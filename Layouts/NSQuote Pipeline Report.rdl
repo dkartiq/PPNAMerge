@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="RepHdr_ReportName">
+          <DataField>RepHdr_ReportName</DataField>
+        </Field>
+        <Field Name="RepHdr_PageCaption">
+          <DataField>RepHdr_PageCaption</DataField>
+        </Field>
+        <Field Name="RepHdr_Company_Name">
+          <DataField>RepHdr_Company_Name</DataField>
+        </Field>
+        <Field Name="Filter_Line">
+          <DataField>Filter_Line</DataField>
+        </Field>
+        <Field Name="GrpHdr_SalespersonCaption">
+          <DataField>GrpHdr_SalespersonCaption</DataField>
+        </Field>
+        <Field Name="GrpTot_TotalCaption">
+          <DataField>GrpTot_TotalCaption</DataField>
+        </Field>
+        <Field Name="ColHdr_SellToCustomerNo">
+          <DataField>ColHdr_SellToCustomerNo</DataField>
+        </Field>
+        <Field Name="ColHdr_SellToCustomerName">
+          <DataField>ColHdr_SellToCustomerName</DataField>
+        </Field>
+        <Field Name="ColHdr_QuoteNot">
+          <DataField>ColHdr_QuoteNot</DataField>
+        </Field>
+        <Field Name="ColHdr_Revision">
+          <DataField>ColHdr_Revision</DataField>
+        </Field>
+        <Field Name="ColHdr_Description">
+          <DataField>ColHdr_Description</DataField>
+        </Field>
+        <Field Name="ColHdr_ProposalDate">
+          <DataField>ColHdr_ProposalDate</DataField>
+        </Field>
+        <Field Name="ColHdr_EstimatedMonthToClose">
+          <DataField>ColHdr_EstimatedMonthToClose</DataField>
+        </Field>
+        <Field Name="ColHdr_EstimatedCompletionDate">
+          <DataField>ColHdr_EstimatedCompletionDate</DataField>
+        </Field>
+        <Field Name="ColHdr_EstimatedPercentToBill">
+          <DataField>ColHdr_EstimatedPercentToBill</DataField>
+        </Field>
+        <Field Name="ColHd_Amount">
+          <DataField>ColHd_Amount</DataField>
+        </Field>
+        <Field Name="ColHdr_GrossMargin">
+          <DataField>ColHdr_GrossMargin</DataField>
+        </Field>
+        <Field Name="ColHdr_GrossMarginPercent">
+          <DataField>ColHdr_GrossMarginPercent</DataField>
+        </Field>
+        <Field Name="ColHdr_ProbabilityToClose">
+          <DataField>ColHdr_ProbabilityToClose</DataField>
+        </Field>
+        <Field Name="ColHdr_Status">
+          <DataField>ColHdr_Status</DataField>
+        </Field>
+        <Field Name="Group_SalespersonName">
+          <DataField>Group_SalespersonName</DataField>
+        </Field>
+        <Field Name="Line_SellToCustomerNo">
+          <DataField>Line_SellToCustomerNo</DataField>
+        </Field>
+        <Field Name="Line_SellToCustomerName">
+          <DataField>Line_SellToCustomerName</DataField>
+        </Field>
+        <Field Name="Line_QuoteNo">
+          <DataField>Line_QuoteNo</DataField>
+        </Field>
+        <Field Name="Line_Revision">
+          <DataField>Line_Revision</DataField>
+        </Field>
+        <Field Name="Line_Description">
+          <DataField>Line_Description</DataField>
+        </Field>
+        <Field Name="Line_ProposalDate">
+          <DataField>Line_ProposalDate</DataField>
+        </Field>
+        <Field Name="Line_EstimatedMonthToClose">
+          <DataField>Line_EstimatedMonthToClose</DataField>
+        </Field>
+        <Field Name="Line_EstimatedCompletiopnDate">
+          <DataField>Line_EstimatedCompletiopnDate</DataField>
+        </Field>
+        <Field Name="Line_EstimatedPercentToBill">
+          <DataField>Line_EstimatedPercentToBill</DataField>
+        </Field>
+        <Field Name="Line_Amount">
+          <DataField>Line_Amount</DataField>
+        </Field>
+        <Field Name="Line_AmountFormat">
+          <DataField>Line_AmountFormat</DataField>
+        </Field>
+        <Field Name="Line_GrossMargin">
+          <DataField>Line_GrossMargin</DataField>
+        </Field>
+        <Field Name="Line_GrossMarginFormat">
+          <DataField>Line_GrossMarginFormat</DataField>
+        </Field>
+        <Field Name="Line_GrossMarginPercent">
+          <DataField>Line_GrossMarginPercent</DataField>
+        </Field>
+        <Field Name="Line_ProbabilityToClose">
+          <DataField>Line_ProbabilityToClose</DataField>
+        </Field>
+        <Field Name="Line_Status">
+          <DataField>Line_Status</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

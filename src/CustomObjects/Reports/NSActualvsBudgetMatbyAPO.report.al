@@ -10,7 +10,6 @@ report 14021158 "NS_ActualvsBudget Mat by APO"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-813.AS.1.0 Commented report not needed anymore
-    //PE-79.RM.1.0 21Apr2023 | Changes in Layout only
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSActual vs Budget Mat by APO.rdl';
     ObsoleteReason = 'This report will not be release anymore';
@@ -87,10 +86,7 @@ report 14021158 "NS_ActualvsBudget Mat by APO"
                         SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                         SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                         SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        // SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 End
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                         SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));
 
                         if Job.GETFILTER("NS_Item No. Filter") > '' then begin
@@ -152,10 +148,7 @@ report 14021158 "NS_ActualvsBudget Mat by APO"
                         SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                         SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                         SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 END
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                         SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
                         if Job.GETFILTER("NS_Item No. Filter") > '' then begin
                             SETFILTER(Type, FORMAT(Type::Item));
@@ -223,10 +216,7 @@ report 14021158 "NS_ActualvsBudget Mat by APO"
                             SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                             SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                             SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                            //PE-308.DK.1.0 13JUNE2024 Start
-                            //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                            SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                            //PE-308.DK.1.0 13JUNE2024 END
+                            SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                             SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));
                             if Job.GETFILTER("NS_Item No. Filter") > '' then begin
                                 SETFILTER(Type, FORMAT(Type::Item));
@@ -267,10 +257,7 @@ report 14021158 "NS_ActualvsBudget Mat by APO"
                             SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                             SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                             SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                            //PE-308.DK.1.0 13JUNE2024 Start
-                            //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                            SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                            //PE-308.DK.1.0 13JUNE2024 END
+                            SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                             SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
                             if Job.GETFILTER("NS_Item No. Filter") > '' then begin
                                 SETFILTER(Type, FORMAT(Type::Item));

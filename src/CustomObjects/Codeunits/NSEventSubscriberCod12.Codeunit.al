@@ -107,7 +107,6 @@ codeunit 14021107 NS_EventSubscriberCod12
     local procedure NS_ErrorIfNegativeAmt(GenJnlLine: Record "Gen. Journal Line")
     var
         RaiseError: Boolean;
-        IsHandled: Boolean; //FGH-163.SM.240424  //PRJCTPR-358.JS.1.0 24APR2024
     begin
         RaiseError := GenJnlLine.Amount < 0;
         // PRJ-471.MS.1.0 start
@@ -115,12 +114,6 @@ codeunit 14021107 NS_EventSubscriberCod12
             RaiseError := RaiseError
         else
             RaiseError := false;
-
-        //FGH-163.SM.240424 START    //PRJCTPR-358.JS.1.0 24APR2024
-        OnBeforeErrorIfNegativeAmt(GenJnlLine, IsHandled);
-        If IsHandled then
-            exit;
-        //FGH-163.SM.240424 END  //PRJCTPR-358.JS.1.0 24APR2024  
         // PRJ-471.MS.1.0 end
         IF RaiseError THEN
           GenJnlLine.FIELDERROR(Amount, 'must be positive');
@@ -131,25 +124,12 @@ codeunit 14021107 NS_EventSubscriberCod12
         RaiseError: Boolean;
     begin
         RaiseError := GenJnlLine.Amount > 0;
-        //PRJCTPR-210.AS.1.0 START COMMENT
-        // // PRJ-471.MS.1.0 start
-        // if (GenJnlLine."Document Type" = GenJnlLine."Document Type"::"Credit Memo") and not GenJnlLine."NS_Retention Document" then
-        //     RaiseError := RaiseError
-        // else
-        //     RaiseError := false;
-        // // PRJ-471.MS.1.0 end       
-        //PRJCTPR-210.AS.1.0 END COMMENT
-
-        //PRJCTPR-210.AS.1.0 START ADD
         // PRJ-471.MS.1.0 start
-        if ((GenJnlLine."Journal Template Name" = '') and (GenJnlLine."Journal Batch Name" = '')) then begin
-            if (GenJnlLine."Document Type" = GenJnlLine."Document Type"::"Credit Memo") and not GenJnlLine."NS_Retention Document" then
-                RaiseError := RaiseError
-            else
-                RaiseError := false;
-        end;
+        if (GenJnlLine."Document Type" = GenJnlLine."Document Type"::"Credit Memo") and not GenJnlLine."NS_Retention Document" then
+            RaiseError := RaiseError
+        else
+            RaiseError := false;
         // PRJ-471.MS.1.0 end       
-        //PRJCTPR-210.AS.1.0 END ADD
         IF RaiseError THEN
             GenJnlLine.FIELDERROR(Amount, 'must be negetive');
     end;
@@ -176,11 +156,4 @@ codeunit 14021107 NS_EventSubscriberCod12
 
     var
         ParameterCU: Codeunit "NS_Parameters for Events";
-
-    //FGH-163.SM.240424 START   //PRJCTPR-358.JS.1.0 24APR2024
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeErrorIfNegativeAmt(Var GenJnlLine: Record "Gen. Journal Line"; var IsHandled: Boolean)
-    begin
-    end;
-    //FGH-163.SM.240424 START  //PRJCTPR-358.JS.1.0 24APR2024
 }

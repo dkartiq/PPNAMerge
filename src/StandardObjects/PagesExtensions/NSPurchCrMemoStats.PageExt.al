@@ -1,8 +1,7 @@
 pageextension 14021251 NS_PurchCrMemoStatsExt extends "Purch. Credit Memo Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purch. Credit Memo Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
 

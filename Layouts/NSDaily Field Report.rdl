@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="WorkOrderNo">
+          <DataField>WorkOrderNo</DataField>
+        </Field>
+        <Field Name="WorkOrderDate">
+          <DataField>WorkOrderDate</DataField>
+        </Field>
+        <Field Name="WorkOrderManager">
+          <DataField>WorkOrderManager</DataField>
+        </Field>
+        <Field Name="WorkOrderCustAddress">
+          <DataField>WorkOrderCustAddress</DataField>
+        </Field>
+        <Field Name="WorkOrderCustAddress2">
+          <DataField>WorkOrderCustAddress2</DataField>
+        </Field>
+        <Field Name="WorkOrderCustName">
+          <DataField>WorkOrderCustName</DataField>
+        </Field>
+        <Field Name="WorkOrderCustPhone">
+          <DataField>WorkOrderCustPhone</DataField>
+        </Field>
+        <Field Name="WorkOrderDescription">
+          <DataField>WorkOrderDescription</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="CompanyAddress">
+          <DataField>CompanyAddress</DataField>
+        </Field>
+        <Field Name="CompanyPhone">
+          <DataField>CompanyPhone</DataField>
+        </Field>
+        <Field Name="CompanyLogo">
+          <DataField>CompanyLogo</DataField>
+        </Field>
+        <Field Name="FooterSignatureLabel">
+          <DataField>FooterSignatureLabel</DataField>
+        </Field>
+        <Field Name="FooterDateLabel">
+          <DataField>FooterDateLabel</DataField>
+        </Field>
+        <Field Name="FooterCustSignatureLabel">
+          <DataField>FooterCustSignatureLabel</DataField>
+        </Field>
+        <Field Name="JobCostCategory">
+          <DataField>JobCostCategory</DataField>
+        </Field>
+        <Field Name="JobCostCatDesc">
+          <DataField>JobCostCatDesc</DataField>
+        </Field>
+        <Field Name="Detail_CostCategory">
+          <DataField>Detail_CostCategory</DataField>
+        </Field>
+        <Field Name="Detail_WorkOrderDate">
+          <DataField>Detail_WorkOrderDate</DataField>
+        </Field>
+        <Field Name="Detail_Type">
+          <DataField>Detail_Type</DataField>
+        </Field>
+        <Field Name="Detail_No">
+          <DataField>Detail_No</DataField>
+        </Field>
+        <Field Name="Detail_Description">
+          <DataField>Detail_Description</DataField>
+        </Field>
+        <Field Name="Detail_Quantity">
+          <DataField>Detail_Quantity</DataField>
+        </Field>
+        <Field Name="Detail_QuantityFormat">
+          <DataField>Detail_QuantityFormat</DataField>
+        </Field>
+        <Field Name="Detail_Rate">
+          <DataField>Detail_Rate</DataField>
+        </Field>
+        <Field Name="Detail_RateFormat">
+          <DataField>Detail_RateFormat</DataField>
+        </Field>
+        <Field Name="Detail_Total">
+          <DataField>Detail_Total</DataField>
+        </Field>
+        <Field Name="Detail_TotalFormat">
+          <DataField>Detail_TotalFormat</DataField>
+        </Field>
+        <Field Name="Skill_Code">
+          <DataField>Skill_Code</DataField>
+        </Field>
+        <Field Name="Work_TYpe_Code">
+          <DataField>Work_TYpe_Code</DataField>
+        </Field>
+        <Field Name="DFRnoVar">
+          <DataField>DFRnoVar</DataField>
+        </Field>
+        <Field Name="DFRNo">
+          <DataField>DFRNo</DataField>
+        </Field>
+        <Field Name="IsDFRcreate">
+          <DataField>IsDFRcreate</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

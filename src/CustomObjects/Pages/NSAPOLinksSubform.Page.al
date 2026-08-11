@@ -8,10 +8,9 @@ page 14021166 "NS_APO Links Subform"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1348.NK.1.0 26May2022 Caption Change
+
     PageType = ListPart;
-    //Caption = 'APO Links Subform'; //PRJ-1348.NK.1.0 26May2022 Block
-    Caption = 'APOS Links Subform';//PRJ-1348.NK.1.0 26May2022
+    Caption = 'APO Links Subform';
     SourceTable = "NS_APO Links Line";
 
 

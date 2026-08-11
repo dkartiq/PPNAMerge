@@ -18,9 +18,7 @@ report 14021386 "NS_Percentage of CompletionNew"
     //PRJ-422.AM.2.0 28OCT2020 | Added Manager & Person Responsible Fields in RequestFilterFields and set visibility of Manager & person responsible variable on request page false.
     //CTSI-202.AM.1.0 16NOV2020 | Added 1 Filter field Gen. Bus posting Group.
     //PRJ-831.AS.1.0 12OCT2021 Replaced Job Table field Gen Bus Posting Grp with Gen Bus Posting Grp New
-    //PRJ-1454.NK.1.0 27Jun2022 | Added Code
-    //PE-141.AS.1.0 16AUG2023 Done change in layout to Add comp logo, user id, timedate, page
-    //PRJCTPR-282.DK.1.0 02April2024 | change in Layout
+
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSProjectProfitAnalysisReport.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -46,17 +44,6 @@ report 14021386 "NS_Percentage of CompletionNew"
             column(CompanyInformation_Name; CompanyInformation.Name)
             {
             }
-            //PE-141.AS.1.0 16AUG2023 start
-            column(CompanyInformationPic; CompanyInformation.Picture) { }
-            column(CompanyInformationAdd; CompanyInformation.Address) { }
-            column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-            column(CompanyInformationcity; CompanyInformation.City) { }
-            column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-            column(CompanyInformationpost; CompanyInformation."Post Code") { }
-            column(CompanyInformationCountry; CompanyInformation.County) { }
-            column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-            column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }//PE-141.AS.1.0 24AUG2023
-            //PE-141.AS.1.0 16AUG2023 end
             column(ShowJobSummaries; ShowJobSummaries)
             {
             }
@@ -125,7 +112,6 @@ report 14021386 "NS_Percentage of CompletionNew"
             column(Under_BillingsCaption; Under_BillingsCaptionLbl)
             {
             }
-            column(ChginperCompl; ChginperCompl) { } //PRJCTPR-282.DK.1.0 4April2024
             dataitem(Job; Job)
             {
                 DataItemTableView = SORTING("No.");
@@ -525,24 +511,17 @@ report 14021386 "NS_Percentage of CompletionNew"
 
                             if PercCompRecOuter.FindLast then begin
                                 ChangePercCompValFinal := PercCompRecOuter."NS_Job Percent Complete";
-                                //PRJCTPR-282.DK.1.0 Start
-                                // ChangeinPercRecProfValFinal := PercCompRecOuter."NS_Recognized Profit";
-                                ChangeinPercRecProfValFinal := PercCompRecOuter."NS_Gross Margin";
-                                // changeRecProftPercentageFinal := PercCompRecOuter."NS_Recognized Profit Percent";
-                                changeRecProftPercentageFinal := PercCompRecOuter."NS_Gross Margin Percent";
-                                //PRJCTPR-282.DK.1.0 End
+                                ChangeinPercRecProfValFinal := PercCompRecOuter."NS_Recognized Profit";
+                                changeRecProftPercentageFinal := PercCompRecOuter."NS_Recognized Profit Percent";
+
                                 PercCompRecInner.Reset;
                                 PercCompRecInner.SetCurrentKey("NS_Entry No");
                                 PercCompRecInner.SetFilter("NS_Job No.", PercCompRecOuter."NS_Job No.");
                                 PercCompRecInner.SetFilter("NS_Posting Date", '< %1', PercCompRecOuter."NS_Posting Date");
                                 if PercCompRecInner.FindLast then begin
                                     ChangePercCompValInitial := PercCompRecInner."NS_Job Percent Complete";
-                                    //PRJCTPR-282.DK.1.0 Start
-                                    //ChangeinPercRecProfValInitial := PercCompRecInner."NS_Recognized Profit";
-                                    ChangeinPercRecProfValInitial := PercCompRecInner."NS_Gross Margin";
-                                    //changeRecProftPercentageInitial := PercCompRecInner."NS_Recognized Profit Percent";
-                                    changeRecProftPercentageInitial := PercCompRecInner."NS_Gross Margin Percent";
-                                    //PRJCTPR-282.DK.1.0 End
+                                    ChangeinPercRecProfValInitial := PercCompRecInner."NS_Recognized Profit";
+                                    changeRecProftPercentageInitial := PercCompRecInner."NS_Recognized Profit Percent";
                                 end;
                             end;
 
@@ -594,12 +573,8 @@ report 14021386 "NS_Percentage of CompletionNew"
                                     PercCompRecInner.SetRange("NS_Job No.", PercCompRecOuter."NS_Job No.");
                                     if PercCompRecInner.FindLast then begin
                                         ChangePercCompValFinalSubJobAdded += PercCompRecInner."NS_Job Percent Complete";
-                                        //PRJCTPR-282.DK.1.0 9April2024 start
-                                        //ChangeinPercRecProfValFinalSubJobAded += PercCompRecInner."NS_Recognized Profit";
-                                        ChangeinPercRecProfValFinalSubJobAded += PercCompRecInner."NS_Gross Margin";
-                                        //changeRecProftPercentageFinalSubJobAdded += PercCompRecInner."NS_Recognized Profit Percent";
-                                        changeRecProftPercentageFinalSubJobAdded += PercCompRecInner."NS_Gross Margin Percent";
-                                        //PRJCTPR-282.DK.1.0 9April2024 End
+                                        ChangeinPercRecProfValFinalSubJobAded += PercCompRecInner."NS_Recognized Profit";
+                                        changeRecProftPercentageFinalSubJobAdded += PercCompRecInner."NS_Recognized Profit Percent";
                                         if PercCompRecInner."NS_Job Percent Complete" <> 0 then//MS
                                             TotalchangePerCentCompleteCountFinal += 1;
 
@@ -610,12 +585,8 @@ report 14021386 "NS_Percentage of CompletionNew"
                                         PercCompRec2.SetFilter("NS_Posting Date", '< %1', PercCompRecInner."NS_Posting Date");
                                         if PercCompRec2.FindLast then begin
                                             ChangePercCompValInitialSubJobAdded += PercCompRec2."NS_Job Percent Complete";
-                                            //PRJCTPR-282.DK.1.0 Start
-                                            //ChangeinPercRecProfValInitialSubJobAdded += PercCompRec2."NS_Recognized Profit";
-                                            ChangeinPercRecProfValInitialSubJobAdded += PercCompRec2."NS_Gross Margin";
-                                            //changeRecProftPercentageInitialSubJobAdded += PercCompRec2."NS_Recognized Profit Percent";
-                                            changeRecProftPercentageInitialSubJobAdded += PercCompRec2."NS_Gross Margin Percent";
-                                            //PRJCTPR-282.DK.1.0 End
+                                            ChangeinPercRecProfValInitialSubJobAdded += PercCompRec2."NS_Recognized Profit";
+                                            changeRecProftPercentageInitialSubJobAdded += PercCompRec2."NS_Recognized Profit Percent";
                                             if PercCompRec2."NS_Job Percent Complete" <> 0 then//MS
                                                 TotalchangePerCentCompleteCountInitial += 1;
 
@@ -743,24 +714,17 @@ report 14021386 "NS_Percentage of CompletionNew"
 
                             if PercCompRecOuter.FindLast then begin
                                 ChangePercCompValFinal := PercCompRecOuter."NS_Job Percent Complete";
-                                //PRJCTPR-282.DK.1.0 Start
-                                //ChangeinPercRecProfValFinal := PercCompRecOuter."NS_Recognized Profit";
-                                ChangeinPercRecProfValFinal := PercCompRecOuter."NS_Gross Margin";
-                                // changeRecProftPercentageFinal := PercCompRecOuter."NS_Recognized Profit Percent";
-                                changeRecProftPercentageFinal := PercCompRecOuter."NS_Gross Margin Percent";
-                                //PRJCTPR-282.DK.1.0 End
+                                ChangeinPercRecProfValFinal := PercCompRecOuter."NS_Recognized Profit";
+                                changeRecProftPercentageFinal := PercCompRecOuter."NS_Recognized Profit Percent";
+
                                 PercCompRecInner.Reset;
                                 PercCompRecInner.SetCurrentKey("NS_Entry No");
                                 PercCompRecInner.SetFilter("NS_Job No.", PercCompRecOuter."NS_Job No.");
                                 PercCompRecInner.SetFilter("NS_Posting Date", '< %1', PercCompRecOuter."NS_Posting Date");
                                 if PercCompRecInner.FindLast then begin
                                     ChangePercCompValInitial := PercCompRecInner."NS_Job Percent Complete";
-                                    //PRJCTPR-282.DK.1.0 Start
-                                    //ChangeinPercRecProfValInitial := PercCompRecInner."NS_Recognized Profit";
-                                    ChangeinPercRecProfValInitial := PercCompRecInner."NS_Gross Margin";
-                                    //changeRecProftPercentageInitial := PercCompRecInner."NS_Recognized Profit Percent";
-                                    changeRecProftPercentageInitial := PercCompRecInner."NS_Gross Margin Percent";
-                                    //PRJCTPR-282.DK.1.0 End
+                                    ChangeinPercRecProfValInitial := PercCompRecInner."NS_Recognized Profit";
+                                    changeRecProftPercentageInitial := PercCompRecInner."NS_Recognized Profit Percent";
                                 end;
                             end;
                             ChangePercCompValToShow := round(ChangePercCompValFinal - ChangePercCompValInitial, 0.01, '>');
@@ -808,12 +772,8 @@ report 14021386 "NS_Percentage of CompletionNew"
                                     PercCompRecInner.SetRange("NS_Job No.", PercCompRecOuter."NS_Job No.");
                                     if PercCompRecInner.FindLast then begin
                                         ChangePercCompValFinalSubJobAdded += PercCompRecInner."NS_Job Percent Complete";
-                                        //PRJCTPR-282.DK.1.0 Start
-                                        //ChangeinPercRecProfValFinalSubJobAded += PercCompRecInner."NS_Recognized Profit";
-                                        ChangeinPercRecProfValFinalSubJobAded += PercCompRecInner."NS_Gross Margin";
-                                        //changeRecProftPercentageFinalSubJobAdded += PercCompRecInner."NS_Recognized Profit Percent";
-                                        changeRecProftPercentageFinalSubJobAdded += PercCompRecInner."NS_Gross Margin Percent";
-                                        //PRJCTPR-282.DK.1.0 End
+                                        ChangeinPercRecProfValFinalSubJobAded += PercCompRecInner."NS_Recognized Profit";
+                                        changeRecProftPercentageFinalSubJobAdded += PercCompRecInner."NS_Recognized Profit Percent";
                                         if PercCompRecInner."NS_Job Percent Complete" <> 0 then//MS
                                             TotalchangePerCentCompleteCountFinal += 1;
 
@@ -824,12 +784,8 @@ report 14021386 "NS_Percentage of CompletionNew"
                                         PercCompRec2.SetFilter("NS_Posting Date", '< %1', PercCompRecInner."NS_Posting Date");
                                         if PercCompRec2.FindLast then begin
                                             ChangePercCompValInitialSubJobAdded += PercCompRec2."NS_Job Percent Complete";
-                                            //PRJCTPR-282.DK.1.0 Start
-                                            //ChangeinPercRecProfValInitialSubJobAdded += PercCompRec2."NS_Recognized Profit";
-                                            ChangeinPercRecProfValInitialSubJobAdded += PercCompRec2."NS_Gross Margin";
-                                            //changeRecProftPercentageInitialSubJobAdded += PercCompRec2."NS_Recognized Profit Percent";
-                                            changeRecProftPercentageInitialSubJobAdded += PercCompRec2."NS_Gross Margin Percent";
-                                            //PRJCTPR-282.DK.1.0 End
+                                            ChangeinPercRecProfValInitialSubJobAdded += PercCompRec2."NS_Recognized Profit";
+                                            changeRecProftPercentageInitialSubJobAdded += PercCompRec2."NS_Recognized Profit Percent";
                                             if PercCompRec2."NS_Job Percent Complete" <> 0 then//MS
                                                 TotalchangePerCentCompleteCountInitial += 1;
 
@@ -863,12 +819,6 @@ report 14021386 "NS_Percentage of CompletionNew"
 
                 trigger OnPreDataItem();
                 begin
-                    //PRJ-1454.NK.1.0 20Sep2022 Start
-                    if JobNo <> '' then
-                        Job.SetRange("No.", JobNo);
-                    if ((StartDate <> 0D) and (EndDate <> 0D)) then
-                        Job.SetFilter("NS_Date Filter", '%1..%2', StartDate, EndDate);
-                    //PRJ-1454.NK.1.0 20Sep2022 End
                     //CTSI-121.N.S.1.0 18Aug2020 Start
                     if ManagerValue <> '' then
                         Job.SetRange(NS_Manager, ManagerValue);
@@ -880,7 +830,7 @@ report 14021386 "NS_Percentage of CompletionNew"
                     "MarkSub-Levels"(Job, IncludeSubLevelsInMasterJobValues);
                     COPYFILTERS(JobFilters);
 
-                    // CurrReport.CREATETOTALS(A, B, C, D, E, F, G, H, I);//PRJCTPR-101.NC.1.0 25Apr2023 Block
+                    CurrReport.CREATETOTALS(A, B, C, D, E, F, G, H, I);
 
                     JobRecRef.OPEN(167);        //Job
                 end;
@@ -1070,40 +1020,8 @@ report 14021386 "NS_Percentage of CompletionNew"
     end;
 
     trigger OnPreReport();
-    var
-        JobsSetup: Record "Jobs Setup"; //PRJ-1571.NK.1.0 25Aug2022
-        ApoSetup: Record NS_APOSetup; //PRJ-1571.NK.1.0 25Aug2022
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.AS.1.0 16AUG2023
-
-        //PE-141.AS.1.0 start 24Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.AS.1.0 start 24Aug2023
-
-        DateFilter := Job.GetFilter("NS_Date Filter"); //PRJ-1554.NK.1.0 25Jan2023
         //CTSI-115.AS.1.0 25Aug2020 - start
         JobsetupRec.Get;
         Clear(GBPGValTxt);
@@ -1123,22 +1041,7 @@ report 14021386 "NS_Percentage of CompletionNew"
                         JobFilter := Job.GETFILTERS;
         //CTSI-121.N.S.1.0 19Aug2020 start Filtervalue print
         // JobFilter := Job.GETFILTERS;CTSI-121.N.S.1.0 19Aug2020 comment
-        //PRJ-1571.NK.1.0 25Aug2022 Start
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then begin
-            TextActivity := ApoSetup."Activity Code" + ' Filter';
-            TextProcess := ApoSetup."Process Code" + ' Filter';
-            TextOperation := ApoSetup."Operation Code" + ' Filter';
-        end else begin
-            TextActivity := 'Activity Filter';
-            TextProcess := 'Process Filter';
-            TextOperation := 'Operation Filter';
-        end;
-        JobFilter := ReplaceString(JobFilter, 'Activity Filter', TextActivity);
-        JobFilter := ReplaceString(JobFilter, 'Process Filter', TextProcess);
-        JobFilter := ReplaceString(JobFilter, 'Operation Filter', TextOperation);
-        //PRJ-1571.NK.1.0 25Aug2022 End
+
         if IncludeSubLevelsInMasterJobValues then
             "Sub-LevelsText" := Text003
         else
@@ -1163,15 +1066,6 @@ report 14021386 "NS_Percentage of CompletionNew"
 
     var
         CompanyInformation: Record "Company Information";
-        //PE-141.AS.1.0 start 24Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.AS.1.0 24Aug2023 
         StoreJobNoPercentCompletion: text;//CTSI-115.AS.1.0 25Aug2020
         StoreJobNo2: code[20]; //CTSI-115.AS.1.0 25Aug2020
         Totalcount: integer;//CTSI-115.AS.1.0 25Aug2020
@@ -1331,14 +1225,7 @@ report 14021386 "NS_Percentage of CompletionNew"
         Report_SummaryCaptionLbl: Label 'Report Summary';
         ManagerValue: Code[20];//CTSI-121.N.S.1.0 18Aug2020;
         ResponsiblePerson: Code[20];//CTSI-121.N.S.1.0 18Aug2020;
-        TextActivity: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TextProcess: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TextOperation: Text; //PRJ-1571.NK.1.0 25Aug2022   
-        StartDate: date;//PRJ-1554.NK.1.0 20Sep2022 
-        EndDate: Date;//PRJ-1554.NK.1.0 20Sep2022 
-        JobNo: Code[20];//PRJ-1554.NK.1.0 20Sep2022     
-        DateFilter: Text; //PRJ-1554.NK.1.0 25Jan2023
-        ChginperCompl: Label 'Change % in Completion';//PRJCTPR-282.DK.1.0 4April2024
+
 
     procedure FindUsageCost(Job: Record Job) Usage: Decimal;
     begin
@@ -1539,22 +1426,14 @@ report 14021386 "NS_Percentage of CompletionNew"
     end;
 
     procedure ForecastedCompletedCost(Job: Record Job; Worksheet: Boolean; Manual: Boolean; var BudgetedPrice: Decimal; var ActualCost: Decimal; var ActualBillings: Decimal; var CostEstimate: Decimal; var Source: Text[1]);
-    var
-        JobSetup: Record "Jobs Setup"; //PRJ-1454.NK.1.0 28Jun2022
     begin
         with Job do begin
             Job.COPYFILTERS(JobFilters);
 
             //Get budget values
-            Job.COPYFILTER("NS_Date Filter", Job."Posting Date Filter");
-            Job.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
-            //PRJ-1454.NK.1.0 28Jun2022 Start
-            JobSetup.Get();
-            if JobSetup."NS_Enab. Budg.on Contract Date" then
-                BudgetedPrice := FindContDaseBaseAmt(Job)
-            else
-                //PRJ-1454.NK.1.0 28Jun2022 End
-                BudgetedPrice := Job."NS_Budgeted Price (LCY)";
+            COPYFILTER("NS_Date Filter", Job."Posting Date Filter");
+            CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
+            BudgetedPrice := "NS_Budgeted Price (LCY)";
 
             //Get actual values
             ActualCost := FindUsageCost(Job);
@@ -1609,9 +1488,9 @@ report 14021386 "NS_Percentage of CompletionNew"
                     end;
 
                 else begin                                         // Neither the Worksheet nor the Manual percent is being used
-                    CostEstimate := Job."NS_Budgeted Cost (LCY)";
-                    Source := CalculatedCode;
-                end;
+                        CostEstimate := Job."NS_Budgeted Cost (LCY)";
+                        Source := CalculatedCode;
+                    end;
             end;
         end;
     end;
@@ -1673,60 +1552,5 @@ report 14021386 "NS_Percentage of CompletionNew"
                 until NEXT = 0;
         end;
     end;
-
-    //PRJ-1454.NK.1.0 28Jun2022 Start
-    procedure FindContDaseBaseAmt(Job: Record Job) ContAmt: Decimal;
-    var
-        JobPlannLine: Record "Job Planning Line";
-    begin
-        ContAmt := 0;
-        Job.COPYFILTERS(JobFilters);
-        JobPlannLine.RESET();
-        JobPlannLine.SETRANGE("Job No.", Job."No.");
-        JobPlannLine.SetFilter("Line Type", '%1|%2', JobPlannLine."Line Type"::Billable, JobPlannLine."Line Type"::"Both Budget and Billable");
-        JobPlannLine.SETFILTER("Job Task No.", job.GetFilter("NS_Job Task No. Filter"));
-        JobPlannLine.SetFilter("NS_Revenue Category", Job.GetFilter("NS_Revenue Category Filter"));
-        //PE-308.DK.1.0 13JUNE2024 Start
-        //JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_Type Filter"));
-        JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_TypeEnumFilter"));
-        //PE-308.DK.1.0 13JUNE2024 END
-        if Job.GetFilter("Posting Date Filter") <> '' then //PRJ-1554.NK.1.0 20Sep2022 
-            JobPlannLine.SETFILTER("NS_Contract Forecast Date", Job.GetFilter("Posting Date Filter"));
-        if DateFilter <> '' then //PRJ-1554.NK.1.0 20Sep2022 
-            JobPlannLine.SETFILTER("NS_Contract Forecast Date", DateFilter); //PRJ-1554.NK.1.0 20Sep2022 
-        if ((StartDate <> 0D) And (EndDate <> 0D) and (DateFilter = '')) then //PRJ-1554.NK.1.0 20Sep2022 
-            JobPlannLine.SETFILTER("NS_Contract Forecast Date", '%1..%2', StartDate, EndDate); //PRJ-1554.NK.1.0 20Sep2022 
-        JobPlannLine.SETFILTER(NS_Adjustment, Job.GetFilter("NS_Adjustment Filter"));
-        JobPlannLine.SETFILTER("NS_Shortcut Dimension 1 Code", Job.GetFilter("NS_Global Dimension 1 Filter"));
-        JobPlannLine.SETFILTER("NS_Shortcut Dimension 2 Code", Job.GetFilter("NS_Global Dimension 2 Filter"));
-        JobPlannLine.SETFILTER("NS_Retention Ledger Code", Job.getfilter("NS_Retention Ledger Filter"));
-        if JobPlannLine.FINDSET() then
-            repeat
-                ContAmt := ContAmt + JobPlannLine."Total Price (LCY)";
-            until JobPlannLine.NEXT() = 0;
-        exit(ContAmt);
-    end;
-
-    procedure SetPar(JobValue: code[20]; FromDate: date; ToDate: date);
-    begin
-        JobNo := JobValue;
-        StartDate := FromDate;
-        Enddate := todate;
-    end;
-    //PRJ-1454.NK.1.0 28Jun2022 End
-    //PRJ-1571.NK.1.0 25Aug2022 Start
-    procedure ReplaceString(OldString: Text; FindWhat: Text; ReplaceWith: Text) NewString: Text;
-    var
-        FindPos: Integer;
-    begin
-        FindPos := STRPOS(OldString, FindWhat);
-        WHILE FindPos > 0 DO BEGIN
-            NewString += DELSTR(OldString, FindPos) + ReplaceWith;
-            OldString := COPYSTR(OldString, FindPos + STRLEN(FindWhat));
-            FindPos := STRPOS(OldString, FindWhat);
-        END;
-        NewString += OldString;
-    end;
-    //PRJ-1571.NK.1.0 25Aug2022 End
 }
 

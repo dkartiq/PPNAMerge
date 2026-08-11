@@ -12,9 +12,6 @@ table 14021438 "NS_Percentage of Completion"
     //CTSI-94.AS.1.0 10AUG2020 Added fields Recognized Profit, Recognized Profit % 
     //PRJ-301.MS.1.0 change leg from 10 to 20
     //PRJ-626.GK.1.0 30Aug2021 |Add field caption
-    //PRJ-1015.JS.1.0  14Oct2021 | Add one Key
-    //PRJ-1098.NK.0.0 11Feb2022 |Add Two Fields
-    //PRJ-1387.NK.1.0 12May2022 | Add One Field
     Caption = 'Percentage of Completion';
 
     fields
@@ -116,42 +113,11 @@ table 14021438 "NS_Percentage of Completion"
             DataClassification = CustomerContent;
             Description = 'CTSI-274';
         }
-        field(19; NS_EntryFromBatchJob; Boolean) //PRJ-1098.NK.0.0 11Feb2022
-        {
-            Caption = 'Entry from Batch Job';
-            DataClassification = CustomerContent;
-            Description = 'Entry From Batch Job';
-            Editable = false;
-        }
-        field(20; NS_JFWBatchDocumentNo; Code[20]) //PRJ-1098.NK.0.0 15Feb2022
-        {
-            Caption = 'JFW Batch Document No.';
-            DataClassification = CustomerContent;
-            Description = 'JFW Batch Document No.';
-            Editable = false;
-        }
-        // +ProjectPro
-
-        field(21; NS_Void; Boolean)   //PRJ-1387.NK.1.0 12May2022
-        {
-            DataClassification = CustomerContent;
-            caption = 'Void';
-            Description = 'PRJ-1387';
-
-        }
     }
 
     keys
     {
         key(Key1; "NS_Entry No")
-        {
-        }
-
-        key(Key2; "NS_Job No.")     //PRJ-1015.JS.1.0  14Oct2021
-        {
-
-        }
-        key(Key3; "NS_Posting Date")   //PE-148.JS.1.0 16Aug2023
         {
         }
     }

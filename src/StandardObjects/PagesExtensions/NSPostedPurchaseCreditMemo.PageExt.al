@@ -1,10 +1,8 @@
 pageextension 14021151 NS_PostedPurchaseCreditMemo extends "Posted Purchase Credit Memo"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,NAVMX11.00.00.23572,PPNA11.00
-    //PRJ-1418.NK.1.0 08Jun2022 | Added Property
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Purchase Credit Memo'; //PRJ-1330.NK.1.0 25Apr2022
-   //Editable = false; //PRJ-1418.NK.1.0 08Jun2022 Block
+
+    Editable = false;
 
     layout
     {
@@ -26,7 +24,6 @@ pageextension 14021151 NS_PostedPurchaseCreditMemo extends "Posted Purchase Cred
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Subcontract No.';
-                Editable = false; //PRJ-1418.NK.1.0 08Jun2022
             }
             field("NS_Draw No."; Rec."NS_Draw No.")
             {

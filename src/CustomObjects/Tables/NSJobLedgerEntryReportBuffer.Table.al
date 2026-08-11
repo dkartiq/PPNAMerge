@@ -228,7 +228,7 @@ table 14021191 "NS_Job LedgerEntryReportBuffer"
             ObsoleteState = Pending;//PRJ-831.AS.2.0 13OCT2021 Obselete
             ObsoleteReason = 'Will be removed in next build';//PRJ-831.AS.2.0 13OCT2021 Obselete
             Caption = 'Gen. Bus. Posting Group';
-            //TableRelation = "Gen. Business Posting Group";//PRJ-1684.AS.1.0 TABLE RELATION REMOVED
+            TableRelation = "Gen. Business Posting Group";
             DataClassification = CustomerContent;
         }
         field(81; "NS_Gen. Prod. Posting Group"; Code[10])
@@ -236,7 +236,7 @@ table 14021191 "NS_Job LedgerEntryReportBuffer"
             ObsoleteState = Pending;//PRJ-831.AS.2.0 13OCT2021 Obselete
             ObsoleteReason = 'Will be removed in next build';//PRJ-831.AS.2.0 13OCT2021 Obselete
             Caption = 'Gen. Prod. Posting Group';
-            //TableRelation = "Gen. Product Posting Group";//PRJ-1684.AS.1.0 TABLE RELATION REMOVED
+            TableRelation = "Gen. Product Posting Group";
             DataClassification = CustomerContent;
         }
         field(82; "NS_Entry/Exit Point"; Code[10])

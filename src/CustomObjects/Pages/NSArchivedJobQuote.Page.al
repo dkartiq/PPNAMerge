@@ -784,7 +784,6 @@ page 14021438 "NS_Archived Job Quote"
                     ApplicationArea = All;
                     Image = Planning;
                     Promoted = true;
-                    Caption = 'Planning Lines Segment';//PRJ-1102.GK.1.0 13Jan2022
                     PromotedCategory = Process;
                     PromotedIsBig = true;
                     ToolTip = 'Planning Lines Segment';
@@ -804,7 +803,6 @@ page 14021438 "NS_Archived Job Quote"
                     ApplicationArea = All;
                     Image = PlanningWorksheet;
                     Promoted = true;
-                    Caption = 'Planning Lines';//PRJ-1102.GK.1.0 13Jan2022
                     PromotedCategory = Process;
                     PromotedIsBig = true;
                     ToolTip = 'Planning lines';
@@ -839,7 +837,6 @@ page 14021438 "NS_Archived Job Quote"
                     Promoted = true;
                     PromotedCategory = Process;
                     PromotedIsBig = true;
-                    Caption = 'Segments';//PRJ-1102.GK.1.0 13Jan2022
                     ApplicationArea = All;
                     ToolTip = 'Segments';
 
@@ -863,7 +860,6 @@ page 14021438 "NS_Archived Job Quote"
                     Image = EditList;
                     Promoted = true;
                     PromotedCategory = Process;
-                    Caption = 'Scope of Work';//PRJ-1102.GK.1.0 13Jan2022
                     PromotedIsBig = true;
                     ToolTip = 'Scope of work';
 
@@ -894,19 +890,8 @@ page 14021438 "NS_Archived Job Quote"
                 PromotedIsBig = true;
 
                 trigger OnAction();
-                var
-                    JQuotehdr: Record "NS_Job Quote Header";//PRJ-1163.AS.2.0 
                 begin
-                    //PRJ-1163.AS.2.0 START
-                    JQuotehdr.Reset();
-                    JQuotehdr.SetRange("NS_Duplicated-from Quote No.", Rec."NS_Quote No.");
-                    JQuotehdr.SetRange("NS_Revision Reference", Rec.NS_Revision);
-                    if JQuotehdr.FindFirst() then
-                        Error('This Revision No. %1.%2  has already been Unarchived', JQuotehdr."NS_Duplicated-from Quote No.", JQuotehdr."NS_Revision Reference");
-                    //PRJ-1163.AS.2.0 END
-
-                    // if not CONFIRM('Are you sure you wish to unarchive this quote?') then //PRJ-1163.AS.1.0 Commented
-                    if CONFIRM('Are you sure you wish to unarchive this quote?') then //PRJ-1163.AS.1.0 Added
+                    if not CONFIRM('Are you sure you wish to unarchive this quote?') then
                         UnarchiveQuote(Rec);
                 end;
             }

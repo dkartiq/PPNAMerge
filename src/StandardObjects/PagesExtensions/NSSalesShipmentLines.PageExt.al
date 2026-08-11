@@ -1,8 +1,7 @@
 pageextension 14021298 NS_SalesShipmentLines extends "Sales Shipment Lines"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Shipment Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Variant Code")

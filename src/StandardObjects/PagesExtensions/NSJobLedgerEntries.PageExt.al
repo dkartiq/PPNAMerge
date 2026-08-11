@@ -3,9 +3,7 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
     // version NAVW111.00.00.19846,PPNA11.00
     //TM-10.AM.1.0 | Added Field.
     //PRJ-841.JS.1.0 16Aug2021 | Add field
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJCTPR-2.RM.1.0 13Dec2022 | Added a new field
-    Caption = 'Job Ledger Entries'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job Task No.")
@@ -18,16 +16,6 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
             Visible = false;
             Enabled = false;
         }
-        //PRJ-1696.GK.1.0 15Dec2022 start
-        addafter("Entry Type")
-        {
-            field("NS_Interim Entry"; Rec."NS_Interim Entry")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Interim Entry field.';
-            }
-        }
-        //PRJ-1696.GK.1.0 15Dec2022 end
         addafter("Job No.")
         {
             field("NS_Job Task No.2"; Rec."Job Task No.")
@@ -99,28 +87,6 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
                 Visible = NS_AdvancedJobLaborActive;
             }
         }
-        //PRJ-1696.GK.1.0 15Dec2022 start
-        addafter("Ledger Entry No.")
-        {
-
-            field("NS_Receipt No."; Rec."NS_Receipt No.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Receipt No. field.';
-            }
-            field("NS_Receipt Line No."; Rec."NS_Receipt Line No.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Receipt Line No. field.';
-            }
-            field("NS_Accural Status"; Rec."NS_Accural Status")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Accural Status field.';
-            }
-
-        }
-        //PRJ-1696.GK.1.0 15Dec2022 end
         addafter("Job Posting Group")
         {
             field("NS_Job Cost Category"; Rec."NS_Job Cost Category")
@@ -138,26 +104,14 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
         }
         addafter("Work Type Code")
         {
-            field("NS_Skill Class"; '') //PE-68.Dk.1.0 10April2023
+            field("NS_Skill Class"; Rec."NS_Skill Class")
             {
                 ApplicationArea = All;
                 Caption = 'Skill Class';
                 Editable = false;
                 ToolTip = 'Specifies the Skill Class';
-                // Visible = NS_AdvancedJobLaborActive;
-                Visible = false;//PE-68.Dk.1.0 10April2023
-
+                Visible = NS_AdvancedJobLaborActive;
             }
-            //PE-68.Dk.1.0 10April2023 Start
-            field("NS_Skill Class New"; Rec."NS_Skill Class New")
-            {
-                ApplicationArea = All;
-                Caption = 'Skill Class';
-                Editable = false;
-                ToolTip = 'Specifies the Skill Class';
-                //Visible = NS_AdvancedJobLaborActive;
-            }
-            //PE-68.Dk.1.010April2023  End
             field("NS_Work Units"; Rec."NS_Work Units")
             {
                 ApplicationArea = All;
@@ -171,12 +125,11 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
                 ToolTip = 'Specifies the Work Unit of Measure';
             }
 
-            field("NS_Skill Code"; '') //PRJ-841.JS.1.0 16Aug2021 //PE-68.Dk.1.0 10April2023
+            field("NS_Skill Code"; Rec."NS_Skill Code")       //PRJ-841.JS.1.0 16Aug2021
             {
                 ToolTip = 'Specifies the value of the resource Skill';
                 ApplicationArea = All;
                 Editable = false;
-                Visible = false;//PE-68.Dk.1.0 10April2023
             }
             //PRJ-841.JS.1.0 16Aug2021-start
             field("NS_Crew Code"; Rec."NS_Crew Code")
@@ -522,13 +475,6 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
                 ApplicationArea = Jobs;
                 Editable = false;
             }
-            //PRJCTPR-2.RM.1.0 13Dec2022 start
-            field("NS_Union Code"; Rec."NS_Union Code")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies Union Code';
-            }
-            //PRJCTPR-2.RM.1.0 13Dec2022 end
         }
 
         modify("Total Price (LCY)")
@@ -594,10 +540,7 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
                         NS_JobLedgEntry2.SETRANGE("Job No.", NS_Job."No.");
                         NS_JobLedgEntry2.SETFILTER("Entry Type", NS_ShowJobRec.GETFILTER("NS_Entry Type Filter"));
                         NS_JobLedgEntry2.SETFILTER("Posting Date", NS_ShowJobRec.GETFILTER("NS_Date Filter"));
-                        //PE-306.JS.1.0 06JUN2024-Start
-                        //NS_JobLedgEntry2.SETFILTER(Type, NS_ShowJobRec.GETFILTER("NS_Type Filter"));
-                        NS_JobLedgEntry2.SETFILTER(Type, NS_ShowJobRec.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-306.JS.1.0 06JUN2024-end
+                        NS_JobLedgEntry2.SETFILTER(Type, NS_ShowJobRec.GETFILTER("NS_Type Filter"));
                         IF NS_JobLedgEntry2.FINDSET THEN
                             REPEAT
                                 GET(NS_JobLedgEntry2."Entry No.");
@@ -621,13 +564,9 @@ pageextension 14021133 NS_JobLedgerEntries extends "Job Ledger Entries"
                 IF NS_ShowJobRec.GETFILTER("NS_Date Filter") > '' THEN
                     SETFILTER("Posting Date", NS_ShowJobRec.GETFILTER("NS_Date Filter"));
                 IF NS_ShowJobRec.GETFILTER("NS_Entry Type Filter") > '' THEN
-                    Rec.SETFILTER("Entry Type", NS_ShowJobRec.GETFILTER("NS_Entry Type Filter"));    //PRJ-1135.RM.1.0
-                //PE-306.JS.1.0 06JUN2024-Start
-                // IF NS_ShowJobRec.GETFILTER("NS_Type Filter") > '' THEN
-                //     Rec.SETFILTER(Type, NS_ShowJobRec.GETFILTER("NS_Type Filter"));    //PRJ-1135.RM.1.0
-                IF NS_ShowJobRec.GETFILTER("NS_TypeEnumFilter") > '' THEN
-                    Rec.SETFILTER(Type, NS_ShowJobRec.GETFILTER("NS_TypeEnumFilter"));    //PRJ-1135.RM.1.0                
-                //PE-306.JS.1.0 06JUN2024-end    
+                    SETFILTER("Entry Type", NS_ShowJobRec.GETFILTER("NS_Entry Type Filter"));
+                IF NS_ShowJobRec.GETFILTER("NS_Type Filter") > '' THEN
+                    SETFILTER(Type, NS_ShowJobRec.GETFILTER("NS_Type Filter"));
                 IF NS_ShowJobRec.GETFILTER("NS_Cost Category Filter") > '' THEN
                     SETFILTER("NS_Job Cost Category", NS_ShowJobRec.GETFILTER("NS_Cost Category Filter"));
                 IF NS_ShowJobRec.GETFILTER("NS_Revenue Category Filter") > '' THEN

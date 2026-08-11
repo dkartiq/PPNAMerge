@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Entry_No_">
+          <DataField>Entry_No_</DataField>
+        </Field>
+        <Field Name="HeadingLine1">
+          <DataField>HeadingLine1</DataField>
+        </Field>
+        <Field Name="HeadingLine2">
+          <DataField>HeadingLine2</DataField>
+        </Field>
+        <Field Name="HeadingLine3">
+          <DataField>HeadingLine3</DataField>
+        </Field>
+        <Field Name="HeadingLine4">
+          <DataField>HeadingLine4</DataField>
+        </Field>
+        <Field Name="HeadingLine5">
+          <DataField>HeadingLine5</DataField>
+        </Field>
+        <Field Name="HeadingLine6">
+          <DataField>HeadingLine6</DataField>
+        </Field>
+        <Field Name="BodyLine1">
+          <DataField>BodyLine1</DataField>
+        </Field>
+        <Field Name="BodyLine2">
+          <DataField>BodyLine2</DataField>
+        </Field>
+        <Field Name="BodyLine3">
+          <DataField>BodyLine3</DataField>
+        </Field>
+        <Field Name="BodyLine4">
+          <DataField>BodyLine4</DataField>
+        </Field>
+        <Field Name="BodyLine5">
+          <DataField>BodyLine5</DataField>
+        </Field>
+        <Field Name="BodyLine6">
+          <DataField>BodyLine6</DataField>
+        </Field>
+        <Field Name="BodyLine7">
+          <DataField>BodyLine7</DataField>
+        </Field>
+        <Field Name="BodyLine8">
+          <DataField>BodyLine8</DataField>
+        </Field>
+        <Field Name="BodyLine9">
+          <DataField>BodyLine9</DataField>
+        </Field>
+        <Field Name="BodyLine10">
+          <DataField>BodyLine10</DataField>
+        </Field>
+        <Field Name="BodyLine11">
+          <DataField>BodyLine11</DataField>
+        </Field>
+        <Field Name="BodyLine12">
+          <DataField>BodyLine12</DataField>
+        </Field>
+        <Field Name="BodyLine13">
+          <DataField>BodyLine13</DataField>
+        </Field>
+        <Field Name="BodyLine14">
+          <DataField>BodyLine14</DataField>
+        </Field>
+        <Field Name="BodyLine15">
+          <DataField>BodyLine15</DataField>
+        </Field>
+        <Field Name="BodyLine16">
+          <DataField>BodyLine16</DataField>
+        </Field>
+        <Field Name="BodyLine17">
+          <DataField>BodyLine17</DataField>
+        </Field>
+        <Field Name="BodyLine18">
+          <DataField>BodyLine18</DataField>
+        </Field>
+        <Field Name="BodyLine19">
+          <DataField>BodyLine19</DataField>
+        </Field>
+        <Field Name="BodyLine20">
+          <DataField>BodyLine20</DataField>
+        </Field>
+        <Field Name="BodyLine21">
+          <DataField>BodyLine21</DataField>
+        </Field>
+        <Field Name="BodyLine22">
+          <DataField>BodyLine22</DataField>
+        </Field>
+        <Field Name="BodyLine23">
+          <DataField>BodyLine23</DataField>
+        </Field>
+        <Field Name="BodyLine24">
+          <DataField>BodyLine24</DataField>
+        </Field>
+        <Field Name="SignatureDateHeading">
+          <DataField>SignatureDateHeading</DataField>
+        </Field>
+        <Field Name="SingatureDate">
+          <DataField>SingatureDate</DataField>
+        </Field>
+        <Field Name="SignatureCheckNoHeading">
+          <DataField>SignatureCheckNoHeading</DataField>
+        </Field>
+        <Field Name="SignatureCheckNo">
+          <DataField>SignatureCheckNo</DataField>
+        </Field>
+        <Field Name="SignatureLine1">
+          <DataField>SignatureLine1</DataField>
+        </Field>
+        <Field Name="SignatureLine2">
+          <DataField>SignatureLine2</DataField>
+        </Field>
+        <Field Name="SignatureLine3">
+          <DataField>SignatureLine3</DataField>
+        </Field>
+        <Field Name="SignatureLine4">
+          <DataField>SignatureLine4</DataField>
+        </Field>
+        <Field Name="SignatureLine5">
+          <DataField>SignatureLine5</DataField>
+        </Field>
+        <Field Name="SignatureLine6">
+          <DataField>SignatureLine6</DataField>
+        </Field>
+        <Field Name="SignatureLine7">
+          <DataField>SignatureLine7</DataField>
+        </Field>
+        <Field Name="SignatureLine8">
+          <DataField>SignatureLine8</DataField>
+        </Field>
+        <Field Name="SignatureLine9">
+          <DataField>SignatureLine9</DataField>
+        </Field>
+        <Field Name="SignatureLine10">
+          <DataField>SignatureLine10</DataField>
+        </Field>
+        <Field Name="SignatureLine11">
+          <DataField>SignatureLine11</DataField>
+        </Field>
+        <Field Name="NoticeLine1">
+          <DataField>NoticeLine1</DataField>
+        </Field>
+        <Field Name="NoticeLine2">
+          <DataField>NoticeLine2</DataField>
+        </Field>
+        <Field Name="NoticeLine3">
+          <DataField>NoticeLine3</DataField>
+        </Field>
+        <Field Name="NoticeLine4">
+          <DataField>NoticeLine4</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

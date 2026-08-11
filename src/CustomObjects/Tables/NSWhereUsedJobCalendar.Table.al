@@ -1,6 +1,3 @@
-/// <summary>
-/// Table NS_Where Used Job Calendar (ID 14021172).
-/// </summary>
 table 14021172 "NS_Where Used Job Calendar"
 {
     // version PPNA11.00

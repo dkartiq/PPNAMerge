@@ -8,7 +8,7 @@ page 14021160 "NS_Processes List"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-917.NK.1.0 09Mar2022 | Add One Field
+
     Caption = 'Processes List';
     PageType = List;
     SourceTable = "NS_Job Process";
@@ -31,13 +31,6 @@ page 14021160 "NS_Processes List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Description';
                 }
-                //PRJ-917.NK.1.0 09Mar2022 Start
-                field(NS_Blocked; Rec.NS_Blocked)
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Specifies the Blocked';
-                }
-                //PRJ-917.NK.1.0 09Mar2022 End
             }
         }
     }

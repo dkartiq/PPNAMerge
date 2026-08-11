@@ -31,7 +31,7 @@
 //     DefaultLayout = RDLC;
 //     RDLCLayout = './Layouts/NSPurchase Order.rdl';
 
-//     Caption = 'Job Purchase Order';//PE-141.NK.1.0 03Aug2023 updated name
+//     Caption = 'Purchase Order';
 
 //     dataset
 //     {
@@ -645,8 +645,7 @@
 //         BuyFromAddress: array[8] of Text[50];
 //         ShipToAddress: array[8] of Text[50];
 //         CopyTxt: Text[10];
-//ItemNumberToPrint: Text[20];   //PRJCTPR-99.JS.1.0 12APR2023 line commented
-//ItemNumberToPrint: Text[50];    //PRJCTPR-99.JS.1.0 12APR2023 line added
+//         ItemNumberToPrint: Text[20];
 //         PrintCompany: Boolean;
 //         PrintFooter: Boolean;
 //         NoCopies: Integer;

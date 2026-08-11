@@ -1,11 +1,6 @@
 page 14021395 "NS_PM Statistics"
 {
     //CTSI-269.MS.1.0 create new page
-    //PRJ-1015.JS.1.0 19Oct2021 | Add New procedure
-    //PRJ-1322.RM.1.0 25April2022 |Added a new caption
-    //PRJ-1514.RM.1.0 21July2022 | Added some code
-    //PE-170.HS.1.0 6Oct2023 | Added Tooltips
-    //PE-170.HS.1.0 10Oct2023 |Added Tooltips
     Caption = 'PM Statistics';
     SourceTable = Job;
     Editable = false;
@@ -33,60 +28,48 @@ page 14021395 "NS_PM Statistics"
                             caption = 'Contract Price';
                             ApplicationArea = all;
                             Style = Strong;
-                            ToolTip = 'Specifies the total of Budgeted Price for a job based on the date defined on the "As of Date Filter".'; //PE-170.HS.1.0 6Oct2023 
                         }
                         field("Caption[3]"; caption[3])
                         {
                             Caption = 'Total Forecasted Completed Cost';
                             ApplicationArea = all;
                             Style = Strong;
-                            ToolTip = 'Specifies the total of Forecasted Completed Cost for a forecast based on the date defined on the "As of Date Filter".'; //PE-170.HS.1.0 6Oct2023 
                         }
                         field("Caption[4]"; Caption[4])
                         {
                             Caption = 'Total Cost Used';
                             ApplicationArea = all;
                             Style = Strong;
-                            ToolTip = 'Specifies the total of Total Cost Used for a forecast based on the date defined on the "As of Date Filter". Please note that, this value is not applicable for "As of Contracted" period.'; //PE-170.HS.1.0 6Oct2023 
                         }
                         field("Caption[5]"; Caption[5])
                         {
                             caption = 'Budget Remaining';
                             ApplicationArea = all;
                             Style = Strong;
-                            ToolTip = 'Specifies the total of Budget Remaining defined in a forecast based on the date defined on the "As of Date Filter".'; //PE-170.HS.1.0 6Oct2023 
                         }
                         field("Caption[6]"; Caption[6])
                         {
                             caption = 'Contract Gross Margin';
                             ApplicationArea = all;
                             Style = Strong;
-                            //ToolTip = 'Specifies the variance between contract price and forecasted completed cost. The value is caluclated as "Contract Price - Total Forecasted Completed Cost"'; //PE-170.HS.1.0 6Oct2023 //PE-170.HS.1.0 10Oct2023 Commented 
-                            ToolTip = 'Specifies the variance between contract price and forecasted completed cost. The value is calculated as "Contract Price - Total Forecasted Completed Cost"'; //PE-170.HS.1.0 10Oct2023 
                         }
                         field("Caption[7]"; caption[7])
                         {
                             Caption = 'GM Var $';
                             ApplicationArea = all;
                             Style = Strong;
-                            //ToolTip = 'Specifies the variance of the gross margin defined between periods As of Contracted and Current Forecast. The value is calcualted as "Contract Gross Margin (Current Forecast - As of Contracted)". Please note that, this value is not applicable for "As of Contracted" period.'; //PE-170.HS.1.0 6Oct2023 //PE-170.HS.1.0 10Oct2023 Commented
-                            ToolTip = 'Specifies the variance of the gross margin defined between periods As of Contracted and Current Forecast. The value is calculated as "Contract Gross Margin (Current Forecast - As of Contracted)". Please note that, this value is not applicable for "As of Contracted" period.'; //PE-170.HS.1.0 10Oct2023 
                         }
                         field("Caption[8]"; Caption[8])
                         {
                             Caption = 'GM%';
                             ApplicationArea = all;
                             Style = Strong;
-                            //ToolTip = 'Specifies the percentage of the gross margin. The values is caluclated as "(Contract Gross Margin / Contract Price) * 100"'; //PE-170.HS.1.0 6Oct2023 //PE-170.HS.1.0 10Oct2023  Commented
-                            ToolTip = 'Specifies the percentage of the gross margin. The value is calculated as "(Contract Gross Margin / Contract Price) * 100"'; //PE-170.HS.1.0 10Oct2023 
                         }
                         field("Caption[9]"; Caption[9])
                         {
                             Caption = 'GM% Var';
                             ApplicationArea = all;
                             Style = Strong;
-                            //ToolTip = 'Specifies the percentage variance of the gross margin defined between periods As of Contracted and Current Forecast. The value is calcualted as "GM% (Current Forecast - As of Contracted)". Please note that, this value is not applicable for "As of Contracted" period.'; //PE-170.HS.1.0 6Oct2023 //PE-170.HS.1.0 10Oct2023 Commented
-                            ToolTip = 'Specifies the percentage variance of the gross margin defined between periods As of Contracted and Current Forecast. The value is calcualted as "GM% (Current Forecast - As of Contracted)". Please note that, this value is not applicable for "As of Contracted" period.'; //PE-170.HS.1.0 10Oct2023 
                         }
                     }
                     group("  ")
@@ -96,7 +79,6 @@ page 14021395 "NS_PM Statistics"
                             caption = 'As of Contracted';
                             Style = Strong;
                             ApplicationArea = all;
-                            ToolTip = 'Shows the forecast values from the start till the date defined on the "As of Date Filter"'; //PE-170.HS.1.0 6Oct2023 
                         }
                         field(ContractPrice; (AsofContracted))//1
                         {
@@ -137,11 +119,9 @@ page 14021395 "NS_PM Statistics"
                     {
                         field("Caption[11]"; Caption[11])
                         {
-                            //caption = 'Previous Forecast'; //PRJ-1322.RM.1.0 commented
-                            Caption = 'Previous Month Forecast'; //PRJ-1322.RM.1.0 
+                            caption = 'Previous Forecast';
                             Style = Strong;
                             ApplicationArea = all;
-                            ToolTip = 'Shows the forecast values posted for the previous month of the date defined on the "As of Date Filter"'; //PE-170.HS.1.0 6Oct2023
                         }
                         field(PreContractPrice; (PreContractPrice)) //2
                         {
@@ -184,7 +164,6 @@ page 14021395 "NS_PM Statistics"
                             caption = 'Current Forecast';
                             Style = Strong;
                             ApplicationArea = all;
-                            ToolTip = 'Shows the forecast values for the month of the date defined on the "As of Date Filter".'; //PE-170.HS.1.0 6Oct2023     
                         }
                         field(CurrContractPrice; (CurrContractPrice))//3
                         {
@@ -300,8 +279,7 @@ page 14021395 "NS_PM Statistics"
         if Jobsetup.get then;
 
         Caption[10] := 'As of Contracted';
-        //  Caption[11] := 'Previous Forecast';//PRJ-1322.RM.1.0 commented
-        Caption[11] := 'Previous Month Forecast'; //PRJ-1322.RM.1.0
+        Caption[11] := 'Previous Forecast';
         Caption[12] := 'Current Forecast';
 
         MasterJob.Reset();
@@ -391,24 +369,14 @@ page 14021395 "NS_PM Statistics"
             Column21 := 0
         else
             Column21 := round((CurrContractPrice - CurrTotalCostEsti) * 100 / CurrContractPrice, Jobsetup."NS_Forecast Amount Rounding");
-        //PRJ-1514.RM.1.0 start
-        Jobsetup.Get();
-        CommentLine.Reset();
-        CommentLine.SetRange("No.", JobNoSentIn);
-        CommentLine.SetRange("Table Name", CommentLine."Table Name"::Job);
-        CommentLine.SetFilter(Comment, '<>%1', '');
-        if not CommentLine.FindFirst() then begin
-            if Jobsetup."NS_Required GM% Var for JFW Comments" <> 0 then
-                if (Column21) - (Column19) <= Jobsetup."NS_Required GM% Var for JFW Comments" then  //PRJ-1514.RM.1.0
-                    Error('Please enter PM comments, as the GM% Var equals or less than %1%', Jobsetup."NS_Required GM% Var for JFW Comments");
+        if Jobsetup."NS_Required GM% Var for JFW Comments" <> 0 then begin
+            if (Column21) - (Column19) <= Jobsetup."NS_Required GM% Var for JFW Comments" then
+                Message('Please enter PM comments, as the GM% Var equals or less than %1%', Jobsetup."NS_Required GM% Var for JFW Comments");
         end;
-        // if Jobsetup."NS_Required GM% Var for JFW Comments" <> 0 then //PRJ-1514.RM.1.0 commented
-        //     if (Column21) - (Column19) <= Jobsetup."NS_Required GM% Var for JFW Comments" then //PRJ-1514.RM.1.0 commented
-        //         Message('Please enter PM comments, as the GM% Var equals or less than %1%', Jobsetup."NS_Required GM% Var for JFW Comments");//PRJ-1514.RM.1.0 commented
     end;
-    //PRJ-1514.RM.1.0 end
+
     var
-        CommentLine: Record "Comment Line"; //PRJ-1514.RM.1.0
+
         Caption: array[30] of Text[30];
         JobNoSentIn: Code[20];
         NewStatusDateSentIn: Date;
@@ -518,74 +486,5 @@ page 14021395 "NS_PM Statistics"
 
     end;
 
-    //PRJ-1015.JS.1.0  19Oct2021 - Start
-    procedure GetPlanningLineIncludeSubLevels(StartDate: Date; var Enddate: Date; var ParaJob: Code[20]; var Flag: Boolean) Answer: Decimal;
-    var
-        PlanningLine: Record "Job Planning Line";
-        PlanningLine2: Record "Job Planning Line";
-        JobNoFilter: Code[20];
-        IsHandle: Boolean;//FGH-163.SM.29022024 //PE-269.JS.1.0
-    begin
-        //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-        OnBeforePMStatGetPlanningLineIncludeSubLevels(StartDate, Enddate, ParaJob, Flag, IsHandle);
-        If IsHandle then
-            exit;
-        //FGH-163.SM.29022024 //PE-269.JS.1.0 END
 
-        JobNoFilter := '';
-        JobNoFilter := '@*' + format(ParaJob) + '*';
-        Answer := 0;
-        PlanningLine.Reset();
-        PlanningLine.SetRange("Job No.", ParaJob);     //for asofdate and current month line commented
-        if not Flag then
-            PlanningLine.SetFilter("Line Type", '<>%1', PlanningLine."Line Type"::Budget)
-        else
-            PlanningLine.SetFilter("Line Type", '<>%1', PlanningLine."Line Type"::Billable);
-        PlanningLine.SetRange("Planning Date", StartDate, Enddate);
-        if PlanningLine.FindSet() then
-            repeat
-                if Flag then
-                    Answer := Answer + PlanningLine."Total Cost (LCY)"
-                else
-                    Answer := Answer + PlanningLine."Line Amount (LCY)";
-
-            until PlanningLine.Next() = 0;
-
-
-        PlanningLine2.Reset();
-        PlanningLine2.Setfilter("NS_Sub-Level to Job No.", '%1', JobNoFilter);
-        if not Flag then
-            PlanningLine2.SetFilter("Line Type", '<>%1', PlanningLine2."Line Type"::Budget)
-        else
-            PlanningLine2.SetFilter("Line Type", '<>%1', PlanningLine2."Line Type"::Billable);
-        PlanningLine2.SetRange("Planning Date", StartDate, Enddate);
-        if PlanningLine2.FindSet() then
-            repeat
-                if Flag then
-                    Answer := Answer + PlanningLine2."Total Cost (LCY)"
-                else
-                    Answer := Answer + PlanningLine2."Line Amount (LCY)";
-
-            until PlanningLine2.Next() = 0;
-
-        exit(Answer);
-    end;
-    //PRJ-1015.JS.1.0  19Oct2021 - end
-
-    //PRJ-1665.AS.1.0 12OCT2022 START
-    procedure Get(var JobNoIn: Code[20]; var NewStatusDateIn: Date; var ParaNextBillDate: date);
-    begin
-        JobNoIn := JobNoSentIn;
-        NewStatusDateIn := NewStatusDateSentIn;
-        ParaNextBillDate := NextBillDate;
-    end;
-    //PRJ-1665.AS.1.0 12OCT2022 END
-
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforePMStatGetPlanningLineIncludeSubLevels(StartDate: Date; var Enddate: Date; var ParaJob: Code[20]; var Flag: Boolean; var Ishandle: Boolean)
-    begin
-    end;
-
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
 }

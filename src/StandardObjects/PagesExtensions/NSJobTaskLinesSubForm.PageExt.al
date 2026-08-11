@@ -3,9 +3,6 @@ pageextension 14021275 NS_JobTaskLinesSubForm extends "Job Task Lines Subform"
     // version NAVW111.00.00.22292,PPNA11.00
     //PRJ-807.RS.1.0 9July21 | Ability to Assign Work Units and Work Units Of Measure at Job Task Line
     //PRJ-959.RM.1.0 04-Oct-2021 | Modify Caption of fields
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1579.RM.1.0  18Aug2022 | Added tooltip
-    Caption = 'Job Task Lines Subform'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Job Task Type")
@@ -14,12 +11,10 @@ pageextension 14021275 NS_JobTaskLinesSubForm extends "Job Task Lines Subform"
             field("NS_Work Units"; Rec."NS_Work Units")
             {
                 ApplicationArea = All;
-                ToolTip = 'Quantity of work to be performed (Example: Qty of Sq Ft for Tile Flooring)'; //PRJ-1579.RM.1.0 
             }
             field("NS_Work Unit of Measure"; Rec."NS_Work Unit of Measure")
             {
                 ApplicationArea = All;
-                ToolTip = 'Specifies the Work Measure'; //PRJ-1579.RM.1.0
             }
             //PRJ-807.RS.1.0 9July21 End
         }

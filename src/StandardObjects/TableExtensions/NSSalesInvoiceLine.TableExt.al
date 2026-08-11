@@ -3,8 +3,7 @@ tableextension 14021121 NS_SalesInvoiceLine extends "Sales Invoice Line"
     // version NAVW111.00.00.24742,NAVNA11.00.00.24742,PPNA11.00
     //TM-10.AM.1.0 | Added Field.
     //CTSI-150.AS.1.0 added new field
-    //PRJ-1015.JS.1.0 22Oct2021 | field Added
-    //PRJ-1624.NK.1.0 22Sep2022 | Added Fields
+
     fields
     {
         //Unsupported feature: Change OptionString on "Type(Field 5)". Please convert manually.
@@ -83,31 +82,6 @@ tableextension 14021121 NS_SalesInvoiceLine extends "Sales Invoice Line"
             Description = 'JD-10.MS.1.0';
             DataClassification = CustomerContent;
         }
-
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-        //PRJ-1624.NK.1.0 22Sep2022 Start
-        field(14021486; "NS_Retention %"; Decimal)
-        {
-            Caption = 'Retention %';
-            DecimalPlaces = 2 : 15;
-            DataClassification = CustomerContent;
-            Description = 'Retention %';
-        }
-        field(14021487; "NS_Retention Amount"; Decimal)
-        {
-            Caption = 'Retention Amount';
-            DataClassification = CustomerContent;
-            Description = 'Retention Amount';
-        }
-        //PRJ-1624.NK.1.0 22Sep2022 End
-
     }
 
     keys

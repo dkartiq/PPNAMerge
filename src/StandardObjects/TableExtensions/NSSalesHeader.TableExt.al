@@ -5,17 +5,6 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
     //CTSI-150.AS.1.0 28Sept2020 Added new field
     //PRJ-415.MS.1.0 flow of salesperson from Job to SI
     //PRJ-911.GK.1.0 10Sep2021 |Validate Default job retention on job No.
-    //PRJ-999.JS.1.0 12Nov2021 | Add Code for Dimension
-    //PRJ-1087.JS.1.0 18Dec2021 | Add condition for dimension
-    //PRJ-1099.JS.1.0 31Dec2021 | Modify code for dimension on condition basis
-    //PRJ-1201.AS.1.0 03MARCH2022  | Add one field
-    //PRJ-1304.RM.1.0 22April2022 | Added a Field
-    //PRJ-1519.NK.1.0 16Jul2022 | Added Code
-    //PRJ-1624.NK.1.0 22Sep2022 | Added Field
-    //PRJCTPR-192.DK.1.0 09OCT2023 | Make a Procedure
-    //PRJCTPR-252.HS.1.0 28Dec2023| Added code
-    //PRJCTPR-304.HS.1.0 24Jan2024 | Added Code
-
     fields
     {
 
@@ -35,30 +24,8 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
                 IncompatibleLines: Boolean;
                 JobSetup: Record "Jobs Setup";
                 CustomerRec: Record Customer;
-                NS_ProgrBillHead: Record "NS_Progress Billing Header";  //PRJ-1099.JS.1.0 30Dec2021
-                NS_DefaultDim: Record "Default Dimension";  //PRJ-1099.JS.1.0 30Dec2021
             begin
                 //ProjectPro - start
-                //PRJ-1610.GK.1.0 09Sept2022 start
-                if Rec."NS_Job No." <> '' then begin
-                    if NS_Job.Get("NS_Job No.") then;
-                    if JobSetup.Get() then;
-                    IF NS_Job."NS_Gen. Bus. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
-                        Validate("Gen. Bus. Posting Group", NS_Job."NS_Gen. Bus. Posting Group New")//PRJ-831.AS.1.0 12OCT2021 Add New
-                    else
-                        IF JobSetup."NS_Gen. Bus. Posting Group" <> '' then
-                            Validate("Gen. Bus. Posting Group", JobSetup."NS_Gen. Bus. Posting Group")
-                        else
-                            IF CustomerRec.Get(Rec."Sell-to Customer No.") then
-                                IF CustomerRec."Gen. Bus. Posting Group" <> '' then
-                                    Validate("Gen. Bus. Posting Group", CustomerRec."Gen. Bus. Posting Group");
-                    //PRJ-131.SK.1.0 End
-                end else begin
-                    IF CustomerRec.Get(Rec."Sell-to Customer No.") then
-                        IF CustomerRec."Gen. Bus. Posting Group" <> '' then
-                            Validate("Gen. Bus. Posting Group", CustomerRec."Gen. Bus. Posting Group");
-                end;
-                //PRJ-1610.GK.1.0 09Sept2022 end
                 if "NS_Job No." = '' then
                     exit;
 
@@ -103,8 +70,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
                 end;
                 "Currency Code" := '';
                 if NS_Job.GET(Rec."NS_Job No.") then begin
-                    if "NS_Multiple Retention on Lines" = false then //PRJ-1624.NK.1.0 07Oct2022
-                        Validate("NS_Retention Percent", NS_Job."NS_Default Job Retention"); //PRJ-911.GK.1.0 10Sep2021
+                     Validate("NS_Retention Percent", NS_Job."NS_Default Job Retention"); //PRJ-911.GK.1.0 10Sep2021
                     if NS_Job."Currency Code" > '' then
                         VALIDATE("Currency Code", NS_Job."Currency Code");
                     if NS_Job."Invoice Currency Code" > '' then
@@ -113,42 +79,20 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
                     //PRJ-131.SK.1.0 Start
                     // IF NS_Job."NS_Gen. Bus. Posting Group" <> '' then//PRJ-831.AS.1.0 12OCT2021 Comment old
                     //    Validate("Gen. Bus. Posting Group", NS_Job."NS_Gen. Bus. Posting Group")//PRJ-831.AS.1.0 12OCT2021 Comment old
-                    //PRJ-999.JS.1.0  12Nov2021 Start
-                    JobSetup.Get();   //PRJ-1087.JS.1.0 18Dec2021 add line
-                    if JobSetup."NS_Flow Job Card Dimension" = true then begin    //PRJ-1087.JS.1.0 18Dec2021 add line
-                        Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                        Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                        Rec."Dimension Set ID" := NS_GetDimensionNoFromJob(Rec."NS_Job No.");
-                        //PRJ-1099.JS.1.0 30Dec2021-Start
-                    end else begin   //PRJ-1087.JS.1.0 18Dec2021 add line
-                                     //PRJ-999.JS.1.0 10Nov2021 - end  //PRJ-1049.JS.1.0 02Dec2021
-                        NS_DefaultDim.Reset();
-                        NS_DefaultDim.SetRange("Table ID", 23);
-                        NS_DefaultDim.SetRange("No.", Rec."Sell-to Customer No.");
-                        if NS_DefaultDim.IsEmpty() then begin
-                            Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                            Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                            Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                        end;
-                    end;
-                    //PRJ-1099.JS.1.0 30Dec2021-End     
-                    CreateDimFromDefaultDim(Rec.FieldNo("NS_Job No.")); //PRJCTPR-199.JS.1.0 line adeed
 
-                    //PRJ-1610.GK.1.0 09Sept2022 start-comment
-                    //IF NS_Job."NS_Gen. Bus. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
-                    //Validate("Gen. Bus. Posting Group", NS_Job."NS_Gen. Bus. Posting Group New")//PRJ-831.AS.1.0 12OCT2021 Add New
-                    //else
-                    // IF JobSetup."NS_Gen. Bus. Posting Group" <> '' then
-                    //  Validate("Gen. Bus. Posting Group", JobSetup."NS_Gen. Bus. Posting Group")
-                    //else
-                    // IF CustomerRec.Get(Rec."Sell-to Customer No.") then
-                    //   IF CustomerRec."Gen. Bus. Posting Group" <> '' then
-                    //      Validate("Gen. Bus. Posting Group", CustomerRec."Gen. Bus. Posting Group");
+                    IF NS_Job."NS_Gen. Bus. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
+                        Validate("Gen. Bus. Posting Group", NS_Job."NS_Gen. Bus. Posting Group New")//PRJ-831.AS.1.0 12OCT2021 Add New
+                    else
+                        IF JobSetup."NS_Gen. Bus. Posting Group" <> '' then
+                            Validate("Gen. Bus. Posting Group", JobSetup."NS_Gen. Bus. Posting Group")
+                        else
+                            IF CustomerRec.Get(Rec."Sell-to Customer No.") then
+                                IF CustomerRec."Gen. Bus. Posting Group" <> '' then
+                                    Validate("Gen. Bus. Posting Group", CustomerRec."Gen. Bus. Posting Group");
                     //PRJ-131.SK.1.0 End
-                    //PRJ-1610.GK.1.0 09Sept2022 end
                     validate("External Document No.", NS_Job."NS_Customer PO Number");//CTSI-179.MS.1.0
                     "Salesperson Code" := NS_Job."NS_Salesperson Code";//PRJ-415
-
+                   
 
                 end;
                 //ProjectPro - end
@@ -156,7 +100,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
         }
         field(14021130; "NS_Retention InvoiceDiscAmount"; Decimal)
         {
-            CalcFormula = Sum("Sales Line"."Inv. Discount Amount" WHERE("Document Type" = FIELD("Document Type"),
+            CalcFormula = Sum ("Sales Line"."Inv. Discount Amount" WHERE("Document Type" = FIELD("Document Type"),
                                                                          "Document No." = FIELD("No."),
                                                                          "NS_Retention Applies" = CONST(true)));
             Caption = 'Retention Invoice Disc. Amount';
@@ -165,7 +109,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
         }
         field(14021136; "NS_Retention Base Amount"; Decimal)
         {
-            CalcFormula = Sum("Sales Line"."Amount Including VAT" WHERE("Document Type" = FIELD("Document Type"),
+            CalcFormula = Sum ("Sales Line"."Amount Including VAT" WHERE("Document Type" = FIELD("Document Type"),
                                                                          "Document No." = FIELD("No."),
                                                                          "NS_Retention Applies" = CONST(true)));
             Caption = 'Retention Base Amount';
@@ -180,7 +124,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
         }
         field(14021137; "NS_Retention Base Before Tax"; Decimal)
         {
-            CalcFormula = Sum("Sales Line"."Line Amount" WHERE("Document Type" = FIELD("Document Type"),
+            CalcFormula = Sum ("Sales Line"."Line Amount" WHERE("Document Type" = FIELD("Document Type"),
                                                                 "Document No." = FIELD("No."),
                                                                 "NS_Retention Applies" = CONST(true)));
             Caption = 'Retention Base Before Tax';
@@ -192,7 +136,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
             Caption = 'Retention Percent';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            DecimalPlaces = 2 : 15; //PRJ-1519.NK.1.0 16Jul2022
+
             trigger OnValidate();
             var
                 GLSetup: Record 98;
@@ -245,8 +189,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
                 //ProjectPro - start
                 NS_JobsSetup.GET;
                 if "NS_Retention Amount (LCY)" <> 0 then begin
-                    if "NS_Retention Document" = false then //PRJ-1648.PS.1.0 16DEC2022
-                        TESTFIELD("NS_Retention Document", false);
+                    TESTFIELD("NS_Retention Document", false);
                     "NS_Retention Percent" := 0;
                     if "Currency Code" = '' then begin
                         "NS_Retention Amount" := "NS_Retention Amount (LCY)";
@@ -277,8 +220,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
                 //ProjectPro - start
                 NS_JobsSetup.GET;
                 if "NS_Retention Amount" <> 0 then begin
-                    if "NS_Retention Document" = false then  //PRJ-1648.PS.1.0 16DEC2022
-                        TESTFIELD("NS_Retention Document", false);
+                    TESTFIELD("NS_Retention Document", false);
                     "NS_Retention Percent" := 0;
                     if "Currency Code" = '' then begin
                         "NS_Retention Amount (LCY)" := "NS_Retention Amount";
@@ -307,8 +249,7 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
                 //ProjectPro - start
                 if CurrFieldNo <> 0 then begin
                     if "NS_Retention Date" > 0D then
-                        if ("NS_Retention Date" > 0D) and ("NS_Retention Document" = false) then //PRJ-1648.PS.1.0 16DEC2022
-                            TESTFIELD("NS_Retention Document", false);
+                        TESTFIELD("NS_Retention Document", false);
 
                     if "NS_Retention Amount (LCY)" <> 0 then
                         TESTFIELD("NS_Retention Date");
@@ -323,97 +264,14 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
             DataClassification = CustomerContent;
 
             trigger OnValidate();
-            var
-                NS_SalesLine: Record "Sales Line";  //PRJCTPR-304.HS.1.0 24Jan2024 
-                NS_SalesLineL: Record "Sales Line";// PRJCTPR-333.PS.1.0 19March2024
-                NS_Jobsetup: Record "Jobs Setup";// PRJCTPR-333.PS.1.0 19March2024
-                SalesHeader: Record "Sales Header"; //FGH-163.SM.240424  //PRJCTPR-358.JS.1.0 24APR2024
-                IsHandled: Boolean; //FGH-163.SM.240424 //PRJCTPR-358.JS.1.0 24APR2024
             begin
-                //FGH-163.SM.240424 START  //PRJCTPR-358.JS.1.0 24APR2024
-                OnBeforeOnValidateRetentionDocument(SalesHeader, IsHandled);
-                If IsHandled then
-                    exit;
-                //FGH-163.SM.240424 END  //PRJCTPR-358.JS.1.0 24APR2024
                 //ProjectPro - start
                 if "NS_Retention Document" = true then begin
                     TESTFIELD("NS_Retention Amount (LCY)", 0);
                     TESTFIELD("NS_Retention Percent", 0);
                     TESTFIELD("NS_Retention Date", 0D);
                 end;
-
-                if NS_Jobsetup.Get() then;
-
                 //ProjectPro - end
-                // PRJCTPR-333.PS.1.0 19March2024 Start
-                if Rec."NS_Retention Document" then begin
-                    NS_SalesLine.Reset();
-                    NS_SalesLine.SetRange("Document No.", Rec."No.");
-                    if not NS_SalesLine.FindFirst() then begin
-                        NS_SalesLineL.Init();
-                        NS_SalesLineL.Validate("Document Type", Rec."Document Type");
-                        NS_SalesLineL.Validate("Document No.", Rec."No.");
-                        NS_SalesLineL.Validate("Line No.", 10000);
-                        NS_SalesLineL.Type := NS_SalesLineL.type::NS_Ledger;
-                        NS_SalesLineL.Validate("No.", NS_Jobsetup."NS_Retention Receivable Ledger");
-                        NS_SalesLineL.Insert();
-
-                    end else begin
-                        // PRJCTPR-333.PS.2.0 02April2024 Start
-                        // PRJCTPR-333.PS.2.0 02April2024 Start
-                        Message('The lines already exist on Invoice No. %1 Enabling it will delete all the lines and a new line with type ledger and No. %2 will be created.', Rec."No.", NS_JobSetup."NS_Retention Receivable Ledger");
-                        if not confirm('Are you sure you want to continue?', true, true) then
-                            Error('');
-                        // PRJCTPR-333.PS.2.0 02April2024 End
-                        // PRJCTPR-333.PS.2.0 02April2024 End
-                        NS_SalesLine.DeleteAll();
-                        NS_SalesLineL.Init();
-                        NS_SalesLineL.Validate("Document Type", Rec."Document Type");
-                        NS_SalesLineL.Validate("Document No.", Rec."No.");
-                        NS_SalesLineL.Validate("Line No.", 10000);
-                        NS_SalesLineL.Type := NS_SalesLineL.type::NS_Ledger;
-                        NS_SalesLineL.Validate("No.", NS_Jobsetup."NS_Retention Receivable Ledger");
-                        NS_SalesLineL.Insert();
-
-                    end;
-
-                end;
-                if not Rec."NS_Retention Document" then begin
-                    // PRJCTPR-333.PS.2.0 02April2024 Start
-                    if not confirm('There exists a line with the type Ledger and No. %1 Disabling it will delete the line. Are you sure you want to continue?', true, NS_JobSetup."NS_Retention Receivable Ledger", true) then
-                        Error('');
-                    // PRJCTPR-333.PS.2.0 02April2024 End
-                    NS_SalesLine.Reset();
-                    NS_SalesLine.SetRange("Document No.", Rec."No.");
-                    NS_SalesLine.SetRange(Type, NS_SalesLine.Type::NS_Ledger);
-                    NS_SalesLine.SetRange("No.", NS_Jobsetup."NS_Retention Receivable Ledger");
-                    if NS_SalesLine.findset() then begin
-                        repeat
-                            NS_SalesLine.Validate("Unit Price", 0);
-                            NS_SalesLine.Validate("Unit Cost (LCY)", 0);
-                            NS_SalesLine.Validate("Unit Cost", 0);
-                            NS_SalesLine.Validate(Quantity, 0);
-                            NS_SalesLine.Validate(Description, '');
-                            NS_SalesLine.type := NS_SalesLine.Type::" ";
-                            NS_SalesLine."No." := '';
-                            NS_SalesLine.Modify(true);
-                        until NS_SalesLine.Next = 0;
-                    end;
-                end;
-
-                // PRJCTPR-304.HS.1.0 23Jan2024 Start
-                // if not Rec."NS_Retention Document" then begin
-                //     NS_SalesLine.Reset();
-                //     NS_SalesLine.SetRange("Document No.", Rec."No.");
-                //     if NS_SalesLine.FindFirst() then begin
-                //         if (NS_SalesLine.Type = NS_SalesLine.Type::NS_Ledger) and (NS_SalesLine."No." = 'RETENTION') then
-                //             Error('You cannot disable "Retention Document" due to existing lines with "Type = Ledger".');
-                //     end;
-                // end;
-                // PRJCTPR-304.HS.1.0 24Jan2024 End  
-                // PRJCTPR-333.PS.1.0 19March2024 End  
-
-
             end;
         }
         field(14021325; "NS_Progress Billing Document"; Boolean)
@@ -501,83 +359,6 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
         }
-
-        //PRJ-1201.AS.1.0 03MARCH2022  start
-        field(14021407; "NS_Add Job Address"; Boolean)
-        {
-            Caption = 'Add Job Address';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PRJ-1201.AS.1.0 03MARCH2022  end
-        //PRJ-1304.RM.1.0 Start
-        field(14021408; "NS_Draw No."; Code[25])
-        {
-            Caption = 'Draw No.';
-            Description = 'Draw No.';
-            // TableRelation = NS_Draw."NS_No.";//PRJ-1304.RM.2.0 //PRJCTPR-252.HS.1.0 28Dec2023 Commented
-            TableRelation = NS_Draw."NS_No." WHERE("NS_Job No." = FIELD("NS_Job No."),  //PRJCTPR-252.HS.1.0 28Dec2023
-                                              NS_Closed = CONST(false));
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1304.RM.1.0 End
-        //PRJ-1624.NK.1.0 22Sep2022 Start
-        field(14021486; "NS_Multiple Retention on Lines"; Boolean)
-        {
-            Caption = 'Multiple Retention on Lines';
-            DataClassification = CustomerContent;
-            Description = 'Multiple Retention on Lines';
-        }
-        //PRJ-1624.NK.1.0 22Sep2022 End
-
-        //PE-302.JS.1.0 29MAY24-Start
-        field(14021311; "NS_AppliesToDocument Type"; Enum "Gen. Journal Document Type")
-        {
-            Caption = 'AppliesToDocument Type';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document Type" is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            //Editable = false;
-        }
-        field(14021312; "NS_AppliesToDocument No."; code[20])
-        {
-            Caption = 'AppliesToDocument No.';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document No." is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            //Editable = false;
-
-            trigger OnValidate()
-            var
-                NSGenJnlLine: Record "Gen. Journal Line";
-                NSGenJnlApply: Codeunit "Gen. Jnl.-Apply";
-                NSApplyCustEntries: Page "Apply Customer Entries";
-                IsHandled: Boolean;
-            begin
-                IsHandled := false;
-                NS_OnBeforeLookupAppliesToDocNo(Rec, NSCustLedgEntry, IsHandled);
-                if IsHandled then
-                    exit;
-
-                TestField("Bal. Account No.", '');
-                NSCustLedgEntry.SetApplyToFilters("Bill-to Customer No.", "NS_AppliesToDocument Type".AsInteger(), "NS_AppliesToDocument No.", Amount);
-                NS_OnAfterSetApplyToFilters(NSCustLedgEntry, Rec);
-
-                NSApplyCustEntries.SetSales(Rec, NSCustLedgEntry, Rec.FieldNo("NS_AppliesToDocument No."));
-                NSApplyCustEntries.SetTableView(NSCustLedgEntry);
-                NSApplyCustEntries.SetRecord(NSCustLedgEntry);
-                NSApplyCustEntries.LookupMode(true);
-                if NSApplyCustEntries.RunModal() = ACTION::LookupOK then begin
-                    NSApplyCustEntries.GetCustLedgEntry(NSCustLedgEntry);
-                    NSGenJnlApply.CheckAgainstApplnCurrency(
-                      "Currency Code", NSCustLedgEntry."Currency Code", NSGenJnlLine."Account Type"::Customer, true);
-                    "NS_AppliesToDocument Type" := NSCustLedgEntry."Document Type";
-                    "NS_AppliesToDocument No." := NSCustLedgEntry."Document No.";
-                    NS_OnAfterAppliesToDocNoOnLookup(Rec, NSCustLedgEntry);
-                end;
-                Clear(NSApplyCustEntries);
-            end;
-        }
-        //PE-302.JS.1.0 29MAY24-end        
-
     }
 
     procedure NS_RetentionBase(DocumentType: enum "Sales Document Type"; No: Code[20]): Decimal;
@@ -610,92 +391,8 @@ tableextension 14021108 NS_SalesHeader extends "Sales Header"
         NS_JobsSetup: Record "Jobs Setup";
         NS_Currency: Record Currency;
         NS_JobCust: Record Customer;
-        NSCustLedgEntry: Record "Cust. Ledger Entry";   //PE-302.JS.1.0 30MAY2024
         Text14021100lbl: Label 'There are lines that are not part of this job.  All Job Numbers will be set to %1.\If a Job Task Number does not exist on the new job, it will be cleared.\Do you want to continue?';
         Text14021101Lbl: Label 'The Job No. has not been modified.';
-
-    //PRJ-999.JS.1.0  12Nov2021 Start
-    procedure NS_GetDimensionNoFromJob(JobNo: Code[20]) DimensionNo: Integer;
-    var
-        DefaultDimension: Record "Default Dimension";
-        DimensionSetEntryTemp: Record "Dimension Set Entry" temporary;
-        DimensionValue: Record "Dimension Value";
-        DimMgt: Codeunit DimensionManagement;
-    begin
-        DimensionNo := 0;
-        with DefaultDimension do begin
-            DefaultDimension.RESET();
-            DefaultDimension.SETRANGE("Table ID", DATABASE::Job);
-            DefaultDimension.SETRANGE("No.", JobNo);
-            if DefaultDimension.FINDSET() then
-                repeat
-                    DimensionValue.RESET();
-                    DimensionValue.SETRANGE("Dimension Code", "Dimension Code");
-                    DimensionValue.SETRANGE(Code, "Dimension Value Code");
-                    if DimensionValue.FINDFIRST() then begin
-                        DimensionSetEntryTemp.INIT();
-                        DimensionSetEntryTemp."Dimension Code" := DimensionValue."Dimension Code";
-                        DimensionSetEntryTemp."Dimension Value ID" := DimensionValue."Dimension Value ID";
-                        DimensionSetEntryTemp."Dimension Value Code" := DimensionValue.Code;
-                        DimensionSetEntryTemp.INSERT();
-                    end;
-                until DefaultDimension.NEXT() = 0;
-            DimensionNo := DimMgt.GetDimensionSetID(DimensionSetEntryTemp);
-        end;
-    end;
-    //PRJ-999.JS.1.0  12Nov2021 end 
-    //PRJCTPR-192.DK.1.0 09OCT2023 Start
-    /// <summary>
-    /// NS_SetShipToAddress.
-    /// </summary>
-    /// <param name="NS_ShipToName">Text[100].</param>
-    /// <param name="NS_ShipToName2">Text[50].</param>
-    /// <param name="NS_ShipToAddress">Text[100].</param>
-    /// <param name="NS_ShipToAddress2">Text[50].</param>
-    /// <param name="NS_ShipToCity">Text[30].</param>
-    /// <param name="NS_ShipToPostCode">Code[20].</param>
-    /// <param name="NS_ShipToCounty">Text[30].</param>
-    /// <param name="NS_ShipToCountryRegionCode">Code[10].</param>
-    /// <param name="NS_ShipToContact">Text[100].</param>
-    /// <param name="NS_ShipToCode">Code[10].</param>
-    procedure NS_SetShipToAddress(NS_ShipToName: Text[100]; NS_ShipToName2: Text[50]; NS_ShipToAddress: Text[100]; NS_ShipToAddress2: Text[50]; NS_ShipToCity: Text[30]; NS_ShipToPostCode: Code[20]; NS_ShipToCounty: Text[30]; NS_ShipToCountryRegionCode: Code[10]; NS_ShipToContact: Text[100]; NS_ShipToCode: Code[10])
-    begin
-        "Ship-to Name" := NS_ShipToName;
-        "Ship-to Name 2" := NS_ShipToName2;
-        "Ship-to Address" := NS_ShipToAddress;
-        "Ship-to Address 2" := NS_ShipToAddress2;
-        "Ship-to City" := NS_ShipToCity;
-        "Ship-to Post Code" := NS_ShipToPostCode;
-        "Ship-to County" := NS_ShipToCounty;
-        "Ship-to Country/Region Code" := NS_ShipToCountryRegionCode;
-        "Ship-to Contact" := NS_ShipToContact;
-        "Ship-to code" := NS_ShipToCode;
-    end;
-    //FGH-163.SM.240424 START  //PRJCTPR-358.JS.1.0 24APR2024
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeOnValidateRetentionDocument(Var SalesHeader: Record "Sales Header"; var IsHandled: Boolean)
-    begin
-    end;
-    //FGH-163.SM.240424 END  //PRJCTPR-358.JS.1.0 24APR2024
-    //PRJCTPR-192.DK.1.0 09OCT2023 End
-
-    //PE-302.JS.1.0 30MAY2024-Start
-    [IntegrationEvent(false, false)]
-    local procedure NS_OnBeforeLookupAppliesToDocNo(var SalesHeader: Record "Sales Header"; var CustLedgEntry: Record "Cust. Ledger Entry"; var IsHandled: Boolean)
-    begin
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure NS_OnAfterSetApplyToFilters(var CustLedgerEntry: Record "Cust. Ledger Entry"; SalesHeader: Record "Sales Header")
-    begin
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure NS_OnAfterAppliesToDocNoOnLookup(var SalesHeader: Record "Sales Header"; CustLedgerEntry: Record "Cust. Ledger Entry")
-    begin
-    end;
-    //PE-302.JS.1.0 30MAY2024-end
-
     /*+----------------------------------------------------------
   +ProjectPro
   + - Added field(s):

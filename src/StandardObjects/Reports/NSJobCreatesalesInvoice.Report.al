@@ -3,7 +3,7 @@ report 14021226 NS_JobCreateSalesInvoice
 
     //PRJ-153.SK.1.0 Added evetns and code
     ApplicationArea = Jobs;
-    Caption = 'Job Create Sales Invoice';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Job Create Sales Invoice';
     ProcessingOnly = true;
     UsageCategory = Tasks;
 

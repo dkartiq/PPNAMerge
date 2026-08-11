@@ -9,7 +9,7 @@ table 14021439 "NS_Job Forecast by Seg code"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //JD-48.AS.1.0 31OCT2020 Created new Table by Saving 14021187
-    //PRJ-1326.NK.1.0 27APR2022 | Code Change
+
     Caption = 'Job Forecast by Segment code';
 
     fields
@@ -185,7 +185,7 @@ table 14021439 "NS_Job Forecast by Seg code"
                                                                                  //"Planning Date" = FIELD("Date Filter"),
                                                                                  "line type" = filter(Budget),
                                                                                  "Type" = filter(Resource),
-                                                                                 "Unit of Measure Code" = filter('HR' | 'HOUR')));//PRJ-1524.GK.1.0 25July2022
+                                                                                 "Unit of Measure Code" = const('HR')));
             Caption = 'Budgeted Hours';
             Description = 'CTSI-21';
             Editable = false;
@@ -201,7 +201,7 @@ table 14021439 "NS_Job Forecast by Seg code"
                                                                                  "Entry Type" = filter(Usage),
                                                                                  "Posting Date" = FIELD("NS_Date Filter"),
                                                                                  "Type" = filter(Resource),
-                                                                                 "Unit of Measure Code" = filter('HR' | 'HOUR')));//PRJ-1524.GK.1.0 25July2022
+                                                                                 "Unit of Measure Code" = const('HR')));
             Caption = 'Actual Hours';
             Description = 'CTSI-21';
             Editable = false;
@@ -832,8 +832,7 @@ table 14021439 "NS_Job Forecast by Seg code"
                         JobPlanningLineBudget.SetRange("NS_Segment Code", "NS_Segment Code");
                         JobPlanningLineBudget.SETRANGE("Job Task No.", "NS_Job Task No.");
                         JobPlanningLineBudget.CALCSUMS("Total Cost", "Total Cost (LCY)");
-                        //TotalBudget := JobPlanningLineBudget."Total Cost"; //PRJ-1326.NK.1.0 27APR2022 Block
-                    TotalBudget := JobPlanningLineBudget."Total Cost (LCY)"; //PRJ-1326.NK.1.0 27APR2022
+                        TotalBudget := JobPlanningLineBudget."Total Cost";
                         "NS_Cost To Complete" := NS_CalcCostToComplete("NS_Status Date", "NS_Percent Complete", TotalBudget, TotalCostsUsed,
                                                                  PreviousJobForecast."NS_Status Date",
                                                                  PreviousJobForecast."NS_Forecasted Completed Cost");

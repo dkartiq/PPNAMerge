@@ -1,9 +1,7 @@
 pageextension 14021107 NS_VendorLedgerEntries extends "Vendor Ledger Entries"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1731.RM.1.0 06Dec2022 | Moved action button to other action
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Vendor Ledger Entries'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Global Dimension 2 Code")
@@ -43,13 +41,6 @@ pageextension 14021107 NS_VendorLedgerEntries extends "Vendor Ledger Entries"
                 ToolTip = 'Specifies the Draw No.';
                 ApplicationArea = All;
             }
-            //PE-200.AS.9.0 START
-            field(NS_PaywhenPaid; Rec.NS_PaywhenPaid)
-            {
-                ToolTip = 'Specify whether the "Pay When Paid" batch for the entry has already been executed. if the user attempts to run the batch again, these entries will be excluded from consideration';
-                ApplicationArea = All;
-            }
-            //PE-200.AS.9.0 END
             field("NS_Lien Release Print Status"; Rec."NS_Lien Release Print Status")
             {
                 Editable = true;
@@ -127,37 +118,6 @@ pageextension 14021107 NS_VendorLedgerEntries extends "Vendor Ledger Entries"
     }
     actions
     {
-        //PRJ-1731.RM.1.0 06Dec2022 start
-        addafter("Create Payment")
-        {
-            action("NS_Print Lien Release1")
-            {
-                Caption = 'Print Lien Release';
-                Image = PrintChecklistReport;
-                ApplicationArea = All;
-                ToolTip = 'Print Lien Release';
-
-                trigger OnAction();
-                var
-                    NS_JobsSetup: Record "Jobs Setup";
-                    LienRelease: Report "NS_Lien Release 01";
-                    VLE: Record "Vendor Ledger Entry";//PRJ-290.AS.1.0 27AUG20
-                begin
-                    //ProjectPro - start
-                    //LienRelease.InitVariables(Rec);
-                    //LienRelease.RUNMODAL;
-                    //PRJ-290.AS.1.0 27AUG20 - start
-                    CurrPage.SETSELECTIONFILTER(VLE); // fetch the marks
-                                                      // internally property Marked is set to true at the selected records
-                                                      // the loop will fetch only these records
-                    REPORT.RUNMODAL(14021302, TRUE, FALSE, VLE);
-                    //PRJ-290.AS.1.0 27AUG20 - end
-                    //ProjectPro - end
-                end;
-            }
-        }
-        // PRJ-1731.RM.1.0 06Dec2022 end
-
         addafter(IncomingDocAttachFile)
         {
             action("NS_Print Lien Release")
@@ -166,9 +126,6 @@ pageextension 14021107 NS_VendorLedgerEntries extends "Vendor Ledger Entries"
                 Image = PrintChecklistReport;
                 ApplicationArea = All;
                 ToolTip = 'Print Lien Release';
-                Visible = false;
-                ObsoleteState = Pending;  // PRJ-1731.RM.1.0 06Dec2022  
-                ObsoleteReason = 'This action button will be going to shift to other action in the latest version';  // PRJ-1731.RM.1.0 06Dec2022 
 
                 trigger OnAction();
                 var

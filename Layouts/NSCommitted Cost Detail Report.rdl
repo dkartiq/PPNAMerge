@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="JobsFilter">
+          <DataField>JobsFilter</DataField>
+        </Field>
+        <Field Name="PurchaseLineFilter">
+          <DataField>PurchaseLineFilter</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Purchase_Line___Committed_Amount__LCY__">
+          <DataField>Purchase_Line___Committed_Amount__LCY__</DataField>
+        </Field>
+        <Field Name="Purchase_Line___Committed_Amount__LCY__Format">
+          <DataField>Purchase_Line___Committed_Amount__LCY__Format</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Committed_Cost_DetailCaption">
+          <DataField>Committed_Cost_DetailCaption</DataField>
+        </Field>
+        <Field Name="JobsFilterCaption">
+          <DataField>JobsFilterCaption</DataField>
+        </Field>
+        <Field Name="PurchaseLineFilterCaption">
+          <DataField>PurchaseLineFilterCaption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Document_No__Caption">
+          <DataField>Purchase_Line__Document_No__Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line_TypeCaption">
+          <DataField>Purchase_Line_TypeCaption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__No__Caption">
+          <DataField>Purchase_Line__No__Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line_DescriptionCaption">
+          <DataField>Purchase_Line_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="ActivityCodeCaption">
+          <DataField>ActivityCodeCaption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Expected_Receipt_Date_Caption">
+          <DataField>Purchase_Line__Expected_Receipt_Date_Caption</DataField>
+        </Field>
+        <Field Name="VendorNameCaption">
+          <DataField>VendorNameCaption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Quantity_Caption">
+          <DataField>Purchase_Line__Committed_Quantity_Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Unit_of_Measure_Caption">
+          <DataField>Purchase_Line__Unit_of_Measure_Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Unit_Cost_Caption">
+          <DataField>Purchase_Line__Unit_Cost_Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Amount_Caption">
+          <DataField>Purchase_Line__Committed_Amount_Caption</DataField>
+        </Field>
+        <Field Name="ProcessCodeCaption">
+          <DataField>ProcessCodeCaption</DataField>
+        </Field>
+        <Field Name="OperationCodeCaption">
+          <DataField>OperationCodeCaption</DataField>
+        </Field>
+        <Field Name="Job__No__Caption">
+          <DataField>Job__No__Caption</DataField>
+        </Field>
+        <Field Name="Report_Total_Caption">
+          <DataField>Report_Total_Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Document_No__">
+          <DataField>Purchase_Line__Document_No__</DataField>
+        </Field>
+        <Field Name="Purchase_Line_Type">
+          <DataField>Purchase_Line_Type</DataField>
+        </Field>
+        <Field Name="Purchase_Line__No__">
+          <DataField>Purchase_Line__No__</DataField>
+        </Field>
+        <Field Name="Purchase_Line_Description">
+          <DataField>Purchase_Line_Description</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Expected_Receipt_Date_">
+          <DataField>Purchase_Line__Expected_Receipt_Date_</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Quantity_">
+          <DataField>Purchase_Line__Committed_Quantity_</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Quantity_Format">
+          <DataField>Purchase_Line__Committed_Quantity_Format</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Unit_of_Measure_">
+          <DataField>Purchase_Line__Unit_of_Measure_</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Unit_Cost_">
+          <DataField>Purchase_Line__Unit_Cost_</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Unit_Cost_Format">
+          <DataField>Purchase_Line__Unit_Cost_Format</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Amount_">
+          <DataField>Purchase_Line__Committed_Amount_</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Amount_Format">
+          <DataField>Purchase_Line__Committed_Amount_Format</DataField>
+        </Field>
+        <Field Name="ActivityCode">
+          <DataField>ActivityCode</DataField>
+        </Field>
+        <Field Name="VendorName">
+          <DataField>VendorName</DataField>
+        </Field>
+        <Field Name="ProcessCode">
+          <DataField>ProcessCode</DataField>
+        </Field>
+        <Field Name="OperationCode">
+          <DataField>OperationCode</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Amount__LCY__">
+          <DataField>Purchase_Line__Committed_Amount__LCY__</DataField>
+        </Field>
+        <Field Name="Purchase_Line__Committed_Amount__LCY__Format">
+          <DataField>Purchase_Line__Committed_Amount__LCY__Format</DataField>
+        </Field>
+        <Field Name="Job_Total_Caption">
+          <DataField>Job_Total_Caption</DataField>
+        </Field>
+        <Field Name="Purchase_Line_Document_Type">
+          <DataField>Purchase_Line_Document_Type</DataField>
+        </Field>
+        <Field Name="Purchase_Line_Line_No_">
+          <DataField>Purchase_Line_Line_No_</DataField>
+        </Field>
+        <Field Name="Purchase_Line_Job_No_">
+          <DataField>Purchase_Line_Job_No_</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

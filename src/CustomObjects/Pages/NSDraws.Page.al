@@ -68,15 +68,7 @@ page 14021218 NS_Draws
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Closed';
-
                 }
-                //PE-200.AS.7.0 START
-                field(NS_ClosedDate; Rec.NS_ClosedDate)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'This gets auto-updated the Work Date on which the draw is closed';
-                }
-                //PE-200.AS.7.0 END
             }
         }
     }

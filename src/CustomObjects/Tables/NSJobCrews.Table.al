@@ -28,12 +28,7 @@ table 14021224 "NS_Job Crews"
                 NS_CrewLines: Record "NS_Crew Line";
                 NS_CrewLines2: Record "NS_Crew Line"; //PRJ-991.GK.2.0 22Oct2021 
                 NS_jobCrewResource: Record "NS_Job Crew Resource"; //PRJ-991.GK.2.0 22Oct2021 
-                NSCrewRec: Record NS_Crew;  //PRJCTPR-343.JS.1.0 21MAR2024 
             begin
-                //PRJCTPR-343.JS.1.0 21MAR2024 - Start
-                if NSCrewRec.get("NS_Crew Code") then
-                    "NS_Crew Description" := NSCrewRec.NS_Description;
-                //PRJCTPR-343.JS.1.0 21MAR2024 - end     
                 NS_CrewLines.Reset();
                 NS_CrewLines.SetRange(NS_Code, "NS_Crew Code");
                 NS_CrewLines.SetRange("NS_Lead Person", true);
@@ -138,53 +133,8 @@ table 14021224 "NS_Job Crews"
             Editable = false;
             Caption = 'Lead Person Name';
         }
-        //PE-152.JS.1.0 21Aug2023 - Start
-        field(9; "NS_Default Crew"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Default Crew';
 
-            trigger OnValidate()
-            var
-                NSJobCrews: record "NS_Job Crews";
-                NSJobCrews2: record "NS_Job Crews";
-                NSResourceRec: record Resource;
-                NSCrewLine: record "NS_Crew Line";
-            begin
-                if "NS_Default Crew" = true then begin
-                    rec.TestField("NS_Job No.");
-                    NSJobCrews.Reset();
-                    NSJobCrews.setrange("NS_Job No.", "NS_Job No.");
-                    NSJobCrews.setrange("NS_Default Crew", true);
-                    if NSJobCrews.FindSet() then begin
-                        if NSJobCrews.Count > 0 then
-                            error('You can not assign more than one default crew on a job');
-                    end;
-                    NSJobCrews2.Reset();
-                    NSJobCrews2.setrange("NS_Job No.", "NS_Job No.");
-                    NSJobCrews2.setrange("NS_Default Crew", true);
-                    if NSJobCrews2.FindFirst() then begin
-                        NSCrewLine.Reset();
-                        NSCrewLine.SetRange("NS_Code", NSJobCrews2."NS_Crew Code");
-                        NSCrewLine.setrange(NS_Active, true);
-                        if NSCrewLine.FindSet() then
-                            repeat
-                                if NSResourceRec.get(NSCrewLine."NS_Resource No.") then
-                                    NSResourceRec.testfield("Time Sheet Approver User ID");
-                            until NSCrewLine.Next() = 0;
-                    end;
-                end;
-            end;
-        }
-        //PE-152.JS.1.0 21Aug2023 - end
-        //PRJCTPR-343.JS.1.0 21MAR2024 - Start
-        field(10; "NS_Crew Description"; Text[50])
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-            Caption = 'Description';
-        }
-        //PRJCTPR-343.JS.1.0 21MAR2024 - end
+
     }
 
     keys

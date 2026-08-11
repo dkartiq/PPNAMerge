@@ -9,8 +9,6 @@ page 14021386 "NS_Payroll Register Ledger Ent"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-221.AS.1.0 : Code Commented
-    //PE-19.RM.1.0 01Feb2023 | Made button invisible
-    //PE-63.RM.1.0 23March2023 | Added a caption
     Caption = 'Payroll Register Ledger Entries';
     PageType = List;
     SourceTable = "NS_Payroll Register Ledger";
@@ -113,8 +111,7 @@ page 14021386 "NS_Payroll Register Ledger Ent"
                 field("Employee Class"; Rec."NS_Employee Class")
                 {
                     ApplicationArea = All;
-                    // ToolTip = 'Specifies the Employee Class';  //PE-63.RM.1.0 23March2023  commented
-                    ToolTip = 'This Specify the First Two Letters of the "Skill Class" and if there are Two words in "Skill Class" then it will specify the First Letters of both the words which are in "Skill Class".'; //PE-63.RM.1.0 23March2023 
+                    ToolTip = 'Specifies the Employee Class';
                 }
                 field("Trade License"; Rec."NS_Trade License")
                 {
@@ -219,8 +216,7 @@ page 14021386 "NS_Payroll Register Ledger Ent"
                 field("Voulentary Deductions"; Rec."NS_Voulentary Deductions")
                 {
                     ApplicationArea = All;
-                    // ToolTip = 'Specifies the Voulentary Deductions';  //PE-63.RM.1.0 23March2023 commented
-                    ToolTip = 'Specifies the Voluntary Deductions'; //PE-63.RM.1.0 23March2023
+                    ToolTip = 'Specifies the Voulentary Deductions';
                 }
                 field("Direct Deposit Amount"; Rec."NS_Direct Deposit Amount")
                 {
@@ -281,7 +277,6 @@ page 14021386 "NS_Payroll Register Ledger Ent"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Include in Certified Payroll';
-                    Visible = false; //PE-348.PS.1.0 27July2024 
                 }
                 field("Date Imported"; Rec."NS_Date Imported")
                 {
@@ -312,190 +307,15 @@ page 14021386 "NS_Payroll Register Ledger Ent"
         }
         area(processing)
         {
-            //PE-40.RM.1.0 13Feb2023 Start
-
-            group(ImportExportPayrollLedgEntries)
-            {
-                Caption = 'Import/Export Payroll Ledger Entries';
-                action("Import Payroll Ledger Entries2")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Import Payroll Ledger Entries';
-                    Image = Import;
-                    Promoted = true;
-                    PromotedOnly = true;
-                    PromotedCategory = Process;
-
-                    ToolTip = 'Import Payroll Ledger Entries';
-
-                    trigger OnAction();
-                    var
-                        HumanResourcesSetup: Record "Human Resources Setup";
-
-                    begin
-                        if NS_UserSetup.get(UserId) then; //PE-19.RM.1.0 09Feb2023 
-                        if NS_UserSetup."NS_Allow CPR functionality" = true then begin
-                            if HumanResourcesSetup.Get() then;//PE-19.RM.1.0 09Feb2023
-                            XMLPORT.RUN(14021376, true, true);
-                            CurrPage.UPDATE();
-                        end else
-                            Error('You don''t have permission to access to this function'); //PE-19.RM.1.0 09Feb2023 
-                    end;
-
-                }
-                action("Import Payroll Ledger Entries1")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Export Payroll Ledger Entries';
-                    Image = Export;
-                    Promoted = true;
-                    PromotedOnly = true;
-                    PromotedCategory = Process;
-
-                    ToolTip = 'Export Payroll Ledger Entries';
-
-                    trigger OnAction();
-                    var
-                        HumanResourcesSetup: Record "Human Resources Setup";
-
-                    begin
-                        if NS_UserSetup.get(UserId) then; //PE-19.RM.1.0 09Feb2023 
-                        if NS_UserSetup."NS_Allow CPR functionality" = true then begin
-                            if HumanResourcesSetup.Get() then;//PE-19.RM.1.0 09Feb2023
-                            XMLPORT.RUN(14021489);
-                            CurrPage.UPDATE();
-                        end else
-                            Error('You don''t have permission to access to this function'); //PE-19.RM.1.0 09Feb2023 
-                    end;
-
-                }
-                //PE-40.RM.1.0 13Feb2023 End
-                //PE-348.PS.1.0 27July2024 Start
-                //PE-86.AT 22May23 Start
-                action(NS_ExportData)
-                {
-                    Caption = 'Export To Excel';
-                    ApplicationArea = All;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    Image = ExportToExcel;
-                    ToolTip = 'Export the Payroll Register Ledger Entry data in Excel format';
-                    trigger OnAction()
-                    var
-                        ImportPoDate: XmlPort "NS_PayrollRegiLedgerExport XML";
-                        TempBlob: Codeunit "Temp Blob";
-                        CSVOutStream: OutStream;
-                        FileMgt: Codeunit "File Management";
-                        HumanResourcesSetup: Record "Human Resources Setup";
-                    begin
-                        if NS_UserSetup.get(UserId) then; //PE-19.RM.1.0 09Feb2023 
-                        if NS_UserSetup."NS_Allow CPR functionality" = true then begin
-                            if HumanResourcesSetup.Get() then;//PE-19.RM.1.0 09Feb2023
-                            ImportPoDate.SetTableView(Rec);
-                            TempBlob.CreateOutStream(CSVOutStream);
-                            ImportPoDate.SetDestination(CSVOutStream);
-                            ImportPoDate.Export();
-                            FileMgt.BLOBExport(TempBlob, 'Payroll Register Ledger.csv', true);
-                            CurrPage.UPDATE();
-                        end else
-                            Error('You don''t have permission to access to this function'); //PE-19.RM.1.0 09Feb2023 
-                    end;
-                }
-
-                action(NS_ExportToExcelTemplate)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Export to Excel Template';
-                    Image = ExportToExcel;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    ToolTip = 'Export the Payroll register ledger Entry Template in excel format';
-                    trigger OnAction()
-                    var
-                        ImportPoDate: XmlPort "NS_PayrollRegLedTemplate XML";
-                        TempBlob: Codeunit "Temp Blob";
-                        CSVOutStream: OutStream;
-                        FileMgt: Codeunit "File Management";
-                        HumanResourcesSetup: Record "Human Resources Setup";
-                    begin
-                        if NS_UserSetup.get(UserId) then; //PE-19.RM.1.0 09Feb2023 
-                        if NS_UserSetup."NS_Allow CPR functionality" = true then begin
-                            if HumanResourcesSetup.Get() then;//PE-19.RM.1.0 09Feb2023
-                            TempBlob.CreateOutStream(CSVOutStream);
-                            ImportPoDate.SetDestination(CSVOutStream);
-                            ImportPoDate.Export();
-                            FileMgt.BLOBExport(TempBlob, 'Payroll Register Ledger.csv', true);
-                            CurrPage.UPDATE();
-                        end else
-                            Error('You don''t have permission to access to this function'); //PE-19.RM.1.0 09Feb2023 
-                    end;
-
-                }
-                action(NS_ImportFromExcel)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Import from Excel';
-                    Image = ImportExcel;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    ToolTip = 'Import the Payroll Register Ledger Entry data in Excel format.'; //PE-86.RM.1.0 01June2023
-                    trigger OnAction()
-                    var
-                        ImportPoDate: XmlPort "NS_PayrollRegLedgeImport XML";
-                        TempBlob: Codeunit "Temp Blob";
-                        CSVOutStream: OutStream;
-                        FileMgt: Codeunit "File Management";
-                        HumanResourcesSetup: Record "Human Resources Setup";
-                    begin
-                        if NS_UserSetup.get(UserId) then; //PE-19.RM.1.0 09Feb2023 
-                        if NS_UserSetup."NS_Allow CPR functionality" = true then begin
-                            if HumanResourcesSetup.Get() then;//PE-19.RM.1.0 09Feb2023
-                            ImportPoDate.Run();
-                            CurrPage.UPDATE();
-                        end else
-                            Error('You don''t have permission to access to this function'); //PE-19.RM.1.0 09Feb2023 
-                    end;
-
-                }
-
-                //PE-86.AT 22May23 end
-                //PE-348.PS.1.0 27July2024 End
-            }
-            // action("Run Certified Payroll Report1")
-            // {
-            //     ApplicationArea = All;
-            //     Caption = 'Certified Payroll WH-347 Report';
-            //     ToolTip = 'Specifies Certified Payroll WH-347 Report';
-            //     Image = UpdateUnitCost;
-            //     Promoted = true;
-            //     PromotedOnly = true;
-            //     PromotedCategory = Process;
-
-            //     trigger OnAction();
-            //     var
-            //     // PayrollRegisterManagement: Codeunit "NS_Payroll Register Management"; //PE-19.RM.1.0 09Feb2023  line commented because unused variable.
-            //     begin
-            //         if NS_UserSetup.get(UserId) then; //PE-19.RM.1.0 09Feb2023 
-            //         if NS_UserSetup."NS_Allow CPR functionality" = true then begin//PE-19.RM.1.0 09Feb2023 
-            //             Message('Please ensure that ''Payroll Week End Date'' equals to Saturday or Sunday on HR Setup and ''Period End Date'' on list page and report must be according to it.');
-            //             REPORT.RUN(14021110, true, true);
-            //         end else
-            //             Error('You don''t have permission to access to this function'); //PE-19.RM.1.0 09Feb2023 
-            //     end;
-            // }
-
-            //PE-19.RM.1.0 01Feb2023 End
             group("F&unctions")
             {
                 Caption = 'F&unctions';
                 Image = "Action";
-                Visible = false; //PE-19.RM.1.0 01Feb2023
                 action("Import Payroll Ledger Entries")
                 {
                     ApplicationArea = All;
                     Caption = 'Import Payroll Ledger Entries';
                     Ellipsis = true;
-                    Visible = false; //PE-19.RM.1.0 01Feb2023
                     Image = Import;
                     Promoted = true;
                     PromotedCategory = Process;
@@ -515,7 +335,6 @@ page 14021386 "NS_Payroll Register Ledger Ent"
                 {
                     ApplicationArea = All;
                     Caption = 'Set Certified Payroll to Yes';
-                    Visible = false; //PE-19.RM.1.0 01Feb2023
                     Ellipsis = true;
                     Image = UpdateUnitCost;
                     Promoted = true;
@@ -539,7 +358,6 @@ page 14021386 "NS_Payroll Register Ledger Ent"
                 {
                     ApplicationArea = All;
                     Caption = 'Set Certified Payroll to No';
-                    Visible = false; //PE-19.RM.1.0 01Feb2023
                     Ellipsis = true;
                     Image = UpdateUnitCost;
                     Promoted = true;
@@ -563,7 +381,7 @@ page 14021386 "NS_Payroll Register Ledger Ent"
                 {
                     ApplicationArea = All;
                     Caption = 'Run Certified Payroll Report';
-                    Visible = false; //PE-19.RM.1.0 01Feb2023
+
                     ToolTip = 'Run Certified Payroll Report';
                     Ellipsis = true;
                     Image = UpdateUnitCost;
@@ -588,6 +406,5 @@ page 14021386 "NS_Payroll Register Ledger Ent"
         Text003: Label 'Action cancelled by the user.';
         Yes: Label 'Yes';
         No: Label 'No';
-        NS_UserSetup: Record "User Setup"; //PE-19.RM.1.0 09Feb2023 
 }
 

@@ -1,5 +1,7 @@
 page 14021360 "NS_Job A/R A/P BalancesFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
+    // 001  04/11/2020  TAD  Fixing Performance
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -56,8 +58,7 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
                 begin
                     ShowJobRec.RESET;
                     ShowJobRec := Rec;
-                    //ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', ShowJobRec."NS_Type Filter"::Ledger); //PRJ-1131.RM.1.0 10Jan2022 need to be checked //PE-306.JS.1.0 06JUN2024 line commented
-                    ShowJobRec.SETFILTER("NS_TypeEnumFilter", '<>%1', ShowJobRec."NS_TypeEnumFilter"::Text); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line added
+                    ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', "NS_Type Filter"::Ledger);
                     ShowJobRec.SETRANGE("NS_Date Filter", 0D, WORKDATE);
                     ShowJobRec.SETRANGE("NS_Entry Type Filter", JobLedgerEntry."Entry Type"::Sale);
                     JobLedgerEntries.NS_SetFilters(ShowJobRec, false);
@@ -103,7 +104,6 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
                     with CustLedgEntryRetention do begin
                         SETRANGE("NS_Job No.", "No.");
                         SETRANGE("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
-                        SetRange(Open, true); //PRJCTPR-220.DK.1.0 06NOV2023
                         if FINDSET then;
                     end;
                     PAGE.RUN(PAGE::"Customer Ledger Entries", CustLedgEntryRetention);
@@ -213,9 +213,17 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
     procedure NS_CalcStatistics();
     var
         DtldCustLedgEntry: Record "Detailed Cust. Ledg. Entry";
-        CustLedgerEntri: Record "Cust. Ledger Entry"; //PRJCTPR-193.DK.1.0 20SEP2023
         Blank: Code[20];
+        // >> Upgrade
+        DtldVendLedgEntry: Record "Detailed Vendor Ledg. Entry";
+    // << Upgrade
     begin
+        // >> Upgrade
+        //FDD108 Start
+        if "NS_Sub-Level to Job No." = "No." then
+            exit;
+        //FDD108 End
+        // << Upgrade
         NS_CalculateJobFinancials(Rec, ActualCostToDate, InvoiceBilled, PaymentReceived, CommittedCost, false);
         //Calculate Common Values
         CLEAR("Sub-LevelsCost");
@@ -229,43 +237,62 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
 
         //Calculate A/R Balance
         ARBalance := 0;
-        //PRJCTPR-193.DK.1.0 15Sep2023 START
-        // DtldCustLedgEntry.RESET();
-        // DtldCustLedgEntry.SETCURRENTKEY("NS_Job No.");
-        // DtldCustLedgEntry.SETRANGE("NS_Job No.", Rec."No.");//PRJ-1131.RM.1.0 10Jan2022 need to be checked
-        // DtldCustLedgEntry.SETRANGE("Customer No.", Rec."Bill-to Customer No.");//PRJ-1131.RM.1.0 10Jan2022 need to be checked
-        // if JobsSetup."NS_Retention Receivable Ledger" <> '' then
-        //     DtldCustLedgEntry.SETFILTER("Initial Entry Global Dim. 2", '<>%1', JobsSetup."NS_Retention Receivable Ledger");
-        // if DtldCustLedgEntry.FINDSET() then
-        //     repeat
-        //         ARBalance := ARBalance + DtldCustLedgEntry.Amount;
-        //     until DtldCustLedgEntry.NEXT() = 0;
-
-        //Calculate A/R Balance From Customer Ledger entries
-        CustLedgerEntri.RESET();
-        CustLedgerEntri.SETCURRENTKEY("NS_Job No.");
-        CustLedgerEntri.SETRANGE("NS_Job No.", Rec."No.");
-        CustLedgerEntri.SetRange(Open, true);
+        DtldCustLedgEntry.RESET();
+        // >> Upgrade
+        // >> 001
+        //DtldCustLedgEntry.SETCURRENTKEY("Job No.");
+        DtldCustLedgEntry.SetCurrentKey("NS_Job No.", "Customer No.", "Initial Entry Global Dim. 2");
+        // << 001
+        // << Upgrade
+        DtldCustLedgEntry.SETRANGE("NS_Job No.", "No.");
+        DtldCustLedgEntry.SETRANGE("Customer No.", "Bill-to Customer No.");
         if JobsSetup."NS_Retention Receivable Ledger" <> '' then
-            CustLedgerEntri.SETFILTER("NS_Retention Ledger Code", '<>%1', JobsSetup."NS_Retention Receivable Ledger");
-        if CustLedgerEntri.FINDSET() then
-            repeat
-                CustLedgerEntri.CalcFields(Amount);
-                if CustLedgerEntri.Amount <> 0 then
-                    ARBalance += CustLedgerEntri.Amount;
-            until CustLedgerEntri.NEXT() = 0;
-        //PRJCTPR-193.DK.1.0 15Sep2023 END
+            DtldCustLedgEntry.SETFILTER("Initial Entry Global Dim. 2", '<>%1', JobsSetup."NS_Retention Receivable Ledger");
+        // >> Upgrade
+        // >> 001
+        /*
+        IF DtldCustLedgEntry.FINDSET THEN
+          REPEAT
+            ARBalance := ARBalance + DtldCustLedgEntry.Amount;
+          UNTIL DtldCustLedgEntry.NEXT = 0;
+        */
+        DtldCustLedgEntry.CalcSums(Amount);
+        ARBalance := DtldCustLedgEntry.Amount;
+        // << 001
+        // << Upgrade
         //Calculate A/P Balance
         APBalance := 0;
+        // >> Upgrade
+        // VendLedgEntry.RESET();
+        // VendLedgEntry.SETRANGE("NS_Job No.", "No.");
+        // VendLedgEntry.SETRANGE(Open, true);
+        // if VendLedgEntry.FINDSET() then
+        //     repeat
+        //         VendLedgEntry.CALCFIELDS(Amount);
+        //         APBalance += ABS(VendLedgEntry.Amount);
+        //     until VendLedgEntry.NEXT() = 0;
+        DtldVendLedgEntry.Reset;
 
-        VendLedgEntry.RESET();
-        VendLedgEntry.SETRANGE("NS_Job No.", "No.");
-        VendLedgEntry.SETRANGE(Open, true);
-        if VendLedgEntry.FINDSET() then
-            repeat
-                VendLedgEntry.CALCFIELDS(Amount);
-                APBalance += ABS(VendLedgEntry.Amount);
-            until VendLedgEntry.NEXT() = 0;
+        // >> 001
+        DtldVendLedgEntry.SetCurrentKey("NS_Job No.", "NS_Retention Ledger Code");
+        //DtldVendLedgEntry.SETCURRENTKEY("Job No.");
+        // << 001
+
+        DtldVendLedgEntry.SetRange("NS_Job No.", "No.");
+        if not PurchSetup."NS_Purchase Retention Inactive" then
+            DtldVendLedgEntry.SetFilter("NS_Retention Ledger Code", '<>%1', JobsSetup."NS_Retention Payable Ledger");
+
+        // >> 001
+        /*
+        IF DtldVendLedgEntry.FINDSET THEN
+          REPEAT
+            APBalance := APBalance + DtldVendLedgEntry.Amount;
+          UNTIL DtldVendLedgEntry.NEXT = 0;
+        */
+        DtldVendLedgEntry.CalcSums(Amount);
+        APBalance := DtldVendLedgEntry.Amount;
+        // << 001
+        // << Upgrade
 
         //Subcontract Balance
         SubcontractBalance := 0;

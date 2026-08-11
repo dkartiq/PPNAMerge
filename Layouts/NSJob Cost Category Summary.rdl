@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="Sub_LevelsText_">
+          <DataField>Sub_LevelsText_</DataField>
+        </Field>
+        <Field Name="Job_TABLECAPTION_____Filters______JobFilter">
+          <DataField>Job_TABLECAPTION_____Filters______JobFilter</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Job_Cost_Category_SummaryCaption">
+          <DataField>Job_Cost_Category_SummaryCaption</DataField>
+        </Field>
+        <Field Name="Inv_ActCaption">
+          <DataField>Inv_ActCaption</DataField>
+        </Field>
+        <Field Name="Amt_InvoicedCaption">
+          <DataField>Amt_InvoicedCaption</DataField>
+        </Field>
+        <Field Name="Com_ActCaption">
+          <DataField>Com_ActCaption</DataField>
+        </Field>
+        <Field Name="Est_ActCaption">
+          <DataField>Est_ActCaption</DataField>
+        </Field>
+        <Field Name="ActualCaption">
+          <DataField>ActualCaption</DataField>
+        </Field>
+        <Field Name="CommittedCaption">
+          <DataField>CommittedCaption</DataField>
+        </Field>
+        <Field Name="EstimateCaption">
+          <DataField>EstimateCaption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Job_No_Caption">
+          <DataField>Job_No_Caption</DataField>
+        </Field>
+        <Field Name="Job_No_">
+          <DataField>Job_No_</DataField>
+        </Field>
+        <Field Name="Job_FIELDNAME__Starting_Date____________FORMAT_Job__Starting_Date__">
+          <DataField>Job_FIELDNAME__Starting_Date____________FORMAT_Job__Starting_Date__</DataField>
+        </Field>
+        <Field Name="Job_FIELDNAME__Ending_Date____________FORMAT_Job__Ending_Date__">
+          <DataField>Job_FIELDNAME__Ending_Date____________FORMAT_Job__Ending_Date__</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="Job__Budgeted_Price__LCY__">
+          <DataField>Job__Budgeted_Price__LCY__</DataField>
+        </Field>
+        <Field Name="Job__Budgeted_Price__LCY__Format">
+          <DataField>Job__Budgeted_Price__LCY__Format</DataField>
+        </Field>
+        <Field Name="Job__Description_2_">
+          <DataField>Job__Description_2_</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost">
+          <DataField>TotaltoPrintCatCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCostFormat">
+          <DataField>TotaltoPrintCatCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost">
+          <DataField>TotaltoPrintBudgetCatCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCostFormat">
+          <DataField>TotaltoPrintBudgetCatCostFormat</DataField>
+        </Field>
+        <Field Name="CategorytoPrint">
+          <DataField>CategorytoPrint</DataField>
+        </Field>
+        <Field Name="CategoryDescription">
+          <DataField>CategoryDescription</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost">
+          <DataField>TotaltoPrintCommittedCatCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCostFormat">
+          <DataField>TotaltoPrintCommittedCatCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCostFormat">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCostFormat">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCostFormat</DataField>
+        </Field>
+        <Field Name="Job_Total_">
+          <DataField>Job_Total_</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost_Control39">
+          <DataField>TotaltoPrintBudgetCatCost_Control39</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost_Control39Format">
+          <DataField>TotaltoPrintBudgetCatCost_Control39Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost_Control40">
+          <DataField>TotaltoPrintCommittedCatCost_Control40</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost_Control40Format">
+          <DataField>TotaltoPrintCommittedCatCost_Control40Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost_Control41">
+          <DataField>TotaltoPrintCatCost_Control41</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost_Control41Format">
+          <DataField>TotaltoPrintCatCost_Control41Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control42">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control42</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control42Format">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control42Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control43">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control43</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control43Format">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control43Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatPrice">
+          <DataField>TotaltoPrintCatPrice</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatPriceFormat">
+          <DataField>TotaltoPrintCatPriceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatPrice___TotaltoPrintCatCost">
+          <DataField>TotaltoPrintCatPrice___TotaltoPrintCatCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatPrice___TotaltoPrintCatCostFormat">
+          <DataField>TotaltoPrintCatPrice___TotaltoPrintCatCostFormat</DataField>
+        </Field>
+        <Field Name="Job__Budgeted_Price__LCY__Caption">
+          <DataField>Job__Budgeted_Price__LCY__Caption</DataField>
+        </Field>
+        <Field Name="Integer_Number">
+          <DataField>Integer_Number</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control46">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control46</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control46Format">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control46Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control47">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control47</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control47Format">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control47Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost_Control48">
+          <DataField>TotaltoPrintCatCost_Control48</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost_Control48Format">
+          <DataField>TotaltoPrintCatCost_Control48Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost_Control49">
+          <DataField>TotaltoPrintCommittedCatCost_Control49</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost_Control49Format">
+          <DataField>TotaltoPrintCommittedCatCost_Control49Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost_Control50">
+          <DataField>TotaltoPrintBudgetCatCost_Control50</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost_Control50Format">
+          <DataField>TotaltoPrintBudgetCatCost_Control50Format</DataField>
+        </Field>
+        <Field Name="CategoryDescription_Control51">
+          <DataField>CategoryDescription_Control51</DataField>
+        </Field>
+        <Field Name="CategorytoPrint_Control52">
+          <DataField>CategorytoPrint_Control52</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost_Control30">
+          <DataField>TotaltoPrintBudgetCatCost_Control30</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost_Control30Format">
+          <DataField>TotaltoPrintBudgetCatCost_Control30Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost_Control27">
+          <DataField>TotaltoPrintCommittedCatCost_Control27</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost_Control27Format">
+          <DataField>TotaltoPrintCommittedCatCost_Control27Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost_Control26">
+          <DataField>TotaltoPrintCatCost_Control26</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCatCost_Control26Format">
+          <DataField>TotaltoPrintCatCost_Control26Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control32">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control32</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control32Format">
+          <DataField>TotaltoPrintBudgetCatCost___TotaltoPrintCatCost_Control32Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control31">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control31</DataField>
+        </Field>
+        <Field Name="TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control31Format">
+          <DataField>TotaltoPrintCommittedCatCost___TotaltoPrintCatCost_Control31Format</DataField>
+        </Field>
+        <Field Name="FinalTotalCatPrice">
+          <DataField>FinalTotalCatPrice</DataField>
+        </Field>
+        <Field Name="FinalTotalCatPriceFormat">
+          <DataField>FinalTotalCatPriceFormat</DataField>
+        </Field>
+        <Field Name="FinalTotalCatPrice___TotaltoPrintCatCost">
+          <DataField>FinalTotalCatPrice___TotaltoPrintCatCost</DataField>
+        </Field>
+        <Field Name="FinalTotalCatPrice___TotaltoPrintCatCostFormat">
+          <DataField>FinalTotalCatPrice___TotaltoPrintCatCostFormat</DataField>
+        </Field>
+        <Field Name="Final_TotalCaption">
+          <DataField>Final_TotalCaption</DataField>
+        </Field>
+        <Field Name="Inv_ActCaption_Control1000000002">
+          <DataField>Inv_ActCaption_Control1000000002</DataField>
+        </Field>
+        <Field Name="Amt_InvoicedCaption_Control1000000003">
+          <DataField>Amt_InvoicedCaption_Control1000000003</DataField>
+        </Field>
+        <Field Name="Com_ActCaption_Control1000000004">
+          <DataField>Com_ActCaption_Control1000000004</DataField>
+        </Field>
+        <Field Name="Est_ActCaption_Control1000000005">
+          <DataField>Est_ActCaption_Control1000000005</DataField>
+        </Field>
+        <Field Name="ActualCaption_Control1000000006">
+          <DataField>ActualCaption_Control1000000006</DataField>
+        </Field>
+        <Field Name="CommittedCaption_Control1000000007">
+          <DataField>CommittedCaption_Control1000000007</DataField>
+        </Field>
+        <Field Name="EstimateCaption_Control1000000008">
+          <DataField>EstimateCaption_Control1000000008</DataField>
+        </Field>
+        <Field Name="DescriptionCaption_Control1000000009">
+          <DataField>DescriptionCaption_Control1000000009</DataField>
+        </Field>
+        <Field Name="Job_No_Caption_Control1000000010">
+          <DataField>Job_No_Caption_Control1000000010</DataField>
+        </Field>
+        <Field Name="FinalTotal_Number">
+          <DataField>FinalTotal_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

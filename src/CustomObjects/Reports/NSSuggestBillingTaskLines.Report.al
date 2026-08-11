@@ -125,14 +125,11 @@ report 14021351 "NS_Suggest Billing Task Lines"
             {
                 group(PostingDateFilter)
                 {
-
-                    caption = 'Posting Date Filter';   //PRJCTPR-235.JS.1.0
                     field(JobForecastPostingDate; JobForecastPostingDate)
                     {
                         Caption = 'As on Date';    //PRJ-878.JS.1.0 19Aug2021 old caption Billing Posting Date
                         ApplicationArea = All;
-                        //ToolTip = 'Define Billing Posting Date, its default set from "Period To Date" from "Progress Billing Card"';  //PRJCTPR-235.JS.1.0 11JAN2024 line commented
-                        ToolTip = 'The Billing Posting Date is defaulted from "Period to Date" from "Progress Billing Card". The calculation will be based on the month-end date from the entered as of date. (Eg: Nov 3rd will result on Nov 30th values for calculation.)'; //PRJCTPR-235.JS.1.0 11JAN2024 line added
+                        ToolTip = 'Define Billing Posting Date';
                     }
                 }
             }
@@ -176,7 +173,6 @@ report 14021351 "NS_Suggest Billing Task Lines"
         TotalInvoicedAmt: Decimal;
         PercentBudgVsActual: Decimal;
         PercetProgresBilling: Decimal;
-        NSPeriodToDateG: Date;   //PRJCTPR-235.JS.1.0
 
 
 
@@ -188,24 +184,5 @@ report 14021351 "NS_Suggest Billing Task Lines"
         VersionNo := VersionNoIn;
         JobNo := JobNoIn;
     end;
-
-    //PRJCTPR-235.JS.1.0 - Start
-    /// <summary>
-    /// SetParameters.
-    /// </summary>
-    /// <param name="NoIn">Code[20].</param>
-    /// <param name="RequisitionNoIn">Integer.</param>
-    /// <param name="VersionNoIn">Integer.</param>
-    /// <param name="JobNoIn">Code[20].</param>
-    /// <param name="PeriodToDate">Date.</param>
-    procedure SetParameters(NoIn: Code[20]; RequisitionNoIn: Integer; VersionNoIn: Integer; JobNoIn: Code[20]; PeriodToDate: Date);
-    begin
-        No := NoIn;
-        RequisitionNo := RequisitionNoIn;
-        VersionNo := VersionNoIn;
-        JobNo := JobNoIn;
-        JobForecastPostingDate := PeriodToDate;
-    end;
-    //PRJCTPR-235.JS.1.0 - end    
 }
 

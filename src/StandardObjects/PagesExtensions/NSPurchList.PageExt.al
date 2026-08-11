@@ -2,8 +2,6 @@ pageextension 14021122 NS_PurchList extends "Purchase List"
 {
     // version NAVW111.00.00.19846,PPNA11.00
     //PRJ-659.RS.1.0 17June21 | NS_ should be removed from every page rest mention the page ID and Name.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase List'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Buy-from Vendor No.")

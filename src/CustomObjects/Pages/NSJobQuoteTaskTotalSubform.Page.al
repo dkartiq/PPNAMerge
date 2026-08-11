@@ -8,7 +8,7 @@ page 14021425 "NS_Job Quote Task TotalSubform"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1072.NK.1.0 10122021
+
     DeleteAllowed = false;
     Caption = 'Job Quote Task Total Subform';
     InsertAllowed = false;
@@ -100,24 +100,16 @@ page 14021425 "NS_Job Quote Task TotalSubform"
                     ToolTip = 'Specifies the Contract (Invoiced Cost)';
                     Visible = false;
                 }
-                //PRJ-1072.GK.2.0 Uncomment & Set visible false start
-                //PRJ-1072.NK.1.0 Start
                 field("Remaining (Total Cost)"; Rec."Remaining (Total Cost)")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Remaining (Total Cost)';
-                    Visible = false;
-                    Editable = false;
                 }
                 field("Remaining (Total Price)"; Rec."Remaining (Total Price)")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Remaining (Total Price)';
-                    Visible = false;
-                    Editable = false;
                 }
-                //PRJ-1072.NK.1.0 END.
-                //PRJ-1072.GK.2.0 Uncomment & Set visible false end
                 field("Amt. Rcd. Not Invoiced"; Rec."Amt. Rcd. Not Invoiced")
                 {
                     ApplicationArea = All;
@@ -152,20 +144,16 @@ page 14021425 "NS_Job Quote Task TotalSubform"
                 {
                     ApplicationArea = All;
                     Caption = 'Markup %';
-                    Editable = FieldEditable;//PRJ-1531.GK.1.0 24Aug2022
                 }
                 field("<Gross Margin>"; Rec."NS_Gross Profit")
                 {
                     ApplicationArea = All;
                     Caption = 'Gross Margin';
-                    Editable = FieldEditable;//PRJ-1531.GK.1.0 24Aug2022
                 }
                 field("<Gross Margin Percentage>"; Rec."NS_Gross Profit Percentage")
                 {
                     ApplicationArea = All;
-                    //Caption = 'Gross Margin Percentage';//PRJ-1531.GK.1.0 24Aug2022|Comment
-                    Caption = 'Gross Margin %';//PRJ-1531.GK.1.0 24Aug2022|Add
-                    Editable = FieldEditable;//PRJ-1531.GK.1.0 24Aug2022
+                    Caption = 'Gross Margin Percentage';
                 }
                 field("Line Amount Incl. Tax"; Rec."NS_Line Amount Incl. Tax")
                 {
@@ -194,9 +182,8 @@ page 14021425 "NS_Job Quote Task TotalSubform"
 
                         QuoteMgt: Codeunit "NS_Job Quote Mgt.";
                     begin
-                        PlanLine.SETRANGE("Job No.", Rec."Job No."); //PRJ-1131.NK.1.0
-                        QuoteMgt.NS_CalcProfitAmounts(Rec."Job No.", Rec."Job Task No.", PlanLine);//PRJ-1131.NK.1.0
-                        QuoteMgt.NS_CalcProfitAmounts4Totals(Rec."Job No.", Rec."Job Task No.");//PRJ-1120.AS.1.0  //PRJ-1531.GK.1.0 24Aug2022
+                        PlanLine.SETRANGE("Job No.", "Job No.");
+                        QuoteMgt.NS_CalcProfitAmounts("Job No.", "Job Task No.", PlanLine);
                     end;
                 }
                 action("Quote Task Lines")
@@ -254,38 +241,9 @@ page 14021425 "NS_Job Quote Task TotalSubform"
                         PAGE.RUN(PAGE::"Job Planning Lines", PlanningLine);
                     end;
                 }
-
             }
-
-            //PRJ-1265.AS.1.0 START
-            action("NS_RefreshTaskValues")
-            {
-                ApplicationArea = all;
-                Caption = 'Refresh Task Values';
-                Image = Refresh;
-                Promoted = true;
-                PromotedCategory = Process;
-                trigger OnAction();
-                begin
-                    CurrPage.Update();
-                end;
-            }
-            //PRJ-1265.AS.1.0 END
         }
     }
-    //PRJ-1531.GK.1.0 24Aug2022 start
-    trigger OnAfterGetCurrRecord()
-    begin
-        if Rec."Job Task Type" = Rec."Job Task Type"::Total then
-            FieldEditable := false
-        else
-            FieldEditable := true;
-    end;
-    //PRJ-1531.GK.1.0 24Aug2022 end
-
-    var
-        FieldEditable: Boolean; //PRJ-1531.GK.1.0 24Aug2022
-
 
     //SMPL Replaced "Job Task Lines" name reference to ID 1002
 }

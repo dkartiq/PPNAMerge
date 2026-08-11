@@ -177,7 +177,6 @@ report 14021326 "NS_AIA G703"
                 trigger OnAfterGetRecord();
                 var
                     OK: Boolean;
-                    RecJob: Record Job; //PRJCTPR-208.NC.1.0 19Oct2023
                 begin
                     //PRJ-91.SK.1.0 Start
                     CLEAR(ScheduledValue);
@@ -203,14 +202,7 @@ report 14021326 "NS_AIA G703"
 
                     if not OK then
                         CurrReport.SKIP;
-                    //PRJCTPR-208.NC.1.0 19Oct2023 Start
-                    RecJob.Reset();
-                    RecJob.SetRange("No.", "Progress Billing Line"."NS_Job No.");
-                    RecJob.SetFilter("NS_Job Class", '<>%1', RecJob."NS_Job Class"::"Change Order");
-                    if RecJob.FindFirst() then
-                        if "Progress Billing Line"."NS_Change Order" then
-                            CurrReport.skip;
-                    //PRJCTPR-208.NC.1.0 19Oct2023 End
+
                     ItemNum := CommentItemNo;
                     if "NS_Item No." > '' then
                         ItemNum := "NS_Item No.";
@@ -230,15 +222,11 @@ report 14021326 "NS_AIA G703"
                         if "NS_Work Retention Amount" = 0 then
                             if "Progress Billing Header"."NS_Work Retention Percent" <> 0 then
                                 "NS_Work Retention Amount" := ROUND(("Progress Billing Header"."NS_Work Retention Percent" / 100) * (PreviousWork + ThisPeriodWork));
-                        //if "NS_Material Retention Amount" = 0 then  //PRJCTPR-384.JS.1.0 08JULY2024 line commented
-                        if "Progress Billing Header"."NS_Material Retention Percent" <> 0 then
-                            "NS_Material Retention Amount" := ROUND(("Progress Billing Header"."NS_Material Retention Percent" / 100) *
-                                                                   "NS_Stored Materials Amount");
+                        if "NS_Material Retention Amount" = 0 then
+                            if "Progress Billing Header"."NS_Material Retention Percent" <> 0 then
+                                "NS_Material Retention Amount" := ROUND(("Progress Billing Header"."NS_Material Retention Percent" / 100) *
+                                                                       "NS_Stored Materials Amount");
                         Retainage := "NS_Work Retention Amount" + "NS_Material Retention Amount";
-                        //PRJ-1624.NK.1.0 03Nov2022 Start
-                        if "Progress Billing Header"."NS_Multiple Retention on Lines" then
-                            Retainage := "NS_Work Retention Amount" + "NS_Stored Mat. Retention Amt";
-                        //PRJ-1624.NK.1.0 03Nov2022 End
                     end;
                 end;
             }

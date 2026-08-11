@@ -1,8 +1,7 @@
 pageextension 14021296 NS_GetShipmentLines extends "Get Shipment Lines"
 {
     // version NAVW111.00.00.19846,NSNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Get Shipment Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job No.")

@@ -10,8 +10,6 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-702.AS.1.0 FULL REPORT MIGRATE FROM CTSI WITH RDLC
-    //PRJ-1239.JS.1.0 08MAR2022 | correct code for decimal please issue
-    //PRJ-1216.JS.5.0 28MAR2022
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSProgress Billing Invoice Rev Cat Summ.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -62,12 +60,7 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
             column(Invoice_Number__Caption; Invoice_Number__CaptionLbl)
             {
             }
-            //PRJ-1332.GK.1.0 25Apr2022 start
-            column(NS_Final; NS_Final)
-            {
-            }
-            //PRJ-1332.GK.1.0 25Apr2022 end
-            column(Progress_Billing_Header_No_; "NS_No." + '-' + FORMAT("NS_Requisition No.") + '-' + Format("NS_Version No."))//PRJ-1332.GK.1.0 25Apr2022|add version
+            column(Progress_Billing_Header_No_; "NS_No." + '-' + FORMAT("NS_Requisition No."))
             {
             }
             column(Invoice_Date__Caption; Invoice_Date__CaptionLbl)
@@ -399,7 +392,6 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
                 trigger OnAfterGetRecord();
                 var
                     OK: Boolean;
-                    RecJob: Record Job; //PRJCTPR-208.NC.1.0 19Oct2023
                 begin
                     if "NS_Job No." > '' then
                         DetailJob.GET("NS_Job No.")
@@ -413,14 +405,7 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
 
                     if not OK then
                         CurrReport.SKIP;
-                    //PRJCTPR-208.NC.1.0 19Oct2023 Start
-                    RecJob.Reset();
-                    RecJob.SetRange("No.", "Progress Billing Line"."NS_Job No.");
-                    RecJob.SetFilter("NS_Job Class", '<>%1', RecJob."NS_Job Class"::"Change Order");
-                    if RecJob.FindFirst() then
-                        if "Progress Billing Line"."NS_Change Order" then
-                            CurrReport.skip;
-                    //PRJCTPR-208.NC.1.0 19Oct2023 End
+
                     DLineNo := DLineNo + 1;
                     DDescription := NS_Description;
                     if "NS_Billing Method" > 0 then begin
@@ -437,17 +422,13 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
                         DWorkRetention := ROUND(("Progress Billing Header"."NS_Work Retention Percent" / 100) * (DPreviousPeriod + DThisPeriod), 0.01);
                         DMaterialRetention := ROUND(("Progress Billing Header"."NS_Material Retention Percent" / 100) * DStoredMaterialsAmount, 0.01);
                         DRetention := DWorkRetention + DMaterialRetention;
-                        //PRJCTPR-320.NC.1.0 16Feb2024 Start
-                        if "Progress Billing Header"."NS_Multiple Retention on Lines" then
-                            DRetention := "NS_Work Retention Amount" + "NS_Stored Mat. Retention Amt";
-                        //PRJCTPR-320.NC.1.0 16Feb2024 End
                     end;
                 end;
 
                 trigger OnPreDataItem();
                 begin
                     ItemNo := 0;
-                    // CurrReport.NEWPAGE; //PRJCTPR-101.NC.1.0 25Apr2023 Block
+                    CurrReport.NEWPAGE;
                 end;
             }
 
@@ -504,13 +485,11 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
                 CurrentDeductions := 0;
 
                 PreviousReqPeriodToDate := NS_GetPeriodFromDate("NS_No.", "NS_Period To");
-                //PRJCTPR-208.NC.1.0 30Oct2023 Block Start
-                // NS_GetChangeOrderValues(Job."No.",
-                //                      PreviousReqPeriodToDate, "NS_Period To",
-                //                      PreviousAdditions, PreviousDeductions,
-                //                      CurrentAdditions, CurrentDeductions);
-                //PRJCTPR-208.NC.1.0 30Oct2023 Block End
-                NS_GetChangeOrderValuesPL(Job."No.", PreviousReqPeriodToDate, "NS_Period To", PreviousAdditions, PreviousDeductions, CurrentAdditions, CurrentDeductions); //PRJCTPR-208.NC.1.0 30Oct2023
+                NS_GetChangeOrderValues(Job."No.",
+                                     PreviousReqPeriodToDate, "NS_Period To",
+                                     PreviousAdditions, PreviousDeductions,
+                                     CurrentAdditions, CurrentDeductions);
+
                 if "NS_Period To" > 0D then
                     Job.SETFILTER("NS_Date Filter", '<=%1', "NS_Period To")
                 else
@@ -523,87 +502,15 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
                 OriginalContractSum := NS_ProgressBillBaseAmount("Progress Billing Header");    //Line 1
                 NetChanges := PreviousAdditions - PreviousDeductions + CurrentAdditions - CurrentDeductions;  //Line 2
                 ContractSumToDate := OriginalContractSum + NetChanges;  //Line 3
-                //TotalCompletedAndStoredToDate := WorkPreviousBilling + "NS_Requisition Total";  //Line 4 //PRJCTPR-208.NC.1.0 27Oct2023 Block
-                TotalCompletedAndStoredToDate := WorkPreviousBilling + NS_RequisitionTotal("Progress Billing Header"); //PRJCTPR-208.NC.1.0 27Oct2023
-                //PRJ-1239.JS.1.0 08MAR2022-Start
-                if "NS_Work Retention Percent" <> 0 then begin
-                    RetentionPercentOfCompletedWork := ROUND((WorkPreviousBilling + "NS_Line Work Amount") * ("NS_Work Retention Percent" / 100), 0.01);  //Line 5a
-                    if RetentionPercentOfCompletedWork <> 0 then begin
-                        ProgressBillingLine2.RESET();
-                        ProgressBillingLine2.SETRANGE("NS_Progress Billing No.", "NS_No.");
-                        ProgressBillingLine2.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
-                        ProgressBillingLine2.SETRANGE("NS_Version No.", "NS_Version No.");
-                        if ProgressBillingLine2.FINDSET() then
-                            repeat
-                                //PRJCTPR-334.AS.2.0 START
-                                JobRec_G.Reset();
-                                JobRec_G.SetRange("No.", ProgressBillingLine2."NS_Job No.");
-                                JobRec_G.SetFilter("NS_Job Class", '<>%1', JobRec_G."NS_Job Class"::"Change Order");
-                                if JobRec_G.FindFirst() then begin
-                                    if ProgressBillingLine2."NS_Change Order" = TRUE then
-                                        NSLineWorkRetnAmount := NSLineWorkRetnAmount + +0
-                                    else
-                                        NSLineWorkRetnAmount := NSLineWorkRetnAmount + ProgressBillingLine2."NS_Work Retention Amount";
-                                end
-                                else
-                                    //PRJCTPR-334.AS.2.0 END
-                                NSLineWorkRetnAmount := NSLineWorkRetnAmount + ProgressBillingLine2."NS_Work Retention Amount";
-                            until ProgressBillingLine2.NEXT() = 0;
-
-                        NSDiffrenceAmount := NSLineWorkRetnAmount - RetentionPercentOfCompletedWork;
-                        if NSDiffrenceAmount <> 0 then
-                            RetentionPercentOfCompletedWork := RetentionPercentOfCompletedWork + NSDiffrenceAmount;
-                    end;
-                end else
-                    //PRJ-1239.JS.1.0 08MAR2022-end
+                TotalCompletedAndStoredToDate := WorkPreviousBilling + "NS_Requisition Total";  //Line 4
+                if "NS_Work Retention Percent" <> 0 then
+                    RetentionPercentOfCompletedWork := ROUND((WorkPreviousBilling + "NS_Line Work Amount") * ("NS_Work Retention Percent" / 100), 0.01)  //Line 5a
+                else
                     RetentionPercentOfCompletedWork := 0;  //Line 5a
-                                                           //PRJCTPR-320.NC.1.0 16Feb2024 Start
-                if "NS_Multiple Retention on Lines" then begin
-                    NSLineWorkRetnAmount := 0;
-                    NSDiffrenceAmount := 0;
-                    ProgressBillingLine.RESET();
-                    ProgressBillingLine.SETRANGE("NS_Progress Billing No.", "NS_No.");
-                    ProgressBillingLine.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
-                    ProgressBillingLine.SETRANGE("NS_Version No.", "NS_Version No.");
-                    if ProgressBillingLine.FINDSET() then
-                        repeat
-                            //PRJCTPR-334.AS.2.0 START
-                            JobRec_G.Reset();
-                            JobRec_G.SetRange("No.", ProgressBillingLine."NS_Job No.");
-                            JobRec_G.SetFilter("NS_Job Class", '<>%1', JobRec_G."NS_Job Class"::"Change Order");
-                            if JobRec_G.FindFirst() then begin
-                                if ProgressBillingLine."NS_Change Order" = TRUE then
-                                    NSLineWorkRetnAmount := NSLineWorkRetnAmount + 0
-                                else
-                                    NSLineWorkRetnAmount += ProgressBillingLine."NS_Work Retention Amount";
-                            end
-                            else
-                                //PRJCTPR-334.AS.2.0 END
-                                NSLineWorkRetnAmount += ProgressBillingLine."NS_Work Retention Amount";
-                        until ProgressBillingLine.NEXT() = 0;
-                    RetentionPercentOfCompletedWork := RetentionPercentOfCompletedWork + NSLineWorkRetnAmount;
-                end;
-                //PRJCTPR-320.NC.1.0 16Feb2024 End  
                 if "NS_Material Retention Percent" <> 0 then
                     RetentionPercentOfCompletedMaterial := ROUND("NS_Line Material Amount" * ("NS_Material Retention Percent" / 100), 0.01)  //Line 5b
                 else
                     RetentionPercentOfCompletedMaterial := 0;  //Line 5b
-                                                               //PRJCTPR-320.NC.1.0 16Feb2024 Start
-                if "NS_Multiple Retention on Lines" then begin
-                    TotStoreAmt := 0;
-                    ProgressBillingLine.RESET();
-                    ProgressBillingLine.SETRANGE("NS_Progress Billing No.", "NS_No.");
-                    ProgressBillingLine.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
-                    ProgressBillingLine.SETRANGE("NS_Version No.", "NS_Version No.");
-                    if ProgressBillingLine.FINDSET() then
-                        repeat
-                            if ProgressBillingLine."NS_Stored Materials Amount" <> 0 then
-                                TotStoreAmt += (ProgressBillingLine."NS_Stored Materials Amount" * ProgressBillingLine."NS_Stored Material Retention %" / 100);
-                        until ProgressBillingLine.Next() = 0;
-                    RetentionPercentOfCompletedMaterial := ROUND(TotStoreAmt, 0.01);
-                end;
-                //PRJCTPR-320.NC.1.0 16Feb2024 End
-
                 if RetentionPercentOfCompletedWork + RetentionPercentOfCompletedMaterial <> 0 then
                     TotalRetention := RetentionPercentOfCompletedWork + RetentionPercentOfCompletedMaterial  //Line 5c
                 else begin
@@ -617,8 +524,7 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
                         until ProgressBillingLine.NEXT = 0;
                 end;
                 TotalEarnedLessRetention := TotalCompletedAndStoredToDate - TotalRetention;  //Line 6
-                //LessPreviousInvoices := NS_ProgressBillPreviousInvoice("Progress Billing Header");  //Line 7  //PRJ-1216.JS.5.0 28MAR2022 line connentd
-                LessPreviousInvoices := NS_ProgressBillPreviousInvoiceNew("Progress Billing Header");  //Line 7  //PRJ-1216.JS.5.0 28MAR2022 line added
+                LessPreviousInvoices := NS_ProgressBillPreviousInvoice("Progress Billing Header");  //Line 7
                 CurrentPaymentDue := TotalEarnedLessRetention - LessPreviousInvoices;  //Line 8
                 BalanceToFinishIncludingRetention := ContractSumToDate - TotalEarnedLessRetention;  //Line 9
                 TotalChangesAdditions := PreviousAdditions + CurrentAdditions;  //Line 13a
@@ -653,7 +559,6 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
     end;
 
     var
-        JobRec_G: Record job;//PRJCTPR-334.AS.2.0
         CompanyInformation: Record "Company Information";
         CompanyInfo1: Record "Company Information";
         CompanyInfo2: Record "Company Information";
@@ -664,7 +569,6 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
         JobContact: Record "NS_Job Contact";
         Customer: Record Customer;
         ProgressBillingLine: Record "NS_Progress Billing Line";
-        ProgressBillingLine2: Record "NS_Progress Billing Line";     //PRJ-1239.JS.1.0 08MAR2022
         PrevProgressBillingHeader: Record "NS_Progress Billing Header";
         JobPlanningLine: Record "Job Planning Line";
         FormatAddress: Codeunit "Format Address";
@@ -678,8 +582,6 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
         CurrentAdditions: Decimal;
         CurrentDeductions: Decimal;
         JobBudgetedPrice: Decimal;
-        NSLineWorkRetnAmount: Decimal;    //PRJ-1239.JS.1.0 08MAR2022
-        NSDiffrenceAmount: Decimal; //PRJ-1239.JS.1.0 08MAR2022
         PeriodToDate: Date;
         PreviousReqPeriodToDate: Date;
         Labels: array[80] of Text[100];
@@ -721,14 +623,9 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
         ItemNo: Integer;
         RevenueRec: Record "NS_Job Revenue Category";
         Text14021101: Label 'There is no "Period To" date.';
-        //PRJ-1332.GK.1.0 25Apr2022 start-change caption
-        // Invoice_CaptionLbl: Label 'INVOICE';
-        //Invoice_Number__CaptionLbl: Label 'Invoice Number:';
-        //Invoice_Date__CaptionLbl: Label 'Invoice Date:';
-        Invoice_CaptionLbl: Label 'Progress Billing Report';
-        Invoice_Number__CaptionLbl: Label 'Progress Billing Number:';
-        Invoice_Date__CaptionLbl: Label 'Requisition Date:';
-        //PRJ-1332.GK.1.0 25Apr2022 end
+        Invoice_CaptionLbl: Label 'INVOICE';
+        Invoice_Number__CaptionLbl: Label 'Invoice Number:';
+        Invoice_Date__CaptionLbl: Label 'Invoice Date:';
         Page__CaptionLbl: Label 'Page:';
         To__CaptionLbl: Label 'To:';
         Bill_CaptionLbl: Label 'Bill';
@@ -782,6 +679,5 @@ report 14021425 "NS_Progress Bill InvRevCatSumm"
         DetailPercentThisPeriodLbl: Label '%';
         DetailBalanceToFinishLbl: Label 'Balance To Finish';
         DetailRetentionLbl: Label 'Retention';
-        TotStoreAmt: Decimal; //PRJCTPR-320.NC.1.0 16Feb2024
 }
 

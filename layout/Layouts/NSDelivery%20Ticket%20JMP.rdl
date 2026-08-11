@@ -8,7 +8,6 @@
         <ConnectString />
       </ConnectionProperties>
       <rd:SecurityType>None</rd:SecurityType>
-      <rd:DataSourceID>81e02641-c577-43ec-8ffb-ae0f818025bb</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <ReportSections>
@@ -24,7 +23,6 @@
                   <TextRun>
                     <Value>To:</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
@@ -33,8 +31,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox5</rd:DefaultName>
-            <Top>1.07791in</Top>
-            <Left>0.42542in</Left>
+            <Top>0.15291in</Top>
+            <Left>0.63208in</Left>
             <Height>0.21875in</Height>
             <Width>0.35417in</Width>
             <Style>
@@ -56,7 +54,6 @@
                   <TextRun>
                     <Value>=First(Fields!Job_AddressLine1.Value, "DataSet_Result")</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
@@ -65,8 +62,8 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox6</rd:DefaultName>
-            <Top>1.07791in</Top>
-            <Left>0.79834in</Left>
+            <Top>0.15291in</Top>
+            <Left>1.1425in</Left>
             <Height>0.21875in</Height>
             <Width>1.58333in</Width>
             <ZIndex>1</ZIndex>
@@ -89,31 +86,6 @@
                   <TextRun>
                     <Value>=First(Fields!Job_AddressLine2.Value, "DataSet_Result")</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Job_AddressLine3.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Job_AddressLine4.Value, "DataSet_Result") &amp; Fields!NS_TextComma.value &amp; " " &amp;  First(Fields!Job_AddressLine5.Value, "DataSet_Result") &amp; " " &amp; First(Fields!Job_AddressLine6.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
@@ -122,15 +94,114 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox7</rd:DefaultName>
-            <Top>1.29666in</Top>
-            <Left>0.79834in</Left>
-            <Height>0.54514in</Height>
+            <Top>0.37166in</Top>
+            <Left>1.1425in</Left>
+            <Height>0.21875in</Height>
             <Width>1.58333in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox8">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Job_AddressLine3.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox8</rd:DefaultName>
+            <Top>0.59041in</Top>
+            <Left>1.1425in</Left>
+            <Height>0.21875in</Height>
+            <Width>1.58333in</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox9">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Job_AddressLine4.Value, "DataSet_Result") + " " + First(Fields!Job_AddressLine5.Value, "DataSet_Result") + " " +First(Fields!Job_AddressLine6.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox9</rd:DefaultName>
+            <Top>0.80916in</Top>
+            <Left>1.1425in</Left>
+            <Height>0.21875in</Height>
+            <Width>1.58333in</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox10">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Customer Account Name</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox10</rd:DefaultName>
+            <Top>0.1668in</Top>
+            <Left>5.51055in</Left>
+            <Height>0.25in</Height>
+            <Width>1.42708in</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -144,9 +215,8 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Job No.:</Value>
+                    <Value>Job No.</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
@@ -157,16 +227,16 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox11</rd:DefaultName>
-            <Top>1.07791in</Top>
-            <Left>5.67791in</Left>
+            <Top>0.4168in</Top>
+            <Left>5.93763in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
-            <ZIndex>3</ZIndex>
+            <ZIndex>6</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Top</VerticalAlign>
+              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -180,9 +250,8 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Job Name:</Value>
+                    <Value>Job Name</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
@@ -193,16 +262,51 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox12</rd:DefaultName>
-            <Top>1.3418in</Top>
-            <Left>5.67791in</Left>
+            <Top>0.6668in</Top>
+            <Left>5.93763in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
-            <ZIndex>4</ZIndex>
+            <ZIndex>7</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Top</VerticalAlign>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox13">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Job Location</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox13</rd:DefaultName>
+            <Top>0.92722in</Top>
+            <Left>5.93763in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -216,9 +320,8 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Person Responsible:</Value>
+                    <Value>Project Engineer</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
@@ -229,16 +332,48 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox14</rd:DefaultName>
-            <Top>1.5918in</Top>
-            <Left>5.62694in</Left>
+            <Top>1.19111in</Top>
+            <Left>5.93763in</Left>
             <Height>0.25in</Height>
-            <Width>1.05097in</Width>
-            <ZIndex>5</ZIndex>
+            <Width>1in</Width>
+            <ZIndex>9</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Top</VerticalAlign>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox15">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Job_CustomerAccountName.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox15</rd:DefaultName>
+            <Top>0.1668in</Top>
+            <Left>7.00708in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
@@ -254,30 +389,27 @@
                   <TextRun>
                     <Value>=First(Fields!Job_No.Value, "DataSet_Result")</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
+                <Style />
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox16</rd:DefaultName>
-            <Top>1.07791in</Top>
-            <Left>6.74736in</Left>
+            <Top>0.4168in</Top>
+            <Left>7.00708in</Left>
             <Height>0.25in</Height>
-            <Width>1.25972in</Width>
-            <ZIndex>6</ZIndex>
+            <Width>1in</Width>
+            <ZIndex>11</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Top</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Textbox17">
@@ -289,30 +421,57 @@
                   <TextRun>
                     <Value>=First(Fields!Job_Name.Value, "DataSet_Result")</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
+                <Style />
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox17</rd:DefaultName>
-            <Top>1.3418in</Top>
-            <Left>6.74736in</Left>
-            <Height>0.24653in</Height>
-            <Width>1.25972in</Width>
-            <ZIndex>7</ZIndex>
+            <Top>0.68069in</Top>
+            <Left>7.00708in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>12</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Top</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox18">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value />
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox18</rd:DefaultName>
+            <Top>0.93069in</Top>
+            <Left>7.00708in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>13</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Textbox19">
@@ -324,30 +483,27 @@
                   <TextRun>
                     <Value>=First(Fields!Job_Project_Emgineer.Value, "DataSet_Result")</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
+                <Style />
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox19</rd:DefaultName>
-            <Top>1.58972in</Top>
-            <Left>6.74736in</Left>
-            <Height>0.23958in</Height>
-            <Width>1.25972in</Width>
-            <ZIndex>8</ZIndex>
+            <Top>1.18069in</Top>
+            <Left>7.00708in</Left>
+            <Height>0.25in</Height>
+            <Width>1in</Width>
+            <ZIndex>14</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
-              <VerticalAlign>Top</VerticalAlign>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
               <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Textbox20">
@@ -357,9 +513,8 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Please review the order. Any discrepancies must be reported within 24 hours of delivery</Value>
+                    <Value>Please review the order. Any Discrepancies MUST be reported with 24 hours of delivery</Value>
                     <Style>
-                      <FontFamily>Segoe UI</FontFamily>
                       <FontSize>6pt</FontSize>
                     </Style>
                   </TextRun>
@@ -368,11 +523,11 @@
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox20</rd:DefaultName>
-            <Top>2.13625in</Top>
-            <Left>0.42542in</Left>
+            <Top>1.36125in</Top>
+            <Left>0.52792in</Left>
             <Height>0.16667in</Height>
             <Width>3.39583in</Width>
-            <ZIndex>9</ZIndex>
+            <ZIndex>15</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -387,16 +542,16 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.48958in</Width>
+                  <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.14416in</Width>
+                  <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.56778in</Width>
+                  <Width>2.4132in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.38014in</Width>
+                  <Width>3.01388in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -413,10 +568,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>Quantity Shipped</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -446,10 +598,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>Box Ref</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -478,11 +627,8 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Part No.</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
+                                  <Value>Part No</Value>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -512,10 +658,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>Description</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -550,13 +693,11 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Quantity_Shipped_Calc.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Left</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -584,9 +725,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Box_Ref_Calc.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -616,9 +755,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Part_No.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -648,9 +785,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!Description.Value</Value>
-                                  <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -693,154 +828,25 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>2.84458in</Top>
-            <Left>0.42542in</Left>
+            <Top>1.69458in</Top>
+            <Left>0.58in</Left>
             <Height>0.5in</Height>
-            <Width>7.58166in</Width>
-            <ZIndex>10</ZIndex>
+            <Width>7.42708in</Width>
+            <ZIndex>16</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Textbox22">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Delivery  Instruction:-</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>6pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value xml:space="preserve">  </Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>6pt</FontSize>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>=First(Fields!JobDeliveryInstruction.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>6pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox20</rd:DefaultName>
-            <Top>2.40521in</Top>
-            <Left>0.42542in</Left>
-            <Height>0.16667in</Height>
-            <Width>7.58166in</Width>
-            <ZIndex>11</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox1">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CoInfo_Name.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CoInfo_Adr.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CoInfo_Adr2.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CoInfo_City.Value, "DataSet_Result") + First(Fields!NS_TextComma.Value, "DataSet_Result") &amp; " " &amp; First(Fields!CoInfo_country.Value, "DataSet_Result") &amp; " " &amp; First(Fields!CoInfo_PostCode.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>="Phone: "&amp; First(Fields!CoInfo_PhNo.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontFamily>Segoe UI</FontFamily>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>0.00139in</Top>
-            <Left>0.41333in</Left>
-            <Height>0.77778in</Height>
-            <Width>3.09375in</Width>
-            <ZIndex>12</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
         </ReportItems>
-        <Height>4.56958in</Height>
+        <Height>2.92708in</Height>
         <Style />
       </Body>
-      <Width>8.44458in</Width>
+      <Width>8.49666in</Width>
       <Page>
         <PageHeader>
-          <Height>1.025in</Height>
+          <Height>1in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -853,22 +859,19 @@
                     <TextRun>
                       <Value>Job Delivery Ticket</Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
                         <FontSize>12pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox2</rd:DefaultName>
               <Top>0.1425in</Top>
               <Left>6.3925in</Left>
               <Height>0.25in</Height>
-              <Width>1.6243in</Width>
+              <Width>1.61458in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -886,32 +889,22 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value> Date: </Value>
+                      <Value>=Globals!ExecutionTime</Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
-                        <Format>dd/MM/yyyy</Format>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Format(Now,"MM/dd/yyyy")</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <Format>t</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Center</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>0.3925in</Top>
-              <Left>5.93417in</Left>
+              <Top>0.46195in</Top>
+              <Left>6.3925in</Left>
               <Height>0.125in</Height>
-              <Width>2.08263in</Width>
+              <Width>1.5625in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -931,23 +924,20 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>="Page " &amp; Globals!PageNumber &amp; " " &amp; "of" &amp; " " &amp; Globals!TotalPages</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
+                      <Value>=Globals!PageNumber &amp; " " &amp; "of" &amp; " " &amp; Globals!TotalPages</Value>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Center</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>0.67028in</Top>
-              <Left>5.93417in</Left>
+              <Top>0.68417in</Top>
+              <Left>6.3925in</Left>
               <Height>0.125in</Height>
-              <Width>2.08263in</Width>
+              <Width>1.5625in</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -966,9 +956,9 @@
               <MIMEType>image/bmp</MIMEType>
               <Sizing>FitProportional</Sizing>
               <Top>0.1425in</Top>
-              <Left>0.41333in</Left>
-              <Height>0.78806in</Height>
-              <Width>1.88542in</Width>
+              <Left>0.78833in</Left>
+              <Height>0.5in</Height>
+              <Width>1.78125in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -976,49 +966,6 @@
                 </Border>
               </Style>
             </Image>
-            <Textbox Name="Textbox13">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>User: </Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=User!UserID</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>0.53139in</Top>
-              <Left>5.93417in</Left>
-              <Height>0.125in</Height>
-              <Width>2.08263in</Width>
-              <ZIndex>4</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -1026,10 +973,6 @@
             </Border>
           </Style>
         </PageHeader>
-        <LeftMargin>0in</LeftMargin>
-        <RightMargin>0in</RightMargin>
-        <TopMargin>0in</TopMargin>
-        <BottomMargin>0in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>
@@ -1072,7 +1015,6 @@ End Function
   <Language>=User!Language</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>2df3c5a0-d25f-4019-84d7-ee756cd3166e</rd:ReportID>
   <DataSets>
     <DataSet Name="DataSet_Result">
       <Fields>
@@ -1081,9 +1023,6 @@ End Function
         </Field>
         <Field Name="FORMAT_TODAY_0_4_">
           <DataField>FORMAT_TODAY_0_4_</DataField>
-        </Field>
-        <Field Name="NS_TodayDate">
-          <DataField>NS_TodayDate</DataField>
         </Field>
         <Field Name="Job_No">
           <DataField>Job_No</DataField>
@@ -1121,38 +1060,8 @@ End Function
         <Field Name="Job_Project_Emgineer">
           <DataField>Job_Project_Emgineer</DataField>
         </Field>
-        <Field Name="JobDeliveryInstruction">
-          <DataField>JobDeliveryInstruction</DataField>
-        </Field>
         <Field Name="CompanyInfo1Picture">
           <DataField>CompanyInfo1Picture</DataField>
-        </Field>
-        <Field Name="CoInfo_Name">
-          <DataField>CoInfo_Name</DataField>
-        </Field>
-        <Field Name="CoInfo_Adr">
-          <DataField>CoInfo_Adr</DataField>
-        </Field>
-        <Field Name="CoInfo_Adr2">
-          <DataField>CoInfo_Adr2</DataField>
-        </Field>
-        <Field Name="CoInfo_City">
-          <DataField>CoInfo_City</DataField>
-        </Field>
-        <Field Name="CoInfo_country">
-          <DataField>CoInfo_country</DataField>
-        </Field>
-        <Field Name="CoInfo_PostCode">
-          <DataField>CoInfo_PostCode</DataField>
-        </Field>
-        <Field Name="CoInfo_PhNo">
-          <DataField>CoInfo_PhNo</DataField>
-        </Field>
-        <Field Name="NS_TextComma">
-          <DataField>NS_TextComma</DataField>
-        </Field>
-        <Field Name="NS_QtyShip">
-          <DataField>NS_QtyShip</DataField>
         </Field>
         <Field Name="Quantity_Shipped">
           <DataField>Quantity_Shipped</DataField>
@@ -1177,9 +1086,6 @@ End Function
         </Field>
         <Field Name="Box_Ref_Calc">
           <DataField>Box_Ref_Calc</DataField>
-        </Field>
-        <Field Name="NS_Userid">
-          <DataField>NS_Userid</DataField>
         </Field>
       </Fields>
       <Query>

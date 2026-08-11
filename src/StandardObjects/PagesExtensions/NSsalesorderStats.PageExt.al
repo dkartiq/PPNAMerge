@@ -1,8 +1,7 @@
 pageextension 14021252 NS_SalesOrderStats extends "Sales Order Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Order Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("TotalAmount2[1]")
@@ -37,16 +36,6 @@ pageextension 14021252 NS_SalesOrderStats extends "Sales Order Statistics"
                 ToolTip = 'Retention Amount ($)';
                 Editable = false;
             }
-            //PRJCTPR-212.PS.1.0 20Oct2023 Start
-            field("NS_Final Total Inv"; NS_FinalTotal)
-            {
-                ApplicationArea = All;
-                AutoFormatType = 1;
-                Caption = 'Final Total';
-                ToolTip = 'Final Total';
-                Editable = false;
-            }
-            //PRJCTPR-212.PS.1.0 20Oct2023 End
         }
         addafter("TotalAmount2[3]")
         {

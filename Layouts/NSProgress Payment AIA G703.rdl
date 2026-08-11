@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="StartAsPageNo">
+          <DataField>StartAsPageNo</DataField>
+        </Field>
+        <Field Name="DocumentHeading01">
+          <DataField>DocumentHeading01</DataField>
+        </Field>
+        <Field Name="DocumentHeading02">
+          <DataField>DocumentHeading02</DataField>
+        </Field>
+        <Field Name="DocumentHeading03">
+          <DataField>DocumentHeading03</DataField>
+        </Field>
+        <Field Name="DocumentHeading04">
+          <DataField>DocumentHeading04</DataField>
+        </Field>
+        <Field Name="DocumentHeading05">
+          <DataField>DocumentHeading05</DataField>
+        </Field>
+        <Field Name="DocumentHeading06">
+          <DataField>DocumentHeading06</DataField>
+        </Field>
+        <Field Name="DocumentHeading07">
+          <DataField>DocumentHeading07</DataField>
+        </Field>
+        <Field Name="DocumentHeading08">
+          <DataField>DocumentHeading08</DataField>
+        </Field>
+        <Field Name="DocumentHeading09">
+          <DataField>DocumentHeading09</DataField>
+        </Field>
+        <Field Name="DocumentHeading10">
+          <DataField>DocumentHeading10</DataField>
+        </Field>
+        <Field Name="DocumentHeading11">
+          <DataField>DocumentHeading11</DataField>
+        </Field>
+        <Field Name="ColumnHeadingA1">
+          <DataField>ColumnHeadingA1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingA2">
+          <DataField>ColumnHeadingA2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingB1">
+          <DataField>ColumnHeadingB1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingB2">
+          <DataField>ColumnHeadingB2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingC1">
+          <DataField>ColumnHeadingC1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingC2">
+          <DataField>ColumnHeadingC2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingD1">
+          <DataField>ColumnHeadingD1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingD2">
+          <DataField>ColumnHeadingD2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingD3">
+          <DataField>ColumnHeadingD3</DataField>
+        </Field>
+        <Field Name="ColumnHeadingE1">
+          <DataField>ColumnHeadingE1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingE2">
+          <DataField>ColumnHeadingE2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingF1">
+          <DataField>ColumnHeadingF1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingF2">
+          <DataField>ColumnHeadingF2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingG1">
+          <DataField>ColumnHeadingG1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingG2">
+          <DataField>ColumnHeadingG2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingGA">
+          <DataField>ColumnHeadingGA</DataField>
+        </Field>
+        <Field Name="ColumnHeadingH1">
+          <DataField>ColumnHeadingH1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingH2">
+          <DataField>ColumnHeadingH2</DataField>
+        </Field>
+        <Field Name="ColumnHeadingI1">
+          <DataField>ColumnHeadingI1</DataField>
+        </Field>
+        <Field Name="ColumnHeadingI2">
+          <DataField>ColumnHeadingI2</DataField>
+        </Field>
+        <Field Name="ApplicationNo">
+          <DataField>ApplicationNo</DataField>
+        </Field>
+        <Field Name="ApplicationDate">
+          <DataField>ApplicationDate</DataField>
+        </Field>
+        <Field Name="PeriodTo">
+          <DataField>PeriodTo</DataField>
+        </Field>
+        <Field Name="ArchitectProjectNo">
+          <DataField>ArchitectProjectNo</DataField>
+        </Field>
+        <Field Name="LineNo">
+          <DataField>LineNo</DataField>
+        </Field>
+        <Field Name="ItemNum">
+          <DataField>ItemNum</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="ScheduledValue">
+          <DataField>ScheduledValue</DataField>
+        </Field>
+        <Field Name="ScheduledValueFormat">
+          <DataField>ScheduledValueFormat</DataField>
+        </Field>
+        <Field Name="PreviousWork">
+          <DataField>PreviousWork</DataField>
+        </Field>
+        <Field Name="PreviousWorkFormat">
+          <DataField>PreviousWorkFormat</DataField>
+        </Field>
+        <Field Name="ThisPeriodWork">
+          <DataField>ThisPeriodWork</DataField>
+        </Field>
+        <Field Name="ThisPeriodWorkFormat">
+          <DataField>ThisPeriodWorkFormat</DataField>
+        </Field>
+        <Field Name="StoredMaterials">
+          <DataField>StoredMaterials</DataField>
+        </Field>
+        <Field Name="StoredMaterialsFormat">
+          <DataField>StoredMaterialsFormat</DataField>
+        </Field>
+        <Field Name="TotalCompletedAndStored">
+          <DataField>TotalCompletedAndStored</DataField>
+        </Field>
+        <Field Name="TotalCompletedAndStoredFormat">
+          <DataField>TotalCompletedAndStoredFormat</DataField>
+        </Field>
+        <Field Name="TotalCompletedAndStoredPct">
+          <DataField>TotalCompletedAndStoredPct</DataField>
+        </Field>
+        <Field Name="TotalCompletedAndStoredPctFormat">
+          <DataField>TotalCompletedAndStoredPctFormat</DataField>
+        </Field>
+        <Field Name="BalanceToFinish">
+          <DataField>BalanceToFinish</DataField>
+        </Field>
+        <Field Name="BalanceToFinishFormat">
+          <DataField>BalanceToFinishFormat</DataField>
+        </Field>
+        <Field Name="Retainage">
+          <DataField>Retainage</DataField>
+        </Field>
+        <Field Name="RetainageFormat">
+          <DataField>RetainageFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

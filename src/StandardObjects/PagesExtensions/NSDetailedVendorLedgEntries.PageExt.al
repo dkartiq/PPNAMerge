@@ -1,8 +1,7 @@
 pageextension 14021273 NS_DetailedVendorLedgEntries extends "Detailed Vendor Ledg. Entries"
 {
     // version NAVW111.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Detailed Vendor Ledger Entries'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Initial Entry Global Dim. 2")

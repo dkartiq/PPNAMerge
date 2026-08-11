@@ -8,7 +8,6 @@ report 14021150 "NS_APO List"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1571.NK.1.0 18Aug2022 Add Code
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSAPO List.rdl';
 
@@ -45,20 +44,6 @@ report 14021150 "NS_APO List"
                 column(COMPANYNAME; COMPANYNAME)
                 {
                 }
-                //PRJ-1571.NK.1.0 23Aug2022 Start
-                column(JobActivity; JobActivity)
-                {
-
-                }
-                column(JobProcess; JobProcess)
-                {
-
-                }
-                column(JobOperation; JobOperation)
-                {
-
-                }
-                //PRJ-1571.NK.1.0 23Aug2022 End
                 column(CurrReport_PAGENO; CurrReport.PAGENO)
                 {
                 }
@@ -172,7 +157,6 @@ report 14021150 "NS_APO List"
                 FirstType := true;
             end;
         }
-
     }
 
     requestpage
@@ -187,12 +171,10 @@ report 14021150 "NS_APO List"
                     field(ShowProcesses; ShowProcesses)
                     {
                         ApplicationArea = All;
-                        CaptionClass = '50995,1,0'; //PRJ-1571.NK.1.0 18Aug2022
                     }
                     field(ShowOperations; ShowOperations)
                     {
                         ApplicationArea = All;
-                        CaptionClass = '50995,2,0'; //PRJ-1571.NK.1.0 18Aug2022
                     }
                 }
             }
@@ -206,29 +188,6 @@ report 14021150 "NS_APO List"
     labels
     {
     }
-    //PRJ-1571.NK.1.0 23Aug2022 Start
-    trigger OnPreReport()
-    var
-        ApoSetup: Record NS_APOSetup;
-        JobsSetup: Record "Jobs Setup";
-    begin
-        JobActivity := '';
-        JobProcess := '';
-        JobOperation := '';
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then begin
-            JobActivity := ApoSetup."Activity Code";
-            JobProcess := ApoSetup."Process Code";
-            JobOperation := ApoSetup."Operation Code";
-        end else begin
-            JobActivity := 'Activity Code';
-            JobProcess := 'Process Code';
-            JobOperation := 'Operation Code';
-        end;
-        //PRJ-1348.NK.1.0 12Jul2022 End
-    end;
-    //PRJ-1571.NK.1.0 23Aug2022 End
 
     var
         TypeHold: Option;
@@ -240,8 +199,5 @@ report 14021150 "NS_APO List"
         Job_Activity_CodeCaptionLbl: Label 'Activity Code';
         Process_CodeCaptionLbl: Label 'Process Code';
         Operation_CodeCaptionLbl: Label 'Operation Code';
-        JobActivity: Text; //PRJ-1571.NK.1.0 23Aug2022
-        JobProcess: Text; //PRJ-1571.NK.1.0 23Aug2022
-        JobOperation: Text; //PRJ-1571.NK.1.0 23Aug2022
 }
 

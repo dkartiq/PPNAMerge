@@ -1,5 +1,9 @@
 report 14021345 "NS_Get PO for Progress Payment"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
+    //     002 23-08-2021  PRE RG008 "Task P0415-13a New Progress Payment"
+    // 001 20-08-2021  PRE RG008 "Task P0415-13 Get PO"
+
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -9,7 +13,7 @@ report 14021345 "NS_Get PO for Progress Payment"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-906.GK.1.0  04Oct2021 |changes in code
-    //PRJ-1257.NK.1.0 30Mar2022 | Change in Code
+
     Caption = 'Get Contact for Progress Bill';
     ProcessingOnly = true;
     UseRequestPage = false;
@@ -25,66 +29,66 @@ report 14021345 "NS_Get PO for Progress Payment"
                 NS_JobTask: Record "Job Task";
                 NS_ProgressPaymentHead: Record "NS_Progress Payment Header";  //PRJ-906.GK.1.0 04Oct2021
                 NS_SubContractHead: Record NS_Subcontract;  //PRJ-906.GK.1.0 04Oct2021
-                ProgressPaymentLine2: Record "NS_Progress Payment Line"; //PRJ-1106.GK.1.0 29Dec2021
             begin
-                //PRJ-1106.GK.1.0 29Dec2021 start
-                ProgressPaymentLine2.Reset();
-                ProgressPaymentLine2.SetRange("NS_Progress Payment No.", ProgressPayNoIn);
-                ProgressPaymentLine2.SetRange("NS_PO Line No.", "Line No.");
-                ProgressPaymentLine2.SetRange("NS_Requisition No.", RequisitionNoIn);
-                ProgressPaymentLine2.SetRange("NS_Version No.", VersionNoIn);
-                if not ProgressPaymentLine2.FindFirst() then begin //PRJ-1106.GK.1.0 29Dec2021 end
-                    ProgressPaymentLine.INIT();
-                    ProgressPaymentLine."NS_Progress Payment No." := ProgressPayNoIn;
-                    ProgressPaymentLine."NS_Requisition No." := RequisitionNoIn;
-                    ProgressPaymentLine."NS_Version No." := VersionNoIn;
-                    LastLineNo := LastLineNo + 10000;
-                    ProgressPaymentLine."NS_Line No." := LastLineNo;
-                    LastItemNo := LastItemNo + 1;
-                    ProgressPaymentLine."NS_Item No." := FORMAT(LastItemNo);
-                    ProgressPaymentLine."NS_Subcontract No." := SubcontractNoIn;
-                    ProgressPaymentLine."NS_Job No." := "Job No.";
-                    case Type of
-                        Type::"G/L Account":
-                            ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::"G/L Account";
-                        Type::Item:
-                            ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::Item;
-                        Type::Resource:
-                            ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::Resource;
-                    end;
-                    ProgressPaymentLine."NS_No." := "No.";
-                    //ProgressPaymentLine."NS_No. Description" := Description;//PRJ-1623.GK.1.0 08Sept2022
-                    ProgressPaymentLine."NS_No. Description New" := Description; //PRJ-1623.GK.1.0 08Sept2022
-                    ProgressPaymentLine."NS_Job Task No." := "Job Task No.";
-                    ProgressPaymentLine."NS_PO Line No." := "Line No.";//PRJ-1106.GK.1.0 29Dec2021
-                    NS_JobTask.GET("Job No.", "Job Task No.");
-                    //PRJ-1652.GK.1.0 29Sept2022 start
-                    //ProgressPaymentLine."NS_Task Description" := NS_JobTask.Description;
-                    ProgressPaymentLine."NS_Task Description New" := NS_JobTask.Description;
-                    //PRJ-1652.GK.1.0 29Sept2022 end
+                ProgressPaymentLine.INIT();
+                ProgressPaymentLine."NS_Progress Payment No." := ProgressPayNoIn;
+                ProgressPaymentLine."NS_Requisition No." := RequisitionNoIn;
+                ProgressPaymentLine."NS_Version No." := VersionNoIn;
+                LastLineNo := LastLineNo + 10000;
+                ProgressPaymentLine."NS_Line No." := LastLineNo;
+                LastItemNo := LastItemNo + 1;
+                ProgressPaymentLine."NS_Item No." := FORMAT(LastItemNo);
+                ProgressPaymentLine."NS_Subcontract No." := SubcontractNoIn;
+                ProgressPaymentLine."NS_Job No." := "Job No.";
+                case Type of
+                    Type::"G/L Account":
+                        ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::"G/L Account";
+                    Type::Item:
+                        ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::Item;
+                    Type::Resource:
+                        ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::Resource;
+                    // >> 001 Upgrade
+                    Type::"Fixed Asset":
+                        ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::"Fixed Asset";
+                // << 001 Upgrade
+                end;
+                ProgressPaymentLine."NS_No." := "No.";
+                ProgressPaymentLine."NS_No. Description" := Description;
+                ProgressPaymentLine."NS_Job Task No." := "Job Task No.";
 
-                    ProgressPaymentLine."NS_Cost Category" := "NS_Job Cost Category";
-                    //ProgressPaymentLine."NS_Base Amount" := "Unit Cost"; //PRJ-1257.NK.1.0 30Mar2022 Block
-                    ProgressPaymentLine."NS_Base Amount" := "Direct Unit Cost" * "Quantity (Base)"; //PRJ-1257.NK.1.0 30Mar2022 Add
-                    ProgressPaymentLine."NS_Base Quantity" := "Quantity (Base)";
-                    //PRJ-906.GK.1.0  04Oct2021 Start
-                    If NS_SubContractHead.Get(SubcontractNoIn) then begin
-                        ProgressPaymentLine."NS_Work Retention Percent" := NS_SubContractHead."NS_Retention Percent";
-                        If NS_ProgressPaymentHead.Get(ProgressPayNoIn, RequisitionNoIn, VersionNoIn) then begin
-                            NS_ProgressPaymentHead."NS_Work Retention Percent" := NS_SubContractHead."NS_Retention Percent";
-                            NS_ProgressPaymentHead."NS_Material Retention Percent" := NS_SubContractHead."NS_Retention Percent"; //PRJ-1194.NK.1.0 09May2022
-                            NS_ProgressPaymentHead.Modify();
-                        end;
-                    end;
+                NS_JobTask.GET("Job No.", "Job Task No.");
+                ProgressPaymentLine."NS_Task Description" := NS_JobTask.Description;
 
-                    //PRJ-906.GK.1.0  04Oct2021 End
-                    if Quantity < 0 then
-                        ProgressPaymentLine."NS_Base Amount" := -ProgressPaymentLine."NS_Base Amount";
-                    ProgressPaymentLine.INSERT();
-                end;//PRJ-1106.GK.1.0 29Dec2021
+                ProgressPaymentLine."NS_Cost Category" := "NS_Job Cost Category";
+                // >> 001 Upgrade
+                //ProgressPaymentLine."NS_Base Amount" := "Unit Cost";
+                ProgressPaymentLine.Validate("NS_Base Amount", "Unit Cost");
+                // << 001 Upgrade
+                ProgressPaymentLine."NS_Base Quantity" := "Quantity (Base)";
+                //PRJ-906.GK.1.0  04Oct2021 Start
+                If NS_SubContractHead.Get(SubcontractNoIn) then begin
+                    ProgressPaymentLine."NS_Work Retention Percent" := NS_SubContractHead."NS_Retention Percent";
+                    If NS_ProgressPaymentHead.Get(ProgressPayNoIn, RequisitionNoIn, VersionNoIn) then begin
+                        NS_ProgressPaymentHead."NS_Work Retention Percent" := NS_SubContractHead."NS_Retention Percent";
+                        NS_ProgressPaymentHead.Modify();
+                    end;
+                end;
+
+                //PRJ-906.GK.1.0  04Oct2021 End
+                if Quantity < 0 then
+                    // >> 001
+                    //ProgressPaymentLine."NS_Base Amount" := -ProgressPaymentLine."NS_Base Amount";
+                    ProgressPaymentLine.Validate("NS_Base Amount", -ProgressPaymentLine."NS_Base Amount");
+                // << 001
+                ProgressPaymentLine.INSERT();
             end;
 
             trigger OnPreDataItem();
+            // >> Upgrade
+            var
+                Subcontract: Record NS_Subcontract;
+                ProgressPaymentHeader: Record "NS_Progress Payment Header";
+            // << Upgrade
             begin
                 with PurchaseHeader do begin
                     RESET();
@@ -93,9 +97,20 @@ report 14021345 "NS_Get PO for Progress Payment"
                     SETRANGE("Document Type", "Document Type"::Order);
                     if COUNT = 0 then
                         CurrReport.QUIT;
-                    FINDFIRST();
+                    // >> 002 Upgrade
+                    FINDFIRST;
+                    IF Subcontract.GET(SubcontractNoIn) THEN
+                        IF Subcontract."NS_Purchase Document No." <> '' THEN
+                            PurchaseHeader.GET(PurchaseHeader."Document Type"::Order, Subcontract."NS_Purchase Document No.");
+                    // << 002 Upgrade
                 end;
-
+                // #RG008 Start Upgrade
+                ProgressPaymentHeader.GET(ProgressPayNoIn, RequisitionNoIn, VersionNoIn);
+                IF ProgressPaymentHeader."NS_Purchase Order No." <> PurchaseHeader."No." THEN BEGIN
+                    ProgressPaymentHeader."NS_Purchase Order No." := PurchaseHeader."No.";
+                    ProgressPaymentHeader.MODIFY;
+                END;
+                // #RG008 End Upgrade
                 //Determine the last Line No. and Item No. so far
                 LastLineNo := 0;
                 LastItemNo := 0;

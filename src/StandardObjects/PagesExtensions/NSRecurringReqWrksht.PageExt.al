@@ -1,8 +1,7 @@
 pageextension 14021241 NS_RecurringReqWrkshtExt extends "Recurring Req. Worksheet"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Recurring Requisition Worksheets'; //PRJ-1330.NK.1.0 25Apr2022
+
     actions
     {
 

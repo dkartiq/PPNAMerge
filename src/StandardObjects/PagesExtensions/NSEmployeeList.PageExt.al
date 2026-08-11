@@ -1,8 +1,7 @@
 pageextension 14021293 NS_EmployeeList extends "Employee List"
 {
     // version NAVW111.00.00.22292,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Employees'; //PRJ-1330.NK.1.0 25Apr2022
+
     actions
     {
         //addafter("Con&fidential Info. Overview")

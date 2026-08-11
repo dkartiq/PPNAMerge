@@ -20,7 +20,7 @@ report 14021214 "NS_Cash Application"
     RDLCLayout = './Layouts/NSCash Application.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Cash Application';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Cash Application';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

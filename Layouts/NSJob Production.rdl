@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="EndDate">
+          <DataField>EndDate</DataField>
+        </Field>
+        <Field Name="ChangesText">
+          <DataField>ChangesText</DataField>
+        </Field>
+        <Field Name="Job_ProductionCaption">
+          <DataField>Job_ProductionCaption</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Job__Caption">
+          <DataField>Job__Caption</DataField>
+        </Field>
+        <Field Name="Job_NameCaption">
+          <DataField>Job_NameCaption</DataField>
+        </Field>
+        <Field Name="Week_EndingCaption">
+          <DataField>Week_EndingCaption</DataField>
+        </Field>
+        <Field Name="Job_CodeCaption">
+          <DataField>Job_CodeCaption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="QuantityCaption">
+          <DataField>QuantityCaption</DataField>
+        </Field>
+        <Field Name="Work_Unit_of_MeasureCaption">
+          <DataField>Work_Unit_of_MeasureCaption</DataField>
+        </Field>
+        <Field Name="Est_MDCaption">
+          <DataField>Est_MDCaption</DataField>
+        </Field>
+        <Field Name="Est___Caption">
+          <DataField>Est___Caption</DataField>
+        </Field>
+        <Field Name="Quantity_Job_to_DateCaption">
+          <DataField>Quantity_Job_to_DateCaption</DataField>
+        </Field>
+        <Field Name="Weekly_ProductionCaption">
+          <DataField>Weekly_ProductionCaption</DataField>
+        </Field>
+        <Field Name="Est____In_PlaceCaption">
+          <DataField>Est____In_PlaceCaption</DataField>
+        </Field>
+        <Field Name="Payroll_CostCaption">
+          <DataField>Payroll_CostCaption</DataField>
+        </Field>
+        <Field Name="Est__Unit_CostCaption">
+          <DataField>Est__Unit_CostCaption</DataField>
+        </Field>
+        <Field Name="Actual_CostCaption">
+          <DataField>Actual_CostCaption</DataField>
+        </Field>
+        <Field Name="Average_Unit_MDCaption">
+          <DataField>Average_Unit_MDCaption</DataField>
+        </Field>
+        <Field Name="TotalWorkUnits_TotalWorkUnitsForWeek">
+          <DataField>TotalWorkUnits_TotalWorkUnitsForWeek</DataField>
+        </Field>
+        <Field Name="TotalWorkUnits_TotalWorkUnitsForWeekFormat">
+          <DataField>TotalWorkUnits_TotalWorkUnitsForWeekFormat</DataField>
+        </Field>
+        <Field Name="EstTotalCost">
+          <DataField>EstTotalCost</DataField>
+        </Field>
+        <Field Name="EstTotalCostFormat">
+          <DataField>EstTotalCostFormat</DataField>
+        </Field>
+        <Field Name="EstManDays">
+          <DataField>EstManDays</DataField>
+        </Field>
+        <Field Name="EstManDaysFormat">
+          <DataField>EstManDaysFormat</DataField>
+        </Field>
+        <Field Name="WorkUnitofMeasure">
+          <DataField>WorkUnitofMeasure</DataField>
+        </Field>
+        <Field Name="WorkUnits">
+          <DataField>WorkUnits</DataField>
+        </Field>
+        <Field Name="WorkUnitsFormat">
+          <DataField>WorkUnitsFormat</DataField>
+        </Field>
+        <Field Name="Description1">
+          <DataField>Description1</DataField>
+        </Field>
+        <Field Name="JobBudgetLine__Activity_Code_________JobBudgetLine__Process_Code_">
+          <DataField>JobBudgetLine__Activity_Code_________JobBudgetLine__Process_Code_</DataField>
+        </Field>
+        <Field Name="TotalWorkUnitsForWeek">
+          <DataField>TotalWorkUnitsForWeek</DataField>
+        </Field>
+        <Field Name="TotalWorkUnitsForWeekFormat">
+          <DataField>TotalWorkUnitsForWeekFormat</DataField>
+        </Field>
+        <Field Name="EstUnitCost">
+          <DataField>EstUnitCost</DataField>
+        </Field>
+        <Field Name="EstUnitCostFormat">
+          <DataField>EstUnitCostFormat</DataField>
+        </Field>
+        <Field Name="EstInPlace">
+          <DataField>EstInPlace</DataField>
+        </Field>
+        <Field Name="EstInPlaceFormat">
+          <DataField>EstInPlaceFormat</DataField>
+        </Field>
+        <Field Name="TotalCost">
+          <DataField>TotalCost</DataField>
+        </Field>
+        <Field Name="TotalCostFormat">
+          <DataField>TotalCostFormat</DataField>
+        </Field>
+        <Field Name="ActualCost">
+          <DataField>ActualCost</DataField>
+        </Field>
+        <Field Name="ActualCostFormat">
+          <DataField>ActualCostFormat</DataField>
+        </Field>
+        <Field Name="AverageUnitPerMD">
+          <DataField>AverageUnitPerMD</DataField>
+        </Field>
+        <Field Name="AverageUnitPerMDFormat">
+          <DataField>AverageUnitPerMDFormat</DataField>
+        </Field>
+        <Field Name="TotalEstManDays">
+          <DataField>TotalEstManDays</DataField>
+        </Field>
+        <Field Name="TotalEstManDaysFormat">
+          <DataField>TotalEstManDaysFormat</DataField>
+        </Field>
+        <Field Name="TotalEstTotalCost">
+          <DataField>TotalEstTotalCost</DataField>
+        </Field>
+        <Field Name="TotalEstTotalCostFormat">
+          <DataField>TotalEstTotalCostFormat</DataField>
+        </Field>
+        <Field Name="TotalEstInPlace">
+          <DataField>TotalEstInPlace</DataField>
+        </Field>
+        <Field Name="TotalEstInPlaceFormat">
+          <DataField>TotalEstInPlaceFormat</DataField>
+        </Field>
+        <Field Name="TotalTotalCost">
+          <DataField>TotalTotalCost</DataField>
+        </Field>
+        <Field Name="TotalTotalCostFormat">
+          <DataField>TotalTotalCostFormat</DataField>
+        </Field>
+        <Field Name="PriorTotalCost">
+          <DataField>PriorTotalCost</DataField>
+        </Field>
+        <Field Name="PriorTotalCostFormat">
+          <DataField>PriorTotalCostFormat</DataField>
+        </Field>
+        <Field Name="PriorEst">
+          <DataField>PriorEst</DataField>
+        </Field>
+        <Field Name="PriorEstFormat">
+          <DataField>PriorEstFormat</DataField>
+        </Field>
+        <Field Name="PriorEst_PriorTotalCost">
+          <DataField>PriorEst_PriorTotalCost</DataField>
+        </Field>
+        <Field Name="PriorEst_PriorTotalCostFormat">
+          <DataField>PriorEst_PriorTotalCostFormat</DataField>
+        </Field>
+        <Field Name="TotalTotalCost_Control1000000047">
+          <DataField>TotalTotalCost_Control1000000047</DataField>
+        </Field>
+        <Field Name="TotalTotalCost_Control1000000047Format">
+          <DataField>TotalTotalCost_Control1000000047Format</DataField>
+        </Field>
+        <Field Name="TotalEstInPlaceSummary">
+          <DataField>TotalEstInPlaceSummary</DataField>
+        </Field>
+        <Field Name="TotalEstInPlaceSummaryFormat">
+          <DataField>TotalEstInPlaceSummaryFormat</DataField>
+        </Field>
+        <Field Name="TotalEstInPlaceSummary_TotalTotalCost">
+          <DataField>TotalEstInPlaceSummary_TotalTotalCost</DataField>
+        </Field>
+        <Field Name="TotalEstInPlaceSummary_TotalTotalCostFormat">
+          <DataField>TotalEstInPlaceSummary_TotalTotalCostFormat</DataField>
+        </Field>
+        <Field Name="PriorTotalCost_TotalTotalCost">
+          <DataField>PriorTotalCost_TotalTotalCost</DataField>
+        </Field>
+        <Field Name="PriorTotalCost_TotalTotalCostFormat">
+          <DataField>PriorTotalCost_TotalTotalCostFormat</DataField>
+        </Field>
+        <Field Name="EstCostJobTotal">
+          <DataField>EstCostJobTotal</DataField>
+        </Field>
+        <Field Name="EstCostJobTotalFormat">
+          <DataField>EstCostJobTotalFormat</DataField>
+        </Field>
+        <Field Name="PriorEst_PriorTotalCost___TotalEstInPlaceSummary_TotalTotalCost_">
+          <DataField>PriorEst_PriorTotalCost___TotalEstInPlaceSummary_TotalTotalCost_</DataField>
+        </Field>
+        <Field Name="PriorEst_PriorTotalCost___TotalEstInPlaceSummary_TotalTotalCost_Format">
+          <DataField>PriorEst_PriorTotalCost___TotalEstInPlaceSummary_TotalTotalCost_Format</DataField>
+        </Field>
+        <Field Name="TotalCaption">
+          <DataField>TotalCaption</DataField>
+        </Field>
+        <Field Name="SummaryCaption">
+          <DataField>SummaryCaption</DataField>
+        </Field>
+        <Field Name="Payroll_CostCaption_Control1000000041">
+          <DataField>Payroll_CostCaption_Control1000000041</DataField>
+        </Field>
+        <Field Name="Estimated_CostCaption">
+          <DataField>Estimated_CostCaption</DataField>
+        </Field>
+        <Field Name="Ahead__Behind_Caption">
+          <DataField>Ahead__Behind_Caption</DataField>
+        </Field>
+        <Field Name="Previous_TotalsCaption">
+          <DataField>Previous_TotalsCaption</DataField>
+        </Field>
+        <Field Name="This_WeekCaption">
+          <DataField>This_WeekCaption</DataField>
+        </Field>
+        <Field Name="Job_TotalsCaption">
+          <DataField>Job_TotalsCaption</DataField>
+        </Field>
+        <Field Name="Integer_Number">
+          <DataField>Integer_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

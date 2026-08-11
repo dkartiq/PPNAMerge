@@ -10,8 +10,6 @@ page 14021157 NS_Processes
     // +------------------------------------------------------------
     //PRJ-192:AS:09APRIL2020 : Changed page type to list page as scrolling feature was not enabled on webclient due to wrong page type card.
     //PPAL-122.N.S.1.0 27Aug2020 change caption
-    //PRJ-1042.JS.1.0 15Dec2021 | Add fields
-
     Caption = 'Processes';
     DataCaptionFields = "NS_Activity Code";
     PageType = List;//PRJ-192:AS:09APRIL2020
@@ -66,21 +64,6 @@ page 14021157 NS_Processes
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Default Task for Job Type';
                 }
-
-                //PRJ-1042.JS.1.0  15Dec2021-Start
-                field("NS_Job Task Type"; Rec."NS_Job Task Type")
-                {
-                    ToolTip = 'Specifies the value of the Job Task Type field.';
-                    ApplicationArea = All;
-                }
-                field(NS_Totaling; Rec.NS_Totaling)
-                {
-                    ToolTip = 'Specifies the value of the Totaling field.';
-                    ApplicationArea = All;
-                }
-
-                //PRJ-1042.JS.1.0  15Dec2021-end
-
             }
         }
     }

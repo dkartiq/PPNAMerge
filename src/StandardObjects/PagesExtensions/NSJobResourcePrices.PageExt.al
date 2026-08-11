@@ -4,8 +4,7 @@ pageextension 14021279 NS_JobResourcePrices extends "Job Resource Prices"
     //PPAL-100.NS.1.0 Visible some fields
     //PRJ-464.AM.1.0 23NOV2020 | Added field in layout.
     //PPAL-166.Am.1.0 | Added Caption property.
-    //PE-68.Dk.1.0 14March2023 | Add New NS_Skill Class code field as per prevoius NS_ Skill class code
-    //PE-132.RM.1.0 19July2023 | Added some code
+
     Caption = 'Job Resource Cost/Price';
     layout
     {
@@ -15,37 +14,15 @@ pageextension 14021279 NS_JobResourcePrices extends "Job Resource Prices"
         }
         addbefore(Type)
         {
-            field("NS_Skill Class Code"; '')//PE-68.Dk.1.0 10April2023
+            field("NS_Skill Class Code"; Rec."NS_Skill Class Code")
             {
                 Caption = 'Skill Class Code';//PPAL-166.AM.1.0
                 ToolTip = 'Specifies the Skill Class Code';
                 ApplicationArea = Jobs;
-                //PE-68.Dk.1.0 14March2023 Start
-                Visible = false;
-                ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-                ObsoleteState = Pending;
-                ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-                //PE-68.Dk.1.0 14March2023 End
             }
-            //PE-68.Dk.1.0 14March2023 Start
-            field("NS_Skill Class Code New"; Rec."NS_Skill Class Code New")
-            {
-                Caption = 'Skill Class Code';
-                ToolTip = 'Specifies the Skill Class Code';
-                ApplicationArea = Jobs;
-            }
-            //PE-68.Dk.1.0 14March2023 End
 
         }
         //PRJ-464.AM.1.0 Start
-        //PRJ-1276.GK.1.0 05apr2022 start
-        moveafter("Job No."; Type)
-        moveafter(Type; Code)
-        moveafter(Code; "Job Task No.")
-        moveafter("Job Task No."; "Work Type Code")
-        moveafter("Work Type Code"; "Currency Code")
-        //PRJ-1276.GK.1.0 05apr2022 end
-
         addafter(Code)
         {
             field("NS_Unit of Measure Code"; Rec."NS_Unit of Measure Code")
@@ -112,13 +89,7 @@ pageextension 14021279 NS_JobResourcePrices extends "Job Resource Prices"
             {
                 ToolTip = 'Specifies the Cost Burden Multiplier';
                 ApplicationArea = All;//PPAL-100.NS.1.0
-                                      //PE-132.RM.1.0 19July2023 Start
-                                      // Visible = true;//PPAL-100.NS.1.0   commented   
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in upcoming build';
-                ObsoleteTag = 'Will be removed in upcoming build';
-                //PE-132.RM.1.0 19July2023 End
+                Visible = true;//PPAL-100.NS.1.0
             }
         }
     }
@@ -149,11 +120,8 @@ pageextension 14021279 NS_JobResourcePrices extends "Job Resource Prices"
                             "Job Task No." := JobPlanningLine."Job Task No.";
                             Type := JobPlanningLine.Type;
                             Code := JobPlanningLine."No.";
-                            Rec."Work Type Code" := JobPlanningLine."Work Type Code";//PRJ-1135.RM.1.0
-                                                                                     //PE-68.Dk.1.0 16may2023 Start
-                                                                                     // Rec."NS_Skill Class Code" := JobPlanningLine."NS_Skill Class";//PRJ-1135.RM.1.0
-                            Rec."NS_Skill Class Code New" := JobPlanningLine."NS_Skill Class New";
-                            //PE-68.Dk.1.0 16may2023 End
+                            "Work Type Code" := JobPlanningLine."Work Type Code";
+                            "NS_Skill Class Code" := JobPlanningLine."NS_Skill Class";
                             "Currency Code" := JobPlanningLine."Currency Code";
                             "Unit Price" := JobPlanningLine."Unit Price";
                             "Unit Cost Factor" := JobPlanningLine."Cost Factor";

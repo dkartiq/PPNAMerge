@@ -69,7 +69,7 @@ codeunit 14021325 "NS_Progress Billing Management"
                 SETRANGE("NS_Progress Billing No.", ProgressBillingNo);
                 SETRANGE("NS_Requisition No.", ProgressBillingRequisitionNo);
                 SETRANGE("NS_Version No.", ProgressBillingVersionNo);
-                PBLine.DELETEALL(true);//PRJCTPR-191.HS.1.0 29Sept2023
+                DELETEALL;
             end;
             with PBCommentLine do begin
                 RESET;
@@ -86,8 +86,7 @@ codeunit 14021325 "NS_Progress Billing Management"
                 DELETEALL;
             end;
         end else
-            //MESSAGE(DeletionStoppedLbl); //PRJCTPR-180.NC.1.0 22Sep2023 Block
-            Error(DeletionStoppedLbl); //PRJCTPR-180.NC.1.0 22Sep2023 
+            MESSAGE(DeletionStoppedLbl);
     end;
 }
 

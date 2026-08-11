@@ -4,8 +4,6 @@ pageextension 14021178 NS_PurchaseReturnOrder extends "Purchase Return Order"
     //PRJ-168.SK.1.0 Added some code and blocked exisiting code
     //PRJ-372.MS.1.0 code comment due to wrong value changes
     //TM-10.AM.1.0 23NOV2020 | Added Validation on Post Action.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Return Order'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Assigned User ID")
@@ -15,14 +13,6 @@ pageextension 14021178 NS_PurchaseReturnOrder extends "Purchase Return Order"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Job No.';
             }
-            //PE-260.JS.1.0 07MAR2024 - Start
-            field("NS_Multiple Jobs on Lines"; Rec."NS_Multiple Jobs on Lines")
-            {
-                ApplicationArea = All;
-                caption = 'Multiple Jobs on Lines';
-                ToolTip = 'If enabled, you can manually select multiple jobs on the purchase order/invoice lines, even if the job number is defined on the purchase order/invoice header. It is suggested to take different jobs but with similar "Tax Area Code" to avoid inconsistency in tax calculation. Please note that, this is not applicable for the purchase orders/invoices created via JMP and Subcontracts.';
-            }
-            //PE-260.JS.1.0 07MAR2024 - end
             field("NS_Draw No."; Rec."NS_Draw No.")
             {
                 ApplicationArea = All;

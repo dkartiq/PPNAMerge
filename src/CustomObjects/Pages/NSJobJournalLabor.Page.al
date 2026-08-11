@@ -1,5 +1,6 @@
 page 14021388 "NS_Job Journal Labor"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -314,20 +315,7 @@ page 14021388 "NS_Job Journal Labor"
                         CurrPage.UPDATE;
                     end;
                 }
-                field("PP Skill Class"; '') //PE-68 Dk.1.0 10April2023
-                {
-                    ApplicationArea = All;
-                    Caption = 'Skill Class';
-                    Visible = false;//PE-68 Dk.1.0 10April2023
-                                    /// Visible = PP_AdvancedJobLaborActive;//PE-68 Dk.1.0 10April2023
-                    ToolTip = 'Skill Class';
-                    trigger OnValidate();
-                    begin
-                        CurrPage.UPDATE;
-                    end;
-                }
-                //PE-68 Dk.1.0 10April2023 Start
-                field("PP Skill Class New"; Rec."NS_Skill Class New")
+                field("PP Skill Class"; Rec."NS_Skill Class")
                 {
                     ApplicationArea = All;
                     Caption = 'Skill Class';
@@ -339,7 +327,6 @@ page 14021388 "NS_Job Journal Labor"
                         CurrPage.UPDATE;
                     end;
                 }
-                //PE-68 Dk.1.0 10April2023 End
                 field("Currency Code"; Rec."Currency Code")
                 {
                     ApplicationArea = All;
@@ -833,6 +820,10 @@ page 14021388 "NS_Job Journal Labor"
             ERROR('');
         JobJnlManagement.OpenJnl(CurrentJnlBatchName, Rec);
     end;
+    // >> Upgrade
+    protected var
+        CurrentJnlBatchName: Code[10];
+    // << Upgrade
 
     var
         PP_HumanResourcesSetup: Record "Human Resources Setup";
@@ -841,7 +832,7 @@ page 14021388 "NS_Job Journal Labor"
         ReportPrint: Codeunit "Test Report-Print";
         JobDescription: Text[50];
         AccName: Text[50];
-        CurrentJnlBatchName: Code[10];
+        // CurrentJnlBatchName: Code[10];
         ShortcutDimCode: array[8] of Code[20];
         OpenedFromBatch: Boolean;
         PP_AdvancedJobLaborActive: Boolean;

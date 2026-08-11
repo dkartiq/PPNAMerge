@@ -1,5 +1,6 @@
 report 14021401 "NS_Load Job Jnl from JMP"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -11,11 +12,7 @@ report 14021401 "NS_Load Job Jnl from JMP"
     //PRJ-134.VT.1.0 Added code
     //PRJ-394.MS.1.0 added code for GBPG
     //TM-10.AM.1.0 | Added Segment Code Flow .
-    //PE-48.RM.1.0 15Feb2023 | Added a caption
-    //PE-144.RM.1.0 09Aug2023 | Added a new caption 
-    // Caption = 'Load Job Jnl from JMP'; //PE-144.RM.1.0 09Aug2023 commented
-    //PE-180.VC.1.0 04Oct2023 | Location Code is not getting populated on Job Journal through JMP Requisition Worksheet.
-    Caption = 'Suggest Available Inventory for JMP requirements'; //PE-144.RM.1.0 09Aug2023 
+    Caption = 'Load Job Jnl from JMP';
     ProcessingOnly = true;
 
     dataset
@@ -27,10 +24,6 @@ report 14021401 "NS_Load Job Jnl from JMP"
 
             trigger OnAfterGetRecord();
             begin
-                //PE-291.JS.1.0 - Start
-                clear(NSBaseAppIDCode);
-                NSBaseAppIDCode := NSEnviroInfo.VersionInstalled(NSBaseAppId.Get());
-                //PE-291.JS.1.0 - end
                 JobSU.GET();
                 JobMatPlan.RESET();
                 JobMatPlan.SETRANGE("NS_Worksheet Job No.", JobNo);
@@ -40,6 +33,10 @@ report 14021401 "NS_Load Job Jnl from JMP"
                 JobMatPlan.SETFILTER("NS_Inv. Avail", '>%1', 0);
                 if JobMatPlan.FINDSET(true, false) then
                     repeat
+                        // >> Upgrade
+                        JobMatPlan.TESTFIELD("NS_Job Plannine Line No."); //FDD109
+                        JobJnlLine.INIT; //FDD109
+                        // << Upgrade
                         if Item.GET(JobMatPlan."NS_Part No.") then;
                         if not AddLine then begin
                             LineNo += 10000;
@@ -66,46 +63,16 @@ report 14021401 "NS_Load Job Jnl from JMP"
                             JobJnlLine."Gen. Prod. Posting Group" := Item."Gen. Prod. Posting Group";
                             JobJnlLine."NS_Segment Code" := JobMatPlan."NS_Segment Code";//TM-10.AM.1.0
                             if Job.GET(JobNo) then begin
-                                //PE-180.VC.1.0 04Oct2023 Start
-                                //JobJnlLine."Location Code" := JobSU."NS_Job Mat'l Planning Location"; //PE-180.VC.1.0 04Oct2023 Commented
-                                JobJnlLine."Location Code" := JobMatPlan."NS_Location Code";
-                                //PE-180.VC.1.0 04Oct2023 End                                    
+                                JobJnlLine."Location Code" := JobSU."NS_Job Mat'l Planning Location";
                                 JobJnlLine."Shortcut Dimension 1 Code" := Job."Global Dimension 1 Code";
                                 JobJnlLine."Shortcut Dimension 2 Code" := Job."Global Dimension 2 Code";
                             end else
                                 JobJnlLine."Location Code" := JobSU."NS_Job Mat'l Planning Location";
-
-                            //PE-291.JS.1.0 - Start
-                            //JobJnlLine."Source Code" := 'JOBJNL';
-                            if NSBaseAppIDCode < 24 then
-                                JobJnlLine."Source Code" := 'JOBJNL'
-                            else
-                                JobJnlLine."Source Code" := 'PROJJNL';
-                            //PE-291.JS.1.0 - end    
+                            JobJnlLine."Source Code" := 'JOBJNL';
                             if UseQOH then
                                 JobJnlLine.VALIDATE(Quantity, CalcReqQty(JobNo, JobMatPlan."NS_Part No.", JobMatPlan.NS_Quantity))
                             else
                                 JobJnlLine.VALIDATE(Quantity, JobMatPlan."NS_Bal. Req");
-                            //PE-279.NC.1.0 08Apr2024 Start
-                            if JobSU."NS_Flow Job Card Dimension" then begin
-                                if JobTask.Get(JobNo, JobMatPlan."NS_Order Code") then;
-                                if ((JobTask."Global Dimension 1 Code" <> '') or (JobTask."Global Dimension 2 Code" <> '')) then begin
-                                    JobJnlLine."Shortcut Dimension 1 Code" := JobTask."Global Dimension 1 Code";
-                                    JobJnlLine."Shortcut Dimension 2 Code" := JobTask."Global Dimension 2 Code";
-                                    JobJnlLine."Dimension Set ID" := JobMatPlan.NS_GetDimensionNoFromJobTask(JobTask."Job No.", JobTask."Job Task No.");
-                                end else begin
-                                    if ((Job."Global Dimension 1 Code" <> '') or (Job."Global Dimension 2 Code" <> '')) then begin
-                                        JobJnlLine."Shortcut Dimension 1 Code" := Job."Global Dimension 1 Code";
-                                        JobJnlLine."Shortcut Dimension 2 Code" := Job."Global Dimension 2 Code";
-                                        JobJnlLine."Dimension Set ID" := JobMatPlan.GetDimensionNoFromJob(Job."No.");
-                                    end else begin
-                                        JobJnlLine."Shortcut Dimension 1 Code" := item."Global Dimension 1 Code";
-                                        JobJnlLine."Shortcut Dimension 2 Code" := item."Global Dimension 2 Code";
-                                        JobJnlLine."Dimension Set ID" := JobMatPlan.GetDimensionNoFromItemNo(Item."No.");
-                                    end;
-                                end;
-                            end;
-                            //PE-279.NC.1.0 08Apr2024 End
                             if JobJnlLine.Quantity > 0 then
                                 if not JobJnlLine.INSERT then
                                     JobJnlLine.MODIFY;
@@ -134,46 +101,16 @@ report 14021401 "NS_Load Job Jnl from JMP"
                             JobJnlLine."Gen. Prod. Posting Group" := Item."Gen. Prod. Posting Group";
                             JobJnlLine."NS_Segment Code" := JobMatPlan."NS_Segment Code";//TM-10.AM.1.0
                             if Job.GET(JobNo) then begin
-                                //PE-180.VC.1.0 04Oct2023 Start 
-                                //JobJnlLine."Location Code" := JobSU."NS_Job Mat'l Planning Location"; //PE-180.VC.1.0 04Oct2023 Commented                              
-                                JobJnlLine."Location Code" := JobMatPlan."NS_Location Code";
-                                //PE-180.VC.1.0 04Oct2023 End                                
+                                JobJnlLine."Location Code" := JobSU."NS_Job Mat'l Planning Location";
                                 JobJnlLine."Shortcut Dimension 1 Code" := Job."Global Dimension 1 Code";
                                 JobJnlLine."Shortcut Dimension 2 Code" := Job."Global Dimension 2 Code";
                             end else
                                 JobJnlLine."Location Code" := JobSU."NS_Job Mat'l Planning Location";
-
-                            //PE-291.JS.1.0 - Start
-                            //JobJnlLine."Source Code" := 'JOBJNL';
-                            if NSBaseAppIDCode < 24 then
-                                JobJnlLine."Source Code" := 'JOBJNL'
-                            else
-                                JobJnlLine."Source Code" := 'PROJJNL';
-                            //PE-291.JS.1.0 - end                              
+                            JobJnlLine."Source Code" := 'JOBJNL';
                             if UseQOH then
                                 JobJnlLine.VALIDATE(Quantity, CalcReqQty(JobNo, JobMatPlan."NS_Part No.", JobMatPlan.NS_Quantity))
                             else
                                 JobJnlLine.VALIDATE(Quantity, JobMatPlan."NS_Bal. Req");
-                            //PE-279.NC.1.0 08Apr2024 Start
-                            if JobSU."NS_Flow Job Card Dimension" then begin
-                                if JobTask.Get(JobNo, JobMatPlan."NS_Order Code") then;
-                                if ((JobTask."Global Dimension 1 Code" <> '') or (JobTask."Global Dimension 2 Code" <> '')) then begin
-                                    JobJnlLine."Shortcut Dimension 1 Code" := JobTask."Global Dimension 1 Code";
-                                    JobJnlLine."Shortcut Dimension 2 Code" := JobTask."Global Dimension 2 Code";
-                                    JobJnlLine."Dimension Set ID" := JobMatPlan.NS_GetDimensionNoFromJobTask(JobTask."Job No.", JobTask."Job Task No.");
-                                end else begin
-                                    if ((Job."Global Dimension 1 Code" <> '') or (Job."Global Dimension 2 Code" <> '')) then begin
-                                        JobJnlLine."Shortcut Dimension 1 Code" := Job."Global Dimension 1 Code";
-                                        JobJnlLine."Shortcut Dimension 2 Code" := Job."Global Dimension 2 Code";
-                                        JobJnlLine."Dimension Set ID" := JobMatPlan.GetDimensionNoFromJob(Job."No.");
-                                    end else begin
-                                        JobJnlLine."Shortcut Dimension 1 Code" := item."Global Dimension 1 Code";
-                                        JobJnlLine."Shortcut Dimension 2 Code" := item."Global Dimension 2 Code";
-                                        JobJnlLine."Dimension Set ID" := JobMatPlan.GetDimensionNoFromItemNo(Item."No.");
-                                    end;
-                                end;
-                            end;
-                            //PE-279.NC.1.0 08Apr2024 End
                             if JobJnlLine.Quantity > 0 then
                                 if not JobJnlLine.INSERT then
                                     JobJnlLine.MODIFY;
@@ -243,9 +180,6 @@ report 14021401 "NS_Load Job Jnl from JMP"
             {
                 group(Control1100773001)
                 {
-                    // Caption = 'Load Job Jnl from JMP'; //PE-48.RM.1.0 15Feb2023 //PE-144.RM.1.0 09Aug2023 commented
-                    Caption = ''; //PE-144.RM.1.0 09Aug2023
-
                     field(JobNo; JobNo)
                     {
                         Caption = 'Job No.';
@@ -261,7 +195,6 @@ report 14021401 "NS_Load Job Jnl from JMP"
                     field(UseQOH; UseQOH)
                     {
                         Caption = 'Use Available Inventory';
-                        Editable = false;//PE-146.NK.1.0 09Aug2023
                         ApplicationArea = All;
                     }
                     field(AsOfDate; AsOfDate)
@@ -292,7 +225,7 @@ report 14021401 "NS_Load Job Jnl from JMP"
         JobMatPlan: Record "NS_Job Material Planning";
         JobSU: Record "Jobs Setup";
         Item: Record Item;
-        JobTask: Record "Job Task";
+
         JobJnlLine: Record "Job Journal Line";
         JobJnlLine2: Record "Job Journal Line";
         UseQOH: Boolean;
@@ -302,10 +235,6 @@ report 14021401 "NS_Load Job Jnl from JMP"
         DocumentNo: Code[20];
         LineNo: Integer;
         LineNo2: Integer;
-
-        NSEnviroInfo: codeunit "Environment information";  //PE-291.JS.1.0
-        NSBaseAppId: Codeunit "BaseApp ID";  //PE-291.JS.1.0
-        NSBaseAppIDCode: Integer;   //PE-291.JS.1.0        
         ItemLedgerEntry: Record "Item Ledger Entry";
         Text0001: Label 'Job No. Must Be Filled In';
         Text0002: Label 'Job Task No. Must Be Filled In';

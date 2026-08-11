@@ -12,14 +12,12 @@ page 14021458 "NS_Percentage of Completion"
     // +------------------------------------------------------------
     //CTSI-115.AS.1.0 : done uneditable property on page
     //PRJ-830.GK.1.0 06Sep2021 |Remove two fields & add caption of two fields at page level.
-    //PRJ-1098.NK.0.0 11Feb2022 |Add Two Fields
-    //PRJ-1387.NK.1.0 12May2022 | Add One Field
+
+
     Caption = 'ProjectPro Summary Details';//CTSI-94.AS.1.0 10AUG2020
     PageType = List;
-    //Editable = false;//CTSI-115.AS.1.0 //PRJ-585.AS.1.0 16MARCH2021 Comment //PRJ-1573.AS.1.0 09SEPT2022
-    SourceTable = "NS_Percentage of Completion";//PRJ-1573.AS.1.0 09SEPT2022
-    UsageCategory = Administration;//PRJ-585.AS.1.0 16MARCH2021//PRJ-1573.AS.1.0 09SEPT2022
-    ApplicationArea = all;//PRJ-585.AS.1.0 16MARCH2021
+    Editable = false;//CTSI-115.AS.1.0
+    SourceTable = "NS_Percentage of Completion";
 
     layout
     {
@@ -105,20 +103,6 @@ page 14021458 "NS_Percentage of Completion"
                     ToolTip = 'Specifies the Gross Margin Percent';
                     Caption = 'Recognized Profit %';//PRJ-830.GK.1.0 06Sep2021
                 }
-                //PRJ-1098.NK.0.0 11Feb2022 Start
-                field(NS_EntryFromBatchJob; Rec.NS_EntryFromBatchJob)
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Entry From Batch Job';
-                    Caption = 'Entry From Batch Job';
-                }
-                field(NS_JFWBatchDocumentNo; Rec.NS_JFWBatchDocumentNo)
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'JFW Batch Document No.';
-                    Caption = 'JFW Batch Document No.';
-                }
-                //PRJ-1098.NK.0.0 11Feb2022 End
 
                 //PRJ-830.GK.1.0 06Sep2021 start
                 // field("PP_Recognized Profit"; Rec."NS_Recognized Profit")//CTSI-94.AS.1.0 10AUG2020
@@ -132,14 +116,6 @@ page 14021458 "NS_Percentage of Completion"
                 //     ToolTip = 'Specifies the Recognized Profit Percent';
                 // }
                 //PRJ-830.GK.1.0 06Sep2021 end
-                //PRJ-1387.NK.1.0 12May2022 Start
-                field(NS_Void; Rec.NS_Void)
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Void';
-                    Description = 'PRJ-1387';
-                }
-                //PRJ-1387.NK.1.0 12May2022 End
             }
         }
     }
@@ -147,26 +123,5 @@ page 14021458 "NS_Percentage of Completion"
     actions
     {
     }
-
-    //PRJ-585.AS.1.0 16MARCH2021 - start //PRJ-1573.AS.1.0 09SEPT2022
-    trigger OnOpenPage()
-    var
-        Usersetup: Record "User Setup";
-    begin
-        if Usersetup.Get(UserId) then;
-        if Usersetup."NS_Modify Project Summary Details" = true then begin
-            PageEditableSummDetails := true;
-            CurrPage.Editable := true;
-        end;
-
-        if Usersetup."NS_Modify Project Summary Details" = false then begin
-            PageEditableSummDetails := false;
-            CurrPage.Editable := false;
-        end;
-    end;
-
-    var
-        PageEditableSummDetails: Boolean;
-    //PRJ-585.AS.1.0 16MARCH2021 - end    //PRJ-1573.AS.1.0 09SEPT2022
 }
 

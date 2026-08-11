@@ -15,7 +15,7 @@ report 14021206 "NS_Suggest Job Jnl. Lines"
     // +     - OnPostReport: populate Unit Cost, Document No. and Payroll Burden Amount
     // +------------------------------------------------------------
 
-    Caption = 'Job Suggest Job Jnl. Lines';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Suggest Job Jnl. Lines';
     ProcessingOnly = true;
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;

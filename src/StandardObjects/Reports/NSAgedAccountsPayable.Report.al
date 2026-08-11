@@ -19,7 +19,7 @@ report 14021213 "NS_Aged Accounts Payable"
     RDLCLayout = './Layouts/NSAged Accounts Payable.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Aged Accounts Payable';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Aged Accounts Payable';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

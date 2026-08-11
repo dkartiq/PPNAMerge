@@ -1,8 +1,7 @@
 pageextension 14021230 NS_ResourceJnlExt extends "Resource Journal"
 {
     // version NAVW111.00.00.23572,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Resource Journals'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Unit of Measure Code")

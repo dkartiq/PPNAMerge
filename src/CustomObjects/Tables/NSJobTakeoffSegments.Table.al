@@ -9,7 +9,7 @@ table 14021400 "NS_Job Takeoff Segments"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //TM-10.AM.1.0 24NOV2020 | Added new fields in table.
-    //PRJ-1312.NK.1.0 03May2022 | Add Code
+
     Caption = 'Job Takeoff Segments';
     DataCaptionFields = "NS_Segment Code", "NS_Segment Name";
     LookupPageID = "NS_Drawing Segment";
@@ -159,30 +159,9 @@ table 14021400 "NS_Job Takeoff Segments"
 
 
             trigger OnValidate();
-            var
-                TJobTakOff: Record "NS_Job Takeoff Segments";
-                JobQuoteHead: Record "NS_Job Quote Header";
-                TotalPrice: Decimal;
             begin
-                Testfield("NS_Freeze Total Contract Price", false);   //PRJCTPR-319.JS.1.0
-                if "NS_Total Contract Price" <> xRec."NS_Total Contract Price" then begin
+                if "NS_Total Contract Price" <> xRec."NS_Total Contract Price" then
                     QuoteMgt.NS_CalcSegmentAmounts(Rec, xRec, 3);
-                    //PRJ-1312.NK.1.0 03May2022 Start
-                    TotalPrice := 0;
-                    TJobTakOff.Reset();
-                    TJobTakOff.SetRange("NS_Job No.", Rec."NS_Job No.");
-                    TJobTakOff.CalcSums("NS_Total Contract Price");
-                    TotalPrice += TJobTakOff."NS_Total Contract Price";
-                    if TotalPrice <> 0 then begin
-                        JobQuoteHead.Reset();
-                        JobQuoteHead.SetRange("NS_Quote No.", Rec."NS_Job No.");
-                        if JobQuoteHead.FindFirst() then begin
-                            JobQuoteHead."NS_Total Contract Price" := TotalPrice;
-                            JobQuoteHead.Modify();
-                        end;
-                    end;
-                    //PRJ-1312.NK.1.0 03May2022 End
-                end;
             end;
         }
         field(162; "NS_Template No."; Code[20])
@@ -252,23 +231,6 @@ table 14021400 "NS_Job Takeoff Segments"
             Caption = 'Total Cost';
             Editable = false;
         }
-
-        //PRJCTPR-319.JS.1.0 07MAR2024 - Start
-        field(171; "NS_Freeze Total Contract Price"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Freeze Total Contract Price';
-
-            trigger OnValidate()
-            begin
-                if "NS_Freeze Total Contract Price" = true then begin
-                    rec.TestField("NS_Segment Code");
-                    rec.TestField("NS_Total Contract Price");
-                end;
-            end;
-
-        }
-        //PRJCTPR-319.JS.1.0 07MAR2024 - end       
         //TM-10.AM.1.0 24NOV2020 End
 
         //PPRJ-774.AS.1.0 07JULY2021 - Start Commented to Remove
@@ -285,9 +247,6 @@ table 14021400 "NS_Job Takeoff Segments"
         key(Key1; NS_Type, "NS_Job No.", "NS_Segment Code", "NS_Size of Weld")
         {
         }
-        key(key2; "NS_Total Contract Price")//PRJ-1155.AS.1.0 Added Key
-        {
-        }
     }
 
     fieldgroups
@@ -298,23 +257,10 @@ table 14021400 "NS_Job Takeoff Segments"
     }
 
     trigger OnDelete();
-    var
-        JobPlanningLine: Record "Job Planning Line";
-        JobQuoteHeader: Record "NS_Job Quote Header";
     begin
 
         if "NS_Is Total" then
             ERROR(Text001Lbl);
-        //PRJ-1312.NK.1.0 03May2022 start
-        JobPlanningLine.Reset();
-        JobPlanningLine.SetRange("Job No.", Rec."NS_Job No.");
-        JobPlanningLine.SetRange("NS_Segment Code", Rec."NS_Segment Code");
-        if JobPlanningLine.FindFirst() then
-            repeat
-                JobPlanningLine.Validate("NS_Segment Code", '');
-                JobPlanningLine.Modify();
-            until JobPlanningLine.Next() = 0;
-        //PRJ-1312.NK.1.0 03May2022 end
     end;
 
     trigger OnInsert();

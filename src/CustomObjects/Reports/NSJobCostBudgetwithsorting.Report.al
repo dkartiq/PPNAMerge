@@ -39,18 +39,6 @@ report 14021160 "NS_Job Cost Budget withSorting"
                 column(CompanyInformation_Name; CompanyInformation.Name)
                 {
                 }
-                //PE-141.NK.1.0 start 11Aug2023
-                column(CompanyInformationPic; CompanyInformation.Picture) { }
-                column(CompanyInformationAdd; CompanyInformation.Address) { }
-                column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-                column(CompanyInformationcity; CompanyInformation.City) { }
-                column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-                column(CompanyInformationpost; CompanyInformation."Post Code") { }
-                column(CompanyInformationCountry; CompanyInformation.County) { }
-                column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-                column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }
-
-                //PE-141.NK.1.0 end 11Aug2023
                 column(Title; Title)
                 {
                 }
@@ -227,7 +215,7 @@ report 14021160 "NS_Job Cost Budget withSorting"
 
                         trigger OnPreDataItem();
                         begin
-                            // CurrReport.CREATETOTALS("Total Cost (LCY)", "Total Price (LCY)"); //PRJCTPR-101.NC.1.0 25Apr2023 Block
+                            CurrReport.CREATETOTALS("Total Cost (LCY)", "Total Price (LCY)");
                             //CurrReport.CREATETOTALS("Total Cost (LCY)","Total Price (LCY)",Quantity,"Work Units");
                             case "Job Task"."Job Task Type" of
                                 "Job Task"."Job Task Type"::Posting:
@@ -391,37 +379,11 @@ report 14021160 "NS_Job Cost Budget withSorting"
     trigger OnPreReport();
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.NK.1.0 start 11Aug2023
         JobFilter := Job.GETFILTERS;
         if BudgetAmountsPer = BudgetAmountsPer::Schedule then
             BudgetOptionText := Text003
         else
             BudgetOptionText := Text004;
-        //PE-141.NK.1.0 start 11Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.NK.1.0 start 11Aug2023
     end;
 
     var
@@ -431,17 +393,6 @@ report 14021160 "NS_Job Cost Budget withSorting"
         Text000: Label 'Job Cost Budget for Job: %1';
         BudgetAmountsPer: Option Schedule,Contract;
         BudgetOptionText: Text[50];
-
-        //PE-141.NK.1.0 start 23Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.NK.1.0 end 23Aug2023 
-
         Text003: Label 'Budgeted Amounts are per the Schedule';
         Text004: Label 'Budgeted Amounts are per the Contract';
         CurrReport_PAGENOCaptionLbl: Label 'Page';

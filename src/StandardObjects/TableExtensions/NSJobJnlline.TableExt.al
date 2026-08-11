@@ -17,8 +17,7 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
     //PRJ-817.JS.1.0 04Aug2021 | Add fields work unit completed
     //PRJ-841.JS.1.0 16Aug2021 | Add field Segment code
     //PRJ-842.JS.1.0 16Aug2021 | Add field Skill Code
-    //PRJ-1015.JS.1.0 10Oct2021 | Add one field field
-    //PRJCTPR-2.RM.1.0 13Dec2022 | Added a new field
+
     fields
     {
         modify(Type)
@@ -44,12 +43,7 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
         {
             trigger OnAfterValidate();
             begin
-                //PE-206.JS.1.0 15NOV2023 - Start
-                if (Rec."Line No." <> 0) and (Rec."Job No." <> '') then
-                    if rec."NS_Crew Time Sheet Ref. No." <> '' then
-                        if rec."Job No." <> xrec."Job No." then
-                            error('The Job Journal line has a value in Crew Time Sheet Reference no. therefore it cannot be changed.');
-                //PE-206.JS.1.0 15NOV2023 - end                   
+
                 //ProjectPro - start
                 NS_AssignPayrollWorkState;
                 NS_AssignDefaultSkillClass;
@@ -88,20 +82,6 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
             end;
 
             trigger OnAfterValidate();
-            var
-                NS_Jobs: Record Job;   //PRJ-1015.JS.1.0  14Oct2021
-                NS_TempDimSetEntry: Record "Dimension Set Entry" temporary; //PRJ-118.SK.1.0 Added Temporary
-                //PRJCTPR-283.JS.1.0 03JAN2024 - Start
-                NS_JobSetup: Record "Jobs Setup";
-                NSDimBufferTemp: record "Dimension Buffer" temporary;
-                NSItemRec: record item;
-                NSGLRec: record "G/L Account";
-                NSResource: record resource;
-                NSDefaultDim: record "Default Dimension";
-                NSJobTaskDimension: record "Job Task Dimension";
-                NSDimMgt: codeunit DimensionManagement;
-                NSGLedgSetup: record "General Ledger Setup";
-            //PRJCTPR-283.JS.1.0 03JAN2024 - - end                                            
             begin
                 //ProjectPro - start
                 if Type = Type::"G/L Account" then begin
@@ -111,119 +91,6 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                 if NS_DirectCostOverride then
                     "Direct Unit Cost (LCY)" := "Unit Cost (LCY)";
                 //ProjectPro - end
-                //PRJ-1015.JS.1.0 10Oct2021 - Start
-                If Rec."Job No." <> '' then
-                    if NS_Jobs.Get(Rec."Job No.") then
-                        Rec."NS_Sub-Level to Job No." := NS_Jobs."NS_Sub-Level to Job No.";
-                //PRJ-1015.JS.1.0 10Oct2021 - end
-                //PE-206.JS.1.0 15NOV2023 - Start
-                if (Rec."Line No." <> 0) and (Rec."No." <> '') then
-                    if rec."NS_Crew Time Sheet Ref. No." <> '' then
-                        if rec."No." <> xrec."No." then
-                            error('The Job Journal line has a value in Crew Time Sheet Reference no. therefore it cannot be changed.');
-                //PE-206.JS.1.0 15NOV2023 - end
-                //PRJCTPR-283.JS.1.0 03JAN2024 - Start
-                clear(NSDimBufferTemp);
-                if NS_JobSetup.get() then;
-                if NSGLedgSetup.get() then;
-                if NS_JobSetup."NS_Flow Job Card Dimension" = true then begin
-                    if (rec."Job No." <> '') and (rec."Job Task No." <> '') then begin
-                        NSJobTaskDimension.reset();
-                        NSJobTaskDimension.setrange("Job No.", rec."Job No.");
-                        NSJobTaskDimension.setrange("Job Task No.", rec."Job Task No.");
-                        if NSJobTaskDimension.findset() then
-                            repeat
-                                NSDimBufferTemp.Init();
-                                NSDimBufferTemp."Table ID" := 210;
-                                NSDimBufferTemp."Dimension Code" := NSJobTaskDimension."Dimension Code";
-                                NSDimBufferTemp.Insert();
-                                NSDimBufferTemp."Dimension Value Code" := NSJobTaskDimension."Dimension Value Code";
-                                NSDimBufferTemp.Modify();
-                            until NSJobTaskDimension.next = 0;
-                    end;
-                    case rec.Type of
-                        rec.Type::Item:
-                            begin
-                                if NSItemRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 27);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 210);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 210;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::Resource:
-                            begin
-                                if NSResource.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 156);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 210);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 210;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::"G/L Account":
-                            begin
-                                if NSGLRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 15);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 210);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 210;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                    end;
-                    NSDimBufferTemp.reset();
-                    if NSDimBufferTemp.findset() then
-                        repeat
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 1 Code" then
-                                rec.validate("Shortcut Dimension 1 Code", NSDimBufferTemp."Dimension Value Code");
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 2 Code" then
-                                rec.validate("Shortcut Dimension 2 Code", NSDimBufferTemp."Dimension Value Code");
-                        until NSDimBufferTemp.next = 0;
-
-                    rec."Dimension Set ID" := NSDimMgt.CreateDimSetIDFromDimBuf(NSDimBufferTemp);
-                end;
-                //PRJCTPR-283.JS.1.0 03JAN2023 - end        s                                            
             end;
         }
 
@@ -232,8 +99,6 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
         modify(Quantity)
         {
             trigger OnAfterValidate();
-            var
-                NS_Jobs: Record Job;   //PRJ-1015.JS.1.0  14Oct2021
             begin
                 //ProjectPro - start
                 NS_CalculateWageRate;
@@ -248,11 +113,6 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                     end;
                 end;
                 //ProjectPro - end
-                //PRJ-1015.JS.1.0 10Oct2021 - Start
-                If Rec."Job No." <> '' then
-                    if NS_Jobs.Get(Rec."Job No.") then
-                        Rec."NS_Sub-Level to Job No." := NS_Jobs."NS_Sub-Level to Job No.";
-                //PRJ-1015.JS.1.0 10Oct2021 - end                  
             end;
         }
 
@@ -320,168 +180,47 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                 NextDimSetID: Integer;
                 NS_DimensionsUpdated: Boolean;
                 NS_TempDimSetEntry: Record "Dimension Set Entry" temporary; //PRJ-118.SK.1.0 Added Temporary
-                //PRJCTPR-283.JS.1.0 03JAN2024 - Start
-                NS_JobSetup: Record "Jobs Setup";
-                NSDimBufferTemp: record "Dimension Buffer" temporary;
-                NSItemRec: record item;
-                NSGLRec: record "G/L Account";
-                NSResource: record resource;
-                NSDefaultDim: record "Default Dimension";
-                NSJobTaskDimension: record "Job Task Dimension";
-                NSDimMgt: codeunit DimensionManagement;
-                NSGLedgSetup: record "General Ledger Setup";
-            //PRJCTPR-283.JS.1.0 03JAN2024 - - end                            
             begin
                 //ProjectPro - start
                 NS_AssignDefaultSkillClass;
                 NS_CalculateWageRate;
+                NS_DimensionsUpdated := FALSE;
+                NS_DimensionSetEntry.RESET;
+                NS_DimensionSetEntry.SETRANGE("Dimension Set ID", "Dimension Set ID");
+                IF NS_DimensionSetEntry.FINDSET THEN
+                    REPEAT
+                        NS_TempDimSetEntry := NS_DimensionSetEntry;
+                        NS_TempDimSetEntry.INSERT;
+                    UNTIL NS_DimensionSetEntry.NEXT = 0;
 
-                //PE-206.JS.1.0 15NOV2023 - Start
-                if (Rec."Line No." <> 0) and (Rec."Job Task No." <> '') then
-                    if rec."NS_Crew Time Sheet Ref. No." <> '' then
-                        if rec."Job Task No." <> xrec."Job Task No." then
-                            error('The Job Journal line has a value in Crew Time Sheet Reference no. therefore it cannot be changed.');
-                //PE-206.JS.1.0 15NOV2023 - end                   
+                NS_JobTaskDimension.RESET;
+                NS_JobTaskDimension.SETRANGE("Job No.", "Job No.");
+                NS_JobTaskDimension.SETRANGE("Job Task No.", "Job Task No.");
+                IF NS_JobTaskDimension.FINDSET THEN
+                    REPEAT
+                        IF NS_JobTaskDimension."Dimension Code" <> '' THEN BEGIN
+                            NS_TempDimSetEntry.SETRANGE("Dimension Code", NS_JobTaskDimension."Dimension Code");
+                            IF NS_TempDimSetEntry.FINDFIRST THEN BEGIN
+                                IF NS_TempDimSetEntry."Dimension Value Code" <> NS_JobTaskDimension."Dimension Value Code" THEN BEGIN
+                                    NS_TempDimSetEntry.VALIDATE("Dimension Value Code", NS_JobTaskDimension."Dimension Value Code");
+                                    NS_TempDimSetEntry.MODIFY(TRUE);
+                                    NS_DimensionsUpdated := TRUE;
+                                END;
+                            END ELSE BEGIN
+                                NS_TempDimSetEntry.INIT;
+                                NS_TempDimSetEntry."Dimension Set ID" := "Dimension Set ID";
+                                NS_TempDimSetEntry.VALIDATE("Dimension Code", NS_JobTaskDimension."Dimension Code");
+                                NS_TempDimSetEntry.VALIDATE("Dimension Value Code", NS_JobTaskDimension."Dimension Value Code");
+                                NS_TempDimSetEntry.INSERT(TRUE);
+                                NS_DimensionsUpdated := TRUE;
+                            END;
+                        END;
+                    UNTIL NS_JobTaskDimension.NEXT = 0;
 
-                //PRJCTPR-283.JS.1.0 03JAN2023 - Start    
-                // NS_DimensionsUpdated := FALSE;
-                // NS_DimensionSetEntry.RESET;
-                // NS_DimensionSetEntry.SETRANGE("Dimension Set ID", "Dimension Set ID");
-                // IF NS_DimensionSetEntry.FINDSET THEN
-                //     REPEAT
-                //         NS_TempDimSetEntry := NS_DimensionSetEntry;
-                //         NS_TempDimSetEntry.INSERT;
-                //     UNTIL NS_DimensionSetEntry.NEXT = 0;
-
-                // NS_JobTaskDimension.RESET;
-                // NS_JobTaskDimension.SETRANGE("Job No.", "Job No.");
-                // NS_JobTaskDimension.SETRANGE("Job Task No.", "Job Task No.");
-                // IF NS_JobTaskDimension.FINDSET THEN
-                //     REPEAT
-                //         IF NS_JobTaskDimension."Dimension Code" <> '' THEN BEGIN
-                //             NS_TempDimSetEntry.SETRANGE("Dimension Code", NS_JobTaskDimension."Dimension Code");
-                //             IF NS_TempDimSetEntry.FINDFIRST THEN BEGIN
-                //                 IF NS_TempDimSetEntry."Dimension Value Code" <> NS_JobTaskDimension."Dimension Value Code" THEN BEGIN
-                //                     NS_TempDimSetEntry.VALIDATE("Dimension Value Code", NS_JobTaskDimension."Dimension Value Code");
-                //                     NS_TempDimSetEntry.MODIFY(TRUE);
-                //                     NS_DimensionsUpdated := TRUE;
-                //                 END;
-                //             END ELSE BEGIN
-                //                 NS_TempDimSetEntry.INIT;
-                //                 NS_TempDimSetEntry."Dimension Set ID" := "Dimension Set ID";
-                //                 NS_TempDimSetEntry.VALIDATE("Dimension Code", NS_JobTaskDimension."Dimension Code");
-                //                 NS_TempDimSetEntry.VALIDATE("Dimension Value Code", NS_JobTaskDimension."Dimension Value Code");
-                //                 NS_TempDimSetEntry.INSERT(TRUE);
-                //                 NS_DimensionsUpdated := TRUE;
-                //             END;
-                //         END;
-                //     UNTIL NS_JobTaskDimension.NEXT = 0;
-
-                // IF NS_DimensionsUpdated THEN BEGIN
-                //     "Dimension Set ID" := DimMgt.GetDimensionSetID(NS_TempDimSetEntry);
-                //     DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID", "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
-                // END;
-                clear(NSDimBufferTemp);
-                if NS_JobSetup.get() then;
-                if NSGLedgSetup.get() then;
-                if NS_JobSetup."NS_Flow Job Card Dimension" = true then begin
-                    if (rec."Job No." <> '') and (rec."Job Task No." <> '') then begin
-                        NSJobTaskDimension.reset();
-                        NSJobTaskDimension.setrange("Job No.", rec."Job No.");
-                        NSJobTaskDimension.setrange("Job Task No.", rec."Job Task No.");
-                        if NSJobTaskDimension.findset() then
-                            repeat
-                                NSDimBufferTemp.Init();
-                                NSDimBufferTemp."Table ID" := 210;
-                                NSDimBufferTemp."Dimension Code" := NSJobTaskDimension."Dimension Code";
-                                NSDimBufferTemp.Insert();
-                                NSDimBufferTemp."Dimension Value Code" := NSJobTaskDimension."Dimension Value Code";
-                                NSDimBufferTemp.Modify();
-                            until NSJobTaskDimension.next = 0;
-                    end;
-                    case rec.Type of
-                        rec.Type::Item:
-                            begin
-                                if NSItemRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 27);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 210);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 210;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::Resource:
-                            begin
-                                if NSResource.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 156);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 210);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 210;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::"G/L Account":
-                            begin
-                                if NSGLRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 15);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 210);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 210;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                    end;
-                    NSDimBufferTemp.reset();
-                    if NSDimBufferTemp.findset() then
-                        repeat
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 1 Code" then
-                                rec.validate("Shortcut Dimension 1 Code", NSDimBufferTemp."Dimension Value Code");
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 2 Code" then
-                                rec.validate("Shortcut Dimension 2 Code", NSDimBufferTemp."Dimension Value Code");
-                        until NSDimBufferTemp.next = 0;
-
-                    rec."Dimension Set ID" := NSDimMgt.CreateDimSetIDFromDimBuf(NSDimBufferTemp);
-                end;
-                //PRJCTPR-283.JS.1.0 03JAN2023 - end                 
+                IF NS_DimensionsUpdated THEN BEGIN
+                    "Dimension Set ID" := DimMgt.GetDimensionSetID(NS_TempDimSetEntry);
+                    DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID", "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
+                END;
                 //ProjectPro - end
             end;
         }
@@ -766,13 +505,8 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
             Description = 'ProjectPro';
             TableRelation = "NS_Skill Class";
             DataClassification = CustomerContent;
-            //PE-68.Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68.Dk.1.0 10April2023 End
+
             trigger OnValidate();
-            var
             begin
                 //ProjectPro - start
                 //UpdateAllAmountsExt; //PRJ-9.SK.1.0 Commented
@@ -780,21 +514,6 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                 //ProjectPro - end
             end;
         }
-        //PE-68.Dk.1.0 10April2023 Start
-        field(14021187; "NS_Skill Class New"; Code[20])
-        {
-            Caption = 'Skill Class';
-            Description = 'ProjectPro';
-            TableRelation = "NS_Skill Class";
-            DataClassification = CustomerContent;
-
-            trigger OnValidate();
-            var
-            begin
-                NS_CalculateWageRate;
-            end;
-        }
-        //PE-68.Dk.1.0 10April2023 End
         field(14021300; "NS_Subcontract No."; Code[20])
         {
             Caption = 'Subcontract No.';
@@ -925,36 +644,8 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
             Caption = 'Skill Code';
             DataClassification = CustomerContent;
             Editable = false;
-            //PE-68.Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68.Dk.1.0 10April2023 End
         }
-        //PE-68.Dk.1.0 10April2023 Start 
-        field(14021425; "NS_Skill Code New"; Code[20])
-        {
-            Caption = 'Skill Code';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-68.Dk.1.0 10April2023 End
-        field(14021423; "NS_Sub-Level to Job No."; Code[20])   //PRJ-1015.JS.1.0 10Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-        //PRJCTPR-2.RM.1.0 13Dec2022 start
-        field(14021424; "NS_Union Code"; Code[10])
-        {
-            Caption = 'Union Code';
-            DataClassification = CustomerContent;
-            TableRelation = Union;
-        }
-        //PRJCTPR-2.RM.1.0 13Dec2022 end
+
     }
 
 
@@ -1075,10 +766,7 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                 IF ("No." <> xRec."No.") OR
                    ("Work Type Code" <> xRec."Work Type Code") OR
                    //ProjectPro - start
-                   //PE-68.Dk.1.0 10April2023 Start
-                   //("NS_Skill Class" <> xRec."NS_Skill Class") OR
-                   ("NS_Skill Class New" <> xRec."NS_Skill Class New") OR
-                   //PE-68.Dk.1.0 10April2023 End
+                   ("NS_Skill Class" <> xRec."NS_Skill Class") OR
                    (Quantity <> xRec.Quantity) OR
                    //ProjectPro - end
                    ("Unit of Measure Code" <> xRec."Unit of Measure Code")
@@ -1357,14 +1045,9 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                     NS_EmployeeWageRate.RESET;
                 NS_EmployeeWageRate.SETRANGE("NS_Employee No.", NS_Employee."No.");
                 NS_EmployeeWageRate.SETFILTER("NS_Effective Date", '..%1', "Posting Date");
-                //PE-68.Dk.1.0 10April2023 Start
-                //NS_EmployeeWageRate.SETFILTER("NS_Skill Class", '<>%1', '');
-                NS_EmployeeWageRate.SETFILTER("NS_Skill Class New", '<>%1', '');
-                IF NS_EmployeeWageRate.FINDFIRST THEN begin
-                    // "NS_Skill Class" := NS_EmployeeWageRate."NS_Skill Class";
-                    "NS_Skill Class New" := NS_EmployeeWageRate."NS_Skill Class New";
-                end;
-                //PE-68.Dk.1.0 10April2023 End
+                NS_EmployeeWageRate.SETFILTER("NS_Skill Class", '<>%1', '');
+                IF NS_EmployeeWageRate.FINDFIRST THEN
+                    "NS_Skill Class" := NS_EmployeeWageRate."NS_Skill Class";
             END;
 
         IF "Job No." <> '' THEN
@@ -1377,25 +1060,14 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                     NS_JobResourcePrice.SETRANGE(Type, NS_JobResourcePrice.Type::Resource);
                     NS_JobResourcePrice.SETRANGE(Code, "No.");
                     IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
-                        //PE-68.Dk.1.0 14March2023 Start
-                        // IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN begin
-                        //     "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
-                        // end;
-                        IF NS_JobResourcePrice."NS_Skill Class Code New" <> '' THEN begin
-                            "NS_Skill Class New" := NS_JobResourcePrice."NS_Skill Class Code New";
-                        end;
-                        //PE-68.Dk.1.0 14March2023 End
+                        IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN
+                            "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
                     END ELSE BEGIN
                         //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.
                         NS_JobResourcePrice.SETRANGE("Job Task No.", '');
                         IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
-                            //PE-68.Dk.1.0 14March2023 Start
-                            // IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN begin
-                            //     "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
-                            // end;
-                            IF NS_JobResourcePrice."NS_Skill Class Code New" <> '' THEN
-                                "NS_Skill Class New" := NS_JobResourcePrice."NS_Skill Class Code New";
-                            //PE-68.Dk.1.0 14March2023 End
+                            IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN
+                                "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
                         END ELSE BEGIN
                             IF NS_Resource.GET("No.") THEN
                                 IF NS_Resource."Resource Group No." <> '' THEN BEGIN
@@ -1404,26 +1076,14 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                                     NS_JobResourcePrice.SETRANGE(Type, NS_JobResourcePrice.Type::"Group(Resource)");
                                     NS_JobResourcePrice.SETRANGE(Code, NS_Resource."Resource Group No.");
                                     IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
-                                        //PE-68.Dk.1.10April2023 Start
-                                        // IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN begin
-                                        //     "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
-                                        // end;
-                                        IF NS_JobResourcePrice."NS_Skill Class Code New" <> '' THEN begin
-                                            "NS_Skill Class New" := NS_JobResourcePrice."NS_Skill Class Code New";
-                                        end;
-                                        //PE-68.Dk.1.0 10April2023 End
+                                        IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN
+                                            "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
                                     END ELSE BEGIN
                                         //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.
                                         NS_JobResourcePrice.SETRANGE("Job Task No.", '');
                                         IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
-                                            //PE-68.Dk.1.0 10April2023 Start
-                                            // IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN begin
-                                            //     "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
-                                            // end;
-                                            IF NS_JobResourcePrice."NS_Skill Class Code New" <> '' THEN begin
-                                                "NS_Skill Class New" := NS_JobResourcePrice."NS_Skill Class Code New";
-                                            end;
-                                            //PE-68.Dk.1.0 10April2023 End
+                                            IF NS_JobResourcePrice."NS_Skill Class Code" <> '' THEN
+                                                "NS_Skill Class" := NS_JobResourcePrice."NS_Skill Class Code";
                                         END
                                     END;
                                 END;
@@ -1590,7 +1250,6 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
             Validate("Line Type", NS_Job."NS_Line Type");
             //Validate("Gen. Bus. Posting Group", NS_Job."NS_Gen. Bus. Posting Group");//PRJ-211 VT1.0 20-04-20 //PRJ-831.AS.1.0 12OCT2021 Comment old
             Validate("Gen. Bus. Posting Group", NS_Job."NS_Gen. Bus. Posting Group New");//PRJ-211 VT1.0 20-04-20 //PRJ-831.AS.1.0 12OCT2021 Add New
-            Rec."NS_Sub-Level to Job No." := NS_Job."NS_Sub-Level to Job No.";   //PRJ-1015.JS.1.0 10Oct2021           
         end;
     end;
     //PRj-162.SK.1.0 End
@@ -1613,36 +1272,24 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                     JobResourcePrice.SETRANGE(Type, JobResourcePrice.Type::Resource);
                     JobResourcePrice.SETRANGE(Code, JobJnlLine."No.");
                     JobResourcePrice.SETRANGE("Work Type Code", JobJnlLine."Work Type Code");
-                    //PE-68.Dk.1.0 10April2023 Start
-                    //JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                    JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                    //PE-68.Dk.1.0 10April2023 End
+                    JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                     if JobResourcePrice.FINDFIRST then begin
                         JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
 
                     end else begin
                         //Match on Job Task No.,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code=<blank>
-                        //PE-68.Dk.1.0 14March2023 Start
-                        // JobResourcePrice.SETRANGE("NS_Skill Class Code", ''); 
-                        JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                        //PE-68.Dk.1.0 14March2023 End
+                        JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                         if JobResourcePrice.FINDFIRST then begin
                             JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                         end else begin
                             //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code
                             JobResourcePrice.SETRANGE("Job Task No.", '');
-                            //PE-68.Dk.1.0 10April2023 Start
-                            // JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                            JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                            //PE-68.Dk.1.0 10April2023 End
+                            JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                             if JobResourcePrice.FINDFIRST then begin
                                 JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                             end else begin
                                 //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code=<blank>
-                                //PE-68.Dk.1.0 14March2023 Start
-                                // JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                //PE-68.Dk.1.0 14March2023 End
+                                JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                 if JobResourcePrice.FINDFIRST then begin
                                     JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                                 end else begin
@@ -1652,35 +1299,23 @@ tableextension 14021139 NS_JobJnlLine extends "Job Journal Line"
                                             JobResourcePrice.SETRANGE("Job Task No.", JobJnlLine."Job Task No.");
                                             JobResourcePrice.SETRANGE(Type, JobResourcePrice.Type::"Group(Resource)");
                                             JobResourcePrice.SETRANGE(Code, Resource."Resource Group No.");
-                                            //PE-68.Dk.1.0 10April2023 Start
-                                            // JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                                            JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                                            //PE-68.Dk.1.0 10April2023 End
+                                            JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                                             if JobResourcePrice.FINDFIRST then begin
                                                 JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                                             end else begin
                                                 //Match on Job Task No.,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code=<blank>
-                                                //PE-68.Dk.1.0 10April2023 Start
-                                                // JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                                JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                                //PE-68.Dk.1.0 10April2023 End
+                                                JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                                 if JobResourcePrice.FINDFIRST then begin
                                                     JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                                                 end else begin
                                                     //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code
                                                     JobResourcePrice.SETRANGE("Job Task No.", '');
-                                                    //PE-68.Dk.1.0 10April2023 Start
-                                                    // JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                                                    JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                                                    //PE-68.Dk.1.0 10April2023 End
+                                                    JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                                                     if JobResourcePrice.FINDFIRST then begin
                                                         JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                                                     end else begin
                                                         //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code=<blank>
-                                                        //PE-68.Dk.1.0 10April2023 Start
-                                                        // JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                                        JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                                        //PE-68.Dk.1.0 10April2023 End
+                                                        JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                                         if JobResourcePrice.FINDFIRST then begin
                                                             JobJnlLine."Unit Price" := JobResourcePrice."Unit Price";
                                                         end;

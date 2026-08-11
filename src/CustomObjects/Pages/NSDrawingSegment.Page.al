@@ -11,7 +11,6 @@ page 14021400 "NS_Drawing Segment"
     //PRJ-374.AS.1.0 10Sept2020 Added Caption Job Segment
     //TM-10.AM.1.0 24NOV2020 | Created new action for Importing Excel Files .
     //TM-10.AM.1.0 24NOV2020 | Added Fields in Layout and added New action to import Segment codes.
-    //PE-75.RM.1.0 17May2023 | Added dome tooltips.
     PageType = List;
     SourceTable = "NS_Job Takeoff Segments";
     SourceTableView = WHERE(NS_Type = FILTER(Drawing));
@@ -50,7 +49,6 @@ page 14021400 "NS_Drawing Segment"
                 field("NS_Segment Description"; "NS_Segment Description")
                 {
                     ApplicationArea = all;
-                    ToolTip = 'Specifies Segment Description';  //PE-75.RM.1.0 17May2023
                 }
                 field("NS_Billing Type"; "NS_Billing Type")
                 {
@@ -59,22 +57,18 @@ page 14021400 "NS_Drawing Segment"
                 field("NS_Unit of Measure Code"; "NS_Unit of Measure Code")
                 {
                     ApplicationArea = all;
-                    ToolTip = 'Specifies the Unit of Measure Code ';  //PE-75.RM.1.0 17May2023
                 }
                 field("NS_Estimated Quantity"; "NS_Estimated Quantity")
                 {
                     ApplicationArea = all;
-                    ToolTip = 'Specifies the Estimated Quantity entered manually against the activity.'; //PE-75.RM.1.0 17May2023
                 }
                 field("NS_Unit Rate"; "NS_Unit Rate")
                 {
                     ApplicationArea = all;
-                    ToolTip = 'Specifies the Unit Rate'; //PE-75.RM.1.0 17May2023
                 }
                 field("NS_Total Cost"; "NS_Total Cost")
                 {
                     ApplicationArea = all;
-                    ToolTip = 'Specfies the Total Cost on the basis of Quanty*Unit Cost.'; //PE-75.RM.1.0 17May2023
                 }
                 //TM-10.AM.1.0 24NOV2020 End
             }

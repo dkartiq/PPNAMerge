@@ -1,7 +1,6 @@
 tableextension 14021220 NS_SegmentLine extends "Segment Line"
 {
     // version NAVW111.00.00.21836,PPNA11.00
-    //PE-6.NK.1.0 28Feb2023 Added Fileds
 
     fields
     {
@@ -110,32 +109,6 @@ tableextension 14021220 NS_SegmentLine extends "Segment Line"
             Caption = 'Job Quote No.';
             DataClassification = CustomerContent;
         }
-        //PE-6.NK.1.0 28Feb2023 Start
-        field(14021101; "NS_Job No."; Code[20])
-        {
-            Description = 'ProjectPro';
-            Caption = 'Job No.';
-            DataClassification = CustomerContent;
-        }
-        field(14021102; "NS_Job Task No."; Code[20])
-        {
-            Description = 'ProjectPro';
-            Caption = 'Job Task No.';
-            DataClassification = CustomerContent;
-        }
-        field(14021103; "NS_Subcontract No."; Code[20])
-        {
-            Description = 'ProjectPro';
-            Caption = 'Subcontract No.';
-            DataClassification = CustomerContent;
-        }
-        field(14021104; "NS_Progess Billing No."; Code[20])
-        {
-            Description = 'ProjectPro';
-            Caption = 'Progess Billing No.';
-            DataClassification = CustomerContent;
-        }
-        //PE-6.NK.1.0 28Feb2023 End
     }
 
     var

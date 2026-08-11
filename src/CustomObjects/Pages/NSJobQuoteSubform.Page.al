@@ -11,7 +11,6 @@ page 14021406 "NS_Job Quote Subform"
     //PPAL-147.AS.2.0 30SEPT2020 Changed Loation of fields of after Unit of measure code 
     //PPAL-147.AS.2.0 30SEPT2020 Added Corrected captions also
     //PRJ-492.RS.1.0 11May2021 | Hide/Unhide Fields 
-    //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
     AutoSplitKey = true;
     Caption = 'Quote Subform';
     PageType = ListPart;
@@ -315,8 +314,7 @@ page 14021406 "NS_Job Quote Subform"
                 {
                     ApplicationArea = All;
                     Caption = 'Markup %';
-                    // ToolTip = 'Markup %'; //PRJ-1579.RM.1.0 commented
-                    ToolTip = 'Markup% is automatically calculated based on formula ((Total Price - Total Cost)/Total Cost*100). Also, manual entry of "Markup %" is allowed. ';//PRJ-1579.RM.1.0
+                    ToolTip = 'Markup %';
                 }
                 field("Item List Price"; Rec."NS_Item List Price")
                 {

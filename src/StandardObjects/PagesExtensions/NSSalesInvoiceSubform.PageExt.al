@@ -5,59 +5,15 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
     //CTSI-42.AS.1.0 21MAY2020 Added Revenue Category Description Field
     //TM-10.AM.1.0 | Added Field.
     //PRJ-492.RS.1.0 11May2021 | Hide/Unhide Fields
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
-    //PRJ-1360.RM.1.0 17May2022 | Added some code
-    //PRJ-1624.NK.1.0 22Sep2022 | Added Fields
     layout
     {
-        //PRJCTPR-333.PS.1.0 19March2024 Start
-        modify(Type)
-        {
-            Editable = NS_TypeEditeable;
-        }
-        modify("No.")
-        {
-            Editable = NS_TypeEditeable;
-        }
-        //PRJCTPR-333.PS.1.0 19March2024 End 
         //PRJ-492.N.S.1.0 Start
         modify("Location Code")
         {
             Visible = false;
         }
-        //PRJ-1332.GK.1.0 25Apr2022 start
-        modify("Unit Price")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-        modify("Line Discount %")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-        modify("Line Discount Amount")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-        modify("Inv. Discount Amount")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-        modify("Line Amount")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-
-        modify("Total Amount Excl. VAT")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-        modify("Total Amount Incl. VAT")
-        {
-            Editable = NS_EditableProgbillSalesInvoiceSub;
-        }
-
-        //PRJ-1332.GK.1.0 25Apr2022 end
+        //moveafter("Amount Including VAT"; "Tax Area Code")//PRJ-492 Test Commented this V17 Code
+        moveafter("Line Amount"; "Tax Area Code")//PRJ-492 Test Added this in place of addafter("Amount Including VAT")
         moveafter("Tax Area Code"; "Tax Group Code")
         //PRJ-492.N.S.1.0 END
         modify("Job No.")
@@ -76,18 +32,6 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
             end;
         }
         //PRJ-492.RS.1.0 11May2021 Start
-        //PRJCTPR-320.NC.1.0 13Feb2024 Start
-        modify("Tax Group Code")
-        {
-            trigger OnAfterValidate()
-            var
-                DocumentTotals: Codeunit "Document Totals";
-            begin
-                DocumentTotals.CalculateSalesSubPageTotals(TotalSalesHeader, TotalSalesLine, VATAmount, InvoiceDiscountAmount, InvoiceDiscountPct);
-                CurrPage.Update();
-            end;
-        }
-        //PRJCTPR-320.NC.1.0 13Feb2024 Start
         moveafter("No."; "Job No.")
         moveafter("Job No."; "Job Task No.")
         //PRJ-492.RS.1.0 11May2021 end
@@ -130,7 +74,6 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
             }
             //TM-32.AM.1.0
         }
-
 
 
         //addafter("Variant Code")//PRJ-492.N.S.1.0
@@ -184,15 +127,7 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
                 Visible = true;//PRJ-492.RS.1.0 11May2021
 
                 trigger OnValidate();
-                var
-                    RevRec: Record "NS_Job Revenue Category"; //PRJ-1360.RM.1.0  
                 begin
-                    //PRJ-1360.RM.1.0 start
-                    if RevRec.Get(Rec."NS_Job Revenue Category") then
-                        Rec."NS_Revenue Cat Description" := RevRec.NS_Description
-                    else
-                        Rec."NS_Revenue Cat Description" := '';
-                    //PRJ-1360.RM.1.0 end
                     //ProjectPro - start
                     NS_Job.CorrectForBlankFields("Job No.", "Job No.", "NS_Job Cost Category", "NS_Job Revenue Category", "Job Task No.");
                     //ProjectPro - end
@@ -241,20 +176,6 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
                 //Visible = false; //PRJ-492.AS.1.0 //PRJ-492.RS.1.0 25May2021  Comment
                 Visible = true;//PRJ-492.RS.1.0 25May2021 
             }
-            //PRJ-1624.NK.1.0 22Sep2022 Start
-            field("NS_Retention %"; Rec."NS_Retention %")
-            {
-                ApplicationArea = all;
-                Caption = 'Retention %';
-                ToolTip = 'Specifies the Retention %';
-            }
-            field("NS_Retention Amount"; Rec."NS_Retention Amount")
-            {
-                ApplicationArea = all;
-                Caption = 'Retention Amount';
-                ToolTip = 'Specifies the Retention Amount';
-            }
-            //PRJ-1624.NK.1.0 22Sep2022 End
         }
         //PRJ-492.RS.1.0 11May2021 end
     }
@@ -306,7 +227,6 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
 
     var
         SalesHeader: Record "Sales Header";
-        NS_NoNonediteable: Boolean;//PRJCTPR-333.PS.1.0 11April2024
 
     var
         NS_GetJobUsage: Report "NS_Get Job Usage";
@@ -315,16 +235,10 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
         Text14021100: Label 'Job No. not entered on the sales header.';
         NS_GenLedgEntry: Record "G/L Entry";
         Text14021101: Label 'Prepayment applied';
-        NS_EditableProgbillSalesInvoiceSub: Boolean; //PRJ-1332.GK.1.0 25Apr2022
-
-
-        NS_TypeEditeable: Boolean; //PRJCTPR-333.PS.1.0 19March2024 
-
 
     trigger OnNewRecord(BelowxRec: Boolean);
     var
         SalesHeader: Record 36;
-        NS_SalesHeader: Record 36;
     begin
         //ProjectPro - start
         "NS_Retention Applies" := TRUE;
@@ -332,58 +246,6 @@ pageextension 14021117 NS_SalesInvoiceSubform extends "Sales Invoice Subform"
             "Job No." := SalesHeader."NS_Job No.";
         //ProjectPro - end
     end;
-    //PRJ-1332.GK.1.0 25Apr2022 start
-    trigger OnAfterGetCurrRecord()
-    var
-        Salesheader: Record "Sales Header";
-        Jobsetup: Record "Jobs Setup";
-        NS_SalesHeader: Record "Sales Header"; //PRJCTPR-333.PS.1.0 20March2024
-        NS_JobSteup: Record "Jobs Setup"; //PRJCTPR-333.PS.1.0 20March2024
-    begin
-        if Jobsetup.Get() AND (Jobsetup."NS_Res Amt in Progbill Inv" = true) then begin
-            if Salesheader.Get(Rec."Document Type", Rec."Document No.") then
-                if Salesheader."NS_Progress Billing Document" = true then
-                    NS_EditableProgbillSalesInvoiceSub := false
-                else
-                    NS_EditableProgbillSalesInvoiceSub := true;
-        end else begin
-            NS_EditableProgbillSalesInvoiceSub := true;
-        end;
-        // end;
-        //PRJCTPR-333.PS.1.0 20March2024 Start 
-
-        NS_TypeEditeable := true;
-        NS_TypeEditeable := NSTypeNonEditeable;
-
-        //PRJCTPR-333.PS.1.0 20March2024 End 
-
-    end;
-    //PRJ-1332.GK.1.0 25Apr2022 end
-
-    trigger OnAfterGetRecord()
-    var
-        myInt: Integer;
-    begin
-        NS_TypeEditeable := NSTypeNonEditeable;
-    end;
-
-    Local procedure NSTypeNonEditeable(): Boolean
-    var
-        NS_SalesHeader: Record "Sales Header";
-    begin
-        NS_NoNonediteable := true;
-        NS_SalesHeader.Reset();
-        NS_SalesHeader.SetRange("Document Type", Rec."Document Type");
-        NS_SalesHeader.SetRange("No.", Rec."Document No.");
-        NS_SalesHeader.SetRange("NS_Retention Document", true);
-        if NS_SalesHeader.FindFirst() then
-            NS_NoNonediteable := false;
-        exit(NS_NoNonediteable);
-
-    end;
-
-    //PRJCTPR-333.PS.1.0 20March2024 End 
-
 
     procedure NS_NoOnAfterValidate();
     begin

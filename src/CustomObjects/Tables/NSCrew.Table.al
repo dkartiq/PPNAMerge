@@ -65,7 +65,6 @@ table 14021163 NS_Crew
 
     fieldgroups
     {
-        fieldgroup(DropDown; NS_Code, NS_Description) { }    //PRJCTPR-343.JS.1.0 21MAR2024
     }
     //PRJ-949.GK.1.0 01Oct2021 start
 

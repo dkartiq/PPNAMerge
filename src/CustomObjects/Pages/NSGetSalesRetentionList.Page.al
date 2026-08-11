@@ -1,5 +1,6 @@
 page 14021212 "NS_Get Sales Retention List"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -18,7 +19,9 @@ page 14021212 "NS_Get Sales Retention List"
     SourceTable = "Cust. Ledger Entry";
     SourceTableView = SORTING("Customer No.", "Posting Date", "Currency Code")
                       ORDER(Ascending);
-
+    // >> Upgrade
+    PromotedActionCategories = 'New,Process,Report,Include';
+    // << Upgrade
     layout
     {
         area(content)
@@ -28,22 +31,6 @@ page 14021212 "NS_Get Sales Retention List"
                 ApplicationArea = All;
                 Caption = 'Job No. Filter';
                 ToolTip = 'Specifies the ob No. Filter';
-
-                trigger OnValidate()
-                var
-                begin
-                    //MHNA-3.NK.1.0 start 08feb2023
-                    if JobNoFilter <> '' then begin
-                        Rec.SetFilter("NS_Job No.", JobNoFilter);
-                        CurrPage.Update();
-                    end else begin
-                        Rec.SetRange("NS_Job No.");
-                        CurrPage.Update();
-                    end;
-                    //MHNA-3.NK.1.0 End 08feb2023
-
-                end;
-
             }
             repeater(Control1)
             {
@@ -77,20 +64,6 @@ page 14021212 "NS_Get Sales Retention List"
                     ToolTip = 'Specifies the Currency Code';
                     Visible = false;
                 }
-                //MHNA-3.NK.1.0  start 07feb2023 
-                field("NS_Job No."; "NS_Job No.")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Job No.';
-                    ToolTip = 'Job No.'; //PE-75.RM.1.0 23May2023
-                }
-                field("NS_Retention Ledger Code"; "NS_Retention Ledger Code")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Retention ledger Code';
-                    ToolTip = 'Retention Ledger Code';  //PE-75.RM.1.0 23May2023
-                }
-                //MHNA-3.NK.1.0  end 07feb2023 
                 field(Amount; Rec.Amount)
                 {
                     ApplicationArea = All;
@@ -136,18 +109,15 @@ page 14021212 "NS_Get Sales Retention List"
                 {
                     ApplicationArea = All;
                     Visible = false;
-                    ToolTip = 'Global Dimension 1 Code'; //PE-75.RM.1.0 23May2023
                 }
                 field("Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
                 {
                     ApplicationArea = All;
                     Visible = false;
-                    ToolTip = 'Global Dimension 2 Code'; //PE-75.RM.1.0 23May2023
                 }
             }
             group(Control41)
             {
-                Caption = '';//PE-204.AS.4.0
                 field(TotalAmount; TotalAmount)
                 {
                     ApplicationArea = All;
@@ -227,7 +197,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Image = SelectField;
                     ShortCutKey = 'F7';
                     ToolTip = 'Include';
-
+                    // >> Upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     begin
                         if "NS_Retention Applies-to Amount" = 0 then
@@ -247,7 +221,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Image = Percentage;
                     ShortCutKey = 'Shift+F11';
                     ToolTip = 'Include retention percentage';
-
+                    // >> upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     var
                         Window: Dialog;
@@ -271,7 +249,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Image = ExciseApplyToLine;
                     ShortCutKey = 'Ctrl+F11';
                     ToolTip = 'Include all rentention percentage.';
-
+                    // >> Upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     var
                         EnteredPct: Decimal;
@@ -300,7 +282,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Caption = '&Clear All';
                     Image = ClearLog;
                     ToolTip = 'Clear all retention.';
-
+                    // >> Upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     begin
                         CustLedgEntry2.RESET();
@@ -327,6 +313,10 @@ page 14021212 "NS_Get Sales Retention List"
                 Promoted = true;
                 PromotedCategory = Process;
                 ToolTip = 'Navigate';
+                // >> Upgrade
+                PromotedOnly = true;
+
+                // << Upgrade
 
                 trigger OnAction();
                 begin
@@ -377,7 +367,6 @@ page 14021212 "NS_Get Sales Retention List"
     procedure NS_SetSalesHeader(SlsHdr: Record "Sales Header");
     begin
         SalesHeader := SlsHdr;
-        JobNoFilter := SlsHdr."NS_Job No.";  //MHNA-3.NK.1.0  start 08feb2023
     end;
 
     procedure NS_FormCalculations();

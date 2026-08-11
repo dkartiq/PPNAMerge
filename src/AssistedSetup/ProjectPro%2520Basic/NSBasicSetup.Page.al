@@ -180,13 +180,10 @@ page 14021225 NS_BasicSetupPage
     trigger OnQueryClosePage(CloseAction: Action): Boolean
     var
         PPAssistedSetupMgt: Codeunit NS_AssistedSetupMgt;
-        //AssistedSetup: Codeunit "Assisted Setup";   //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-        AssistedSetup: Codeunit "Guided Experience";  //PRJCTPR-155.JS.1.0 09SEP2023 line added
-        NSObjectType: ObjectType;  //PRJCTPR-155.JS.1.0 09SEP2023 line added
+        AssistedSetup: Codeunit "Assisted Setup";
     begin
         if CloseAction = Action::OK then
-            //if AssistedSetup.ExistsAndIsNotComplete(Page::NS_BasicSetupPage) then  //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-            if AssistedSetup.AssistedSetupExistsAndIsNotComplete(NSObjectType::Page, 14021225) then  //PRJCTPR-155.JS.1.0 09SEP2023 line added
+            if AssistedSetup.ExistsAndIsNotComplete(Page::NS_BasicSetupPage) then
                 if not Confirm(NotSetUpQst, false) then
                     Error('');
         PPAssistedSetupMgt.NS_UpdateStatus();

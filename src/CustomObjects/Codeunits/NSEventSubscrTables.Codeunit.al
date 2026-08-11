@@ -41,16 +41,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     //PRJ-899.GK.1.0 24Sep2021 | Merge code from CTSI for PRJ-899.
     //PRJ-1003.JS.1.0 25Oct2021 | code commented
     //PRJ-1004.JS.1.0 25Oct2021 | code commented
-    //PRJ-1082.RM.1.0 15Dec2021 | Added field to table
-    //PRJ-1058.AS.1.0 24DEC2021 Blocked old function NS_T1003OnAfterModifyEvent() & Created new NS_T1003OnAfterModifyEvent() as old one will give Appsource failure
-    //PRJ-1165.JS.1.0 24JAN2022 | correct code for type Ledger
-    //PRJ-1317.RM.1.0  20April2022 | Grammar Correction 
-    //PRJ-1299.JS.1.0 09MAY2022 | Add Procedure regarding Forecast by Task Totals
-    //PRJ-1409.JS.1.0 01JUN2022 | correct code
-    //PRJ-1436.JS.1.0 08JUN2022 | Add Procedure
-    //PRJ-1654.JS.1.0 03OCT2022 | Correction for decimal places  
-    //PRJ-1670.JS.1.0 02NOV2022 | Correction Regarding Dimension
-    //PRJCTPR-84.NK.1.0 13Mar2023 | Added Code.
+
     Permissions = tabledata "Purch. Rcpt. Line" = rimd, tabledata 169 = rimd, tabledata "NS_Assembley BOM Components" = rimd;//PRJ-256.MS.1.0 //PRJ-563.AS.2.0 Added AssemblyBOM
 
     trigger OnRun()
@@ -94,16 +85,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     //PPNA16.0 Blocked End
     //PRJ-212 VT1.0 22-04-20 end
 
-    //PRJ-1082.RM.1.0 15Dec2021 Start
-    [EventSubscriber(ObjectType::Table, 99, 'OnAfterValidateEvent', 'Vendor No.', false, false)]
-    local procedure NS_VendNameGet(var Rec: Record "Item Vendor")
-    var
-        VendRec: Record Vendor;
-    begin
-        if VendRec.get(Rec."Vendor No.") then
-            rec."NS_Vendor Name" := VendRec.Name;
-    end;
-    //PRJ-1082.RM.1.0 15Dec2021 END
 
     //PRJ-568.AS.1.0 - START
     [EventSubscriber(ObjectType::Table, 1003, 'OnBeforeModifyEvent', '', false, false)]
@@ -111,153 +92,42 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     var
         JPLRec: Record "Job Planning Line";
     begin
-        //PRJ-1068.AS.1.0 - START Commented old code
-        // JPLRec.reset;
-        // JPLRec.SetRange("Job No.", Rec."Job No.");
-        // // JPLRec.SetRange("Job Task No.", Rec."Job Task No.");
-        // JPLRec.SetRange("NS_Resource Line No.", Rec."Line No.");
-        // if JPLRec.FindFirst() then begin
-        //     JPLRec.Validate(Quantity, Rec.Quantity * Rec."NS_Labor Hours per Qty.");
-        //     JPLRec."NS_Labor Hours per Qty." := Rec."NS_Labor Hours per Qty.";
-        //     JPLRec.Modify();
-        // end;
-        //PRJ-1068.AS.1.0 - END Commented old code
+        JPLRec.reset;
+        JPLRec.SetRange("Job No.", Rec."Job No.");
+        // JPLRec.SetRange("Job Task No.", Rec."Job Task No.");
+        JPLRec.SetRange("NS_Resource Line No.", Rec."Line No.");
+        if JPLRec.FindFirst() then begin
+            JPLRec.Validate(Quantity, Rec.Quantity * Rec."NS_Labor Hours per Qty.");
+            JPLRec."NS_Labor Hours per Qty." := Rec."NS_Labor Hours per Qty.";
+            JPLRec.Modify();
+        end;
     end;
     //PRJ-568.AS.1.0 - END
-    //PE-323 AT 12july2024 Start
-    /*
-        //PRJ-1068.AS.1.0 - START
-        [EventSubscriber(ObjectType::Table, 1003, 'OnAfterValidateEvent', 'NS_Get Linked Resource', false, false)]
-        local procedure NS_T1003OnAfterValidteGetLinkRes(var Rec: Record "Job Planning Line")
-        var
-            JPLRec: Record "Job Planning Line";
-        begin
-            JPLRec.reset;
-            JPLRec.SetRange("Job No.", Rec."Job No.");
-            JPLRec.SetRange("NS_Resource Line No.", Rec."Line No.");
-            JPLRec.SetRange("Job Task No.", Rec."Job Task No.");
-            if JPLRec.FindFirst() then begin
-                JPLRec.Validate(Quantity, Rec.Quantity * Rec."NS_Labor Hours per Qty.");
-                JPLRec.Validate(Quantity, Rec.Quantity * Rec."NS_Labor Hr Per Qty(Res 2)"); //CJQ-36.PD.1.0
-                JPLRec."NS_Labor Hours per Qty." := Rec."NS_Labor Hours per Qty.";
-                JPLRec."NS_Labor Hr Per Qty(Res 2)" := REC."NS_Labor Hr Per Qty(Res 2)"; //CJQ-36.PD.1.0
-                JPLRec.Modify();
-            end;
-        end;
-        //PRJ-1068.AS.1.0 - END
-        */
-    //PE-323 AT 12july2024 end
+
     //PRJ-568.AS.1.0 Start
     [EventSubscriber(ObjectType::Table, 1003, 'OnAfterValidateEvent', 'No.', false, false)]
     local procedure NS_UpdateLinkedResourceFields(var Rec: Record "Job Planning Line")
     var
         ItemMasterRec: Record Item;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        Rec_Item: Record Item;
-        Rec_QuoteHeader: Record "NS_Job Quote Header";
-        Rec_Job: Record Job;
-        Rec_LaborratebyTask: Record "NS_Labor rate by task list";
-        Rec_Resourec: Record Resource;
-        LinkRes: array[4] of Text[100];
-        LinkedRes: Text[50];
-        NS_LinkedResources: Record "NS_Linked Resources";//PE-323.AT.1.0 18Jun24
-
-    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
     begin
         IF Rec.Type = Rec.Type::Item then begin
             if ItemMasterRec.get(Rec."No.") then begin
-                //PE-323.AT.1.0 18Jun24 Start
-                NS_LinkedResources.Reset();
-                NS_LinkedResources.SetRange("NS_Item No.", ItemMasterRec."No.");
-                NS_LinkedResources.SetRange(NS_Default, true);
-                if NS_LinkedResources.FindFirst() then Begin
-                    Rec.Validate("NS_Linked Resource", NS_LinkedResources."NS_Linked Resource");
-                    Rec.Validate("NS_Labor Hours per Qty.", NS_LinkedResources."NS_Labor Hr. per Qty");
-                    Rec."NS_Get Linked Resource" := true;
-                    //    Rec.Validate("NS_Linked Resource", ItemMasterRec."NS_Linked Resource");
-                    // Rec.Validate("NS_Labor Hours per Qty.", ItemMasterRec."NS_Labor Hours per Qty.");
-                End;
-                //PE-323.AT.1.0 18Jun24 End
+                Rec.Validate("NS_Linked Resource", ItemMasterRec."NS_Linked Resource");
+                Rec.Validate("NS_Labor Hours per Qty.", ItemMasterRec."NS_Labor Hours per Qty.");
             end;
         end;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        Rec_QuoteHeader.Reset();
-        Rec_QuoteHeader.SetRange("NS_Quote No.", Rec."Job No.");
-        IF Rec_QuoteHeader.FindFirst() then;
-
-        IF Rec_QuoteHeader."NS_Item Quote Costs" then begin
-            IF Rec.Type = Rec.Type::Item then begin
-                IF Rec_Item.Get(Rec."No.") then;
-                IF Rec_Item."NS_Quote Costs" <> 0 then
-                    Rec.Validate("Unit Cost", Rec_Item."NS_Quote Costs");
-            end;
-        end;
-
-        IF Rec_QuoteHeader."NS_Labour Rate" then begin
-            IF Rec.Type = Rec.Type::Resource then begin
-                IF Rec_Resourec.Get(Rec."No.") then;
-                IF Rec_Resourec.Type = Rec_Resourec.Type::Person then begin
-                    Rec_LaborratebyTask.Reset();
-                    Rec_LaborratebyTask.SetRange("NS_Job Type Code", Rec_QuoteHeader."NS_Job Type Code");
-                    IF Rec_LaborratebyTask.FindFirst() then
-                        Rec.Validate("Unit Cost", Rec_LaborratebyTask."NS_Labor Rate");
-                end;
-            end;
-        end;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
     end;
     //PRJ-568.AS.1.0 End   
 
     //PRJ-452.AM.1.0 Start
     [EventSubscriber(ObjectType::Table, 1003, 'OnAfterValidateEvent', 'Quantity', false, false)]
     local procedure UpdateQtyFields(var Rec: Record "Job Planning Line")
-    var
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        Rec_Item: Record Item;
-        Rec_QuoteHeader: Record "NS_Job Quote Header";
-        Rec_Job: Record Job;
-        Rec_LaborratebyTask: Record "NS_Labor rate by task list";
-        Rec_Resourec: Record Resource;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-        Rec_JobSetup: Record "Jobs Setup"; //PE-323 AT.01.05july2024
-
     begin
         if (rec."Line Type" = Rec."Line Type"::"Both Budget and Billable") OR (rec."Line Type" = Rec."Line Type"::Billable) then begin
             Rec.Validate("Contract Line", true);
-            // Rec.Validate("Qty. to Invoice", Rec.Quantity);//PRJ-1580.AS.1.0 18AUG2022 COMMENTED
-            // Rec.Validate("Qty. to Transfer to Invoice", Rec.Quantity);//PRJ-1580.AS.1.0 18AUG2022 COMMENTED
+            Rec.Validate("Qty. to Invoice", Rec.Quantity);
+            Rec.Validate("Qty. to Transfer to Invoice", Rec.Quantity);
         end;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        Rec_QuoteHeader.Reset();
-        Rec_QuoteHeader.SetRange("NS_Quote No.", Rec."Job No.");
-        IF Rec_QuoteHeader.FindFirst() then;
-
-        IF Rec_QuoteHeader."NS_Item Quote Costs" then begin
-            IF Rec.Type = Rec.Type::Item then begin
-                IF Rec_Item.Get(Rec."No.") then;
-                IF Rec_Item."NS_Quote Costs" <> 0 then
-                    Rec.Validate("Unit Cost", Rec_Item."NS_Quote Costs");
-            end;
-        end;
-
-        IF Rec_QuoteHeader."NS_Labour Rate" then begin
-            IF Rec.Type = Rec.Type::Resource then begin
-                IF Rec_Resourec.Get(Rec."No.") then;
-                IF Rec_Resourec.Type = Rec_Resourec.Type::Person then begin
-                    Rec_LaborratebyTask.Reset();
-                    Rec_LaborratebyTask.SetRange("NS_Job Type Code", Rec_QuoteHeader."NS_Job Type Code");
-                    IF Rec_LaborratebyTask.FindFirst() then
-                        Rec.Validate("Unit Cost", Rec_LaborratebyTask."NS_Labor Rate");
-                end;
-            end;
-        end;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-        // //PE-323 AT.01 05July2024 start
-        // if Rec_JobSetup.get then begin
-        //     if Rec_JobSetup."NS_Explode Linked Resource" then
-        //         InsertLinkedResourceInProjectPL(Rec);
-        // end;
-        // //PE-323 AT.01 05July2024 End
     end;
 
     //PRJ-452.AM.1.0 End
@@ -315,83 +185,79 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         itemrec: Record Item;
         Resourcerec: Record Resource;
         JobPlanLine: Record "Job Planning Line";//PRJ-563.AS.1.0 24MAY2020 
-        jobsRec: Record Job;//PRJ-1616.AS.1.0
     begin
-        if jobsRec.Get(Rec."NS_Job No.") then;//PRJ-1616.AS.1.0
+        if (Rec.NS_Type = Rec.NS_Type::Item) and (Rec."NS_No." <> '') and (Rec."NS_Assembly BOM" = true) then begin
+            BOMComponentRec.Reset();
+            BOMComponentRec.SetRange("Parent Item No.", Rec."NS_No.");
+            BOMComponentRec.SetFilter(Type, '<>%1', BOMComponentRec.Type::" ");//PRJ-563.AS.4.0 14APRIL2021
+            if BOMComponentRec.FindSet() then
+                repeat
+                    AssemBOMRec.Reset();
+                    AssemBOMRec.SetRange("NS_Job No.", rec."NS_Job No.");
+                    AssemBOMRec.SetRange("NS_Job Task No.", rec."NS_Job Task No.");
+                    AssemBOMRec.SetRange("NS_Ref. JPL Line No.", Rec."NS_Ref. JPL Line No.");
+                    AssemBOMRec.SetRange("NS_Ref. JPL Parent Item No.", BOMComponentRec."Parent Item No.");
+                    AssemBOMRec.SetRange("NS_Ref. ASMBOM Line No.", BOMComponentRec."Line No.");
+                    if not AssemBOMRec.FindFirst() then begin
+                        AssemBOMRec2.Init();
+                        AssemBOMRec2."NS_Job No." := Rec."NS_Job No.";
+                        AssemBOMRec2."NS_Job Task No." := Rec."NS_Job Task No.";
 
-        if jobsRec.NS_CopyJob = false then //PRJ-1616.AS.1.0
-            if (Rec.NS_Type = Rec.NS_Type::Item) and (Rec."NS_No." <> '') and (Rec."NS_Assembly BOM" = true) then begin
-                BOMComponentRec.Reset();
-                BOMComponentRec.SetRange("Parent Item No.", Rec."NS_No.");
-                BOMComponentRec.SetFilter(Type, '<>%1', BOMComponentRec.Type::" ");//PRJ-563.AS.4.0 14APRIL2021
-                if BOMComponentRec.FindSet() then
-                    repeat
-                        AssemBOMRec.Reset();
-                        AssemBOMRec.SetRange("NS_Job No.", rec."NS_Job No.");
-                        AssemBOMRec.SetRange("NS_Job Task No.", rec."NS_Job Task No.");
-                        AssemBOMRec.SetRange("NS_Ref. JPL Line No.", Rec."NS_Ref. JPL Line No.");
-                        AssemBOMRec.SetRange("NS_Ref. JPL Parent Item No.", BOMComponentRec."Parent Item No.");
-                        AssemBOMRec.SetRange("NS_Ref. ASMBOM Line No.", BOMComponentRec."Line No.");
-                        if not AssemBOMRec.FindFirst() then begin
-                            AssemBOMRec2.Init();
-                            AssemBOMRec2."NS_Job No." := Rec."NS_Job No.";
-                            AssemBOMRec2."NS_Job Task No." := Rec."NS_Job Task No.";
+                        AssemBOMRec3.Reset();
+                        AssemBOMRec3.SetRange("NS_Job No.", Rec."NS_Job No.");
+                        AssemBOMRec3.SetRange("NS_Job Task No.", Rec."NS_Job Task No.");
+                        if AssemBOMRec3.FindLast() then
+                            AssemBOMRec2."NS_Line No." := AssemBOMRec3."NS_Line No." + 10000
+                        else
+                            AssemBOMRec2."NS_Line No." := 10000;
 
-                            AssemBOMRec3.Reset();
-                            AssemBOMRec3.SetRange("NS_Job No.", Rec."NS_Job No.");
-                            AssemBOMRec3.SetRange("NS_Job Task No.", Rec."NS_Job Task No.");
-                            if AssemBOMRec3.FindLast() then
-                                AssemBOMRec2."NS_Line No." := AssemBOMRec3."NS_Line No." + 10000
-                            else
-                                AssemBOMRec2."NS_Line No." := 10000;
-
-                            if BOMComponentRec.Type = BOMComponentRec.Type::Item then begin
-                                AssemBOMRec2.NS_Type := BOMComponentRec.Type::Item;
-                                AssemBOMRec2."NS_No." := BOMComponentRec."No.";
-                                if (AssemBOMRec2.NS_Type = AssemBOMRec2.NS_Type::Item) and (AssemBOMRec2."NS_No." <> '') then begin
-                                    if itemrec.get(AssemBOMRec2."NS_No.") then begin
-                                        itemrec.CalcFields("Assembly BOM");
-                                        AssemBOMRec2."NS_Assembly BOM" := itemrec."Assembly BOM";
-                                        // AssemBOMRec2.NS_Description := itemrec.Description;//PRJ-838 COMMENT
-                                        AssemBOMRec2."NS_Description New" := itemrec.Description;//PRJ-838 ADD
-                                        AssemBOMRec2."NS_Unit Cost" := itemrec."Unit Cost";//PRJ-563.AS.4.0 23JUN2021
-                                    end;
+                        if BOMComponentRec.Type = BOMComponentRec.Type::Item then begin
+                            AssemBOMRec2.NS_Type := BOMComponentRec.Type::Item;
+                            AssemBOMRec2."NS_No." := BOMComponentRec."No.";
+                            if (AssemBOMRec2.NS_Type = AssemBOMRec2.NS_Type::Item) and (AssemBOMRec2."NS_No." <> '') then begin
+                                if itemrec.get(AssemBOMRec2."NS_No.") then begin
+                                    itemrec.CalcFields("Assembly BOM");
+                                    AssemBOMRec2."NS_Assembly BOM" := itemrec."Assembly BOM";
+                                    // AssemBOMRec2.NS_Description := itemrec.Description;//PRJ-838 COMMENT
+                                    AssemBOMRec2."NS_Description New" := itemrec.Description;//PRJ-838 ADD
+                                    AssemBOMRec2."NS_Unit Cost" := itemrec."Unit Cost";//PRJ-563.AS.4.0 23JUN2021
                                 end;
                             end;
-                            if BOMComponentRec.Type = BOMComponentRec.Type::Resource then begin
-                                AssemBOMRec2.NS_Type := AssemBOMRec2.NS_Type::Resource;
-                                AssemBOMRec2."NS_No." := BOMComponentRec."No.";
-                                // if (AssemBOMRec2.NS_Type = AssemBOMRec2.NS_Type::Item) and (AssemBOMRec2."NS_No." <> '') then begin
-                                if Resourcerec.get(AssemBOMRec2."NS_No.") then begin
-                                    AssemBOMRec2."NS_Assembly BOM" := BOMComponentRec."Assembly BOM";
-                                    // AssemBOMRec2.NS_Description := Resourcerec.Name;//PRJ-838 COMMENT
-                                    AssemBOMRec2."NS_Description New" := Resourcerec.Name;//PRJ-838 ADD
-                                    AssemBOMRec2."NS_Unit Cost" := Resourcerec."Unit Cost";//PRJ-563.AS.4.0 23JUN2021
-                                end;
-                                //end;
-                            end;
-
-                            //PRJ-563.AS.1.0 24MAY2020 - start
-                            AssemBOMRec2.NS_Level := Rec.NS_Level + 1;
-                            AssemBOMRec2."NS_Main Item" := Rec."NS_Main Item";
-                            if AssemBOMRec2."NS_Assembly BOM" = true then
-                                AssemBOMRec2."NS_Item Type" := AssemBOMRec2."NS_Item Type"::Assembly
-                            else
-                                AssemBOMRec2."NS_Item Type" := AssemBOMRec2."NS_Item Type"::Normal;
-                            //PRJ-563.AS.1.0 24MAY2020 - end
-
-                            AssemBOMRec2."NS_Quantity Per" := BOMComponentRec."Quantity per";
-                            AssemBOMRec2."NS_Unit of Measure Code" := BOMComponentRec."Unit of Measure Code";
-                            AssemBOMRec2."NS_Quantity of Assembly Item on Job" := AssemBOMRec."NS_Expected Quantity";//PRJ-563.AS.2.0
-                            AssemBOMRec2."NS_Expected Quantity" := AssemBOMRec2."NS_Quantity Per" * AssemBOMRec2."NS_Quantity of Assembly Item on Job";
-                            AssemBOMRec2."NS_Ref. JPL Line No." := Rec."NS_Ref. JPL Line No.";
-                            AssemBOMRec2."NS_Ref. JPL Parent Item No." := BOMComponentRec."Parent Item No.";
-                            AssemBOMRec2."NS_Ref. ASMBOM Line No." := BOMComponentRec."Line No.";
-                            AssemBOMRec2."NS_JPL DocNo" := AssemBOMRec."NS_JPL DocNo";
-                            AssemBOMRec2.Insert();
                         end;
-                    until BOMComponentRec.NEXT = 0;
-            end;
+                        if BOMComponentRec.Type = BOMComponentRec.Type::Resource then begin
+                            AssemBOMRec2.NS_Type := AssemBOMRec2.NS_Type::Resource;
+                            AssemBOMRec2."NS_No." := BOMComponentRec."No.";
+                            // if (AssemBOMRec2.NS_Type = AssemBOMRec2.NS_Type::Item) and (AssemBOMRec2."NS_No." <> '') then begin
+                            if Resourcerec.get(AssemBOMRec2."NS_No.") then begin
+                                AssemBOMRec2."NS_Assembly BOM" := BOMComponentRec."Assembly BOM";
+                                // AssemBOMRec2.NS_Description := Resourcerec.Name;//PRJ-838 COMMENT
+                                AssemBOMRec2."NS_Description New" := Resourcerec.Name;//PRJ-838 ADD
+                                AssemBOMRec2."NS_Unit Cost" := Resourcerec."Unit Cost";//PRJ-563.AS.4.0 23JUN2021
+                            end;
+                            //end;
+                        end;
+
+                        //PRJ-563.AS.1.0 24MAY2020 - start
+                        AssemBOMRec2.NS_Level := Rec.NS_Level + 1;
+                        AssemBOMRec2."NS_Main Item" := Rec."NS_Main Item";
+                        if AssemBOMRec2."NS_Assembly BOM" = true then
+                            AssemBOMRec2."NS_Item Type" := AssemBOMRec2."NS_Item Type"::Assembly
+                        else
+                            AssemBOMRec2."NS_Item Type" := AssemBOMRec2."NS_Item Type"::Normal;
+                        //PRJ-563.AS.1.0 24MAY2020 - end
+
+                        AssemBOMRec2."NS_Quantity Per" := BOMComponentRec."Quantity per";
+                        AssemBOMRec2."NS_Unit of Measure Code" := BOMComponentRec."Unit of Measure Code";
+                        AssemBOMRec2."NS_Quantity of Assembly Item on Job" := AssemBOMRec."NS_Expected Quantity";//PRJ-563.AS.2.0
+                        AssemBOMRec2."NS_Expected Quantity" := AssemBOMRec2."NS_Quantity Per" * AssemBOMRec2."NS_Quantity of Assembly Item on Job";
+                        AssemBOMRec2."NS_Ref. JPL Line No." := Rec."NS_Ref. JPL Line No.";
+                        AssemBOMRec2."NS_Ref. JPL Parent Item No." := BOMComponentRec."Parent Item No.";
+                        AssemBOMRec2."NS_Ref. ASMBOM Line No." := BOMComponentRec."Line No.";
+                        AssemBOMRec2."NS_JPL DocNo" := AssemBOMRec."NS_JPL DocNo";
+                        AssemBOMRec2.Insert();
+                    end;
+                until BOMComponentRec.NEXT = 0;
+        end;
 
     end;
     //PRJ-563.AS.1.0 end
@@ -699,31 +565,13 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                     jobtaskrec.SetRange("Job No.", jobRecord1."No.");
                     jobtaskrec.SetRange("Job Task No.", Rec."Job Task No.");
                     if not jobtaskrec.FindFirst() then
-                        //PRJCTPR-123 START COMMENT
-                        //                     IF not CONFIRM('The Task No. "%1" doesn�t exist in the Master Job No. "%2". Do you want to continue?', false,
-                        // Rec."Job Task No.", jobRecord1."No.") THEN begin //PRJ-1317.RM.1.0 //PRJ-1401.GK.1.0 24May2022
-                        //PRJCTPR-123 END COMMENT
-
-                        //PRJCTPR-123 START ADD
-                        IF not CONFIRM('The Task No. "%1" doesn’t exist in the Master Job No. "%2". clicking on Yes will add this Job Task in the Master Job.\\Do you want to continue?', false,
-        Rec."Job Task No.", jobRecord1."No.") THEN begin //PRJ-1317.RM.1.0 //PRJ-1401.GK.1.0 24May2022
-                                                         //PRJCTPR-123 END ADD                                                     
-
-                            //PRJCTPR-123 START COMMENT
-                            // jobtaskrec1.Reset();
-                            // jobtaskrec1.SetRange("Job No.", Rec."Job No.");
-                            // jobtaskrec1.SetRange("Job Task No.", Rec."Job Task No.");
-                            // if jobtaskrec1.FindFirst() then
-                            //     jobtaskrec1.Delete();
-                            //PRJCTPR-123 END COMMENT
-                        end
-                        else begin
-                            //PRJCTPR-123 START ADD
-                            jobtaskrec1.Init();
-                            jobtaskrec1."Job No." := rec."NS_Sub-Level to Job No.";
-                            jobtaskrec1.Validate("Job Task No.", Rec."Job Task No.");
-                            jobtaskrec1.Insert();
-                            //PRJCTPR-123 END ADD 
+                        IF not CONFIRM('The Task No. "%1" doesn�t Exist in the Master Job No. "%2" . Do you want to Continue??', false,
+    Rec."Job Task No.", jobRecord1."No.") THEN begin
+                            jobtaskrec1.Reset();
+                            jobtaskrec1.SetRange("Job No.", Rec."Job No.");
+                            jobtaskrec1.SetRange("Job Task No.", Rec."Job Task No.");
+                            if jobtaskrec1.FindFirst() then
+                                jobtaskrec1.Delete();
                         end;
                 end;
             end;
@@ -1003,8 +851,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     [EventSubscriber(ObjectType::Table, 36, 'OnAfterSetFieldsBilltoCustomer', '', false, false)]
     local procedure NS_T36OnAfterSetFieldsBilltoCustomer(var SalesHeader: Record "Sales Header"; Customer: Record Customer)
     var
-        //BillToCustTemplate: Record "Customer Template";    //PRJCTPR-155.JS.1.0 line commented
-        BillToCustTemplate: Record "Customer Templ.";    //PRJCTPR-155.JS.1.0 line added
+        BillToCustTemplate: Record "Customer Template";
     begin
         //ProjectPro - start
         if not SalesHeader."NS_Progress Billing Document" then
@@ -1235,10 +1082,9 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         Currency: Record Currency;
         SalesHeader: Record "Sales Header";
         SalesTaxCalculate: Codeunit "Sales Tax Calculate";
-        NS_JobsSetup: Record "Jobs Setup"; //PRJCTPR-320.NC.1.0 26Feb2024
     begin
         with SalesLine do begin
-            if SalesHeader.GET(SalesLine."Document Type", SalesLine."Document No.") then; // PRJCTPR-227.AT.1.0 22Nov2023
+            SalesHeader.GET("Document Type", "Document No.");
             IF SalesHeader."Currency Code" = '' THEN
                 Currency.InitRoundingPrecision
             ELSE
@@ -1296,19 +1142,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                                 //ProjectPro - end
                                 ELSE
                                     "VAT %" := 0;
-                                //PRJCTPR-320.NC.1.0 09Feb2024 Start
-                                if NS_JobsSetup.Get() then;
-                                if NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" = NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"3 - Calc tax on sale less the retention determined by progress billing" then begin
-                                    if SalesHeader."NS_Multiple Retention on Lines" then begin
-                                        SalesLine."VAT Base Amount" := SalesLine.Amount - SalesLine."NS_Retention Amount";
-                                        SalesLine."Amount Including VAT" :=
-                                                          SalesLine.Amount - SalesLine."NS_Retention Amount" +
-                                                          SalesTaxCalculate.CalculateTax(
-                                                            SalesLine."Tax Area Code", SalesLine."Tax Group Code", SalesLine."Tax Liable", SalesHeader."Posting Date",
-                                                            SalesLine."VAT Base Amount", SalesLine."Quantity (Base)", SalesHeader."Currency Factor");
-                                    end;
-                                end;
-                                //PRJCTPR-320.NC.1.0 09Feb2024 End
                             END;
                     END; //Case
             END;
@@ -1421,29 +1254,21 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     end;
     //PRJ-9.TY.1.0 End
 
-    //PRJCTPR-155.JS.1.0 11Sep2023 - Start    
-    //[EventSubscriber(ObjectType::Table, 38, 'OnAfterCreateDimTableIDs', '', false, false)]
-    [EventSubscriber(ObjectType::Table, 38, 'OnAfterInitDefaultDimensionSources', '', false, false)]
-    //local procedure NS_T38OnAfterCreateDimTableIDs(VAR PurchaseHeader: Record "Purchase Header"; CallingFieldNo: Integer; VAR TableID: ARRAY[10] OF Integer; VAR No: ARRAY[10] OF Code[20])
-    local procedure NS_T38OnAfterInitDefaultDimensionSources(VAR PurchaseHeader: Record "Purchase Header"; var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]])
+    [EventSubscriber(ObjectType::Table, 38, 'OnAfterCreateDimTableIDs', '', false, false)]
+    local procedure NS_T38OnAfterCreateDimTableIDs(VAR PurchaseHeader: Record "Purchase Header"; CallingFieldNo: Integer; VAR TableID: ARRAY[10] OF Integer; VAR No: ARRAY[10] OF Code[20])
     var
         No2: Code[20];
         TableID2: Integer;
-        NSDimMgt: codeunit DimensionManagement;  //PRJCTPR-155.JS.1.0 08Sep2023        
     begin
-        //PRJCTPR-155.JS.1.0 11Sep2023 - Start
-        //p.NS_T38GetCreateDim(TableID2, No2);  //PRJCTPR-199.JS.1.0 11DEC2023 line commented
+        p.NS_T38GetCreateDim(TableID2, No2);
         if TableID2 <> 0 then begin
-            //TableID[5] := TableID[2];
-            //No[5] := No[2];
-            //DefaultDimSource[5, [5]] := DefaultDimSource[2, [2]];
-            //TableID[2] := TableID2;
-            //No[2] := No2;
+            TableID[5] := TableID[2];
+            No[5] := No[2];
+            TableID[2] := TableID2;
+            No[2] := No2;
         end;
-        //PRJCTPR-155.JS.1.0 11Sep2023 - end
-        //p.NS_T38SetCreateDim(0, '');  //PRJCTPR-199.JS.1.0 11DEC2023 line commented
+        p.NS_T38SetCreateDim(0, '');
     end;
-    //PRJCTPR-155.JS.1.0 11Sep2023 - end
 
     [EventSubscriber(ObjectType::Table, 38, 'OnAfterInsertEvent', '', false, false)]
     local procedure NS_T38OnAfterInsertEvent(var Rec: Record "Purchase Header"; RunTrigger: Boolean)
@@ -1529,8 +1354,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
 
         //PRJ-196 VT 08-04-20 Begin
         with PurchaseLine do begin
-            //PurchHeader.Get("Document Type", "Document No."); //PRJ-1096.GK.1.0 28Dec2021-comment
-            if PurchHeader.Get("Document Type", "Document No.") then; //PRJ-1096.GK.1.0 28Dec2021-add
+            PurchHeader.Get("Document Type", "Document No.");
             TotalLineAmount := 0;
             TotalInvDiscAmount := 0;
             TotalAmount := 0;
@@ -1605,11 +1429,9 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                     StdText.Insert();
                     p.NS_T39SetStdTextRecId(StdText.RecordId());
                 end;
-
                 Type := Type::" ";
                 "No." := StdText.Code;
             end;
-
         end;
     end;
 
@@ -1650,10 +1472,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                             "Indirect Cost %" := NS_Resource."Indirect Cost %";
                             "Gen. Prod. Posting Group" := NS_Resource."Gen. Prod. Posting Group";
                             "VAT Prod. Posting Group" := NS_Resource."VAT Prod. Posting Group";
-                            //PRJ-1069.GK.1.0 08Dec2021 start
-                            PurchLine."Tax Area Code" := PurchHeader."Tax Area Code";
-                            PurchLine."Tax Liable" := PurchHeader."Tax Liable"; //PRJ-1069.GK.1.0 14Dec2021
-                            //PRJ-1069.GK.1.0 08Dec2021 end
                             "Tax Group Code" := NS_Resource."Tax Group Code";
                             PPEventSubsCodeunits.NS_C221FindResUnitPricePurchLine(PurchLine);
                             PPEventSubsCodeunits.NS_C220FindResUnitCostPurchLine(PurchLine);
@@ -1672,26 +1490,12 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     var
         PurchaseHeader: Record "Purchase Header";
         PurchLineTypeEnum: enum "Purchase Line Type";
-        NS_Job: Record Job;  //PRJ-1469.JS.1.0 22JUN2022
     begin
         with PurchLine do begin
-            //PurchaseHeader.Get("Document Type", "Document No.");//PRJ-1096.GK.1.0 28Dec2021| comment
-            if PurchaseHeader.Get("Document Type", "Document No.") then; //PRJ-1096.GK.1.0 28Dec2021| add.
+            PurchaseHeader.Get("Document Type", "Document No.");
             //ProjectPro - start
             if (Type <> PurchLineTypeEnum::" ") AND (Type <> PurchLineTypeEnum::"Fixed Asset") then begin //PRJ-490.AM.1.0
-                                                                                                          //PRJ-1469.GK.2.0 04Oct2022 start
-                                                                                                          //Validate("Job No.", PurchaseHeader."NS_Job No.");
-                "Job No." := PurchaseHeader."NS_Job No.";
-
-                If PurchLine."Job No." <> '' then begin
-                    //ZEL-14.NC.1.0 26May2023 Start
-                    if NS_Job.Get(PurchLine."Job No.") then;
-                    if NS_Job."NS_Time And Material" then
-                        PurchLine."Job Line Type" := NS_Job."NS_Line Type";
-                    //ZEL-14.NC.1.0 26May2023 End
-
-                end;
-                //PRJ-1469.GK.2.0 04Oct2022 end
+                Validate("Job No.", PurchaseHeader."NS_Job No.");
                 "Job Task No." := TempPurchaseLine."Job Task No.";
                 "NS_Job Cost Category" := TempPurchaseLine."NS_Job Cost Category";
             end else //PRJ-490.AM.1.0 start
@@ -1774,16 +1578,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     var
         AmountInclVAT: Decimal;
         SalesTaxCalculate: Codeunit "Sales Tax Calculate";
-        CurrExchRate: Record "Currency Exchange Rate";//PRJ-1618.AS.1.0
-        NS_Currency: Record Currency;//PRJ-1618.AS.1.0
-        Currency2: Record Currency;//PRJ-1618.AS.1.0
-        IsHandled: boolean;  //FGH-163.SM.29022024 //PE-269.JS.1.0
     begin
-        //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-        OnBeforeNS_T39OnAfterInitOutstandingAmount(PurchLine, xPurchLine, PurchHeader, Currency, Ishandled);
-        IF IsHandled then
-            exit;
-        ////FGH-163.SM.29022024 //PE-269.JS.1.0 END
         with PurchLine do begin
             if Quantity = 0 then begin
                 //ProjectPro - start
@@ -1815,55 +1610,18 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                             Currency."Amount Rounding Precision");
 
                 //ProjectPro - start
-                //PRJ-1618.AS.1.0 start comment
-                // VALIDATE(
-                //   "NS_Committed Amount",
-                //   ROUND(
-                //     AmountInclVAT * "NS_Committed Quantity" / Quantity,
-                //     Currency."Amount Rounding Precision"));
+                VALIDATE(
+                  "NS_Committed Amount",
+                  ROUND(
+                    AmountInclVAT * "NS_Committed Quantity" / Quantity,
+                    Currency."Amount Rounding Precision"));
                 //ProjectPro - end
-                //PRJ-1618.AS.1.0 end comment
             end;
 
             //ProjectPro - start
             NS_SetRetentionBase;
             //ProjectPro - end
-
-
-            //PRJ-1618.AS.1.0 START
-            NS_Currency.InitRoundingPrecision;
-            if PurchLine.Quantity <> 0 then begin  //PRJ-1618.JS.1.0 line added  //PRJ-1654.JS.1.0 03OCT2022 line added 
-                if PurchHeader."Currency Code" <> '' then begin
-                    PurchLine."NS_Committed Amount" := ROUND(
-                    PurchLine."Amount Including VAT" * PurchLine."NS_Committed Quantity" / PurchLine.Quantity,
-                    NS_Currency."Amount Rounding Precision");
-
-                    PurchLine."NS_Committed Amount (LCY)" :=
-                    ROUND(
-                      CurrExchRate.ExchangeAmtFCYToLCY(
-                        PurchLine.GetDate, PurchLine."Currency Code",
-                        PurchLine."NS_Committed Amount", PurchHeader."Currency Factor"),
-                      NS_Currency."Amount Rounding Precision")
-                end
-                else begin
-                    PurchLine.VALIDATE(
-                "NS_Committed Amount",
-                ROUND(
-                  AmountInclVAT * PurchLine."NS_Committed Quantity" / PurchLine.Quantity,
-                  Currency."Amount Rounding Precision"));
-
-                    PurchLine."NS_Committed Amount (LCY)" :=
-                    ROUND(PurchLine."NS_Committed Amount", Currency2."Amount Rounding Precision");
-                end;
-            end;  //PRJ-1618.JS.1.0 line added //PRJ-1654.JS.1.0 03OCT2022 line added
-            //PRJ-1618.AS.1.0 END
         end;
-
-        //ProjectPro - start
-        PurchLine.NS_SetRetentionBase();
-        //ProjectPro - end
-        //end;
-        //PRJ-1170.NK.1.0 End
     end;
 
     [EventSubscriber(ObjectType::Table, 39, 'OnAfterInitHeaderDefaults', '', false, false)]
@@ -1873,10 +1631,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         with PurchLine do begin
             if Type <> Type::"Fixed Asset" then //PRJ-490.Am.1.0
-                //PRJ-1469.GK.2.0 04Oct2022 start
-                //Validate("Job No.", PurchHeader."NS_Job No.")
-                "Job No." := PurchHeader."NS_Job No."
-            //PRJ-1469.GK.2.0 04Oct2022 end
+                Validate("Job No.", PurchHeader."NS_Job No.")
             else begin
                 // "NS_FA Job Usage" := true;//PRJ-665.N.S.1.0 Comment
                 // Validate("NS_FA Job No.", PurchHeader."NS_Job No.")//PRJ-490.Am.1.0 //PRJ-665.N.S.1.0 Comment
@@ -1908,21 +1663,19 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         NS_JobSetup.Get();
         IF PurchHeader.get(Rec."Document Type", Rec."No.") then;
-        //PRJ-1610.GK.1.0 09Sept2022 start|Comment Code
-        // IF NS_JobSetup."NS_Gen. Bus. Posting Group" <> '' then
-        //     Rec.VALIDATE(Rec."Gen. Bus. Posting Group", NS_JobSetup."NS_Gen. Bus. Posting Group")
-        // else
-        //     IF VendorRec.get(PurchHeader."Buy-from Vendor No.") then
-        //         IF VendorRec."Gen. Bus. Posting Group" <> '' then
-        //             Rec.VALIDATE(Rec."Gen. Bus. Posting Group", VendorRec."Gen. Bus. Posting Group");
 
+        IF NS_JobSetup."NS_Gen. Bus. Posting Group" <> '' then
+            Rec.VALIDATE(Rec."Gen. Bus. Posting Group", NS_JobSetup."NS_Gen. Bus. Posting Group")
+        else
+            IF VendorRec.get(PurchHeader."Buy-from Vendor No.") then
+                IF VendorRec."Gen. Bus. Posting Group" <> '' then
+                    Rec.VALIDATE(Rec."Gen. Bus. Posting Group", VendorRec."Gen. Bus. Posting Group");
 
-        // IF job.Get(PurchHeader."NS_Job No.") then//PRJ-488.MS.1.0 changes place of code and jobsetp to job 
-        //     // IF job."NS_Gen. Bus. Posting Group" <> '' then //PRJ-831.AS.1.0 12OCT2021 Comment old
-        //     //     Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group"); //PRJ-831.AS.1.0 12OCT2021 Comment old
-        //              IF job."NS_Gen. Bus. Posting Group New" <> '' then //PRJ-831.AS.1.0 12OCT2021 Add New
-        //         Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group New"); //PRJ-831.AS.1.0 12OCT2021 Add New
-        //PRJ-1610.GK.1.0 09Sept2022 end
+        IF job.Get(PurchHeader."NS_Job No.") then//PRJ-488.MS.1.0 changes place of code and jobsetp to job 
+            // IF job."NS_Gen. Bus. Posting Group" <> '' then //PRJ-831.AS.1.0 12OCT2021 Comment old
+            //     Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group"); //PRJ-831.AS.1.0 12OCT2021 Comment old
+                     IF job."NS_Gen. Bus. Posting Group New" <> '' then //PRJ-831.AS.1.0 12OCT2021 Add New
+                Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group New"); //PRJ-831.AS.1.0 12OCT2021 Add New
     end;
     //PRJ-145.SK.1.0 End
 
@@ -1937,24 +1690,16 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         NS_JobSetup.Get();
         IF SalesHeader.get(Rec."Document Type", Rec."No.") then;
-        //PRJ-1610.GK.1.0 09Sept2022 start
-        IF Job.Get(SalesHeader."NS_Job No.") then begin
+        IF Job.Get(SalesHeader."NS_Job No.") then
             // IF job."NS_Gen. Bus. Posting Group" <> '' then//PRJ-831.AS.1.0 12OCT2021 Comment old
             IF job."NS_Gen. Bus. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
-                Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group New")
-            else
-                IF NS_JobSetup."NS_Gen. Bus. Posting Group" <> '' then
-                    Rec.VALIDATE(Rec."Gen. Bus. Posting Group", NS_JobSetup."NS_Gen. Bus. Posting Group")
-                else
-                    IF CustomerRec.get(SalesHeader."Sell-to Customer No.") then
-                        IF CustomerRec."Gen. Bus. Posting Group" <> '' then
-                            Rec.VALIDATE(Rec."Gen. Bus. Posting Group", CustomerRec."Gen. Bus. Posting Group");
-        end else begin
+                Rec.VALIDATE(Rec."Gen. Bus. Posting Group", NS_JobSetup."NS_Gen. Bus. Posting Group");
+        IF NS_JobSetup."NS_Gen. Bus. Posting Group" <> '' then
+            Rec.VALIDATE(Rec."Gen. Bus. Posting Group", NS_JobSetup."NS_Gen. Bus. Posting Group")
+        else
             IF CustomerRec.get(SalesHeader."Sell-to Customer No.") then
                 IF CustomerRec."Gen. Bus. Posting Group" <> '' then
                     Rec.VALIDATE(Rec."Gen. Bus. Posting Group", CustomerRec."Gen. Bus. Posting Group")
-        end;
-        //PRJ-1610.GK.1.0 09Sept2022 end
     end;
     //PRJ-131.SK.1.0 End
 
@@ -1984,18 +1729,8 @@ codeunit 14021106 "NS_Event Subscr. Tables"
             //ProjectPro - start
             "NS_Job Cost Category" := Item."NS_Job Cost Category";
             //ProjectPro - end
-            //PE-301.NC.1.0 07Jun2024 Start
-            if Item."Purch. Unit of Measure" <> '' then
-                PurchLine."Unit of Measure" := Item."Purch. Unit of Measure"
-            else begin
-                if Item."Ns_Parent Item UOM" <> '' then
-                    PurchLine."Unit of Measure Code" := Item."Ns_Parent Item UOM"
-                else
-                    PurchLine."Unit of Measure Code" := Item."Base Unit of Measure";
-            end;
-            //PE-301.NC.1.0 07Jun2024 End
         end;
-    End;
+    end;
 
     //PRJ-52.SK.1.0 Start
     [EventSubscriber(ObjectType::Table, Database::"Purchase Line", 'OnBeforeValidateEvent', 'Job No.', False, False)]
@@ -2120,10 +1855,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         IF PurchHeader.Get(PurchaseLine."Document Type", PurchaseLine."Document No.") Then;
         Clear(TempJobJournalLine);
         TempJobJournalLine.DontCheckStdCost;
-        //PRJ-1469.GK.2.0 04Oct2022 - Start
-        //TempJobJournalLine.Validate("Job No.", PurchaseLine."Job No.");
-        TempJobJournalLine."Job No." := PurchaseLine."Job No.";
-        //PRJ-1469.GK.2.0 04Oct2022 - end
+        TempJobJournalLine.Validate("Job No.", PurchaseLine."Job No.");
         TempJobJournalLine.Validate("Job Task No.", PurchaseLine."Job Task No.");
         TempJobJournalLine.Validate("Posting Date", PurchHeader."Posting Date");
         if PurchaseLine."Job Currency Factor" <> 0 then //PRJ-613 N.S.1.0
@@ -2141,10 +1873,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         TempJobJournalLine.Validate("NS_Job Cost Category", PurchaseLine."NS_Job Cost Category");//PRJ-212 VT1.0 22-0-20 //PRJ-212 VT1.0 22-0-20 //PRJ-268 VT1.0 18-05-20 Code Commented
                                                                                                  //IF PurchaseLine.Type = PurchaseLine.Type::Resource THEN//PRJ-470.MS.1.0 comment
                                                                                                  //TempJobJournalLine.VALIDATE(Type, TempJobJournalLine.Type::Resource);//PRJ-470.MS.1.0 comment
-                                                                                                 //PRJ-1469.GK.2.0 04Oct2022 - start                                                                                        
-                                                                                                 //TempJobJournalLine.Validate("No.", PurchaseLine."No.");
-        TempJobJournalLine."No." := PurchaseLine."No.";
-        //PRJ-1469.GK.2.0 04Oct2022 - end
+        TempJobJournalLine.Validate("No.", PurchaseLine."No.");
         TempJobJournalLine.Validate(Quantity, PurchaseLine.Quantity);
         TempJobJournalLine.Validate("Variant Code", PurchaseLine."Variant Code");
         TempJobJournalLine.Validate("Unit of Measure Code", PurchaseLine."Unit of Measure Code");
@@ -2172,7 +1901,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     end;
     //PPNA17.0 Opened End
 
-    [Obsolete('Replaced by event OnAfterPrepareSales in table Invoice Posting Buffer', '22.0')]//PE-129.AS.3.0
     [EventSubscriber(ObjectType::Table, 49, 'OnAfterInvPostBufferPrepareSales', '', false, false)]
     local procedure NS_T49OnAfterInvPostBufferPrepareSales(var SalesLine: Record "Sales Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
     begin
@@ -2181,17 +1909,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         //ProjectPro - end
     end;
 
-    //PE-129.AS.3.0 start Add
-    [EventSubscriber(ObjectType::Table, 55, 'OnAfterPrepareSales', '', false, false)]
-    local procedure NS_T55OnAfterPrepareSales(var SalesLine: Record "Sales Line"; var InvoicePostingBuffer: Record "Invoice Posting Buffer")
-    begin
-        //ProjectPro - start
-        InvoicePostingBuffer."NS_Job Task No." := SalesLine."Job Task No.";
-        //ProjectPro - end
-    end;
-    //PE-129.AS.3.0 end Add
-
-    [Obsolete('Replaced by event OnAfterPreparePurchase in table Invoice Posting Buffer', '22.0')]//PE-129.AS.3.0
     [EventSubscriber(ObjectType::Table, 49, 'OnAfterInvPostBufferPreparePurchase', '', false, false)]
     local procedure NS_T49OnAfterInvPostBufferPreparePurchase(var PurchaseLine: Record "Purchase Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
     begin
@@ -2199,16 +1916,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         InvoicePostBuffer."NS_Job Task No." := PurchaseLine."Job Task No.";
         //ProjectPto - end
     end;
-
-    //PE-129.AS.3.0 start Add
-    [EventSubscriber(ObjectType::Table, 55, 'OnAfterPreparePurchase', '', false, false)]
-    local procedure NS_T55OnAfterPreparePurchase(var PurchaseLine: Record "Purchase Line"; var InvoicePostingBuffer: Record "Invoice Posting Buffer")
-    begin
-        //ProjectPro - start
-        InvoicePostingBuffer."NS_Job Task No." := PurchaseLine."Job Task No.";
-        //ProjectPto - end
-    end;
-    //PE-129.AS.3.0 end Add
 
     [EventSubscriber(ObjectType::Table, 81, 'OnAfterValidateEvent', 'Account Type', false, false)]
     local procedure NS_T81OnAfterValidateAccountType(var Rec: Record "Gen. Journal Line"; var xRec: Record "Gen. Journal Line"; CurrFieldNo: Integer)
@@ -2232,29 +1939,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     end;
 
 
-    //PRJCTPR-221.AS.1.0 START
-    [EventSubscriber(ObjectType::Table, 81, 'OnAfterValidateEvent', 'Bal. Account Type', false, false)]
-    local procedure NS_T81OnAfterValidateBalAccountType(var Rec: Record "Gen. Journal Line"; var xRec: Record "Gen. Journal Line"; CurrFieldNo: Integer)
-    var
-        PurchSetup: Record "Purchases & Payables Setup";
-        SalesSetup: Record "Sales & Receivables Setup";
-    begin
-
-        //PRJCTPR-221.AS.1.0 START
-        if (Rec."Bal. Account Type" = Rec."Bal. Account Type"::Vendor) and (Rec."NS_Retention Ledger Code" = '') then begin
-            IF PurchSetup.Get THEN;
-            IF NOT PurchSetup."NS_Purchase Retention Inactive" THEN
-                Rec."NS_Retention Ledger Code" := PurchSetup."NS_Normal Vendor Ledger No.";
-        end;
-
-        if (Rec."Bal. Account Type" = Rec."Bal. Account Type"::Customer) and (Rec."NS_Retention Ledger Code" = '') then begin
-            If SalesSetup.Get then;
-            IF NOT SalesSetup."NS_Sales Retention Inactive" THEN
-                Rec."NS_Retention Ledger Code" := SalesSetup."NS_Normal Customer Ledger No.";
-        end;
-        //PRJCTPR-221.AS.1.0 END
-    end;
-    //PRJCTPR-221.AS.1.0 END
 
 
     //PPDA.1.0 Start
@@ -2267,8 +1951,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     //     isHandled := false;
     //     IF GenJournalLine."Journal Template Name" <> '' THEN BEGIN
     //         GenJnlTemplate.GET(GenJournalLine."Journal Template Name");
-    //IF GenJnlTemplate.Type = GenJnlTemplate.Type::Deposits THEN  //PE-267.JS.1.0 05MAR2024 option Deposits is removed by line commented
-    //  IF GenJnlTemplate.Type = GenJnlTemplate.Type::Payments THEN     //PE-267.JS.1.0 05MAR2024 line added
+    //         IF GenJnlTemplate.Type = GenJnlTemplate.Type::Deposits THEN
     //             isHandled := true;
     //     END;
     // end;
@@ -2307,25 +1990,9 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     //PPNA17.0 Opened End
 
 
-    //PRJCTPR-155.JS.1.0 18JULY2023-Start
-    [Obsolete('Replaced by Microsoft with OnAfterInitDefaultDimensionSources().', '23.0')]
-    //[EventSubscriber(ObjectType::Table, 81, 'OnAfterCreateDimTableIDs', '', false, false)]
+    [EventSubscriber(ObjectType::Table, 81, 'OnAfterCreateDimTableIDs', '', false, false)]
     //local procedure T81OnAfterCreateDimTableIDs(var GenJournalLine: Record "Gen. Journal Line"; FieldNo: Integer; var TableID: array[10] of Integer; var No: array[10] of Code[20])
-    // local procedure NS_T81OnAfterCreateDimTableIDs(var GenJournalLine: Record "Gen. Journal Line"; var TableID: array[10] of Integer; var No: array[10] of Code[20])
-    // var
-    //     ParamsForTables: Codeunit "NS_Parameters for Table Events";
-    //     NS_PurchSetup: Record "Purchases & Payables Setup";
-    // begin
-    //NS_PurchSetup.Get();s
-    //ProjectPro - start
-    //if (not NS_PurchSetup."NS_Purchase Retention Inactive") and (GenJournalLine."NS_Retention Ledger Code" > '') then
-    //    GenJournalLine.Validate("NS_Retention Ledger Code", GenJournalLine."NS_Retention Ledger Code");
-    //ProjectPro - end
-    // end;
-
-    [EventSubscriber(ObjectType::Table, 81, 'OnAfterInitDefaultDimensionSources', '', false, false)]
-    //local procedure NS_T81OnAfterInitDefaultDimensionSources(var GenJournalLine: Record "Gen. Journal Line"; var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]]; FromFieldNo: Integer) //PRJCTPR-155.JS.1.0 18SEP2023 line commented
-    local procedure NS_T81OnAfterInitDefaultDimensionSources(var GenJournalLine: Record "Gen. Journal Line"; var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]]) //PRJCTPR-155.JS.1.0 18SEP2023 line Add
+    local procedure NS_T81OnAfterCreateDimTableIDs(var GenJournalLine: Record "Gen. Journal Line"; var TableID: array[10] of Integer; var No: array[10] of Code[20])
     var
         ParamsForTables: Codeunit "NS_Parameters for Table Events";
         NS_PurchSetup: Record "Purchases & Payables Setup";
@@ -2336,7 +2003,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
             GenJournalLine.Validate("NS_Retention Ledger Code", GenJournalLine."NS_Retention Ledger Code");
         //ProjectPro - end
     end;
-    //PRJCTPR-155.JS.1.0 18JULY2023-end
 
 
 
@@ -2413,7 +2079,6 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         if not NS_PurchSetup."NS_Purchase Retention Inactive" then
             GenJournalLine."NS_Retention Ledger Code" := NS_PurchSetup."NS_Normal Vendor Ledger No.";
         //ProjectPro - end
-        GenJournalLine.Validate("Bal. Account No.");//PRJCTPR-396 AT.01 27June2024
     end;
 
     [EventSubscriber(ObjectType::Table, 83, 'OnAfterCopyItemJnlLineFromPurchLine', '', false, false)]
@@ -2500,31 +2165,26 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         JobJournalLine."Job No.",
         JobJournalLine."Currency Code");
         //PPNA16.0 Added End
-        //PRJ-1170.NK.1.0 Start
-        //with JobJournalLine do begin
-        CASE JobJournalLine.Type OF
-            JobJournalLine.Type::Resource:
-                IF (JobJournalLine."No." <> xJobJournalLine."No.") OR
-                   (JobJournalLine."Work Type Code" <> xJobJournalLine."Work Type Code") OR
-                   //ProjectPro - start
-                   //PE-68 Dk.1.0 10April2023 Start
-                   // (JobJournalLine."NS_Skill Class" <> xJobJournalLine."NS_Skill Class") OR
-                   (JobJournalLine."NS_Skill Class New" <> xJobJournalLine."NS_Skill Class New") OR
-                   //PE-68 Dk.1.0 10April2023 End
-                   (JobJournalLine.Quantity <> xJobJournalLine.Quantity) OR
-                   //ProjectPro - end
-                   (JobJournalLine."Unit of Measure Code" <> xJobJournalLine."Unit of Measure Code")
-                THEN
-                    ShouldRetrieveCostPrice := true;
-            //PRJ-232 VT1.0 16-04-20
-            JobJournalLine.Type::"G/L Account":
-                //ProjectPro - start
-                //ShouldRetrieveCostPrice := "No." <> TempNo; //PRJ-232 VT1.0 16-04-20
-                ShouldRetrieveCostPrice := (JobJournalLine."No." <> xJobJournalLine."No.");// or ("Job Cost Category" <> xJobJournalLine."Job Cost Category");//PRJ-232 VT1.0 16-04-20
-                                                                                           //ProjectPro - end    
+        with JobJournalLine do begin
+            CASE Type OF
+                Type::Resource:
+                    IF ("No." <> xJobJournalLine."No.") OR
+                       ("Work Type Code" <> xJobJournalLine."Work Type Code") OR
+                       //ProjectPro - start
+                       ("NS_Skill Class" <> xJobJournalLine."NS_Skill Class") OR
+                       (Quantity <> xJobJournalLine.Quantity) OR
+                       //ProjectPro - end
+                       ("Unit of Measure Code" <> xJobJournalLine."Unit of Measure Code")
+                    THEN
+                        ShouldRetrieveCostPrice := true;
+                //PRJ-232 VT1.0 16-04-20
+                Type::"G/L Account":
+                    //ProjectPro - start
+                    //ShouldRetrieveCostPrice := "No." <> TempNo; //PRJ-232 VT1.0 16-04-20
+                    ShouldRetrieveCostPrice := ("No." <> xJobJournalLine."No.");// or ("Job Cost Category" <> xJobJournalLine."Job Cost Category");//PRJ-232 VT1.0 16-04-20
+            //ProjectPro - end    
+            end;
         end;
-        //end;
-        //PRJ-1170.NK.1.0 End
     end;
 
     //PRJ-158/159 VT 25-03-20 Begin
@@ -3179,42 +2839,33 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     procedure NS_UpdateForecastWorksheet(JobNo: Code[20]; JobTaskNo: Code[20]; StatusDate: Date; TotalPct: Decimal; BillDate: Date; BillPct: Decimal)
     var
         JobForecast: Record "NS_Job Forecast";
-        JobForeCast2: Record "NS_Job Forecast";  //PRJ-1409.JS.1.0 01JUN2022
         Found: Boolean;
     begin
         //ProjectPro - start
-        //PRJ-1170.NK.1.0 Start
-        //with JobForecast do begin
-        //PRJ-1409.JS.1.0 01JUN2022 - start
-        JobForecast2.Reset();
-        JobForecast2.SetCurrentKey("NS_Job No.", "NS_Job Task No.", NS_Posted, "NS_Status Date");
-        JobForecast2.SetRange("NS_Job No.", JobNo);
-        if JobForecast2.Findfirst() then begin
+        with JobForecast do begin
             Found := false;
-            JobForecast.Reset();
-            JobForecast.SetCurrentKey("NS_Job No.", "NS_Job Task No.", NS_Posted, "NS_Status Date");
-            JobForecast.SetRange("NS_Job No.", JobNo);
-            JobForecast.SetRange("NS_Job Task No.", JobTaskNo);
-            JobForecast.SetRange(NS_Posted, false);
-            if JobForecast.FindSet(true) then
+            Reset;
+            SetCurrentKey("NS_Job No.", "NS_Job Task No.", NS_Posted, "NS_Status Date");
+            SetRange("NS_Job No.", JobNo);
+            SetRange("NS_Job Task No.", JobTaskNo);
+            SetRange(NS_Posted, false);
+            if FindSet(true) then
                 Found := true;
             if not Found then begin
-                JobForecast.Validate("NS_Job No.", JobNo);
-                JobForecast.Validate("NS_Job Task No.", JobTaskNo);
-                JobForecast."NS_Line No." := 100;
-                JobForecast.Insert();
+                Validate("NS_Job No.", JobNo);
+                Validate("NS_Job Task No.", JobTaskNo);
+                "NS_Line No." := 100;
+                Insert;
                 Found := true;
             end;
 
-            JobForecast."NS_Status Date" := StatusDate;
-            JobForecast."NS_Percent Complete" := TotalPct;
-            JobForecast."NS_Bill Date" := BillDate;
-            JobForecast."NS_Bill Percent" := BillPct;
+            "NS_Status Date" := StatusDate;
+            "NS_Percent Complete" := TotalPct;
+            "NS_Bill Date" := BillDate;
+            "NS_Bill Percent" := BillPct;
 
-            JobForecast.Modify();
-        end;   //PRJ-1409.JS.1.0 01JUN2022
-        //end;
-        //PRJ-1170.NK.1.0 End
+            Modify;
+        end;
         //ProjectPro - end
     end;
 
@@ -3265,10 +2916,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                     //ProjectPro - start
                     ShouldRetrieveCostPrice := ("No." <> NS_TempNo) or
                        ("Work Type Code" <> NS_TempWorkType) or
-                   //PE-68 Dk.1.0 10April2023 Start
-                   //  (JobPlanningLine."NS_Skill Class" <> JobPlanningLine.NS_TempSkillClass) or
-                   (JobPlanningLine."NS_Skill Class New" <> JobPlanningLine.NS_TempSkillClass) or
-                       //PE-68.Dk.1.0 10April2023 End
+                       ("NS_Skill Class" <> NS_TempSkillClass) or
                        ("Unit of Measure Code" <> NS_TempUM);
                 // ShouldRetrieveCostPrice := ((xJobPlanningLine."No." = '') AND (JobPlanningLine."No." <> '')) OR
                 //     (xJobPlanningLine."No." <> JobPlanningLine."No.");
@@ -3303,43 +2951,23 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         jobRecord1: Record Job;
         jobPlanLineRec: Record "Job Planning Line";
         jobPlanLineRec1: Record "Job Planning Line";
-        jobtaskrec: Record "Job Task";//PRJCTPR-123
-        NS_jobChangeRequest: Record Job; //PE-193.PS.2.0 12Dec2023
     begin
         JobSetupRec.Get();
 
         if JobSetupRec."NS_Check Master Job No." = true then begin
-            //PE-193.PS.2.0 12Dec2023 Start
-            NS_jobChangeRequest.SetRange("No.", Rec."NS_Ext Reference No.");
-            if NS_jobChangeRequest.FindSet() then begin
-                if NS_jobChangeRequest."NS_Job Class" <> NS_jobChangeRequest."NS_Job Class"::"Change Request" then begin
-                    //PE-193.PS.2.0 12Dec2023 End 
-                    if jobRecord.get(Rec."Job No.") then begin
-                        if jobRecord1.get(jobRecord."NS_Sub-Level to Job No.") then begin
-
-                            //PRJCTPR-123 START COMMENT
-                            // jobPlanLineRec.Reset();
-                            // jobPlanLineRec.SetRange("Job No.", jobRecord1."No.");
-                            // jobPlanLineRec.SetRange("Job Task No.", Rec."Job Task No.");
-                            // if not jobPlanLineRec.FindFirst() then BEGIN
-                            //PRJCTPR-123 END COMMENT
-
-                            //PRJCTPR-123 START ADD
-                            jobtaskrec.Reset();
-                            jobtaskrec.SetRange("Job No.", jobRecord1."No.");
-                            jobtaskrec.SetRange("Job Task No.", Rec."Job Task No.");
-                            if not jobtaskrec.FindFirst() then BEGIN
-                                //PRJCTPR-123 END ADD
-                                Error('This Job Task does not exist in the Master job “%1”, The planning Line would not be saved as the check box of “Check Master Job No.” is enabled on the Job Setup. To enter the Job Planning Lines in this task, it is required to create the same task on the Master Job.', jobRecord1."No."); //PRJCTPR-123
-                                jobPlanLineRec1.Reset();
-                                jobPlanLineRec1.SetRange("Job No.", Rec."Job No.");
-                                jobPlanLineRec1.SetRange("Job Task No.", Rec."Job Task No.");
-                                if jobPlanLineRec1.FindFirst() then
-                                    jobPlanLineRec1.Delete();
-                            end;
-                        end;
-                    end;//PE-193.PS.2.0 12Dec2023
-                end;//PE-193.PS.2.0 12Dec2023
+            if jobRecord.get(Rec."Job No.") then begin
+                if jobRecord1.get(jobRecord."NS_Sub-Level to Job No.") then begin
+                    jobPlanLineRec.Reset();
+                    jobPlanLineRec.SetRange("Job No.", jobRecord1."No.");
+                    jobPlanLineRec.SetRange("Job Task No.", Rec."Job Task No.");
+                    if not jobPlanLineRec.FindFirst() then BEGIN
+                        jobPlanLineRec1.Reset();
+                        jobPlanLineRec1.SetRange("Job No.", Rec."Job No.");
+                        jobPlanLineRec1.SetRange("Job Task No.", Rec."Job Task No.");
+                        if jobPlanLineRec1.FindFirst() then
+                            jobPlanLineRec1.Delete();
+                    end;
+                end;
             end;
         end;
     end;
@@ -3433,55 +3061,13 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     //PRJ-71.SK.1.0 End
     //PPNA17.0 Opened End
 
-    //PRJ-1058.AS.1.0 24DEC2021 start Blocked due to Appsource failure ---- Do not use this function
     //JD-48.AS.1.0 //PRJ-419.MS.1.0 - start
     [EventSubscriber(ObjectType::Table, 1003, 'OnAfterModifyEvent', '', false, false)]
     local procedure NS_T1003OnAfterModifyEvent(var Rec: Record "Job Planning Line")
     var
-    // JobForeCastbySeg: Record "NS_Job Forecast by Seg code";
-    // JobtaskRec: Record "Job Task";
-    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks
-    // Rec_LaborratebyTask: Record "NS_Labor rate by task list";
-    begin
-        // JobtaskRec.Reset();
-        // JobtaskRec.SetRange("Job No.", Rec."Job No.");
-        // JobtaskRec.SetRange("Job Task No.", Rec."Job Task No.");
-        // if JobtaskRec.FindSet then begin
-        //     if JobtaskRec."Job Task Type" <> JobtaskRec."Job Task Type"::Posting then begin
-        //         JobForeCastbySeg.Reset();
-        //         JobForeCastbySeg.SetRange("NS_Job No.", Rec."Job No.");
-        //         JobForeCastbySeg.SetRange("NS_Job Task No.", rec."Job Task No.");
-        //         JobForeCastbySeg.SetRange("NS_Segment Code", rec."NS_Segment Code");
-        //         if JobForeCastbySeg.FindFirst() then
-        //             JobForeCastbySeg.Deleteall;
-        //     end;
-        // end;
-        // //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start            
-        // IF Rec.Type = Rec.Type::Resource then begin
-        //     IF Rec."NS_Shortcut Dimension 1 Code" <> xRec."NS_Shortcut Dimension 1 Code" then begin
-        //         Rec_LaborratebyTask.Reset();
-        //         Rec_LaborratebyTask.SetRange("NS_Dimension Value code", Rec."NS_Shortcut Dimension 1 Code");
-        //         Rec_LaborratebyTask.SetRange("NS_Task Code", Rec."Job Task No.");
-        //         IF Rec_LaborratebyTask.FindFirst() then begin
-        //             Rec.Validate("Unit Cost", Rec_LaborratebyTask."NS_Labor Rate");
-        //             Rec.Modify();
-        //         end;
-        //     end;
-        // end;
-        // //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-    end;
-    //JD-48.AS.1.0 //PRJ-419.MS.1.0 - end
-    //PRJ-1058.AS.1.0 24DEC2021 End Blocked due to Appsource failure ---- Do not use this function
-
-    //PRJ-1058.AS.1.0 24DEC2021 start Created copy of procedure & event NS_T1003OnAfterModifyEvent() due to Appsource failure Created copy of procedure & event NS_T1003OnAfterModifyEvent() due to Appsource failure
-    //JD-48.AS.1.0 //PRJ-419.MS.1.0 - start
-    [EventSubscriber(ObjectType::Table, 1003, 'OnAfterModifyEvent', '', false, false)]
-    local procedure NS_T1003OnAfterModifyEvent1(var Rec: Record "Job Planning Line"; var xRec: Record "Job Planning Line")
-    var
         JobForeCastbySeg: Record "NS_Job Forecast by Seg code";
         JobtaskRec: Record "Job Task";
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks
-        Rec_LaborratebyTask: Record "NS_Labor rate by task list";
+
     begin
         JobtaskRec.Reset();
         JobtaskRec.SetRange("Job No.", Rec."Job No.");
@@ -3496,22 +3082,8 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                     JobForeCastbySeg.Deleteall;
             end;
         end;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start            
-        IF Rec.Type = Rec.Type::Resource then begin
-            IF Rec."NS_Shortcut Dimension 1 Code" <> xRec."NS_Shortcut Dimension 1 Code" then begin
-                Rec_LaborratebyTask.Reset();
-                Rec_LaborratebyTask.SetRange("NS_Dimension Value code", Rec."NS_Shortcut Dimension 1 Code");
-                Rec_LaborratebyTask.SetRange("NS_Task Code", Rec."Job Task No.");
-                IF Rec_LaborratebyTask.FindFirst() then begin
-                    Rec.Validate("Unit Cost", Rec_LaborratebyTask."NS_Labor Rate");
-                    Rec.Modify();
-                end;
-            end;
-        end;
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
     end;
     //JD-48.AS.1.0 //PRJ-419.MS.1.0 - end
-    //PRJ-1058.AS.1.0 24DEC2021 end Created copy of procedure & event NS_T1003OnAfterModifyEvent() due to Appsource failure Created copy of procedure & event NS_T1003OnAfterModifyEvent() due to Appsource failure
 
     //DMT TTU kodas pradzia
     //DMT TTU kodo pabaiga
@@ -3733,8 +3305,8 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         CreateOpportunityNotification.SETDATA(
           NS_CU783GetSegmentLineNotificationDataItemID, NS_CU783RecordsToXml(SegmentLine, InteractionLogEntry));
         CreateOpportunityNotification.SCOPE(NOTIFICATIONSCOPE::LocalScope);
-        // CreateOpportunityNotification.ADDACTION(
-        //   CreateOpportunityCaptionTxt, CODEUNIT::"Relationship Performance Mgt.", 'CreateOpportunityFromSegmentLineNotification');
+        CreateOpportunityNotification.ADDACTION(
+          CreateOpportunityCaptionTxt, CODEUNIT::"Relationship Performance Mgt.", 'CreateOpportunityFromSegmentLineNotification');
         CreateOpportunityNotification.SEND;
     end;
 
@@ -3773,8 +3345,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         SalesHeader: Record "Sales Header";
     begin
         JobSetup_Tbl.Get();
-        //SalesHeader.Get(rec."Document Type", rec."Document No."); // PRJCTPR-227 AT.0.1 11Dec2023 Commented 
-        IF SalesHeader.Get(rec."Document Type", rec."Document No.") THEN;// PRJCTPR-227 AT.0.1 11Dec2023
+        SalesHeader.Get(rec."Document Type", rec."Document No.");
         if (Rec.Type = Rec.Type::"G/L Account") OR (Rec.Type = Rec.Type::NS_Ledger) then begin
             if Job_Tbl.Get(SalesHeader."NS_Job No.") then begin
                 // if Job_Tbl."NS_Gen. Prod. Posting Group" <> '' then//PRJ-831.AS.1.0 12OCT2021 Comment old
@@ -3783,94 +3354,12 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                 if Job_Tbl."NS_Gen. Prod. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
                     Rec."Gen. Prod. Posting Group" := Job_Tbl."NS_Gen. Prod. Posting Group New"//PRJ-831.AS.1.0 12OCT2021 Add New
                 else
-                    //Rec."Gen. Prod. Posting Group" := JobSetup_Tbl."NS_Prog. Bill Gen. ProdPostGr.";//PRJ-1684.AS.1.0 Comment
-                Rec."Gen. Prod. Posting Group" := JobSetup_Tbl."NS_ProgBillGenProdPostGr New";//PRJ-1684.AS.1.0 Add
+                    Rec."Gen. Prod. Posting Group" := JobSetup_Tbl."NS_Prog. Bill Gen. ProdPostGr.";
             end;
         end;
     end;
 
     //PRJ-333.AS.1.0 27 JULY 2020 - end
-    //PE-62.GK.1.0 29Mar2023 start
-    [EventSubscriber(ObjectType::Table, 39, 'OnBeforeValidateEvent', 'No.', false, false)]
-    local procedure NS_T39NoOnBeforeValidateEvent(var Rec: Record "Purchase Line"; var xRec: Record "Purchase Line")
-    var
-        //Txt001Lbl: label 'You are changing %1 %2 that is linked to the Job Material Planning schedule, Do you want to Continue? '; //PRJCTPR-115.AT.1.0 17May2023 change the new message
-        Txt001Lbl: label 'You are changing  %1 %2 that is linked to the Job Material Planning schedule, linking will be detached. Do you want to continue?'; //PRJCTPR-115.AT.1.0 17May2023 change the new message
-        Txt001: text[20];
-    begin
-        if (Rec."NS_JMP Document No." <> '') AND (Rec."NS_JMP Line No." <> 0) AND (Rec."Quantity Invoiced" = 0) then begin
-            if Rec.Type = Rec.Type::Item then
-                Txt001 := 'an'
-            else
-                Txt001 := 'a';
-            if not confirm(StrSubstNo(Txt001Lbl, Txt001, Rec.Type), false) then
-                Error('');
-
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, 39, 'OnBeforeDeleteEvent', '', false, false)]
-    local procedure NS_T39NoOnBeforeDeleteEvent(var Rec: Record "Purchase Line"; RunTrigger: Boolean)
-    var
-        //Txt002Lbl: label 'You are changing %1 %2 that is linked to the Job Material Planning schedule, Do you want to Continue? '; //PRJCTPR-115.AT.1.0 17May2023 change the new message
-        Txt002Lbl: label 'You are changing  %1 %2 that is linked to the Job Material Planning schedule, linking will be detached. Do you want to continue?'; //PRJCTPR-115.AT.1.0 17May2023 change the new message
-        NSPurHeader: Record "Purchase Header";
-        Txt001: text[20];
-    begin
-        if (Rec."NS_JMP Document No." <> '') AND (Rec."NS_JMP Line No." <> 0) AND (Rec."Quantity Invoiced" = 0) AND (Rec."Qty. Rcd. Not Invoiced" = 0) then begin
-            if Rec.Type = Rec.Type::Item then
-                Txt001 := 'an'
-            else
-                Txt001 := 'a';
-            NSPurHeader.Reset();
-            NSPurHeader.SetRange("Document Type", Rec."Document Type");
-            NSPurHeader.SetRange("No.", Rec."Document No.");
-            if NSPurHeader.findfirst() then
-                if (NSPurHeader.Invoice = false) and (RunTrigger) then
-                    if not confirm(StrSubstNo(Txt002Lbl, Txt001, Rec.Type), false) then
-                        Error('');
-
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, 38, 'OnBeforeOnDelete', '', false, false)]
-    local procedure NS_T38NoOnBeforeDeleteEvent(var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean)
-    var
-        PurchLine: Record "Purchase Line";
-        //Txt002Lbl: label 'You are deleting a Purchase %1 that is linked to the Job Material Planning schedule, Do you want to Continue? ';//PRJCTPR-115.AT.1.0 17May2023 change the new message
-        Txt002Lbl: label 'You are deleting a Purchase %1 that is linked to the Job Material Planning schedule, linking will be detached. Do you want to continue? ';//PRJCTPR-115.AT.1.0 17May2023 change the new message
-    begin
-        if (PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order) OR (PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Invoice) then begin
-            //PRJCTPR-115.AT.1.0 17May2023 change the new message Start
-            // PurchLine.Reset();
-            // PurchLine.setrange("Document Type", PurchaseHeader."Document Type");
-            // PurchLine.setrange("Document No.", PurchaseHeader."No.");
-            // PurchLine.SetFilter("NS_JMP Document No.", '<>%1', '');
-            // PurchLine.SetFilter("NS_JMP Line No.", '<>%1', 0);
-            // PurchLine.SetRange("Quantity Invoiced", 0);
-            // if PurchLine.findfirst then begin
-            //PRJCTPR-115.AT.1.0 17May2023 change the new message End
-            If PurchaseHeader."NS_Created By JMP" then begin //PRJCTPR-115.AT.1.0 17May2023 change the new message
-                if not confirm(StrSubstNo(Txt002Lbl, PurchaseHeader."Document Type"), false) then begin
-                    Error('');
-                    IsHandled := true;
-                end;
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, 39, 'OnAfterValidateEvent', 'No.', false, false)]
-    local procedure NS_T39NoOnAfterValidateEvent(var Rec: Record "Purchase Line"; var xRec: Record "Purchase Line")
-    var
-
-    begin
-        if Rec."No." = '' then begin
-            Rec."Job Task No." := '';
-            Rec."NS_Job Cost Category" := '';
-            Rec.Modify();
-        end;
-    end;
-    //PE-62.GK.1.0 29Mar2023 end
     //PRJ-394 start
     [EventSubscriber(ObjectType::Table, 1003, 'OnbeforeInsertEvent', '', false, false)]
     local procedure NS_T1003OnBeforeInsertEvent(var Rec: Record "job planning line"; RunTrigger: Boolean)
@@ -3912,7 +3401,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
                 else
                     if Job."Global Dimension 2 Code" = Rec."Dimension Value Code" then
                         PlngLine."NS_Shortcut Dimension 2 Code" := rec."Dimension Value Code";
-            //PlngLine.Modify();   //PRJ-1670.JS.1.0 line commented
+                PlngLine.Modify();
             until PlngLine.Next() = 0;
     end;
 
@@ -3943,15 +3432,13 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         Job: Record Job;
         PurchHeader: Record "Purchase Header";
     begin
-        //PRJ-1610.GK.1.0 13Sept2022 start-Comment
-        // IF PurchHeader.get(Rec."Document Type", Rec."No.") then;
-        // IF Job.Get(PurchHeader."NS_Job No.") then
-        //     // IF job."NS_Gen. Bus. Posting Group" <> '' then //PRJ-831.AS.1.0 12OCT2021 Comment old
-        //     //     Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group"); //PRJ-831.AS.1.0 12OCT2021 Comment old
+        IF PurchHeader.get(Rec."Document Type", Rec."No.") then;
+        IF Job.Get(PurchHeader."NS_Job No.") then
+            // IF job."NS_Gen. Bus. Posting Group" <> '' then //PRJ-831.AS.1.0 12OCT2021 Comment old
+            //     Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group"); //PRJ-831.AS.1.0 12OCT2021 Comment old
 
-        //         IF job."NS_Gen. Bus. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
-        //         Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group New");//PRJ-831.AS.1.0 12OCT2021 Add New
-        //PRJ-1610.GK.1.0 13Sept2022 end
+                IF job."NS_Gen. Bus. Posting Group New" <> '' then//PRJ-831.AS.1.0 12OCT2021 Add New
+                Rec.VALIDATE(Rec."Gen. Bus. Posting Group", Job."NS_Gen. Bus. Posting Group New");//PRJ-831.AS.1.0 12OCT2021 Add New
     end;
     //PRJ-488.MS.1.0 End
 
@@ -4010,10 +3497,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         if (LookupType <> OptionLookupBuffer."Lookup Type"::Purchases) then
             exit;
-        //PRJ-1165.JS.1.0 24JAN2022 - Start
-        //IndexofLedger := PurchaseLine.Type.Ordinals.IndexOf(PurchaseLine.Type::NS_Ledger.AsInteger()) - 1;
-        IndexofLedger := 14021100;
-        //PRJ-1165.JS.1.0 24JAN2022 - end 
+        IndexofLedger := PurchaseLine.Type.Ordinals.IndexOf(PurchaseLine.Type::NS_Ledger.AsInteger()) - 1;
         if Option = IndexofLedger then begin
             Result := true;
             Handled := true;
@@ -4030,10 +3514,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         if (rec."Lookup Type" <> Rec."Lookup Type"::Purchases) then
             exit;
-        //PRJ-1165.JS.1.0 24JAN2022 - Start    
-        //IndexofLedger := PurchaseLine.Type.Ordinals.IndexOf(PurchaseLine.Type::NS_Ledger.AsInteger()) - 1;
-        IndexofLedger := 14021100;
-        //PRJ-1165.JS.1.0 24JAN2022 - end
+        IndexofLedger := PurchaseLine.Type.Ordinals.IndexOf(PurchaseLine.Type::NS_Ledger.AsInteger()) - 1;
         if rec.ID = IndexofLedger then begin
             Rec.ID := "purchase line type"::NS_Ledger;
             Rec."Option Caption" := format("Purchase Line Type"::NS_Ledger);
@@ -4049,10 +3530,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         if (LookupType <> OptionLookupBuffer."Lookup Type"::Sales) then
             exit;
-        //PRJ-1165.JS.1.0 24JAN2022 - Start    
-        //IndexofLedger := SalesLine.Type.Ordinals.IndexOf(SalesLine.Type::NS_Ledger.AsInteger()) - 1;
-        IndexofLedger := 14021100;
-        //PRJ-1165.JS.1.0 24JAN2022 - end
+        IndexofLedger := SalesLine.Type.Ordinals.IndexOf(SalesLine.Type::NS_Ledger.AsInteger()) - 1;
         if Option = IndexofLedger then begin
             Result := true;
             Handled := true;
@@ -4067,10 +3545,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
         if (rec."Lookup Type" <> Rec."Lookup Type"::Sales) then
             exit;
-        //PRJ-1165.JS.1.0 24JAN2022 - Start    
-        //IndexofLedger := SaleLine.Type.Ordinals.IndexOf(SaleLine.Type::NS_Ledger.AsInteger()) - 1;
-        IndexofLedger := 14021100;
-        //PRJ-1165.JS.1.0 24JAN2022 - end
+        IndexofLedger := SaleLine.Type.Ordinals.IndexOf(SaleLine.Type::NS_Ledger.AsInteger()) - 1;
         if rec.ID = IndexofLedger then begin
             Rec.ID := "sales line type"::NS_Ledger;
             Rec."Option Caption" := format("sales Line Type"::NS_Ledger);
@@ -4220,8 +3695,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
         JobLedEntry.SetRange("Job Task No.", JobForecast."NS_Job Task No.");
         JobLedEntry.SetFilter(Type, '%1', JobLedEntry.Type::Resource);
         JobLedEntry.SetFilter("Entry Type", '%1', JobLedEntry."Entry Type"::Usage);
-        //JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR'); //PRJ-1524.GK.1.0 25July2022
-        JobLedEntry.SetFilter("Unit of Measure Code", '%1|%2', 'HR', 'HOUR'); //PRJ-1524.GK.1.0 25July2022
+        JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');
         if DefaultStatusDate <> 0D then
             JobLedEntry.SetFilter("Posting Date", '%1..%2', 0D, DefaultStatusDate);
         JobLedEntry.CalcSums(Quantity);
@@ -4451,13 +3925,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     var
         CurrExchRate: Record "Currency Exchange Rate";
         Currency: Record Currency;
-        IsHandlebool1: Boolean;//SSCM-15.AS.25072024  //PE-344.JS.1.0 26July2024
     begin
-        //SSCM-15.AS.25072024 START //PE-344.JS.1.0 26July2024
-        NSOnBeforeNS_R1095OnPostTotalCostAdjustmentOnBeforeJobLedgEntryModify(JobLedgerEntry, ItemLedgerEntry, IsHandlebool1);
-        if IsHandlebool1 then
-            exit;
-        //SSCM-15.AS.25072024 END //PE-344.JS.1.0 26July2024
         if JobLedgerEntry."NS_Burden Amount" > 0 then begin
             JobLedgerEntry."Total Cost" := JobLedgerEntry."Total Cost" + JobLedgerEntry."NS_Burden Amount";
             if JobLedgerEntry."Currency Code" <> '' then
@@ -4473,13 +3941,7 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     [EventSubscriber(ObjectType::Report, 1095, 'OnBeforePostTotalCostAdjustment', '', false, false)]
     LOCAL procedure NS_R1095OnBeforePostTotalCostAdjustment(ItemLedgerEntry: Record "Item Ledger Entry"; JobLedgerEntryCostValueACY: Decimal; JobLedgerEntryCostValue: Decimal; var AdjustJobCost: Decimal; var AdjustJobCostLCY: Decimal; var IsHandled: Boolean; var JobLedgEntry: Record "Job Ledger Entry"; var NoOfJobLedgEntry: Integer)
     var
-        IsHandlebool: Boolean;//SSCM-15.AS.25072024  //PE-344.JS.1.0 26July2024
     begin
-        //SSCM-15.AS.25072024 START  //PE-344.JS.1.0 26July2024
-        NSOnBeforeNS_R1095OnBeforePostTotalCostAdjustment(ItemLedgerEntry, JobLedgerEntryCostValueACY, JobLedgerEntryCostValue, AdjustJobCost, AdjustJobCostLCY, IsHandled, JobLedgEntry, NoOfJobLedgEntry, IsHandlebool);
-        if IsHandlebool then
-            exit;
-        //SSCM-15.AS.25072024 END  //PE-344.JS.1.0 26July2024
         if JobLedgEntry.Adjusted = true then
             IsHandled := true;
     end;
@@ -4558,582 +4020,5 @@ codeunit 14021106 "NS_Event Subscr. Tables"
     begin
     end;
     //PPDA.1.0 End
-
-    //PRJ-1106.GK.1.0 29Dec2021 start
-    [EventSubscriber(ObjectType::Table, 14021301, 'OnBeforeModifyEvent', '', false, false)]
-    local procedure T14021301OnBeforeModifyEvent(var Rec: Record "NS_Subcontract Lines"; var xRec: Record "NS_Subcontract Lines")
-    var
-
-        NS_PurchLine: Record "Purchase Line";
-        NS_PurInvHeader: Record "Purch. Inv. Header";
-        NS_PurInvLine: Record "Purch. Inv. Line";
-    begin
-        NS_PurchLine.Reset();
-        NS_PurchLine.SetRange("Document Type", NS_PurchLine."Document Type"::Order);
-        NS_PurchLine.SetRange("Document No.", Rec."NS_PO No.");
-        NS_PurchLine.SetRange("Line No.", Rec."NS_PO Line No.");
-        NS_PurchLine.SetFilter("Quantity Received", '<>%1', 0);
-        if NS_PurchLine.FindFirst() then begin
-            Error('You can not Modify the Line because PO Line is already being posted');
-        end;
-        NS_PurInvHeader.Reset();
-        NS_PurInvHeader.SetRange("Order No.", Rec."NS_PO No.");
-        if NS_PurInvHeader.FindFirst() then begin
-            NS_PurInvLine.Reset();
-            NS_PurInvLine.SetRange("Document No.", NS_PurInvHeader."No.");
-            NS_PurInvLine.SetRange("Line No.", Rec."NS_PO Line No.");
-            NS_PurInvLine.SetFilter(Quantity, '<>%1', 0);//PRJ-1142.AS.1.0 18 JAN2022
-            if NS_PurInvLine.FindFirst() then begin
-                Error('You can not Modify the Line because PO Line is already being posted');
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, 14021301, 'OnBeforeValidateEvent', 'NS_PO No.', false, false)]
-    local procedure T14021301OnBeforeValidatePONoEvent(var Rec: Record "NS_Subcontract Lines"; var xRec: Record "NS_Subcontract Lines")
-    var
-
-        NS_PurchLine: Record "Purchase Line";
-        NS_PurInvHeader: Record "Purch. Inv. Header";
-        NS_PurInvLine: Record "Purch. Inv. Line";
-    begin
-
-        NS_PurchLine.Reset();
-        NS_PurchLine.SetRange("Document Type", NS_PurchLine."Document Type"::Order);
-        NS_PurchLine.SetRange("Document No.", xRec."NS_PO No.");
-        NS_PurchLine.SetRange("Line No.", Rec."NS_PO Line No.");
-        NS_PurchLine.SetFilter("Quantity Received", '<>%1', 0);
-        if NS_PurchLine.FindFirst() then begin
-            Error('You can not Modify the Line because PO Line is already being posted');
-        end;
-        NS_PurInvHeader.Reset();
-        NS_PurInvHeader.SetRange("Order No.", xRec."NS_PO No.");
-        if NS_PurInvHeader.FindFirst() then begin
-            NS_PurInvLine.Reset();
-            NS_PurInvLine.SetRange("Document No.", NS_PurInvHeader."No.");
-            NS_PurInvLine.SetRange("Line No.", Rec."NS_PO Line No.");
-            NS_PurInvLine.SetFilter(Quantity, '<>%1', 0);//PRJ-1142.AS.1.0 18 JAN2022
-            if NS_PurInvLine.FindFirst() then begin
-                Error('You can not Modify the Line because PO Line is already being posted');
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, 14021301, 'OnBeforeValidateEvent', 'NS_PO Line No.', false, false)]
-    local procedure T14021301OnBeforeValidatePOLineNoEvent(var Rec: Record "NS_Subcontract Lines"; var xRec: Record "NS_Subcontract Lines")
-    var
-
-        NS_PurchLine: Record "Purchase Line";
-        NS_PurInvHeader: Record "Purch. Inv. Header";
-        NS_PurInvLine: Record "Purch. Inv. Line";
-    begin
-
-        NS_PurchLine.Reset();
-        NS_PurchLine.SetRange("Document Type", NS_PurchLine."Document Type"::Order);
-        NS_PurchLine.SetRange("Document No.", Rec."NS_PO No.");
-        NS_PurchLine.SetRange("Line No.", xRec."NS_PO Line No.");
-        NS_PurchLine.SetFilter("Quantity Received", '<>%1', 0);
-        if NS_PurchLine.FindFirst() then begin
-            Error('You can not Modify the Line because PO Line is already being posted');
-        end;
-        NS_PurInvHeader.Reset();
-        NS_PurInvHeader.SetRange("Order No.", Rec."NS_PO No.");
-        if NS_PurInvHeader.FindFirst() then begin
-            NS_PurInvLine.Reset();
-            NS_PurInvLine.SetRange("Document No.", NS_PurInvHeader."No.");
-            NS_PurInvLine.SetRange("Line No.", xRec."NS_PO Line No.");
-            NS_PurInvLine.SetFilter(Quantity, '<>%1', 0);//PRJ-1142.AS.1.0 18 JAN2022
-            if NS_PurInvLine.FindFirst() then begin
-                Error('You can not Modify the Line because PO Line is already being posted');
-            end;
-        end;
-    end;
-
-
-    //PRJ-1106.GK.1.0 29Dec2021 end
-
-    //FGH-16.AS.1.0 18JAN2022 START
-    [EventSubscriber(ObjectType::Table, database::NS_RevenueRecSummaryTab, 'OnBeforeInsertEvent', '', false, false)]
-    local procedure UpdatePOCMethod(var Rec: Record NS_RevenueRecSummaryTab)
-    var
-        JobRec: Record Job;
-    begin
-        IF Rec."NS_Job No." <> '' then
-            IF JobRec.get(Rec."NS_Job No.") then
-                Rec."NS_POC Method" := JobRec."NS_POC Method";
-    end;
-    //FGH-16.AS.1.0 18JAN2022 END
-
-    //PRJ-1299.JS.1.0 20APR2022 - Start
-    local procedure ListUpdateByTaskTotals(VAR JobForecast: record "NS_Job Forecast"; LCurrentJobNo: Code[20]; LCurrentTaskManager: Code[100])
-    var
-        StartBillingPeriod: Date;
-        EndBillingPeriod: Date;
-        //JobForecast: Record "Job Forecast";
-        CurrentJobNo: Code[20];
-        CurrentTaskManager: Code[100];
-        ViewOpenTaskonly: Boolean;
-        JFWorsheetpage: Page "NS_Job Forecast Worksheet";
-    begin
-        JobForecast.RESET;
-        JobForecast.FILTERGROUP := 2;
-        if ViewOpenTaskonly = true then
-            JobForecast.SetFilter("NS_View Open Tasks Only", '%1', true);
-        JobForecast.SETRANGE("NS_Job No.");
-        JobForecast.SETRANGE("NS_Task Manager");
-        if LCurrentJobNo > '' then
-            JobForecast.SETRANGE("NS_Job No.", LCurrentJobNo);
-        if LCurrentTaskManager > '' then
-            JobForecast.SETRANGE("NS_Task Manager", LCurrentTaskManager);
-        JobForecast.SETRANGE(NS_Posted, false);
-        JobForecast.FILTERGROUP := 0;
-        if JobForecast.FINDSET then;
-        JobForecast.NS_GetNewTasksByTaskTotalsFBTT(LCurrentJobNo, LCurrentTaskManager);
-    end;
-
-    /// <summary>
-    /// POpenForecastpageByTaskTotals.
-    /// </summary>
-    /// <param name="JobNo">Code[20].</param>
-    /// <param name="DefaultStatusDate">Date.</param>
-    /// <param name="NextBillDate">Date.</param>
-    /// <param name="JobForecast">VAR Record "NS_Job Forecast".</param>
-    procedure POpenForecastpageByTaskTotals(JobNo: Code[20]; DefaultStatusDate: Date; NextBillDate: Date; var JobForecast: Record "NS_Job Forecast")
-    var
-        PreviousJobForecastNew: Record "NS_Job Forecast";
-        PreviousJobForecastNew2: Record "NS_Job Forecast";
-        ViewOpenTaskonly: Boolean;
-        CurrentJobNo: Code[20];
-        JobsRec: Record Job;
-        PersonResponsible: Code[20];
-        ManagerValue: Code[20];
-        JobDescription: Text;
-        CurrentTaskManager: Code[100];
-        TaskManagerName: Text;
-        TaskManagerSentIn: Code[20];
-        Resource: Record Resource;
-        Job: Record Job;
-        JobNoSentIn: Code[20];
-        AsOfDateSentIn: Date;
-        FilterMonth: Integer;
-    begin
-        ViewOpenTaskonly := false;
-        JobForecast.Reset();
-        JobForecast.SETCURRENTKEY("NS_Job No.", "NS_Job Task No.", NS_Posted, "NS_Status Date");
-
-        CurrentJobNo := JobNo;
-        JobDescription := '';
-        if CurrentJobNo > '' then
-            if Job.GET(CurrentJobNo) then begin
-                JobDescription := Job.Description;
-                // CurrPage.SAVERECORD;
-            end;
-
-        if JobsRec.get(CurrentJobNo) then
-            PersonResponsible := JobsRec."Person Responsible"
-        else
-            PersonResponsible := '';
-        if JobsRec.get(CurrentJobNo) then
-            ManagerValue := JobsRec.NS_Manager
-        Else
-            ManagerValue := '';
-
-        CurrentTaskManager := TaskManagerSentIn;
-        TaskManagerName := '';
-        if CurrentTaskManager > '' then
-            if Resource.GET(CurrentTaskManager) then begin
-                TaskManagerName := Resource.Name;
-                // CurrPage.SAVERECORD;
-            end;
-
-        DefaultStatusDate := AsOfDateSentIn;
-        NextBillDate := 0D;
-        if DefaultStatusDate > 0D then begin
-            FilterMonth := DATE2DMY(DefaultStatusDate, 2);
-            case true of
-                FilterMonth <= 10:
-                    NextBillDate := DMY2DATE(1, DATE2DMY(DefaultStatusDate, 2) + 2, DATE2DMY(DefaultStatusDate, 3)) - 1;
-                FilterMonth = 11:
-                    NextBillDate := DMY2DATE(31, 12, DATE2DMY(DefaultStatusDate, 3));
-                else
-                    NextBillDate := DMY2DATE(31, 1, DATE2DMY(DefaultStatusDate, 3) + 1);
-            end;
-        end;
-
-        ListUpdateByTaskTotals(JobForecast, CurrentJobNo, CurrentTaskManager);
-
-        JobForecast.FILTERGROUP := 2;
-        if CurrentJobNo > '' then
-            JobForecast.SETRANGE("NS_Job No.", CurrentJobNo);
-        if CurrentTaskManager > '' then
-            JobForecast.SETRANGE("NS_Task Manager", CurrentTaskManager);
-        JobForecast.SETRANGE(NS_Posted, false);
-        JobForecast.FILTERGROUP := 1;
-        ListUpdateByTaskTotals(JobForecast, CurrentJobNo, CurrentTaskManager);
-    end;
-
-
-    [EventSubscriber(objectType::table, database::"NS_Job Forecast", 'OnOpenJobForcastPageTaskTotals', '', false, false)]
-    local procedure P14021187_OnOpenForcastPageByTaskTotal(JobNo: Code[20]; DefaultStatusDate: Date; NextBillDate: Date; var JobForecast: Record "NS_Job Forecast")
-    begin
-        POpenForecastpageByTaskTotals(JobNo, DefaultStatusDate, NextBillDate, JobForecast);
-    end;
-    //PRJ-1299.JS.1.0 20APR2022 - end    
-    //PRJ-1436.VC.1.0 08JUL2022 Commented Start
-    // //PRJ-1436.JS.1.0 08JUN2022 - Start
-    // [EventSubscriber(ObjectType::Table, 210, 'OnAfterUpdateAllAmounts', '', false, false)]
-    // local procedure NS_T210OnAfterUpdateAllAmounts(var JobJournalLine: Record "Job Journal Line"; xJobJournalLine: Record "Job Journal Line")
-    // var
-    //     NS_Job: Record Job;
-    //     JobTask: record "job Task";
-    //     NS_JobsSetup2: record "Jobs Setup";
-    //     GLSetup: record "General Ledger Setup";
-    //     BurdenPercent: decimal;
-    // begin
-    //     IF ((JobJournalLine."Entry Type" = JobJournalLine."Entry Type"::Usage) and (JobJournalLine.Type = JobJournalLine.Type::Resource)) then begin
-    //         if NS_Job.get(JobJournalLine."Job No.") then;
-    //         BurdenPercent := JobTask.NS_GetTaskBurdenPercent(NS_Job, JobJournalLine."Job Task No.") / 100;
-    //         NS_JobsSetup2.get();
-    //         IF NS_JobsSetup2."NS_Calculate Indirect Burden" then begin
-    //             JobJournalLine."NS_Burden Amount" := ROUND(JobJournalLine."Total Cost (LCY)" * BurdenPercent, GLSetup."Amount Rounding Precision");
-
-    //         end;
-
-    //     end;
-    // end;
-    // //PRJ-1436.JS.1.0 08JUN2022 - end
-    //PRJ-1436.VC.1.0 08JUL2022 Commented End
-    //PRJCTPR-84.NK.1.0 13Mar2023 Start
-    [EventSubscriber(ObjectType::Table, 81, 'OnAfterValidateEvent', 'Job Quantity', false, false)]
-    local procedure NS_(var Rec: Record "Gen. Journal Line")
-    var
-    begin
-        if Rec."Account Type" <> Rec."Account Type"::"G/L Account" then begin
-            Rec."Job Unit Cost" := Abs(Rec.Amount / Rec."Job Quantity");
-            Rec."Job Unit Cost (LCY)" := Abs(Rec."Amount (LCY)" / Rec."Job Quantity");
-            Rec."Job Total Cost" := Abs(Rec.Amount);
-            Rec."Job Total Cost (LCY)" := Abs(Rec."Amount (LCY)");
-        end;
-    end;
-    //PRJCTPR-84.NK.1.0 13Mar2023 End
-
-    //PE-47.PS.1.0 Start
-    [EventSubscriber(ObjectType::Table, Database::Job, 'OnBeforeInsertEvent', '', false, false)]
-    local procedure OnBeforeInsertEventJob(var Rec: Record Job; RunTrigger: Boolean)
-    begin
-        Rec."NS_New Run B_OpenJob B Log" := false; //PRJCTPR-122.PS.1.0 14Jun2023
-        Rec."NS_New Billable/Inv Dif" := 0; //PRJCTPR-122.PS.1.0 14Jun2023
-    end;
-
-    //PE-47.PS.1.0 End
-
-    //PE-136.JS.1.0 03Aug2023 - Start
-    [EventSubscriber(ObjectType::Table, Database::"G/L Entry", 'OnAfterCopyGLEntryFromGenJnlLine', '', false, false)]
-    local procedure T17_OnAfterCopyGLEntryFromGenJnlLine(var GLEntry: Record "G/L Entry"; var GenJournalLine: Record "Gen. Journal Line")
-    begin
-        GLEntry."NS_RevRec GenJnl Document No." := GenJournalLine."NS_RevRec GenJnl Document No.";
-    end;
-    //PE-136.JS.1.0 03Aug2023 - end
-
-    //PE-200.AS.1.0 24SEPT2023 START
-    [EventSubscriber(ObjectType::Table, Database::"Gen. Journal Line", 'OnAfterCopyGenJnlLineFromSalesHeader', '', False, false)]
-    local procedure NS_GenJNLLineOnAfterCopyGenJnlLineFromSalesHeader(SalesHeader: Record "Sales Header"; var GenJournalLine: Record "Gen. Journal Line")
-    var
-    begin
-        GenJournalLine."NS_Draw No." := SalesHeader."NS_Draw No.";
-    end;
-    //PE-200.AS.1.0 24SEPT2023 END
-
-    //PRJCTPR-222.JS.1.0 08NOV2023 - Start
-    [EventSubscriber(ObjectType::Table, Database::"Item Journal Line", 'OnAfterCopyItemJnlLineFromServLine', '', False, false)]
-    local procedure NS_T83OnAfterCopyItemJnlLineFromServLine(var ItemJnlLine: Record "Item Journal Line"; ServLine: Record "Service Line")
-    begin
-        ItemJnlLine."NS_Category" := ServLine."ns_job cost category";
-    end;
-    //PRJCTPR-222.JS.1.0 08NOV2023 - end
-    //PRJCTPR-199.JS.1.0 Start
-    [EventSubscriber(ObjectType::Table, 38, 'OnAfterInitDefaultDimensionSources', '', false, false)]
-    local procedure NS_Table38OnAfterInitDefaultDimensionSources(VAR PurchaseHeader: Record "Purchase Header"; var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]]; FieldNo: Integer)
-    var
-        NSDimMgt: codeunit DimensionManagement;
-        NSJobSetup: record "Jobs Setup";
-        NSJobs: record Job;
-    begin
-        if NSJobSetup.get() then;
-        if (PurchaseHeader."NS_Job No." <> '') and (NSJobSetup."NS_Flow Job Card Dimension" = true) then begin
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Vendor, PurchaseHeader."Buy-from Vendor No.", true);
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Job, PurchaseHeader."NS_Job No.", true)
-        end else
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Vendor, PurchaseHeader."Buy-from Vendor No.", true);
-    end;
-
-    [EventSubscriber(ObjectType::Table, 36, 'OnAfterInitDefaultDimensionSources', '', false, false)]
-    local procedure NS_Table36OnAfterInitDefaultDimensionSources(VAR SalesHeader: Record "Sales Header"; var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]]; FieldNo: Integer)
-    var
-        NSDimMgt: codeunit DimensionManagement;
-        NSJobSetup: record "Jobs Setup";
-        NSJobs: record Job;
-    begin
-        if NSJobSetup.get() then;
-        if (SalesHeader."NS_Job No." <> '') and (NSJobSetup."NS_Flow Job Card Dimension" = true) then begin
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Customer, SalesHeader."Bill-to Customer No.", true);
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Job, SalesHeader."NS_Job No.", true)
-        end else
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Customer, SalesHeader."Bill-to Customer No.", true);
-    end;
-    //PRJCTPR-199.JS.1.0 Start  
-
-    //PRJCTPR-240.JS.1.0 22DEC2023 - start
-    [EventSubscriber(ObjectType::Table, Database::"NS_Job Activity", 'OnAfterInsertEvent', '', False, false)]
-    local procedure NS_T14021153OnAfterInsertEvent(var Rec: Record "NS_Job Activity")
-    var
-        NSJobActivity: record "NS_Job Activity";
-        NSJobActivity2: record "NS_Job Activity";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec.NS_Code <> '') then begin
-            NSJobActivity2.Reset();
-            NSJobActivity2.Setrange(NS_Type, NSJobActivity2.NS_Type::Revenue);
-            NSJobActivity2.Setrange(NS_Code, rec.NS_Code);
-            if not NSJobActivity2.findfirst() then begin
-                NSJobActivity.Init();
-                NSJobActivity.TransferFields(rec);
-                NSJobActivity.NS_Type := NSJobActivity.NS_Type::Revenue;
-                NSJobActivity.insert();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Job Process", 'OnAfterInsertEvent', '', False, false)]
-    local procedure NS_T14021154OnAfterInsertEvent(var Rec: Record "NS_Job Process")
-    var
-        NSJobProcess: record "NS_Job Process";
-        NSJobProcess2: record "NS_Job Process";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec."NS_Activity Code" <> '') and (rec.NS_Code <> '') then begin
-            NSJobProcess2.Reset();
-            NSJobProcess2.Setrange(NS_Type, NSJobProcess2.NS_Type::Revenue);
-            NSJobProcess2.setrange("NS_Activity Code", rec."NS_Activity Code");
-            NSJobProcess2.Setrange(NS_Code, rec.NS_Code);
-            if not NSJobProcess2.findfirst() then begin
-                NSJobProcess.Init();
-                NSJobProcess.TransferFields(rec);
-                NSJobProcess.NS_Type := NSJobProcess.NS_Type::Revenue;
-                NSJobProcess.insert();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Job Operation", 'OnAfterInsertEvent', '', False, false)]
-    local procedure NS_T14021155OnAfterInsertEvent(var Rec: Record "NS_Job Operation")
-    var
-        NSJobOperation: record "NS_Job Operation";
-        NSJobOperation2: record "NS_Job Operation";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec."NS_Activity Code" <> '') and (rec."NS_Process Code" <> '')
-           and (rec.NS_Code <> '') then begin
-            NSJobOperation2.Reset();
-            NSJobOperation2.Setrange(NS_Type, NSJobOperation2.NS_Type::Revenue);
-            NSJobOperation2.setrange("NS_Activity Code", rec."NS_Activity Code");
-            NSJobOperation2.setrange("NS_Process Code", rec."NS_Process Code");
-            NSJobOperation2.Setrange(NS_Code, rec.NS_Code);
-            if not NSJobOperation2.findfirst() then begin
-                NSJobOperation.Init();
-                NSJobOperation.TransferFields(rec);
-                NSJobOperation.NS_Type := NSJobOperation.NS_Type::Revenue;
-                NSJobOperation.insert();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Sections", 'OnAfterInsertEvent', '', False, false)]
-    local procedure NS_T14021156OnAfterInsertEvent(var Rec: Record "NS_Sections")
-    var
-        NSJobSections: record "NS_Sections";
-        NSJobSections2: record "NS_Sections";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec."NS_Activity Code" <> '') and (rec."NS_Process Code" <> '')
-           and (rec.NS_Code <> '') then begin
-            NSJobSections2.Reset();
-            NSJobSections2.Setrange(NS_Type, NSJobSections2.NS_Type::Revenue);
-            NSJobSections2.setrange("NS_Activity Code", rec."NS_Activity Code");
-            NSJobSections2.setrange("NS_Process Code", rec."NS_Process Code");
-            NSJobSections2.setrange("NS_Operation Code", rec."NS_Operation Code");
-            NSJobSections2.Setrange(NS_Code, rec.NS_Code);
-            if not NSJobSections2.findfirst() then begin
-                NSJobSections.Init();
-                NSJobSections.TransferFields(rec);
-                NSJobSections.NS_Type := NSJobSections.NS_Type::Revenue;
-                NSJobSections.insert();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Job Activity", 'OnAfterModifyEvent', '', False, false)]
-    local procedure NS_T14021153OnAfterModifyEvent(var Rec: Record "NS_Job Activity")
-    var
-        NSJobActivity: record "NS_Job Activity";
-        NSJobActivity2: record "NS_Job Activity";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec.NS_Code <> '') then begin
-            NSJobActivity2.Reset();
-            NSJobActivity2.Setrange(NS_Type, NSJobActivity2.NS_Type::Revenue);
-            NSJobActivity2.Setrange(NS_Code, rec.NS_Code);
-            if NSJobActivity2.findfirst() then begin
-                NSJobActivity2."NS_Search Code" := rec."NS_Search Code";
-                NSJobActivity2.NS_Description := rec.NS_Description;
-                NSJobActivity2.modify();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Job Process", 'OnAfterModifyEvent', '', False, false)]
-    local procedure NS_T14021154OnAfterModifyEvent(var Rec: Record "NS_Job Process")
-    var
-        NSJobProcess: record "NS_Job Process";
-        NSJobProcess2: record "NS_Job Process";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec."NS_Activity Code" <> '') and (rec.NS_Code <> '') then begin
-            NSJobProcess2.Reset();
-            NSJobProcess2.Setrange(NS_Type, NSJobProcess2.NS_Type::Revenue);
-            NSJobProcess2.setrange("NS_Activity Code", rec."NS_Activity Code");
-            NSJobProcess2.Setrange(NS_Code, rec.NS_Code);
-            if NSJobProcess2.findfirst() then begin
-                NSJobProcess2."NS_Search Code" := rec."NS_Search Code";
-                NSJobProcess2.NS_Description := rec.NS_Description;
-                NSJobProcess2.modify();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Job Operation", 'OnAfterModifyEvent', '', False, false)]
-    local procedure NS_T14021155OnAfterModifyEvent(var Rec: Record "NS_Job Operation")
-    var
-        NSJobOperation: record "NS_Job Operation";
-        NSJobOperation2: record "NS_Job Operation";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec."NS_Activity Code" <> '') and (rec."NS_Process Code" <> '')
-           and (rec.NS_Code <> '') then begin
-            NSJobOperation2.Reset();
-            NSJobOperation2.Setrange(NS_Type, NSJobOperation2.NS_Type::Revenue);
-            NSJobOperation2.setrange("NS_Activity Code", rec."NS_Activity Code");
-            NSJobOperation2.setrange("NS_Process Code", rec."NS_Process Code");
-            NSJobOperation2.Setrange(NS_Code, rec.NS_Code);
-            if NSJobOperation2.findfirst() then begin
-                NSJobOperation2."NS_Search Code" := rec."NS_Search Code";
-                NSJobOperation2.NS_Description := rec.NS_Description;
-                NSJobOperation2.modify();
-            end;
-        end;
-    end;
-
-    [EventSubscriber(ObjectType::Table, Database::"NS_Sections", 'OnAfterModifyEvent', '', False, false)]
-    local procedure NS_T14021156OnAfterModifyEvent(var Rec: Record "NS_Sections")
-    var
-        NSJobSections: record "NS_Sections";
-        NSJobSections2: record "NS_Sections";
-    begin
-        if (rec.NS_Type = rec.NS_Type::Cost) and (rec."NS_Activity Code" <> '') and (rec."NS_Process Code" <> '')
-           and (rec.NS_Code <> '') then begin
-            NSJobSections2.Reset();
-            NSJobSections2.Setrange(NS_Type, NSJobSections2.NS_Type::Revenue);
-            NSJobSections2.setrange("NS_Activity Code", rec."NS_Activity Code");
-            NSJobSections2.setrange("NS_Process Code", rec."NS_Process Code");
-            NSJobSections2.setrange("NS_Operation Code", rec."NS_Operation Code");
-            NSJobSections2.Setrange(NS_Code, rec.NS_Code);
-            if NSJobSections2.findfirst() then begin
-                NSJobSections2."NS_Search Code" := rec."NS_Search Code";
-                NSJobSections2.NS_Description := rec.NS_Description;
-                NSJobSections2.modify();
-            end;
-        end;
-    end;
-    //PRJCTPR-240.JS.1.0 22DEC2023 - end
-
-
-    //PRJCTPR-283.JS.1.0 03JAN2023 Start
-    [EventSubscriber(ObjectType::Table, 210, 'OnAfterInitDefaultDimensionSources', '', false, false)]
-    local procedure NS_Table210OnAfterInitDefaultDimensionSources(var JobJournalLine: Record "Job Journal Line"; var DefaultDimSource: List of [Dictionary of [Integer, Code[20]]]; FieldNo: Integer)
-    var
-        NSDimMgt: codeunit DimensionManagement;
-        NSJobSetup: record "Jobs Setup";
-        NSJobs: record Job;
-    begin
-        if NSJobSetup.get() then;
-        if (JobJournalLine."Job No." <> '') and (NSJobSetup."NS_Flow Job Card Dimension" = true) then begin
-            case JobJournalLine.type of
-                JobJournalLine.type::Item:
-                    NSDimMgt.AddDimSource(DefaultDimSource, Database::Item, JobJournalLine."No.", true);
-                JobJournalLine.type::Resource:
-                    NSDimMgt.AddDimSource(DefaultDimSource, Database::Resource, JobJournalLine."No.", true);
-                JobJournalLine.type::"G/L Account":
-                    NSDimMgt.AddDimSource(DefaultDimSource, Database::"G/L Account", JobJournalLine."No.", true);
-            end;
-        end else
-            NSDimMgt.AddDimSource(DefaultDimSource, Database::Job, JobJournalLine."Job No.", true);
-    end;
-    //PRJCTPR-283.JS.1.0 03JAN2023 end
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeNS_T39OnAfterInitOutstandingAmount(var PurchLine: Record "Purchase Line"; xPurchLine: Record "Purchase Line"; PurchHeader: Record "Purchase Header"; Currency: Record Currency; var Ishandled: boolean)
-    begin
-    end;
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
-
-    //PE-239.JS.1.0 09JAN2024 Start
-    [EventSubscriber(ObjectType::Table, Database::"Vendor Payment Buffer", 'OnCopyFieldsToGenJournalLine', '', False, false)]
-    local procedure NS_T475OnCopyFieldsToGenJournalLine(PaymentBufferSource: Record "Vendor Payment Buffer"; var GenJournalLineTarget: Record "Gen. Journal Line")
-    Var
-        NSVLE: record "Vendor Ledger Entry";
-    begin
-        if NSVLE.get(PaymentBufferSource."Vendor Ledg. Entry No.") then begin
-            GenJournalLineTarget."NS_Retention Ledger Code" := NSVLE."NS_Retention Ledger Code";
-        end;
-    end;
-    //PE-239.JS.1.0 09JAN2024 end
-
-    //PE-239.PS.2.0 29April2024 Start
-
-    // [EventSubscriber(ObjectType::Page, Page::"Create Payment", 'OnMakeGenJnlLinesOnAfterSetFilterTempVendorPymBuffer', '', false, false)]
-    // local procedure NS_SetfilterRetetionLedgerCode(var TempVendorPaymentBuffer: Record "Vendor Payment Buffer" temporary; VendorLedgerEntry: Record "Vendor Ledger Entry"; Vendor: Record Vendor)
-    // begin
-    //     TempVendorPaymentBuffer.SetRange("NS_Retention Ledger Code", VendorLedgerEntry."NS_Retention Ledger Code");
-    // end;
-
-    // [EventSubscriber(ObjectType::Page, Page::"Create Payment", 'OnUpdateVendorPaymentBufferFromVendorLedgerEntry', '', false, false)]
-    // local procedure NS_InsertRetetionLedgerCode(var TempVendorPaymentBuffer: Record "Vendor Payment Buffer" temporary; VendorLedgerEntry: Record "Vendor Ledger Entry")
-    // begin
-    //     TempVendorPaymentBuffer."NS_Retention Ledger Code" := VendorLedgerEntry."NS_Retention Ledger Code";
-    // end;
-    //PE-239.PS.2.0 29April2024 End
-
-    //PE-302.JS.1.0 29MAY24-Start
-    [EventSubscriber(ObjectType::Table, Database::"Gen. Journal Line", 'OnAfterCopyGenJnlLineFromSalesHeader', '', true, true)]
-    local procedure NS_T36OnAfterCopyGenJnlLineFromSalesHeader(SalesHeader: Record "Sales Header"; var GenJournalLine: Record "Gen. Journal Line")
-    var
-        NSSalesRecSetup: Record "Sales & Receivables Setup";
-    begin
-        if NSSalesRecSetup.get() then begin
-            if NSSalesRecSetup."NS_AutoApplySCM After Posting" = true then begin
-                if ((SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo") and
-                    (SalesHeader."NS_Retention Percent" <> 0)) then begin
-                    GenJournalLine."NS_AppliesToDocument Type" := SalesHeader."NS_AppliesToDocument Type";
-                    GenJournalLine."NS_AppliesToDocument No." := SalesHeader."NS_AppliesToDocument No.";
-                end;
-            end;
-        end;
-    end;
-    //PE-302.JS.1.0 29MAY24-end
-
-    //SSCM-15.AS.25072024 START  //PE-344.JS.1.0 26July2024
-    [IntegrationEvent(false, false)]
-    local procedure NSOnBeforeNS_R1095OnBeforePostTotalCostAdjustment(ItemLedgerEntry: Record "Item Ledger Entry"; var JobLedgerEntryCostValueACY: Decimal; var JobLedgerEntryCostValue: Decimal; var AdjustJobCost: Decimal; var AdjustJobCostLCY: Decimal; var IsHandled: Boolean; var JobLedgEntry: Record "Job Ledger Entry"; var NoOfJobLedgEntry: Integer; var IsHandlebool: Boolean)
-    begin
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure NSOnBeforeNS_R1095OnPostTotalCostAdjustmentOnBeforeJobLedgEntryModify(var JobLedgerEntry: Record "Job Ledger Entry"; ItemLedgerEntry: Record "Item Ledger Entry"; var IsHandlebool1: Boolean)
-    begin
-    end;
-    //SSCM-15.AS.25072024 END  //PE-344.JS.1.0 26July2024
 }
 

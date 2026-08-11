@@ -1,0 +1,440 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Job_No_">
+          <DataField>Job_No_</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text000_Job__No___">
+          <DataField>STRSUBSTNO_Text000_Job__No___</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="Job_TABLECAPTION_____Filters______JobFilter">
+          <DataField>Job_TABLECAPTION_____Filters______JobFilter</DataField>
+        </Field>
+        <Field Name="Job__Description_2_">
+          <DataField>Job__Description_2_</DataField>
+        </Field>
+        <Field Name="Job_FIELDCAPTION__Ending_Date____________FORMAT_Job__Ending_Date__">
+          <DataField>Job_FIELDCAPTION__Ending_Date____________FORMAT_Job__Ending_Date__</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Job_FIELDCAPTION__Starting_Date____________FORMAT_Job__Starting_Date__">
+          <DataField>Job_FIELDCAPTION__Starting_Date____________FORMAT_Job__Starting_Date__</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Job_DescriptionCaption">
+          <DataField>Job_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Cost_VarianceCaption">
+          <DataField>Cost_VarianceCaption</DataField>
+        </Field>
+        <Field Name="Budgeted_Material_CostCaption">
+          <DataField>Budgeted_Material_CostCaption</DataField>
+        </Field>
+        <Field Name="Actual__Material_CostCaption">
+          <DataField>Actual__Material_CostCaption</DataField>
+        </Field>
+        <Field Name="No_Caption">
+          <DataField>No_Caption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Activity___Process___OperationCaption">
+          <DataField>Activity___Process___OperationCaption</DataField>
+        </Field>
+        <Field Name="Cost_Percent_VarianceCaption">
+          <DataField>Cost_Percent_VarianceCaption</DataField>
+        </Field>
+        <Field Name="Actual_Material_QtyCaption">
+          <DataField>Actual_Material_QtyCaption</DataField>
+        </Field>
+        <Field Name="Budgeted_Material_QtyCaption">
+          <DataField>Budgeted_Material_QtyCaption</DataField>
+        </Field>
+        <Field Name="Qty_VarianceCaption">
+          <DataField>Qty_VarianceCaption</DataField>
+        </Field>
+        <Field Name="Qty_Percent_VarianceCaption">
+          <DataField>Qty_Percent_VarianceCaption</DataField>
+        </Field>
+        <Field Name="Page_Header_Number">
+          <DataField>Page_Header_Number</DataField>
+        </Field>
+        <Field Name="ShowProcesses">
+          <DataField>ShowProcesses</DataField>
+        </Field>
+        <Field Name="ShowOperations">
+          <DataField>ShowOperations</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text001__Operation__OperationCodetoPrint_">
+          <DataField>STRSUBSTNO_Text001__Operation__OperationCodetoPrint_</DataField>
+        </Field>
+        <Field Name="Activity_Description">
+          <DataField>Activity_Description</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualOpCost">
+          <DataField>TotaltoPrintActualOpCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualOpCostFormat">
+          <DataField>TotaltoPrintActualOpCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetOpCost">
+          <DataField>TotaltoPrintBudgetOpCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetOpCostFormat">
+          <DataField>TotaltoPrintBudgetOpCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpCostVariance">
+          <DataField>TotaltoPrintOpCostVariance</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpCostVarianceFormat">
+          <DataField>TotaltoPrintOpCostVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpCostVariance__">
+          <DataField>TotaltoPrintOpCostVariance__</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpCostVariance__Format">
+          <DataField>TotaltoPrintOpCostVariance__Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualOpQty">
+          <DataField>TotaltoPrintActualOpQty</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualOpQtyFormat">
+          <DataField>TotaltoPrintActualOpQtyFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetOpQty">
+          <DataField>TotaltoPrintBudgetOpQty</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetOpQtyFormat">
+          <DataField>TotaltoPrintBudgetOpQtyFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpQtyVariance">
+          <DataField>TotaltoPrintOpQtyVariance</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpQtyVarianceFormat">
+          <DataField>TotaltoPrintOpQtyVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpQtyVariance__">
+          <DataField>TotaltoPrintOpQtyVariance__</DataField>
+        </Field>
+        <Field Name="TotaltoPrintOpQtyVariance__Format">
+          <DataField>TotaltoPrintOpQtyVariance__Format</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text001__Process__ProcessCodetoPrint_">
+          <DataField>STRSUBSTNO_Text001__Process__ProcessCodetoPrint_</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualProCost">
+          <DataField>TotaltoPrintActualProCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualProCostFormat">
+          <DataField>TotaltoPrintActualProCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetProCost">
+          <DataField>TotaltoPrintBudgetProCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetProCostFormat">
+          <DataField>TotaltoPrintBudgetProCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProCostVariance">
+          <DataField>TotaltoPrintProCostVariance</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProCostVarianceFormat">
+          <DataField>TotaltoPrintProCostVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProCostVariance__">
+          <DataField>TotaltoPrintProCostVariance__</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProCostVariance__Format">
+          <DataField>TotaltoPrintProCostVariance__Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualProQty">
+          <DataField>TotaltoPrintActualProQty</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualProQtyFormat">
+          <DataField>TotaltoPrintActualProQtyFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetProQty">
+          <DataField>TotaltoPrintBudgetProQty</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetProQtyFormat">
+          <DataField>TotaltoPrintBudgetProQtyFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProQtyVariance">
+          <DataField>TotaltoPrintProQtyVariance</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProQtyVarianceFormat">
+          <DataField>TotaltoPrintProQtyVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProQtyVariance__">
+          <DataField>TotaltoPrintProQtyVariance__</DataField>
+        </Field>
+        <Field Name="TotaltoPrintProQtyVariance__Format">
+          <DataField>TotaltoPrintProQtyVariance__Format</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text001__Activity__ActivityCodetoPrint_">
+          <DataField>STRSUBSTNO_Text001__Activity__ActivityCodetoPrint_</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualActCost">
+          <DataField>TotaltoPrintActualActCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualActCostFormat">
+          <DataField>TotaltoPrintActualActCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetActCost">
+          <DataField>TotaltoPrintBudgetActCost</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetActCostFormat">
+          <DataField>TotaltoPrintBudgetActCostFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActCostVariance">
+          <DataField>TotaltoPrintActCostVariance</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActCostVarianceFormat">
+          <DataField>TotaltoPrintActCostVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActCostVariance__">
+          <DataField>TotaltoPrintActCostVariance__</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActCostVariance__Format">
+          <DataField>TotaltoPrintActCostVariance__Format</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualActQty">
+          <DataField>TotaltoPrintActualActQty</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActualActQtyFormat">
+          <DataField>TotaltoPrintActualActQtyFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetActQty">
+          <DataField>TotaltoPrintBudgetActQty</DataField>
+        </Field>
+        <Field Name="TotaltoPrintBudgetActQtyFormat">
+          <DataField>TotaltoPrintBudgetActQtyFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActQtyVariance">
+          <DataField>TotaltoPrintActQtyVariance</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActQtyVarianceFormat">
+          <DataField>TotaltoPrintActQtyVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActQtyVariance__">
+          <DataField>TotaltoPrintActQtyVariance__</DataField>
+        </Field>
+        <Field Name="TotaltoPrintActQtyVariance__Format">
+          <DataField>TotaltoPrintActQtyVariance__Format</DataField>
+        </Field>
+        <Field Name="Activity_____Activity_Code">
+          <DataField>Activity_____Activity_Code</DataField>
+        </Field>
+        <Field Name="Process_Description">
+          <DataField>Process_Description</DataField>
+        </Field>
+        <Field Name="Process______Process_Code">
+          <DataField>Process______Process_Code</DataField>
+        </Field>
+        <Field Name="Operation_Description">
+          <DataField>Operation_Description</DataField>
+        </Field>
+        <Field Name="Operation_____Operation_Code">
+          <DataField>Operation_____Operation_Code</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer_Description">
+          <DataField>JobAnalysisBuffer_Description</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Budgeted_Cost_">
+          <DataField>JobAnalysisBuffer__Budgeted_Cost_</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Budgeted_Cost_Format">
+          <DataField>JobAnalysisBuffer__Budgeted_Cost_Format</DataField>
+        </Field>
+        <Field Name="Variance">
+          <DataField>Variance</DataField>
+        </Field>
+        <Field Name="VarianceFormat">
+          <DataField>VarianceFormat</DataField>
+        </Field>
+        <Field Name="Variance__">
+          <DataField>Variance__</DataField>
+        </Field>
+        <Field Name="Variance__Format">
+          <DataField>Variance__Format</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__No__">
+          <DataField>JobAnalysisBuffer__No__</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Actual_Cost_">
+          <DataField>JobAnalysisBuffer__Actual_Cost_</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Actual_Cost_Format">
+          <DataField>JobAnalysisBuffer__Actual_Cost_Format</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Actual_Cost_Qty__">
+          <DataField>JobAnalysisBuffer__Actual_Cost_Qty__</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Actual_Cost_Qty__Format">
+          <DataField>JobAnalysisBuffer__Actual_Cost_Qty__Format</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Budgeted_Cost_Qty__">
+          <DataField>JobAnalysisBuffer__Budgeted_Cost_Qty__</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Budgeted_Cost_Qty__Format">
+          <DataField>JobAnalysisBuffer__Budgeted_Cost_Qty__Format</DataField>
+        </Field>
+        <Field Name="QtyVariance">
+          <DataField>QtyVariance</DataField>
+        </Field>
+        <Field Name="QtyVarianceFormat">
+          <DataField>QtyVarianceFormat</DataField>
+        </Field>
+        <Field Name="QtyVariance__">
+          <DataField>QtyVariance__</DataField>
+        </Field>
+        <Field Name="QtyVariance__Format">
+          <DataField>QtyVariance__Format</DataField>
+        </Field>
+        <Field Name="TotalActualCost">
+          <DataField>TotalActualCost</DataField>
+        </Field>
+        <Field Name="TotalActualCostFormat">
+          <DataField>TotalActualCostFormat</DataField>
+        </Field>
+        <Field Name="TotalBudgetCost">
+          <DataField>TotalBudgetCost</DataField>
+        </Field>
+        <Field Name="TotalBudgetCostFormat">
+          <DataField>TotalBudgetCostFormat</DataField>
+        </Field>
+        <Field Name="TotalCostVariance">
+          <DataField>TotalCostVariance</DataField>
+        </Field>
+        <Field Name="TotalCostVarianceFormat">
+          <DataField>TotalCostVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotalCostVariance__">
+          <DataField>TotalCostVariance__</DataField>
+        </Field>
+        <Field Name="TotalCostVariance__Format">
+          <DataField>TotalCostVariance__Format</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text002_Job__No___">
+          <DataField>STRSUBSTNO_Text002_Job__No___</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text003_Job__No___">
+          <DataField>STRSUBSTNO_Text003_Job__No___</DataField>
+        </Field>
+        <Field Name="TotalActualQty">
+          <DataField>TotalActualQty</DataField>
+        </Field>
+        <Field Name="TotalActualQtyFormat">
+          <DataField>TotalActualQtyFormat</DataField>
+        </Field>
+        <Field Name="TotalBudgetQty">
+          <DataField>TotalBudgetQty</DataField>
+        </Field>
+        <Field Name="TotalBudgetQtyFormat">
+          <DataField>TotalBudgetQtyFormat</DataField>
+        </Field>
+        <Field Name="TotalQtyVariance">
+          <DataField>TotalQtyVariance</DataField>
+        </Field>
+        <Field Name="TotalQtyVarianceFormat">
+          <DataField>TotalQtyVarianceFormat</DataField>
+        </Field>
+        <Field Name="TotalQtyVariance__">
+          <DataField>TotalQtyVariance__</DataField>
+        </Field>
+        <Field Name="TotalQtyVariance__Format">
+          <DataField>TotalQtyVariance__Format</DataField>
+        </Field>
+        <Field Name="Integer_Number">
+          <DataField>Integer_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

@@ -16,13 +16,10 @@ page 14021213 "NS_Get Purchase Retention List"
     ApplicationArea = Jobs;
     InsertAllowed = false;
     PageType = Card;
-    Permissions = TableData "Vendor Ledger Entry" = rm;//PE-204.AS.2.0 ADD
     SourceTable = "Vendor Ledger Entry";
-    // SourceTableView = SORTING("Vendor No.", "Posting Date", "Currency Code")
-    //                   ORDER(Ascending)
-    //                   WHERE("Global Dimension 2 Code" = CONST('RETENTION'));//PE-204.AS.2.0 COMMENT
     SourceTableView = SORTING("Vendor No.", "Posting Date", "Currency Code")
-                      ORDER(Ascending);//PE-204.AS.2.0 ADD
+                      ORDER(Ascending)
+                      WHERE("Global Dimension 2 Code" = CONST('RETENTION'));
 
     layout
     {
@@ -33,21 +30,6 @@ page 14021213 "NS_Get Purchase Retention List"
                 ApplicationArea = All;
                 Caption = 'Job No. Filter';
                 ToolTip = 'Specifies the job no filter.';
-
-                trigger OnValidate()
-                var
-                begin
-                    //PE-204.AS.1.0 START
-                    if JobNoFilter <> '' then begin
-                        Rec.SetFilter("NS_Job No.", JobNoFilter);
-                        CurrPage.Update();
-                    end else begin
-                        Rec.SetRange("NS_Job No.");
-                        CurrPage.Update();
-                    end;
-                    //PE-204.AS.1.0 END
-
-                end;
             }
             repeater(Control1)
             {
@@ -81,20 +63,6 @@ page 14021213 "NS_Get Purchase Retention List"
                     ToolTip = 'Specifies the Currency Code';
                     Visible = false;
                 }
-                //PE-204.AS.1.0 START 
-                field("NS_Job No."; Rec."NS_Job No.")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Job No.';
-                    ToolTip = 'Job No.';
-                }
-                field("NS_Retention Ledger Code"; Rec."NS_Retention Ledger Code")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Retention ledger Code';
-                    ToolTip = 'Retention Ledger Code';
-                }
-                //PE-204.AS.1.0 END
                 field(Amount; Rec.Amount)
                 {
                     ApplicationArea = All;
@@ -114,23 +82,7 @@ page 14021213 "NS_Get Purchase Retention List"
                     Visible = true;
 
                     trigger OnValidate();
-                    var
-                        jbstp: Record "Jobs Setup";//PE-204.AS.4.0
-                        vleRec: Record "Vendor Ledger Entry";//PE-204.AS.4.0
                     begin
-                        //PE-204.AS.4.0 START
-                        if jbstp.get() then;
-                        vleRec.Reset();
-                        vleRec.SetRange("Vendor No.", Rec."Vendor No.");
-                        vleRec.SetRange("Document Type", Rec."Document Type"::Invoice);
-                        vleRec.SetRange(Open, TRUE);
-                        vleRec.SetRange("NS_Job No.", Rec."NS_Job No.");
-                        vleRec.SetRange("NS_Retention Ledger Code", jbstp."NS_Retention Payable Ledger");
-                        vleRec.SetFilter("NS_Retention Applies-to Amount", '<>%1', 0);
-                        if vleRec.Count() >= 1 then
-                            Error('You can only apply one line of Retention on a Purchase Invoice');
-                        //PE-204.AS.4.0 END
-
                         NS_RetentionAppliestoAmountOnAfte;
                     end;
                 }
@@ -157,18 +109,15 @@ page 14021213 "NS_Get Purchase Retention List"
                 {
                     ApplicationArea = All;
                     Visible = false;
-                    ToolTip = 'Global Dimension 1 Code'; //PE-75.RM.1.0 23May2023 
                 }
                 field("Global Dimension 2 Code"; Rec."Global Dimension 2 Code")
                 {
                     ApplicationArea = All;
                     Visible = false;
-                    ToolTip = 'Global Dimension 2 Code'; //PE-75.RM.1.0 23May2023 
                 }
             }
             group(Control41)
             {
-                Caption = '';//PE-204.AS.4.0
                 field(TotalAmount; TotalAmount)
                 {
                     ApplicationArea = All;
@@ -239,29 +188,13 @@ page 14021213 "NS_Get Purchase Retention List"
                     ToolTip = 'Include retention';
 
                     trigger OnAction();
-                    var
-                        vleRec: Record "Vendor Ledger Entry";//PE-204.AS.4.0
-                        jbstp: Record "Jobs Setup";//PE-204.AS.4.0
                     begin
-                        //PE-204.AS.4.0 START
-                        if jbstp.get() then;
-                        vleRec.Reset();
-                        vleRec.SetRange("Vendor No.", Rec."Vendor No.");
-                        vleRec.SetRange("Document Type", Rec."Document Type"::Invoice);
-                        vleRec.SetRange(Open, TRUE);
-                        vleRec.SetRange("NS_Job No.", Rec."NS_Job No.");
-                        vleRec.SetRange("NS_Retention Ledger Code", jbstp."NS_Retention Payable Ledger");
-                        vleRec.SetFilter("NS_Retention Applies-to Amount", '<>%1', 0);
-                        if vleRec.Count() >= 1 then
-                            Error('You can only apply one line of Retention on a Purchase Invoice');
-                        //PE-204.AS.4.0 END
-                        if vleRec.Count() = 0 then begin //PE-204.AS.4.0 START COunt condition Added Begin..end
-                            if Rec."NS_Retention Applies-to Amount" = 0 then //PRJ-1131.NK.1.0
-                                Rec."NS_Retention Applies-to Amount" := Rec."Remaining Amount" //PRJ-1131.NK.1.0
-                            else
-                                Rec."NS_Retention Applies-to Amount" := 0; //PRJ-1131.NK.1.0
-                            Rec.MODIFY(); //PRJ-1131.NK.1.0
-                        end;//PE-204.AS.4.0 END COunt condition Added Begin..end
+                        if "NS_Retention Applies-to Amount" = 0 then
+                            "NS_Retention Applies-to Amount" := "Remaining Amount"
+                        else
+                            "NS_Retention Applies-to Amount" := 0;
+                        MODIFY();
+
                         CurrPage.UPDATE();
                         NS_FormCalculations();
                     end;
@@ -277,31 +210,14 @@ page 14021213 "NS_Get Purchase Retention List"
                     trigger OnAction();
                     var
                         EnteredPct: Decimal;
-                        vleRec: Record "Vendor Ledger Entry";//PE-204.AS.4.0
-                        jbstp: Record "Jobs Setup";//PE-204.AS.4.0
                     begin
-                        //PE-204.AS.4.0 START
-                        if jbstp.get() then;
-                        vleRec.Reset();
-                        vleRec.SetRange("Vendor No.", Rec."Vendor No.");
-                        vleRec.SetRange("Document Type", Rec."Document Type"::Invoice);
-                        vleRec.SetRange(Open, TRUE);
-                        vleRec.SetRange("NS_Job No.", Rec."NS_Job No.");
-                        vleRec.SetRange("NS_Retention Ledger Code", jbstp."NS_Retention Payable Ledger");
-                        vleRec.SetFilter("NS_Retention Applies-to Amount", '<>%1', 0);
-                        if vleRec.Count() >= 1 then
-                            Error('You can only apply one line of Retention on a Purchase Invoice');
-                        //PE-204.AS.4.0 END
-
                         EnteredPct := 0;
                         CLEAR(EnterPercentage);
                         if EnterPercentage.RUNMODAL = ACTION::OK then
                             EnterPercentage.NS_ReturnPercentage(EnteredPct);
+                        "NS_Retention Applies-to Amount" := ROUND(Amount * (EnteredPct / 100), 0.01);
+                        MODIFY();
 
-                        if vleRec.Count() = 0 then begin//PE-204.AS.4.0 START COunt condition Added Begin..end
-                            Rec."NS_Retention Applies-to Amount" := ROUND(Rec.Amount * (EnteredPct / 100), 0.01); //PRJ-1131.NK.1.0
-                            Rec.MODIFY(); //PRJ-1131.NK.1.0
-                        end;//PE-204.AS.4.0 END COunt condition Added Begin..end
                         CurrPage.UPDATE();
                         NS_FormCalculations();
                     end;
@@ -313,7 +229,6 @@ page 14021213 "NS_Get Purchase Retention List"
                     Image = ExciseApplyToLine;
                     ShortCutKey = 'Ctrl+F11';
                     ToolTip = 'Include all retention percentage';
-                    Visible = false; //PE-204.AS.4.0
 
                     trigger OnAction();
                     var
@@ -395,10 +310,8 @@ page 14021213 "NS_Get Purchase Retention List"
     begin
         PurchSetup.GET();
         JobsSetup.GET();
-        Rec.FilterGroup(2); //PRJCTPR-273.NC.1.0 21Dec2023
         if not PurchSetup."NS_Purchase Retention Inactive" then
             SETRANGE("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
-        Rec.FilterGroup(0); //PRJCTPR-273.NC.1.0 21Dec2023
         VendLedgEntry.COPY(Rec);
         NS_FormCalculations();
     end;
@@ -425,7 +338,6 @@ page 14021213 "NS_Get Purchase Retention List"
     procedure NS_SetPurchHeader(PurHdr: Record "Purchase Header");
     begin
         PurchHeader := PurHdr;
-        JobNoFilter := PurHdr."NS_Job No.";//PE-204.AS.1.0
     end;
 
     procedure NS_FormCalculations();

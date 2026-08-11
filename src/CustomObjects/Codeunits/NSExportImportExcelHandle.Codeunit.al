@@ -901,7 +901,7 @@ codeunit 14021406 "NS_ExportImport Excel Handle"
         CommonDialogControl: Integer;
         FileMgt: Codeunit "File Management";
     begin
-        //exit(FileMgt.OpenFileDialog(WindowTitle, DefaultFileName, FilterString));   //PRJ-1221.JS.1.0  24FEB2022 Need to check comments
+        exit(FileMgt.OpenFileDialog(WindowTitle, DefaultFileName, FilterString));
     end;
 
     local procedure NS_EnterCell(var ExcelBuf: Record "Excel Buffer"; RowNo: Integer; ColumnCode: Text[20]; CellValue: Text[250]; Bold: Boolean; Italic: Boolean; UnderLine: Boolean; DoubleUnderLine: Boolean; Format: Text[30]; CellType: Option)

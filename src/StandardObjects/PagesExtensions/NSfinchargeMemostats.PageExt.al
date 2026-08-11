@@ -1,8 +1,7 @@
 pageextension 14021256 NS_FinChargeMemoStats extends "Finance Charge Memo Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Finance Charge Memo Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Cust.""Balance (LCY)""")

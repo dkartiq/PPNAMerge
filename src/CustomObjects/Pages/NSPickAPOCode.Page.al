@@ -1,5 +1,6 @@
 page 14021203 "NS_Pick APO Code"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -8,10 +9,8 @@ page 14021203 "NS_Pick APO Code"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-917.NK.1.0 11Mar2022 Error for Blocked.
-    //PRJ-1348.NK.1.0 24May2022 Add Property
-    //Caption = 'Pick APO Code'; //PRJ-1348.NK.1.0 26May2022 Block
-    Caption = 'Pick Task Codes'; //PRJ-1348.NK.1.0 26May2022
+
+    Caption = 'Pick APO Code';
     PageType = Card;
     UsageCategory = Documents;
     ApplicationArea = Jobs;
@@ -24,19 +23,30 @@ page 14021203 "NS_Pick APO Code"
             {
                 ApplicationArea = All;
                 Caption = 'Activity Code';
-                CaptionClass = '50999,0,0'; //PRJ-1348.NK.1.0 24May2022
                 ToolTip = 'Specifies the Activity Code';
 
                 trigger OnLookup(VAR Text: Text): Boolean;
                 var
                     JobAct: Record "NS_Job Activity";
+                    // >> Upgrade
+                    IsHandled: Boolean;
+                // << Upgrade
                 begin
+
                     JobAct.RESET();
+                    // >> Upgrade
+                    OnBeforeLookupActcd(JobAct);
+
+                    // << Upgrade
                     if JobTaskType = JobTaskType::Cost then
                         JobAct.SETRANGE(NS_Type, JobAct.NS_Type::Cost)
                     else
                         if JobTaskType = JobTaskType::Price then
                             JobAct.SETRANGE(NS_Type, JobAct.NS_Type::Revenue);
+                    // >> Upgrade
+                    OnBeforeLookupActcd2(JobAct, JobNo);
+
+                    // << Upgrade
                     if PAGE.RUNMODAL(PAGE::"NS_Activities List", JobAct) = ACTION::LookupOK then begin
                         ActivityCode := JobAct.NS_Code;
                         if JobAct.NS_Type = JobAct.NS_Type::Cost then
@@ -44,10 +54,6 @@ page 14021203 "NS_Pick APO Code"
                         else
                             JobActivity.GET(JobActivity.NS_Type::Revenue, ActivityCode);
                         ActivityDescription := JobActivity.NS_Description;
-                        //PRJ-917.NK.1.0 09Mar2022 Start
-                        if JobActivity.NS_Blocked then
-                            Error('Sorry! This Activity is blocked.');
-                        //PRJ-917.NK.1.0 09Mar2022 end
                     end;
                     NS_SetProcessOperation();
                 end;
@@ -64,7 +70,6 @@ page 14021203 "NS_Pick APO Code"
                 Editable = false;
                 ToolTip = 'Specifies the Activity Description';
                 Caption = 'Activity Description';
-                CaptionClass = '50998,0,0'; //PRJ-1348.NK.1.0 24May2022
             }
             field(ProcCd; ProcessCode)
             {
@@ -72,7 +77,7 @@ page 14021203 "NS_Pick APO Code"
                 Caption = 'Process Code';
                 Enabled = ProcCdEnable;
                 ToolTip = 'Specifies the Process Code';
-                CaptionClass = '50999,1,0'; //PRJ-1348.NK.1.0 24May2022
+
                 trigger OnLookup(VAr Text: Text): Boolean;
                 var
                     JobProc: Record "NS_Job Process";
@@ -91,10 +96,6 @@ page 14021203 "NS_Pick APO Code"
                         else
                             JobProcess.GET(JobProcess.NS_Type::Revenue, ActivityCode, ProcessCode);
                         ProcessDescription := JobProcess.NS_Description;
-                        //PRJ-917.NK.1.0 09Mar2022 Start
-                        if JobProcess.NS_Blocked then
-                            Error('Sorry! This Process is blocked.');
-                        //PRJ-917.NK.1.0 09Mar2022 end
                     end;
                     NS_SetProcessOperation();
                 end;
@@ -112,7 +113,6 @@ page 14021203 "NS_Pick APO Code"
                 Caption = 'Process Description';
                 Editable = false;
                 ToolTip = 'Specifies the Process Description';
-                CaptionClass = '50998,1,0'; //PRJ-1348.NK.1.0 24May2022
             }
             field(OpCd; OperationCode)
             {
@@ -121,7 +121,7 @@ page 14021203 "NS_Pick APO Code"
                 Editable = OpCdEditable;
                 Enabled = OpCdEnable;
                 ToolTip = 'Specifies the Operation Code';
-                CaptionClass = '50999,2,0'; //PRJ-1348.NK.1.0 24May2022
+
                 trigger OnLookup(VAr Text: Text): Boolean;
                 var
                     JobOper: Record "NS_Job Operation";
@@ -141,11 +141,6 @@ page 14021203 "NS_Pick APO Code"
                         else
                             JobOperation.GET(JobOperation.NS_Type::Revenue, ActivityCode, ProcessCode, OperationCode);
                         OperationDescription := JobOperation.NS_Description;
-                        //PRJ-917.NK.1.0 09Mar2022 Start
-                        if JobOperation.NS_Blocked then
-                            Error('Sorry! This Operation is blocked.');
-                        //PRJ-917.NK.1.0 09Mar2022 end
-
                     end;
                     NS_SetProcessOperation();
                 end;
@@ -162,7 +157,6 @@ page 14021203 "NS_Pick APO Code"
                 Caption = 'Operation Description';
                 Editable = false;
                 ToolTip = 'Specifies the Operation Description';
-                CaptionClass = '50998,2,0'; //PRJ-1348.NK.1.0 24May2022
             }
             //PRJ-688.AM.1.0 Start
             field(SectionCode; SectionCode)
@@ -172,7 +166,7 @@ page 14021203 "NS_Pick APO Code"
                 Editable = Sectioneditable;
                 Enabled = SectionEnable;
                 ToolTip = 'Specifies the Section Code';
-                CaptionClass = '50999,3,0'; //PRJ-1348.NK.1.0 24May2022
+
                 trigger OnLookup(VAr Text: Text): Boolean;
                 var
                     JobSection: Record NS_Sections;
@@ -193,10 +187,6 @@ page 14021203 "NS_Pick APO Code"
                         else
                             JobSection.GET(JobSection.NS_Type::Revenue, ActivityCode, ProcessCode, OperationCode, SectionCode);
                         SectionDescription := JobSection.NS_Description;
-                        //PRJ-917.NK.1.0 09Mar2022 Start
-                        if JobSection.NS_Blocked then
-                            Error('Sorry! This Section is blocked.');
-                        //PRJ-917.NK.1.0 09Mar2022 end
                     end;
                     NS_SetProcessOperation();
                 end;
@@ -213,7 +203,6 @@ page 14021203 "NS_Pick APO Code"
                 Caption = 'Section Description';
                 Editable = false;
                 ToolTip = 'Specifies the Section Description';
-                CaptionClass = '50998,3,0'; //PRJ-1348.NK.1.0 24May2022
             }
             //PRJ-688.AM.1.0 End
             field(JobTaskNo; JobTaskNo)
@@ -328,6 +317,9 @@ page 14021203 "NS_Pick APO Code"
                     JobActivity.GET(JobActivity.NS_Type::Revenue, ActivityCode);
             if not JobActivity.GET(JobActivity.NS_Type::Cost, ActivityCode) then
                 JobActivity.GET(JobActivity.NS_Type::Revenue, ActivityCode);
+            // >> Upgrade
+            OnNS_GetActivityDescription(JobActivity);
+            // << Upgrade
             ActivityDescription := JobActivity.NS_Description;
         end else
             ActivityDescription := '';
@@ -423,8 +415,10 @@ page 14021203 "NS_Pick APO Code"
             JobTaskNo := JobTaskNo + Separator3 + SectionCode;
         //PRJ-688.AM.1.0 End
     end;
-
-    procedure NS_SetInput(JobNoIn: Code[20]; JobTaskNoIn: Code[35]; TaskTypeIn: Option Cost,Price);
+    // >> Upgrade
+    // procedure NS_SetInput(JobNoIn: Code[20]; JobTaskNoIn: Code[35]; TaskTypeIn: Option Cost,Price);
+    procedure NS_SetInput(JobNoIn: Code[20]; JobTaskNoIn: Code[35]; JobAct: Code[20]; TaskTypeIn: Option Cost,Price);
+    // << Upgrade
     begin
         JobNo := JobNoIn;
         JobTaskNo := JobTaskNoIn;
@@ -437,12 +431,19 @@ page 14021203 "NS_Pick APO Code"
             ProcessCode := '';
             OperationCode := '';
         end;
+        // >> Upgrade
+        if JobAct <> '' then
+            ActivityCode := JobAct;
+        // << Upgrade
     end;
 
-    procedure NS_GetResult(var JobTskNo: Code[35]; var JobTskDesc: Text[100]): Code[35];//PRJ-449.Am.1.0
+    // procedure NS_GetResult(var JobTskNo: Code[35]; var JobTskDesc: Text[100]): Code[35];//PRJ-449.Am.1.0
+    procedure NS_GetResult(var JobTskNo: Code[35]; var JobTskDesc: Text[100]; var JobTskAct: Code[20]): Code[35];//PRJ-449.Am.1.0
     begin
         JobTskNo := JobTaskNo;
-
+        // >> Upgrade
+        JobTskAct := ActivityCode;
+        // << Upgrade
         if ActivityDescription > '' then
             JobTskDesc := ActivityDescription;
 
@@ -477,5 +478,25 @@ page 14021203 "NS_Pick APO Code"
         OperationCode := '';
         NS_SetProcessOperation();
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeLookupActcd(var JobAct: Record "NS_Job Activity")
+    begin
+
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeLookupActcd2(var JobAct: Record "NS_Job Activity"; var JobNo: Code[20])
+    begin
+
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_GetActivityDescription(var JobActivity: Record "NS_Job Activity")
+    begin
+
+    end;
+
+    // << Upgrade
 }
 

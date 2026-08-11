@@ -1,8 +1,7 @@
 pageextension 14021231 NS_WorkTypes extends "Work Types"
 {
     // version NAVW111.00.PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Work Types'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Unit of Measure Code")

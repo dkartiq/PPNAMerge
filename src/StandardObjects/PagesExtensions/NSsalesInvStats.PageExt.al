@@ -2,9 +2,7 @@ pageextension 14021248 NS_SalesInvStats extends "Sales Invoice Statistics"
 {
     // version NAVW111.00,PPNA11.00
     //PRJ-56.SK.1.0 Added code for clearing all variables
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJCTPR-224.VC.1.0 16Nov2023 | Sale Invoice with Foreign Currency
-    Caption = 'Sales Invoice Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Cust.""Balance (LCY)""")
@@ -67,17 +65,6 @@ pageextension 14021248 NS_SalesInvStats extends "Sales Invoice Statistics"
                 AutoFormatType = 1;
                 Caption = 'Retention Amount ($)';
             }
-            //PRJCTPR-224.VC.1.0 Start         
-            field("NS_Retention Amount"; Rec."NS_Retention Amount")
-            {
-                ApplicationArea = All;
-                AutoFormatType = 1;
-                Caption = 'Retention Amount';
-
-                ToolTip = 'Retention Amount';
-                Editable = false;
-            }
-            //PRJCTPR-224.VC.1.0 End
             field("NS Final Total"; NS_FinalTotal)
             {
                 ApplicationArea = All;
@@ -156,11 +143,6 @@ pageextension 14021248 NS_SalesInvStats extends "Sales Invoice Statistics"
         END;
 
         //ProjectPro - start
-        //PRJCTPR-224.VC.1.0 Start        
-        If Rec."Currency Code" <> '' then
-            NS_FinalTotal := NS_AmountInclVAT - Rec."NS_Retention Amount"
-        else
-            //PRJCTPR-224.VC.1.0 End 
         NS_FinalTotal := NS_AmountInclVAT - "NS_Retention Amount (LCY)";
         //ProjectPro - end
     end;

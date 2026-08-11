@@ -1,7 +1,7 @@
 tableextension 14021124 NS_PurchRcptHeader extends "Purch. Rcpt. Header"
 {
     // version NAVW111.00.00.20783,NAVNA11.00.00.20783,PPNA11.00
-    //PRJ-1380.NK.1.0 13May2022 | Add Fields
+
     fields
     {
 
@@ -35,21 +35,6 @@ tableextension 14021124 NS_PurchRcptHeader extends "Purch. Rcpt. Header"
             Description = 'ProjectPro';
             TableRelation = "NS_Retention Ledger Code".NS_Code;
         }
-        //PRJ-1380.NK.1.0 13May2022 Start
-        field(14021330; "NS_Job Purchaser"; Code[20])
-        {
-            Caption = 'Job Purchaser';
-            Description = 'PRJ-1380.NK.1.0';
-            DataClassification = CustomerContent;
-        }
-        field(14021331; "NS_Job Manager"; Code[20])
-        {
-            Caption = 'Job Manager';
-            Description = 'PRJ-1380.NK.1.0';
-            TableRelation = Resource;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1380.NK.1.0 13May2022 End
     }
 
     var

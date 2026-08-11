@@ -1,8 +1,7 @@
 pageextension 14021249 NS_SalesCrMemoStatsExt extends "Sales Credit Memo Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Credit Memo Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
 
@@ -65,16 +64,6 @@ pageextension 14021249 NS_SalesCrMemoStatsExt extends "Sales Credit Memo Statist
                 AutoFormatType = 1;
                 ToolTip = 'Specifies the Retention Amount (LCY)';
             }
-            //PRJCTPR-224.PS.1.0 01May2024 Start
-            field("NS_Retention Amount"; Rec."NS_Retention Amount")
-            {
-                ApplicationArea = All;
-                AutoFormatType = 1;
-                Caption = 'Retention Amount';
-                ToolTip = 'Retention Amount';
-                Editable = false;
-            }
-            //PRJCTPR-224.PS.1.0 01May2024 End
             field("NS Final Total"; NS_FinalTotal)
             {
                 ApplicationArea = All;

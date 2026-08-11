@@ -1,18 +1,10 @@
 pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version NAVW111.00.00.22292,NAVNA11.00.00.22292,PPNA11.00
     //PRJ-431.AM.1.0 11NOV2020 | Added style property to JobtaskNo. .
     //PRJ-492.RS.1.0 10May2021 | Hide/Unhide Fields
     //PRJ-807.RS.1.0 9July21 | Ability to Assign Work Units and Work Units Of Measure at Job Task Line
-    //PRJ-1221.JS.0.1 24FEB2022 | Need to Check Code commented
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1299.JS.1.0 18APR2022 | Add one field
-    //PRJ-1299.JS.1.0 18APR2022 | Add one field
-    //PRJ-1437.NK.1.0 10Jun2022 | Add Code
-    //PRJ-1535.RM.1.0 26July2022 | Added some code
-    //PE-74.NK.1.0 18Apr2023 | Added Code
-    //PE-210.HS.1.0 23Nov2023| Add Code
-    Caption = 'Job Task Lines'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         //PRJ-492.N.S.1.0 Start
@@ -67,17 +59,6 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
             Visible = false;//PRJ-492.RS.1.0 10May2021
         }
         //PRJ-492.RS.1.0 10May2021 End
-
-        //PE-210.HS.1.0 23Nov2023 Start
-        modify("Usage (Total Cost)")
-        {
-            StyleExpr = NS_Color;
-        }
-        modify("Contract (Invoiced Price)")
-        {
-            StyleExpr = NS_InvColor;
-        }
-        //PE-210.HS.1.0 23Nov2023 End
         addafter("Job No.")
         {
             field(NS_JobTaskNo; Rec."Job Task No.")
@@ -89,89 +70,38 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 StyleExpr = SMP_StyleIsStrong;
 
                 trigger OnValidate()
-                var
-                    JobQuoteHead: Record "NS_Job Quote Header"; //PRJ-1437.NK.1.0 10Jun2022
                 begin
                     //ProjectPro - start
                     IF Description = '' THEN
                         Description := NS_GetJobTaskDescription("Job No.", "Job Task No.");
                     //ProjectPro - end
-                    //PRJ-1437.NK.1.0 10Jun2022 Start
-                    JobQuoteHead.Reset();
-                    JobQuoteHead.SetRange("NS_Quote No.", Rec."Job No.");
-                    if JobQuoteHead.FindFirst() then
-                        Rec."Job Posting Group" := JobQuoteHead."NS_Job Posting Group New";
-                    //PRJ-1437.NK.1.0 10Jun2022 End
                 end;
 
                 trigger OnLookup(VAR Text: Text): Boolean;
                 var
                     NS_PickAPOCode: Page "NS_Pick APO Code";
                     NS_Description2: Text[100];//PRJ-449.AM.1.0
-                    NJob: Record job;//PRJ-1264.AS.1.0
-                    Activity: Code[10];//PRJ-1264.AS.1.0
-                    NProcess: Code[10];//PRJ-1264.AS.1.0
-                    Operation: Code[10];//PRJ-1264.AS.1.0
-                    Section: Code[10];//PRJ-1264.AS.1.0
-                    JobActivity: Record "NS_Job Activity";//PRJ-1264.AS.1.0
-                    JobProcess: Record "NS_Job Process";//PRJ-1264.AS.1.0
-                    JobOperation: Record "NS_Job Operation";//PRJ-1264.AS.1.0
-                    JobSection: Record NS_Sections;//PRJ-1264.AS.1.0
-                    JobQuoteHead: Record "NS_Job Quote Header"; //PRJ-1437.NK.1.0 10Jun2022
+                                               // >> Upgrade
+                    JobAct: Code[20];
+                // << Upgrade
                 begin
                     //ProjectPro - start
                     CLEAR(NS_PickAPOCode);
                     NS_PickAPOCode.LOOKUPMODE(TRUE);
-                    NS_PickAPOCode.NS_SetInput("Job No.", "Job Task No.", 0);
+                    // >> Upgrade
+                    // NS_PickAPOCode.NS_SetInput("Job No.", "Job Task No.", 0);
+                    NS_PickAPOCode.NS_SetInput("Job No.", "Job Task No.", JobAct, 0);
+                    // << Upgrade
                     IF NS_PickAPOCode.RUNMODAL = ACTION::LookupOK THEN BEGIN
                         if (Rec."Job Task No.") <> '' then//PRJ-604.AS.1.0
                             Validate("Job Task No.", Rec."Job Task No.");//PRJ-604.AS.1.0
-                        NS_PickAPOCode.NS_GetResult("Job Task No.", NS_Description2);
+                        // NS_PickAPOCode.NS_GetResult("Job Task No.", NS_Description2);
+                        NS_PickAPOCode.NS_GetResult("Job Task No.", NS_Description2, JobAct);
                         Description := NS_JobTask.NS_GetJobTaskDescription("Job No.", "Job Task No.");
                         IF Description = '' THEN
                             Description := NS_Description2;
-
-                        //PRJ-1264.AS.1.0 start
-                        NJob.NS_JobTaskNoToAPo(Rec."Job Task No.", Activity, NProcess, Operation, Section);//PRJ-1264.AS.1.0            
-                        IF JobActivity.GET(JobActivity.NS_Type::Cost, Activity) THEN;
-                        IF JobProcess.GET(JobProcess.NS_Type::Cost, Activity, NProcess) THEN;
-                        IF JobOperation.get(JobOperation.NS_Type::Cost, Activity, NProcess, Operation) THEN;
-                        IF JobSection.get(JobSection.NS_Type::Cost, Activity, NProcess, Operation, Section) THEN;
-
-                        if NProcess <> '' then BEGIN
-                            NProcess := NProcess;
-                        end else begin
-                            NProcess := '';
-
-                        end;
-                        if Operation <> '' then BEGIN
-                            Operation := Operation;
-                        end else BEGIN
-                            Operation := '';
-                        end;
-
-                        if Section <> '' then BEGIN
-                            Section := Section;
-                        end else BEGIN
-                            Section := '';
-                        end;
-
-                        Rec.NS_Act := Activity;
-                        Rec.NS_Proc := NProcess;
-                        Rec.NS_Opr := Operation;
-                        Rec.NS_Sec := Section;
-                        //PRJ-1264.AS.1.0 end
                     END;
                     //ProjectPro - end
-                    //PRJ-1437.NK.1.0 10Jun2022 Start
-                    JobQuoteHead.Reset();
-                    JobQuoteHead.SetRange("NS_Job No.", rec."Job No.");
-                    if JobQuoteHead.FindFirst() then
-                        Rec."Job Posting Group" := JobQuoteHead."NS_Job Posting Group New";
-                    if NJob.get(Rec."Job No.") then
-                        if NJob."Job Posting Group" <> '' then
-                            Rec."Job Posting Group" := NJob."Job Posting Group";
-                    //PRJ-1437.NK.1.0 10Jun2022 End
                 end;
             }
         }
@@ -236,61 +166,6 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 ToolTip = 'Specifies the Resource No.';
                 Visible = false; //PRJ-492.AS.1.0
             }
-            //PRJ-1299.JS.1.0 18APR2022 - start
-            field("NS_Forecast By Task Totals"; Rec."NS_Forecast By Task Totals")
-            {
-                ToolTip = 'Specifies the value of the Forecast By Task Totals field.';
-                ApplicationArea = All;
-                Caption = 'Forecast By Tasks Total';
-                trigger OnValidate()
-                begin
-                    Rec.Modify();
-                    CurrPage.Update();
-                end;
-            }
-            //PRJ-1299.JS.1.0 18APR2022 - end
-
-            //PE-90.AS.1.0 start
-            field(NS_ForecastedCompCostOverride; Rec.NS_ForecastedCompCostOverride)
-            {
-                //Caption = 'Forecasted Completed Cost Override';//PE-270.AS.1.0
-                Caption = 'Override Forecasted Completed Cost';//PE-270.JS.1.0 06MAY2024
-                ApplicationArea = All;
-                // ToolTip = 'When a value is entered against a task, That value will flow to the Job Forecast Worksheet under field "Forecasted Completed Cost Over-ride" and field "Forecasted Completed Cost"';//PE-270.AS.1.0 Commented
-                //ToolTip = 'Specifies the value that will override the existing value in the field "Forecasted Completed Cost" on Job Forecast Worksheet and update the field "Override Forecasted Completed Cost" as well. Please note that, this is non-editable here if the �Enable Override Forecast on JFW� on the job card is True.';//PE-270.AS.1.0 Added
-                ToolTip = 'Specify the value to override the existing values on Job Forecast Worksheet for "Forecasted Completed Cost" and "Override Forecasted Completed Cost". Please note that, this is non-editable here if the setup �Enable Override Forecast on JFW� on the job card is True.'; //PE-270.JS.1.0 06MAY2024
-                Editable = GetOverrideEditable;//PE-270.AS.1.0
-                //PE-90.NC.1.0 29June2023 Start
-                trigger OnValidate()
-                var
-                    RecJob: Record Job;
-                begin
-                    RecJob.Reset();
-                    RecJob.SetRange("No.", Rec."Job No.");
-                    RecJob.SetFilter("NS_Sub-Level to Job No.", '<>%1', '');
-                    if RecJob.FindFirst() then
-                        Error('You can not enter a value on �Forecasted Completed Cost Over-ride� at Sub-Level. It is recommended to enter Total Forecasted Cost for each task including the value of Master Job and its Sub-Levels on field �Forecasted Completed Cost Over-ride� on the Master Job Task Page');
-                end;
-                //PE-90.NC.1.0 29June2023 End
-            }
-            //PE-90.AS.1.0 end
-            //PE-287.JS.1.0 28APR2024-Start
-            field("NS_JFW Forecast Completed Cost"; Rec."NS_JFW Forecast Completed Cost")
-            {
-                Caption = 'JFW Forecasted Completed Cost';
-                ApplicationArea = All;
-                ToolTip = 'Specifies the latest �Forecasted Completed Cost� value against the job task from the job forecast worksheet if it is posted or is closed with/without any change. The values are stored only if the setup �Enable JFW Forecasted Completed Cost on JTL� is true on the job and hence will be used for calculating TCE value on rev rec summary details when the �Batch Posting of Job Forecast Worksheets�. Please note that this column shows the combined values of the sub-level job tasks, if �Forecast to Include Sub-Level� is enabled on the current job.';
-            }
-            //PE-287.JS.1.0 28APR2024-end
-            //PE-288.JS.1.0 06MAY2024
-            field(NSJobTaskStatus; Rec.NSJobTaskStatus)
-            {
-
-                Caption = 'Job Task Status';
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Job Task Status field.';
-            }
-            //PE-288.JS.1.0 06MAY2024
         }
         addafter("Job Posting Group")
         {
@@ -340,45 +215,6 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 Visible = false; //PRJ-492.AS.1.0
             }
         }
-        //PRJ-1535.RM.1.0 start
-        addafter("Remaining (Total Price)")
-        {
-            field(NS_Manager; Rec.NS_Manager)
-            {
-                ApplicationArea = all;
-                ToolTip = 'Specifies the Manager';
-            }
-            //PRJ-1535.RM.1.0 end
-
-            //PE-90.AS.4.0 START
-            field("NS_Budgeted Hours"; Rec."NS_Budgeted Hours")
-            {
-                ApplicationArea = all;
-                ToolTip = 'This is the sum of Quantity for Type Resource with Unit of Measure as HR/HOUR from the job planning lines page';
-            }
-            field("NS_Actual Hours"; Rec."NS_Actual Hours")
-            {
-                ApplicationArea = all;
-                ToolTip = 'The hours will be added from the Quantity for Type Resource with Unit of measure Hours/HR from the Job ledger Entries page';
-            }
-            field("NS_Remaining Hours"; Rec."NS_Remaining Hours")
-            {
-                ApplicationArea = all;
-                ToolTip = 'This is the difference between the Budgeted Hours and Actual Hours';
-            }
-            //PE-90.AS.4.0 END
-        }
-        //PE-210.HS.1.0 23Nov2023 Starts
-        addlast(Control1)
-        {
-            field(NS_JobTaskStatus; Rec.NS_JobTaskStatus)
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Status field.';
-                Editable = NS_NotEditable;
-            }
-        }
-        //PE-210.HS.1.0 23Nov2023 End
     }
     actions
     {
@@ -485,7 +321,6 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedIsBig = true;
-                ToolTip = 'Use to Import XML file';    //PRJ-1221.JS.1.0 24FEB2022
 
                 trigger OnAction();
                 var
@@ -495,8 +330,8 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 begin
                     if "Job Task Type" <> "Job Task Type"::Posting then
                         ERROR(Text14021127);
-                    //FileName := FileMgt.OpenFileDialog('', '', '');  //PRJ-1221.JS.1.0 24FEB2022 Need to Check Code commented                 
-                    //XMLImport.NS_ImportXML(FileName, Rec."Job No.", Rec."Job Task No."); //PRJ-1135.NK.1.0 //PRJ-1221.JS.1.0 24FEB2022 Need to Check Code commented
+                    FileName := FileMgt.OpenFileDialog('', '', '');
+                    XMLImport.NS_ImportXML(FileName, "Job No.", "Job Task No.");
                     CurrPage.UPDATE;
                 end;
             }
@@ -523,21 +358,20 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 begin
                     if "Job Task Type" <> "Job Task Type"::Posting then
                         ERROR(Text14021127);
-                    //PRJ-1221.JS.0.1 24FEB2022 Need to Check Code commented-Start
-                    //FileName := FileMgt.OpenFileDialog(NS_OpenFileDialogWindowTitle, '', '');   //PRJ-1221.JS.0.1 24FEB2022 Need to Check Code commented
+                    FileName := FileMgt.OpenFileDialog(NS_OpenFileDialogWindowTitle, '', '');
                     //Text1 := FileMgt.BrowseForFolderDialog('Test','',TRUE);
-                    // Text2 := FileMgt.GetDirectoryName(FileName);
-                    // if STRPOS(Text2, NS_FolderLocation) > 0 then begin
-                    //     FileName := DELSTR(FileName, STRPOS(Text2, NS_FolderLocation), 3);
-                    //     FileName := NS_SharedFolderLocation + FileName;
-                    // end;
-                    // FileName2 := FileMgt.GetFileName(FileName);
-                    // FileName2 := NS_TempFolderLocation + FileName2;
-                    // //FileMgt.CopyClientFile(FileName,FileName2,TRUE);
-                    // XMLImport.NS_ImportXML(FileName, Rec."Job No.", Rec."Job Task No."); //PRJ-1135.NK.1.0
-                    // CLEAR(FileMgt);
-                    // CLEAR(XMLImport);
-                    //PRJ-1221.JS.0.1 24FEB2022 Need to Check Code commented-End
+                    Text2 := FileMgt.GetDirectoryName(FileName);
+                    if STRPOS(Text2, NS_FolderLocation) > 0 then begin
+                        FileName := DELSTR(FileName, STRPOS(Text2, NS_FolderLocation), 3);
+                        FileName := NS_SharedFolderLocation + FileName;
+                    end;
+                    FileName2 := FileMgt.GetFileName(FileName);
+                    FileName2 := NS_TempFolderLocation + FileName2;
+                    //FileMgt.CopyClientFile(FileName,FileName2,TRUE);
+                    XMLImport.NS_ImportXML(FileName, "Job No.", "Job Task No.");
+                    CLEAR(FileMgt);
+                    CLEAR(XMLImport);
+
                     //SMP start DeleteClientFile not supported in extension development
                     //FileMgt.DeleteClientFile(FileName2);
                     //SMP end
@@ -546,52 +380,6 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 end;
             }
         }
-        //PE-74.NK.1.0 18Apr2023 Start
-        addafter("Sales &Invoices/Credit Memos")
-        {
-            action("NS_User Tasks")
-            {
-                ApplicationArea = all;
-                Promoted = true;
-                PromotedCategory = Process;
-                Caption = 'User Tasks';
-                Image = Task;
-                ToolTip = 'View this User Tasks.';
-                trigger OnAction()
-                var
-                    UserTask: Record "User Task";
-                    UserTask2: Record "User Task";
-                begin
-                    UserTask.Reset();
-                    UserTask.SetRange("NS_Job No.", Rec."Job No.");
-                    if UserTask.IsEmpty then begin
-                        UserTask2.Init();
-                        UserTask2."NS_Job No." := Rec."Job No.";
-                        UserTask2."NS_Task No." := Rec."Job Task No.";
-                        UserTask2.Insert();
-                        Commit();
-                        UserTask.Reset();
-                        UserTask.SetRange("NS_Job No.", Rec."Job No.");
-                        UserTask.SetRange("NS_Task No.", Rec."Job Task No.");
-                        PAGE.RunModal(PAGE::"User Task Card", UserTask);
-                    end else begin
-                        UserTask.Reset();
-                        UserTask.SetRange("NS_Job No.", Rec."Job No.");
-                        UserTask.SetRange("NS_Task No.", Rec."Job Task No.");
-                        if UserTask.FindFirst() then
-                            PAGE.RunModal(PAGE::"User Task List", UserTask)
-                        else begin
-                            UserTask.Reset();
-                            UserTask.SetRange("NS_Job No.", Rec."Job No.");
-                            if UserTask.FindFirst() then
-                                PAGE.RunModal(PAGE::"User Task List", UserTask);
-                        end;
-                    end;
-                end;
-            }
-
-        }
-        //PE-74.NK.1.0 18Apr2023 End
         addafter("F&unctions")
         {
             group("NS_Take-Off")
@@ -656,23 +444,6 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 end;
             }
         }
-        //PE-299.JS.1.0 17MAY024-Start
-        addafter("Job &Task Card")
-        {
-            action(NSUpdOverrideToJFWForcasted)
-            {
-                ApplicationArea = all;
-                Caption = 'Update Override Cost to JFW Forecasted Cost';
-                ToolTip = 'This function will update/copy "Override Forecasted Completed Cost" values to the "JFW Forecasted Completed Cost" column for all job task lines if the �Push Override value to JFW Forecasted on JTL� setup on the job card is enabled.';
-                Image = UpdateUnitCost;
-                trigger OnAction()
-                begin
-                    if (rec."Job No." <> '') and (rec."Job Task No." <> '') then
-                        rec.NS_UpdJobForecastOverrideCostToJFWForecastedCostonJTL(Rec);
-                end;
-            }
-        }
-        //PE-299.JS.1.0 17MAY024-end
     }
 
     var
@@ -717,27 +488,8 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
         QuoteNo: Code[20];
         Text14021127: Label 'The Task Line must be of Type Posting';
         SMP_StyleIsStrong: Boolean;
-        //PE-210.HS.1.0 23Nov2023  Start
-        NS_Color: Text;
-        NS_InvColor: Text;
-        NS_NotEditable: Boolean;
-        //PE-210.HS.1.0 23Nov2023 End
-
-        GetOverrideEditable: Boolean;//PE-270.AS.1.0
-        Job_G: Record Job;//PE-270.AS.1.0
 
     //Unsupported feature: CodeModification on "OnAfterGetRecord". Please convert manually.
-
-    trigger OnAfterGetCurrRecord()
-    begin
-        //PE-270.AS.1.0 start
-        if Job_G.get(Rec."Job No.") then;
-        if Job_G.NS_EnableOverrideForecastonJFW = true then
-            GetOverrideEditable := false;
-        if Job_G.NS_EnableOverrideForecastonJFW = false then
-            GetOverrideEditable := true;
-        //PE-270.AS.1.0 end;
-    end;
 
     trigger OnAfterGetRecord();
     begin
@@ -750,32 +502,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
             NS_JobOSFileName := NS_Job."NS_OS File Name"
         else
             NS_JobOSFileName := '';
-        //ProjectPro - end 
-
-        //PE-210.HS.1.0 23Nov2023 Start
-        Clear(NS_Color);
-        Clear(NS_InvColor);
-        if NS_JobsSetup.Get() then;
-        if NS_JobsSetup.NS_CostExceedsColor then begin
-            if Rec."Usage (Total Cost)" > Rec."Schedule (Total Cost)" then
-                NS_Color := 'Unfavorable';
-            if rec."Contract (Total Price)" < rec."Contract (Invoiced Price)" then
-                NS_InvColor := 'Unfavorable';
-
-            if (rec."Job Task Type" = rec."Job Task Type"::"Begin-Total") or (rec."Job Task Type" = rec."Job Task Type"::"End-Total") or (rec."Job Task Type" = rec."Job Task Type"::Heading) or (rec."Job Task Type" = rec."Job Task Type"::Heading) then
-                NS_NotEditable := false
-            else
-                NS_NotEditable := true;
-        end;
-        //PE-210.HS.1.0 23Nov2023 Ends
-
-        //PE-270.AS.1.0 start
-        if Job_G.get(Rec."Job No.") then;
-        if Job_G.NS_EnableOverrideForecastonJFW = true then
-            GetOverrideEditable := false;
-        if Job_G.NS_EnableOverrideForecastonJFW = false then
-            GetOverrideEditable := true;
-        //PE-270.AS.1.0 end;
+        //ProjectPro - end      
     end;
 
 
@@ -795,9 +522,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
             SETRANGE("Job No.", NS_CurrentJobNo);
             FILTERGROUP := 0;
         end;
-        //ProjectPro - end  
-
-        GetOverrideEditable := true;//PE-270.AS.1.0 
+        //ProjectPro - end    
     end;
 
 
@@ -1067,10 +792,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
         if JobNo > '' then
             if NS_Job.GET(JobNo) then
                 if NS_Job."NS_Job Calendar Code" > '' then
-                //PRJCTPR-308.DK.1.0 11June2024 Start
-                    //if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then begin //PRJ-1070.RM.1.0 08Dec2021
-                     if NS_JobsSetup."NS_JobCalendarSource" = NS_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then begin 
-                     //PRJCTPR-308.DK.1.0 11June2024 End
+                    if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then begin
                         if NS_BaseCalendar.GET(NS_Job."NS_Job Calendar Code") then
                             NS_CalendarCode := NS_Job."NS_Job Calendar Code"
                         else
@@ -1083,10 +805,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                     end;
 
         if NS_CalendarCode = '' then
-        //PRJCTPR-308.DK.1.0 11June2024 Start
-            //if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then begin //PRJ-1070.RM.1.0 08Dec2021
-            if NS_JobsSetup."NS_JobCalendarSource" = NS_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then begin 
-            //PRJCTPR-308.DK.1.0 11June2024
+            if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then begin
                 if NS_BaseCalendar.GET(NS_JobsSetup."NS_Job Calendar Code") then
                     NS_CalendarCode := NS_JobsSetup."NS_Job Calendar Code"
                 else
@@ -1106,10 +825,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
             for NS_DayCount := 1 to Days do begin
                 repeat
                     NS_NewDate := CALCDATE('+1D', NS_NewDate);
-                    //PRJCTPR-308.DK.1.0 11June2024 Start
-                    // if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then //PRJ-1070.RM.1.0 08Dec2021
-                    if NS_JobsSetup."NS_JobCalendarSource" = NS_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then 
-                    //PRJCTPR-308.DK.1.0 11June2024 End
+                    if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then
                         //NS_NonWorkingDate := NS_CalendarManagement.CheckDateStatus(NS_CalendarCode, NS_NewDate, NS_Description)//PPNA16.0 Blocked
                         NS_NonWorkingDate := true //PPNA16.0 Added
                     else
@@ -1118,10 +834,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                 until NS_NonWorkingDate = false;
             end
         else begin
-            //PRJCTPR-308.DK.1.0 11June2024 Start
-            //if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then //PRJ-1070.RM.1.0 08Dec2021
-            if NS_JobsSetup."NS_JobCalendarSource" = NS_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then
-                //PRJCTPR-308.DK.1.0 11June2024 End
+            if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then
                 //NS_NonWorkingDate := NS_CalendarManagement.CheckDateStatus(NS_CalendarCode, NS_NewDate, NS_Description) //PPNA16.0 Blocked
                 NS_NonWorkingDate := true //PPNA16.0 Added
             else
@@ -1130,10 +843,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
             if NS_NonWorkingDate then
                 repeat
                     NS_NewDate := CALCDATE('+1D', NS_NewDate);
-                    //PRJCTPR-308.DK.1.0 11June2024 Start
-                    // if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then //PRJ-1070.RM.1.0 08Dec2021
-                    if NS_JobsSetup."NS_JobCalendarSource" = NS_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then
-                        //PRJCTPR-308.DK.1.0 11June2024 End
+                    if NS_JobsSetup."NS_Job Calendar Source" = NS_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then
                         //NS_NonWorkingDate := NS_CalendarManagement.CheckDateStatus(NS_CalendarCode, NS_NewDate, NS_Description) //PPNA16.0 Blocked
                         NS_NonWorkingDate := true //PPNA16.0 Added
                     else

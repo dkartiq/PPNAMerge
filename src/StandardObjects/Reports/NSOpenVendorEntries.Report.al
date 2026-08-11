@@ -19,7 +19,7 @@ report 14021217 "NS_Open Vendor Entries"
     RDLCLayout = './Layouts/NSOpen Vendor Entries.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Open Vendor Entries'; //PE-141.NK.1.0 start 09Aug2023
+    Caption = 'Open Vendor Entries';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

@@ -2,8 +2,7 @@ page 14021450 NS_JobListTemplateWise
 {
     //PPAL-172.AS.1.0 12 DEC2020 New Page Created
 
-    //Caption = 'Job List'; //PRJ-1051.GK.1.0
-    Caption = 'Package List'; //PRJ-1051.GK.1.0
+    Caption = 'Job List';
     AutoSplitKey = true;
     PageType = List;
     SourceTable = "NS_Job Quote Line";

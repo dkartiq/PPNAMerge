@@ -1,5 +1,8 @@
 page 14021172 "NS_Job Planning List (Locked)"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+    // 002 24-11-2021  PREM  Job Filter
+    //   001 12-11-2021  PREM  RG007-P0485-62-1 JPL Lock actions
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -9,7 +12,7 @@ page 14021172 "NS_Job Planning List (Locked)"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-895.GK.1.0 27Aug2021| Added two fields Use Tax Sku & Use Tax Amount
-    //PRJ-1420.NK.1.0 30May2022 | Add Field
+
     Caption = 'Job Planning List (Locked)';
     PageType = List;
     SourceTable = "NS_Locked Job Planning Line";
@@ -100,16 +103,7 @@ page 14021172 "NS_Job Planning List (Locked)"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Description';
-                    Visible = false; //PRJ-1420.NK.1.0 30May2022
                 }
-                //PRJ-1420.NK.1.0 30May2022 Start
-                field(NS_DescriptionNew; Rec.NS_DescriptionNew)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Description';
-                    ToolTip = 'Specifies the Description';
-                }
-                //PRJ-1420.NK.1.0 30May2022 End
                 field("Gen. Bus. Posting Group"; Rec."NS_Gen. Bus. Posting Group New")//PRJ-831.AS.2.0 13OCT2021 Changed Field reference from "NS_Gen. Bus. Posting Group" to "NS_Gen. Bus. Posting Group New"
                 {
                     ApplicationArea = All;
@@ -353,35 +347,28 @@ page 14021172 "NS_Job Planning List (Locked)"
         }
     }
 
+
     trigger OnOpenPage();
     begin
         JobSetup.GET();
-        CurrPage.EDITABLE(false);
-        if JobSetup."NS_Allow UpdatesToOrigPlanning" then
-            CurrPage.EDITABLE(true);
+        IF JobNoFilterG = '' THEN BEGIN // >> 002 <<
+            CurrPage.EDITABLE(false);
+            if JobSetup."NS_Allow UpdatesToOrigPlanning" then
+                CurrPage.EDITABLE(true);
 
-        if PP_ShowJobNo > '' then begin
-            SETFILTER("NS_Job No.", PP_ShowJobNo);
-            SETFILTER("NS_Line Type", '%1|%2', PP_ShowLineType, 2);
-            if PP_ShowAdjustmentLines = Text14021140_Lbl then
-                SETFILTER(NS_Adjustment, '>%1', '')
-            else
-                if PP_ShowAdjustmentLines = Text14021141_Lbl then
-                    SETFILTER(NS_Adjustment, '=%1', '');
-        end;
-        //MHNA-6.NK.1.0 start 06march2023
-
-        NS_SkillClassEditable := TRUE;
-        IF NS_ShowJobNo > '' THEN BEGIN
-            Rec.SETFILTER("NS_Job No.", NS_ShowJobNo);
-            Rec.SETFILTER("NS_Line Type", '%1|%2', NS_ShowLineType, 2);
-            IF Rev_ShowAdjustmentLines = Text14021401 THEN
-                Rec.SETFILTER(NS_Adjustment, '>%1', '')
-            ELSE
-                IF Rev_ShowAdjustmentLines = Text14021402 THEN
-                    Rec.SETFILTER(NS_Adjustment, '=%1', '');
-        END;
-        //MHNA-6.NK.1.0 end 06march2023
+            if PP_ShowJobNo > '' then begin
+                SETFILTER("NS_Job No.", PP_ShowJobNo);
+                SETFILTER("NS_Line Type", '%1|%2', PP_ShowLineType, 2);
+                if PP_ShowAdjustmentLines = Text14021140_Lbl then
+                    SETFILTER(NS_Adjustment, '>%1', '')
+                else
+                    if PP_ShowAdjustmentLines = Text14021141_Lbl then
+                        SETFILTER(NS_Adjustment, '=%1', '');
+            end;
+            // >> 002
+        END ELSE
+            SETFILTER("NS_Job No.", JobNoFilterG);
+        // << 002
     end;
 
     var
@@ -391,14 +378,16 @@ page 14021172 "NS_Job Planning List (Locked)"
         PP_ShowAdjustmentLines: Code[10];
         Text14021140_Lbl: Label 'YES';
         Text14021141_Lbl: Label 'NO';
-        //MHNA-6.NK.1.0 start 06march2023 start
-        Rev_ShowAdjustmentLines: Code[10]; //MHNA-6.NK.1.0 start 06march2023
-        NS_SkillClassEditable: Boolean;
-        NS_ShowJobNo: Code[20];
-        Text14021402: Label 'NO';
-        NS_ShowLineType: Option;
-        Text14021401: Label 'YES';
-    //MHNA-6.NK.1.0 end 06march2023
+        // >> Upgrade
+        JobNoFilterG: Text;
+
+    PROCEDURE SetJobFilter(JobNoFilter: Text);
+    BEGIN
+        // >> 001 New Function <<
+        JobNoFilterG := JobNoFilter;
+    END;
+    // << Upgrade
+
     procedure NS_SetFilters(JobNo: Code[20]; LineType: Option);
     begin
         PP_ShowJobNo := JobNo;
@@ -409,21 +398,5 @@ page 14021172 "NS_Job Planning List (Locked)"
     begin
         PP_ShowAdjustmentLines := PassedShowAdjLines;
     end;
-    //MHNA-6.NK.1.0 start 06march2023
-    procedure Rev_SetShowAdjustmentLines(PassedShowAdjLines_Rev: Code[10]);
-    begin
-
-        Rev_ShowAdjustmentLines := PassedShowAdjLines_Rev;
-
-    end;
-
-    procedure SetFilters(JobNo: Code[20]; LineType: Option);
-    begin
-
-        NS_ShowJobNo := JobNo;
-        NS_ShowLineType := LineType;
-
-    end;
-    //MHNA-6.NK.1.0 start 06march2023
 }
 

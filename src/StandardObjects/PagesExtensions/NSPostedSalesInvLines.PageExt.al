@@ -2,8 +2,6 @@ pageextension 14021266 NS_PostedSalesInvLines extends "Posted Sales Invoice Line
 {
     // version NAVW111.00.00.19846,NAVNA11.00.00.19846,PPNA11.00
     //PRJ-659.RS.1.0 17June21 | NS_ should be removed from every page rest mention the page ID and Name.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Sales Invoice Lines'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Variant Code")

@@ -75,14 +75,14 @@
 //     var
 //         TempSalesTaxAmtLine: Record 10011 temporary;
 //     begin
-//NS_FinalTotal := p.P10045GetNS_FinalTotal();//PRJ-196 VT 08-04-20 Added //PRJCTPR-336.NC.1.0 19Mar2024 Block
+//         NS_FinalTotal := p.P10045GetNS_FinalTotal();//PRJ-196 VT 08-04-20 Added
 //         PurchInvLine.SETRANGE("Document No.", "No.");
 //         IF PurchInvLine.FIND('-') THEN
 //             REPEAT
 //                 VendAmount := VendAmount + PurchInvLine.Amount;
 //                 AmountInclVAT := AmountInclVAT + PurchInvLine."Amount Including VAT";
 //             UNTIL PurchInvLine.NEXT = 0;
-//NS_FinalTotal := AmountInclVAT - Rec."NS_Retention Amount (LCY)"; //PRJCTPR-336.NC.1.0 19Mar2024
+
 //         //ProjectPro - start
 //         IF NS_JobsSetup."NS_Calc Payable Ret Before Tax" THEN
 //             TaxAmount := AmountInclVAT - VendAmount + "NS_Retention Amount (LCY)"

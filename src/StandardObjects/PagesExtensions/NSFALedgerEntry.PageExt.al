@@ -1,7 +1,5 @@
 pageextension 14021350 NS_FALedger extends "FA Ledger Entries"
 {
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'FA Ledger Entries'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("No. of Depreciation Days")

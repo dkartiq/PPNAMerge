@@ -10,8 +10,7 @@ report 14021154 "NS_Gross Profit by APO"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-849.AS.1.0 Line Amnt change in Layout also. Also added Section functionality
-    //PRJ-1571.NK.1.0 18Aug2022 | Add Code
-   DefaultLayout = RDLC;
+    DefaultLayout = RDLC;
     Caption = 'Gross Profit by APO';
     RDLCLayout = './Layouts/NSGross Profit by APO.rdl';
 
@@ -45,10 +44,7 @@ report 14021154 "NS_Gross Profit by APO"
                     SETFILTER("Job No.", Job."No.");
                     SetFilter("Job Task No.", Job.GetFilter("NS_Job Task No. Filter"));
                     SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                    SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 END
+                    SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                 end;
             }
             dataitem("Sub-Levels"; Job)
@@ -70,10 +66,7 @@ report 14021154 "NS_Gross Profit by APO"
                         //Get sub-job Job Ledger Entries into the buffer
                         SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
                         SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        // SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 END
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                     end;
                 }
 
@@ -445,7 +438,7 @@ report 14021154 "NS_Gross Profit by APO"
                 {
                     Caption = 'Show Processes';
                     ApplicationArea = All;
-                    CaptionClass = '50995,1,0'; //PRJ-1571.NK.1.0 18Aug2022
+
                     trigger OnValidate()
                     begin
                         IF NOT ShowProcesses THEN
@@ -456,7 +449,7 @@ report 14021154 "NS_Gross Profit by APO"
                 {
                     Caption = 'Show Operations';
                     ApplicationArea = All;
-                    CaptionClass = '50995,2,0'; //PRJ-1571.NK.1.0 18Aug2022
+
                     trigger OnValidate()
                     begin
                         IF ShowOperations THEN
@@ -468,7 +461,7 @@ report 14021154 "NS_Gross Profit by APO"
                 {
                     Caption = 'Show Sections';
                     ApplicationArea = All;
-                    CaptionClass = '50995,3,0'; //PRJ-1571.NK.1.0 18Aug2022
+
                     trigger OnValidate();
                     begin
                         if ShowSections then
@@ -528,8 +521,6 @@ report 14021154 "NS_Gross Profit by APO"
     end;
 
     trigger OnPreReport()
-    var
-        ApoSetup: Record NS_APOSetup; //PRJ-1571.NK.1.0 22Aug2022
     begin
         IF JobNumFilter <> '' THEN
             Job.SETRANGE("No.", JobNumFilter);
@@ -543,15 +534,6 @@ report 14021154 "NS_Gross Profit by APO"
             NoHeadingLbl := NoLbl;
             TypeHeadingLbl := TypeHeading;
         END;
-        //PRJ-1571.NK.1.0 22Aug2022 Start
-        ActivityProcessOperationLbl := '';
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then
-            ActivityProcessOperationLbl := ApoSetup."Activity Code" + ' / ' + ApoSetup."Process Code" + ' / ' + ApoSetup."Operation Code" + ' / ' + ApoSetup."Section Code"
-        else
-            ActivityProcessOperationLbl := 'Activity / Process / Operation / Sections';
-        //PRJ-1571.NK.1.0 22Aug2022 Start End
     end;
 
     var
@@ -615,8 +597,7 @@ report 14021154 "NS_Gross Profit by APO"
         ActualCostLbl: Label 'Actual Cost';
         ActualProfitLbl: Label 'Actual Profit';
         PercentProfitLbl: Label 'Percent Profit';
-        //ActivityProcessOperationLbl: Label 'Activity / Process / Operation / Sections';//PRJ-688.AM.1.0 //PRJ-1571.NK.1.0 22Aug2022 Block
-        ActivityProcessOperationLbl: Text;//PRJ-1571.NK.1.0 22Aug2022
+        ActivityProcessOperationLbl: Label 'Activity / Process / Operation / Sections';//PRJ-688.AM.1.0
         JobDescription: Label 'Job Description:';
         CustomerAccountNameLbl: Label 'Customer Account Name:';
         JobLocationLbl: Label 'Job Location:';

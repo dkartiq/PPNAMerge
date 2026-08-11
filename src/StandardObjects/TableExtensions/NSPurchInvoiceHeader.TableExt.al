@@ -1,7 +1,7 @@
 tableextension 14021126 NS_PurchInvoiceHeader extends "Purch. Inv. Header"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1380.NK.1.0 12May2022 | Add Fields
+
     fields
     {
         field(14021100; "NS_Job No."; Code[20])
@@ -105,31 +105,6 @@ tableextension 14021126 NS_PurchInvoiceHeader extends "Purch. Inv. Header"
             Editable = false;
         }
         //PRJ-889.GK.1.0 13Sep2021 end
-        //PRJ-1380.NK.1.0 12May2022 Start
-        field(14021330; "NS_Job Purchaser"; Code[20])
-        {
-            Caption = 'Job Purchaser';
-            DataClassification = CustomerContent;
-            Description = 'PRJ-1380.NK.1.0';
-        }
-        field(14021331; "NS_Job Manager"; Code[20])
-        {
-            Caption = 'Job Manager';
-            DataClassification = CustomerContent;
-            Description = 'PRJ-1380.NK.1.0';
-            TableRelation = Resource;
-        }
-        //PRJ-1380.NK.1.0 12May2022 End
-
-        //PE-211.AS start
-        field(14021488; "NS_Field Manager"; Code[50])
-        {
-            Caption = 'Field Manager';
-            TableRelation = "User Setup";
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-211.AS end
     }
     keys
     {

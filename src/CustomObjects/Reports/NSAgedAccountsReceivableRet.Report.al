@@ -12,48 +12,21 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-215.MS.1.0 rearrange code on aftergetrecord trigger of Totals dataitem as per 2017DB
     //CTSI-158.AS.1.0 21SEPT2020 Increased lengths of Text
-    //PRJ-1133.RM.1.0 15Jan2022 | Removed with statement
-    //PRJ-1193.RM.1.0 15Feb2022 | Double Conversion Problem on Aging
-    //PRJ-1235.RM.1.0 02March2022 | Added Job Description column
-    //PRJ-1449.RM.1.0 10June2022 | Added some code
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSAged Accounts Receivable Ret.rdl';
     UsageCategory = ReportsAndAnalysis;
-    Caption = 'Aged A/R with Retention';//PRJ-1193.RM.1.0
+    Caption = 'Aged Accounts Receivable';
     ApplicationArea = all;
 
     dataset
     {
-
         dataitem(Customer; Customer)
         {
             PrintOnlyIfDetail = true;
             RequestFilterFields = "No.", "Customer Posting Group", "Payment Terms Code", "Salesperson Code";
-            //PRJ-1449.RM.1.0 start
-            column(TotRetAmt; TotRetAmt)
-            {
-            }
-            //PRJ-1449.RM.1.0 end
             column(FORMAT_TODAY_0_4_; FORMAT(TODAY, 0, 4))
             {
             }
-            //PRJ-1193.RM.1.0 start
-            column(GrandTotalBalanceDue_; GrandTotalBalanceDue)
-            {
-            }
-            column(GrandBalanceDue_1_; GrandBalanceDue[1])
-            {
-            }
-            column(GrandBalanceDue_2_; GrandBalanceDue[2])
-            {
-            }
-            column(GrandBalanceDue_3_; GrandBalanceDue[3])
-            {
-            }
-            column(GrandBalanceDue_4_; GrandBalanceDue[4])
-            {
-            }
-            //PRJ-1193.RM.1.0 end
             column(TIME; TIME)
             {
             }
@@ -274,7 +247,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
             column(CLE_JobNo_Caption; JobNoLbl)
             {
             }
-
             dataitem("Cust. Ledger Entry"; "Cust. Ledger Entry")
             {
                 DataItemLink = "Customer No." = FIELD("No."), "Global Dimension 2 Code" = FIELD("Global Dimension 2 Filter"), "Global Dimension 1 Code" = FIELD("Global Dimension 1 Filter");
@@ -287,7 +259,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                     if "Remaining Amount" <> 0 then
                         NS_InsertTemp("Cust. Ledger Entry");
                     CurrReport.SKIP;    // this fools the system into thinking that no details "printed"...yet
-
                 end;
 
                 trigger OnPreDataItem();
@@ -314,11 +285,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                 DataItemTableView = SORTING(Number);
                 column(AmountDueToPrint; AmountDueToPrint)
                 {
-                }//////
-                //PRJ-1193.RM.1.0 start
-                column(RetentionToPrintUSD; NS_RetentionToPrintUSD)
-                { }
-                //PRJ-1193.RM.1.0 end
+                }
                 column(AmountDue_1_; AmountDue[1])
                 {
                 }
@@ -328,12 +295,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                 column(AmountDue_3_; AmountDue[3])
                 {
                 }
-                //PRJ-1235.RM.1.0 start
-
-                column("Job_Desc_Caption"; JobDescLbl)
-                {
-                }
-                //PRJ-1235.RM.1.0 end
                 column(AmountDue_4_; AmountDue[4])
                 {
                 }
@@ -355,7 +316,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                 column(RetentionToPrint; NS_RetentionToPrint)
                 {
                 }
-
                 column(AmountDueToPrint_Control63; AmountDueToPrint)
                 {
                 }
@@ -476,17 +436,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                 column(AgingDateText; NS_AgingDateText)
                 {
                 }
-                //PRJ-1235.RM.1.0 start
-                column(Descr; NSJobDesc)
-                {
-                }
-                //PRJ-1235.RM.1.0 end
-                //PRJ-1193.NK.0.1 Start
-                // column(TotRetAmt; TotRetAmt)  //PRJ-1449.RM.1.0 commented start
-                // {
-                // }
-                //PRJ-1449.RM.1.0 commented end
-                //PRJ-1193.NK.0.1 End
+
                 trigger OnAfterGetRecord();
                 begin
                     NS_CalcPercents(AmountDueToPrint, AmountDue);
@@ -519,17 +469,8 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                               TempCustLedgEntry."Remaining Amount"),
                             Currency."Amount Rounding Precision");
                         AmountDueToPrint := TempCustLedgEntry."Remaining Amount";
-
-                    end else begin
+                    end else
                         AmountDueToPrint := TempCustLedgEntry."Remaining Amt. (LCY)";
-
-                    end;
-
-                    NSJobDesc := ' ';//PRJ-1235.RM.1.0 start
-                    if NSJob.Get(TempCustLedgEntry."NS_Job No.") then
-                        NSJobDesc := NSJob.Description; //PRJ-1235.RM.1.0 end
-                    //NS_RetentionToPrintUSD := TempCustLedgEntry."NS_Retention Amount";//PRJ-1193.RM.1.0
-
 
                     //PRJ-215.MS.1.0 Commented Start
                     // if (not SalesSetup."Sales Retention Inactive") and
@@ -567,10 +508,10 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                     //PRJ-215.MS.1.0 End
 
                     NS_RetentionToPrint := 0;
+                    NS_RetentionToPrint := 0;
                     if not SalesSetup."NS_Sales Retention Inactive" then
                         if TempCustLedgEntry."NS_Retention Ledger Code" = JobsSetup."NS_Retention Receivable Ledger" then begin
                             NS_RetentionToPrint := AmountDueToPrint;
-
                             NS_TotalRetention := NS_TotalRetention + NS_RetentionToPrint;
                             if AgingDate > PeriodEndingDate[1] then
                                 AmountDueToPrint := 0;
@@ -594,21 +535,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                     NS_CalcPercents("TotalBalanceDue$", "BalanceDue$");
 
                     "Cust. Ledger Entry" := TempCustLedgEntry;
-                    //PRJ-1193.NK.0.1 Start
-                    // if not SalesSetup."NS_Sales Retention Inactive" then begin
-                    //     JobsSetup.Get();
-                    //     TotRetAmt := 0;
-                    //     CustLedgEntry.Reset();
-                    //     CustLedgEntry.SetRange("Customer No.", "Cust. Ledger Entry"."Customer No.");
-                    //     CustLedgEntry.SETRANGE("Date Filter", 0D, PeriodEndingDate[1]);
-                    //     CustLedgEntry.setrange("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
-                    //     if CustLedgEntry.FindFirst() then
-                    //         repeat
-                    //             CustLedgEntry.CalcFields("Remaining Amt. (LCY)");
-                    //             TotRetAmt += CustLedgEntry."Remaining Amt. (LCY)";
-                    //         until CustLedgEntry.Next() = 0;
-                    // end;
-                    //PRJ-1193.NK.0.1 End
+
                     // Do NOT use the following fields in the sections:
                     // "Applied-To Doc. Type"
                     // "Applied-To Doc. No."
@@ -619,18 +546,13 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                     // "Closed by Amount"
 
 
-                    //PRJ-1193.RM.1.0 Start
-                    TotalNumberOfEntries -= 1;
-                    if TotalNumberOfEntries = 0 then begin
-                        for j := 1 to 4 do
-                            GrandBalanceDue[j] += "BalanceDue$"[j];
-                        GrandTotalBalanceDue += "TotalBalanceDue$";
-                    end;
-                    if PrintDetail and PrintToExcel then
-                        NS_MakeExcelDataBody();
-                    NumberOfLines += 1;
+                    //PRJ-215.MS.1.0 Start
+                    // if PrintDetail and PrintToExcel then
+                    //     MakeExcelDataBody;
+                    //PRJ-215.MS.1.0 End
                 end;
-                //PRJ-1193.RM.1.0 End
+
+
                 trigger OnPostDataItem();
                 begin
                     if TempCustLedgEntry.COUNT > 0 then begin
@@ -638,7 +560,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                             AmountDue[j] := CustTotAmountDue[j];
                         AmountDueToPrint := CustTotAmountDueToPrint;
                         if not PrintDetail and PrintToExcel then
-                            NS_MakeExcelDataBody();
+                            NS_MakeExcelDataBody;
                     end;
                 end;
 
@@ -651,7 +573,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                     CLEAR("BalanceDue$");
                     CLEAR(CustTotAmountDue);
                     CustTotAmountDueToPrint := 0;
-                    TotalNumberOfEntries := TempCustLedgEntry.Count();//PRJ-1193.RM.1.0
                 end;
             }
 
@@ -659,21 +580,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
             var
                 CustLedgEntry: Record "Cust. Ledger Entry";
             begin
-                //PRJ-1449.RM.1.0 start
-                SalesSetup.Get();
-                if not SalesSetup."NS_Sales Retention Inactive" then begin
-                    JobsSetup.Get();
-                    CustLedgEntry.Reset();
-                    CustLedgEntry.SetRange("Customer No.", Customer."No.");
-                    CustLedgEntry.SETRANGE("Date Filter", 0D, PeriodEndingDate[1]);
-                    CustLedgEntry.setrange("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
-                    if CustLedgEntry.FindFirst() then
-                        repeat
-                            CustLedgEntry.CalcFields("Remaining Amt. (LCY)");
-                            TotRetAmt += CustLedgEntry."Remaining Amt. (LCY)";
-                        until CustLedgEntry.Next() = 0;
-                end;
-                //PRJ-1449.RM.1.0 end
                 if PrintAmountsInLocal then begin
                     NS_GetCurrencyRecord(Currency, "Currency Code");
                     CurrencyFactor := CurrExchRate.ExchangeRate(PeriodEndingDate[1], "Currency Code");
@@ -768,7 +674,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
                   + Text012;
 
                 if PrintToExcel then
-                    NS_MakeExcelInfo();
+                    NS_MakeExcelInfo;
             end;
         }
     }
@@ -905,8 +811,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
     trigger OnPostReport();
     begin
         if PrintToExcel then
-            NS_CreateExcelbook();//PRJ-1193.RM.1.0
-
+            NS_CreateExcelbook;
     end;
 
     trigger OnPreReport();
@@ -934,9 +839,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
     var
         CompanyInformation: Record "Company Information";
         TempCustLedgEntry: Record "Cust. Ledger Entry" temporary;
-        CustLedgEntry: Record "Cust. Ledger Entry";
         Currency: Record Currency;
-        NumberOfLines: Integer;//PRJ-1193.RM.1.0
         CurrExchRate: Record "Currency Exchange Rate";
         GLSetup: Record "General Ledger Setup";
         JobsSetup: Record "Jobs Setup";
@@ -956,9 +859,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         PercentString: array[4] of Text;//CTSI-158.AS.1.0 21SEPT2020 Changed length from 10 chars
         Percent: Decimal;
         "TotalBalanceDue$": Decimal;
-        TotalNumberOfEntries: Integer;//PRJ-1193.RM.1.0 
-        GrandTotalBalanceDue: Decimal;//PRJ-1193.RM.1.0
-        GrandBalanceDue: array[4] of Decimal;//PRJ-1193.RM.1.0
         AmountDueToPrint: Decimal;
         CreditLimitToPrint: Text;//CTSI-158.AS.1.0 21SEPT2020 Changed length from 25 chars
         BlockedDescription: Text;//CTSI-158.AS.1.0 21SEPT2020 Changed length from 60 chars
@@ -994,7 +894,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         Text021: Label 'Amounts are in the customer''s local currency (report totals are in %1).';
         Text022: Label 'Report Total Amount Due (%1)';
         Text101: Label 'Data';
-        Text102: Label 'Aged A/R with Retention';//PRJ-1193.RM. 1.0 
+        Text102: Label 'Aged Accounts Receivable';
         Text103: Label 'Company Name';
         Text104: Label 'Report No.';
         Text105: Label 'Report Name';
@@ -1005,7 +905,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         Text110: Label 'Amounts are';
         Text111: Label 'In our Functional Currency';
         Text112: Label 'As indicated in Data';
-
         Text113: Label 'Aged as of';
         Text114: Label 'Aging Date (%1)';
         Text115: Label 'Balance Due';
@@ -1013,18 +912,13 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         Text117: Label 'Customer Currency';
         Text118: Label 'Credit Limit';
         Text119: Label 'Show Only Overdue By Needs a Valid Date Formula';
-        Text122: Label 'Amounts in Customer''s Currency'; //PRJ-1193.RM.1.0 
-        Text123: Label 'Print Detail'; //PRJ-1193.RM.1.0 
-        Text124: Label 'Include Retention';//PRJ-1193.RM.1.0 
         ShowAllForOverdue: Boolean;
         CalculatedDate: Date;
         Text120: Label 'This option is only allowed for method Due Date';
         CustTotAmountDue: array[4] of Decimal;
         CustTotAmountDueToPrint: Decimal;
         Text121: Label 'You must enter a period calculation in the Length of Aging Periods field.';
-        Aged_Accounts_ReceivableCaptionLbl: Label 'Aged A/R with Retention';//PRJ-1193.RM.1.0
-        NSJob: Record Job;//PRJ-1235.RM.1.0
-        TotRetAmt: Decimal; //PRJ-1309.NK.1.0
+        Aged_Accounts_ReceivableCaptionLbl: Label 'Aged Accounts Receivable';
         CurrReport_PAGENOCaptionLbl: Label 'Page';
         Aged_byCaptionLbl: Label 'Aged by';
         AmountDueToPrint_Control74CaptionLbl: Label 'Balance Due';
@@ -1034,7 +928,6 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         Cust__Ledger_Entry__DescriptionCaptionLbl: Label 'Description';
         Cust__Ledger_Entry___Document_Type_CaptionLbl: Label 'Type';
         AmountDueToPrint_Control63CaptionLbl: Label 'Balance Due';
-
         Cust__Ledger_Entry___Currency_Code_CaptionLbl: Label 'Doc. Curr.';
         DocumentCaptionLbl: Label 'Document';
         Balance_ForwardCaptionLbl: Label 'Balance Forward';
@@ -1045,31 +938,25 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         NS_JobLbl: Label 'Job';
         NS_RetentionLbl: Label 'Retention';
         NS_RetentionToPrint: Decimal;
-        NS_RetentionToPrintUSD: Decimal;//PRJ-1193.RM.1.0
-
         NS_TotalRetention: Decimal;
         "NS_RetentionDue$": array[4] of Decimal;
         NS_AgingDateText: Text;//CTSI-158.AS.1.0 21SEPT2020 Changed length from 4 chars
         JobNoLbl: Label 'Job No.';
-        JobDescLbl: Label 'Job Description'; //PRJ-1235.RM.1.0
-        NSJobDesc: Text;//PRJ-1235.RM.1.0
 
     local procedure NS_InsertTemp(var CustLedgEntry: Record "Cust. Ledger Entry");
     begin
-        //PRJ-1133.RM.1.0.001 start
-        //with TempCustLedgEntry do begin
-        if TempCustLedgEntry.GET(CustLedgEntry."Entry No.") then
-            exit;
-        TempCustLedgEntry := CustLedgEntry;
-        case AgingMethod of
-            AgingMethod::"Due Date":
-                TempCustLedgEntry."Posting Date" := TempCustLedgEntry."Due Date";
-            AgingMethod::"Document Date":
-                TempCustLedgEntry."Posting Date" := TempCustLedgEntry."Document Date";
+        with TempCustLedgEntry do begin
+            if GET(CustLedgEntry."Entry No.") then
+                exit;
+            TempCustLedgEntry := CustLedgEntry;
+            case AgingMethod of
+                AgingMethod::"Due Date":
+                    "Posting Date" := "Due Date";
+                AgingMethod::"Document Date":
+                    "Posting Date" := "Document Date";
+            end;
+            INSERT;
         end;
-        TempCustLedgEntry.INSERT();
-        //end;
-        //PRJ-1133.RM.1.0.001 end
     end;
 
     procedure NS_CalcPercents(Total: Decimal; Amounts: array[4] of Decimal);
@@ -1115,7 +1002,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
 
             NS_GetCurrencyRecord(Currency, CurrencyCode);
             exit('101,4,' + STRSUBSTNO(Text001, Currency.Description));
-
+            ;
         end;
         exit('');
     end;
@@ -1130,7 +1017,7 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         ExcelBuf.AddInfoColumn(FORMAT(Text102), false, false, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text104), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
-        ExcelBuf.AddInfoColumn(REPORT::"NS_Aged Accounts ReceivableRet", false, false, false, false, '', ExcelBuf."Cell Type"::Number);//PRJ-1193.RM.1.0
+        ExcelBuf.AddInfoColumn(REPORT::"Aged Accounts Receivable", false, false, false, false, '', ExcelBuf."Cell Type"::Number);
         ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text106), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddInfoColumn(USERID, false, false, false, false, '', ExcelBuf."Cell Type"::Text);
@@ -1148,29 +1035,20 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
         ExcelBuf.AddInfoColumn(FORMAT(Text113), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddInfoColumn(PeriodEndingDate[1], false, false, false, false, '', ExcelBuf."Cell Type"::Date);
         ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text122), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(PrintAmountsInLocal, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text123), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(PrintDetail, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text124), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(IncludeRetention, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text110), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
         if PrintAmountsInLocal then
             ExcelBuf.AddInfoColumn(FORMAT(Text112), false, false, false, false, '', ExcelBuf."Cell Type"::Text)
         else
             ExcelBuf.AddInfoColumn(FORMAT(Text111), false, false, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.ClearNewRow;
-        NS_MakeExcelDataHeader();
+        NS_MakeExcelDataHeader;
     end;
 
     local procedure NS_MakeExcelDataHeader();
     begin
         ExcelBuf.NewRow;
         ExcelBuf.AddColumn("Cust. Ledger Entry".FIELDCAPTION("Customer No."), false, '', true, false, true, '', ExcelBuf."Cell Type"::Text);
-        ExcelBuf.AddColumn(Customer.FieldCaption(Name), false, '', true, false, true, '', ExcelBuf."Cell Type"::Text);
+        ExcelBuf.AddColumn(Customer.FIELDCAPTION(Name), false, '', true, false, true, '', ExcelBuf."Cell Type"::Text);
         if PrintDetail then begin
             ExcelBuf.AddColumn(STRSUBSTNO(Text114, ShortDateTitle), false, '', true, false, true, '', ExcelBuf."Cell Type"::Text);
             ExcelBuf.AddColumn("Cust. Ledger Entry".FIELDCAPTION(Description), false, '', true, false, true, '', ExcelBuf."Cell Type"::Text);
@@ -1229,16 +1107,11 @@ report 14021187 "NS_Aged Accounts ReceivableRet"
             ExcelBuf.AddColumn(CurrencyCodeToPrint, false, '', false, false, false, '', ExcelBuf."Cell Type"::Text)
         end;
     end;
-    //PRJ-1193.RM.1.0 Start
+
     local procedure NS_CreateExcelbook();
     begin
-        ExcelBuf.CreateNewBook(Text102);
-        ExcelBuf.WriteSheet(Text102, CompanyName, UserId);
-        ExcelBuf.CloseBook();
-        ExcelBuf.SetFriendlyFilename(StrSubstNo(Text102, CurrentDateTime, UserId));
-        ExcelBuf.OpenExcel();
+        //ExcelBuf.CreateBookAndOpenExcel(Text101,Text102,COMPANYNAME,USERID);
+        ERROR('');
     end;
-    //PRJ-1193.RM.1.0 End
 }
-
 

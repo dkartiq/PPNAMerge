@@ -1,5 +1,7 @@
 pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
 {
+    //  "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+    // 001 23.10.2021  PREM  bugfix
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
     // +------------------------------------------------------------
     // +ProjectPro
@@ -100,54 +102,9 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
     //PRJ-906.GK.1.0 04Oct2021 | Added Code
     //PRJ-659.RM.1.0 06-Oct-2021 | Remove NS_ from fields' caption
     //PRJ-973.GK.1.0 13Oct2021 | Add one field.
-    //PRJ-999.JS.1.0  08Nov2021 | code added
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1345.RM.1.0 29April2022 | Added some code
-    //PRJ-1374.RM.1.0 16May2022 | Added some code
-    //PE-169.HS.1.0 19SEPT2023 | Added action 
-    Caption = 'Job Planning Lines'; //PRJ-1330.NK.1.0 25Apr2022
-                                    //PRJ-1608.RM.1.0 06Sep2022  | Added some code
-                                    //PE-38 Dk.1.0 23Jan2023    | Addes a Action Import/Export 
-                                    //PE-38 DK 1.0 13March2023  | Add two Method ExportExcel And ImportExcelData
-                                    //PRJCTPR-191.HS.1.0 29SEPT2023|Added Two Fields and some code
-                                    //PRJCTPR-191.HS.1.0 17Oct2023 | Added Action
-                                    //PRJCTPR-191.HS.1.0 7Nov2023 | Added Caption
-                                    // PE-229.HS.1.0 14Dec2023 | Added code
+
     layout
     {
-        //PRJCTPR-191.HS.1.0 29SEPT2023 START
-        addlast(Control1)
-        {
-            field("NS_Version No."; Rec."NS_Version No.")
-            {
-                ApplicationArea = All;
-                Caption = 'Version No.';
-                ToolTip = 'Specifies the value of the _Version No. field.';
-                Visible = false;
-            }
-
-            field("NS_Requisition No."; Rec."NS_Requisition No.")
-            {
-                ApplicationArea = All;
-                Caption = 'Requisition No.';
-                ToolTip = 'Specifies the value of the _Requisition No. field.';
-                Visible = false;
-            }
-        }
-        //PRJCTPR-191.HS.1.0 29SEPT2023 END
-
-        //PRJ-1608.RM.1.0 start
-        modify("Gen. Prod. Posting Group")
-        {
-            Editable = true;
-            trigger OnAfterValidate()
-            var
-                myInt: Integer;
-            begin
-                CurrPage.Update();
-            end;
-        }
-        //PRJ-1608.RM.1.0 end
         modify(Type)
         {
             Style = Unfavorable;
@@ -164,30 +121,13 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
             StyleExpr = NS_BelowCost;
             //PRJ-588.AS.1.0 16MARCH2021 - START
             trigger OnBeforeValidate()
-            var
-                JobStpTbl: Record "Jobs Setup";//PE-119.AS.1.0 26JUNE2023
-                CostErrMsg: Label 'There must be a cost category for job %1 on line %2.';//PE-119.AS.1.0 26JUNE2023
             begin
-                //PE-119.AS.1.0 26JUNE2023 start
-                if JobStpTbl.Get() then;
-                if (JobStpTbl."NS_Cost Category Required Bud" = true) then begin
-                    if (rec."Line Type" <> Rec."Line Type"::Billable) then
-                        if (Rec."NS_Cost Category" = '') then
-                            ERROR(CostErrMsg, Rec."Job No.", Rec."Line No.");
+                if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
+                    if (Rec.Quantity > 1) then
+                        Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
+                    if (Rec.Quantity < 0) then
+                        Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
                 end;
-                //PE-119.AS.1.0 26JUNE2023 end
-
-                if not JobStpTbl."NS_Disable Qty for % Method" then begin    // PE-229.HS.1.0 14Dec2023
-                    if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
-                        if (Rec.Quantity > 1) then
-                            Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                        if (Rec.Quantity < 0) then
-                            Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                    end;
-                end;  // PE-229.HS.1.0 14Dec2023 
-                //PRJ-1058.GK.1.0 26Nov2021 start Twinoaks Start
-                Rec."NS_Old Qty." := Rec.Quantity;
-                //PRJ-1058.GK.1.0 26Nov2021 end Twinoaks End
             end;
             //PRJ-588.AS.1.0 16MARCH2021 - END
             //PRJ-936.JS.1.0 23Sep2021-Start
@@ -197,7 +137,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
             end;
             //PRJ-936.JS.1.0 23Sep2021-End
         }
-
         modify("Unit Cost")
         {
             Style = Attention;
@@ -363,25 +302,13 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
         }
 
         //PRJ-568.AS.1.0 - START
-        //PRJ-1189.GK.1.0 06apr2022 start
-        addbefore("Planned Delivery Date")
-        {
-
-            field("NS_Contract Forecast Date"; Rec."NS_Contract Forecast Date")
-            {
-                ToolTip = 'Specifies the value of the Contract Forecast Date field.';
-                ApplicationArea = All;
-            }
-        }
-        //PRJ-1189.GK.1.0 06apr2022 end
         addafter("No.")
         {
             field("NS_Get Linked Resource"; Rec."NS_Get Linked Resource")
             {
                 ApplicationArea = All;
-                Caption = 'Linked Resource';//PE-323 AT 12july2024
-                Editable = False; //PE-323 AT 12july2024  GetLinkEditable; //PRJ-1066.GK.1.0 07Dec2021
-                //Editable = false; //PRJ-1066.GK.1.0 07Dec2021
+                Caption = 'Get Linked Resource';
+                Editable = GetLinkEditable;
                 Visible = false;//PRJ-492.RS.1.0 10May2021
                 ToolTip = 'Specifies the  Get Linked Resource for the Job';  //PRJ-768.JS.1.0 26July2021
                 trigger OnValidate()
@@ -389,13 +316,10 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                     JPLRec: Record "Job Planning Line";
                     JPLRec2: Record "Job Planning Line";
                     jobTblRec: Record Job;
-                    JQHeader: Record "NS_Job Quote Header";//PRJ-1068.AS.1.0
-                    TLaborRatebyTask: Record "NS_Labor rate by task list";//PRJ-1068.AS.1.0
                     Res: Record Resource;
                     Res2: Record Resource;
                     JobTaskRec: Record "Job Task";//PRJ-568.AS.1.0 18MAR2021
                 begin
-                    //PRJ-1066.GK.1.0 07Dec2021 start |comment code
                     if (Rec.Type = Rec.Type::Item) and (Rec."NS_Get Linked Resource" = true) and (Rec."NS_Linked Resource" <> '') then begin
                         JPLRec.reset;
                         JPLRec.SetRange("Job No.", Rec."Job No.");
@@ -406,7 +330,7 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
 
                         JPLRec.Reset();
                         JPLRec.SetRange("Job No.", Rec."Job No.");
-                        JPLRec.SetRange("Job Task No.", Rec."Job Task No.");
+                        //JPLRec.SetRange("Line No.", Rec."Line No.");
                         if JPLRec.FindLast() then begin
                             JPLRec2.INIT;
                             JPLRec2."Line No." := JPLRec."Line No." + 10000;
@@ -418,11 +342,20 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                             JPLRec2."Planning Date" := Rec."Planning Date";
                             JPLRec2."NS_Shortcut Dimension 1 Code" := Rec."NS_Shortcut Dimension 1 Code";
                             JPLRec2."NS_Shortcut Dimension 2 Code" := Rec."NS_Shortcut Dimension 2 Code";
+                            // JPLRec2."DFR Created" := Rec."DFR Created";
+                            // JPLRec2."DFR Locked" := Rec."DFR Locked";
+                            // JPLRec2."DFR No." := rec."DFR No.";
+                            // JPLRec2."Vendor No." := Rec."Vendor No.";
+                            // JPLRec2."Vendor Quote No." := Rec."Vendor Quote No.";
+                            // JPLRec2."Quote No." := Rec."Quote No.";
+                            // JPLRec2."Quote Line No." := Rec."Quote Line No.";
                             JPLRec2."Planned Delivery Date" := Rec."Planned Delivery Date";
+                            // JPLRec2."Progress Billing Line" := Rec."Progress Billing Line";
                             JPLRec2."NS_Progress Billing Method" := Rec."NS_Progress Billing Method";
+                            // JPLRec2."Purchase Order No." := Rec."Purchase Order No.";
                             JPLRec2.Type := JPLRec2.Type::Resource;
                             JPLRec2."No." := Rec."NS_Linked Resource";
-                            IF Res.GET(Rec."NS_Linked Resource") Then begin
+                            IF Res.GET("NS_Linked Resource") Then begin
                                 IF Res."NS_Job Revenue Category" <> '' THEN
                                     JPLRec2."NS_Revenue Category" := Res."NS_Job Revenue Category";
                                 IF Res."NS_Job Cost Category" <> '' THEN
@@ -432,25 +365,7 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                                 JPLRec2."Gen. Prod. Posting Group" := Res."Gen. Prod. Posting Group";
                                 JPLRec2."Resource Group No." := Res."Resource Group No.";
                                 JPLRec2."Unit of Measure Code" := Res."Base Unit of Measure";
-
-                                JPLRec2."Unit Cost" := Res."Unit Cost";//PRJ-1336.AS.1.0 Added Code
-                                //PRJ-1068.AS.1.0 START
-                                if Res.Type = Res.Type::Person then begin
-                                    if JQHeader.get(Rec."Job No.") then begin
-                                        if JQHeader."NS_Job Type Code" <> '' then begin
-                                            TLaborRatebyTask.Reset();
-                                            TLaborRatebyTask.SetRange("NS_Job Type Code", JQHeader."NS_Job Type Code");
-                                            if TLaborRatebyTask.FindFirst() then
-                                                JPLRec2.Validate("Unit Cost", TLaborRatebyTask."NS_Labor Rate");
-                                        end;
-                                    end;
-                                end;
-
-                                //PRJ-1336.AS.1.0 START Code comment
-                                // if NOT JQHeader.get(Rec."Job No.") then
-                                //     JPLRec2."Unit Cost" := Res."Unit Cost";
-                                //PRJ-1336.AS.1.0 END
-                                //PRJ-1068.AS.1.0 END
+                                JPLRec2."Unit Cost" := Res."Unit Cost";
                                 JPLRec2."Unit Price" := Res."Unit Price";
                             end;
                             JPLRec2.Validate(Quantity, Rec.Quantity * Rec."NS_Labor Hours per Qty.");
@@ -461,7 +376,7 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                             if Rec."Job No." <> '' then
                                 JPLRec2."Job No." := Rec."Job No.";
                             //PRJ-568.AS.1.0 18MAR2021 - start
-                            IF Res.GET(Rec."NS_Linked Resource") Then begin
+                            IF Res.GET("NS_Linked Resource") Then begin
                                 if Res."NS_Default Job Task No" <> '' then begin
                                     if not JobTaskRec.Get(Rec."Job No.", Res."NS_Default Job Task No") then
                                         Error('You cannot insert Resouce Line having Job Task No. %1 not defined in Task lines of Job %2', Res."NS_Default Job Task No", Rec."Job No.");
@@ -471,7 +386,8 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                                     JPLRec2."Job Task No." := Rec."Job Task No.";
                             end;
                             //PRJ-568.AS.1.0 18MAR2021 - end
-
+                            //if Rec."Job Task No." <> '' then //PRJ-568.AS.1.0 18MAR2021 Comment
+                            //    JPLRec2."Job Task No." := Rec."Job Task No."; //PRJ-568.AS.1.0 18MAR2021 Comment
                             if jobTblRec.get(Rec."Job No.") then;
                             //JPLRec2."Gen. Bus. Posting Group" := jobTblRec."NS_Gen. Bus. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
                             JPLRec2."Gen. Bus. Posting Group" := jobTblRec."NS_Gen. Bus. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
@@ -484,22 +400,15 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                         end;
                     end;
                     currpage.update := true;
-                    //PRJ-1066.GK.1.0 07Dec2021 end |comment code
                 end;
             }
         }
         addafter(Quantity)
         {
-            //PRJ-1417.PD.1.0 START   
-            field("NS_Vendor No."; Rec."NS_Vendor No.")
-            {
-                ApplicationArea = all;
-            }
-            //PRJ-1417.PD.1.0 end  
             field("NS_Linked Resource"; Rec."NS_Linked Resource")
             {
                 ApplicationArea = All;
-                Caption = 'Default Linked Resource'; //PE-323.AT.1.0 10July24
+                Caption = 'Linked Resource';
                 Editable = false;
                 Visible = false;//PRJ-492.RS.1.0 10May2021
                 ToolTip = 'Specifies the  Linked Resource for the Job';  //PRJ-768.JS.1.0 26July2021
@@ -707,19 +616,14 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
 
                 //PRJ-588.AS.1.0 21APRILH2021 - START
                 trigger OnValidate()
-                var
-                    NS_JobSetup: Record "Jobs Setup"; // PE-229.HS.1.0 14Dec2023
                 begin
-                    if NS_JobSetup.Get() then; // PE-229.HS.1.0 14Dec2023
-                    if not NS_JobSetup."NS_Disable Qty for % Method" then begin    // PE-229.HS.1.0 14Dec2023
-                        if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
-                            if (Rec.Quantity > 1) then
-                                Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                            if (Rec.Quantity < 0) then
-                                Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                        end;
+                    if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
+                        if (Rec.Quantity > 1) then
+                            Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
+                        if (Rec.Quantity < 0) then
+                            Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
                     end;
-                end;  // PE-229.HS.1.0 14Dec2023
+                end;
                 //PRJ-588.AS.1.0 21APRIL2021 - END
             }
         }
@@ -842,30 +746,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                 Visible = false;//PRJ-929.GK.1.0
             }
             //PRJ-895.GK.1.0 27Aug2021 end
-            //PE-118.NC.1.0 03Aug2023 Start
-            field(NS_ProgessBillingNo; Rec.NS_ProgessBillingNo)
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Progess Billing No. field.';
-                Visible = false;
-                Editable = false; //PRJCTPR-191.HS.1.0 28Sept2023
-            }
-            //PE-118.NC.1.0 03Aug2023 End
-            //PE-142.NC.1.0 03Aug2023 Start
-            field("NS_Change Order"; Rec."NS_Change Order")
-            {
-                ApplicationArea = All;
-                ToolTip = 'When marked true it will be shown as a change order on a Progress Billing line';
-            }
-            //PE-142.NC.1.0 03Aug2023 End
-            //PRJCTPR-147.PS.2.0 20Sep2023 Start
-            field("NS_Ext Reference No."; Rec."NS_Ext Reference No.")
-            {
-                ApplicationArea = all;
-                // Editable = EditableItemexploded; //PE-220.NC.1.0 15Feb2024
-                Caption = 'External Reference No.';
-            }
-            //PRJCTPR-147.PS.2.0 20Sep2023 End
         }
         addafter("NS_Gross Profit Percentage")
         {
@@ -968,26 +848,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
         }
         addafter(DemandOverview)
         {
-            //PRJCTPR-191.HS.1.0 17Oct2023 Start
-            action("NS_Remove Progress Billing No")
-            {
-                // ToolTip = 'Removes progress billing no. and line no. from the planning lines. You are allowed to run this batch only if you have access to the user setup.';  //PRJCTPR-191.HS.1.0 17Oct2023  Remove this line from code
-                ToolTip = 'Removes Progress Billing No., Requisition No., and Version No., from the job planning lines. A request page opens up to specify the details/filters as per requirement. To run the batch, you must have permission on User Setup for "Access to Remove Progress Billing No."';
-                ApplicationArea = all;
-                Caption = 'Remove Progress Billing No.';
-                Image = Delete;
-                trigger OnAction()
-                var
-                    NS_JPL: Record "Job Planning Line";
-                begin
-                    NS_JPL.SetRange("Job No.", rec."Job No.");
-                    NS_JPL.SetRange("Job Task No.", rec."Job Task No.");
-                    if NS_JPL.FindFirst() then begin
-                        Report.RunModal(14021480, true, false, NS_JPL);
-                    end;
-                end;
-            }
-            //PRJCTPR-191.HS.1.0 17Oct2023 END
             separator(NS_Separator1100773027)
             {
             }
@@ -1027,17 +887,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                         //ProjectPro - end
                     end;
                 }
-                //PE-169.HS.1.0 19SEPT2023 START
-                action("NS_View Locked Planning Lines")
-                {
-                    ApplicationArea = All;
-                    Caption = 'View Locked Planning Lines';
-                    Image = CopyBudget;
-                    RunObject = Page "NS_Job Planning List (Locked)";
-                    RunPageLink = "NS_Job No." = FIELD("Job No.");
-                    ToolTip = 'View locked job planning lines';
-                }
-                //PE-169.HS.1.0 19SEPT2023 END
             }
         }
         addafter("Jobs - Transaction Detail")
@@ -1062,78 +911,20 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
             // }
             //PPDA.1.0.TBA End
         }
-        //PE-38 Dk.1.0 13March2023 Start
-        addlast(processing)
-        {
-
-            group(NS_ImportNew)
-            {
-                Caption = 'Export/Import';
-                ToolTip = 'Use This button to Export & Import Job Planning line';
-                action(NS_Export1)
-                {
-                    Caption = 'Export Excel';
-                    ToolTip = 'Use This button to Export Job Planning line in Excel .CSV Format';
-                    Image = Export;
-                    Ellipsis = true;
-                    ApplicationArea = All;
-                    trigger OnAction()
-                    begin
-                        ExportExcel(Rec);
-                    end;
-                }
-                action(NS_Import)
-                {
-                    Caption = 'Import CSV';
-                    ToolTip = 'Use This button to Import Job Planning line in Text Format';
-                    Image = Import;
-                    Ellipsis = true;
-                    ApplicationArea = All;
-                    trigger OnAction()
-                    begin
-                        //Xmlport.Run(14021102, false, true, Rec);
-                        ReadCsvdata();
-                        ImportCSVData();
-                    end;
-                }
-                action(NS_Import1)
-                {
-                    Caption = 'Import Excel';
-                    ToolTip = 'Use This button to Import Job Planning line in Excel Formate';
-                    Image = Import;
-                    Ellipsis = true;
-                    ApplicationArea = All;
-                    trigger OnAction()
-                    begin
-                        ReadExcelSheet();
-                        ImportExcelData();
-                    end;
-                }
-            }
-        }
-
-        //PE-38 Dk.2.0 13March2023 End
     }
     //JD-54.AM.1.0 Start
-
     trigger OnModifyRecord(): Boolean
     var
-        JobTab: Record Job;//PRJ-1345.RM.1.0 
     begin
-        //PRJ-1345.RM.1.0 29April2022 start
-        if JobTab.Get(Rec."Job No.") then;
         if Rec."NS_DFR Locked" then
             Error('You cannot Modify Locked Job Planning line');
 
         //JD-48.AS.1.0 31OCT2020 - start
-        if JobTab."NS_Forecast Method" = JobTab."NS_Forecast Method"::"Job Forecast by Segment Code" then begin//PRJ-1345.RM.1.0 29April2022
-            if xRec."NS_Segment Code" <> '' then begin
-                if xRec."NS_Segment Code" <> Rec."NS_Segment Code" then
-                    ERROR('You cannot change the %1, %2, %3 of this %4.', Rec.FIELDCAPTION("Job No."), Rec.FIELDCAPTION("Job Task No."), Rec.FIELDCAPTION("NS_Segment Code"), Rec.TABLECAPTION); //PRJ-1135.RM.1.0            
-            end;   //PRJ-1345.RM.1.0 29April2022
+        if xRec."NS_Segment Code" <> '' then begin
+            if xRec."NS_Segment Code" <> Rec."NS_Segment Code" then
+                ERROR('You cannot change the %1, %2, %3 of this %4.', FIELDCAPTION("Job No."), FIELDCAPTION("Job Task No."), FIELDCAPTION("NS_Segment Code"), TABLECAPTION);
         end;
         //JD-48.AS.1.0 31OCT2020 - end
-        //PRJ-1345.RM.1.0 29April2022 end
     end;
     //JD-54.AM.1.0 End
 
@@ -1283,23 +1074,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                 else
                     NS_CreatePurchaseOrderDetail(JobPlaningLineVar, PurchaseOrderNo); //PRJ-389 changes var rec to JobPlaningLineVar
         end;
-        //PE-118.NC.1.0 02Aug2023 Start
-        if (CalledFromProgBilling) and (CloseAction in [ACTION::OK, ACTION::LookupOK]) then begin
-            CurrPage.SETSELECTIONFILTER(JobPlaningLineVar);
-            if JobPlaningLineVar.FindSet() then
-                if ((RequisitionNo > 0) and (NSJobNo > '')) then
-                    NS_CreateProgessBilling(JobPlaningLineVar)
-        end;
-        //PE-118.NC.1.0 02Aug2023 End
-
-        //PRJCTPR-319.JS.1.0 26FEB2024 - Start
-        if (NSCalledFromJobQuote) and (CloseAction in [ACTION::OK, ACTION::LookupOK]) then begin
-            JobPlaningLineVar.Reset();
-            if JobPlaningLineVar.FindSet() then
-                if ((NSQuotSegJobNoG > '') and (NSQuotSegmentCodeG > '')) then
-                    NS_CreateQuoteSegmentTakeoffTotal(JobPlaningLineVar, NSQuotSegJobNoG, NSQuotSegmentCodeG)
-        end;
-        //PRJCTPR-319.JS.1.0 26FEB2024 - end 
     end;
 
     procedure SetFilters(JobNo: Code[20]; LineType: Option);
@@ -1315,7 +1089,10 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
         //ProjectPro - start
         NS_LineJobDescription := '';
         if NS_Job.GET("Job No.") then
-            NS_LineJobDescription := NS_Job.Description;
+            // >> 001
+            //NS_LineJobDescription := NS_Job.Description;
+            NS_LineJobDescription := CopyStr(NS_Job.Description, 1, MaxStrLen(NS_LineJobDescription));
+        // << 001
         //ProjectPro - end
     end;
 
@@ -1418,18 +1195,10 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                             else
                                 "NS_Unit of Measure Code" := NS_PassJobPlanningLine."Unit of Measure Code";
 
-                    //PE-301.NC.1.0 10Jun2024 Start
-                    if NS_JobsSetup."NS_Subcontract Use of UOM" = NS_JobsSetup."NS_Subcontract Use of UOM"::"Default only if none provided" then begin
-                        if ((NS_PassJobPlanningLine."Line Type" = NS_PassJobPlanningLine."Line Type"::"Both Budget and Billable") and (NS_PassJobPlanningLine.Type = NS_PassJobPlanningLine.Type::Item)) then begin
-                            NS_SubcontractDetail."NS_Unit of Measure Code" := Rec.NS_GetUOMItemBB(NS_PassJobPlanningLine."No.", NS_PassJobPlanningLine."Job No.", NS_PassJobPlanningLine)
-                        end;
-                    end;
-                    //PE-301.NC.1.0 10Jun2024 End
                     "NS_Direct Unit Cost" := NS_PassJobPlanningLine."Direct Unit Cost (LCY)";
                     "NS_Unit Cost" := NS_PassJobPlanningLine."Unit Cost (LCY)";
                     "NS_Work Units" := NS_PassJobPlanningLine."NS_Work Units";
                     "NS_Work Unit of Measure" := NS_PassJobPlanningLine."NS_Work Unit of Measure";
-                    NS_SubcontractDetail."NS_Segment Code" := NS_PassJobPlanningLine."NS_Segment Code"; //PRJCTPR-237 AT.0.1 12Dec2023
                     //PRJ-906.GK.1.0 04Oct2021 - Start
                     IF NS_SubcontractHeader.GET(SubcontractNo) then begin
                         "NS_Dimension Set ID" := NS_SubcontractHeader."NS_Dimension Set ID";
@@ -1449,18 +1218,10 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
 
                     //PRJ-913.JS.1.0  14Sep2021-Start
                     if NS_JobTask1.GET(NS_PassJobPlanningLine."Job No.", NS_PassJobPlanningLine."Job Task No.") then
-                        IF ((NS_JobTask1."Global Dimension 1 Code" <> '') and (NS_JobTask1."Global Dimension 2 Code" <> '')) then begin    //PRJ-999.JS.1.0  08Nov2021  add begin statement
+                        IF ((NS_JobTask1."Global Dimension 1 Code" <> '') and (NS_JobTask1."Global Dimension 2 Code" <> '')) then
                             "NS_Dimension Set ID" := NS_BillingHeader.NS_GetDimensionNoFromJobTask(NS_PassJobPlanningLine."Job No.", NS_PassJobPlanningLine."Job Task No.");
-                            "NS_Shortcut Dimension 1 Code" := NS_JobTask1."Global Dimension 1 Code";  //PRJ-999.JS.1.0  08Nov2021  line added
-                            "NS_Shortcut Dimension 2 Code" := NS_JobTask1."Global Dimension 2 Code";  //PRJ-999.JS.1.0  08Nov2021  line added
-                        end;    //PRJ-999.JS.1.0  08Nov2021  line added
                     //PRJ-913.JS.1.0  14Sep2021-End
 
-                    //PRJ-773.SK.1.0 Start
-                    OnBeforeInsertSubconLinesFromJobPlanningLines(NS_SubcontractDetail, NS_PassJobPlanningLine);
-                    //PRJ-773.SK.1.0 End
-                    NS_SubcontractDetail.validate("NS_Location Code", NS_PassJobPlanningLine."Location Code");  //PRJ-1374.RM.1.0
-                    NS_CreateSubContractDetailBeforeInsert(NS_PassJobPlanningLine, NS_SubcontractDetail);  //PE-194.HS.1.0 26Oct2023 
                     INSERT;
                     NS_PassJobPlanningLine."NS_Subcontract No." := SubcontractNo;
                     NS_PassJobPlanningLine."NS_Subcontract Line No." := NS_SubcontractDetail."NS_Line No.";//PRJ-271/PRJ-272 VT1.0 21-05-20
@@ -1502,7 +1263,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                     "Line No." := NS_LastLineNo;
                     "Job No." := NS_PassJobPlanningLine."Job No.";
                     "Job Task No." := NS_PassJobPlanningLine."Job Task No.";
-                    NS_PurchaseLine."Job Planning Line No." := NS_PassJobPlanningLine."Line No."; //PE-301.NC.1.0 10Jun2024
                     NS_Job.NS_JobTaskNoToAPO(NS_PassJobPlanningLine."Job Task No.", "NS_Activity Code", "NS_Process Code", "NS_Operation Code", "NS_Section Code");//PRJ-688.AM.1.0
                     "NS_Job Cost Category" := NS_PassJobPlanningLine."NS_Cost Category";
                     case NS_PassJobPlanningLine.Type of
@@ -1518,11 +1278,6 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                     Description := NS_PassJobPlanningLine.Description;
                     "Description 2" := NS_PassJobPlanningLine."Description 2";
                     VALIDATE(Quantity, NS_PassJobPlanningLine.Quantity);
-                    //PE-301.NC.1.0 10Jun2024 Start
-                    if ((NS_PassJobPlanningLine."Line Type" = NS_PassJobPlanningLine."Line Type"::"Both Budget and Billable") and (NS_PassJobPlanningLine.Type = NS_PassJobPlanningLine.Type::Item)) then
-                        NS_PurchaseLine."Unit of Measure Code" := Rec.NS_GetUOMItemBB(NS_PassJobPlanningLine."No.", NS_PassJobPlanningLine."Job No.", NS_PassJobPlanningLine)
-                    else
-                        //PE-301.NC.1.0 10Jun2024 End
                     "Unit of Measure Code" := NS_PassJobPlanningLine."Unit of Measure Code";
                     validate("Direct Unit Cost", NS_PassJobPlanningLine."Unit Cost");//PRJ-389
                     "Direct Unit Cost (LCY)" := NS_PassJobPlanningLine."Direct Unit Cost (LCY)";
@@ -1576,425 +1331,9 @@ pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
                     else
                         "Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
                     //PRJ-389 end
-                    NS_PurchaseLine."Location Code" := NS_PassJobPlanningLine."Location Code"; //PRJ-1374.RM.1.0
                     INSERT;
                 until NS_PassJobPlanningLine.NEXT = 0;
         end;
     end;
-
-    //PE-38 DK 1.0 13March2023 Start
-    local Procedure ExportExcel(var JobPlanningLine: Record "Job Planning Line")
-    var
-        TempExcelBuffer: Record "Excel Buffer" temporary;
-        JobPlanningLbl: Label 'JobPlanning Line Entries';
-        ExcelFileName: Label 'JobPlanningLine Excel Entries %1 %2';
-    begin
-        TempExcelBuffer.Reset();
-        TempExcelBuffer.Deleteall();
-        TempExcelBuffer.NewRow();
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Job No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Job Task No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Line No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Type"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption(Description), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption(Quantity), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Unit of Measure Code"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Unit Cost"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Total Cost"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Unit Price"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Total Price"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Line Amount"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Line Type"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Planning Date"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        //TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Usage Link"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Gen. Bus. Posting Group"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(JobPlanningLine.FieldCaption("Gen. Prod. Posting Group"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        if JobPlanningLine.findSet() then
-            repeat
-                TempExcelBuffer.NewRow();
-                TempExcelBuffer.AddColumn(JobPlanningLine."Job No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Job Task No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Line No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Type", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine.Description, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine.Quantity, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Unit of Measure Code", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Unit Cost", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Total Cost", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Unit Price", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Total Price", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Line Amount", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Line Type", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Planning Date", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Date);
-                //  TempExcelBuffer.AddColumn(JobPlanningLine."Usage Link", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Gen. Bus. Posting Group", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(JobPlanningLine."Gen. Prod. Posting Group", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            until JobPlanningLine.Next() = 0;
-        TempExcelBuffer.CreateNewBook(JobPlanningLbl);
-        TempExcelBuffer.WriteSheet(JobPlanningLbl, CompanyName, UserId);
-        TempExcelBuffer.CloseBook();
-        TempExcelBuffer.SetFriendlyFilename(StrSubstNo(ExcelFileName, CurrentDateTime, UserId));
-        TempExcelBuffer.OpenExcel();
-        Message(ExcelExportSuccess);
-    end;
-
-    local procedure ReadExcelSheet()
-    var
-        FileManagement: Codeunit "File Management";
-        Istrem: InStream;
-        FromFile: Text[100];
-    begin
-        UploadIntoStream(UploadMsg, '', '', FromFile, Istrem);
-        if FromFile <> '' then begin
-            FileName := FileManagement.GetFileName(FromFile);
-            SheetName := TempExcelBuffer.SelectSheetsNameStream(Istrem);
-        end else
-            Error(NoFileMes);
-        TempExcelBuffer.Reset();
-        TempExcelBuffer.DeleteAll();
-        TempExcelBuffer.OpenBookStream(Istrem, SheetName);
-        TempExcelBuffer.ReadSheet();
-
-    end;
-
-    local procedure GetValueAtcell(RowNo: Integer; ColNo: Integer): Text
-    var
-    begin
-        TempExcelBuffer.Reset();
-        if TempExcelBuffer.Get(RowNo, ColNo) then
-            exit(TempExcelBuffer."Cell Value as Text")
-        else
-            exit('');
-    end;
-
-    local procedure ImportExcelData()
-    var
-        JobPlanningLine: Record "Job Planning Line";
-        RowNo: Integer;
-        ColNo: Integer;
-        LineNo: Integer;
-        MaxRow: Integer;
-    begin
-        RowNo := 0;
-        ColNo := 0;
-        MaxRow := 0;
-        LineNo := 0;
-        JobPlanningLine.Reset();
-        if JobPlanningLine.FindLast() then
-            LineNo := JobPlanningLine."Line No.";
-        TempExcelBuffer.Reset();
-        if TempExcelBuffer.FindLast() then begin
-            MaxRow := TempExcelBuffer."Row No.";
-        end;
-        for RowNo := 2 to MaxRow do begin
-            LineNo := LineNo + 10000;
-            JobPlanningLine.Init();
-            Evaluate(JobPlanningLine."Job No.", TransName);
-            JobPlanningLine."Line No." := LineNo;
-            Evaluate(JobPlanningLine."Job No.", GetValueAtcell(RowNo, 1));
-            Evaluate(JobPlanningLine."Job Task No.", GetValueAtcell(RowNo, 2));
-            Evaluate(JobPlanningLine."Line No.", GetValueAtcell(RowNo, 3));
-            Evaluate(JobPlanningLine.Type, GetValueAtcell(RowNo, 4));
-            Evaluate(JobPlanningLine."No.", GetValueAtcell(RowNo, 5));
-            Evaluate(JobPlanningLine.Description, GetValueAtcell(RowNo, 6));
-            Evaluate(JobPlanningLine.Quantity, GetValueAtcell(RowNo, 7));
-            Evaluate(JobPlanningLine."Unit of Measure Code", GetValueAtcell(RowNo, 8));
-            Evaluate(JobPlanningLine."Unit Cost", GetValueAtcell(RowNo, 9));
-            Evaluate(JobPlanningLine."Total Cost", GetValueAtcell(RowNo, 10));
-            Evaluate(JobPlanningLine."Unit Price", GetValueAtcell(RowNo, 11));
-            Evaluate(JobPlanningLine."Total Price", GetValueAtcell(RowNo, 12));
-            Evaluate(JobPlanningLine."Line Amount", GetValueAtcell(RowNo, 13));
-            Evaluate(JobPlanningLine."Line Type", GetValueAtcell(RowNo, 14));
-            Evaluate(JobPlanningLine."Planning Date", GetValueAtcell(RowNo, 15));
-            //Evaluate(JobPlanningLine."Usage Link", GetValueAtcell(RowNo, 16));
-            Evaluate(JobPlanningLine."Gen. Bus. Posting Group", GetValueAtcell(RowNo, 16));
-            Evaluate(JobPlanningLine."Gen. Prod. Posting Group", GetValueAtcell(RowNo, 17));
-            JobPlanningLine.Insert();
-        end;
-        Message(ExcelImportsuccess);
-    end;
-    // This Method is used to Import CSV file
-    local procedure ReadCsvdata()
-    var
-        Filemanagement: Codeunit "File Management";
-        IStream: InStream;
-        FromFile: Text[100];
-    begin
-        UploadIntoStream(Uploadmsg1, '', '', FromFile, IStream);
-        if FromFile <> '' then begin
-            FileName := Filemanagement.GetFileName(FromFile);
-
-        end
-        else
-            Error(NoFileMes);
-        TempCsvBuffer.Reset();
-        TempCsvBuffer.DeleteAll();
-        TempCsvBuffer.LoadDataFromStream(IStream, ',');
-        TempCsvBuffer.GetNumberOfLines();
-    end;
-
-    local procedure GetValueAtcellInCSV(RowNo: Integer; ColNo: Integer): Text
-    var
-    begin
-        TempCsvBuffer.Reset();
-        if TempCsvBuffer.Get(RowNo, ColNo) then
-            exit(TempCsvBuffer.Value)
-        else
-            exit('');
-    end;
-
-    local procedure ImportCSVData()
-    var
-        JobPlanningLine: Record "Job Planning Line";
-        RowNo: Integer;
-        ColNo: Integer;
-        LineNo: Integer;
-        MaxRow: Integer;
-    begin
-        RowNo := 0;
-        ColNo := 0;
-        MaxRow := 0;
-        LineNo := 0;
-        JobPlanningLine.Reset();
-        if JobPlanningLine.FindLast() then
-            LineNo := JobPlanningLine."Line No.";
-        TempCsvBuffer.Reset();
-        if TempCsvBuffer.FindLast() then begin
-            MaxRow := TempCsvBuffer."Line No.";
-        end;
-        for RowNo := 2 to MaxRow do begin
-            LineNo := LineNo + 10000;
-            JobPlanningLine.Init();
-            Evaluate(JobPlanningLine."Job No.", TransName);
-            JobPlanningLine."Line No." := LineNo;
-            Evaluate(JobPlanningLine."Job No.", GetValueAtcellInCSV(RowNo, 1));
-            Evaluate(JobPlanningLine."Job Task No.", GetValueAtcellInCSV(RowNo, 2));
-            Evaluate(JobPlanningLine."Line No.", GetValueAtcellInCSV(RowNo, 3));
-            Evaluate(JobPlanningLine.Type, GetValueAtcellInCSV(RowNo, 4));
-            Evaluate(JobPlanningLine."No.", GetValueAtcellInCSV(RowNo, 5));
-            Evaluate(JobPlanningLine.Description, GetValueAtcellInCSV(RowNo, 6));
-            Evaluate(JobPlanningLine.Quantity, GetValueAtcellInCSV(RowNo, 7));
-            Evaluate(JobPlanningLine."Unit of Measure Code", GetValueAtcellInCSV(RowNo, 8));
-            Evaluate(JobPlanningLine."Unit Cost", GetValueAtcellInCSV(RowNo, 9));
-            Evaluate(JobPlanningLine."Total Cost", GetValueAtcellInCSV(RowNo, 10));
-            Evaluate(JobPlanningLine."Unit Price", GetValueAtcellInCSV(RowNo, 11));
-            Evaluate(JobPlanningLine."Total Price", GetValueAtcellInCSV(RowNo, 12));
-            Evaluate(JobPlanningLine."Line Amount", GetValueAtcellInCSV(RowNo, 13));
-            Evaluate(JobPlanningLine."Line Type", Format(GetValueAtcellInCSV(RowNo, 14)));
-            Evaluate(JobPlanningLine."Planning Date", GetValueAtcellInCSV(RowNo, 15));
-            //Evaluate(JobPlanningLine."Usage Link", GetValueAtcell(RowNo, 16));
-            Evaluate(JobPlanningLine."Gen. Bus. Posting Group", GetValueAtcellInCSV(RowNo, 16));
-            Evaluate(JobPlanningLine."Gen. Prod. Posting Group", GetValueAtcellInCSV(RowNo, 17));
-            JobPlanningLine.Insert();
-        end;
-        Message(CsvImportsuccess);
-    end;
-    //PE-118.NC.1.0 02Aug2023 Start
-    procedure NS_GetFromProgessBilling(NSJobNo1: Code[20]; PassGetProgBilling: Boolean; ProgressBillingNo1: Code[20]; RequisitionNo1: Integer; VersionNo1: Integer);
-    begin
-        NSJobNo := NSJobNo1;
-        CalledFromProgBilling := PassGetProgBilling;
-        ProgressBillingNo := ProgressBillingNo1;
-        RequisitionNo := RequisitionNo1;
-        VersionNo := VersionNo1;
-    end;
-    //PRJCTPR-191.DK.1.0 11Sep2023 START 
-    procedure NS_GetFromProgessBillingCO(NSJobNo1: Code[20]; PassGetProgBilling: Boolean; ProgressBillingNo1: Code[20]; RequisitionNo1: Integer; VersionNo1: Integer; NSChangeOrdger: Boolean);
-    begin
-        NSJobNo := NSJobNo1;
-        CalledFromProgBilling := PassGetProgBilling;
-        ProgressBillingNo := ProgressBillingNo1;
-        RequisitionNo := RequisitionNo1;
-        VersionNo := VersionNo1;
-        Change_Order := NSChangeOrdger;
-    end;
-    //PRJCTPR-191.DK.1.0 11Sep2023 END
-    local procedure NS_CreateProgessBilling(var NS_PassJobPlanningLine: Record "Job Planning Line");
-    var
-        ProgressBillingLine: Record "NS_Progress Billing Line";
-        RevCatTble: Record "NS_Job Revenue Category";
-        JobActivity: Record "NS_Job Activity";
-        JobTask1: Record "Job Task";
-        BillingHeader: Record "NS_Progress Billing Header";
-        RecJob: Record Job;
-        LastLineNo: Integer;
-        ItemNo: Integer;
-        BudgetDesc: Text[100];
-        APODesc: Text[100];
-        NSIsProgressBillChangeOrder: Boolean;
-    begin
-        ProgressBillingLine.RESET();
-        ProgressBillingLine.SETRANGE("NS_Progress Billing No.", ProgressBillingNo);
-        ProgressBillingLine.SETRANGE("NS_Requisition No.", RequisitionNo);
-        ProgressBillingLine.SETRANGE("NS_Version No.", VersionNo);
-        if ProgressBillingLine.FINDLAST() then
-            LastLineNo := ProgressBillingLine."NS_Line No."
-        else
-            LastLineNo := 0;
-        if RecJob.Get(NSJobNo) then;
-        if NS_PassJobPlanningLine.FINDSET() then
-            repeat
-                ProgressBillingLine.INIT();
-                ProgressBillingLine."NS_Progress Billing No." := ProgressBillingNo;
-                ProgressBillingLine."NS_Requisition No." := RequisitionNo;
-                ProgressBillingLine."NS_Version No." := VersionNo;
-                LastLineNo := LastLineNo + 10000;
-                ProgressBillingLine."NS_Line No." := LastLineNo;
-                ItemNo := ItemNo + 1;
-                ProgressBillingLine."NS_Item No." := FORMAT(ItemNo);
-                ProgressBillingLine."NS_Job No." := NS_PassJobPlanningLine."Job No.";
-                ProgressBillingLine."NS_Revenue Category" := NS_PassJobPlanningLine."NS_Revenue Category";
-                if RevCatTble.Get(ProgressBillingLine."NS_Revenue Category") then
-                    ProgressBillingLine."NS_Revenue Cat Description" := RevCatTble.NS_Description;
-                ProgressBillingLine."NS_Job Task No." := NS_PassJobPlanningLine."Job Task No.";
-                ProgressBillingLine."NS_Activity Code" := NS_PassJobPlanningLine."NS_Activity Code";
-                ProgressBillingLine."NS_Process Code" := NS_PassJobPlanningLine."NS_Process Code";
-                ProgressBillingLine."NS_Operation Code" := NS_PassJobPlanningLine."NS_Operation Code";
-                BudgetDesc := NS_PassJobPlanningLine.Description;
-                if JobActivity.GET(JobActivity.NS_Type::Revenue, NS_PassJobPlanningLine."NS_Activity Code") then
-                    APODesc := JobActivity.NS_Description;
-                if BudgetDesc > '' then
-                    ProgressBillingLine.NS_Description := BudgetDesc
-                else
-                    ProgressBillingLine.NS_Description := APODesc;
-                ProgressBillingLine."NS_Billing Method" := NS_PassJobPlanningLine."NS_Progress Billing Method";
-                if ProgressBillingLine."NS_Billing Method" = ProgressBillingLine."NS_Billing Method"::Unit then begin
-                    ProgressBillingLine."NS_Contract Quantity" := NS_PassJobPlanningLine.Quantity;
-                    ProgressBillingLine."NS_Base Amount" := NS_PassJobPlanningLine."Unit Price";
-                    if NS_PassJobPlanningLine.Quantity < 0 then
-                        ProgressBillingLine."NS_Base Amount" := ProgressBillingLine."NS_Base Amount" * -1;
-                end else
-                    ProgressBillingLine."NS_Base Amount" := NS_PassJobPlanningLine."Total Price";
-                ProgressBillingLine."NS_Segment Code" := NS_PassJobPlanningLine."NS_Segment Code";
-                ProgressBillingLine."NS_Unit of Measure Code" := NS_PassJobPlanningLine."Unit of Measure Code";
-                ProgressBillingLine."NS_Planing Line No." := NS_PassJobPlanningLine."Line No.";
-                ProgressBillingLine."NS_Scheduled Values" := NS_PassJobPlanningLine."Line Amount (LCY)";
-                ProgressBillingLine."NS_Contract Forecast Date" := NS_PassJobPlanningLine."NS_Contract Forecast Date";
-                //PRJCTPR-191.DK.1.0 11Sep2023 START 
-                // if NSIsProgressBillChangeOrder = true then
-                //PRJCTPR-388.DK.1.0 21Jun2024 Start
-                if Change_Order = true then begin
-                    if RecJob."NS_Job Class" = RecJob."NS_Job Class"::"Change Order" then
-                        ProgressBillingLine."NS_Change Order" := true
-                end
-                //PRJCTPR-388.DK.1.0 21Jun2024 End
-                //PRJCTPR-191.DK.1.0 11Sep2023 END
-                else
-                    ProgressBillingLine."NS_Change Order" := NS_PassJobPlanningLine."NS_Change Order";
-                ProgressBillingLine."NS_Shortcut Dimension 1 Code" := RecJob."Global Dimension 1 Code";
-                ProgressBillingLine."NS_Shortcut Dimension 2 Code" := RecJob."Global Dimension 2 Code";
-                ProgressBillingLine."NS_Dimension Set ID" := ProgressBillingLine.GetDimensionNoFromJob(RecJob."No.");
-
-                if JobTask1.GET(ProgressBillingLine."NS_Job No.", ProgressBillingLine."NS_Job Task No.") then
-                    IF ((JobTask1."Global Dimension 1 Code" <> '') and (JobTask1."Global Dimension 2 Code" <> '')) then begin
-                        ProgressBillingLine."NS_Shortcut Dimension 1 Code" := JobTask1."Global Dimension 1 Code";
-                        ProgressBillingLine."NS_Shortcut Dimension 2 Code" := JobTask1."Global Dimension 2 Code";
-                        ProgressBillingLine."NS_Dimension Set ID" := BillingHeader.NS_GetDimensionNoFromJobTask(ProgressBillingLine."NS_Job No.", ProgressBillingLine."NS_Job Task No.");
-                    end;
-                if ProgressBillingLine.INSERT() then begin
-                    NS_PassJobPlanningLine.NS_ProgessBillingNo := ProgressBillingNo;//PRJCTPR-191.HS.1.0 29SEPT2023
-                    NS_PassJobPlanningLine."NS_Requisition No." := RequisitionNo; //PRJCTPR-191.HS.1.0 29SEPT2023
-                    NS_PassJobPlanningLine."NS_Version No." := VersionNo; //PRJCTPR-191.HS.1.0 29SEPT2023
-                    NS_PassJobPlanningLine.Modify();
-                end;
-            until NS_PassJobPlanningLine.Next() = 0;
-    end;
-    //PE-118.NC.1.0 02Aug2023 End
-    var
-        UploadMsg: Label 'Please choose the Excel File';
-        FileName: Text[100];
-        TempExcelBuffer: Record "Excel Buffer" temporary;
-        TempCsvBuffer: Record "CSV Buffer" temporary;
-        SheetName: Text[100];
-        NoFileMes: Label 'No Excel File Found';
-        TransName: code[10];
-        ExcelImportsuccess: Label 'Excel Imported successfully';
-        ExcelExportSuccess: Label 'Excel Exported successfully';
-        CsvImportsuccess: Label 'Csv Imported successfully';
-        CsvExportSuccess: Label 'Csv Exported successfully';
-        Uploadmsg1: Label 'Please Choose the Csv File';
-        NoFileMsg: Label 'No Csv File found';
-        CalledFromProgBilling: Boolean; //PE-118.NC.1.0 02Aug2023
-        ProgressBillingNo: Code[20]; //PE-118.NC.1.0 02Aug2023
-        RequisitionNo: Integer; //PE-118.NC.1.0 02Aug2023
-        VersionNo: Integer; //PE-118.NC.1.0 02Aug2023
-        NSJobNo: Code[20]; //PE-118.NC.1.0 02Aug2023
-        Change_Order: Boolean; //PRJCTPR-191.DK.1.0 11Sep2023
-
-        NSCalledFromJobQuote: boolean;   //PRJCTPR-319.JS.1.0
-        NSQuotSegJobNoG: code[20]; //PRJCTPR-319.JS.1.0
-        NSQuotSegmentCodeG: code[30]; //PRJCTPR-319.JS.1.0
-
-    //PE-38 DK 1.0 13March2023 End
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeInsertSubconLinesFromJobPlanningLines(Var SubcontractLines: Record "NS_Subcontract Lines"; var JobPlanningLines: Record "Job Planning Line")
-    begin
-    end;
-    //PE-194.HS.1.0 26Oct2023 Start
-    [IntegrationEvent(false, false)]
-    procedure NS_CreateSubContractDetailBeforeInsert(var NS_JPL: Record "Job Planning Line"; var NS_Subconline: record "NS_Subcontract Lines")
-    begin
-    end;
-    //PE-194.HS.1.0 26Oct2023 ENd
-
-    //PRJCTPR-319.JS.1.0 26FEB2024 - Start
-    /// <summary>
-    /// NS_GetQuoteSegmentLinesVars.
-    /// </summary>
-    /// <param name="NSPassJobNo">VAR code[20].</param>
-    /// <param name="Var NSPassSegmentCode">code[30].</param>    
-    procedure NS_GetQuoteSegmentLineVars(var NSPassJobNo: code[20]; Var NSPassSegmentCode: code[30])
-    begin
-        NSQuotSegJobNoG := NSPassJobNo;
-        NSQuotSegmentCodeG := NSPassSegmentCode;
-        NSCalledFromJobQuote := true;
-    end;
-
-    /// <summary>
-    /// NS_CreateQuoteSegmentTakeoffTotal.
-    /// </summary>
-    /// <param name="NSPaddJobPlanningLine">VAR record "Job Planning Line".</param>
-    /// <param name="NSPassJobNum">VAR code[20].</param>
-    /// <param name="Var NSPassSegmentCode">code[30].</param>
-    procedure NS_CreateQuoteSegmentTakeoffTotal(var NSPaddJobPlanningLine: record "Job Planning Line"; var NSPassJobNum: code[20]; Var NSPassSegmentCode: code[30])
-    var
-        NSJobPlanningLn: record "Job Planning Line";
-        NSJobPlanningLn2: record "Job Planning Line";
-        NSJobTakeOffSegments: record "NS_Job Takeoff Segments";
-        NSLastSegmentNo: code[20];
-    begin
-        clear(NSLastSegmentNo);
-        NSJobPlanningLn2.Reset();
-        NSJobPlanningLn2.SetCurrentKey("NS_Segment Code");
-        NSJobPlanningLn2.setrange("Job No.", NSPassJobNum);
-        NSJobPlanningLn2.setrange("Schedule Line", true);
-        NSJobPlanningLn2.setfilter("NS_Segment Code", '<>%1', '');
-        if NSJobPlanningLn2.FindSet() then begin
-            repeat
-                if NSLastSegmentNo <> NSJobPlanningLn2."NS_Segment Code" then begin
-                    NSLastSegmentNo := NSJobPlanningLn2."NS_Segment Code";
-                    NSJobPlanningLn.reset();
-                    NSJobPlanningLn.setrange("Job No.", NSJobPlanningLn2."Job No.");
-                    NSJobPlanningLn.setrange("NS_Segment Code", NSJobPlanningLn2."NS_Segment Code");
-                    NSJobPlanningLn.setrange("Schedule Line", true);
-                    if NSJobPlanningLn.FindSet() then begin
-                        NSJobPlanningLn.CalcSums("Line Amount (LCY)");
-                        NSJobTakeOffSegments.Reset();
-                        NSJobTakeOffSegments.setrange("NS_Job No.", NSJobPlanningLn2."Job No.");
-                        NSJobTakeOffSegments.setrange("NS_Segment Code", NSJobPlanningLn2."NS_Segment Code");
-                        if NSJobTakeOffSegments.FindFirst() then begin
-                            if NSJobTakeOffSegments."NS_Freeze Total Contract Price" = false then begin
-                                NSJobTakeOffSegments."NS_Total Contract Price" := NSJobPlanningLn."Line Amount (LCY)";
-                                NSJobTakeOffSegments.modify();
-                            end;
-                        end;
-                    end;
-                end;
-            until NSJobPlanningLn2.Next() = 0;
-        end;
-    end;
-    //PRJCTPR-319.JS.1.0 26FEB2024 - end
 }
 

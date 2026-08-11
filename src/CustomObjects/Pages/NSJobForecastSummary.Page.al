@@ -11,9 +11,7 @@ page 14021197 "NS_Job Forecast Summary"
     //PRJ-433.MS.1.0 added new changes for different fields
     // +------------------------------------------------------------
     //PRJ-353.GK.1.0 08Sep2021 | Add new changes with new array column.
-    //PRJ-1454.NK.1.0 17Oct2022 | Change Code
-    //PE-170.HS.1.0 6Oct2023 | Added Tooltips
-    //PE-170.HS.1.0 10Oct2023 |Added Tooltips
+
     Caption = 'JobForecast';
     Editable = false;
     LinksAllowed = false;
@@ -50,59 +48,49 @@ page 14021197 "NS_Job Forecast Summary"
                         {
                             ApplicationArea = All;
                             Caption = 'Budget Costs';
-                            //ToolTip = 'Specifies the Budget Costs.'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the total of Budgeted Costs defined in a forecast based on the date filter applied.'; //PE-170.HS.1.0 6Oct2023 
-
+                            ToolTip = 'Specifies the Budget Costs.';
                         }
                         field("Column1[2]"; Column1[2])
                         {
                             ApplicationArea = All;
                             Caption = 'Forecasted Cost To Complete';
-                            //ToolTip = 'Specifies the Forecasted Cost To Complete'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the total of Forecasted Completed Cost defined in a forecast based on the date filter applied.'; //PE-170.HS.1.0 6Oct2023 
+                            ToolTip = 'Specifies the Forecasted Cost To Complete';
                         }
                         field("Estimated Cost To Complete"; '')
                         {
                             ApplicationArea = All;
                             Caption = 'Estimated Cost To Complete';
-                            //ToolTip = 'Estimated Cost To Complete'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the total of Estimated Cost to Complete defined in a forecast based on the date filter applied.'; //PE-170.HS.1.0 6Oct2023 
+                            ToolTip = 'Estimated Cost To Complete';
                         }
                         field("Column1[3]"; Column1[3])
                         {
                             ApplicationArea = All;
                             Caption = 'Actual Costs';
-                            //ToolTip = 'Actual Cost'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the total of Total Cost Used defined in a forecast based on the date filter applied.'; //PE-170.HS.1.0 6Oct2023 
+                            ToolTip = 'Actual Cost';
                         }
                         field("Column1[4]"; Column1[4])
                         {
                             ApplicationArea = All;
                             Caption = 'Contract';
-                            // ToolTip = 'Contract'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the total of Budgeted Price for a job till the date defined on the "As of Date Filter".';//PE-170.HS.1.0 6Oct2023 
+                            ToolTip = 'Contract';
                         }
                         field("Column1[5]"; Column1[5])
                         {
                             ApplicationArea = All;
                             Caption = 'Billings To Date';
-                            // ToolTip = 'Billings To Date'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the total of Invoiced Price for a job till the date defined on the "As of Date Filter".'; //PE-170.HS.1.0 6Oct2023 
+                            ToolTip = 'Billings To Date';
                         }
                         field("Column1[6]"; Column1[6])
                         {
                             ApplicationArea = All;
                             Caption = 'Job % Complete';
-                            //ToolTip = 'Job % Complete'; //PE-170.HS.1.0 6Oct2023 Commented
-                            //ToolTip = 'Specifies at what percentge the job is completed. This gets calculated by (Actual Costs / Forecasted Completed Cost) * 100'; //PE-170.HS.1.0 6Oct2023 //PE-170.HS.1.0 10Oct2023 Commented
-                            ToolTip = 'Specifies at what percentage the job is completed. This gets calculated by (Actual Costs / Forecasted Completed Cost) * 100'; //PE-170.HS.1.0 10Oct2023 
+                            ToolTip = 'Job % Complete';
                         }
                         field("Column1[7]"; Column1[7])
                         {
                             ApplicationArea = All;
                             Caption = 'Gross Profit To Date';
-                            // ToolTip = 'Gross Profit To Date'; //PE-170.HS.1.0 6Oct2023 Commented
-                            ToolTip = 'Specifies the gross profit of the job based on date filter applied. This gets calculated by "((Job % Complete * Contract) / 100) - Actual Costs"'; //PE-170.HS.1.0 6Oct2023 
+                            ToolTip = 'Gross Profit To Date';
                         }
                     }
                     // group(Control1100773012)
@@ -435,7 +423,6 @@ page 14021197 "NS_Job Forecast Summary"
         JobPlanningLine: Record "Job Planning Line";
         JobPlanningLineBudget: Record "Job Planning Line";
         GLSetup: Record "General Ledger Setup";
-        JobSetup: record "Jobs Setup"; //PRJ-1454.NK.1.0 17Oct2022
         JobNoSentIn: Code[20];
         NewStatusDateSentIn: Date;
         PlanningLineTotal: Decimal;
@@ -507,8 +494,7 @@ page 14021197 "NS_Job Forecast Summary"
 
                     Job.CALCFIELDS("NS_Budgeted Price (LCY)", "NS_Invoiced Price (LCY)", "NS_Usage (Cost) (LCY)");
                     TotalCostsUsed := TotalCostsUsed + Job."NS_Usage (Cost) (LCY)"; //PRJ-433 
-                   //TotalContractValue := TotalContractValue + Job."NS_Budgeted Price (LCY)"; //PRJ-433  PRJ-1454.NK.1.0 17Oct2022 Block
-                TotalContractValue := GetPlanningLineIncludeSubLevels(0D, NewStatusDateSentIn, JobNoSentIn); //PRJ-1454.NK.1.0 17Oct2022     
+                    TotalContractValue := TotalContractValue + Job."NS_Budgeted Price (LCY)"; //PRJ-433 
                     TotalBillings := TotalBillings + Job."NS_Invoiced Price (LCY)";  //PRJ-433 
 
                     NS_GetLastPostedStatus("NS_Job No.", "NS_Job Task No.", NewStatusDateSentIn, PreviousJobForecast);
@@ -603,63 +589,5 @@ page 14021197 "NS_Job Forecast Summary"
         JobNoSentIn := JobNoIn;
         NewStatusDateSentIn := NewStatusDateIn;
     end;
-    //PRJ-1454.NK.1.0 18Oct2022 Start
-    procedure GetPlanningLineIncludeSubLevels(StartDate: Date; var Enddate: Date; var ParaJob: Code[20]) Answer: Decimal;
-    var
-        PlanningLine: Record "Job Planning Line";
-        PlanningLine2: Record "Job Planning Line";
-        NSJob: Record Job;   
-        JobNoFilter: Code[20];
-        IsHandle: Boolean;//FGH-163.SM.20022024 PE-269.JS.1.0 05MAR2024
-    begin
-        //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 START
-        OnBeforeGetPlanningLineIncludeSubLevels(StartDate, Enddate, ParaJob, IsHandle, Answer);//FGH-163.SMAdded Parameter  //PE-269.JS.1.0
-        if IsHandle then
-            exit(Answer);
-        //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 END
-        JobNoFilter := '';
-        JobNoFilter := '@*' + format(ParaJob) + '*';
-        if jobSetup.Get() then;
-        Answer := 0;
-        PlanningLine.Reset();
-        PlanningLine.SetRange("Job No.", ParaJob);     
-        PlanningLine.SetFilter("Line Type", '<>%1', PlanningLine."Line Type"::Budget);
-        if jobSetup."NS_Enab. Budg.on Contract Date" then
-            PlanningLine.SetRange("NS_Contract Forecast Date", StartDate, Enddate)
-        else 
-            PlanningLine.SetRange("Planning Date", StartDate, Enddate);
-        if PlanningLine.FindSet() then
-            repeat
-                    Answer := Answer + PlanningLine."Total Price (LCY)";
-            until PlanningLine.Next() = 0;
-
-        NSJob.Reset();
-        NSJob.SetCurrentKey("NS_Sub-Level to Job No.");
-        NSJob.SetFilter("NS_Sub-Level to Job No.", '%1', JobNoFilter);
-        if NSJob.FindSet() then
-            repeat
-                PlanningLine2.Reset();
-                PlanningLine2.SetRange("Job No.", NSJob."No.");               
-                PlanningLine2.SetFilter("Line Type", '<>%1', PlanningLine2."Line Type"::Budget);
-                if jobSetup."NS_Enab. Budg.on Contract Date" then
-                    PlanningLine2.SetRange("NS_Contract Forecast Date", StartDate, Enddate)
-                else 
-                    PlanningLine2.SetRange("Planning Date", StartDate, Enddate);
-                if PlanningLine2.FindSet() then
-                    repeat
-                            Answer := Answer + PlanningLine2."Total Price (LCY)";
-                    until PlanningLine2.Next() = 0;
-            until NSJob.Next() = 0;
-        exit(Answer);
-    end;
-    //PRJ-1454.NK.1.0 18Oct2022 End
-
-    //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 START
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeGetPlanningLineIncludeSubLevels(StartDate: Date; var Enddate: Date; var ParaJob: Code[20]; var Ishandled: Boolean; var FGHAnswer: Decimal)//FGH-163.SMAdded Parameter //PE-269.JS.1.0
-    begin
-
-    end;
-    //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 END
 }
 

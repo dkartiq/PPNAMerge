@@ -10,7 +10,7 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
     // +     - OnRun:
     // +         - If Sales Retention or Purchase Retention is active, then set filter on Retention Ledger Code
     // +------------------------------------------------------------
-    //PRJ-1353.JS.1.0 05MAY2022 | change code to get blank entries with normal entries in Custoner/Vendor Ledger entries
+
 
     trigger OnRun()
     begin
@@ -39,24 +39,6 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
         NS_C225OnRun(GenJnlLine);
         IsHandled := true;
     end;
-    //PRJCTPR-97.GK.1.0 06Apr2023 start
-    [EventSubscriber(ObjectType::Table, 81, 'OnBeforeSetAmountWithCustLedgEntry', '', false, false)]
-    local procedure NS_T81OnBeforeSetAmountWithCustLedgEntry(var CustLedgerEntry: Record "Cust. Ledger Entry"; var GenJournalLine: Record "Gen. Journal Line")
-    var
-    begin
-        if (GenJournalLine."Document Type" = GenJnlLine."Document Type"::Payment) AND (GenJournalLine."Source Code" = 'CASHRECJNL') then begin
-            GenJournalLine."Job No." := CustLedgerEntry."NS_Job No.";
-            GenJournalLine."NS_Draw No." := CustLedgerEntry."NS_Draw No.";//PE-200.AS.11.0
-        end;
-
-        //PE-200.AS.11.0 START
-        if (GenJournalLine."Document Type" = GenJnlLine."Document Type"::Payment) AND (GenJournalLine."Source Code" = 'PAYMENTJNL') then begin
-            GenJournalLine."Job No." := CustLedgerEntry."NS_Job No.";
-            GenJournalLine."NS_Draw No." := CustLedgerEntry."NS_Draw No.";
-        end;
-        //PE-200.AS.11.0 END
-    end;
-    //PRJCTPR-97.GK.1.0 06Apr2023 end
 
     local procedure NS_C225OnRun(var inGenJnlLine: Record "Gen. Journal Line")
     var
@@ -99,13 +81,8 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
 
                         //ProjectPro - start
                         if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
-                            if GenJnlLine."NS_Retention Ledger Code" > '' then
-                                //PRJ-1353.JS.1.0 07MAY2022 - Start
-                                If GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
-                                    CustLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
-                                else
-                                    VendLedgEntry.SetFilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
-                        //PRJ-1353.JS.1.0 07MAY2022 - end    
+                            if "NS_Retention Ledger Code" > '' then
+                                CustLedgEntry.SetRange("NS_Retention Ledger Code", "NS_Retention Ledger Code");
                         //ProjectPro - end
 
                         if CustLedgEntry.Find('-') then begin
@@ -129,8 +106,6 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
                                 if ("Bal. Account Type" = "Bal. Account Type"::Customer) or ("Bal. Account Type" = "Bal. Account Type"::Vendor) then
                                     Amount := -Amount;
                                 Validate(Amount);
-                                GenJnlLine."NS_Draw No." := CustLedgEntry."NS_Draw No."; //PE-200.AS.7.0
-                                GenJnlLine."Job No." := CustLedgEntry."NS_Job No."; //PE-200.AS.7.0
                             end else
                                 repeat
                                     NS_CheckAgainstApplnCurrency(CurrencyCode2, CustLedgEntry."Currency Code", AccType::Customer, true);
@@ -165,12 +140,7 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
                         //ProjectPro - start
                         if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
                             if "NS_Retention Ledger Code" > '' then
-                                //PRJ-1353.JS.1.0 07MAY2022 - Start
-                                If GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
-                                    VendLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
-                                else
-                                    VendLedgEntry.SetFilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
-                        //PRJ-1353.JS.1.0 07MAY2022 - End    
+                                VendLedgEntry.SetRange("NS_Retention Ledger Code", "NS_Retention Ledger Code");
                         //ProjectPro - end
 
                         VendLedgEntry.SetRange("Applies-to ID", "Applies-to ID");
@@ -246,17 +216,12 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
             CustLedgEntry.SetRange(Open, true);
 
             //ProjectPro - start
-            //PRJ-1353.JS.1.0 05MAY2022 - Start
-            NS_SalesSetup.Get();
-            NS_PurchSetup.Get();
+            NS_SalesSetup.Get;
+            NS_PurchSetup.Get;
             if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
-                if GenJnlLine."NS_Retention Ledger Code" > '' then
-                    if GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
-                        CustLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
-                    else
-                        CustLedgEntry.SetFilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
+                if "NS_Retention Ledger Code" > '' then
+                    CustLedgEntry.SetRange("NS_Retention Ledger Code", "NS_Retention Ledger Code");
             //ProjectPro - end
-            //PRJ-1353.JS.1.0 05MAY2022 - end
 
             if "Applies-to ID" = '' then
                 "Applies-to ID" := "Document No.";
@@ -291,17 +256,12 @@ codeunit 14021115 "NS_Gen. Jnl.-Apply"
             VendLedgEntry.SetRange(Open, true);
 
             //ProjectPro - start
-            //PRJ-1353.JS.1.0 05MAY2022 - Start
-            NS_SalesSetup.Get();
-            NS_PurchSetup.Get();
+            NS_SalesSetup.Get;
+            NS_PurchSetup.Get;
             if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
-                if GenJnlLine."NS_Retention Ledger Code" > '' then
-                    if GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
-                        VendLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
-                    else
-                        VendLedgEntry.Setfilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
+                if "NS_Retention Ledger Code" > '' then
+                    VendLedgEntry.SetRange("NS_Retention Ledger Code", "NS_Retention Ledger Code");
             //ProjectPro - end
-            //PRJ-1353.JS.1.0 05MAY2022 - Start
 
             if "Applies-to ID" = '' then
                 "Applies-to ID" := "Document No.";

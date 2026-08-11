@@ -2,8 +2,7 @@ pageextension 14021253 NS_PurchOrderStats extends "Purchase Order Statistics"
 {
     // version NAVW111.00,PPNA11.00
     //PRJ-659.RS.1.0 17June21 | NS_ should be removed from every page rest mention the page ID and Name.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Order Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("TotalInclVAT_General")

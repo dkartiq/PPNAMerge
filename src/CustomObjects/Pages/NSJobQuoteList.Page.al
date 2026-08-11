@@ -1,5 +1,6 @@
 page 14021407 "NS_Job Quote List"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -9,10 +10,6 @@ page 14021407 "NS_Job Quote List"
     // +  - www.gemko.com
     //PRJ-322.MS.1.0 swap the order of quote no. and template for open card on web client
     // +------------------------------------------------------------
-    //PRJ-1085.RM.1.0 16Dec2021 | Added Page url
-    //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
-     //PRJCTPR-130.RM.1.0 18July2023 | Added an action button
-    ContextSensitiveHelpPage = 'user-guide/job-quotes/defining-a-job-quote/'; //PRJ-1085.RM.1.0 16Dec2021
 
     Caption = 'Quote List';
     CardPageID = "NS_Job Quote";
@@ -22,7 +19,11 @@ page 14021407 "NS_Job Quote List"
     ApplicationArea = Jobs;
     PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Filters';
     SourceTable = "NS_Job Quote Header";
-
+    // >> Upgrade
+    RefreshOnActivate = true;
+    SourceTableView = SORTING("NS_Quote No.")
+                      ORDER(Descending);
+    // << Upgrade
     layout
     {
         area(content)
@@ -62,22 +63,11 @@ page 14021407 "NS_Job Quote List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Accepted at Date';
                 }
-                //PE-300.Dk.1.0  29May2024 Start
-                field(Status; Rec."NS_Quote Status")  //PE-300.JS.1.0 21JUN2024
+                field(Status; Rec.NS_Status)
                 {
-                    Caption = 'Status';
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Status';
                 }
-                //PE-300.Dk.1.0  29May2024 End
-                //PRJ-1155.AS.1.0 21JAN2022 START
-                field("NS_Total Contract Price"; Rec."NS_Total Contract Price")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Total Contract Price';
-                    Editable = false;
-                }
-                //PRJ-1155.AS.1.0 21JAN2022 END
                 field("Link-to Quote No."; Rec."NS_Link-to Quote No.")
                 {
                     ApplicationArea = All;
@@ -93,14 +83,12 @@ page 14021407 "NS_Job Quote List"
                 field("Sell-to Customer No."; Rec."NS_Sell-to Customer No.")
                 {
                     ApplicationArea = All;
-                    //ToolTip = 'Specifies the Sell-to Customer No.'; //PRJ-1579.RM.1.0 
-                    ToolTip = 'Select the Customer No.'; //PRJ-1579.RM.1.0 
+                    ToolTip = 'Specifies the Sell-to Customer No.';
                 }
                 field("Sell-to Customer Name"; Rec."NS_Sell-to Customer Name")
                 {
                     ApplicationArea = All;
-                    // ToolTip = 'Specifies the Sell-to Customer Name'; //PRJ-1579.RM.1.0 
-                    ToolTip = 'Sepcifies the name of the Customer'; //PRJ-1579.RM.1.0 
+                    ToolTip = 'Specifies the Sell-to Customer Name';
                 }
                 field("Salesperson Code"; Rec."NS_Salesperson Code New")//PRJ-867.AS.1.0 23SEPT2021 Changed field Sales Person code to Sales person code New
                 {
@@ -144,15 +132,12 @@ page 14021407 "NS_Job Quote List"
                     ToolTip = 'Specifies the Sales Quote No.';
                     Visible = false;
                 }
-                //PE-300-DK.1.0 29May2024 Start
-                field("Probability to Close"; Rec."NS_QuotePro to Close")  //PE-300.JS.1.0 21JUN2024
+                field("Probability to Close"; Rec."NS_Probability to Close")
                 {
-                    Caption = 'Probability to Close';
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Probability to Close';
                     Visible = false;
                 }
-                //PE-300-DK.1.0 29May2024 End
             }
         }
     }
@@ -272,27 +257,6 @@ page 14021407 "NS_Job Quote List"
                 PromotedIsBig = true;
                 RunObject = Report "NS_Quote Pipeline Report";
             }
-             //PRJCTPR-130.RM.1.0 19July2023 start
-            action(JobQuoteEstimation)
-            {
-                ApplicationArea = all;
-                Image = Report;
-                Promoted = true;
-                PromotedCategory = "Report";
-                PromotedIsBig = true;
-                Caption = 'Job Quote Estimation Report';
-                ToolTip = 'This Report shows the estimate of the Job Quote Cost & Job Quote Price details.';
-                trigger OnAction();
-                var
-                    JobQuoteHdr: Record "NS_Job Quote Header";
-                begin
-                    Commit();
-                    JobQuoteHdr.Reset();
-                    JobQuoteHdr.SetRange("NS_Quote No.", Rec."NS_Quote No.");
-                    REPORT.RUNMODAL(14021332, true, false, JobQuoteHdr);
-                end;
-            }
-            //PRJCTPR-130.RM.1.0 19July2023 End
             action(NS_PreservePricing)
             {
                 ApplicationArea = All;

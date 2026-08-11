@@ -1,4 +1,3 @@
-//PRJCTPR-399.PP.1.0 09JUL2024 | Obselete this report, New report 14021498-"NS_ProjectCostCategorySummary" has been created. 
 report 14021178 "NS_Job Cost Category Summary"
 {
     // version PPNA11.00
@@ -11,17 +10,12 @@ report 14021178 "NS_Job Cost Category Summary"
     // +------------------------------------------------------------
     //SMPL - Caption = 'RequestPage' can't be used on area
     //PRJ-84.SK.1.0 Added report to search
-    //PRJCTPR-399.PP.1.0 09JUL2024 | Obselete this report, New report 14021498-"NS_ProjectCostCategorySummary" has been created. 
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSJob Cost Category Summary.rdl';
     UsageCategory = ReportsAndAnalysis;
     Caption = 'Job Cost Category Summary';
     ApplicationArea = all;
-    //PRJCTPR-399.PP.1.0 09JUL2024 Start
-    ObsoleteState = Pending;
-    ObsoleteReason = 'Will be removed in next build becuase a new report (Project Cost Category Summary) is created. New report id is 14021498.';
-    ObsoleteTag = 'ProjectPro upcoming release 24.0.XXX.00';
-    //PRJCTPR-399.PP.1.0 09JUL2024 End
+
     dataset
     {
         dataitem(Job; Job)
@@ -124,10 +118,7 @@ report 14021178 "NS_Job Cost Category Summary"
                     SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                     SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                     SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                    SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 END
+                    SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                     SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));
                 end;
             }
@@ -172,10 +163,7 @@ report 14021178 "NS_Job Cost Category Summary"
                     SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                     SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                     SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                    SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 END
+                    SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                     SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
                 end;
             }

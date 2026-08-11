@@ -809,8 +809,7 @@ page 14021456 "NS_Job Forecast Work by Seg"
         JobLedEntry.SetRange("Job Task No.", "NS_Job Task No.");
         JobLedEntry.SetFilter(Type, '%1', JobLedEntry.Type::Resource);
         JobLedEntry.SetFilter("Entry Type", '%1', JobLedEntry."Entry Type"::Usage);
-        //JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');//PRJ-1524.GK.1.0 25July2022
-        JobLedEntry.SetFilter("Unit of Measure Code", '%1|%2', 'HR', 'HOUR');//PRJ-1524.GK.1.0 25July2022
+        JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');
         if AsOfDateFilter <> 0D then
             JobLedEntry.SetFilter("Posting Date", '%1..%2', 0D, AsOfDateFilter);
         JobLedEntry.CalcSums(Quantity);
@@ -956,8 +955,7 @@ page 14021456 "NS_Job Forecast Work by Seg"
             JobLedEntry.SetRange("Job Task No.", "NS_Job Task No.");
             JobLedEntry.SetFilter(Type, '%1', JobLedEntry.Type::Resource);
             JobLedEntry.SetFilter("Entry Type", '%1', JobLedEntry."Entry Type"::Usage);
-            //JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');//PRJ-1524.GK.1.0 25July2022
-            JobLedEntry.SetFilter("Unit of Measure Code", '%1|%2', 'HR', 'HOUR');//PRJ-1524.GK.1.0 25July2022
+            JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');
             JobLedEntry.SetFilter("Posting Date", '%1..%2', 0D, AsOfDateFilter);
             JobLedEntry.CalcSums(Quantity);
         end else begin
@@ -968,8 +966,7 @@ page 14021456 "NS_Job Forecast Work by Seg"
             JobLedEntry.SetRange("Job Task No.", "NS_Job Task No.");
             JobLedEntry.SetFilter(Type, '%1', JobLedEntry.Type::Resource);
             JobLedEntry.SetFilter("Entry Type", '%1', JobLedEntry."Entry Type"::Usage);
-            //JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');//PRJ-1524.GK.1.0 25July2022
-            JobLedEntry.SetFilter("Unit of Measure Code", '%1|%2', 'HR', 'HOUR');//PRJ-1524.GK.1.0 25July2022
+            JobLedEntry.SetFilter("Unit of Measure Code", '%1', 'HR');
             JobLedEntry.CalcSums(Quantity);
         end;
         //CTSI-21.MS.1.0 end   

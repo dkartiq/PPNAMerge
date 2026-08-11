@@ -1,5 +1,7 @@
 codeunit 14021400 "NS_Job Quote Mgt."
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -17,14 +19,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
     //PPAL-147.AS.2.0 02Oct2020 Commented & Added code
     //PPAL-172.MS.1.0 added code for package functionality
     //PRJ-646.AM | Recalculated Total Contract Price field by taking Schedule Price calculation in it .
-    //PRJ-914.AS.1.0 20OCT2021 Created New Function
-    //PRJ-1104.JS.1.0 02FEB2022
-    //PRJ-1215.JS.1.0 23FEB2022 | Correct code for contact
-    //PRJ-1487.NK.1.0 01Jul2022 | Added Code
-    //PRJCTPR-81.NK.1.0 17Mar2023 | Added Code
-    //PE-6.NK.1.0 21Mar2023
-    //PRJCTPR-197 Dk.1.0 31March2023 | Job No. Rewrite Issue.
-    //PRJCTPR-216.VC.1.0 08Nov2023 | Customers name do not populate on jobs of job quote.
     Permissions = tabledata "NS_Assembley BOM Components" = rimd;//PRJ-563.AS.4.0
     trigger OnRun();
     begin
@@ -43,6 +37,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
         Job: Record Job;
         BySegment: Boolean;
         DisableJobTaskLoad: Boolean;
+        HasGotGLSetup: Boolean;
+        GLSetupShortcutDimCode: ARRAY[8] OF Code[20];
 
     procedure NS_AmountCheck(_QuoteHeader: Record "NS_Job Quote Header");
     var
@@ -638,174 +634,110 @@ codeunit 14021400 "NS_Job Quote Mgt."
         CostRecs: Integer;
         tmpQuotePlanLine: Record "Job Planning Line" temporary;
         PlanLineRscQty: Decimal;
-        JQHdr: Record "NS_Job Quote Header";//PRJ-1443.AS.1.0
     begin
-        //PRJ-1170.NK.1.0 Start
-        //with Rec do begin
-        AmtTotal := Rec."Schedule (Total Price)";
-        PercentDelta := Rec."NS_Gross Profit Percentage" - xRec."NS_Gross Profit Percentage";
-        QuotePlanLine.RESET();
-        QuotePlanLine.SETRANGE("Job No.", Rec."Job No.");
-        QuotePlanLine.SETFILTER("Job Task No.", Rec.Totaling);
-        QuotePlanLine.CALCSUMS(Quantity, "Quantity (Base)");
-        QtyTotal := QuotePlanLine.Quantity;
-        RecCt := QuotePlanLine.COUNT();
+        with Rec do begin
+            AmtTotal := "Schedule (Total Price)";
+            PercentDelta := "NS_Gross Profit Percentage" - xRec."NS_Gross Profit Percentage";
+            QuotePlanLine.RESET;
+            QuotePlanLine.SETRANGE("Job No.", "Job No.");
+            QuotePlanLine.SETFILTER("Job Task No.", Totaling);
+            QuotePlanLine.CALCSUMS(Quantity, "Quantity (Base)");
+            QtyTotal := QuotePlanLine.Quantity;
+            RecCt := QuotePlanLine.COUNT;
 
-        if (not Rec."NS_Quantity Weighted") and (not Rec."NS_Cost Weighted") then begin
-            if QuotePlanLine.FINDSET(true, false) then begin
-                repeat
-                    tmpQuotePlanLine := QuotePlanLine;
-                    tmpQuotePlanLine.INSERT();
-                    if QuotePlanLine.Quantity > 0 then begin
-
-                        if JQHdr.Get(QuotePlanLine."Job No.") then;//PRJ-1443.AS.1.0
-
-                        //PRJ-1443.AS.1.0 START
-                        if JQHdr.NS_EnblGLNResGMCalc = false then begin
-                            //OLD PROJECTPRO CONDITION START Code ..Putted Inside false condition of NS_EnblGLNResGMCalc
+            if (not "NS_Quantity Weighted") and (not "NS_Cost Weighted") then begin
+                if QuotePlanLine.FINDSET(true, false) then begin
+                    repeat
+                        tmpQuotePlanLine := QuotePlanLine;
+                        tmpQuotePlanLine.INSERT;
+                        if QuotePlanLine.Quantity > 0 then begin
                             if QuotePlanLine.Type <> QuotePlanLine.Type::Resource then begin
-                                //PRJ-1443.AS.1.0 -- START Commented Old
-                                // QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
-                                // QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                                // QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");
-                                // if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                                //     CostRecs += 1;
-                                //PRJ-1443.AS.1.0 -- END Commented Old
-
-                                //PRJ-1443.AS.1.0 -- START done code
-                                QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
+                                QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - ("NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
                                 QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                                QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine.Quantity * QuotePlanLine."Unit Price");
+                                QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");
                                 if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
                                     CostRecs += 1;
-                                //PRJ-1443.AS.1.0 -- END done code
-                                QuotePlanLine.MODIFY();
+                                QuotePlanLine.MODIFY;
+                            end else begin
+                                QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - ("NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
+                                QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * PlanLineRscQty, GLSetup."Amount Rounding Precision");
+                                QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");
+                                if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
+                                    CostRecs += 1;
+                                QuotePlanLine.MODIFY;
                             end;
-                            //OLD PROJECTPRO CONDITION END ..Putted Inside false condition of NS_EnblGLNResGMCalc
                         end;
-
-                        if JQHdr.NS_EnblGLNResGMCalc = true then begin
-                            //PRJ-1443.AS.1.0 -- START Commented Old
-                            // QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
-                            // QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                            // QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");
-                            // if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                            //     CostRecs += 1;
-                            //PRJ-1443.AS.1.0 -- END Commented Old
-
-                            //PRJ-1443.AS.1.0 -- START done code
-                            QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
-                            QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                            QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine.Quantity * QuotePlanLine."Unit Price");
-                            if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                                CostRecs += 1;
-                            //PRJ-1443.AS.1.0 -- END done code
-                            QuotePlanLine.MODIFY();
-                        end;
-                        //PRJ-1443.AS.1.0 -- START CODE BLOCKED
-                        // end else begin
-                        //     QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
-                        //     QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * PlanLineRscQty, GLSetup."Amount Rounding Precision");
-                        //     QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");
-                        //     if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                        //         CostRecs += 1;
-                        //     QuotePlanLine.MODIFY();
-                        // end;
-                        //PRJ-1443.AS.1.0 -- END CODE BLOCKED
-
-
-                        //PRJ-1443.AS.1.0 END
-                    end;
-                until QuotePlanLine.NEXT() = 0;
+                    until QuotePlanLine.NEXT = 0;
+                end;
             end;
-        end;
 
-        if Rec."NS_Quantity Weighted" then begin
-            if QuotePlanLine.FINDSET(true, false) then begin
-                repeat
-                    tmpQuotePlanLine := QuotePlanLine;
-                    tmpQuotePlanLine.INSERT();
-                    //PRJ-1443.AS.1.0 -- START Commented Old
-                    // QuotePlanLine."Unit Price" := ROUND(((1 + Rec."NS_Gross Profit" / 100) * (QuotePlanLine.Quantity / QtyTotal)) *
-                    //                                   QuotePlanLine."Unit Cost", GLSetup."Amount Rounding Precision");
-
-                    // QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Total Price", GLSetup."Amount Rounding Precision");
-                    // QuotePlanLine."Unit Price" := ROUND((QuotePlanLine."Total Price" / QuotePlanLine.Quantity), GLSetup."Amount Rounding Precision");
-                    // QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price" * QuotePlanLine.Quantity);
-                    // if QuotePlanLine."Unit Cost (LCY)" > QuotePlanLine."Unit Price (LCY)" then
-                    //     CostRecs += 1;
-                    //PRJ-1443.AS.1.0 -- END Commented Old
-
-                    //PRJ-1443.AS.1.0 -- START done code
-                    QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
-                    QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                    QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine.Quantity * QuotePlanLine."Unit Price");
-                    if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                        CostRecs += 1;
-                    //PRJ-1443.AS.1.0 -- END done code
-                    QuotePlanLine.MODIFY();
-                until QuotePlanLine.NEXT() = 0;
-            end;
-        end;
-
-        if Rec."NS_Cost Weighted" then begin
-            if QuotePlanLine.FINDSET(true, false) then begin
-                repeat
-                    tmpQuotePlanLine := QuotePlanLine;
-                    tmpQuotePlanLine.INSERT();
-                    //PRJ-1443.AS.1.0 -- START Commented Old
-                    // QuotePlanLine."Unit Price" := ROUND(((1 + Rec."NS_Gross Profit" / 100) * (QuotePlanLine."Total Price" / AmtTotal)) *
-                    //                                   QuotePlanLine."Unit Cost", GLSetup."Amount Rounding Precision");
-
-                    // QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Total Price", GLSetup."Amount Rounding Precision");
-                    // QuotePlanLine."Unit Price" := ROUND((QuotePlanLine."Total Price" / QuotePlanLine.Quantity), GLSetup."Amount Rounding Precision");
-                    // QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price" * QuotePlanLine.Quantity);
-                    // if QuotePlanLine."Unit Cost (LCY)" > QuotePlanLine."Unit Price (LCY)" then
-                    //     CostRecs += 1;
-                    //PRJ-1443.AS.1.0 -- END Commented Old
-
-                    //PRJ-1443.AS.1.0 -- START done code
-                    QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percentage" / 100)), GLSetup."Amount Rounding Precision");
-                    QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                    QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine.Quantity * QuotePlanLine."Unit Price");
-                    if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                        CostRecs += 1;
-                    //PRJ-1443.AS.1.0 -- END done code
-                    QuotePlanLine.MODIFY();
-                until QuotePlanLine.NEXT() = 0;
-            end;
-        end;
-
-        if CostRecs <> 0 then begin
-            if not CONFIRM(Text14021402Lbl, true, CostRecs) then begin
-                tmpQuotePlanLine.RESET();
-                if tmpQuotePlanLine.FINDSET(false, false) then
+            if "NS_Quantity Weighted" then begin
+                if QuotePlanLine.FINDSET(true, false) then begin
                     repeat
-                        QuotePlanLine.RESET();
-                        QuotePlanLine.SETRANGE("Job No.", tmpQuotePlanLine."Job No.");
-                        QuotePlanLine.SETRANGE("Job Task No.", tmpQuotePlanLine."Job Task No.");
-                        QuotePlanLine.SETRANGE("Line No.", tmpQuotePlanLine."Line No.");
-                        if QuotePlanLine.FINDFIRST() then begin
-                            QuotePlanLine.DELETE();
-                            COMMIT();
-                            QuotePlanLine := tmpQuotePlanLine;
-                            QuotePlanLine.INSERT();
-                        end;
-                    until tmpQuotePlanLine.NEXT() = 0;
+                        tmpQuotePlanLine := QuotePlanLine;
+                        tmpQuotePlanLine.INSERT;
+
+                        QuotePlanLine."Unit Price" := ROUND(((1 + "NS_Gross Profit" / 100) * (QuotePlanLine.Quantity / QtyTotal)) *
+                                                      QuotePlanLine."Unit Cost", GLSetup."Amount Rounding Precision");
+
+                        QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Total Price", GLSetup."Amount Rounding Precision");
+                        QuotePlanLine."Unit Price" := ROUND((QuotePlanLine."Total Price" / QuotePlanLine.Quantity), GLSetup."Amount Rounding Precision");
+                        QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price" * QuotePlanLine.Quantity);
+                        if QuotePlanLine."Unit Cost (LCY)" > QuotePlanLine."Unit Price (LCY)" then
+                            CostRecs += 1;
+                        QuotePlanLine.MODIFY;
+                    until QuotePlanLine.NEXT = 0;
+                end;
+            end;
+
+            if "NS_Cost Weighted" then begin
+                if QuotePlanLine.FINDSET(true, false) then begin
+                    repeat
+                        tmpQuotePlanLine := QuotePlanLine;
+                        tmpQuotePlanLine.INSERT;
+
+                        QuotePlanLine."Unit Price" := ROUND(((1 + "NS_Gross Profit" / 100) * (QuotePlanLine."Total Price" / AmtTotal)) *
+                                                      QuotePlanLine."Unit Cost", GLSetup."Amount Rounding Precision");
+
+                        QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Total Price", GLSetup."Amount Rounding Precision");
+                        QuotePlanLine."Unit Price" := ROUND((QuotePlanLine."Total Price" / QuotePlanLine.Quantity), GLSetup."Amount Rounding Precision");
+                        QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price" * QuotePlanLine.Quantity);
+                        if QuotePlanLine."Unit Cost (LCY)" > QuotePlanLine."Unit Price (LCY)" then
+                            CostRecs += 1;
+                        QuotePlanLine.MODIFY;
+                    until QuotePlanLine.NEXT = 0;
+                end;
+            end;
+
+            if CostRecs <> 0 then begin
+                if not CONFIRM(Text14021402Lbl, true, CostRecs) then begin
+                    tmpQuotePlanLine.RESET;
+                    if tmpQuotePlanLine.FINDSET(false, false) then
+                        repeat
+                            QuotePlanLine.RESET;
+                            QuotePlanLine.SETRANGE("Job No.", tmpQuotePlanLine."Job No.");
+                            QuotePlanLine.SETRANGE("Job Task No.", tmpQuotePlanLine."Job Task No.");
+                            QuotePlanLine.SETRANGE("Line No.", tmpQuotePlanLine."Line No.");
+                            if QuotePlanLine.FINDFIRST then begin
+                                QuotePlanLine.DELETE;
+                                COMMIT;
+                                QuotePlanLine := tmpQuotePlanLine;
+                                QuotePlanLine.INSERT;
+                            end;
+                        until tmpQuotePlanLine.NEXT = 0;
+                end;
+            end;
+            CALCFIELDS("Schedule (Total Cost)", "Schedule (Total Price)");
+            if "Schedule (Total Price)" <> 0 then begin
+                "NS_Mark-up" := (("Schedule (Total Price)" - "Schedule (Total Cost)") / "Schedule (Total Cost)") * 100;
+                "NS_Gross Profit" := "Schedule (Total Price)" - "Schedule (Total Cost)";
+                MODIFY;
+            end else begin
+                "NS_Mark-up" := 0;
+                "NS_Gross Profit" := 0;
+                MODIFY;
             end;
         end;
-        Rec.CALCFIELDS("Schedule (Total Cost)", "Schedule (Total Price)");
-        if Rec."Schedule (Total Price)" <> 0 then begin
-            Rec."NS_Mark-up" := ((Rec."Schedule (Total Price)" - Rec."Schedule (Total Cost)") / Rec."Schedule (Total Cost)") * 100;
-            Rec."NS_Gross Profit" := Rec."Schedule (Total Price)" - Rec."Schedule (Total Cost)";
-            Rec.MODIFY();
-        end else begin
-            Rec."NS_Mark-up" := 0;
-            Rec."NS_Gross Profit" := 0;
-            Rec.MODIFY();
-        end;
-        //end;
-        //PRJ-1170.NK.1.0 End
     end;
 
     local procedure NS_CalcSegAmountsFromPercent(var Rec: Record "NS_Job Takeoff Segments"; xRec: Record "NS_Job Takeoff Segments");
@@ -819,78 +751,58 @@ codeunit 14021400 "NS_Job Quote Mgt."
         tmpQuotePlanLine: Record "Job Planning Line" temporary;
         PlanLineRscQty: Decimal;
         TotalPrice: Decimal;
-        JQHdr: Record "NS_Job Quote Header";//PRJ-1443.AS.1.0
     begin
-        //PRJ-1170.NK.1.0 Start
-        //with Rec do begin
-        AmtTotal := Rec."NS_Schedule (Total Price)";
-        PercentDelta := Rec."NS_Gross Profit Percent" - xRec."NS_Gross Profit Percent";
-        QuotePlanLine.RESET();
-        QuotePlanLine.SETRANGE("Job No.", Rec."NS_Job No.");
-        QuotePlanLine.SETRANGE("NS_Segment Code", Rec."NS_Segment Code");
-        QuotePlanLine.CALCSUMS(Quantity, "Quantity (Base)");
-        QtyTotal := QuotePlanLine.Quantity;
-        RecCt := QuotePlanLine.COUNT();
+        with Rec do begin
+            AmtTotal := "NS_Schedule (Total Price)";
+            PercentDelta := "NS_Gross Profit Percent" - xRec."NS_Gross Profit Percent";
+            QuotePlanLine.RESET;
+            QuotePlanLine.SETRANGE("Job No.", "NS_Job No.");
+            QuotePlanLine.SETRANGE("NS_Segment Code", "NS_Segment Code");
+            QuotePlanLine.CALCSUMS(Quantity, "Quantity (Base)");
+            QtyTotal := QuotePlanLine.Quantity;
+            RecCt := QuotePlanLine.COUNT;
 
-        if QuotePlanLine.FINDSET(true, false) then begin
-            repeat
-                tmpQuotePlanLine := QuotePlanLine;
-                tmpQuotePlanLine.INSERT();
-                if QuotePlanLine.Quantity > 0 then begin
-
-                    if JQHdr.Get(QuotePlanLine."Job No.") then;//PRJ-1443.AS.1.0
-                                                               //PRJ-1443.AS.1.0 START
-                    if JQHdr.NS_EnblGLNResGMCalc = false then begin
-                        //OLD PROJECTPRO CONDITION START Code ..Putted Inside false condition of NS_EnblGLNResGMCalc
+            if QuotePlanLine.FINDSET(true, false) then begin
+                repeat
+                    tmpQuotePlanLine := QuotePlanLine;
+                    tmpQuotePlanLine.INSERT;
+                    if QuotePlanLine.Quantity > 0 then begin
                         if QuotePlanLine.Type <> QuotePlanLine.Type::Resource then begin
-                            QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percent" / 100)), GLSetup."Amount Rounding Precision");
+                            QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - ("NS_Gross Profit Percent" / 100)), GLSetup."Amount Rounding Precision");
                             QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                            //QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");//PRJ-1206.AS.1.0 18FEB2022 COMMENT
-                            QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine.Quantity * QuotePlanLine."Unit Price");//PRJ-1206.AS.1.0 18FEB2022 ADDED
+                            QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine."Unit Price");
                             if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
                                 CostRecs += 1;
-                            QuotePlanLine.MODIFY();
+                            QuotePlanLine.MODIFY;
                         end;
-                        //OLD PROJECTPRO CONDITION END Code ..Putted Inside false condition of NS_EnblGLNResGMCalc
-                    end;
 
-                    if JQHdr.NS_EnblGLNResGMCalc = true then begin
-                        QuotePlanLine."Unit Price" := ROUND(QuotePlanLine."Unit Cost" / (1 - (Rec."NS_Gross Profit Percent" / 100)), GLSetup."Amount Rounding Precision");
-                        QuotePlanLine."Total Price" := ROUND(QuotePlanLine."Unit Price" * QuotePlanLine.Quantity, GLSetup."Amount Rounding Precision");
-                        QuotePlanLine.VALIDATE("Line Amount", QuotePlanLine.Quantity * QuotePlanLine."Unit Price");
-                        if QuotePlanLine."Unit Cost" > QuotePlanLine."Unit Price" then
-                            CostRecs += 1;
-                        QuotePlanLine.MODIFY();
                     end;
-                    //PRJ-1443.AS.1.0 END
-                end;
-            until QuotePlanLine.NEXT() = 0;
-        end;
-
-        if CostRecs <> 0 then begin
-            if not CONFIRM(Text14021402Lbl, true, CostRecs) then begin
-                tmpQuotePlanLine.RESET();
-                if tmpQuotePlanLine.FINDSET(false, false) then
-                    repeat
-                        QuotePlanLine.RESET();
-                        QuotePlanLine.SETRANGE("Job No.", tmpQuotePlanLine."Job No.");
-                        QuotePlanLine.SETRANGE("Job Task No.", tmpQuotePlanLine."Job Task No.");
-                        QuotePlanLine.SETRANGE("Line No.", tmpQuotePlanLine."Line No.");
-                        if QuotePlanLine.FINDFIRST() then begin
-                            QuotePlanLine.DELETE();
-                            COMMIT();
-                            QuotePlanLine := tmpQuotePlanLine;
-                            QuotePlanLine.INSERT();
-                        end;
-                    until tmpQuotePlanLine.NEXT() = 0;
+                until QuotePlanLine.NEXT = 0;
             end;
-        end;
 
-        Rec.CALCFIELDS("NS_Schedule (Total Cost)");
-        Rec."NS_Total Contract Price" := Rec."NS_Schedule (Total Cost)" / (1 - (Rec."NS_Gross Profit Percent" / 100));
-        NS_UpdateSegmentAmounts(Rec);
-        //end;
-        //PRJ-1170.NK.1.0 End
+            if CostRecs <> 0 then begin
+                if not CONFIRM(Text14021402Lbl, true, CostRecs) then begin
+                    tmpQuotePlanLine.RESET;
+                    if tmpQuotePlanLine.FINDSET(false, false) then
+                        repeat
+                            QuotePlanLine.RESET;
+                            QuotePlanLine.SETRANGE("Job No.", tmpQuotePlanLine."Job No.");
+                            QuotePlanLine.SETRANGE("Job Task No.", tmpQuotePlanLine."Job Task No.");
+                            QuotePlanLine.SETRANGE("Line No.", tmpQuotePlanLine."Line No.");
+                            if QuotePlanLine.FINDFIRST then begin
+                                QuotePlanLine.DELETE;
+                                COMMIT;
+                                QuotePlanLine := tmpQuotePlanLine;
+                                QuotePlanLine.INSERT;
+                            end;
+                        until tmpQuotePlanLine.NEXT = 0;
+                end;
+            end;
+
+            CALCFIELDS("NS_Schedule (Total Cost)");
+            "NS_Total Contract Price" := "NS_Schedule (Total Cost)" / (1 - ("NS_Gross Profit Percent" / 100));
+            NS_UpdateSegmentAmounts(Rec);
+        end;
     end;
 
     procedure NS_CalcSegProfitAmounts(var JobTakeoffSegment: Record "NS_Job Takeoff Segments"; FieldChanged: Text[20]);
@@ -981,33 +893,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         end;
     end;
 
-    //PRJ-1120.AS.1.0 START
-    procedure NS_CalcProfitAmounts4Totals(JobNo: Code[20]; JobTaskNo: Code[20]);
-    var
-        JTaskLines: Record "Job Task";
-    begin
-        JTaskLines.Reset();
-        JTaskLines.SetRange("Job No.", JobNo);
-        JTaskLines.SetRange("Job Task Type", JTaskLines."Job Task Type"::Total);
-        if JTaskLines.FindFirst() then begin
-            JTaskLines.CalcFields("Schedule (Total Cost)", "Schedule (Total Price)");
-
-            if (JTaskLines."Schedule (Total Price)" <> 0) and (JTaskLines."Schedule (Total Cost)" <> 0) then begin
-                JTaskLines."NS_Mark-up" := ((JTaskLines."Schedule (Total Price)" - JTaskLines."Schedule (Total Cost)") / JTaskLines."Schedule (Total Cost)") * 100;
-                JTaskLines."NS_Gross Profit" := JTaskLines."Schedule (Total Price)" - JTaskLines."Schedule (Total Cost)";
-                JTaskLines."NS_Gross Profit Percentage" := ((JTaskLines."Schedule (Total Price)" - JTaskLines."Schedule (Total Cost)") / JTaskLines."Schedule (Total Price)") * 100;
-                JTaskLines.MODIFY;
-            end else begin
-                JTaskLines."NS_Mark-up" := 0;
-                JTaskLines."NS_Gross Profit" := 0;
-                JTaskLines."NS_Gross Profit Percentage" := 0;
-                JTaskLines.MODIFY;
-            end;
-
-        end;
-    end;
-    //PRJ-1120.AS.1.0 END
-
     procedure NS_CalcSegmentProfitAmounts(JobNo: Code[20]; SegmentDrawingCode: Code[20]);
     var
         qJobTask: Record "Job Task";
@@ -1018,15 +903,13 @@ codeunit 14021400 "NS_Job Quote Mgt."
         TotalPrice: Decimal;
         qJobSegment: Record "NS_Job Takeoff Segments";
     begin
-        qJobSegment.Reset();   //PRJCTPR-319.JS.1.0
         qJobSegment.SETRANGE("NS_Job No.", JobNo);
         if SegmentDrawingCode <> '' then
             qJobSegment.SETRANGE("NS_Segment Code", SegmentDrawingCode);
 
         if qJobSegment.FINDSET(true, false) then
             repeat
-                if qJobSegment."NS_Freeze Total Contract Price" = false then   //PRJCTPR-319.JS.1.0 07MAR2024
-                    NS_UpdateSegmentAmounts(qJobSegment);
+                NS_UpdateSegmentAmounts(qJobSegment);
             until qJobSegment.NEXT = 0;
     end;
 
@@ -1074,7 +957,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _InstallTasksExist: Boolean;
         _ServiceTaskExists: Boolean;
         _DimMgt: Codeunit DimensionManagement;
-        _NoSeriesMgt: Codeunit NoSeriesManagement;
+        _NoSeriesMgt: Codeunit NoSeriesManagementGlo;
         _ReleaseSalesDoc: Codeunit "Release Sales Document";
         _CostCategoryCode: Code[10];
         _JobNo: Code[20];
@@ -1087,6 +970,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _LineNo: Integer;
         _JobTakeoffSegments: Record "NS_Job Takeoff Segments";
     begin
+        // >> << 007 Converter local vars to point to new no. series objects
         _QuoteSetup.GET;
         _QuoteSetup.TESTFIELD("NS_ResourceNo. forContractLine");
         _QuoteSetup.TESTFIELD("NS_Install Category Code");
@@ -1104,10 +988,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _JobsSetup.GET;
 
         with _QuoteHeader do
-            //PE-300-DK.1.0 29May2024 Start
-        // if _QuoteHeader.NS_Status <> _QuoteHeader.NS_Status::Accepted 
-        if _QuoteHeader."NS_Quote Status" <> _QuoteHeader."NS_Quote Status"::Accepted then
-            //PE-300-DK.1.0 29May2024 End
+            if NS_Status <> NS_Status::Awarded then
                 if not CONFIRM(_Text000, false) then
                     exit;
 
@@ -1166,10 +1047,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
             if _QuoteHeader."NS_Certified Payroll" = _QuoteHeader."NS_Certified Payroll"::Yes then
                 "NS_Requires Certified Payroll" := true;
             NS_Bond := _QuoteHeader.NS_Bond;
-            //PRJCTPR-197 Dk.1.0 Start
-            // _Job."NS_Job Type" := _QuoteHeader."NS_Job Type Code";
-            _Job."NS_Job Type New" := _QuoteHeader."NS_Job Type Code";
-            //PRJCTPR-197 Dk.1.0 End
+            "NS_Job Type" := _QuoteHeader."NS_Job Type Code";
             "NS_Billing Cutoff Day of Month" := _QuoteHeader."NS_Billing Cutoff Day of Month";
             "NS_CCIP/OCIP/RCOIP Insurance" := _QuoteHeader."NS_CCIP/OCIP/RCOIP Insurance";
             "NS_Lien Waiver Required" := _QuoteHeader."NS_Lien Waiver Required";
@@ -1642,12 +1520,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
                                             _JobPlanningLine.Description := UPPERCASE(COPYSTR(_ItemCategory.Description, 1, MAXSTRLEN(_JobPlanningLine.Description)));
                                     end;
                                 else begin
-                                    _JobPlanningLine.VALIDATE("No.", _QuoteSetup."NS_ResourceNo. forContractLine");
-                                    if _JobTask.GET(_JobPlanningLine."Job No.", _JobPlanningLine."Job Task No.") then
-                                        _JobPlanningLine.Description := UPPERCASE(COPYSTR(_JobTask.Description, 1, MAXSTRLEN(_JobPlanningLine.Description)))
-                                    else
-                                        _JobPlanningLine.Description := UPPERCASE(COPYSTR(_QuoteHeader."NS_Description/Nickname", 1, MAXSTRLEN(_JobPlanningLine.Description)));
-                                end;
+                                        _JobPlanningLine.VALIDATE("No.", _QuoteSetup."NS_ResourceNo. forContractLine");
+                                        if _JobTask.GET(_JobPlanningLine."Job No.", _JobPlanningLine."Job Task No.") then
+                                            _JobPlanningLine.Description := UPPERCASE(COPYSTR(_JobTask.Description, 1, MAXSTRLEN(_JobPlanningLine.Description)))
+                                        else
+                                            _JobPlanningLine.Description := UPPERCASE(COPYSTR(_QuoteHeader."NS_Description/Nickname", 1, MAXSTRLEN(_JobPlanningLine.Description)));
+                                    end;
                             end;
                             _JobPlanningLine."NS_Quote No." := _QuoteLine."NS_Quote No.";
                             _JobPlanningLine."NS_Quote Line No." := _QuoteLine."NS_Quote Line No.";
@@ -1730,10 +1608,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         // stamp quote with job no.
 
         _QuoteHeader.VALIDATE("NS_Job No.", _JobNo);
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Closed;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Closed;
-        //PE-300-DK.1.0 29May2024 End
+        _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Closed;
         _QuoteHeader.MODIFY;
 
         // display the job
@@ -1756,405 +1631,107 @@ codeunit 14021400 "NS_Job Quote Mgt."
         QuoteTaskLines: Record "Job Task";//PRJ-646.AM
         AssemBOMRec: Record "NS_Assembley BOM Components";//PRJ-563.AS.4.0
         AssemBOMRec1: Record "NS_Assembley BOM Components";//PRJ-563.AS.4.0
-        TextUpdte001: Label 'System will update the Job Task Lines and Job Planning Lines for Job Quote No. %1, with Sub Level to Job No. %2.\\Do you want to continue ?';
-        TextUpdte002: Label 'System will create the Job Change Order with the Job Task Lines and Job Planning Lines from Job Quote No. %1.\\Do you want to continue ?'; //PRJCTPR-81.NK.1.0 22Mar2023
-        UpdJob: Record job;
-        DocumentAttachment: Record "Document Attachment"; //PRJ-1487.GK.1.0 29June2022
-        DocumentAttachment2: Record "Document Attachment";//PRJ-1487.GK.1.0 29June2022
-        DocumentAttachment3: Record "Document Attachment";//PRJ-1487.GK.1.0 29June2022
-        Opportunity: Record Opportunity; //PE-6.NK.1.0 21Mar2023
-        NS_NoSeries: Record "No. Series"; //PE-128.PS.2.0 
-        NS_Job: Record Job; //PE-128.PS.2.0 08April2024
     begin
+        JobsSetup.GET;
+        JobsSetup.TESTFIELD("Job Nos.");
+        QuoteJob.RESET;
+        QuoteJob.GET(lQuoteHeader."NS_Quote No.");
 
-        //PRJ-914.AS.1.0 20OCT2021 START <<For Change order with Sub level Job No Done code & in below code deployed previous code for else begin .. end with No Code changing
-        IF (lQuoteHeader."NS_Job class" = lQuoteHeader."NS_Job class"::"Change Order") AND (lQuoteHeader."NS_Sub-Level to Job No." <> '') then Begin
-            //if CONFIRM(TextUpdte001, true, lQuoteHeader."NS_Quote No.", lQuoteHeader."NS_Sub-Level to Job No.") then begin //PRJCTPR-81.NK.1.0 22Mar2023 Block
-            if NOT CONFIRM(TextUpdte002, true, lQuoteHeader."NS_Quote No.") then begin //PRJCTPR-81.NK.1.0 22Mar2023    
-                exit; //PRJCTPR-81.NK.1.0 22Mar2023
-                JobsSetup.GET;
-                JobsSetup.TESTFIELD("Job Nos.");
-                QuoteJob.RESET;
-                QuoteJob.GET(lQuoteHeader."NS_Quote No.");
-                if UpdJob.get(lQuoteHeader."NS_Sub-Level to Job No.") then;
+        JobfromQuote.INIT;
+        JobfromQuote := QuoteJob;
+        JobfromQuote."No." := NoSeriesMgt.GetNextNo(JobsSetup."Job Nos.", TODAY, true);
+        JobfromQuote.VALIDATE("No.");
+        JobfromQuote."NS_Sell-to Customer No." := lQuoteHeader."NS_Sell-to Customer No.";
+        JobfromQuote."NS_Sell-to Customer Name" := lQuoteHeader."NS_Sell-to Customer Name";
+        JobfromQuote."Global Dimension 1 Code" := lQuoteHeader."NS_Shortcut Dimension 1 Code";//PRJ-409.AS.1.0 28DEC2020
+        JobfromQuote."Global Dimension 2 Code" := lQuoteHeader."NS_Shortcut Dimension 2 Code";//PRJ-409.AS.1.0 28DEC2020
+        if JobfromQuote.INSERT then begin
+            JobfromQuote.VALIDATE(Status, JobfromQuote.Status::Planning);
+            JobfromQuote."NS_Created from Quote No." := lQuoteHeader."NS_Quote No.";
+            JobfromQuote."NS_Job Class" := JobfromQuote."NS_Job Class"::"Master Job";
+            JobfromQuote."NS_Job Type" := lQuoteHeader."NS_Job Type Code";
+            JobfromQuote."NS_Job Class" := JobsSetup."NS_Default Job Class";
 
-                JobfromQuote.INIT;
-                JobfromQuote := QuoteJob;
-                JobfromQuote."No." := NS_GetNextChangeOrderNo(lQuoteHeader."NS_Sub-Level to Job No.", JobsSetup."NS_Change Order No. Separator");
-                JobfromQuote.VALIDATE("No.");
-                JobfromQuote."NS_Sell-to Customer No." := lQuoteHeader."NS_Sell-to Customer No.";
-                JobfromQuote."NS_Sell-to Customer Name" := lQuoteHeader."NS_Sell-to Customer Name";
-                JobfromQuote."Global Dimension 1 Code" := lQuoteHeader."NS_Shortcut Dimension 1 Code";//PRJ-409.AS.1.0 28DEC2020
-                JobfromQuote."Global Dimension 2 Code" := lQuoteHeader."NS_Shortcut Dimension 2 Code";//PRJ-409.AS.1.0 28DEC2020
-                                                                                                      //PE-6.NK.1.0 21Mar2023 Start
-                if Opportunity.Get(lQuoteHeader.NS_Opportunity) then begin
-                    Opportunity.NS_JobOrderNo := JobfromQuote."No.";
-                    Opportunity.Modify();
+            NS_CopyQuoteJobTasksToJob(lQuoteHeader, JobfromQuote);
+            NS_CopyQuoteJPLToJob(lQuoteHeader, JobfromQuote);
+            NS_ConvertQuoteSegments(lQuoteHeader, JobfromQuote);
+
+            //PRJ-497.AM.1.0 start
+            Jobsegments.Reset();
+            Jobsegments.SetRange("NS_Job No.", lQuoteHeader."NS_Job No.");
+            if NOT Jobsegments.FindFirst() then begin
+                lQuoteHeader.NS_UpdateMinSellPrice();
+                //PRJ-497.AM.1.0 End
+                //PRJ-311.MS.1.0 start comment --PPAL-33 //PRJ-497.AM.1.0 Uncomment start
+                //PRJ-646.AM start
+                JobsSetup.GET();
+                QuoteTaskLines.RESET();
+                QuoteTaskLines.SETRANGE("Job No.", lQuoteHeader."NS_Job No.");
+                QuoteTaskLines.SETRANGE("Job Task No.", JobsSetup."NS_Total Task No.");
+                if QuoteTaskLines.FINDFIRST() then begin
+                    QuoteTaskLines.CALCFIELDS("Schedule (Total Price)", "NS_Line Amount Incl. Tax");
+                    lQuoteHeader."NS_Total Contract Price" := ROUND((QuoteTaskLines."Schedule (Total Price)" / (1 - (lQuoteHeader."NS_Minimum Selling Price G.M.%" / 100))), 0.01);
                 end;
-                //PE-6.NK.1.0 21Mar2023 End
-                if JobfromQuote.INSERT then begin
-                    JobfromQuote.VALIDATE(Status, JobfromQuote.Status::Planning);
-                    JobfromQuote."NS_Created from Quote No." := lQuoteHeader."NS_Quote No.";
-                    JobfromQuote."NS_Job Class" := JobfromQuote."NS_Job Class"::"Change Order";
-                    //PRJCTPR-197 DK.1.0 Start
-                    //JobfromQuote."NS_Job Type" := lQuoteHeader."NS_Job Type Code";
-                    JobfromQuote."NS_Job Type New" := lQuoteHeader."NS_Job Type Code";
-                    //PRJCTPR-197 DK.1.0 End
-                    JobfromQuote."Job Posting Group" := lQuoteHeader."NS_Job Posting Group New";//PRJ-1372.GK.1.0 11May2022
-                    NS_CopyQuoteJobTasksToJobChangeOrder(UpdJob, JobfromQuote);
-                    NS_CopyQuoteJPLToJobChangeOrder(UpdJob, JobfromQuote);
-                    NS_ConvertQuoteSegmentsChangeOrder(UpdJob, JobfromQuote);
-
-                    Jobsegments.Reset();
-                    Jobsegments.SetRange("NS_Job No.", lQuoteHeader."NS_Job No.");
-                    if NOT Jobsegments.FindFirst() then begin
-                        lQuoteHeader.NS_UpdateMinSellPrice();
-                        JobsSetup.GET();
-                        QuoteTaskLines.RESET();
-                        QuoteTaskLines.SETRANGE("Job No.", lQuoteHeader."NS_Job No.");
-                        QuoteTaskLines.SETRANGE("Job Task No.", JobsSetup."NS_Total Task No.");
-                        if QuoteTaskLines.FINDFIRST() then begin
-                            QuoteTaskLines.CALCFIELDS("Schedule (Total Price)", "NS_Line Amount Incl. Tax");
-                            lQuoteHeader."NS_Total Contract Price" := ROUND((QuoteTaskLines."Schedule (Total Price)" / (1 - (lQuoteHeader."NS_Minimum Selling Price G.M.%" / 100))), 0.01);
-                        end;
-
-                        if lQuoteHeader."NS_Total Contract Price" > 0 then begin
-                            JobPostingGroup.GET(lQuoteHeader."NS_Job Posting Group New");
-                            JobPostingGroup.TESTFIELD("Recognized Sales Account");
-                            JobsSetup.TESTFIELD("NS_Billing Job Task No.");
-                            JobPL.INIT;
-                            JobPL.Type := JobPL.Type::"G/L Account";
-                            JobPL."Job No." := JobfromQuote."No.";
-                            JobPL.VALIDATE("No.", JobPostingGroup."Recognized Sales Account");
-                            JobPL.VALIDATE("Job Task No.", JobsSetup."NS_Billing Job Task No.");
-                            JobPL.VALIDATE("Line Type", JobPL."Line Type"::Billable);
-                            JobPL.VALIDATE(Quantity, 1);
-                            JobPL.VALIDATE("Unit Price", lQuoteHeader."NS_Total Contract Price");
-                            JobPL.INSERT(true);
-                        end;
-                    end;
-
-                    if JobsSetup."NS_Auto Lock Planning Lines" then
-                        JobfromQuote.NS_CopyPlanningToLocked(JobfromQuote."No.");
-
-                    NS_DeleteQuoteJPL(lQuoteHeader);
-                    NS_DeleteQuoteJobTasks(lQuoteHeader);
-                    QuoteJob.DELETE;
+                //PRJ-646.AM End
+                if lQuoteHeader."NS_Total Contract Price" > 0 then begin
+                    //JobPostingGroup.GET(lQuoteHeader."NS_Job Posting Group");//PRJ-993.AS.1.0 18OCT2021 comment old code for field "NS_Job Posting Group" for Job Quote header
+                    JobPostingGroup.GET(lQuoteHeader."NS_Job Posting Group New");//PRJ-993.AS.1.0 18OCT2021 Add new code for field "NS_Job Posting Group New" for Job Quote header
+                    JobPostingGroup.TESTFIELD("Recognized Sales Account");
+                    JobsSetup.TESTFIELD("NS_Billing Job Task No.");
+                    JobPL.INIT;
+                    JobPL.Type := JobPL.Type::"G/L Account";
+                    JobPL."Job No." := JobfromQuote."No."; //PRJ-497.AM.1.0 changed location of Job No. validate
+                    JobPL.VALIDATE("No.", JobPostingGroup."Recognized Sales Account");
+                    JobPL.VALIDATE("Job Task No.", JobsSetup."NS_Billing Job Task No.");
+                    JobPL.VALIDATE("Line Type", JobPL."Line Type"::Billable);
+                    JobPL.VALIDATE(Quantity, 1);
+                    JobPL.VALIDATE("Unit Price", lQuoteHeader."NS_Total Contract Price");
+                    JobPL.INSERT(true);
                 end;
-                lQuoteHeader."NS_Job No." := JobfromQuote."No.";
-                lQuoteHeader."NS_Date Converted to Order" := Today();//PRJ-1156.AS.1.0
-                NS_CopyQuoteLinksToJob(lQuoteHeader, JobfromQuote);
-                //PE-300-DK.1.0 29May2024 Start
-                // lQuoteHeader.NS_Status := lQuoteHeader.NS_Status::Accepted;
-                lQuoteHeader."NS_Quote Status" := lQuoteHeader."NS_Quote Status"::Accepted;
-                //PE-300-DK.1.0 29May2024 End
-                JobfromQuote."NS_Default Job Retention" := lQuoteHeader."NS_Retainage %";//PRJ-1192.AS.1.0 18FEB2022
-                JobfromQuote.Modify();
-
-                AssemBOMRec.Reset();
-                AssemBOMRec.SetRange("NS_Job No.", lQuoteHeader."NS_Quote No.");
-                if AssemBOMRec.Findset() then begin
-                    repeat
-                        if AssemBOMRec1.Get(AssemBOMRec."NS_Job No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.") then
-                            AssemBOMRec1.RENAME(JobfromQuote."No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.");
-                    until AssemBOMRec.next = 0;
-                end;
-
-                DefaultDimRec.Reset;
-                DefaultDimRec.SetRange("Table ID", 14021402);
-                DefaultDimRec.SetRange("No.", lQuoteHeader."NS_Quote No.");
-                if DefaultDimRec.FindSet then
-                    repeat
-                        DefaultDimRec2.Init;
-                        DefaultDimRec2."Table ID" := 167;
-                        DefaultDimRec2."No." := lQuoteHeader."NS_Job No.";
-                        DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                        DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
-                        DefaultDimRec2.Insert;
-                    until DefaultDimRec.Next = 0;
-
-                lQuoteHeader.MODIFY;
-
-                MESSAGE(STRSUBSTNO(Text14021400, lQuoteHeader."NS_Quote No.", lQuoteHeader."NS_Job No."));
-            end
-            else begin
-                JobsSetup.GET;
-                JobsSetup.TESTFIELD("Job Nos.");
-                QuoteJob.RESET;
-                QuoteJob.GET(lQuoteHeader."NS_Quote No.");
-
-                JobfromQuote.INIT;
-                JobfromQuote := QuoteJob;
-                JobfromQuote."No." := NS_GetNextChangeOrderNo(lQuoteHeader."NS_Sub-Level to Job No.", JobsSetup."NS_Change Order No. Separator");
-                JobfromQuote.VALIDATE("No.");
-                JobfromQuote."NS_Sell-to Customer No." := lQuoteHeader."NS_Sell-to Customer No.";
-                JobfromQuote."NS_Sell-to Customer Name" := lQuoteHeader."NS_Sell-to Customer Name";
-                JobfromQuote."Global Dimension 1 Code" := lQuoteHeader."NS_Shortcut Dimension 1 Code";//PRJ-409.AS.1.0 28DEC2020
-                JobfromQuote."Global Dimension 2 Code" := lQuoteHeader."NS_Shortcut Dimension 2 Code";//PRJ-409.AS.1.0 28DEC2020
-                if JobfromQuote.INSERT then begin
-                    JobfromQuote.VALIDATE(Status, JobfromQuote.Status::Planning);
-                    JobfromQuote."NS_Created from Quote No." := lQuoteHeader."NS_Quote No.";
-                    JobfromQuote."NS_Job Class" := JobfromQuote."NS_Job Class"::"Change Order";
-                    //PRJCTPR-197 Dk.1.0 Start
-                    // JobfromQuote."NS_Job Type" := lQuoteHeader."NS_Job Type Code";
-                    JobfromQuote."NS_Job Type New" := lQuoteHeader."NS_Job Type Code";
-                    //PRJCTPR-197 Dk.1.0 End
-                    JobfromQuote."Job Posting Group" := lQuoteHeader."NS_Job Posting Group New"; //PRJ-1372.GK.1.0 11May2022
-                    NS_CopyQuoteJobTasksToJob(lQuoteHeader, JobfromQuote);
-                    NS_CopyQuoteJPLToJob(lQuoteHeader, JobfromQuote);
-                    NS_ConvertQuoteSegments(lQuoteHeader, JobfromQuote);
-
-                    Jobsegments.Reset();
-                    Jobsegments.SetRange("NS_Job No.", lQuoteHeader."NS_Job No.");
-                    if NOT Jobsegments.FindFirst() then begin
-                        lQuoteHeader.NS_UpdateMinSellPrice();
-                        JobsSetup.GET();
-                        QuoteTaskLines.RESET();
-                        QuoteTaskLines.SETRANGE("Job No.", lQuoteHeader."NS_Job No.");
-                        QuoteTaskLines.SETRANGE("Job Task No.", JobsSetup."NS_Total Task No.");
-                        if QuoteTaskLines.FINDFIRST() then begin
-                            QuoteTaskLines.CALCFIELDS("Schedule (Total Price)", "NS_Line Amount Incl. Tax");
-                            lQuoteHeader."NS_Total Contract Price" := ROUND((QuoteTaskLines."Schedule (Total Price)" / (1 - (lQuoteHeader."NS_Minimum Selling Price G.M.%" / 100))), 0.01);
-                        end;
-
-                        if lQuoteHeader."NS_Total Contract Price" > 0 then begin
-                            JobPostingGroup.GET(lQuoteHeader."NS_Job Posting Group New");
-                            JobPostingGroup.TESTFIELD("Recognized Sales Account");
-                            JobsSetup.TESTFIELD("NS_Billing Job Task No.");
-                            JobPL.INIT;
-                            JobPL.Type := JobPL.Type::"G/L Account";
-                            JobPL."Job No." := JobfromQuote."No.";
-                            JobPL.VALIDATE("No.", JobPostingGroup."Recognized Sales Account");
-                            JobPL.VALIDATE("Job Task No.", JobsSetup."NS_Billing Job Task No.");
-                            JobPL.VALIDATE("Line Type", JobPL."Line Type"::Billable);
-                            JobPL.VALIDATE(Quantity, 1);
-                            JobPL.VALIDATE("Unit Price", lQuoteHeader."NS_Total Contract Price");
-                            JobPL.INSERT(true);
-                        end;
-                    end;
-
-                    if JobsSetup."NS_Auto Lock Planning Lines" then
-                        JobfromQuote.NS_CopyPlanningToLocked(JobfromQuote."No.");
-
-                    NS_DeleteQuoteJPL(lQuoteHeader);
-                    NS_DeleteQuoteJobTasks(lQuoteHeader);
-                    QuoteJob.DELETE;
-                end;
-                lQuoteHeader."NS_Job No." := JobfromQuote."No.";
-                lQuoteHeader."NS_Date Converted to Order" := Today();//PRJ-1156.AS.1.0
-                NS_CopyQuoteLinksToJob(lQuoteHeader, JobfromQuote);
-                //PE-300-DK.1.0 29May2024 Start
-                // lQuoteHeader.NS_Status := lQuoteHeader.NS_Status::Accepted;
-                lQuoteHeader."NS_Quote Status" := lQuoteHeader."NS_Quote Status"::Accepted;
-                //PE-300-DK.1.0 29May2024 End
-                JobfromQuote."NS_Default Job Retention" := lQuoteHeader."NS_Retainage %";//PRJ-1192.AS.1.0 18FEB2022
-                JobfromQuote.Modify();
-
-                AssemBOMRec.Reset();
-                AssemBOMRec.SetRange("NS_Job No.", lQuoteHeader."NS_Quote No.");
-                if AssemBOMRec.Findset() then begin
-                    repeat
-                        if AssemBOMRec1.Get(AssemBOMRec."NS_Job No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.") then
-                            AssemBOMRec1.RENAME(JobfromQuote."No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.");
-                    until AssemBOMRec.next = 0;
-                end;
-
-                DefaultDimRec.Reset;
-                DefaultDimRec.SetRange("Table ID", 14021402);
-                DefaultDimRec.SetRange("No.", lQuoteHeader."NS_Quote No.");
-                if DefaultDimRec.FindSet then
-                    repeat
-                        DefaultDimRec2.Init;
-                        DefaultDimRec2."Table ID" := 167;
-                        DefaultDimRec2."No." := lQuoteHeader."NS_Job No.";
-                        DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                        DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
-                        DefaultDimRec2.Insert;
-                    until DefaultDimRec.Next = 0;
-
-                lQuoteHeader.MODIFY;
-
-                MESSAGE(STRSUBSTNO(Text14021400, lQuoteHeader."NS_Quote No.", lQuoteHeader."NS_Job No."));
             end;
-        END
-        //PRJ-914.AS.1.0 20OCT2021 END	>>For Change order with Sub level Job No Done code
-        ELSE BEGIN //PRJ-914.AS.1.0 20OCT2021 START <<Deployed previous code for else begin .. end with No Code Changing
-            JobsSetup.GET;
-            JobsSetup.TESTFIELD("Job Nos.");
-            QuoteJob.RESET;
-            QuoteJob.GET(lQuoteHeader."NS_Quote No.");
+            //PRJ-311.MS.1.0 End comment PPAL-33 //PRJ-497.AM.1.0 Uncomment End
 
-            JobfromQuote.INIT;
-            JobfromQuote := QuoteJob;
-            //PE-128.PS.2.0 29March2024 Start
-            if NS_NoSeries.Get(lQuoteHeader."NS_Job No. Series") then;
-            if (NS_NoSeries."Manual Nos." = false) And (NS_NoSeries."Default Nos." = false) then
-                Error('It is not possible to assign numbers automatically. If you want the program to assign numbers automatically, please activate Default Nos. in No. Series %1.', lQuoteHeader."NS_Job No. Series");
+            if JobsSetup."NS_Auto Lock Planning Lines" then
+                JobfromQuote.NS_CopyPlanningToLocked(JobfromQuote."No.");
 
-            if lQuoteHeader."NS_Job No. Series" <> '' then begin
-                if NS_NoSeries.Get(lQuoteHeader."NS_Job No. Series") then;
-                if (NS_NoSeries."Manual Nos." = true) And (NS_NoSeries."Default Nos." = true) then begin
-                    if lQuoteHeader."NS_Manual Job No." = '' then
-                        JobfromQuote."No." := NoSeriesMgt.GetNextNo(lQuoteHeader."NS_Job No. Series", Today, true)
-                    else
-                        JobfromQuote."No." := lQuoteHeader."NS_Manual Job No.";
-                    JobfromQuote.VALIDATE("No.");
-                end;
-
-                If (NS_NoSeries."Manual Nos." = true) And (NS_NoSeries."Default Nos." = false) then
-                    JobfromQuote."No." := lQuoteHeader."NS_Manual Job No.";
-
-                If (NS_NoSeries."Manual Nos." = false) And (NS_NoSeries."Default Nos." = true) then
-                    JobfromQuote."No." := NoSeriesMgt.GetNextNo(lQuoteHeader."NS_Job No. Series", Today, true);
-                JobfromQuote.VALIDATE("No.");
-            end;
-
-            NS_Job.Reset();
-            NS_Job.SetRange("No.", JobfromQuote."No.");
-            if NS_Job.FindFirst() then
-                Error('The record in table Job already exists. Identification fields and values: No. %1', JobfromQuote."No.");
-
-            //PE-128.PS.2.0 29March2024  End 
-            JobfromQuote."NS_Sell-to Customer No." := lQuoteHeader."NS_Sell-to Customer No.";
-            JobfromQuote."NS_Sell-to Customer Name" := lQuoteHeader."NS_Sell-to Customer Name";
-            JobfromQuote."Global Dimension 1 Code" := lQuoteHeader."NS_Shortcut Dimension 1 Code";//PRJ-409.AS.1.0 28DEC2020
-            JobfromQuote."Global Dimension 2 Code" := lQuoteHeader."NS_Shortcut Dimension 2 Code";//PRJ-409.AS.1.0 28DEC2020
-            //PE-6.NK.1.0 21Mar2023 Start
-            if Opportunity.Get(lQuoteHeader.NS_Opportunity) then begin
-                Opportunity.NS_JobOrderNo := JobfromQuote."No.";
-                Opportunity.Modify();
-            end;
-            //PE-6.NK.1.0 21Mar2023 End
-            if JobfromQuote.INSERT then begin
-                JobfromQuote.VALIDATE(Status, JobfromQuote.Status::Planning);
-                JobfromQuote."NS_Created from Quote No." := lQuoteHeader."NS_Quote No.";
-                JobfromQuote."NS_Job Class" := JobfromQuote."NS_Job Class"::"Master Job";
-                //PRJCTPR-197 Dk.1.0 Start
-                // JobfromQuote."NS_Job Type" := lQuoteHeader."NS_Job Type Code";
-                JobfromQuote."NS_Job Type New" := lQuoteHeader."NS_Job Type Code";
-                //PRJCTPR-197 Dk.1.0 End
-                JobfromQuote."NS_Job Class" := JobsSetup."NS_Default Job Class";
-                JobfromQuote."Job Posting Group" := lQuoteHeader."NS_Job Posting Group New";//PRJ-1372.GK.1.0 11May2022
-                NS_CopyQuoteJobTasksToJob(lQuoteHeader, JobfromQuote);
-                NS_CopyQuoteJPLToJob(lQuoteHeader, JobfromQuote);
-                NS_ConvertQuoteSegments(lQuoteHeader, JobfromQuote);
-
-                //PRJ-497.AM.1.0 start
-                Jobsegments.Reset();
-                Jobsegments.SetRange("NS_Job No.", lQuoteHeader."NS_Job No.");
-                if NOT Jobsegments.FindFirst() then begin
-                    lQuoteHeader.NS_UpdateMinSellPrice();
-                    //PRJ-497.AM.1.0 End
-                    //PRJ-311.MS.1.0 start comment --PPAL-33 //PRJ-497.AM.1.0 Uncomment start
-                    //PRJ-646.AM start
-                    JobsSetup.GET();
-                    QuoteTaskLines.RESET();
-                    QuoteTaskLines.SETRANGE("Job No.", lQuoteHeader."NS_Job No.");
-                    QuoteTaskLines.SETRANGE("Job Task No.", JobsSetup."NS_Total Task No.");
-                    if QuoteTaskLines.FINDFIRST() then begin
-                        QuoteTaskLines.CALCFIELDS("Schedule (Total Price)", "NS_Line Amount Incl. Tax");
-                        lQuoteHeader."NS_Total Contract Price" := ROUND((QuoteTaskLines."Schedule (Total Price)" / (1 - (lQuoteHeader."NS_Minimum Selling Price G.M.%" / 100))), 0.01);
-                    end;
-                    //PRJ-646.AM End
-                    if lQuoteHeader."NS_Total Contract Price" > 0 then begin
-                        //JobPostingGroup.GET(lQuoteHeader."NS_Job Posting Group");//PRJ-993.AS.1.0 18OCT2021 comment old code for field "NS_Job Posting Group" for Job Quote header
-                        JobPostingGroup.GET(lQuoteHeader."NS_Job Posting Group New");//PRJ-993.AS.1.0 18OCT2021 Add new code for field "NS_Job Posting Group New" for Job Quote header
-                        JobPostingGroup.TESTFIELD("Recognized Sales Account");
-                        JobsSetup.TESTFIELD("NS_Billing Job Task No.");
-                        JobPL.INIT;
-                        JobPL.Type := JobPL.Type::"G/L Account";
-                        JobPL."Job No." := JobfromQuote."No."; //PRJ-497.AM.1.0 changed location of Job No. validate
-                        JobPL.VALIDATE("No.", JobPostingGroup."Recognized Sales Account");
-                        JobPL.VALIDATE("Job Task No.", JobsSetup."NS_Billing Job Task No.");
-                        JobPL.VALIDATE("Line Type", JobPL."Line Type"::Billable);
-                        JobPL.VALIDATE(Quantity, 1);
-                        JobPL.VALIDATE("Unit Price", lQuoteHeader."NS_Total Contract Price");
-                        JobPL.INSERT(true);
-                    end;
-                end;
-                //PRJ-311.MS.1.0 End comment PPAL-33 //PRJ-497.AM.1.0 Uncomment End
-
-                if JobsSetup."NS_Auto Lock Planning Lines" then
-                    JobfromQuote.NS_CopyPlanningToLocked(JobfromQuote."No.");
-
-                NS_DeleteQuoteJPL(lQuoteHeader);
-                NS_DeleteQuoteJobTasks(lQuoteHeader);
-                QuoteJob.DELETE;
-            end;
-            lQuoteHeader."NS_Job No." := JobfromQuote."No.";
-            lQuoteHeader."NS_Date Converted to Order" := Today();//PRJ-1156.AS.1.0
-            NS_CopyQuoteLinksToJob(lQuoteHeader, JobfromQuote);
-            //PE-300-DK.1.0 29May2024 Start
-            //lQuoteHeader.NS_Status := lQuoteHeader.NS_Status::Accepted;
-            lQuoteHeader."NS_Quote Status" := lQuoteHeader."NS_Quote Status"::Accepted;
-            //PE-300-DK.1.0 29May2024 End
-            JobfromQuote."NS_Default Job Retention" := lQuoteHeader."NS_Retainage %";//PRJ-1192.AS.1.0 18FEB2022
-            JobfromQuote.Modify();//PRJ-883.AS.1.0 20AUG21
-
-            //PRJ-563.AS.4.0 START
-            AssemBOMRec.Reset();
-            AssemBOMRec.SetRange("NS_Job No.", lQuoteHeader."NS_Quote No.");
-            if AssemBOMRec.Findset() then begin
-                repeat
-                    if AssemBOMRec1.Get(AssemBOMRec."NS_Job No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.") then
-                        AssemBOMRec1.RENAME(JobfromQuote."No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.");
-                until AssemBOMRec.next = 0;
-            end;
-            //PRJ-563.AS.4.0 END
-
-            //PRJ-409.AS.1.0 28DEC2020 start
-            DefaultDimRec.Reset;
-            DefaultDimRec.SetRange("Table ID", 14021402);
-            DefaultDimRec.SetRange("No.", lQuoteHeader."NS_Quote No.");
-            if DefaultDimRec.FindSet then
-                repeat
-                    DefaultDimRec2.Init;
-                    DefaultDimRec2."Table ID" := 167;
-                    DefaultDimRec2."No." := lQuoteHeader."NS_Job No.";
-                    DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                    DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
-                    DefaultDimRec2.Insert;
-                until DefaultDimRec.Next = 0;
-            //PRJ-409.AS.1.0 28DEC2020 end
-            lQuoteHeader.MODIFY;
-            //PRJ-1487.GK.1.0 29June2022 start
-            DocumentAttachment.reset;
-            DocumentAttachment.SetRange("No.", lQuoteHeader."NS_Quote No.");
-            DocumentAttachment.SetRange("Table ID", 14021402);
-            if DocumentAttachment.FindSet() then
-                repeat
-                    DocumentAttachment2.init();
-                    DocumentAttachment2."Table ID" := 167;
-                    DocumentAttachment2."No." := JobfromQuote."No.";
-                    DocumentAttachment2."Document Type" := DocumentAttachment2."Document Type"::Quote;
-                    DocumentAttachment3.reset;
-                    DocumentAttachment3.SetRange("No.", JobfromQuote."No.");
-                    DocumentAttachment3.SetRange("Table ID", 167);
-                    //PRJ-1487.NK.1.0 01Jul2022 Start
-                    if DocumentAttachment3.FindLast() then
-                        DocumentAttachment2."Line No." := DocumentAttachment3."Line No." + 10000
-                    else
-                        DocumentAttachment2."Line No." := 10000;
-                    // if not DocumentAttachment3.FindFirst() then
-                    //     DocumentAttachment2."Line No." := 10000
-                    //     else
-                    //     DocumentAttachment2."Line No." := DocumentAttachment3."Line No." + 1000;
-                    //PRJ-1487.NK.1.0 01Jul2022 End
-
-
-                    DocumentAttachment2.Insert();
-                    DocumentAttachment2."File Name" := DocumentAttachment."File Name";
-                    DocumentAttachment2."File Type" := DocumentAttachment."File Type";
-                    DocumentAttachment2."File Extension" := DocumentAttachment."File Extension";
-                    DocumentAttachment2."Attached By" := DocumentAttachment."Attached By";
-                    DocumentAttachment2.User := DocumentAttachment.User;
-                    DocumentAttachment2.modify();
-                until DocumentAttachment.next = 0;
-            //PRJ-1487.GK.1.0 29June2022 end
-            MESSAGE(STRSUBSTNO(Text14021400, lQuoteHeader."NS_Quote No.", lQuoteHeader."NS_Job No."));
+            NS_DeleteQuoteJPL(lQuoteHeader);
+            NS_DeleteQuoteJobTasks(lQuoteHeader);
+            QuoteJob.DELETE;
         end;
-    END;
-    //PRJ-914.AS.1.0 20OCT2021 END >>Deployed previous code for else begin .. end with No Code Changing
+        lQuoteHeader."NS_Job No." := JobfromQuote."No.";
+        NS_CopyQuoteLinksToJob(lQuoteHeader, JobfromQuote);
+        lQuoteHeader.NS_Status := lQuoteHeader.NS_Status::Awarded;
+        JobfromQuote.Modify();//PRJ-883.AS.1.0 20AUG21
+
+        //PRJ-563.AS.4.0 START
+        AssemBOMRec.Reset();
+        AssemBOMRec.SetRange("NS_Job No.", lQuoteHeader."NS_Quote No.");
+        if AssemBOMRec.Findset() then begin
+            repeat
+                if AssemBOMRec1.Get(AssemBOMRec."NS_Job No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.") then
+                    AssemBOMRec1.RENAME(JobfromQuote."No.", AssemBOMRec."NS_Job Task No.", AssemBOMRec."NS_Line No.");
+            until AssemBOMRec.next = 0;
+        end;
+        //PRJ-563.AS.4.0 END
+
+        //PRJ-409.AS.1.0 28DEC2020 start
+        DefaultDimRec.Reset;
+        DefaultDimRec.SetRange("Table ID", 14021402);
+        DefaultDimRec.SetRange("No.", lQuoteHeader."NS_Quote No.");
+        if DefaultDimRec.FindSet then
+            repeat
+                DefaultDimRec2.Init;
+                DefaultDimRec2."Table ID" := 167;
+                DefaultDimRec2."No." := lQuoteHeader."NS_Job No.";
+                DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
+                DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
+                DefaultDimRec2.Insert;
+            until DefaultDimRec.Next = 0;
+        //PRJ-409.AS.1.0 28DEC2020 end
+        lQuoteHeader.MODIFY;
+
+        MESSAGE(STRSUBSTNO(Text14021400, lQuoteHeader."NS_Quote No.", lQuoteHeader."NS_Job No."));
+    end;
 
     procedure NS_CopyDocument(_QuoteHeader: Record "NS_Job Quote Header");
     var
@@ -2417,7 +1994,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             if qPlanningLines.FINDSET(true, true) then
                 repeat
                     lPlanningLines := qPlanningLines;
-                    lPlanningLines.Validate("No.", qPlanningLines."No.");//PRJ-1340.GK.1.0 04May2022
                     lPlanningLines."Job No." := "NS_Job No.";
                     if lPlanningLines.INSERT then;
                 until qPlanningLines.NEXT = 0;
@@ -2431,50 +2007,33 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _TableID: array[10] of Integer;
         _No: array[10] of Code[20];
         _OldDimSetID: Integer;
-        _NSDefaultDimSource: List of [Dictionary of [Integer, Code[20]]];   //PRJCTPR-155.JS.1.0 08Sep2023
     begin
-        //PRJ-1170.NK.1.0 Start
-        //with _QuoteHeader do begin
-        _SourceCodeSetup.GET();
-        _TableID[1] := _Type1;
-        _No[1] := _No1;
-        _TableID[2] := _Type2;
-        _No[2] := _No2;
-        //_TableID[3] := _Type3;  // Campaign
-        //_No[3] := _No3;
-        //_TableID[4] := _Type4;  // Responsibility Center
-        //_No[4] := _No4;
-        //_TableID[5] := _Type5;  // Customer Template
-        //_No[5] := _No5;
-        _QuoteHeader."NS_Shortcut Dimension 1 Code" := '';
-        _QuoteHeader."NS_Shortcut Dimension 2 Code" := '';
-        //PRJCTPR-155.JS.1.0 08Sep2023 - Start
-        if (_TableID[1] <> 0) and (_No[1] <> '') then begin
-            _DimMgt.AddDimSource(_NSDefaultDimSource, _TableID[1], _No[1]);
+        with _QuoteHeader do begin
+            _SourceCodeSetup.GET;
+            _TableID[1] := _Type1;
+            _No[1] := _No1;
+            _TableID[2] := _Type2;
+            _No[2] := _No2;
             //_TableID[3] := _Type3;  // Campaign
             //_No[3] := _No3;
             //_TableID[4] := _Type4;  // Responsibility Center
             //_No[4] := _No4;
             //_TableID[5] := _Type5;  // Customer Template
             //_No[5] := _No5;
-            _OldDimSetID := _QuoteHeader."NS_Dimension Set ID";
-            _QuoteHeader."NS_Dimension Set ID" :=
-              //_DimMgt.GetDefaultDimID(_TableID, _No, _SourceCodeSetup.Sales, _QuoteHeader."NS_Shortcut Dimension 1 Code", _QuoteHeader."NS_Shortcut Dimension 2 Code", 0, 0);  
-              _DimMgt.GetDefaultDimID(_NSDefaultDimSource, _SourceCodeSetup.Sales, _QuoteHeader."NS_Shortcut Dimension 1 Code", _QuoteHeader."NS_Shortcut Dimension 2 Code", 0, 0);
+            // >> Upgrade
+            //FDD101
+            //"NS_Shortcut Dimension 1 Code" := '';
+            //"NS_Shortcut Dimension 2 Code" := '';
+            // << Upgrade
+            _OldDimSetID := "NS_Dimension Set ID";
+            "NS_Dimension Set ID" :=
+              _DimMgt.GetDefaultDimID(_TableID, _No, _SourceCodeSetup.Sales, "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code", 0, 0);
+
+            if (_OldDimSetID <> "NS_Dimension Set ID") and NS_QuoteLinesExist(_QuoteHeader) then begin
+                MODIFY;
+                NS_UpdateAllLineDim(_QuoteHeader, "NS_Dimension Set ID", _OldDimSetID);
+            end;
         end;
-        if (_TableID[2] <> 0) and (_No[2] <> '') then begin
-            _DimMgt.AddDimSource(_NSDefaultDimSource, _TableID[2], _No[2]);
-            _OldDimSetID := _QuoteHeader."NS_Dimension Set ID";
-            _QuoteHeader."NS_Dimension Set ID" :=
-              _DimMgt.GetDefaultDimID(_NSDefaultDimSource, _SourceCodeSetup.Sales, _QuoteHeader."NS_Shortcut Dimension 1 Code", _QuoteHeader."NS_Shortcut Dimension 2 Code", 0, 0);
-        end;
-        //PRJCTPR-155.JS.1.0 08Sep2023 - end
-        if (_OldDimSetID <> _QuoteHeader."NS_Dimension Set ID") and NS_QuoteLinesExist(_QuoteHeader) then begin
-            _QuoteHeader.MODIFY();
-            NS_UpdateAllLineDim(_QuoteHeader, _QuoteHeader."NS_Dimension Set ID", _OldDimSetID);
-        end;
-        //end;
-        //PRJ-1170.NK.1.0 End
     end;
 
     procedure NS_CreateDimForLine(var _QuoteLine: Record "NS_Job Quote Line"; _Type1: Integer; _No1: Code[20]; _Type2: Integer; _No2: Code[20]; _Type3: Integer; _No3: Code[20]);
@@ -2485,7 +2044,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _DimSetID: Integer;
         _TableID: array[10] of Integer;
         _No: array[10] of Code[20];
-        _NSDefaultDimSource: List of [Dictionary of [Integer, Code[20]]];   //PRJCTPR-155.JS.1.0 08Sep2023
     begin
         if not _QuoteHeader.GET(_QuoteLine."NS_Quote No.") then
             _QuoteHeader.INIT;
@@ -2495,33 +2053,24 @@ codeunit 14021400 "NS_Job Quote Mgt."
             if _QuoteHeader."NS_Dimension Set ID" <> 0 then
                 _DimSetID := _QuoteHeader."NS_Dimension Set ID";
 
-        //PRJ-1170.NK.1.0 Start
-        //with _QuoteLine do begin
-        _SourceCodeSetup.GET();
-        _TableID[1] := _Type1;
-        _No[1] := _No1;
-        _DimMgt.AddDimSource(_NSDefaultDimSource, _TableID[1], _No[1]);  //PRJCTPR-155.JS.1.0 08Sep2023
-        //_TableID[2] := _Type2;  // Job
-        //_No[2] := _No2;
-        //_TableID[3] := _Type3;  // Responsibility Center
-        //_No[3] := _No3;
-        _QuoteLine."NS_Shortcut Dimension 1 Code" := '';
-        _QuoteLine."NS_Shortcut Dimension 2 Code" := '';
-        _QuoteLine."NS_Dimension Set ID" :=
-          //PRJCTPR-155.JS.1.0 08Sep2023 - Start
-          //     _DimMgt.GetDefaultDimID(
-          //       _TableID, _No, _SourceCodeSetup.Sales,
-          //   _QuoteLine."NS_Shortcut Dimension 1 Code", _QuoteLine."NS_Shortcut Dimension 2 Code",
-          //       _DimSetID, DATABASE::Customer);
-          _DimMgt.GetDefaultDimID(
-            _NSDefaultDimSource, _SourceCodeSetup.Sales,
-        _QuoteLine."NS_Shortcut Dimension 1 Code", _QuoteLine."NS_Shortcut Dimension 2 Code",
-            _DimSetID, DATABASE::Customer);
-        //PRJCTPR-155.JS.1.0 08Sep2023 - end
-        _DimMgt.UpdateGlobalDimFromDimSetID(_QuoteLine."NS_Dimension Set ID", _QuoteLine."NS_Shortcut Dimension 1 Code", _QuoteLine."NS_Shortcut Dimension 2 Code");
-        _QuoteLine.MODIFY();
-        //end;
-        //PRJ-1170.NK.1.0 End
+        with _QuoteLine do begin
+            _SourceCodeSetup.GET;
+            _TableID[1] := _Type1;
+            _No[1] := _No1;
+            //_TableID[2] := _Type2;  // Job
+            //_No[2] := _No2;
+            //_TableID[3] := _Type3;  // Responsibility Center
+            //_No[3] := _No3;
+            "NS_Shortcut Dimension 1 Code" := '';
+            "NS_Shortcut Dimension 2 Code" := '';
+            "NS_Dimension Set ID" :=
+              _DimMgt.GetDefaultDimID(
+                _TableID, _No, _SourceCodeSetup.Sales,
+                "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code",
+                _DimSetID, DATABASE::Customer);
+            _DimMgt.UpdateGlobalDimFromDimSetID("NS_Dimension Set ID", "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code");
+            MODIFY;
+        end;
     end;
 
     procedure NS_CreateRevision(_QuoteHeader: Record "NS_Job Quote Header");
@@ -2574,7 +2123,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
         PAGE.RUN(PAGE::"NS_Job Quote", _QuoteHeader2);
     end;
 
-    procedure NS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header");
+    // >> Upgrade
+    //procedure NS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header");
+    procedure NS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header"; IsRevision: Boolean)
+    // << Upgrade
     var
         qQuoteLine: Record "NS_Job Quote Line";
         QuoteJob: Record Job;
@@ -2595,7 +2147,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_Quote Revision" := qQuoteHeader.NS_Revision;
             QuoteJob.MODIFY;
         end;
+        // >> Upgrade
+        OnAfterNS_CreateRevisionJQ(qQuoteHeader);
 
+        // << Upgrade
         MESSAGE('Job Quote Revision Created: ' + qQuoteHeader."NS_Quote No." + '.' + FORMAT(qQuoteHeader.NS_Revision - 1));
     end;
 
@@ -2773,7 +2328,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _FeatureText2: Record "NS_Job Quote Feature Text";
         _ScopeOfWork: Record "NS_Job Quote Scope of Work";
         _ScopeOfWork2: Record "NS_Job Quote Scope of Work";
-        _CustomerRec: record customer;    //PRJ-1215.JS.1.0 23FEB2022
         _AttributeMgt: Codeunit "NS_Job Quote Mgt.";
         _DimMgt: Codeunit DimensionManagement;
         _NewQuoteNo: Code[20];
@@ -2790,12 +2344,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _QuoteHeader2."NS_Duplicated-from Quote No." := _QuoteHeader."NS_Quote No.";
         _QuoteHeader2."NS_Copy in Progress" := true;
         _QuoteHeader2.VALIDATE("NS_Sell-to Customer No.", CustNo);
-        //PRJ-1215.JS.1.0 23FEB2022 - Start
-        If _CustomerRec.Get(CustNo) then begin
-            _QuoteHeader2."NS_Contact No." := _CustomerRec."primary contact no.";
-            _QuoteHeader2."NS_Contact Name" := _CustomerRec.Contact;
-        end;
-        //PRJ-1215.JS.1.0 23FEB2022 - end;    
         NS_OnInsertQuoteCopy(_QuoteHeader2);
         NS_CopyQuoteJob(_QuoteHeader, _QuoteHeader2);
         _NewQuoteNo := _QuoteHeader2."NS_Quote No.";
@@ -2918,6 +2466,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _Job: Record Job;
         _QuoteHeader: Record "NS_Job Quote Header";
         _Resource: Record Resource;
+        // >> Upgrade
+        Salesperson: Record "Salesperson/Purchaser";
+    // << Upgrade
     begin
         case _TableID of
             DATABASE::"NS_Job Quote Header":
@@ -2933,10 +2484,14 @@ codeunit 14021400 "NS_Job Quote Mgt."
                         else
                             _Value := '';
                     _QuoteHeader.FIELDNO("NS_Project Manager No."):
-                        if _Resource.GET(_Code) then
-                            _Value := _Resource.Name
+                        // >> Upgrade
+                        // if _Resource.GET(_Code) then
+                        //     _Value := _Resource.Name
+                        if Salesperson.Get(_Code) then //FDD109
+                            _Value := Salesperson.Name //FDD109
                         else
                             _Value := '';
+                // << Upgrade
                 end;
             DATABASE::Job:
                 case _FieldNo of
@@ -2979,10 +2534,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _QuoteHeader: Record "NS_Job Quote Header";
     begin
-        //PE-300-DK.1.0 29May2024 Start
-        //_QuoteHeader.SETRANGE(NS_Status, _QuoteHeader.NS_Status::Closed);
-        _QuoteHeader.SETRANGE("NS_Quote Status", _QuoteHeader."NS_Quote Status"::Closed);
-        //PE-300-DK.1.0 29May2024 End
+        _QuoteHeader.SETRANGE(NS_Status, _QuoteHeader.NS_Status::Closed);
         _QuoteHeader.SETRANGE("NS_Sales Order No.", _OrderNo);
         if not _QuoteHeader.FINDFIRST then
             exit(_QuoteNo)
@@ -3068,10 +2620,11 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_GetNextNo(): Code[20];
     var
-        _NoSeries: Record "No. Series";
-        _NoSeriesMgt: Codeunit NoSeriesManagement;
+        _NoSeries: Record 51463;
+        _NoSeriesMgt: Codeunit NoSeriesManagementGlo;
         QuoteSetup: Record "Jobs Setup";
     begin
+        // >> << 007 Converter local vars to point to new no. series objects
         QuoteSetup.GET;
         QuoteSetup.TESTFIELD("Job Nos.");
         QuoteSetup.TESTFIELD("NS_Job Quote No. Series");
@@ -3229,10 +2782,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         if not _QuoteHeader.GET(_QuoteNo) then
             exit;
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Open);
-        _QuoteHeader.TESTFIELD("NS_Quote Status", _QuoteHeader."NS_Quote Status"::Open);
-        //PE-300-DK.1.0 29May2024 End
+        _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Created);
+
         // 20130930 - because the majority of J&F users will be accessing the NAV Windows Client via
         // Remote Desktop published application, the "local" drive to the client is \\ts01\c, not their
         // local drive.  Syntech is mapping T: for every Terminal Service user to \\nav1\Transfer.
@@ -3422,40 +2973,21 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_Inactive(var _QuoteHeader: Record "NS_Job Quote Header");
     begin
-     
-        //with _QuoteHeader do
-        //PE-300-DK.1.0 29May2024 Start
-        // case _QuoteHeader.NS_Status of
-        //     _QuoteHeader.NS_Status::Open:
-        //         begin
-        //             _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Inactive;
-        //             _QuoteHeader.MODIFY();
-        //         end;
-        //     _QuoteHeader.NS_Status::Inactive:
-        //         begin
-        //             _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Open;
-        //             _QuoteHeader.MODIFY();
-        //         end;
-        //     else
-        //         _QuoteHeader.FIELDERROR(NS_Status);
-        // end;
-
-        case _QuoteHeader."NS_Quote Status" of
-            _QuoteHeader."NS_Quote Status"::Open:
-                begin
-                    _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Inactive;
-                    _QuoteHeader.MODIFY();
-                end;
-            _QuoteHeader."NS_Quote Status"::Inactive:
-                begin
-                    _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Open;
-                    _QuoteHeader.MODIFY();
-                end;
-            else
-                _QuoteHeader.FIELDERROR("NS_Quote Status");
-        end;
-        //PE-300-DK.1.0 29May2024 End
-      
+        with _QuoteHeader do
+            case NS_Status of
+                NS_Status::Created:
+                    begin
+                        NS_Status := NS_Status::"On Hold";
+                        MODIFY;
+                    end;
+                NS_Status::"On Hold":
+                    begin
+                        NS_Status := NS_Status::Created;
+                        MODIFY;
+                    end;
+                else
+                    FIELDERROR(NS_Status);
+            end;
     end;
 
     procedure NS_JobOnValidateJobSiteCustNo(var _Job: Record Job);
@@ -3500,7 +3032,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         LineNo: Integer;
         qJob: Record Job;
         JPLine: Record "Job Planning Line";//PPAL-147.AS.2.0 30SEPT2020
-        NS_Jobsetup: Record "Jobs Setup"; //PRJCTPR-153.PS.1.0 18Jul2023
     begin
 
         NS_GetQuoteHeaderC50000(qQuoteLine);
@@ -3546,10 +3077,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             qJobPlanLine."NS_Cost Category" := 'ADM';
             qJobPlanLine."Planning Date" := QuoteHeader."NS_Proposal Date";//PPAL-147.AS.2.0 06Oct2020 Add
             qJobPlanLine."Planned Delivery Date" := QuoteHeader."NS_Proposal Date";//PPAL-147.AS.2.0 06Oct2020 Add
-                                                                                   //PRJCTPR-153.PS.1.0 11Jul2023 Start
-            if NS_Jobsetup.Get() then;
-            qJobPlanLine."Usage Link" := NS_Jobsetup."Apply Usage Link by Default";
-            //PRJCTPR-153.PS.1.0 11Jul2023 End 
             qJobPlanLine.INSERT;
 
             qQuoteLine."NS_Unit of Measure Code" := 'EA';
@@ -3574,10 +3101,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             qJobPlanLine.Quantity := qQuoteLine.NS_Quantity;
             qJobPlanLine."Quantity (Base)" := qQuoteLine."NS_Quantity (Base)";
             qJobPlanLine."NS_Revenue Category" := qQuoteLine."NS_Revenue Category";
-            //PRJCTPR-153.PS.1.0 11Jul2023 Start
-            if NS_Jobsetup.Get() then;
-            qJobPlanLine."Usage Link" := NS_Jobsetup."Apply Usage Link by Default";
-            //PRJCTPR-153.PS.1.0 11Jul2023 End 
             qJobPlanLine.Modify;
         end;
         //PPAL-147.AS.2.0 02Oct2020 End - Added condition
@@ -3604,7 +3127,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         ItemUoMTbl: Record "Item Unit of Measure";
         QtyUoM: Decimal;
         JPLine: Record "Job Planning Line";//PPAL-147.AS.2.0 05Oct2020
-        NS_Jobsetup: Record "Jobs Setup"; //PRJCTPR-153.PS.1.0 18Jul2023
     begin
         NS_GetQuoteHeaderC50000(qQuoteLine);
 
@@ -3662,10 +3184,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             qJobPlanLine."NS_Cost Category" := qItem."NS_Job Cost Category";
             qJobPlanLine."Planning Date" := QuoteHeader."NS_Proposal Date";
             qJobPlanLine."Planned Delivery Date" := QuoteHeader."NS_Proposal Date";
-            //PRJCTPR-153.PS.1.0 11Jul2023 Start
-            if NS_Jobsetup.Get() then;
-            qJobPlanLine."Usage Link" := NS_Jobsetup."Apply Usage Link by Default";
-            //PRJCTPR-153.PS.1.0 11Jul2023 End 
             qJobPlanLine.INSERT;
 
         end;//PPAL-147.AS.2.0 05Oct2020 End - Added condition
@@ -3732,9 +3250,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
         PlanLineNo: Integer;
         SegmentDwgCode: Code[20];
         x: Integer;
+        SeqNo: Integer;
     begin
         if QuoteJob.GET(qJobNo) then begin
-
+            SeqNo := 100; // >> 005 <<
             TmplTaskLine.RESET;
             TmplTaskLine.SETRANGE("Job No.", tJobNo);
             if TmplTaskLine.FINDSET(false, false) then
@@ -3746,6 +3265,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
                         QuoteTaskLine."NS_Template No." := QuoteTaskLine."Job No.";
                         QuoteTaskLine."Job No." := qJobNo;
                         QuoteTaskLine."NS_Quote No." := qJobNo;
+                        // >> 005
+                        NS_LoadFromJobTmplOnBeforeInsert(QuoteTaskLine, SeqNo);
+                        SeqNo += 5;
+                        // << 005
                         QuoteTaskLine.INSERT;
                     end;
                 until TmplTaskLine.NEXT = 0;
@@ -3853,7 +3376,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                     QPL.RESET;
                     QPL.SETRANGE("Job No.", qJobNo);
                     QPL.SETRANGE("Job Task No.", TmplPlanLine."Job Task No.");
-                    // QPL.SETRANGE("Document No.", TmplPlanLine."Document No."); //PRJCTPR-359.NC.1.0 21May2024 Block
+                    QPL.SETRANGE("Document No.", TmplPlanLine."Document No.");
                     if QPL.FINDLAST then
                         PlanLineNo := QPL."Line No." + 10000
                     else
@@ -3872,8 +3395,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                     QuotePlanLine.NS_TempWorkType := QuotePlanLine."Work Type Code";
                     QuotePlanLine.NS_TempSkillClass := QuotePlanLine."NS_Skill Class";
                     QuotePlanLine.VALIDATE(Quantity, TmplPlanLine.Quantity);
-                    //QuotePlanLine."NS_Segment Code" := SegCode; //PRJCTPR-359.NC.1.0 21May2024 Block
-                    QuotePlanLine.Validate("NS_Segment Code", SegCode); //PRJCTPR-359.NC.1.0 21May2024
+                    QuotePlanLine."NS_Segment Code" := SegCode;
                     QuotePlanLine.INSERT;
                 until TmplPlanLine.NEXT = 0;
 
@@ -3932,7 +3454,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
         qJobPlanLine2: Record "Job Planning Line";
         LineNo: Integer;
         JPLine: Record "Job Planning Line";//PPAL-147.AS.2.0 05Oct2020
-        NS_Jobsetup: Record "Jobs Setup";//PRJCTPR-153.PS.1.0
     begin
 
         NS_GetQuoteHeaderC50000(qQuoteLine);
@@ -3988,10 +3509,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             qJobPlanLine."NS_Revenue Category" := qQuoteLine."NS_Revenue Category";
             qJobPlanLine."Planning Date" := QuoteHeader."NS_Proposal Date";//PPAL-147.AS.2.0 06Oct2020 Add
             qJobPlanLine."Planned Delivery Date" := QuoteHeader."NS_Proposal Date";//PPAL-147.AS.2.0 06Oct2020 Add
-                                                                                   //PRJCTPR-153.PS.1.0 11Jul2023 Start
-            if NS_Jobsetup.Get() then;
-            qJobPlanLine."Usage Link" := NS_Jobsetup."Apply Usage Link by Default";
-            //PRJCTPR-153.PS.1.0 11Jul2023 End 
             qJobPlanLine.INSERT;
         end;//PPAL-147.AS.2.0 05Oct2020 End - Added condition
         qQuoteLine."NS_Qty. per Unit of Measure" := 1;
@@ -4081,10 +3598,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         NS_TestFieldsRequiredForConversion(_QuoteHeader);
         NS_QuotingCheck(_QuoteHeader);
         NS_AmountCheck(_QuoteHeader);
-        //PE-300-DK.1.0 29May2024 Start
-        // if _QuoteHeader.NS_Status = _QuoteHeader.NS_Status::Open then begin
-        if _QuoteHeader."NS_Quote Status" = _QuoteHeader."NS_Quote Status"::Open then begin
-            //PE-300-DK.1.0 29May2024 End
+        if _QuoteHeader.NS_Status = _QuoteHeader.NS_Status::Created then begin
             NS_SetStatusReleased(_QuoteHeader);
         end;
         _SalesHeader.GET(_SalesHeader."Document Type"::Quote, _QuoteHeader."NS_Sales Quote No.");
@@ -4100,10 +3614,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
             exit;
 
         // close the quote and stamp it with order no.
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Closed;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Closed;
-        //PE-300-DK.1.0 29May2024 End
+
+        _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Closed;
         _QuoteHeader."NS_Sales Order No." := _SalesHeader."No.";
         _QuoteHeader."NS_Date Converted to Order" := TODAY;
         _QuoteHeader.MODIFY;
@@ -4196,6 +3708,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         if lJob.GET(_QuoteHeader."NS_Job No.") then
             lJob.DELETE(true);
+        // >> Upgrade
+        OnAfterNS_OnDeleteQuote(_QuoteHeader);
+        // << Upgrade
     end;
 
     procedure NS_OnDeleteQuoteLine(_QuoteLine: Record "NS_Job Quote Line");
@@ -4209,10 +3724,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
         qJobPlan: Record "Job Planning Line";
     begin
         NS_GetQuoteHeaderC50000(_QuoteLine);
-        //PE-300-DK.1.0 29May2024 Start
-        //QuoteHeader.TESTFIELD(NS_Status, QuoteHeader.NS_Status::Open);
-        QuoteHeader.TESTFIELD("NS_Quote Status", QuoteHeader."NS_Quote Status"::Open);
-        //PE-300-DK.1.0 29May2024 End
+        QuoteHeader.TESTFIELD(NS_Status, QuoteHeader.NS_Status::Created);
+
         if _QuoteLine."NS_Attribute Set Entry No." <> 0 then begin
             _AttributeSetEntry.SETRANGE("NS_Attribute Set ID", _QuoteLine."NS_Attribute Set Entry No.");
             _AttributeSetEntry.DELETEALL;
@@ -4276,10 +3789,14 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_OnInsertQuote(var _QuoteHeader: Record "NS_Job Quote Header"; TrueFalse: Boolean);
     var
-        _NoSeries: Record "No. Series";
+        _NoSeries: Record 51463;
         _UserSetup: Record "User Setup";
         QuoteSetup: Record "Jobs Setup";
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
+        // >> << 007 Converter local vars to point to new no. series objects
         if not _UserSetup.GET(USERID) then
             _UserSetup.INIT;
 
@@ -4295,13 +3812,21 @@ codeunit 14021400 "NS_Job Quote Mgt."
                     QuoteSetup.GET;
                     QuoteSetup.TESTFIELD("Job Nos.");
                     _NoSeries.GET(QuoteSetup."NS_Job Quote No. Series");
-                    _NoSeries.TESTFIELD("Manual Nos.");
+                    // >> Upgrade
+                    NS_OnInsertQuote1(_QuoteHeader, IsHandled);
+                    if IsHandled then
+                        _NoSeries.TESTFIELD("Manual Nos.");
+
+                    // << Upgrade
                 end;
 
             "NS_Job Class" := "NS_Job Class"::"Master Job";
             "NS_Created by" := USERID;
             "NS_Created at Date" := TODAY;
             "NS_Created at Time" := TIME;
+            // >> Upgrade
+            NS_OnInsertQuote2(_QuoteHeader, _UserSetup);
+            // << Upgrade
             "NS_Modified by" := '';
             "NS_Modified at Date" := 0D;
             "NS_Modified at Time" := 000000T;
@@ -4319,7 +3844,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Use Tax Liable" := "NS_Use Tax Liable"::No;
             end;
 
-            NS_Status := NS_Status::Open;
+            NS_Status := NS_Status::Created;
             NS_Template := false;
             "NS_Link-to Quote No." := '';
             "NS_Sales Quote No." := '';
@@ -4327,23 +3852,24 @@ codeunit 14021400 "NS_Job Quote Mgt."
             "NS_Date Submitted to Estimator" := 0D;
             "NS_Preserve Pricing Flag" := false;
         end;
-        //PE-300-DK.1.0 29May2024 Start
-        //_QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Open;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Open;
-        //PE-300-DK.1.0 29May2024 End
-        
         if _QuoteHeader."NS_Duplicated-from Quote No." = '' then
             NS_CopyScopeOfWorkFromSetup(_QuoteHeader);
         NS_CreateQuoteJob(_QuoteHeader, TrueFalse);
-        Commit();    //PRJCTPR-164.JS.1.0
+        // >> Upgrade
+        IsHandled := false;
+        NS_OnInsertQuote3(_QuoteHeader, IsHandled);
+        if IsHandled then
+            NS_CreateDim(_QuoteHeader, DATABASE::Job, _QuoteHeader."NS_Quote No.", 0, '', 0, '', 0, '', 0, '');
+        // << Upgrade
     end;
 
     local procedure NS_OnInsertQuoteCopy(var _QuoteHeader: Record "NS_Job Quote Header");
     var
-        _NoSeries: Record "No. Series";
+        _NoSeries: Record 51463;
         _UserSetup: Record "User Setup";
         QuoteSetup: Record "Jobs Setup";
     begin
+        // >> << 007 Converter local vars to point to new no. series objects
         if not _UserSetup.GET(USERID) then
             _UserSetup.INIT;
 
@@ -4365,6 +3891,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
             "NS_Created by" := USERID;
             "NS_Created at Date" := TODAY;
             "NS_Created at Time" := TIME;
+            "NS_Salesperson Code New" := _UserSetup."Salespers./Purch. Code"; //FDD109
             "NS_Modified by" := '';
             "NS_Modified at Date" := 0D;
             "NS_Modified at Time" := 000000T;
@@ -4382,7 +3909,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Use Tax Liable" := "NS_Use Tax Liable"::No;
             end;
 
-            NS_Status := NS_Status::Open;
+            NS_Status := NS_Status::Created;
             NS_Template := false;
             //IF Revision = 0 THEN
             //Revision := 1;
@@ -4392,10 +3919,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             "NS_Date Submitted to Estimator" := 0D;
             "NS_Preserve Pricing Flag" := false;
         end;
-        //PE-300-DK.1.0 29May2024 Start
-        //_QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Open;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Open;
-        //PE-300-DK.1.0 29May2024 End
         if _QuoteHeader."NS_Duplicated-from Quote No." = '' then
             NS_CopyScopeOfWorkFromSetup(_QuoteHeader);
         _QuoteHeader.INSERT(false);
@@ -4460,7 +3983,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
             "NS_Modified at Time" := TIME;
         end;
         NS_ModifyQuoteJob(_QuoteHeader);
-        commit();     //PRJCTPR-164.JS.1.0
     end;
 
     procedure NS_OnModifyQuoteLine(var _QuoteLine: Record "NS_Job Quote Line");
@@ -4516,6 +4038,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _Address: Record "Ship-to Address";
         _Customer: Record Customer;
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         if _QuoteHeader."NS_Bill-to Customer No." = '' then
             _QuoteHeader."NS_Bill-to Customer No." := _QuoteHeader."NS_Sell-to Customer No.";
@@ -4527,12 +4052,13 @@ codeunit 14021400 "NS_Job Quote Mgt."
               0, '',   // Campaign
               0, '',   // Responsibility Center
               0, '');  // Customer Template
-
-        if _Customer.GET(_QuoteHeader."NS_Bill-to Customer No.") then begin
-            _QuoteHeader."NS_Bill-to Customer Name" := _Customer.Name;
-            _QuoteHeader."NS_Payment Terms Code" := _Customer."Payment Terms Code";
+        NS_OnValidateBillToCustomerOnBefore(_QuoteHeader, IsHandled);//>>Upgrade<<
+        if not IsHandled then begin
+            if _Customer.GET(_QuoteHeader."NS_Bill-to Customer No.") then begin
+                _QuoteHeader."NS_Bill-to Customer Name" := _Customer.Name;
+                _QuoteHeader."NS_Payment Terms Code" := _Customer."Payment Terms Code";
+            end;
         end;
-
         _Address.SETRANGE("NS_Table ID", DATABASE::"NS_Job Quote Header");
         _Address.SETRANGE("NS_No.", _QuoteHeader."NS_Quote No.");
         _Address.DELETEALL;
@@ -4562,19 +4088,16 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         // contact business relation
 
-        //PRJ-1170.NK.1.0 Start
-        //with _QuoteHeader do
-        //PRJ-1215.JS.1.0 06MAR2022 - Start
-        // if _QuoteHeader."NS_Contact No." <> '' then begin
-        //     _ContBusRel.SETRANGE("Contact No.", _QuoteHeader."NS_Contact No.");
-        //     _ContBusRel.SETRANGE("Link to Table", _ContBusRel."Link to Table"::Customer);
-        //     _ContBusRel.SETFILTER("No.", '<>%1', '');
-        //     if _ContBusRel.FINDFIRST() then
-        //         if _Customer.GET(_ContBusRel."No.") then
-        //             _QuoteHeader.VALIDATE("NS_Sell-to Customer No.", _Customer."No.");
-        // end;
-        //PRJ-1215.JS.1.0 06MAR2022 - end
-        //PRJ-1170.NK.1.0 End
+        with _QuoteHeader do
+            if "NS_Contact No." <> '' then begin
+                _ContBusRel.SETRANGE("Contact No.", "NS_Contact No.");
+                _ContBusRel.SETRANGE("Link to Table", _ContBusRel."Link to Table"::Customer);
+                _ContBusRel.SETFILTER("No.", '<>%1', '');
+                if _ContBusRel.FINDFIRST then
+                    if _Customer.GET(_ContBusRel."No.") then
+                        VALIDATE("NS_Sell-to Customer No.", _Customer."No.");
+            end;
+
         // copy addresses
         if _Customer."No." <> '' then
             NS_CopyContactAddress(_QuoteHeader);
@@ -4589,10 +4112,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _QuoteLine: Record "NS_Job Quote Line";
     begin
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Open);
-        _QuoteHeader.TESTFIELD("NS_Quote Status", _QuoteHeader."NS_Quote Status"::Open);
-        //PE-300-DK.1.0 29May2024 End
+        _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Created);
         if not _QuoteHeader."NS_Equipment Only" then
             exit;
 
@@ -4611,13 +4131,20 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_OnValidateEstimatorNo(var _QuoteHeader: Record "NS_Job Quote Header");
     var
-        _Resource: Record Resource;
+        // >> Upgrade
+        // _Resource: Record Resource;
+        Salesperson: Record "Salesperson/Purchaser";
+    // << Upgrade
     begin
         CLEAR(_QuoteHeader."NS_Estimator Name");
         with _QuoteHeader do
             if "NS_Estimator No." <> '' then
-                if _Resource.GET("NS_Estimator No.") then
-                    "NS_Estimator Name" := _Resource.Name;
+                // >> Upgrade
+                // if _Resource.GET("NS_Estimator No.") then
+                //     "NS_Estimator Name" := _Resource.Name;
+                if Salesperson.Get("NS_Estimator No.") then //FDD109
+                    "NS_Estimator Name" := Salesperson.Name; //FDD109
+                                                             // << Upgrade
     end;
 
     procedure NS_OnValidateJobNo(var _QuoteHeader: Record "NS_Job Quote Header");
@@ -4663,10 +4190,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
         NS_GetQuoteHeaderC50000(_QuoteLine);
 
         QuoteHeader.TESTFIELD(NS_Template, false);
-        //PE-300-DK.1.0 29May2024 Start
-        // QuoteHeader.TESTFIELD(NS_Status, QuoteHeader.NS_Status::Open);
-        QuoteHeader.TESTFIELD("NS_Quote Status", QuoteHeader."NS_Quote Status"::Open);
-        //PE-300-DK.1.0 29May2024 End
+        QuoteHeader.TESTFIELD(NS_Status, QuoteHeader.NS_Status::Created);
+
         if _QuoteLine."NS_No." = '' then begin
             NS_SyncSalesQuoteLine(_QuoteLine, false);
             _QuoteLine.INIT;
@@ -4723,9 +4248,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
                         "NS_Qty. per Unit of Measure" := 1;
                     end;
                 else begin
-                    "NS_Unit of Measure Code" := '';
-                    "NS_Qty. per Unit of Measure" := 1;
-                end;
+                        "NS_Unit of Measure Code" := '';
+                        "NS_Qty. per Unit of Measure" := 1;
+                    end;
             end;
             "NS_Quantity (Base)" := NS_CalcBaseQty(_QuoteLine, NS_Quantity);
             NS_SyncSalesQuoteLine(_QuoteLine, false);
@@ -4736,16 +4261,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Unit Price" := SalesLine."Unit Price";
             if "NS_Unit Price" <> 0 then
                 NS_Markup := "NS_Unit Cost" / "NS_Unit Price";
-            //PRJCTPR-155.JS.1.0 11Sep2023 - Start
-            // NS_CreateDimForLine(_QuoteLine,
-            //   _DimMgt.TypeToTableID3(_QuoteLine.NS_Type), _QuoteLine."NS_No.",
-            //   DATABASE::Job, '',
-            //   DATABASE::"Responsibility Center", '');
             NS_CreateDimForLine(_QuoteLine,
-              _DimMgt.SalesLineTypeToTableID(_QuoteLine.NS_Type), _QuoteLine."NS_No.",
+              _DimMgt.TypeToTableID3(NS_Type), "NS_No.",
               DATABASE::Job, '',
               DATABASE::"Responsibility Center", '');
-            //PRJCTPR-155.JS.1.0 11Sep2023 - end
         end;
 
         case _QuoteLine.NS_Type of
@@ -5000,7 +4519,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Job City" := lSellToCust.City;
                 "NS_Job County" := lSellToCust.County;
                 "NS_Job Post Code" := lSellToCust."Post Code";
-                qQuoteHeader.validate("NS_Contact No.", lSellToCust."primary contact No.");  //PRJ-1215.JS.1.0  23FEB2022
                 if lSellToCust."Bill-to Customer No." <> '' then begin
                     VALIDATE("NS_Bill-to Customer No.", lSellToCust."Bill-to Customer No.");
                     lBillToCust.GET(lSellToCust."Bill-to Customer No.");
@@ -5024,60 +4542,35 @@ codeunit 14021400 "NS_Job Quote Mgt."
             end else
                 ERROR('Site Customer No. must be populated');
 
-            if Job.GET(qQuoteHeader."NS_Job No.") then
-                if lSellToCust.GET(qQuoteHeader."NS_Sell-to Customer No.") then
-                    //PRJCTPR-164.JS.1.0 21July2023 - Strat
-                    if qQuoteHeader."NS_Sell-to Customer No." <> Job."NS_Sell-to Customer No." then begin
-                        //Job.Validate("NS_Sell-to Customer No.", qQuoteHeader."NS_Sell-to Customer No."); Block
-                        Job."NS_Sell-to Customer No." := qQuoteHeader."NS_Sell-to Customer No.";
-                        Job."NS_Sell-to Customer Name" := lSellToCust.Name;//PRJCTPR-216.VC.1.0
-                        Job."Sell-to Customer Name" := lSellToCust.Name;
-                        Job."Sell-to Address" := lSellToCust.Address;
-                        Job."Sell-to Address 2" := lSellToCust."Address 2";
-                        Job."Sell-to City" := lSellToCust.City;
-                        Job."Sell-to County" := lSellToCust.County;
-                        Job."Sell-to Post Code" := lSellToCust."Post Code";
-                        Job."Sell-to Country/Region Code" := lSellToCust."Country/Region Code";
-                        Job."Sell-to Customer Name 2" := lSellToCust."Name 2";
-                        Job."Sell-to Contact" := lSellToCust.Contact;
-                        Job."Sell-to Customer Name" := lSellToCust.Name;
-                        Job."Sell-to Customer No." := qQuoteHeader."NS_Sell-to Customer No.";
-                        //PRJCTPR-216.VC.1.0 Start
-                        Job."Sell-to Customer No." := lSellToCust."No.";
-                        Job."Sell-to Customer Name" := lSellToCust.Name;
-                        //PRJCTPR-216.VC.1.0 End
-                        Job."Sell-to Customer Name 2" := lSellToCust."Name 2";
-                        Job.MODIFY();
+            if Job.GET("NS_Job No.") then
+                if lSellToCust.GET("NS_Sell-to Customer No.") then
+                    if lSellToCust."No." <> lSellToCust."Bill-to Customer No." then begin
+                        if lBillToCust.GET(lSellToCust."Bill-to Customer No.") then begin
+                            Job."Bill-to Name" := lBillToCust.Name;
+                            Job."Bill-to Address" := lBillToCust.Address;
+                            Job."Bill-to Address 2" := lBillToCust."Address 2";
+                            Job."Bill-to City" := lBillToCust.City;
+                            Job."Bill-to County" := lBillToCust.County;
+                            Job."Bill-to Post Code" := lBillToCust."Post Code";
+                            Job."Bill-to Country/Region Code" := lBillToCust."Country/Region Code";
+                            Job."Bill-to Name 2" := lBillToCust."Name 2";
+                            //Job."Bill-to Contact No." :=
+                            Job."Bill-to Contact" := lBillToCust.Contact;
+                            Job.MODIFY;
+                        end;
+                    end else begin
+                        Job."Bill-to Name" := lSellToCust.Name;
+                        Job."Bill-to Address" := lSellToCust.Address;
+                        Job."Bill-to Address 2" := lSellToCust."Address 2";
+                        Job."Bill-to City" := lSellToCust.City;
+                        Job."Bill-to County" := lSellToCust.County;
+                        Job."Bill-to Post Code" := lSellToCust."Post Code";
+                        Job."Bill-to Country/Region Code" := lSellToCust."Country/Region Code";
+                        Job."Bill-to Name 2" := lSellToCust."Name 2";
+                        //Job."Bill-to Contact No." :=
+                        Job."Bill-to Contact" := lSellToCust.Contact;
+                        Job.MODIFY;
                     end;
-            //PRJCTPR-164.JS.1.0 21July2023 - End                
-            if lSellToCust."No." <> lSellToCust."Bill-to Customer No." then begin
-                if lBillToCust.GET(lSellToCust."Bill-to Customer No.") then begin
-                    Job."Bill-to Name" := lBillToCust.Name;
-                    Job."Bill-to Address" := lBillToCust.Address;
-                    Job."Bill-to Address 2" := lBillToCust."Address 2";
-                    Job."Bill-to City" := lBillToCust.City;
-                    Job."Bill-to County" := lBillToCust.County;
-                    Job."Bill-to Post Code" := lBillToCust."Post Code";
-                    Job."Bill-to Country/Region Code" := lBillToCust."Country/Region Code";
-                    Job."Bill-to Name 2" := lBillToCust."Name 2";
-                    //Job."Bill-to Contact No." :=
-                    Job."Bill-to Contact" := lBillToCust.Contact;
-                    Job.MODIFY();
-                end;
-            end else begin
-                Job."Bill-to Name" := lSellToCust.Name;
-                Job."Bill-to Address" := lSellToCust.Address;
-                Job."Bill-to Address 2" := lSellToCust."Address 2";
-                Job."Bill-to City" := lSellToCust.City;
-                Job."Bill-to County" := lSellToCust.County;
-                Job."Bill-to Post Code" := lSellToCust."Post Code";
-                Job."Bill-to Country/Region Code" := lSellToCust."Country/Region Code";
-                Job."Bill-to Name 2" := lSellToCust."Name 2";
-                //Job."Bill-to Contact No." :=
-                Job."Bill-to Contact" := lSellToCust.Contact;
-                Job.MODIFY();
-            end;
-            Commit();    //PRJCTPR-164.JS.1.0
 
             JobPlanLine.RESET;
             JobPlanLine.SETRANGE("Job No.", "NS_Quote No.");
@@ -5091,6 +4584,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_OnValidateTemplate(var _QuoteHeader: Record "NS_Job Quote Header");
     var
+        UserSetup: Record "User Setup";
         _Text000: Label 'This quote has been assigned to the LIBRARY, so Template may not be changed.';
         _Text001: Label 'This quote has been assigned to the LIBRARY.  If Template is turned OFF, the document will be removed from the LIBRARY.  Continue?';
     begin
@@ -5102,6 +4596,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
                     ERROR(_Text000);
             _QuoteHeader."NS_Salesperson/User ID" := USERID;
             _QuoteHeader."NS_Created by" := USERID;  // super quote users, if modify Template, change USERID
+            // >> Upgrade
+            //FDD109 Start
+            if UserSetup.Get(UserId) then
+                _QuoteHeader."NS_Salesperson Code New" := UserSetup."Salespers./Purch. Code";
+            //FDD109 End
+            // << Upgrade
         end;                                    //   so the quote no longer appears in the LIBRARY
         _QuoteHeader.MODIFY;
     end;
@@ -5138,9 +4638,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
                         "NS_Quantity (Base)" := NS_CalcBaseQty(_QuoteLine, NS_Quantity);
                     end;
                 else begin
-                    "NS_Qty. per Unit of Measure" := 1;
-                    "NS_Quantity (Base)" := NS_Quantity;
-                end;
+                        "NS_Qty. per Unit of Measure" := 1;
+                        "NS_Quantity (Base)" := NS_Quantity;
+                    end;
             end;
 
         NS_SyncSalesQuoteLine(_QuoteLine, false);
@@ -5277,13 +4777,13 @@ codeunit 14021400 "NS_Job Quote Mgt."
                             "NS_Line Discount %" := ROUND("NS_Line Discount Amount" / NS_Amount * 100, 0.00001);
                         end
                     else begin
-                        "NS_Line Discount Amount" := NS_Amount * ("NS_Line Discount %" / 100);
-                        if "NS_Line Discount Amount" > NS_Amount then
-                            "NS_Line Discount Amount" := NS_Amount;
-                        if "NS_Line Discount Amount" < 0 then
-                            "NS_Line Discount Amount" := 0;
-                        "NS_Line Discount %" := ROUND(("NS_Line Discount Amount" / NS_Amount) * 100, 0.00001);
-                    end;
+                            "NS_Line Discount Amount" := NS_Amount * ("NS_Line Discount %" / 100);
+                            if "NS_Line Discount Amount" > NS_Amount then
+                                "NS_Line Discount Amount" := NS_Amount;
+                            if "NS_Line Discount Amount" < 0 then
+                                "NS_Line Discount Amount" := 0;
+                            "NS_Line Discount %" := ROUND(("NS_Line Discount Amount" / NS_Amount) * 100, 0.00001);
+                        end;
                 end;
 
             // synchronize the sales quote line
@@ -5626,21 +5126,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _SalesHeader: Record "Sales Header";
         _Text001: Label 'Deleting existing NAV Sales Quote No. %1 and \regenerating from this Enhanced Sales Quote No. %2 ...';
         _d: Dialog;
-        NSQuoteStatus: enum "NS_Quote Status";  //PE-300.JS.1.0 29JULY2024
-        NSQuoteStatusInt: Integer; //PE-300.JS.1.0 29JULY2024
     begin
-        //PE-300.JS.1.0 29JULY2024
-        Clear(NSQuoteStatusInt);
-        NSQuoteStatus := NSQuoteStatus::Open;
-        NSQuoteStatusInt := NSQuoteStatus.AsInteger();
-        //PE-300.JS.1.0 29JULY2024
         _QuoteHeader.TESTFIELD("NS_Sales Quote No.");
-        //PE-300-DK.1.0 29May2024 Start
-        // if _QuoteHeader.NS_Status > _QuoteHeader.NS_Status::Open then
-        //     _QuoteHeader.FIELDERROR(NS_Status);
-        if _QuoteHeader."NS_Quote Status".AsInteger() > NSQuoteStatusInt then  //PE-300.JS.1.0 29July2024
-            _QuoteHeader.FIELDERROR("NS_Quote Status");
-        //PE-300-DK.1.0 29May2024 End
+        if _QuoteHeader.NS_Status > _QuoteHeader.NS_Status::Created then
+            _QuoteHeader.FIELDERROR(NS_Status);
         if not CONFIRM(_Text000, false) then
             exit;
         _d.OPEN(STRSUBSTNO(_Text001, _QuoteHeader."NS_Sales Quote No.", _QuoteHeader."NS_Quote No."));
@@ -5805,32 +5294,17 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _SalesHeader: Record "Sales Header";
         _DocumentApprovalMgt: Codeunit "Approvals Mgmt.";
         _ReleaseSalesDoc: Codeunit "Release Sales Document";
-        NSQuoteStatus: enum "NS_Quote Status";  //PE-300.JS.1.0 29JULY2024
-        NSQuoteStatusInt: Integer; //PE-300.JS.1.0 29JULY2024        
         _Blocked: Boolean;
         _BlockedItemNo: Code[20];
         _Text000: Label 'At least one item is marked as Blocked on the Item Card:  No. %1, Mfg. Item No. %2, %3';
     begin
-        //PE-300.JS.1.0 29JULY2024
-        Clear(NSQuoteStatusInt);
-        NSQuoteStatus := NSQuoteStatus::Accepted;
-        NSQuoteStatusInt := NSQuoteStatus.AsInteger();
-        //PE-300.JS.1.0 29JULY2024        
         _QuoteHeader.TESTFIELD(NS_Template, false);
-        //PE-300-DK.1.0 29May2024 Start
-        // if _QuoteHeader.NS_Status > _QuoteHeader.NS_Status::Accepted then
-        //     _QuoteHeader.FIELDERROR(NS_Status);
-        //if _QuoteHeader."NS_Quote Status".AsInteger() > _QuoteHeader."NS_Quote Status".AsInteger() then
-        if _QuoteHeader."NS_Quote Status".AsInteger() > NSQuoteStatusInt then
-            _QuoteHeader.FIELDERROR("NS_Quote Status");
-        //PE-300-DK.1.0 29May2024 End
-        //PRJ-1170.NK.1.0 Start
-        //with _DocumentApprovalEntry do
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Open;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Open;
-        //PE-300-DK.1.0 29May2024 End
-      
+        if _QuoteHeader.NS_Status > _QuoteHeader.NS_Status::Awarded then
+            _QuoteHeader.FIELDERROR(NS_Status);
+
+        with _DocumentApprovalEntry do
+
+            _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Created;
         if _QuoteHeader."NS_Sales Quote No." <> '' then
             if _SalesHeader.GET(_SalesHeader."Document Type", _QuoteHeader."NS_Sales Quote No.") then begin
                 CLEAR(_ReleaseSalesDoc);
@@ -5873,14 +5347,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _ReleaseSalesDoc: Codeunit "Release Sales Document";
         _Proposal: Boolean;
         _Text000: Label 'Every line for Item, Resource or G/L Account must have a Category Code.  Line No. found: %1';
-        NSQuoteStatus: enum "NS_Quote Status";  //PE-300.JS.1.0 29JULY2024
-        NSQuoteStatusInt: Integer; //PE-300.JS.1.0 29JULY2024        
     begin
-        //PE-300.JS.1.0 29JULY2024
-        Clear(NSQuoteStatusInt);
-        NSQuoteStatus := NSQuoteStatus::Released;
-        NSQuoteStatusInt := NSQuoteStatus.AsInteger();
-        //PE-300.JS.1.0 29JULY2024
+
         // require category code
         _QuoteLine.SETRANGE("NS_Quote No.", _QuoteHeader."NS_Quote No.");
         _QuoteLine.SETFILTER(NS_Type, '<>%1', _QuoteLine.NS_Type::" ");
@@ -5893,19 +5361,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _QuoteHeader.TESTFIELD("NS_Sell-to Customer No.");
         _Proposal := not _QuoteHeader."NS_Equipment Only";
         _QuoteHeader.TESTFIELD(NS_Template, false);
-        //PE-300-DK.1.0 29May2024 Start
-        // if _Proposal then
-        //     _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Review)     // requires mgr approval
-        // else
-        //     if _QuoteHeader.NS_Status >= _QuoteHeader.NS_Status::Released then
-        //         _QuoteHeader.FIELDERROR(NS_Status);
         if _Proposal then
-            _QuoteHeader.TESTFIELD("NS_Quote Status", _QuoteHeader."NS_Quote Status"::Review)     // requires mgr approval
+            _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::"Estimate Pending WF")     // requires mgr approval
         else
-            //if _QuoteHeader."NS_Quote Status".Asinteger() >= _QuoteHeader."NS_Quote Status".AsInteger() then
-            if _QuoteHeader."NS_Quote Status".Asinteger() >= NSQuoteStatusInt then   //PE-300.JS.1.0 29July2024
-                _QuoteHeader.FIELDERROR("NS_Quote Status");
-        //PE-300-DK.1.0 29May2024 End
+            if _QuoteHeader.NS_Status >= _QuoteHeader.NS_Status::Submitted then
+                _QuoteHeader.FIELDERROR(NS_Status);
+
         if _QuoteHeader."NS_Equipment Only" then begin  // quotes marked equipment only do not require user to select Review action
                                                         // send approval request
             _QuoteHeader.CALCFIELDS(NS_Amount);
@@ -5933,10 +5394,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         NS_SyncSalesQuoteHeader(_QuoteHeader);
         NS_SyncSalesQuoteLines(_QuoteHeader);
-        //PE-300-DK.1.0 29May2024 Start
-        //_QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Released;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Released;
-        //PE-300-DK.1.0 29May2024 End
+
+        _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Submitted;
         _QuoteHeader.MODIFY;
 
         // release associated sales quote
@@ -5980,10 +5439,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         // test status
 
         _QuoteHeader.TESTFIELD(NS_Template, false);
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Open);
-        _QuoteHeader.TESTFIELD("NS_Quote Status", _QuoteHeader."NS_Quote Status"::Open);
-        //PE-300-DK.1.0 29May2024 End
+        _QuoteHeader.TESTFIELD(NS_Status, _QuoteHeader.NS_Status::Created);
         _QuoteHeader.TESTFIELD("NS_Equipment Only", false);
 
         // require category code
@@ -6007,43 +5463,41 @@ codeunit 14021400 "NS_Job Quote Mgt."
         end;
 
         // create Sales Quote if not exist
+        // >> Upgrade
+        // NS_CreateSalesQuoteHeader(_QuoteHeader);
 
-        NS_CreateSalesQuoteHeader(_QuoteHeader);
+        // // synchronize Sales Quote and Quote (Enhanced)
 
-        // synchronize Sales Quote and Quote (Enhanced)
+        // NS_SyncSalesQuoteHeader(_QuoteHeader);
+        // NS_SyncSalesQuoteLines(_QuoteHeader);
 
-        NS_SyncSalesQuoteHeader(_QuoteHeader);
-        NS_SyncSalesQuoteLines(_QuoteHeader);
+        // // release quote
 
-        // release quote
+        // if _SalesHeader.GET(_SalesHeader."Document Type"::Quote, _QuoteHeader."NS_Sales Quote No.") then begin
+        //     CLEAR(_ReleaseSalesDoc);
+        //     //_ReleaseSalesDoc.SetHideValidationDialog(TRUE);
+        //     _ReleaseSalesDoc.RUN(_SalesHeader);
+        // end;
 
-        if _SalesHeader.GET(_SalesHeader."Document Type"::Quote, _QuoteHeader."NS_Sales Quote No.") then begin
-            CLEAR(_ReleaseSalesDoc);
-            //_ReleaseSalesDoc.SetHideValidationDialog(TRUE);
-            _ReleaseSalesDoc.RUN(_SalesHeader);
-        end;
+        // // copy taxability information from quote
 
-        // copy taxability information from quote
-
-        _QuoteLine.SETRANGE("NS_Quote No.", _QuoteHeader."NS_Quote No.");
-        if _QuoteLine.FINDSET(true) then
-            repeat
-                if _QuoteLine."NS_Sales Quote Line No." <> 0 then
-                    if _SalesLine.GET(_SalesLine."Document Type"::Quote, _QuoteLine."NS_Sales Quote No.", _QuoteLine."NS_Sales Quote Line No.") then begin
-                        if _QuoteHeader."NS_Use Tax Liable" = _QuoteHeader."NS_Use Tax Liable"::No then begin
-                            _QuoteLine."NS_Amount Including VAT" := _SalesLine."Amount Including VAT";
-                            _QuoteLine."NS_Sales Tax Amount" := _SalesLine."Amount Including VAT" - _SalesLine.Amount;
-                        end else
-                            _QuoteLine."NS_Amount Including VAT" := _QuoteLine.NS_Amount + _QuoteLine."NS_Sales Tax Amount";
-                        _QuoteLine.MODIFY;
-                    end;
-            until _QuoteLine.NEXT = 0;
-
+        // _QuoteLine.SETRANGE("NS_Quote No.", _QuoteHeader."NS_Quote No.");
+        // if _QuoteLine.FINDSET(true) then
+        //     repeat
+        //         if _QuoteLine."NS_Sales Quote Line No." <> 0 then
+        //             if _SalesLine.GET(_SalesLine."Document Type"::Quote, _QuoteLine."NS_Sales Quote No.", _QuoteLine."NS_Sales Quote Line No.") then begin
+        //                 if _QuoteHeader."NS_Use Tax Liable" = _QuoteHeader."NS_Use Tax Liable"::No then begin
+        //                     _QuoteLine."NS_Amount Including VAT" := _SalesLine."Amount Including VAT";
+        //                     _QuoteLine."NS_Sales Tax Amount" := _SalesLine."Amount Including VAT" - _SalesLine.Amount;
+        //                 end else
+        //                     _QuoteLine."NS_Amount Including VAT" := _QuoteLine.NS_Amount + _QuoteLine."NS_Sales Tax Amount";
+        //                 _QuoteLine.MODIFY;
+        //             end;
+        //     until _QuoteLine.NEXT = 0;
+        // << Upgrade
         // set document status
-        //PE-300-DK.1.0 29May2024 Start
-        // _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Review;
-        _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Review;
-        //PE-300-DK.1.0 29May2024 End
+
+        _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::"Estimate Pending WF";
         _QuoteHeader.MODIFY;
 
         // send approval request
@@ -6069,6 +5523,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _User: Record User;
         _NewDocNo: Code[20];
         _Text000: Label 'Quote %1 was created and assigned to %2.';
+        // >> Upgrade
+        UserSetup: Record "User Setup";
+    // << Upgrade
     begin
         // if PAGE.RUNMODAL(PAGE::Users,_User) <> ACTION::LookupOK then
         //   exit;
@@ -6077,6 +5534,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _QuoteHeader2.GET(_NewDocNo);
         _QuoteHeader2."NS_Created by" := _User."User Name";
         _QuoteHeader2."NS_Salesperson/User ID" := _User."User Name";
+        // >> Upgrade
+        //FDD109 Start
+        if UserSetup.Get(_User."User Name") then
+            _QuoteHeader2."NS_Salesperson Code New" := UserSetup."Salespers./Purch. Code";
+        //FDD109 End
+        // << Upgrade
         _QuoteHeader2.NS_Template := true;
         _QuoteHeader2.MODIFY;
         MESSAGE(_Text000, _NewDocNo, _User."User Name");
@@ -6117,13 +5580,20 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _DimMgt: Codeunit DimensionManagement;
         _OldDimSetID: Integer;
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         with _QuoteHeader do begin
             _OldDimSetID := "NS_Dimension Set ID";
-            "NS_Dimension Set ID" :=
-              _DimMgt.EditDimensionSet(
-                "NS_Dimension Set ID", STRSUBSTNO('%1 %2', TABLECAPTION, "NS_Quote No."),
-                "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code");
+            // >> Upgrade
+            OnBeforeNS_ShowDocDim(_QuoteHeader, IsHandled);
+            if not IsHandled then
+                // << Upgrade
+                "NS_Dimension Set ID" :=
+                  _DimMgt.EditDimensionSet(
+                    "NS_Dimension Set ID", STRSUBSTNO('%1 %2', TABLECAPTION, "NS_Quote No."),
+                    "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code");
             if _OldDimSetID <> "NS_Dimension Set ID" then begin
                 MODIFY;
                 if NS_QuoteLinesExist(_QuoteHeader) then
@@ -6192,50 +5662,11 @@ codeunit 14021400 "NS_Job Quote Mgt."
     procedure NS_ShowJobQuote(lQuoteHeader: Record "NS_Job Quote Header");
     var
         lJob: Record Job;
-        //PRJCTPR-342.DK.1.0 Start
-        DocumentAttachment: Record "Document Attachment";
-        NS_DocumentAttachmentNew: Record "Document Attachment";
-        LineNo: Integer;
-    //PRJCTPR-342.DK.1.0 End
     begin
-        if lJob.GET(lQuoteHeader."NS_Quote No.") then;
-        NS_DocumentAttachmentNew.Reset();
-        NS_DocumentAttachmentNew.SetRange("No.", lJob."No.");
-        NS_DocumentAttachmentNew.SetRange("Table ID", 167);
-        if NS_DocumentAttachmentNew.FindSet() then
-            NS_DocumentAttachmentNew.DeleteAll();
-        //PRJCTPR-342.DK.1.0 Start 
-        DocumentAttachment.Reset();
-        DocumentAttachment.SetRange("No.", lJob."No.");
-
-        IF DocumentAttachment.FindSet() then begin
-            repeat
-                NS_DocumentAttachmentNew.Reset();
-                NS_DocumentAttachmentNew.SetRange("No.", lJob."No.");
-                NS_DocumentAttachmentNew.SetRange("Table ID", 167);
-                if NS_DocumentAttachmentNew.FINDLAST then
-                    LineNo := NS_DocumentAttachmentNew."Line No." + 1000
-                else
-                    LineNo := 1000;
-                NS_DocumentAttachmentNew.init;
-                NS_DocumentAttachmentNew."Table ID" := 167;
-                NS_DocumentAttachmentNew."Line No." := LineNo;
-                NS_DocumentAttachmentNew."No." := DocumentAttachment."No.";
-                NS_DocumentAttachmentNew."Document Type" := DocumentAttachment."Document Type";
-                NS_DocumentAttachmentNew.SystemRowVersion := DocumentAttachment.SystemRowVersion;
-                NS_DocumentAttachmentNew.ID := DocumentAttachment.ID;
-                NS_DocumentAttachmentNew."Attached Date" := DocumentAttachment."Attached Date";
-                NS_DocumentAttachmentNew."Attached By" := DocumentAttachment."Attached By";
-                NS_DocumentAttachmentNew."File Name" := DocumentAttachment."File Name";
-                NS_DocumentAttachmentNew."File Type" := DocumentAttachment."File Type";
-                NS_DocumentAttachmentNew."File Extension" := DocumentAttachment."File Extension";
-                NS_DocumentAttachmentNew."Document Reference ID" := DocumentAttachment."Document Reference ID";
-                NS_DocumentAttachmentNew.Insert();
-            until DocumentAttachment.Next = 0;
-        end;
+        lJob.GET(lQuoteHeader."NS_Quote No.");
         PAGE.RUN(PAGE::"Job Card", lJob);
     end;
-    //PRJCTPR-342.DK.1.0 End
+
     procedure NS_ShowSalesQuote(_QuoteHeader: Record "NS_Job Quote Header");
     var
         _SalesHeader: Record "Sales Header";
@@ -6287,8 +5718,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _Address: Record "Ship-to Address";
         _Customer: Record Customer;
-        //_CustomerTemplate: Record "Customer Template";  //PRJCTPR-155.JS.1.0 line commented
-        _CustomerTemplate: Record "Customer Templ.";  //PRJCTPR-155.JS.1.0 line added
+        _CustomerTemplate: Record "Customer Template";
         _SalesHeader: Record "Sales Header";
         _DimMgt: Codeunit DimensionManagement;
         _ReleaseSalesDoc: Codeunit "Release Sales Document";
@@ -6321,8 +5751,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         if (_QuoteHeader."NS_Sell-to Customer No." = '') and (_QuoteHeader."NS_Bill-to Customer No." = '') then
             if _CustomerTemplate.FINDFIRST then
-                // _SalesHeader."Sell-to Customer Template Code" := _CustomerTemplate.Code;//PRJ-1620.AS.1.0 COMMENTED As per V21 Validations not allowing
-        _SalesHeader."Sell-to Customer Templ. Code" := _CustomerTemplate.Code;//PRJ-1620.AS.1.0 Added/Replaced As per V21 Validations
+                _SalesHeader."Sell-to Customer Template Code" := _CustomerTemplate.Code;
         if _QuoteHeader."NS_Contact No." <> '' then
             if _SalesHeader."Sell-to Contact No." <> _QuoteHeader."NS_Contact No." then
                 _SalesHeader.VALIDATE("Sell-to Contact No.", _QuoteHeader."NS_Contact No.");
@@ -6731,6 +6160,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _DimMgt: Codeunit DimensionManagement;
         _OldDimSetID: Integer;
+        // >> Upgrade
+        Job: Record Job;
+    // << Upgrade
     begin
         with _QuoteHeader do begin
             _OldDimSetID := "NS_Dimension Set ID";
@@ -6742,6 +6174,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 MODIFY;
                 if NS_QuoteLinesExist(_QuoteHeader) then
                     NS_UpdateAllLineDim(_QuoteHeader, "NS_Dimension Set ID", _OldDimSetID);
+                // >> Upgrade
+                NS_ValidateShortcutDimCode1(_QuoteHeader, _ShortcutDimCode, _FieldNumber);
+
+                // << Upgrade
             end;
         end;
 
@@ -7136,16 +6572,16 @@ codeunit 14021400 "NS_Job Quote Mgt."
         QuoteJob.RESET;
         QuoteJob.INIT;
         QuoteJob."No." := lJobQuote."NS_Quote No.";
-        //PRJCTPR-197 Dk.1.0 Start
-        //QuoteJob."NS_Job Type" := lJobQuote."NS_Job Type Code";
-        QuoteJob."NS_Job Type New" := lJobQuote."NS_Job Type Code";
-        //PRJCTPR-197 Dk.1.0 End
+        QuoteJob."NS_Job Type" := lJobQuote."NS_Job Type Code";
         if lJobQuote."NS_Job Class" <> 0 then
             QuoteJob."NS_Job Class" := lJobQuote."NS_Job Class"
         else
             QuoteJob."NS_Job Class" := QuoteJob."NS_Job Class"::Proposed;
         QuoteJob.InitVar(TrueFalse, true);
         QuoteJob.SetDisableLoadTasks(DisableJobTaskLoad);
+        // >> Upgrade
+        NS_CreateQuoteJob1(QuoteJob, lJobQuote);
+        // << Upgrade
         if not QuoteJob.INSERT(true) then
             QuoteJob.MODIFY(true);
     end;
@@ -7162,21 +6598,22 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 QuoteJob.Validate("NS_Sell-to Customer No.", JobQuote."NS_Sell-to Customer No.");
             if QuoteJob."Bill-to Customer No." <> JobQuote."NS_Bill-to Customer No." then
                 QuoteJob.VALIDATE("Bill-to Customer No.", JobQuote."NS_Bill-to Customer No.");
-            QuoteJob."Creation Date" := JobQuote."NS_Proposal Date";
+            // >> Upgrade
+            //>>FDD101.01
+            //QuoteJob."Creation Date" := JobQuote."Proposal Date";
+            QuoteJob."Creation Date" := JobQuote."NS_Created at Date";
+            //<<FDD101.01
+            // << Upgrade
             QuoteJob."Starting Date" := JobQuote."NS_Estimated Start Date";
             QuoteJob."Ending Date" := JobQuote."NS_Estimated Completion Date";
-            QuoteJob.NS_EnblGLNResGMCalc := JobQuote.NS_EnblGLNResGMCalc;//PRJ-1443
             QuoteJob.Status := QuoteJob.Status::Quote;
             QuoteJob."NS_Job Class" := QuoteJob."NS_Job Class"::Proposed;
             QuoteJob."Global Dimension 1 Code" := JobQuote."NS_Shortcut Dimension 1 Code";
             QuoteJob."Global Dimension 2 Code" := JobQuote."NS_Shortcut Dimension 2 Code";
             //QuoteJob.VALIDATE("NS_Salesperson Code", JobQuote."NS_Salesperson Code");//PRJ-867.AS.1.0 23SEPT2021 Comment
             QuoteJob.VALIDATE("NS_Salesperson Code", JobQuote."NS_Salesperson Code New");//PRJ-867.AS.1.0 23SEPT2021 Changed field Sales Person code to Sales person code New
-                                                                                         //QuoteJob."Job Type" := FORMAT(JobQuote."Job Type");//*
-                                                                                         //PRJCTPR-197 Dk.1.0 Start
-                                                                                         // QuoteJob."NS_Job Type" := JobQuote."NS_Job Type Code";
-            QuoteJob."NS_Job Type New" := JobQuote."NS_Job Type Code";
-            //PRJCTPR-197 Dk.1.0 End
+            //QuoteJob."Job Type" := FORMAT(JobQuote."Job Type");//*
+            QuoteJob."NS_Job Type" := JobQuote."NS_Job Type Code";
             QuoteJob."NS_Job Class" := JobQuote."NS_Job Class";
             QuoteJob."NS_Sub-Level to Job No." := JobQuote."NS_Sub-Level to Job No.";
             QuoteJob."NS_Owner No." := JobQuote."NS_Owner No.";
@@ -7194,12 +6631,15 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_CCIP/OCIP/RCOIP Insurance" := JobQuote."NS_CCIP/OCIP/RCOIP Insurance";
             QuoteJob."NS_Lien Waiver Required" := JobQuote."NS_Lien Waiver Required";
             QuoteJob."NS_Billing Cutoff Day of Month" := JobQuote."NS_Billing Cutoff Day of Month";
-            QuoteJob."NS_Estimated Start Date" := JobQuote."NS_Estimated Start Date";
-            QuoteJob."NS_Estimated Completion Date" := JobQuote."NS_Estimated Completion Date";
+            // >> Upgrade
+            // >> 001
+            //QuoteJob."NS_Estimated Start Date" := JobQuote."NS_Estimated Start Date";
+            //QuoteJob."NS_Estimated Completion Date" := JobQuote."NS_Estimated Completion Date";
+            // << 001
+            // << Upgrade
             QuoteJob."NS_Tax Area Code" := JobQuote."NS_Tax Area Code";
             QuoteJob."NS_Tax Liable" := JobQuote."NS_Tax Liable";
-            // QuoteJob."NS_Tax Group Code" := JobQuote."NS_Tax Group Code"; //PRJCTPR-298.JS.1.0 16JAN2024
-            QuoteJob."NS_Tax Group Code New" := JobQuote."NS_Tax Group Code";  //PRJCTPR-298.JS.1.0
+            QuoteJob."NS_Tax Group Code" := JobQuote."NS_Tax Group Code";
             QuoteJob."NS_VAT Bus. Posting Group" := JobQuote."NS_VAT Bus. Posting Group";
             QuoteJob."NS_VAT Prod. Posting Group" := JobQuote."NS_VAT Prod. Posting Group";
             QuoteJob."NS_Use Tax SKU" := JobQuote."NS_Use Tax SKU";
@@ -7217,6 +6657,15 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_Job Post Code" := JobQuote."NS_Job Post Code";
             QuoteJob."NS_Job Country/Region Code" := JobQuote."NS_Job Country/Region Code";
             QuoteJob."NS_Job Ship-to Code" := JobQuote."NS_Job Ship-to Code";
+            // >> Upgrade
+            //>>TG060818
+            QuoteJob."NS_Customer Job No." := JobQuote."Customer Job No.";
+            //<<TG060818
+            // << Upgrade
+            // >> Upgrade
+            NS_ModifyQuoteJob1(QuoteJob, JobQuote);
+            // << Upgrade
+
             QuoteJob.MODIFY;
         end;
     end;
@@ -7310,72 +6759,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 end;
             until _JobTakeoffSegments.NEXT = 0;
     end;
-
-    //PRJ-914.AS.1.0 START
-    local procedure NS_ConvertQuoteSegmentsChangeOrder(UpdateJob: Record Job; lJob: Record Job);
-    var
-        _JobTakeoffSegments: Record "NS_Job Takeoff Segments";
-        _JobPlanningLine: Record "Job Planning Line";
-        NewSegment: Record "NS_Job Takeoff Segments";
-        _LastJPL: Record "Job Planning Line";
-        _LineNo: Integer;
-        JobPostingGroup: Record "Job Posting Group";
-        JobsSetup: Record "Jobs Setup";
-        TotalContractPrice: Decimal;
-    begin
-        JobsSetup.GET;
-        JobsSetup.TESTFIELD("NS_Billing Job Task No.");
-
-        if JobPostingGroup.GET(UpdateJob."Job Posting Group") then;
-        JobPostingGroup.TESTFIELD("Recognized Sales Account");
-
-        _JobTakeoffSegments.RESET;
-        _JobTakeoffSegments.SETRANGE("NS_Job No.", UpdateJob."No.");
-        if _JobTakeoffSegments.FINDSET then
-            repeat
-
-                _JobTakeoffSegments.CALCFIELDS("NS_Schedule (Total Price)");
-                if _JobTakeoffSegments."NS_Total Contract Price" = 0 then
-                    TotalContractPrice := _JobTakeoffSegments."NS_Schedule (Total Price)"
-                else
-                    TotalContractPrice := _JobTakeoffSegments."NS_Total Contract Price";
-
-                if TotalContractPrice > 0 then begin
-
-                    //Create Job Takeoff Segment for new Job
-                    NewSegment.INIT;
-                    NewSegment := _JobTakeoffSegments;
-                    NewSegment."NS_Job No." := lJob."No.";
-                    //IF NewSegment.INSERT THEN;
-                    NewSegment.INSERT(true);
-
-                    //Look for last Job Planning Line to get Line No.
-                    _LastJPL.RESET;
-                    _LastJPL.SETRANGE("Job No.", lJob."No.");
-                    _LastJPL.SETRANGE("Job Task No.", JobsSetup."NS_Billing Job Task No.");
-                    if _LastJPL.FINDLAST then
-                        _LineNo := _LastJPL."Line No." + 10000
-                    else
-                        _LineNo := 10000;
-
-                    //Create Job Planning Lines of type Billable for the Segment Total
-                    _JobPlanningLine.INIT;
-                    _JobPlanningLine.VALIDATE("Job No.", lJob."No.");
-                    _JobPlanningLine.VALIDATE("Job Task No.", JobsSetup."NS_Billing Job Task No.");
-                    _JobPlanningLine.VALIDATE("Line No.", _LineNo);
-                    _JobPlanningLine.VALIDATE("NS_Segment Code", _JobTakeoffSegments."NS_Segment Code");
-                    _JobPlanningLine.VALIDATE(Type, _JobPlanningLine.Type::"G/L Account");
-                    _JobPlanningLine.VALIDATE("No.", JobPostingGroup."Recognized Sales Account");
-                    _JobPlanningLine.VALIDATE("Line Type", _JobPlanningLine."Line Type"::Billable);
-                    _JobPlanningLine.VALIDATE(Quantity, 1);
-                    _JobPlanningLine.VALIDATE("Unit Price", TotalContractPrice);
-                    _JobPlanningLine.VALIDATE("Planning Date", TODAY);
-                    _JobPlanningLine.Description := _JobTakeoffSegments."NS_Segment Name";
-                    _JobPlanningLine.INSERT;
-                end;
-            until _JobTakeoffSegments.NEXT = 0;
-    end;
-    //PRJ-914.AS.1.0 END
 
     procedure NS_SetBySegment(PassSegment: Boolean);
     begin
@@ -7498,15 +6881,11 @@ codeunit 14021400 "NS_Job Quote Mgt."
         TotalBySegment: Decimal;
         SegmentScopeOfWork: Record "NS_Job Quote Scope of Work";
         QuoteSetup: Record "Jobs Setup";
-        NSQuoteStatus: enum "NS_Quote Status";  //PE-300.JS.1.0 29JULY2024
-        NSQuoteStatusInt: Integer; //PE-300.JS.1.0 29JULY2024
+        // >> Upgrade
+        Ins: InStream;
+    // << Upgrade
     begin
         CLEAR(_QuoteDoc);
-        //PE-300.JS.1.0 29JULY2024
-        Clear(NSQuoteStatusInt);
-        NSQuoteStatus := NSQuoteStatus::Released;
-        NSQuoteStatusInt := NSQuoteStatus.AsInteger();
-        //PE-300.JS.1.0 29JULY2024
         _QuoteDoc.Initialize(_QuoteHeader);
         _Proposal := not _QuoteHeader."NS_Equipment Only";
 
@@ -7533,10 +6912,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         // set draft/"Internal Use Only"
 
         if _Proposal then
-            //PE-300-DK.1.0 29May2024 Start
-            //if _QuoteHeader.NS_Status < _QuoteHeader.NS_Status::Released then
-            if _QuoteHeader."NS_Quote Status".AsInteger() < NSQuoteStatusInt then  //PE-300-DK.1.0 29May2024 29July2024
-                //PE-300-DK.1.0 29May2024 End
+            if _QuoteHeader.NS_Status < _QuoteHeader.NS_Status::Submitted then
                 if not GUIALLOWED then
                     exit
                 else
@@ -8326,15 +7702,8 @@ codeunit 14021400 "NS_Job Quote Mgt."
         Segment: Record "NS_Job Takeoff Segments";
         TotalBySegment: Decimal;
         QuoteSetup: Record "Jobs Setup";
-        NSQuoteStatus: enum "NS_Quote Status";  //PE-300.JS.1.0 29JULY2024
-        NSQuoteStatusInt: Integer; //PE-300.JS.1.0 29JULY2024        
     begin
         CLEAR(_QuoteDoc);
-        //PE-300.JS.1.0 29JULY2024
-        Clear(NSQuoteStatusInt);
-        NSQuoteStatus := NSQuoteStatus::Released;
-        NSQuoteStatusInt := NSQuoteStatus.AsInteger();
-        //PE-300.JS.1.0 29JULY2024        
         _QuoteDoc.Initialize(_QuoteHeader);
         _Proposal := not _QuoteHeader."NS_Equipment Only";
 
@@ -8366,10 +7735,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         // set draft/"Internal Use Only"
 
         if _Proposal then
-            //PE-300-DK.1.0 29May2024 Start
-            //if _QuoteHeader.NS_Status < _QuoteHeader.NS_Status::Released then
-            if _QuoteHeader."NS_Quote Status".AsInteger() < NSQuoteStatusInt then  //PE-300.JS.1.0 29July2024
-                //PE-300-DK.1.0 29May2024 End
+            if _QuoteHeader.NS_Status < _QuoteHeader.NS_Status::Submitted then
                 if not GUIALLOWED then
                     exit
                 else
@@ -9124,13 +8490,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
     begin
         with Rec do begin
             CALCFIELDS("NS_Schedule (Total Cost)", "NS_Schedule (Total Price)");
-            //PRJ-1104.AS.1.0 START Commented Code //PRJ-1104.JS.1.0 02FEB2022
             if "NS_Total Contract Price" = 0 then
                 TotalPrice := "NS_Schedule (Total Price)"
             else
                 TotalPrice := "NS_Total Contract Price";
-            //PRJ-1104.AS.1.0 END Commented Code  //PRJ-1104.JS.1.0 02FEB2022
-            //TotalPrice := "NS_Schedule (Total Price)";//PRJ-1104.AS.1.0 Added code line commented //PRJ-1104.JS.1.0 02FEB2022
 
             if TotalPrice <> 0 then begin
                 if "NS_Schedule (Total Cost)" <> 0 then
@@ -9142,7 +8505,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Gross Profit" := 0;
                 "NS_Gross Profit Percent" := 0;
             end;
-            MODIFY();
+            MODIFY;
         end;
     end;
 
@@ -9160,23 +8523,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 JobTask.INSERT;
             until QuoteJobTask.NEXT = 0;
     end;
-
-    //PRJ-914.AS.1.0 - START
-    local procedure NS_CopyQuoteJobTasksToJobChangeOrder(Updatejob: Record Job; Job: Record Job);
-    var
-        QuoteJobTask: Record "Job Task";
-        JobTask: Record "Job Task";
-    begin
-        QuoteJobTask.SETRANGE("Job No.", Updatejob."No.");
-        if QuoteJobTask.FINDSET then
-            repeat
-                JobTask.INIT;
-                JobTask := QuoteJobTask;
-                JobTask."Job No." := Job."No.";
-                JobTask.INSERT;
-            until QuoteJobTask.NEXT = 0;
-    end;
-    //PRJ-914.AS.1.0 - END
 
     local procedure NS_DeleteQuoteJobTasks(JobQuoteHeader: Record "NS_Job Quote Header");
     var
@@ -9201,23 +8547,6 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 JPL.INSERT;
             until QuoteJPL.NEXT = 0;
     end;
-
-    //PRJ-914.AS.1.0 - START
-    local procedure NS_CopyQuoteJPLToJobChangeOrder(UpdateJob: Record Job; Job: Record Job);
-    var
-        QuoteJPL: Record "Job Planning Line";
-        JPL: Record "Job Planning Line";
-    begin
-        QuoteJPL.SETRANGE("Job No.", UpdateJob."No.");
-        if QuoteJPL.FINDSET then
-            repeat
-                JPL.INIT;
-                JPL := QuoteJPL;
-                JPL."Job No." := Job."No.";
-                JPL.INSERT;
-            until QuoteJPL.NEXT = 0;
-    end;
-    //PRJ-914.AS.1.0 - END
 
     local procedure NS_DeleteQuoteJPL(JobQuoteHeader: Record "NS_Job Quote Header");
     var
@@ -9482,99 +8811,63 @@ codeunit 14021400 "NS_Job Quote Mgt."
             until PlanLine_L.NEXT = 0;
     end;
     //PRJ-774.AS.1.0 - end
+    //(,);
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterNS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header")
+    begin
+    end;
 
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterNS_OnDeleteQuote(var _QuoteHeader: Record "NS_Job Quote Header")
+    begin
+    end;
 
-    //PRJ-914.AS.1.0 20OCT2021 START Created New Function
-    LOCAL PROCEDURE NS_GetNextChangeOrderNo(PassJobNo: Code[20]; PassJobSeparator: Text[10]): Code[20];
-    VAR
-        JobRec: Record 167;
-        NS_JobSetup: Record "Jobs Setup";  //PE-246.HS.1.0 1Feb2024 
-    BEGIN
-        if NS_JobSetup.Get() then; //PE-246.HS.1.0 1Feb2024 
-        if (NS_JobSetup."NS_Change Ordr NumberingFormat" = '') then begin   //PE-246.HS.1.0 1Feb2024 
-            JobRec.RESET;
-            Job.SETFILTER("No.", '%1', PassJobNo + PassJobSeparator + '*');
-            IF Job.FINDLAST THEN BEGIN
-                EXIT(INCSTR(Job."No."));
-            END ELSE
-                EXIT(PassJobNo + PassJobSeparator + '001');
-        end  //PE-246.HS.1.0 1Feb2024 
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnInsertQuote1(var _QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
+    begin
+    end;
 
-        //PE-246.HS.1.0 1Feb2024 Start
-        else begin
-            JobRec.RESET;
-            Job.SETFILTER("No.", '%1', PassJobNo + PassJobSeparator + '*');
-            IF Job.FINDLAST THEN BEGIN
-                EXIT(INCSTR(Job."No."));
-            END ELSE
-                EXIT(PassJobNo + PassJobSeparator + NS_JobSetup."NS_Change Ordr NumberingFormat");
-        end;
-        //PE-246.HS.1.0 1Feb2024 End
-    END;
-    //PRJ-914.AS.1.0 20OCT2021 END
-    //PRJ-1487.NK.1.0 01Jul2022 Start
-    [EventSubscriber(ObjectType::Page, Page::"Document Attachment Factbox", 'OnBeforeDrillDown', '', false, false)]
-    local procedure OnBeforeDrillDown(DocumentAttachment: Record "Document Attachment"; var RecRef: RecordRef)
-    var
-        JobQuoteHead: Record "NS_Job Quote Header";
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnInsertQuote2(var _QuoteHeader: Record "NS_Job Quote Header"; var _UserSetup: Record "User Setup")
     begin
-        case DocumentAttachment."Table ID" of
-            DATABASE::"NS_Job Quote Header":
-                begin
-                    RecRef.Open(DATABASE::"NS_Job Quote Header");
-                    if JobQuoteHead.Get(DocumentAttachment."No.") then
-                        RecRef.GetTable(JobQuoteHead);
-                end;
-        end;
     end;
-    //PRJCTPR-342.DK.2.0 Start
-    [EventSubscriber(ObjectType::Page, Page::"Document Attachment Factbox", 'OnBeforeDrillDown', '', false, false)]
-    local procedure OnBeforeDrillDownJob(DocumentAttachment: Record "Document Attachment"; var RecRef: RecordRef)
-    var
-        JobQuoteHead: Record "NS_Job Quote Header";
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnInsertQuote3(var _QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
     begin
-        case DocumentAttachment."Table ID" of
-            DATABASE::Job:
-                begin
-                    RecRef.Open(DATABASE::"NS_Job Quote Header");
-                    if JobQuoteHead.Get(DocumentAttachment."No.") then
-                        RecRef.GetTable(JobQuoteHead);
-                end;
-        end;
     end;
-    //PRJCTPR-342.DK.2.0 End
-    [EventSubscriber(ObjectType::Page, Page::"Document Attachment Details", 'OnAfterOpenForRecRef', '', false, false)]
-    local procedure OnAfterOpenForRecRef(var DocumentAttachment: Record "Document Attachment"; var RecRef: RecordRef; var FlowFieldsEditable: Boolean)
-    var
-        FieldRef1: FieldRef;
-        RecNo: Code[20];
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeNS_ShowDocDim(var _QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
     begin
-        case RecRef.Number of
-            database::"NS_Job Quote Header":
-                begin
-                    FieldRef1 := RecRef.Field(11);
-                    RecNo := FieldRef1.Value;
-                    DocumentAttachment.SetRange("No.", RecNo);
-                end;
-        end;
     end;
-    //PRJ-1487.NK.1.0 01Jul2022 End
-    //PRJCTPR-342.DK.2.0 Start
-    [EventSubscriber(ObjectType::Table, Database::"Document Attachment", 'OnAfterInitFieldsFromRecRef', '', false, false)]
-    local procedure NS_OnAfterInitFieldsFromRecRef(var DocumentAttachment: Record "Document Attachment"; var RecRef: RecordRef)
-    var
-        FieldRef: FieldRef;
-        RecNo: Code[20];
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_ValidateShortcutDimCode1(var _QuoteHeader: Record "NS_Job Quote Header"; var _ShortcutDimCode: Code[20]; var _FieldNumber: Integer)
     begin
-        case RecRef.Number of
-            DATABASE::"NS_Job Quote Header":
-                begin
-                    FieldRef := RecRef.Field(11);
-                    RecNo := FieldRef.Value;
-                    DocumentAttachment.Validate("No.", RecNo);
-                end;
-        end;
     end;
-    //PRJCTPR-342.DK.2.0 End
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_CreateQuoteJob1(var QuoteJob: Record Job; var lJobQuote: Record "NS_Job Quote Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_ModifyQuoteJob1(var QuoteJob: Record Job; var JobQuote: Record "NS_Job Quote Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_LoadFromJobTmplOnBeforeInsert(var QuoteTaskLine: Record "Job Task"; var SeqNo: integer)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnValidateBillToCustomerOnBefore(_QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: boolean)
+    begin
+
+    end;
+    // << Upgrade
 }
 

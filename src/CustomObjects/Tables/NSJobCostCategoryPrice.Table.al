@@ -9,7 +9,7 @@ table 14021178 "NS_Job Cost Category Price"
     // +  - www.gemko.com
     //PRJ-295.MS.1.0 changes flow field value
     // +------------------------------------------------------------
-    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks  Custmization
+
     Caption = 'Job Cost Category Price';
 
     fields
@@ -54,20 +54,6 @@ table 14021178 "NS_Job Cost Category Price"
                 "NS_Unit Cost Factor" := 1 + "NS_Markup %" / 100;
             end;
         }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        field(6; "NS_Degree of Difficulty"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Degree of Difficulty';
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End;
-        //PRJ-1417.NK.1.0 12Jul2022 Start
-        field(7; "NS_Quote Category"; Code[30])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Quote Category';
-        }
-        //PRJ-1417.NK.1.0 12Jul2022 end
     }
 
     keys
@@ -80,11 +66,5 @@ table 14021178 "NS_Job Cost Category Price"
     fieldgroups
     {
     }
-    //PRJ-1058.GK.1.0 26Nov2021 start Twinoaks 
-    trigger OnInsert()
-    begin
-        Rec."NS_Degree of Difficulty" := 1;
-    end;
-    //PRJ-1058.GK.1.0 26Nov2021 end Twinoaks
 }
 

@@ -2,7 +2,6 @@ tableextension 14021102 NS_GLEntry extends "G/L Entry"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
     //PRJ-490.AM.1.0 Added Fields.
-    //PE-209.HS.1.0 7Dec2023 | Obselete Bal. to Ledger No.
 
     fields
     {
@@ -14,13 +13,7 @@ tableextension 14021102 NS_GLEntry extends "G/L Entry"
         }
         field(14021129; "NS_Bal. Ledger No."; Code[20])
         {
-            //PE-209.HS.1.0 7Dec2023 Start
-            // Caption = 'Bal. Ledger No.'; // commented
-            Caption = 'Bal. Ledger No. (Obsolete)';
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in next build';
-            ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-            //PE-209.HS.1.0 7Dec2023  End
+            Caption = 'Bal. Ledger No.';
             Description = 'ProjectPro';
             TableRelation = "NS_Retention Ledger Code".NS_Code;
             DataClassification = CustomerContent;
@@ -85,22 +78,6 @@ tableextension 14021102 NS_GLEntry extends "G/L Entry"
             DataClassification = CustomerContent;
 
         }
-        //PE-136.JS.1.0 03Aug2023 - Start
-        field(14021421; "NS_RevRec Reverced Entry Job"; Code[20])
-        {
-            Caption = 'Rev. Rec. Reverced Entry Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        field(14021422; "NS_RevRec GenJnl Document No."; code[20])
-        {
-            Caption = 'Rev. Rec. GenJnl Document No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        //PE-136.JS.1.0 03Aug2023 - end
     }
     /* +------------------------------------------------------------
       +ProjectPro

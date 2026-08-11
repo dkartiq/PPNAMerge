@@ -1,8 +1,7 @@
 pageextension 14021458 NS_PurchaseOrderList extends "Purchase Order List"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Orders'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Amount Received Not Invoiced (LCY)")

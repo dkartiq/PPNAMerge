@@ -138,14 +138,9 @@ report 14021341 "NS_Progress Payment AIA G703"
                 column(ItemNum; ItemNum)
                 {
                 }
-                //PRJ-1652.GK.1.0 29Sept2022 start
-                // column(Description; "NS_Task Description")
-                // {
-                // }
-                column(Description; "NS_Task Description New")
+                column(Description; "NS_Task Description")
                 {
                 }
-                //PRJ-1652.GK.1.0 29Sept2022 end
                 column(ScheduledValue; ScheduledValue)
                 {
                 }
@@ -193,10 +188,7 @@ report 14021341 "NS_Progress Payment AIA G703"
                     ItemNum := CommentItemNo;
                     if "NS_Item No." > '' then
                         ItemNum := "NS_Item No.";
-                    //PRJ-1652.GK.1.0 29Sept2022 start   
-                    //"NS_Task Description" := "NS_Task Description";
-                    "NS_Task Description New" := "NS_Task Description New";
-                    //PRJ-1652.GK.1.0 29Sept2022 end
+                    "NS_Task Description" := "NS_Task Description";
                     if "NS_Payment Method" > 0 then begin
                         ScheduledValue := NS_LastBase("Progress Payment Line");
                         PreviousWork := NS_LastTotal("Progress Payment Line");

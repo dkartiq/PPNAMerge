@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Job_Forecast_Caption">
+          <DataField>Job_Forecast_Caption</DataField>
+        </Field>
+        <Field Name="FinalRoundingDec">
+          <DataField>FinalRoundingDec</DataField>
+        </Field>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO_Caption">
+          <DataField>CurrReport_PAGENO_Caption</DataField>
+        </Field>
+        <Field Name="Job_Name_Caption">
+          <DataField>Job_Name_Caption</DataField>
+        </Field>
+        <Field Name="Job_Task_No_Caption">
+          <DataField>Job_Task_No_Caption</DataField>
+        </Field>
+        <Field Name="Job_Task_Description_Caption">
+          <DataField>Job_Task_Description_Caption</DataField>
+        </Field>
+        <Field Name="Work_Units_Caption">
+          <DataField>Work_Units_Caption</DataField>
+        </Field>
+        <Field Name="Work_Unit_Of_Measure_Caption">
+          <DataField>Work_Unit_Of_Measure_Caption</DataField>
+        </Field>
+        <Field Name="Status_Date_Caption">
+          <DataField>Status_Date_Caption</DataField>
+        </Field>
+        <Field Name="Units_Complete_Caption">
+          <DataField>Units_Complete_Caption</DataField>
+        </Field>
+        <Field Name="Percent_Complete_Caption">
+          <DataField>Percent_Complete_Caption</DataField>
+        </Field>
+        <Field Name="Cost_To_Complete_Caption">
+          <DataField>Cost_To_Complete_Caption</DataField>
+        </Field>
+        <Field Name="Forecasted_Completed_Cost_Caption">
+          <DataField>Forecasted_Completed_Cost_Caption</DataField>
+        </Field>
+        <Field Name="Budgeted_Costs_Caption">
+          <DataField>Budgeted_Costs_Caption</DataField>
+        </Field>
+        <Field Name="Total_Budgeted_Cost_Caption">
+          <DataField>Total_Budgeted_Cost_Caption</DataField>
+        </Field>
+        <Field Name="Total_Costs_Used_Caption">
+          <DataField>Total_Costs_Used_Caption</DataField>
+        </Field>
+        <Field Name="Budget_Remaining_Caption">
+          <DataField>Budget_Remaining_Caption</DataField>
+        </Field>
+        <Field Name="Budget_Percentage_Used_Caption">
+          <DataField>Budget_Percentage_Used_Caption</DataField>
+        </Field>
+        <Field Name="New_Status_Date_Caption">
+          <DataField>New_Status_Date_Caption</DataField>
+        </Field>
+        <Field Name="New_Total_Units_Complete_Caption">
+          <DataField>New_Total_Units_Complete_Caption</DataField>
+        </Field>
+        <Field Name="New_Total_Percent_Complete_Caption">
+          <DataField>New_Total_Percent_Complete_Caption</DataField>
+        </Field>
+        <Field Name="Estimated_Cost_To_Complete_Caption">
+          <DataField>Estimated_Cost_To_Complete_Caption</DataField>
+        </Field>
+        <Field Name="Forecasted_Variance_Caption">
+          <DataField>Forecasted_Variance_Caption</DataField>
+        </Field>
+        <Field Name="Forecast_Summary_Caption">
+          <DataField>Forecast_Summary_Caption</DataField>
+        </Field>
+        <Field Name="Total_Forecasted_Completed_Cost_Caption">
+          <DataField>Total_Forecasted_Completed_Cost_Caption</DataField>
+        </Field>
+        <Field Name="Total_Forecasted_Variance_Caption">
+          <DataField>Total_Forecasted_Variance_Caption</DataField>
+        </Field>
+        <Field Name="Total_Cost_To_Date_Caption">
+          <DataField>Total_Cost_To_Date_Caption</DataField>
+        </Field>
+        <Field Name="Total_Budget_Remaining_Caption">
+          <DataField>Total_Budget_Remaining_Caption</DataField>
+        </Field>
+        <Field Name="Forecasted_Cost_Remaining_Caption">
+          <DataField>Forecasted_Cost_Remaining_Caption</DataField>
+        </Field>
+        <Field Name="Net_Cost_Variance_Caption">
+          <DataField>Net_Cost_Variance_Caption</DataField>
+        </Field>
+        <Field Name="Job_Percent_Complete_Caption">
+          <DataField>Job_Percent_Complete_Caption</DataField>
+        </Field>
+        <Field Name="Revenue_Earned_Caption">
+          <DataField>Revenue_Earned_Caption</DataField>
+        </Field>
+        <Field Name="Gross_Margins_Amount_Caption">
+          <DataField>Gross_Margins_Amount_Caption</DataField>
+        </Field>
+        <Field Name="Gross_Margins_Percent_Caption">
+          <DataField>Gross_Margins_Percent_Caption</DataField>
+        </Field>
+        <Field Name="Total_Contract_Revenue_Caption">
+          <DataField>Total_Contract_Revenue_Caption</DataField>
+        </Field>
+        <Field Name="Job_Forecast_Job_No">
+          <DataField>Job_Forecast_Job_No</DataField>
+        </Field>
+        <Field Name="Job_Name">
+          <DataField>Job_Name</DataField>
+        </Field>
+        <Field Name="Job_Task_No">
+          <DataField>Job_Task_No</DataField>
+        </Field>
+        <Field Name="Job_Task_Description">
+          <DataField>Job_Task_Description</DataField>
+        </Field>
+        <Field Name="Work_Units">
+          <DataField>Work_Units</DataField>
+        </Field>
+        <Field Name="Work_UnitsFormat">
+          <DataField>Work_UnitsFormat</DataField>
+        </Field>
+        <Field Name="Work_Unit_of_Measure">
+          <DataField>Work_Unit_of_Measure</DataField>
+        </Field>
+        <Field Name="Status_Date">
+          <DataField>Status_Date</DataField>
+        </Field>
+        <Field Name="Units_Complete">
+          <DataField>Units_Complete</DataField>
+        </Field>
+        <Field Name="Units_CompleteFormat">
+          <DataField>Units_CompleteFormat</DataField>
+        </Field>
+        <Field Name="Percent_Complete">
+          <DataField>Percent_Complete</DataField>
+        </Field>
+        <Field Name="Percent_CompleteFormat">
+          <DataField>Percent_CompleteFormat</DataField>
+        </Field>
+        <Field Name="Cost_To_Complete">
+          <DataField>Cost_To_Complete</DataField>
+        </Field>
+        <Field Name="Cost_To_CompleteFormat">
+          <DataField>Cost_To_CompleteFormat</DataField>
+        </Field>
+        <Field Name="Forecasted_Completed_Cost">
+          <DataField>Forecasted_Completed_Cost</DataField>
+        </Field>
+        <Field Name="Forecasted_Completed_CostFormat">
+          <DataField>Forecasted_Completed_CostFormat</DataField>
+        </Field>
+        <Field Name="Budgeted_Costs">
+          <DataField>Budgeted_Costs</DataField>
+        </Field>
+        <Field Name="Budgeted_CostsFormat">
+          <DataField>Budgeted_CostsFormat</DataField>
+        </Field>
+        <Field Name="Total_Budgeted_Costs">
+          <DataField>Total_Budgeted_Costs</DataField>
+        </Field>
+        <Field Name="Total_Budgeted_CostsFormat">
+          <DataField>Total_Budgeted_CostsFormat</DataField>
+        </Field>
+        <Field Name="Total_Costs_Used">
+          <DataField>Total_Costs_Used</DataField>
+        </Field>
+        <Field Name="Total_Costs_UsedFormat">
+          <DataField>Total_Costs_UsedFormat</DataField>
+        </Field>
+        <Field Name="Budget_Remaining">
+          <DataField>Budget_Remaining</DataField>
+        </Field>
+        <Field Name="Budget_RemainingFormat">
+          <DataField>Budget_RemainingFormat</DataField>
+        </Field>
+        <Field Name="Budget_Percentage_Used">
+          <DataField>Budget_Percentage_Used</DataField>
+        </Field>
+        <Field Name="Budget_Percentage_UsedFormat">
+          <DataField>Budget_Percentage_UsedFormat</DataField>
+        </Field>
+        <Field Name="New_Status_Date">
+          <DataField>New_Status_Date</DataField>
+        </Field>
+        <Field Name="New_Total_Units_Complete">
+          <DataField>New_Total_Units_Complete</DataField>
+        </Field>
+        <Field Name="New_Total_Units_CompleteFormat">
+          <DataField>New_Total_Units_CompleteFormat</DataField>
+        </Field>
+        <Field Name="New_Total_Percent_Complete">
+          <DataField>New_Total_Percent_Complete</DataField>
+        </Field>
+        <Field Name="New_Total_Percent_CompleteFormat">
+          <DataField>New_Total_Percent_CompleteFormat</DataField>
+        </Field>
+        <Field Name="Estimated_Cost_To_Complete">
+          <DataField>Estimated_Cost_To_Complete</DataField>
+        </Field>
+        <Field Name="Estimated_Cost_To_CompleteFormat">
+          <DataField>Estimated_Cost_To_CompleteFormat</DataField>
+        </Field>
+        <Field Name="New_Forecasted_Completed_Cost">
+          <DataField>New_Forecasted_Completed_Cost</DataField>
+        </Field>
+        <Field Name="New_Forecasted_Completed_CostFormat">
+          <DataField>New_Forecasted_Completed_CostFormat</DataField>
+        </Field>
+        <Field Name="Forecasted_Variance">
+          <DataField>Forecasted_Variance</DataField>
+        </Field>
+        <Field Name="Forecasted_VarianceFormat">
+          <DataField>Forecasted_VarianceFormat</DataField>
+        </Field>
+        <Field Name="Contracted_Amount">
+          <DataField>Contracted_Amount</DataField>
+        </Field>
+        <Field Name="Contracted_AmountFormat">
+          <DataField>Contracted_AmountFormat</DataField>
+        </Field>
+        <Field Name="Total_Forecasted_Completed_Cost">
+          <DataField>Total_Forecasted_Completed_Cost</DataField>
+        </Field>
+        <Field Name="Total_Forecasted_Completed_CostFormat">
+          <DataField>Total_Forecasted_Completed_CostFormat</DataField>
+        </Field>
+        <Field Name="Full_WorkSheet">
+          <DataField>Full_WorkSheet</DataField>
+        </Field>
+        <Field Name="Job_Pct_Complete">
+          <DataField>Job_Pct_Complete</DataField>
+        </Field>
+        <Field Name="Job_Pct_CompleteFormat">
+          <DataField>Job_Pct_CompleteFormat</DataField>
+        </Field>
+        <Field Name="As_Of_Date">
+          <DataField>As_Of_Date</DataField>
+        </Field>
+        <Field Name="Total_Revenue">
+          <DataField>Total_Revenue</DataField>
+        </Field>
+        <Field Name="Total_RevenueFormat">
+          <DataField>Total_RevenueFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

@@ -2,11 +2,7 @@ pageextension 14021116 NS_SalesOrderSubform extends "Sales Order Subform"
 {
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,NAVMX11.00.00.25466,PPNA11.00
     //PRJ-89.SK.1.0 Modified code
-    //PRJ-1221.JS.1.0 | change regarding creoss reference no. functionality
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJCTPR-75 DK.1.0. 2March2023 | Job no field Visiable false
-    //PRJCTPR-75 DK.1.0. 9March2023 | Job Task No. field Visiable false
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         //PRJ-492.N.S.1.0 Start
@@ -95,44 +91,31 @@ pageextension 14021116 NS_SalesOrderSubform extends "Sales Order Subform"
         // }
         //PRJ-89.SK.1.0 End
 
-        //PRJ-1221.JS.1.0 24FEB2022 - Start
-        // modify("Cross-Reference No.")
-        // {
-        //     Visible = false;
-        //     Enabled = false;
-        // }
-
-        modify("Item Reference No.")
+        modify("Cross-Reference No.")
         {
             Visible = false;
             Enabled = false;
         }
-
-
         addafter("No.")
         {
-            field("NS_Cross-Reference No New"; Rec."Item Reference No.")   //PRJ-1221.JS.1.0 24FEB2022
+            field("NS_Cross-Reference No New"; Rec."Cross-Reference No.")
             {
-                Caption = 'Item Reference No.';   //PRJ-1221.JS.1.0 24FEB2022
-                ToolTip = 'Specifies the Item Reference item number. If you enter a Item Reference between yours and your vendors or customers item number, then this number will override the standard item number when you enter the Item Reference number on a sales or purchase document.';  //PRJ-1221.JS.1.0 24FEB2022
+                Caption = 'Cross-Reference No.';
+                ToolTip = 'Specifies the cross-referenced item number. If you enter a cross reference between yours and your vendors or customers item number, then this number will override the standard item number when you enter the cross-reference number on a sales or purchase document.';
                 ApplicationArea = Basic, Suite;
                 Visible = false;
                 trigger OnValidate();
                 begin
-                    NS_NoOnAfterValidate();   //PRJ-1221.JS.1.0 24FEB2022
+                    NS_NoOnAfterValidate;
                 end;
 
                 trigger OnLookup(VAR Text: Text): Boolean;
-                var
-                    ItemRefMgt: codeunit "Item Reference Management";  //PRJ-1221.JS.1.0 24FEB2022
                 begin
-                    //Rec.CrossReferenceNoLookUp(); //PRJ-1135.NK.1.0  //PRJ-1221.JS.1.0 24FEB2022 line commented
-                    ItemRefMgt.SalesReferenceNoLookup(Rec);  //PRJ-1221.JS.1.0 24FEB2022 line added
-                    NS_NoOnAfterValidate();
+                    CrossReferenceNoLookUp;
+                    NS_NoOnAfterValidate;
                 end;
             }
         }
-        //PRJ-1221.JS.1.0 24FEB2022 - end
 
         modify(Description)
         {
@@ -202,7 +185,6 @@ pageextension 14021116 NS_SalesOrderSubform extends "Sales Order Subform"
             field("NS_Job No."; Rec."Job No.")
             {
                 ApplicationArea = All;
-                Visible = false;//PRJCTPR-75 DK.1.0. 2March2023
                 ToolTip = 'Specifies the qJob No.';
 
                 trigger OnValidate();
@@ -216,7 +198,7 @@ pageextension 14021116 NS_SalesOrderSubform extends "Sales Order Subform"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the qJob Task No.';
-                Visible = false;//PRJCTPR-75 Dk.1.0 9March2023
+
                 trigger OnValidate();
                 begin
                     //ProjectPro - start

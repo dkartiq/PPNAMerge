@@ -1,7 +1,6 @@
 tableextension 14021423 NS_TimeSheetHdr extends "Time Sheet Header"
 {
     //PRJ-772.AS.2.0 12July2021 New Table ext for Time sheet Header
-    //PRJ-1074.AS.1.0 28DEC2021 : Done code to transfer values of field "NS_Resource Name" to field "NS_Resource Name New", as we are obseleting old field in "Time Sheet Header" Table
 
     fields
     {
@@ -89,8 +88,6 @@ tableextension 14021423 NS_TimeSheetHdr extends "Time Sheet Header"
         }
         field(14021132; "NS_Resource Name"; Code[20])//PRJ-772.2.0
         {
-            ObsoleteState = Pending;//PRJ-1074.AS.1.0 28DEC2021 Obselete
-            ObsoleteReason = 'Will be removed in next build';//PRJ-1074.AS.1.0 28DEC2021 Obselete
             Caption = 'Resource Name';
             Description = 'Specifies Resource Name';
             TableRelation = Resource;
@@ -111,13 +108,6 @@ tableextension 14021423 NS_TimeSheetHdr extends "Time Sheet Header"
             Description = 'Specifies Crew Time Sheet Ref. No.';
             DataClassification = CustomerContent;
             Editable = false;
-        }
-        field(14021135; "NS_Resource Name New"; Text[100])//PRJ-1074.AS.1.0 28DEC2021 
-        {
-            Caption = 'Resource Name';
-            Description = 'Specifies Resource Name';
-            TableRelation = Resource;
-            DataClassification = CustomerContent;
         }
     }
 }

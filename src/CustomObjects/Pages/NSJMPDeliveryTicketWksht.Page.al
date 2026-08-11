@@ -8,9 +8,7 @@ page 14021428 "NS_JMP Delivery Ticket Wksht"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1386.NK.1.0 12May2022 | Add Code
-    //PRJ-1458.RM.1.0 21June2022 | Added some code
-    //PE-215.HS.1.0 15Jan2024 | Added Tooltip
+
     PageType = Worksheet;
     Caption = 'JMP Delivery Ticket Wksht';
     Permissions = TableData "NS_Export/Import Excel Header" = rimd,
@@ -18,7 +16,6 @@ page 14021428 "NS_JMP Delivery Ticket Wksht"
     RefreshOnActivate = true;
     SourceTable = "NS_Job Material Planning";
     SourceTableView = WHERE("NS_Total Quantity Staged" = FILTER(> 0));
-    DeleteAllowed = false; //PRJ-1386.NK.1.0 12May2022
     UsageCategory = Lists;
     ApplicationArea = Jobs;
 
@@ -47,19 +44,6 @@ page 14021428 "NS_JMP Delivery Ticket Wksht"
                     ApplicationArea = All;
                     Editable = false;
                     ToolTip = 'Specifies the Part No.';
-                    trigger OnValidate();
-                    var
-                        Item: Record Item; //PE-301.NC.1.0 05Jun2024
-                    begin
-                        Rec.NS_ItemAvail;    //PRJ-1131.RM.1.0
-                        //PE-301.NC.1.0 05Jun2024 Start
-                        if Rec.NS_Type = Rec.NS_Type::Item then begin
-                            if item.Get(Rec."NS_Part No.") then;
-                            Rec."NS_Unit of Measure Code" := Rec.NS_GetUOMfromItem(Rec."NS_Part No.");
-                            Rec."NS_Base UOM" := item."Base Unit of Measure";
-                        end;
-                        //PE-301.NC.1.0 05Jun2024 End
-                    End;
                 }
                 field(Description; Rec.NS_Description)
                 {
@@ -184,8 +168,8 @@ page 14021428 "NS_JMP Delivery Ticket Wksht"
                 {
                     ApplicationArea = All;
                     Caption = 'Print Job Delivery Ticket';
-                    // ToolTip = 'Print Job Delivery Ticket'; //PE-215.HS.1.0 15Jan2024 Commented
-                    ToolTip = 'This report can also be viewed on word layout using custom report layout option.'; //PE-215.HS.1.0 15Jan2024
+
+                    ToolTip = 'Print Job Delivery Ticket';
                     Ellipsis = true;
                     Image = Report2;
                     Promoted = true;
@@ -197,55 +181,8 @@ page 14021428 "NS_JMP Delivery Ticket Wksht"
                         DeliveryTicket: Report "NS_Delivery Ticket JMP";
                         lJobMatPlan: Record "NS_Job Material Planning";
                     begin
-                        lJobMatPlan.Reset(); //PRJ-1458.RM.1.0 21June2022
-                        lJobMatPlan.SetRange("NS_Worksheet Job No.", Rec."NS_Worksheet Job No.");//PRJ-1458.RM.1.0 21June2022 
-                        // REPORT.RUN(14021402, true, false, Rec); //PRJ-1458.RM.1.0 21June2022  commented
-                        REPORT.RUN(14021402, true, false, lJobMatPlan);//PRJ-1458.RM.1.0 21June2022 
+                        REPORT.RUN(14021402, true, false, Rec);
                         CurrPage.UPDATE;
-                    end;
-                }
-                action(UpdateQty) //PRJ-1386.NK.1.0 12May2022
-                {
-                    ApplicationArea = All;
-                    Caption = 'Update Qty';
-                    ToolTip = 'Update Qty';
-                    Ellipsis = true;
-                    Image = Report2;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    PromotedIsBig = true;
-                    trigger OnAction();
-                    var
-                        DeliveryTicket: Report "NS_Delivery Ticket JMP";
-                        lJobMatPlan: Record "NS_Job Material Planning";
-                        JMPRec: Record "NS_Job Material Planning";
-                        JMPRec2: Record "NS_Job Material Planning";
-                    begin
-                        //PRJ-1386.NK.1.0 12May2022 Start
-                        JMPRec2.Reset();
-                        JMPRec2.SetRange("NS_Worksheet Job No.", Rec."NS_Worksheet Job No.");
-                        JMPRec2.setfilter("NS_Total Quantity Staged", '>%1', 0);
-                        if JMPRec2.FindSet() then
-                            repeat
-                                JMPRec.Reset();
-                                JMPRec.CopyFilters(JMPRec2);
-                                JMPRec.SetRange("NS_Line No.", JMPRec2."NS_Line No.");
-                                if JMPRec.FindFirst() then begin
-                                    JMPRec.CalcFields("NS_PO Qty Staged");
-                                    if (JMPRec."NS_Invt. Qty. to Ship" = 0) then
-                                        JMPRec2."NS_Invt. Qty. to Ship" := JMPRec."NS_Inventory Qty. Staged";
-                                    if (JMPRec2."NS_PO Qty. to Ship" = 0) then
-                                        JMPRec2."NS_PO Qty. to Ship" := JMPRec."NS_PO Qty Staged";//PRJ-1386.NK.1.0 12May2022
-                                    //PE-146.NK.1.0 start 16Aug2023
-                                    if (JMPRec2."NS_Inventory Qty. Staged" = 0) then
-                                        JMPRec2."NS_Inventory Qty. Staged" := JMPRec."NS_Inventory Qty. Staged";
-                                    //PE-146.NK.1.0 end 16Aug2023
-                                    JMPRec2."NS_Total Qty. Ready to Ship" := JMPRec."NS_Inventory Qty. Staged" + JMPRec."NS_PO Qty Staged";
-                                    JMPRec2.VALIDATE("NS_Total Qty. Ready to Ship", JMPRec."NS_Inventory Qty. Staged" + JMPRec."NS_PO Qty Staged");
-                                    JMPRec2.Modify();
-                                end;
-                            until JMPRec2.Next() = 0;
-                        //PRJ-1386.NK.1.0 12May2022 end
                     end;
                 }
             }
@@ -254,30 +191,22 @@ page 14021428 "NS_JMP Delivery Ticket Wksht"
 
     trigger OnAfterGetCurrRecord();
     begin
-        //PRJ-1131.RM.1.0.001 10Jan2022 start
-        //PRJ-1386.NK.1.0 12May2022 comment start
-        //if Rec."NS_Invt. Qty. to Ship" = 0 then
-        //  Rec."NS_Invt. Qty. to Ship" := Rec."NS_Inventory Qty. Staged";
-        //if Rec."NS_PO Qty. to Ship" = 0 then
-        //  Rec."NS_PO Qty. to Ship" := Rec."NS_PO Qty Staged"; //PRJ-1386.NK.1.0 12May2022
-        ////"Total Quantity Ready to Ship" := "Inventory Qty. Staged" + "PO Qty Staged";
-        //Rec.VALIDATE("NS_Total Qty. Ready to Ship", Rec."NS_Inventory Qty. Staged" + Rec."NS_PO Qty Staged");
-        //PRJ-1131.RM.1.0.001 10Jan2022 end
-        //PRJ-1386.NK.1.0 12May2022 comment end
+        if "NS_Invt. Qty. to Ship" = 0 then
+            "NS_Invt. Qty. to Ship" := "NS_Inventory Qty. Staged";
+        if "NS_PO Qty. to Ship" = 0 then
+            "NS_PO Qty. to Ship" := "NS_PO Qty Staged";
+        //"Total Quantity Ready to Ship" := "Inventory Qty. Staged" + "PO Qty Staged";
+        VALIDATE("NS_Total Qty. Ready to Ship", "NS_Inventory Qty. Staged" + "NS_PO Qty Staged");
     end;
 
     trigger OnAfterGetRecord();
     begin
-        //PRJ-1386.NK.1.0 12May2022 comment start
-        //PRJ-1131.RM.1.0.001 10Jan2022 start
-        //if Rec."NS_Invt. Qty. to Ship" = 0 then
-        //  Rec."NS_Invt. Qty. to Ship" := Rec."NS_Inventory Qty. Staged";
-        //if Rec."NS_PO Qty. to Ship" = 0 then
-        //  Rec."NS_PO Qty. to Ship" := Rec."NS_PO Qty Staged"; //PRJ-1386.NK.1.0 12May2022
-        ////"Total Quantity Ready to Ship" := "Inventory Qty. Staged" + "PO Qty Staged";
-        //Rec.VALIDATE("NS_Total Qty. Ready to Ship", Rec."NS_Inventory Qty. Staged" + Rec."NS_PO Qty Staged");
-        //PRJ-1131.RM.1.0.001 10Jan2022 end
-        //PRJ-1386.NK.1.0 12May2022 comment end
+        if "NS_Invt. Qty. to Ship" = 0 then
+            "NS_Invt. Qty. to Ship" := "NS_Inventory Qty. Staged";
+        if "NS_PO Qty. to Ship" = 0 then
+            "NS_PO Qty. to Ship" := "NS_PO Qty Staged";
+        //"Total Quantity Ready to Ship" := "Inventory Qty. Staged" + "PO Qty Staged";
+        VALIDATE("NS_Total Qty. Ready to Ship", "NS_Inventory Qty. Staged" + "NS_PO Qty Staged");
     end;
 
     var

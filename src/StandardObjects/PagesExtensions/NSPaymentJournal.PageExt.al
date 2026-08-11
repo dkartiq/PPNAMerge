@@ -5,9 +5,6 @@ pageextension 14021237 NS_PaymentJournal extends "Payment Journal"
     //PRJ-290.MS.1.0 written code for print len report
     //PRJ-290.AS.1.0 09SEPT20 Done Visible false for Print Lien Release report
     //PRJ-669.N.S.1.0 add new field on page
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1482.NK.1.0 28Jun2022 | Add Code
-    Caption = 'Payment Journals'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
 
@@ -158,7 +155,7 @@ pageextension 14021237 NS_PaymentJournal extends "Payment Journal"
             action(NS_SuggestVendorPayments)
             {
                 ApplicationArea = Basic, Suite;
-                Caption = 'Job Suggest Vendor Payments';//PE-141.NK.1.0 03Aug2023 updated name
+                Caption = 'Suggest Vendor Payments';
                 ToolTip = 'Create payment suggestions as lines in the payment journal.';
                 Image = SuggestVendorPayments;
                 Promoted = True;
@@ -195,19 +192,7 @@ pageextension 14021237 NS_PaymentJournal extends "Payment Journal"
         NS_PurchSetup.GET;
         NS_GLSetup.GET;
     end;
-    //PRJ-1482.NK.1.0. 28Jun2022 Start
-    trigger OnDeleteRecord(): Boolean
-    var
-        VendLedgEntry: Record "Vendor Ledger Entry";
-    begin
-        VendLedgEntry.Reset();
-        VendLedgEntry.SetRange("Vendor No.", Rec."Account No.");
-        VendLedgEntry.SetRange(Open, true);
-        VendLedgEntry.SetRange("Applies-to ID", Rec."Document No.");
-        if VendLedgEntry.FindFirst() then
-            VendLedgEntry.ModifyAll("Applies-to ID", '');
-    end;
-    //PRJ-1482.NK.1.0. 28Jun2022 End
+
     //+---------------------------------------------------------------------------------------------
     //+ProjectPro
     //   +  - Added field(s):

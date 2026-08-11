@@ -1,5 +1,6 @@
 table 14021402 "NS_Job Quote Header"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -13,11 +14,8 @@ table 14021402 "NS_Job Quote Header"
     //PRJ-867.GK.1.0 18Aug2021 - Sales person length to be increased
     //PRJ-933.JS.1.0 05OCT2021 | Add one field and code change
     //PRJ-993.AS.1.0 18OCT2021 Add new field "NS_Job Posting Group New" and obslete pending old field "NS_Job Posting Group"
-    //PRJ-1312.NK.1.0 03May2022 | Add Code
-    //PRJ-1368.RM.1.0 23May2022 | Corrected Grammatical error
-    //PRJCTPR-23.NK.1.0 06Jan2023 | added filter of job no. not equal to blank on function NS_TotalContractPrice    
-    //PRJ-1437.NK.1.0 09Jun2022 | Add Code
-    //PE-6.NK.1.0 24Mar2022 Add New Field
+
+
     Caption = 'Quote Header';
     DrillDownPageID = "NS_Job Quote List";
     LookupPageID = "NS_Job Quote List";
@@ -106,39 +104,28 @@ table 14021402 "NS_Job Quote Header"
             Caption = 'Proposal Date';
             DataClassification = CustomerContent;
         }
-        //PE-300.Dk.1.0  29May2024 Start
         field(61; NS_Status; Option)
         {
-            Caption = 'Status (Obsolete)';
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will remove in next build because the field is converted from type option to Enum type';
-            ObsoleteTag = 'Will remove in ProjectPro upcoming release 24.0.XXX.00';
-            OptionCaption = 'Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed';
-            OptionMembers = Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed;
-            DataClassification = CustomerContent;
-        }
-        field(62; "NS_Quote Status"; Enum "NS_Quote Status")
-        {
             Caption = 'Status';
+            // >> Upgrade
+            // OptionCaption = 'Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed';
+            // OptionMembers = Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed;
+            OptionMembers = Created,,,,"On Hold","Off Hold Pending WF",,Go,"Estimate Pending WF","Estimate Approved","Response Pending WF","Response Approved",Submitted,,,"Award Pending WF",Awarded,,,"Won Pending WF",Closed,,,Won,Lost;
+            OptionCaption = 'Created,,,,On Hold,Off Hold Pending WF,,Go,Estimate Pending WF,Estimate Approved,Response Pending WF,Response Approved,Submitted,,,Award Pending WF,Awarded,,,Won Pending WF,Closed,,,Won,Lost';
+            // << Upgrade
             DataClassification = CustomerContent;
         }
         field(66; "NS_Probability to Close"; Option)
         {
-            Caption = 'Probability to Close (Obsolete)';
-            DataClassification = CustomerContent;
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will remove in next build because the field is converted from type option to Enum type';
-            ObsoleteTag = 'Will remove in ProjectPro upcoming release 24.0.XXX.00';
-            OptionCaption = 'Draft,Budget Only,25,,,50,,75,,90,100,,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
-            OptionMembers = Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
-        }
-        field(67; "NS_QuotePro to Close"; Enum "NS_QuotePro to Close")
-        {
             Caption = 'Probability to Close';
             DataClassification = CustomerContent;
-
+            // >> Upgrade
+            //OptionCaption = 'Draft,Budget Only,25,,,50,,75,,90,100,,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
+            OptionCaption = '10 - Feasibility Pricing Submitted,25 - Budget Quote Submitted,50 - FBS Shortlisted for Project,,,50,,75 - FBS Nominated as Preferred Supplier,,90 - Letter of Award Issued/Verbal Award,100 - Project Won - FBS has Award Documentation,,,,,,,,,,0 - Project Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
+            // OptionMembers = Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
+            // << Upgrade
+            OptionMembers = "10 - Feasibility Pricing Submitted","25 - Budget Quote Submitted","50 - FBS Shortlisted for Project",,,"50",,"75 - FBS Nominated as Preferred Supplier",,"90 - Letter of Award Issued/Verbal Award","100 - Project Won - FBS has Award Documentation",,,,,,,,,,"0 - Project Lost",,,,,,,,,,Canceled,,,,,,,Opportunity;
         }
-        //PE-300.Dk.1.0  29May2024 End
         field(71; NS_Template; Boolean)
         {
             Caption = 'Template';
@@ -157,19 +144,10 @@ table 14021402 "NS_Job Quote Header"
 
             trigger OnValidate();
             var
-                //lCust: Record Customer;  
-                //lCust2: Record Customer;
-                L_Customer: Record Customer;
+            //lCust: Record Customer;
+            //lCust2: Record Customer;
             begin
-                if rec."NS_Sell-to Customer No." <> xRec."NS_Sell-to Customer No." then  //PRJCTPR-164.JS.1.0
-                    QuoteMgt.NS_OnValidateSelltoCustomerJQ(Rec);
-                // PRJ-1709.0.0.PS Start 
-                L_Customer.Reset();
-                L_Customer.Get(Rec."NS_Sell-to Customer No.");
-                if (L_Customer."Privacy Blocked" = true) or (L_Customer.Blocked = L_Customer.Blocked::All) or (L_Customer.Blocked = L_Customer.Blocked::Ship) or (L_Customer.Blocked = L_Customer.Blocked::Invoice) then begin
-                    Error('you cannot create this type of document when Customer ' + L_Customer."No." + ' is blocked with type ' + Format(L_Customer.Blocked));
-                end;
-                // PRJ-1709.0.0.PS End  
+                QuoteMgt.NS_OnValidateSelltoCustomerJQ(Rec);
             end;
         }
         field(102; "NS_Sell-to Customer Name"; Text[100]) //PRJ-301.MS.1.0
@@ -286,7 +264,7 @@ table 14021402 "NS_Job Quote Header"
             ObsoleteState = Pending;//PRJ-867.AS.1.0 23SEPT2021
             ObsoleteReason = 'Will be removed in Next Build';//PRJ-867.AS.1.0 23SEPT2021
             Caption = 'Salesperson Code';
-            // TableRelation = "Salesperson/Purchaser";//PRJCTPR-47.AS.1.0 TABLE RELATION REMOVED
+            TableRelation = "Salesperson/Purchaser";
             DataClassification = CustomerContent;
 
             trigger OnValidate();
@@ -315,30 +293,59 @@ table 14021402 "NS_Job Quote Header"
             trigger OnLookup()
             var
                 Cust: Record Customer;
-                Cont: Record Contact;
-                ContBusinessRelation: Record "Contact Business Relation";
+                // >> Upgrade
+                Contact: Record Contact;
+                ContactBusinessRelation: Record "Contact Business Relation";
+            // << Upgrade
             begin
-                if ("NS_Contact No." <> '') and Cont.Get("NS_Contact No.") then
-                    Cont.SetRange("Company No.", Cont."Company No.")
-                else
-                    if Cust.Get("NS_Sell-to Customer No.") then begin
-                        if ContBusinessRelation.FindByRelation(ContBusinessRelation."Link to Table"::Customer, "NS_Sell-to Customer No.") then
-                            Cont.SetRange("Company No.", ContBusinessRelation."Contact No.");
-                    end else
-                        Cont.SetFilter("Company No.", '<>%1', '''');
+                // >> Upgrade
+                // if ("NS_Contact No." <> '') and Cont.Get("NS_Contact No.") then
+                //     Cont.SetRange("Company No.", Cont."Company No.")
+                // else
+                //     if Cust.Get("NS_Sell-to Customer No.") then begin
+                //         if ContBusinessRelation.FindByRelation(ContBusinessRelation."Link to Table"::Customer, "NS_Sell-to Customer No.") then
+                //             Cont.SetRange("Company No.", ContBusinessRelation."Contact No.");
+                //     end else
+                //         Cont.SetFilter("Company No.", '<>%1', '''');
 
-                if "NS_Contact No." <> '' then
-                    if Cont.Get("NS_Contact No.") then;
-                if PAGE.RunModal(0, Cont) = ACTION::LookupOK then begin
-                    xRec := Rec;
-                    Validate("NS_Contact No.", Cont."No.");
-                end;
+                // if "NS_Contact No." <> '' then
+                //     if Cont.Get("NS_Contact No.") then;
+                // if PAGE.RunModal(0, Cont) = ACTION::LookupOK then begin
+                //     xRec := Rec;
+                //     Validate("NS_Contact No.", Cont."No.");
+                // end;
+                //FDD104 Start
+                Contact.SetRange(Type, Contact.Type::Person);
+
+                ContactBusinessRelation.SetRange("Link to Table", ContactBusinessRelation."Link to Table"::Customer);
+                ContactBusinessRelation.SetRange("No.", "NS_Sell-to Customer No.");
+                ContactBusinessRelation.SetFilter("Contact No.", '<>%1', '');
+                if ContactBusinessRelation.FindFirst then
+                    Contact.SetRange("Company No.", ContactBusinessRelation."Contact No.");
+
+                if PAGE.RunModal(0, Contact) = ACTION::LookupOK then
+                    Validate("NS_Contact No.", Contact."No.");
+                //FDD104 End
+                // << Upgrade
             end;
             //PRJ-896.GK.1.0 08Sep2021 end
 
             trigger OnValidate();
+            // >> Upgrade
+            var
+                Opportunity: Record Opportunity;
+            // << Upgrade
             begin
                 QuoteMgt.NS_OnValidateContactNo(Rec);
+                // >> Upgrade
+                // #167 Start
+                Modify(true);
+                if Opportunity.Get("NS_Quote No.") and (Opportunity."Contact No." <> "NS_Contact No.") then begin
+                    Opportunity.Validate("Contact No.", "NS_Contact No.");
+                    Opportunity.Modify(true);
+                end;
+                // #167 End
+                // << Upgrade
             end;
         }
         field(162; "NS_Contact Name"; Text[100])  //PRJ-301.MS.1.0
@@ -429,7 +436,10 @@ table 14021402 "NS_Job Quote Header"
                                 , "NS_General Contractor Name");
             end;
         }
-        field(1011; "NS_General Contractor Name"; Text[50])
+        // >> Upgrade
+        //field(1011; "NS_General Contractor Name"; Text[50])
+        field(1011; "NS_General Contractor Name"; Text[100])
+        // << Upgrade
         {
             Caption = 'General Contractor Name';
             DataClassification = CustomerContent;
@@ -488,6 +498,22 @@ table 14021402 "NS_Job Quote Header"
             Caption = 'Estimator Name';
             DataClassification = CustomerContent;
         }
+        // >> Upgrade
+        field(1042; "Installation Estimator No."; Code[20])
+        {
+            Caption = 'Installation Estimator No.';
+            Description = 'FDD101';
+            TableRelation = "Salesperson/Purchaser";
+        }
+        field(1043; "Installation Estimator Name"; Text[50])
+        {
+            CalcFormula = Lookup("Salesperson/Purchaser".Name WHERE(Code = FIELD("Installation Estimator No.")));
+            Caption = 'Installation Estimator Name';
+            Description = 'FDD101';
+            Editable = false;
+            FieldClass = FlowField;
+        }
+        // << Upgrade
         field(1046; "NS_Date Submitted to Estimator"; Date)
         {
             Caption = 'Date Submitted to Estimator';
@@ -516,6 +542,7 @@ table 14021402 "NS_Job Quote Header"
         {
             Caption = 'Estimated Start Date';
             DataClassification = CustomerContent;
+
         }
         field(1092; "NS_Estimated Completion Date"; Date)
         {
@@ -778,11 +805,17 @@ table 14021402 "NS_Job Quote Header"
         {
             Caption = 'Created at Date';
             DataClassification = CustomerContent;
+            // >> Upgrade
+            Editable = false;
+            // << Upgrade
         }
         field(5003; "NS_Created at Time"; Time)
         {
             Caption = 'Created at Time';
             DataClassification = CustomerContent;
+            // >> Upgrade
+            Editable = false;
+            // << Upgrade
         }
         field(5006; "NS_Salesperson/User ID"; Code[50])
         {
@@ -797,16 +830,25 @@ table 14021402 "NS_Job Quote Header"
             //TestTableRelation = false;
             ValidateTableRelation = false;
             DataClassification = CustomerContent;
+            // >> Upgrade
+            Editable = false;
+            // << Upgrade
         }
         field(5012; "NS_Modified at Date"; Date)
         {
             Caption = 'Modified at Date';
             DataClassification = CustomerContent;
+            // >> Upgrade
+            Editable = false;
+            // << Upgrade
         }
         field(5013; "NS_Modified at Time"; Time)
         {
             Caption = 'Modified at Time';
             DataClassification = CustomerContent;
+            // >> Upgrade
+            Editable = false;
+            // << Upgrade
         }
         field(5021; "NS_Accepted by"; Code[50])
         {
@@ -832,8 +874,7 @@ table 14021402 "NS_Job Quote Header"
         field(5051; "NS_Sell-toCustomerTemplateCode"; Code[10])
         {
             Caption = 'Sell-to Customer Template Code';
-            //TableRelation = "Customer Template";   //PRJCTPR-155.JS.1.0 line commented
-            TableRelation = "Customer Templ.";  //PRJCTPR-155.JS.1.0 line added
+            TableRelation = "Customer Template";
             DataClassification = CustomerContent;
         }
         field(5053; "NS_Bill-to Contact No."; Code[20])
@@ -845,8 +886,7 @@ table 14021402 "NS_Job Quote Header"
         field(5054; "NS_Bill-toCustomerTemplateCode"; Code[10])
         {
             Caption = 'Bill-to Customer Template Code';
-            //TableRelation = "Customer Template";   //PRJCTPR-155.JS.1.0 line commented
-            TableRelation = "Customer Templ.";  //PRJCTPR-155.JS.1.0 line added        
+            TableRelation = "Customer Template";
             DataClassification = CustomerContent;
         }
         field(5400; "NS_Lump Sum"; Boolean)
@@ -968,14 +1008,12 @@ table 14021402 "NS_Job Quote Header"
             Caption = 'Tax Area Code';
             TableRelation = "Tax Area";
             DataClassification = CustomerContent;
-
         }
         field(14021141; "NS_Tax Liable"; Boolean)
         {
             Caption = 'Tax Liable';
             Editable = true;
             DataClassification = CustomerContent;
-
         }
         field(14021142; "NS_Tax Group Code"; Code[10])
         {
@@ -995,16 +1033,20 @@ table 14021402 "NS_Job Quote Header"
             TableRelation = "VAT Product Posting Group";
             DataClassification = CustomerContent;
         }
-
-        //PRJ-1443.AS.1.0 START
-        field(14021416; "NS_EnblGLNResGMCalc"; Boolean)
+        // >> Upgrade
+        field(14021160; "Customer Job No."; Text[30])
         {
-            Caption = 'Enable Resources in Gross Marg. Calc.';
-            Description = 'Enable Resources in Gross Marg. Calc.';
+            Caption = 'Customer Job No.';
+            Description = 'ProjectPro Customer Interface Data';
             DataClassification = CustomerContent;
+            trigger OnValidate()
+            begin
+                //>>TG060818
+                "Customer Job No." := UPPERCASE("Customer Job No.");
+                //<<TG060818
+            end;
         }
-        //PRJ-1443.AS.1.0 END
-
+        // << Upgrade
         field(14021417; "NS_Use Tax SKU"; Code[20])
         {
             Caption = 'Use Tax SKU';
@@ -1476,114 +1518,7 @@ table 14021402 "NS_Job Quote Header"
             Caption = 'Job Posting Group';
             TableRelation = "Job Posting Group";
             DataClassification = CustomerContent;
-            //PRJ-1437.NK.1.0 09Jun2022 Start
-            trigger OnValidate()
-            var
-                JobTast: Record "Job Task";
-                RecJob: Record Job;
-            begin
-                JobTast.Reset();
-                JobTast.SetRange("Job No.", Rec."NS_Job No.");
-                if JobTast.FindFirst() then
-                    JobTast.ModifyAll("Job Posting Group", Rec."NS_Job Posting Group New");
-                if RecJob.Get(Rec."NS_Job No.") then begin
-                    RecJob.validate("Job Posting Group", Rec."NS_Job Posting Group New");
-                    RecJob.Modify();
-                end;
-            end;
-            //PRJ-1437.NK.1.0 09Jun2022 End
         }
-        field(14021454; "NS_Created by Job"; Code[20])//PRJ-914.AS.1.0 Added field
-        {
-            Caption = 'Created by Job';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        field(14021455; "NS_Item Quote Costs"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Item Quote Costs';
-        }
-        field(14021456; "NS_Labour Rate"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            caption = 'Use Labor Rate';
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-
-        field(14021457; "NS_Revision Reference"; Integer)//PRJ-1163.2.0 ADDED FIELD
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Revision Reference';
-        }
-        //PE-6.NK.1.0 24Mar2022 Start
-        field(14021493; "NS_Opportunity"; Code[20])
-        {
-            //DataClassification = CustomerContent;
-            Caption = 'Opportunity';
-            Editable = false;
-            FieldClass = FlowField;
-            CalcFormula = Lookup(Opportunity."No." WHERE(NS_JobQuoteNo = FIELD("NS_Quote No.")));
-        }
-        //PE-6.NK.1.0 24Mar2022 End 
-        //PE-221.NC.1.0 29Dec2023 Start
-        field(14021494; "NS_Total Units"; Decimal)
-        {
-            Caption = 'Total Units';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        field(14021495; "NS_Unit of Measure"; Code[10])
-        {
-            Caption = 'Unit of Measure';
-            Description = 'ProjectPro';
-            TableRelation = "Unit of Measure";
-            DataClassification = CustomerContent;
-        }
-        //PE-221.NC.1.0 29Dec2023 End
-        //PE-128.PS.1.0 12March2024 Start
-        field(14021496; "NS_Job No. Series"; Code[10])
-        {
-            Description = 'Job No. Series';
-            Caption = 'Job No. Series';
-            DataClassification = CustomerContent;
-
-        }
-        field(14021497; "NS_Manual Job No."; Code[20])
-        {
-            Description = 'ProjectPro';
-            Caption = 'Manual Job No.';
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-
-            begin
-                if NS_NoSeries.Get(Rec."NS_Job No. Series") then;
-                if NS_NoSeries."Manual Nos." = false then
-                    Error('You may not enter numbers manually. If you want to enter numbers manually, please activate Manual Nos. in No. Series %1', Rec."NS_Job No. Series");
-
-            end;
-
-        }
-        //PE-128.PS.1.0 12March2024 End
-
-        //PE-300.JS.1.0 02JUN2024-Start
-        field(14021333; "NS_Status Updated"; boolean)
-        {
-            Description = 'This filed is use to check Status filed updated';
-            Caption = 'Status Updated';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021334; "NS_Updated Prob. To Close"; boolean)
-        {
-            Description = 'This filed is use to check Prob. To Close filed updated';
-            Caption = 'Updated Prob. To Close';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-300.JS.1.0 02JUN2024-end
-
     }
 
     keys
@@ -1597,15 +1532,9 @@ table 14021402 "NS_Job Quote Header"
         key(Key3; "NS_Sales Quote No.")
         {
         }
-        //PE-300.Dk.1.0  29May2024 Start
         key(Key4; NS_Status, "NS_Sales Order No.")
         {
         }
-
-        key(Key7; "NS_Quote Status", "NS_Sales Order No.")
-        {
-        }
-        //PE-300.Dk.1.0  29May2024 End
         key(Key5; "NS_Created by")
         {
         }
@@ -1616,7 +1545,16 @@ table 14021402 "NS_Job Quote Header"
 
     fieldgroups
     {
+        // >> Upgrade
+        fieldgroup(DropDown; "NS_Quote No.", "NS_Description/Nickname")
+        {
+        }
+        // << Upgrade
     }
+    // >> Upgrade
+    var
+        GLSetup: Record "General Ledger Setup";
+    // << Upgrade
 
     trigger OnDelete();
     begin
@@ -1631,7 +1569,10 @@ table 14021402 "NS_Job Quote Header"
         Licdate: date;//PRJ-516
         NoOfDays: Text;//PRJ-516
         EnvInfoCU: Codeunit "Environment Information";//PRJ-516
+                                                      // >> Upgrade
+        IsHanldled: Boolean;
 
+    // << Upgrade
     begin
         //PRJ-516.ms.1.0 start
         if EnvInfoCU.IsSaaS() then begin
@@ -1642,47 +1583,24 @@ table 14021402 "NS_Job Quote Header"
             //     Message('Your free trial is going to expire in %1 days.Please contact your administrator.', NoOfDays);
             // if WorkDate > Licdate then
             //     Error('Your free trial has expired.Please contact your administrator.');
-
-            //PRJ-1686.GK.1.0 26Oct2022 start
-            //PRJ-1641.JS.1.0 23SEP2022 - Start		
-            // Licdate := DMY2Date(30, 11, 2022);
-            // Licdate := DMY2Date(31, 12, 2022);
-            // Licdate := DMY2Date(31, 1, 2023);
-            // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-            // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-            //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-            // if WorkDate > Licdate then
-            //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-            OnCheckPPLicenseExpire();   //PRJ-1641.JS.1.0 23SEP2022 line commented
-            //PRJ-1641.JS.1.0 23SEP2022 - end 
-            //PRJ-1686.GK.1.0 26Oct2022 end           
-
+            OnCheckPPLicenseExpire();
         end;
         //PRJ-516.ms.1.0 end
         JobsSetup.GET();
 
-        //PRJ-1443.AS.1.0 START
-        if JobsSetup.NS_EnblGLNResGMCalc = true then
-            Rec.NS_EnblGLNResGMCalc := TRUE;
-        //PRJ-1443.AS.1.0 END
-
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        Rec."NS_Item Quote Costs" := JobsSetup."NS_Item Quote Costs";
-        Rec."NS_Labour Rate" := JobsSetup."NS_Labour Rate";
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-        //PRJ-1368.GK.1.0 13June2022 start
         if JobsSetup."NS_Use Default Tasks" > 0 then begin
             if "NS_Data From API" = false then begin       //PRJ-933.JS.1.0 05OCT2021
-                if JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::Default then begin
-                    if CONFIRM(Text14021400Lbl, true) then begin
-                        QuoteMgt.NS_OnInsertQuote(Rec, false);
-                    end else
-                        QuoteMgt.NS_OnInsertQuote(Rec, true);
-                end;
-                if JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::JobType then begin
-                    if CONFIRM(Text14021401Lbl, true) then begin
+                                                           // >> Upgrade
+                IsHanldled := false;
+                SkipDialog(Rec, IsHanldled);
+                if IsHanldled then
+                    QuoteMgt.NS_OnInsertQuote(Rec, true)
+                else
+
+                    //if CONFIRM(Text14021400Lbl, true, FORMAT(JobsSetup."NS_Use Default Tasks")) then begin
+                    IF CONFIRM(Text14021400Lbl, FALSE, FORMAT(JobsSetup."NS_Use Default Tasks")) THEN BEGIN  // >> 013 Set default action to FALSE <<
+                                                                                                             // << Upgrade
                         if JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::JobType then begin
-                            Commit(); //PRJCTPR-179.NC.1.0 23Aug2023
                             QuoteType.LOOKUPMODE(true);
                             QuoteType.SETRECORD(JobType);
                             if QuoteType.RUNMODAL() = ACTION::LookupOK then begin
@@ -1695,17 +1613,19 @@ table 14021402 "NS_Job Quote Header"
                         QuoteMgt.NS_OnInsertQuote(Rec, false);
                     end else
                         QuoteMgt.NS_OnInsertQuote(Rec, true);
-                end;
             end else  //PRJ-933.JS.1.0 05OCT2021
                 QuoteMgt.NS_OnInsertQuote(Rec, true);   //PRJ-933.JS.1.0 05OCT2021                
         end else
             QuoteMgt.NS_OnInsertQuote(Rec, true);
-        //PRJ-1368.GK.1.0 13June2022 end
+
 
         //"NS_Job Posting Group" := JobsSetup."Default Job Posting Group";//PRJ-993.AS.1.0 18OCT2021 comment old code for field "NS_Job Posting Group" for Job Quote header
         "NS_Job Posting Group New" := JobsSetup."Default Job Posting Group";//PRJ-993.AS.1.0 18OCT2021 Add new code for field "NS_Job Posting Group New" for Job Quote header
         "NS_Billing Job Task No." := JobsSetup."NS_Billing Job Task No.";
+        // >> Upgrade
+        OnAfterInsert(Rec);
 
+        // << Upgrade
         QuoteMgt.NS_SetDisableJobTaskLoad(false);
         //PRJ-409.AS.1.0 - START
         DimMgmt.UpdateDefaultDim(
@@ -1720,7 +1640,6 @@ table 14021402 "NS_Job Quote Header"
     end;
 
     var
-        NS_NoSeries: Record "No. Series";//PE-128.PS.3.0 16April2024
         JobsSetup: Record "Jobs Setup";
         QuoteTaskLines: Record "Job Task";
         PostCode: Record "Post Code";
@@ -1731,10 +1650,7 @@ table 14021402 "NS_Job Quote Header"
         DimMgmt: Codeunit DimensionManagement;//PRJ-409.AS.1.0
         SegmentType: Option Welding,Drawing,Template;
         TrueFalse: Boolean;
-        //Text14021400Lbl: Label 'Do You want to Use Default Tasks of Type %1', Comment = '%1=JobsSetup."Use Default Tasks"';  //PRJ-1368.RM.1.0 commented
-        Text14021400Lbl: Label 'Do you want to use Default Tasks?', Comment = '%1=JobsSetup."Use Default Tasks"';  //PRJ-1368.RM.1.0 
-
-        Text14021401Lbl: Label 'Do you want to use Default Tasks by Job Type ?', Comment = '%1=JobsSetup."Use Default Tasks"';  //PRJ-1368.GK.1.0 13June2022 
+        Text14021400Lbl: Label 'Do You want to Use Default Tasks of Type %1', Comment = '%1=JobsSetup."Use Default Tasks"';
 
     procedure NS_SetSegmentType(lSegmentType: Option Welding,Drawing,Template; lTrueFalse: Boolean);
     begin
@@ -1841,7 +1757,16 @@ table 14021402 "NS_Job Quote Header"
     end;
 
     procedure NS_UpdateMinSellPrice();
+    // >> Upgrade
+    var
+        IsHandled: Boolean;
+    // << Upgrade
     begin
+        // >> Upgrade
+        OnBeforeNS_UpdateMinSellPrice(Rec, IsHandled);
+        if IsHandled then
+            exit;
+        // << Upgrade
         JobsSetup.GET();
         QuoteTaskLines.RESET();
         QuoteTaskLines.SETRANGE("Job No.", "NS_Job No.");
@@ -1849,224 +1774,36 @@ table 14021402 "NS_Job Quote Header"
         if QuoteTaskLines.FINDFIRST() then begin
             QuoteTaskLines.CALCFIELDS("Schedule (Total Cost)", "Schedule (Total Price)", "NS_Line Amount Incl. Tax");
             "NS_Minimum Selling Price" := ROUND((QuoteTaskLines."Schedule (Total Cost)" / (1 - ("NS_Minimum Selling Price G.M.%" / 100))), 0.01);
-            //PRJ-1112.AS.1.0 START COMMENT
-            // if "NS_Selling Price" = 0 then
-            //     VALIDATE("NS_Selling Price", "NS_Minimum Selling Price");
-            //PRJ-1112.AS.1.0 END Comment
-
-            //PRJ-1112.AS.10 START Add Code
-            VALIDATE("NS_Selling Price", QuoteTaskLines."Schedule (Total Price)");
-            //PRJ-1112.AS.10 END Add Code
-
-            //PRJ-1112.AS.1.0 START COMMENT
-            // if "NS_Total Contract Price" = 0 then
-            //     VALIDATE("NS_Total Contract Price", "NS_Minimum Selling Price");
-            //PRJ-1112.AS.1.0 END Comment
-
+            if "NS_Selling Price" = 0 then
+                VALIDATE("NS_Selling Price", "NS_Minimum Selling Price");
+            if "NS_Total Contract Price" = 0 then
+                VALIDATE("NS_Total Contract Price", "NS_Minimum Selling Price");
             VALIDATE("NS_Use Tax Code");
             MODIFY();
         end;
+
     end;
 
     [IntegrationEvent(false, false)]
     local procedure OnCheckPPLicenseExpire()
     begin
     end;
-
-    //PRJ-1312.NK.1.0 03May2022 Start
-    procedure NS_TotalContractPrice()
-    var
-        TJobTakOff: Record "NS_Job Takeoff Segments";
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure SkipDialog(var JobQuoteHeader: Record "NS_Job Quote Header"; var IsHanldled: Boolean)
     begin
-        TJobTakOff.Reset();
-        TJobTakOff.SetRange("NS_Job No.", Rec."NS_Quote No.");
-        TJobTakOff.CalcSums("NS_Total Contract Price");
-        if TJobTakOff."NS_Total Contract Price" <> 0 then begin
-            Rec.VALIDATE("NS_Total Contract Price", TJobTakOff."NS_Total Contract Price");
-            Rec.Modify();
-        END else
-            if TJobTakOff."NS_Job No." <> '' then begin //PRJCTPR-23.NK.1.0 start 06jan2023
-
-                Rec.Validate("NS_Total Contract Price", 0);
-                rec.Modify();
-            end;
-    end;
-    //PRJ-1312.NK.1.0 03May2022 End
-    //PE-221.NC.1.0 22May2024 Start
-    PROCEDURE NS_CalculateStandardEstimateReport(var QuoteNo: Code[20]; VAR StdEstAmount: ARRAY[10] OF Decimal);
-    var
-        NS_JobCostCategory: Record "NS_Job Cost Category";
-        JobPlaningLine: Record "Job Planning Line";
-    begin
-        Clear(StdEstAmount);
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Labor);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                //if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[1] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Material);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                // if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[2] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Equipment);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                // if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[3] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Subcontract);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                // if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[4] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Manufacturing);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                // if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[5] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Overhead);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                // if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[6] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Miscellaneous);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                //if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then
-                    repeat
-                        StdEstAmount[7] += JobPlaningLine."Total Cost (LCY)";
-                    until JobPlaningLine.Next() = 0;
-            until NS_JobCostCategory.Next() = 0;
-        JobPlaningLine.Reset();
-        //PE-300.Dk.1.0  29May2024 Start
-        // if Rec.NS_Status = Rec.NS_Status::Open then
-        if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-            //PE-300.Dk.1.0  29May2024 End
-            JobPlaningLine.SetRange("Job No.", QuoteNo)
-        else
-            JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-        JobPlaningLine.SetFilter("NS_Cost Category", '%1', '');
-        if JobPlaningLine.FindFirst() then
-            repeat
-                StdEstAmount[8] += JobPlaningLine."Total Cost (LCY)";
-            until JobPlaningLine.Next() = 0;
     end;
 
-    PROCEDURE NS_CalculateHours(var QuoteNo: Code[20]; VAR StdEstHours: Decimal);
-    var
-        NS_JobCostCategory: Record "NS_Job Cost Category";
-        JobPlaningLine: Record "Job Planning Line";
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterInsert(var JobQuoteHeader: Record "NS_Job Quote Header")
     begin
-        StdEstHours := 0;
-        NS_JobCostCategory.RESET();
-        NS_JobCostCategory.SetRange(NS_Type, NS_JobCostCategory.NS_Type::Labor);
-        IF NS_JobCostCategory.FINDSET() THEN
-            REPEAT
-                JobPlaningLine.Reset();
-                //PE-300.Dk.1.0  29May2024 Start
-                //if Rec.NS_Status = Rec.NS_Status::Open then
-                if Rec."NS_Quote Status" = Rec."NS_Quote Status"::Open then
-                    //PE-300.Dk.1.0  29May2024 End
-                    JobPlaningLine.SetRange("Job No.", QuoteNo)
-                else
-                    JobPlaningLine.SetRange("NS_Job Quote No.", QuoteNo);
-                JobPlaningLine.SetRange("NS_Cost Category", NS_JobCostCategory.NS_Code);
-                if JobPlaningLine.FindFirst() then begin
-                    JobPlaningLine.CalcSums(Quantity);
-                    StdEstHours += JobPlaningLine.Quantity;
-                end;
-            until NS_JobCostCategory.Next() = 0;
-    End;
-    //PE-221.NC.1.0 22May2024 End
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeNS_UpdateMinSellPrice(var JobQuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
+    begin
+    end;
+    // << Upgrade
 }
-
 
 

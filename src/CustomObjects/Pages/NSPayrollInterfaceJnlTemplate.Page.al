@@ -13,7 +13,6 @@ page 14021378 "NS_PayrollInterfaceJnlTemplate"
     UsageCategory = Lists;//PRJ-542.AM.1.0
     Caption = 'Payroll Interface Jnl Template';
     SourceTable = "NS_PayrollInterfaceJnlTemplate";
-    ApplicationArea = all;   //PRJ-1442.JS.1.0 07JUN2022
 
     layout
     {

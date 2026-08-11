@@ -1,5 +1,6 @@
 tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
     //PRJ-162.SK.1.0 Added code for populating "Line Type" from "Job No."
     //PRJ-190.MS.1.0 added new Type Chage type for validate job no.
@@ -19,18 +20,7 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
     //PRJ-817.JS.1.0 26July21 | field added
     //PRJ-817.JS.1.0�04Aug2021 | Add one field work unit completed
     //PRJ-866.JS.1.0 17Aug2021 | Add one new field
-    //PRJ-939.JS.1.0 29Sep2021 | code added
-    //PRJ-1015.JS.1.0 22Oct2021 | field added
-    //PRJ-1039.JS.1.0 12Nov2021 | Code added
-    //PRJ-1087.JS.1.0 18Dec2021 | add condition for dimension    
-    //PRJ-1233.JS.1.0 02MAR2022 | change in the code
-    //PRJ-1314.JS.1.0 18APR2022 | make procedure Obsolete
-    //PRJ-1411.RM.1.0 08June2022 | Added some code 
-    //PRJ-1469.GK.2.0 04Oct2022 | Change condition
-    //PRJ-1740.SD.1.0 15Dec2022 | Code addded to update "Job Cost Category" from Resource. 
-    //PRJCTPR-32.JS.1.0 13FEB2023 | correct code for job line type    
-    //PRJCTPR-279.HS.1.0 15Jan2024 | Added Code
-    // PRJCTPR-303.HS.1.0 23Jan2024 | Added Code
+    //PRJ-939.JS.1.0 29Sep2021 | code added    
     fields
     {
 
@@ -39,145 +29,13 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             TableRelation = If (Type = const(NS_Ledger)) "NS_Retention Ledger Code";
 
             trigger OnAfterValidate()
-            var
-                //PRJ-1087.JS.1.0 18Dec2021 - Satrt
-                NS_JobSetup: Record "Jobs Setup";
-                NS_Jobs: Record job;
-                NS_BillingHeader: Record "NS_Progress Billing Header";
-                NSJobCostCategory: record "NS_Job Cost Category";   //PRJCTPR-185.JS.1.0 01Sep2023
-                                                                    //PRJ-1087.JS.1.0 18Dec2021 - end
-                PLRec: Record "Purchase Line";//PE-204.AS.4.0
-                PLRec2: Record "Purchase Line";//PE-204.AS.4.0
-                //PRJCTPR-279.HS.1.0 15Jan2024 Start
-                NS_VendorPostGroup: Record "Vendor Posting Group";
-                NS_Vendor: Record Vendor;
-                NS_GLAccount: Record "G/L Account";
-                NS_PurchaseHeader: Record "Purchase Header";
-            //PRJCTPR-279.HS.1.0 15Jan2024 End
             begin
-                //PE-204.AS.4.0 START
-                if (Rec."Document Type" = Rec."Document Type"::Invoice) AND (Rec.Type = Rec.Type::NS_Ledger) AND (Rec."No." = 'RETENTION') then begin
-                    PLRec.Reset();
-                    PLRec.SetRange("Document Type", PLRec."Document Type"::Invoice);
-                    PLRec.SetRange("Document No.", Rec."Document No.");
-                    PLRec.SetRange(Type, PLRec.Type::NS_Ledger);
-                    PLRec.SetRange("No.", 'RETENTION');
-                    if PLRec.FindFirst() then begin
-                        //PRJCTPR-354.DK.1.0 Start
-                        PLRec.DeleteAll();
-                        // Error('You cannot enter more than 1 line with Type "Ledger" and No. "RETENTION"');
-                        //PRJCTPR-354.DK.1.0 End
-                    end;
-                end;
-                //PE-204.AS.4.0 END
-                //PRJCTPR-354.DK.1.0 Start
-                if (Rec."Document Type" = Rec."Document Type"::"Credit Memo") AND (Rec.Type = Rec.Type::NS_Ledger) AND (Rec."No." = 'RETENTION') then begin
-                    PLRec.Reset();
-                    PLRec.SetRange("Document Type", PLRec."Document Type"::"Credit Memo");
-                    PLRec.SetRange("Document No.", Rec."Document No.");
-                    PLRec.SetRange(Type, PLRec.Type::NS_Ledger);
-                    PLRec.SetRange("No.", 'RETENTION');
-                    if PLRec.FindFirst() then begin
-                        PLRec.DeleteAll();
-                    end;
-                end;
-                //PRJCTPR-354.DK.1.0 End
                 NS_AssignDefaultValuesToTaxFields();
 
                 PostingSetupMgt.CheckGenPostingSetupPurchAccount("Gen. Bus. Posting Group", "Gen. Prod. Posting Group");
                 PostingSetupMgt.CheckVATPostingSetupPurchAccount("VAT Bus. Posting Group", "VAT Prod. Posting Group");
-                //PRJ-1308.GK.1.0 05May2022 Start -Comment
-                //PRJ-1087.JS.1.0 18Dec2021 - Start
-                // If Rec."Job No." <> '' then begin
-                //     NS_JobsSetup.Get();
-                //     if NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                //         NS_Jobs.Get(Rec."Job No.");
-                //         Rec."Shortcut Dimension 1 Code" := NS_Jobs."Global Dimension 1 Code";
-                //         Rec."Shortcut Dimension 2 Code" := NS_Jobs."Global Dimension 2 Code";
-                //         Rec."Dimension Set ID" := NS_BillingHeader.GetDimensionNoFromJob(Rec."Job No.");
-                //     end;
-                // end;
-                //PRJ-1087.JS.1.0 18Dec2021 - end 
-                //PRJ-1308.GK.1.0 05May2022 end             
-                //PRJ-1740.SD.2.0 04Jan2023 -End
-                //PRJCTPR-60 NK.1.0 13march2022 start
-                if (Rec.Type = Rec.Type::"G/L Account") then
-                    if GLAccount.Get(Rec."No.") then begin
-                        Rec."NS_Job Cost Category" := GLAccount."NS_Cost Category";
-                        //PRJCTPR-185.JS.1.0 31Aug2023 - Start                        
-                        if Rec."NS_Job Cost Category" = '' then begin
-                            NSJobCostCategory.Reset();
-                            NSJobCostCategory.SetCurrentKey("NS_G/L Account No.");
-                            NSJobCostCategory.SetRange("NS_G/L Account No.", rec."No.");
-                            if NSJobCostCategory.FindFirst() then
-                                rec."NS_Job Cost Category" := NSJobCostCategory.NS_Code;
-                        end;
-                        //PRJCTPR-185.JS.1.0 31Aug2023 - end                        
-                    end else begin
-                        if (Rec.Type = Rec.Type::"G/L Account") and
-                           (Rec."Job No." <> '') then
-                            PP_JobPlanningLine1.Reset();
-                        PP_JobPlanningLine1.SetRange("Job No.", Rec."Job No.");
-                        PP_JobPlanningLine1.SetRange(Type, PP_JobPlanningLine1.Type::"G/L Account");
-                        PP_JobPlanningLine1.SetRange("No.", Rec."No.");
-                        PP_JobPlanningLine1.SetRange("Job Task No.", Rec."Job Task No.");
-                        if PP_JobPlanningLine1.FindSet() then
-                            Rec."NS_Job Cost Category" := PP_JobPlanningLine1."NS_Cost Category";
-
-                    end;
-                //PRJCTPR-60.NK.1.0 13march2022 end
-
-                //PRJCTPR-279.HS.1.0 15Jan2024 Start
-                NS_PurchaseHeader.Reset();
-                NS_PurchaseHeader.SetRange("No.", Rec."Document No.");
-                if NS_PurchaseHeader.FindFirst() then begin
-                    if (Rec.Type = Rec.Type::NS_Ledger) and (Rec."No." = 'RETENTION') then begin //PRJCTPR-333.PS.1.0 02April2024
-                        if NS_Vendor.Get(rec."Buy-from Vendor No.") then;
-                        NS_VendorPostGroup.Reset();
-                        NS_VendorPostGroup.SetRange(Code, NS_Vendor."Vendor Posting Group");
-                        if NS_VendorPostGroup.FindFirst() then begin
-                            if NS_GLAccount.Get(NS_VendorPostGroup."NS_Retention Payables Account") then
-                                Rec."Gen. Prod. Posting Group" := NS_GLAccount."Gen. Prod. Posting Group";
-                        end;
-                    end;
-                end;
-                //PRJCTPR-279.HS.1.0 15Jan2024 End
-            End;
-        }
-        //PRJCTPR-303.HS.1.0 23Jan2024 Start
-        modify(Type)
-        {
-            trigger OnAfterValidate()
-            var
-                NS_PurchaseHeader: Record "Purchase Header";
-                NS_JobSteup: Record "Jobs Setup";
-            begin
-                //PRJCTPR-333.PS.1.0 11March2024 Start 
-
-                // NS_PurchaseHeader.SetRange("No.", Rec."Document No.");
-                // if NS_PurchaseHeader.FindFirst() then begin
-                //     if (NS_PurchaseHeader."NS_Retention Document") and (Rec.Type <> Rec.Type::NS_Ledger) then
-                //         Error('You can only select "Type = Ledger” when "Retention Document" is enabled.')
-                // end;
-
-
-                if NS_JobSteup.Get() then;
-
-                if NS_PurchaseHeader.Get(Rec."Document Type", Rec."Document No.") then;
-
-                if (NS_PurchaseHeader."NS_Retention Document") and (Rec.Type = Rec.Type::NS_Ledger) then
-                    Rec.Validate("No.", NS_JobSteup."NS_Retention Payable Ledger");
-
-                if (NS_PurchaseHeader."NS_Retention Document") and (Rec.Type <> Rec.Type::NS_Ledger) then
-                    Error('You can only select "Type = Ledger” when "Retention Document" is enabled.');
-
-                if not (NS_PurchaseHeader."NS_Retention Document") and (Rec.Type = Rec.Type::NS_Ledger) then
-                    Error('You must enable "Retention Document" to select Type=Ledger.');
-
-                //PRJCTPR-333.PS.1.0 11March2024 End 
             end;
         }
-        //PRJCTPR-303.HS.1.0 23Jan2024 End
 
         modify(Quantity)
         {
@@ -425,16 +283,12 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
         modify("Job No.")
         {
             trigger OnBeforeValidate();
-            var
-                NS_Job: Record Job;  //PRJ-1087.JS.1.0 18Dec2021
-                NS_BillingHeader: Record "NS_Progress Billing Header";  //PRJ-1087.JS.1.0 18Dec2021
             begin
                 if "Job No." <> '' then begin
                     GetPurchHeader();
-                    //if PurchHeader."NS_Job No." <> '' then   //PE-260.JS.1.0 20FEB2024 line commented
-                    if (PurchHeader."NS_Job No." <> '') and (PurchHeader."NS_Multiple Jobs on Lines" = false) then  //PE-260.JS.1.0 20FEB2024 line added
-                        if not NS_JobLinks.GET("Job No.", PurchHeader."NS_Job No.") then
-                            if rec."Job No." <> PurchHeader."NS_Job No." then    //PE-260.JS.1.0 20FEB2024 line added
+                    if PurchHeader."NS_Job No." <> '' then
+                        if "Job No." <> PurchHeader."NS_Job No." then
+                            if not NS_JobLinks.GET("Job No.", PurchHeader."NS_Job No.") then
                                 ERROR(Text14021100_Txt, PurchHeader."NS_Job No.");
                 end;
                 //PRJ-145.SK.1.0 Start
@@ -443,54 +297,20 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                 // end else
                 //     "Gen. Bus. Posting Group" := PurchHeader."Gen. Bus. Posting Group";
                 //PRJ-145.SK.1.0 End
-                //PRJ-1308.GK.1.0 05May2022 start-Comment
-                // //PRJ-1087.JS.1.0 18Dec2021 - Start
-                // If Rec."Job No." <> '' then begin
-                //     NS_JobsSetup.Get();
-                //     if NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                //         NS_Job.Get(Rec."Job No.");
-                //         Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                //         Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                //         Rec."Dimension Set ID" := NS_BillingHeader.GetDimensionNoFromJob(Rec."Job No.");
-                //     end;
-                // end;
-                // //PRJ-1087.JS.1.0 18Dec2021 - end  
-                //PRJ-1308.GK.1.0 05May2022 end              
 
-                //PRJ-1233.JS.1.0 02MAR2022-Start
-                //IF NOT (Type IN [Type::Item, Type::"G/L Account", Type::Resource, Type::NS_Ledger, Type::"Charge (Item)", Type::"Fixed Asset", Type::" "]) THEN //PRJ-190.MS.1.0 added new Type "Charge(Item)" and "Fixed Asset" for validate job no.
-                //    FIELDERROR("Job No.", STRSUBSTNO(Text012_Txt, FIELDCAPTION(Type), Type));
-                //PRJ-1233.JS.1.0 02MAR2022-end    
+                IF NOT (Type IN [Type::Item, Type::"G/L Account", Type::Resource, Type::NS_Ledger, Type::"Charge (Item)", Type::"Fixed Asset"]) THEN //PRJ-190.MS.1.0 added new Type "Charge(Item)" and "Fixed Asset" for validate job no.
+                    FIELDERROR("Job No.", STRSUBSTNO(Text012_Txt, FIELDCAPTION(Type), Type));
             end;
 
             trigger OnAfterValidate()
             var
                 NS_Job: Record job;
                 RecVendor: Record Vendor;
-                NS_BillingHeader: Record "NS_Progress Billing Header";  //PRJ-1087.JS.1.0 18Dec2021
             begin
                 NS_AssignDefaultValuesToTaxFields;
                 //PRJ-162.SK.1.0 Start
-                IF NS_Job.Get(Rec."Job No.") then begin   //PRJ-1015.JS.1.0  22Oct2021
-                    //PRJCTPR-32.JS.1.0 13FEB2023 - Start
-                    //Validate("Job Line Type", NS_Job."NS_Line Type"); //PRJCTPR-32.JS.1.0 13FEB2023 Line commented
-                    if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::" " then
-                        rec."Job Line Type" := rec."Job Line Type"::" ";
-                    if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::Billable then
-                        rec."Job Line Type" := rec."Job Line Type"::Billable;
-                    if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::Budget then
-                        rec."Job Line Type" := rec."Job Line Type"::Budget;
-                    if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::"Both Budget and Billable" then
-                        rec."Job Line Type" := rec."Job Line Type"::"Both Budget and Billable";
-                    //PRJCTPR-32.JS.1.0 13FEB2023 - end      
-                    //"NS_Sub-Level to Job No." := NS_Job."NS_Sub-Level to Job No.";   //PRJ-1015.JS.1.0  22Oct2021 //PRJ-1039.JS.1.0 12Nov2021line commented
-                    //PRJ-1039.JS.1.0 12Nov2021-Start
-                    if NS_Job."NS_Sub-Level to Job No." = '' then
-                        Rec."NS_Sub-Level to Job No." := NS_Job."No."
-                    else
-                        Rec."NS_Sub-Level to Job No." := NS_Job."NS_Sub-Level to Job No.";
-                    //PRJ-1039.JS.1.0 12Nov2021-Start                                
-                end;   //PRJ-1015.JS.1.0  22Oct2021
+                IF NS_Job.Get(Rec."Job No.") then
+                    Validate("Job Line Type", NS_Job."NS_Line Type");
                 //PRJ-162.SK.1.0 End
                 "NS_Segment Code" := ''; //TM-10.AM.1.0
                 //CTSI-23.MS.1.0001 Start //PRJ-247
@@ -508,20 +328,6 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                     end;
                 end;
                 //CTSI-23.MS.1.0001 end //PRJ-247
-                //PRJ-1308.GK.1.0 05May2022 start-Comment
-                // //PRJ-1087.JS.1.0 18Dec2021 - Start
-                // if Rec."Job No." <> '' then begin
-                //     NS_JobsSetup.Get();
-                //     if NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                //         NS_Job.Get(Rec."Job No.");
-                //         Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                //         Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                //         Rec."Dimension Set ID" := NS_BillingHeader.GetDimensionNoFromJob(Rec."Job No.");
-                //     end;
-                // end;
-                // //PRJ-1087.JS.1.0 18Dec2021 - end
-                //PRJ-1308.GK.1.0 05May2022 end
-
             end;
         }
 
@@ -531,275 +337,11 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             trigger OnAfterValidate()
             var
                 myInt: Integer;
-                //PRJ-1087.JS.1.0 18Dec2021 - Start
-                NS_JobSetup: Record "Jobs Setup";
-                NS_PurchHead: Record "Purchase Header";
-                NS_Jobs: Record job;
-                NS_JobTesks: Record "Job Task";
-                NS_BillingHeader: Record "NS_Progress Billing Header";
-                //PRJ-1087.JS.1.0 18Dec2021 - end
-                //PRJCTPR-199.JS.1.0 20NOV2023 - Start    
-                NSDimBufferTemp: record "Dimension Buffer" temporary;
-                NSItemRec: record item;
-                NSGLRec: record "G/L Account";
-                NSResource: record resource;
-                NSDefaultDim: record "Default Dimension";
-                NSJobTaskDimension: record "Job Task Dimension";
-                NSDimMgt: codeunit DimensionManagement;
-                NSGLedgSetup: record "General Ledger Setup";
-            //PRJCTPR-199.JS.1.0 20NOV2023 - end
             begin
-                //PRJCTPR-199.JS.1.0 20NOV2023 - Start
-                clear(NSDimBufferTemp);
-                if NS_JobSetup.get() then;
-                if NSGLedgSetup.get() then;
-                if NS_JobSetup."NS_Flow Job Card Dimension" = true then begin
-                    if (rec."Job No." <> '') and (rec."Job Task No." <> '') then begin
-                        NSJobTaskDimension.reset();
-                        NSJobTaskDimension.setrange("Job No.", rec."Job No.");
-                        NSJobTaskDimension.setrange("Job Task No.", rec."Job Task No.");
-                        if NSJobTaskDimension.findset() then
-                            repeat
-                                NSDimBufferTemp.Init();
-                                NSDimBufferTemp."Table ID" := 39;
-                                NSDimBufferTemp."Dimension Code" := NSJobTaskDimension."Dimension Code";
-                                NSDimBufferTemp.Insert();
-                                NSDimBufferTemp."Dimension Value Code" := NSJobTaskDimension."Dimension Value Code";
-                                NSDimBufferTemp.Modify();
-                            until NSJobTaskDimension.next = 0;
-                    end;
-                    case rec.Type of
-                        rec.Type::Item:
-                            begin
-                                if NSItemRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 27);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 39);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 39;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::Resource:
-                            begin
-                                if NSResource.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 156);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 39);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 39;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::"G/L Account":
-                            begin
-                                if NSGLRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 15);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.SetFilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 39);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 39;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                    end;
-                    NSDimBufferTemp.reset();
-                    if NSDimBufferTemp.findset() then
-                        repeat
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 1 Code" then
-                                rec.validate("Shortcut Dimension 1 Code", NSDimBufferTemp."Dimension Value Code");
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 2 Code" then
-                                rec.validate("Shortcut Dimension 2 Code", NSDimBufferTemp."Dimension Value Code");
-                        until NSDimBufferTemp.next = 0;
-
-                    //if rec."Line No." <> 0 then begin
-                    rec."Dimension Set ID" := NSDimMgt.CreateDimSetIDFromDimBuf(NSDimBufferTemp);
-                    //rec.Modify();
-                    //end;
-                end;
-                if NS_JobSetup."NS_Flow Job Card Dimension" = false then begin
-                    if (rec."Job No." <> '') and (rec."Job Task No." <> '') then begin
-                        NSJobTaskDimension.reset();
-                        NSJobTaskDimension.setrange("Job No.", rec."Job No.");
-                        NSJobTaskDimension.setrange("Job Task No.", rec."Job Task No.");
-                        NSJobTaskDimension.setfilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-324.JS.1.0 23FEB2024
-                        if NSJobTaskDimension.findset() then
-                            repeat
-                                NSDimBufferTemp.Init();
-                                NSDimBufferTemp."Table ID" := 39;
-                                NSDimBufferTemp."Dimension Code" := NSJobTaskDimension."Dimension Code";
-                                NSDimBufferTemp.Insert();
-                                NSDimBufferTemp."Dimension Value Code" := NSJobTaskDimension."Dimension Value Code";
-                                NSDimBufferTemp.Modify();
-                            until NSJobTaskDimension.next = 0;
-                    end;
-                    case rec.Type of
-                        rec.Type::Item:
-                            begin
-                                if NSItemRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 27);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.setfilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 39);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 39;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::Resource:
-                            begin
-                                if NSResource.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 156);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.setfilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 39);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 39;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                        rec.Type::"G/L Account":
-                            begin
-                                if NSGLRec.get(rec."No.") then begin
-                                    NSDefaultDim.Reset();
-                                    NSDefaultDim.setrange("Table ID", 15);
-                                    NSDefaultDim.setrange("No.", rec."No.");
-                                    NSDefaultDim.setfilter("Dimension Value Code", '<>%1', '');  //PRJCTPR-311.JS.1.0 11FEB2024
-                                    if NSDefaultDim.findset() then
-                                        repeat
-                                            NSDimBufferTemp.reset();
-                                            NSDimBufferTemp.setrange("Table ID", 39);
-                                            NSDimBufferTemp.setrange("Dimension Code", NSDefaultDim."Dimension Code");
-                                            if not NSDimBufferTemp.findfirst() then begin
-                                                NSDimBufferTemp.Init();
-                                                NSDimBufferTemp."Table ID" := 39;
-                                                NSDimBufferTemp."Dimension Code" := NSDefaultDim."Dimension Code";
-                                                NSDimBufferTemp.Insert();
-                                                NSDimBufferTemp."Dimension Value Code" := NSDefaultDim."Dimension Value Code";
-                                                NSDimBufferTemp.Modify();
-                                            end;
-                                        until NSDefaultDim.next = 0;
-                                end;
-                            end;
-                    end;
-                    NSDimBufferTemp.reset();
-                    if NSDimBufferTemp.findset() then
-                        repeat
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 1 Code" then
-                                rec.validate("Shortcut Dimension 1 Code", NSDimBufferTemp."Dimension Value Code");
-                            if NSDimBufferTemp."Dimension Code" = NSGLedgSetup."Global Dimension 2 Code" then
-                                rec.validate("Shortcut Dimension 2 Code", NSDimBufferTemp."Dimension Value Code");
-                        until NSDimBufferTemp.next = 0;
-
-
-                    rec."Dimension Set ID" := NSDimMgt.CreateDimSetIDFromDimBuf(NSDimBufferTemp);
-
-                end;
-                //PRJCTPR-199.JS.1.0 20NOV2023 - end                
                 CreateTempJobLineTempPP();//VIKAS JOB PRICE
-                //PRJ-1308.GK.1.0 05May2022 start-Comment
-                // //PRJ-1087.JS.1.0 18Dec2021 Start
-                // if Rec."Job No." <> '' then
-                //     if Rec."Job Task No." <> '' then begin
-                //         NS_JobSetup.Get();
-                //         if NS_JobSetup."NS_Flow Job Card Dimension" = true then begin
-                //             NS_JobTesks.get(Rec."Job No.", Rec."Job Task No.");
-                //             Rec."Shortcut Dimension 1 Code" := NS_JobTesks."Global Dimension 1 Code";
-                //             Rec."Shortcut Dimension 2 Code" := NS_JobTesks."Global Dimension 2 Code";
-                //             Rec."Dimension Set ID" := NS_BillingHeader.NS_GetDimensionNoFromJobTask(Rec."Job No.", Rec."Job Task No.");
-                //         end;
-                //     end;
-                //PRJ-1308.GK.1.0 05May2022 end
             end;
-            //PRJ-1087.JS.1.0 18Dec2021 End
-
         }
         //PRJ-212 VT1.0 04-05-20 end
-
-        //PRJ-1087.JS.1.0 18Dec2021 Start
-        modify("Buy-from Vendor No.")
-        {
-            trigger OnAfterValidate()
-            var
-                NS_JobSetup: Record "Jobs Setup";
-                NS_Jobs: Record job;
-                NS_BillingHeader: Record "NS_Progress Billing Header";
-            begin
-                //PRJ-1087.JS.1.0 18Dec2021 - Start
-                //PRJCTPR-199.JS.1.0 11DEC2023 - start below code commented
-                // If Rec."Job No." <> '' then begin
-                //     NS_JobsSetup.Get();
-                //     if NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                //         NS_Jobs.Get(Rec."Job No.");
-                //         Rec."Shortcut Dimension 1 Code" := NS_Jobs."Global Dimension 1 Code";
-                //         Rec."Shortcut Dimension 2 Code" := NS_Jobs."Global Dimension 2 Code";
-                //         Rec."Dimension Set ID" := NS_BillingHeader.GetDimensionNoFromJob(Rec."Job No.");
-                //     end;
-                // end;
-                //PRJCTPR-199.JS.1.0 11DEC2023 - end
-                //PRJ-1087.JS.1.0 18Dec2021 - end                
-            end;
-
-        }
-        //PRJ-1087.JS.1.0 18Dec2021 End        
 
         modify("Line Amount")
         {
@@ -847,13 +389,12 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
         {
             Caption = 'Job Cost Category';
             Description = 'ProjectPro';
-            TableRelation = "NS_Job Cost Category".NS_Code;  //PRJCTPR-185.JS.1.0 31Aug2023
+            TableRelation = "NS_Job Cost Category";
             DataClassification = CustomerContent;
 
             trigger OnValidate();
             var
                 NS_JobCostCategory: Record "NS_Job Cost Category";
-                NSJobCostCategory: record "NS_Job Cost Category";  //PRJCTPR-185.JS.1.0
             begin
                 //ProjectPro - start
                 if NS_JobCostCategory.GET("NS_Job Cost Category") then begin
@@ -864,15 +405,6 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                                     if "No." <> NS_JobCostCategory."NS_G/L Account No." then begin //PRJ-268 VT1.0 18-05-20
                                         VALIDATE(Type, Type::"G/L Account");
                                         VALIDATE("No.", NS_JobCostCategory."NS_G/L Account No.");
-                                        //PRJCTPR-185.JS.1.0 31Aug2023 - Start
-                                        if Rec."NS_Job Cost Category" = '' then begin
-                                            NSJobCostCategory.Reset();
-                                            NSJobCostCategory.SetCurrentKey("NS_G/L Account No.");
-                                            NSJobCostCategory.SetRange("NS_G/L Account No.", rec."No.");
-                                            if NSJobCostCategory.FindFirst() then
-                                                rec."NS_Job Cost Category" := NSJobCostCategory.NS_Code;
-                                        end;
-                                        //PRJCTPR-185.JS.1.0 31Aug2023 - end                                        
                                     end;//PRJ-268 VT1.0 18-05-20
                                     if NS_JobCostCategory."NS_Activity Code" <> '' then
                                         VALIDATE("Job Task No.", NS_JobCostCategory."NS_Activity Code");
@@ -949,27 +481,19 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                 Currency2: Record Currency;
             begin
                 //ProjectPro - start
-                //PRJ-1618.AS.1.0 START COMMENT
                 GetPurchHeader;
                 NS_Currency.InitRoundingPrecision;
-                // if PurchHeader."Currency Code" <> '' then
-                //     "NS_Committed Amount (LCY)" :=
-                //     ROUND(
-                //       CurrExchRate.ExchangeAmtLCYToFCY(
-                //         GetDate, "Currency Code",
-                //         "NS_Committed Amount", PurchHeader."Currency Factor"),
-                //       NS_Currency."Amount Rounding Precision")
-                // else
-                //     "NS_Committed Amount" :=
-                //     ROUND("NS_Committed Amount (LCY)", Currency2."Amount Rounding Precision");
-                //PRJ-1618.AS.1.0 END COMMENT
-                //ProjectPro - end
-
-                //PRJ-1618.AS.1.0 START 
-                if PurchHeader."Currency Code" = '' then
+                if PurchHeader."Currency Code" <> '' then
+                    "NS_Committed Amount (LCY)" :=
+                    ROUND(
+                      CurrExchRate.ExchangeAmtLCYToFCY(
+                        GetDate, "Currency Code",
+                        "NS_Committed Amount", PurchHeader."Currency Factor"),
+                      NS_Currency."Amount Rounding Precision")
+                else
                     "NS_Committed Amount" :=
-                     ROUND("NS_Committed Amount (LCY)", Currency2."Amount Rounding Precision");
-                //PRJ-1618.AS.1.0 END
+                    ROUND("NS_Committed Amount (LCY)", Currency2."Amount Rounding Precision");
+                //ProjectPro - end
             end;
         }
         field(14021118; "NS_Committed Amount"; Decimal)
@@ -983,35 +507,15 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                 Currency2: Record Currency;
             begin
                 //ProjectPro - start
-                // GetPurchHeader;//PRJ-1618.AS.1.0
+                GetPurchHeader;
                 NS_Currency.InitRoundingPrecision;
-                if PurchHeader."Currency Code" <> '' then begin
-
-                    //PRJ-1618.AS.1.0 START
-                    "NS_Committed Amount" := ROUND(
-                    rec."Amount Including VAT" * rec."NS_Committed Quantity" / Rec.Quantity,
-                    NS_Currency."Amount Rounding Precision");
-                    //PRJ-1618.AS.1.0 END
-
-                    //PRJ-1618.AS.1.0 START COMMENT
-                    // "NS_Committed Amount" :=
-                    // ROUND(
-                    //   CurrExchRate.ExchangeAmtFCYToLCY(
-                    //     GetDate, "Currency Code",
-                    //     "NS_Committed Amount (LCY)", PurchHeader."Currency Factor"),
-                    //   NS_Currency."Amount Rounding Precision")
-                    //PRJ-1618.AS.1.0 END COMMENT
-
-                    //PRJ-1618.AS.1.0 START
-                    "NS_Committed Amount (LCY)" :=
+                if PurchHeader."Currency Code" <> '' then
+                    "NS_Committed Amount" :=
                     ROUND(
                       CurrExchRate.ExchangeAmtFCYToLCY(
                         GetDate, "Currency Code",
-                        "NS_Committed Amount", PurchHeader."Currency Factor"),
+                        "NS_Committed Amount (LCY)", PurchHeader."Currency Factor"),
                       NS_Currency."Amount Rounding Precision")
-                    //PRJ-1618.AS.1.0 END
-
-                end
                 else
                     "NS_Committed Amount (LCY)" :=
                     ROUND("NS_Committed Amount", Currency2."Amount Rounding Precision");
@@ -1120,18 +624,6 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             Caption = 'JMP Details';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PRJCTPR-256.JS.1.0 14DEC2023 - Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Replaced by new field “JMP Details” with increased length 100 characters';
-            ObsoleteTag = 'Repleace in ProjectPro Upcomming release 23.0.XX.XXXX';
-            //PRJCTPR-256.JS.1.0 14DEC2023 - end
-            //PRJCTPR-256.JS.1.0 14DEC2023 - start
-            trigger OnValidate()
-            begin
-                if rec."NS_JMP Details" <> '' then
-                    rec."NS_JMP Details" := copystr(rec."NS_JMP Details", 1, 20);
-            end;
-            //PRJCTPR-256.JS.1.0 14DEC2023 - end  
         }
         field(14021409; "NS_Segment Code"; Code[20])
         {
@@ -1153,7 +645,7 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                 if NOT rec."NS_FA Job Usage" then begin
                     "NS_FA Job No." := '';
                     "NS_FA Job Task No." := '';
-                    //  "NS_FA Segment Code" := ''; //PE-81.Dk.1.0 04May2023
+                    "NS_FA Segment Code" := '';
                 end;
 
             end;
@@ -1188,7 +680,7 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             TableRelation = "NS_Job Takeoff Segments"."NS_Segment Code" WHERE("NS_Job No." = FIELD("NS_FA Job No."));
             trigger OnValidate()
             begin
-                // TestField("NS_FA Job Usage", true);  //PE-81.Dk.1.0 04May2023
+                TestField("NS_FA Job Usage", true);
             end;
         }
 
@@ -1222,43 +714,6 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             Editable = false;
         }
 
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-        //PRJ-1411.RM.1.0 start
-        field(14021434; "NS_JMP Line No."; Integer)
-        {
-            caption = 'JMP Line No.';
-            description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            Editable = false;
-
-        }
-        //PRJ-1411.RM.1.0 end
-        //PRJCTPR-256.JS.1.0 - Start
-        field(14021322; "NS_PPJMP Details"; Text[100])
-        {
-            Caption = 'JMP Details';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-256.JS.1.0 - end
-
-        //PE-260.JS.1.0 20FEB2024 - Start
-        field(14021323; "NS_Multiple Jobs on Lines"; Boolean)
-        {
-            Caption = 'Multiple Jobs on Purchase Lines';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        //PE-260.JS.1.0 20FEB2024 - end  
-
     }
     keys
     {
@@ -1271,61 +726,6 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             SumIndexFields = "NS_Committed Amount (LCY)", "NS_Committed Amount";
         }
     }
-
-    trigger OnInsert()//PRJ-1740.SD.1.0 15Dec2022 -Start
-    begin
-        CheckResource();
-    end;//PRJ-1740.SD.1.0 15Dec2022 -End
-
-    trigger OnAfterInsert()//PRJ-1740.SD.1.0 15Dec2022 -Start
-    var
-        JobCostCategory: Code[20];
-        NSJobCostCategory: Record "NS_Job Cost Category"; //PRJCTPR-185.AT.1.0  31OCT2023
-    begin
-        JobCostCategory := CheckResource();
-        If JobCostCategory <> '' then begin
-            "NS_Job Cost Category" := JobCostCategory;
-            Modify();
-        end;
-        //PRJCTPR-185.AT.1.0  31OCT2023 - Start
-        if Rec."NS_Job Cost Category" = '' then begin
-            NSJobCostCategory.Reset();
-            NSJobCostCategory.SetCurrentKey("NS_G/L Account No.");
-            NSJobCostCategory.SetRange("NS_G/L Account No.", rec."No.");
-            if NSJobCostCategory.FindFirst() then
-                rec."NS_Job Cost Category" := NSJobCostCategory.NS_Code;
-            Modify();
-        end;
-        //PRJCTPR-185.AT.1.0  31OCT2023 - end 
-    end;//PRJ-1740.SD.1.0 15Dec2022 -End
-
-    trigger OnModify()//PRJ-1740.SD.1.0 15Dec2022 -Start
-    var
-        JobCostCategory: Code[20];
-    begin
-        JobCostCategory := CheckResource();
-        If JobCostCategory <> '' then begin
-            "NS_Job Cost Category" := JobCostCategory;
-            Modify();
-        end;
-    end;//PRJ-1740.SD.1.0 15Dec2022 -End
-
-    local procedure CheckResource() JobCostCategory: Code[20] //PRJ-1740.SD.1.0 15Dec2022 -Start
-    var
-        NSFARec: Record "Fixed Asset";   //PRJ-1740.SD.1.0 15Dec2022
-        NSResRec: Record Resource;     //PRJ-1740.SD.1.0 15Dec2022
-        Text14021100: Label 'There must be a cost category for Resource %1 on Fixed Asset %2'; //PRJ-1740.SD.1.0 15Dec2022
-    begin
-        if Type = Type::"Fixed Asset" then
-            if NSFARec.Get("No.") then
-                if NSResRec.Get(NSFARec."NS_FA Res. No.") then
-                    if NS_JobsSetup.Get() then
-                        if (NS_JobsSetup."NS_Cost Category Required Bud") and (NS_JobsSetup."NS_Cost Category Required") then
-                            if NSResRec."NS_Job Cost Category" = '' then
-                                ERROR(Text14021100, NSResRec."No.", NSFARec."No.")
-                            else
-                                exit(NSResRec."NS_Job Cost Category");
-    end;//PRJ-1740.SD.1.0 15Dec2022 -End
 
     trigger OnAfterDelete()
     var
@@ -1395,11 +795,6 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
         Text012_Txt: Label 'must not be specified when %1 = %2';
         p: Codeunit "NS_Parameters for Table Events";
         EditBool: Boolean;
-        GLAccount: Record "G/L Account";//PRJCTPR-60.NK.1.0 start13march2023
-
-        PP_JobPlanningLine1: Record "Job Planning Line"; //PRJCTPR-60.NK.1.0 start13march2023
-
-
 
     procedure GetJobCosts();
     VAR
@@ -1733,9 +1128,9 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                     VALIDATE("VAT Prod. Posting Group");
         IF "Job No." <> '' THEN
             IF NS_Job.GET("Job No.") THEN BEGIN
-                IF NS_Job."NS_Tax Group Code New" <> '' THEN
-                    IF "Tax Group Code" <> NS_Job."NS_Tax Group Code New" THEN
-                        VALIDATE("Tax Group Code", NS_Job."NS_Tax Group Code New");
+                IF NS_Job."NS_Tax Group Code" <> '' THEN
+                    IF "Tax Group Code" <> NS_Job."NS_Tax Group Code" THEN
+                        VALIDATE("Tax Group Code", NS_Job."NS_Tax Group Code");
                 IF NS_Job."NS_VAT Prod. Posting Group" <> '' THEN
                     IF "VAT Prod. Posting Group" <> NS_Job."NS_VAT Prod. Posting Group" THEN
                         VALIDATE("VAT Prod. Posting Group", NS_Job."NS_VAT Prod. Posting Group");
@@ -1814,21 +1209,19 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
             IF HasTypeToFillMandatoryFields THEN;
         PurchHeader.TESTFIELD(Status, PurchHeader.Status::Open.AsInteger());
     END;
-
-    //PRJ-1314.JS.1.0 18APR2022 - Start
-    [Obsolete('Now this procedure is available in Business Central Standard in Purchase Line and will be removed in ProjectPro upcomming release')] //PRJCTPR-168.JS.1.0 27July2023
-    PROCEDURE SuspendStatusCheck(Suspend: Boolean);
+    // Upgrade
+    // PROCEDURE SuspendStatusCheck(Suspend: Boolean);
+    PROCEDURE NS_SuspendStatusCheck(Suspend: Boolean);
+    // << Upgrade
     BEGIN
         StatusCheckSuspended := Suspend;
     END;
-    //PRJ-1314.JS.1.0 18APR2022 - end
 
     LOCAL PROCEDURE GetPurchHeader();
     BEGIN
         Rec.TESTFIELD("Document No.");
         IF ("Document Type" <> PurchHeader."Document Type") OR ("Document No." <> PurchHeader."No.") THEN BEGIN
-            //PurchHeader.GET("Document Type", "Document No.");//PRJ-1096.GK.1.0 28Dec2021-comment
-            if PurchHeader.GET("Document Type", "Document No.") then; //PRJ-1096.GK.1.0 28Dec2021 -Add
+            PurchHeader.GET("Document Type", "Document No.");
             IF PurchHeader."Currency Code" = '' THEN
                 Currency.InitRoundingPrecision
             ELSE BEGIN
@@ -1890,10 +1283,7 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
                         TempJobJnlLine.validate(Type, TempJobJnlLine.Type::Item);
 
 
-            //PRJ-1469.GK.2.0 04Oct2022 - Start
-            //TempJobJnlLine.VALIDATE("No.", "No.");
-            TempJobJnlLine."No." := "No.";
-            //PRJ-1469.GK.2.0 04Oct2022 - Start            
+            TempJobJnlLine.VALIDATE("No.", "No.");
             TempJobJnlLine.validate(Quantity, Quantity);
             TempJobJnlLine.VALIDATE("Variant Code", "Variant Code");
             TempJobJnlLine.VALIDATE("Unit of Measure Code", "Unit of Measure Code");

@@ -6,7 +6,6 @@ page 14021451 "NS_Labor rate by task list"
     // +ProjectPro
     //CTSI-95.MS.1.0 create new page
     // +------------------------------------------------------------
-    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks  Custmization
 
     Caption = 'Labor Rates by Task';
     //Editable = false;
@@ -37,12 +36,6 @@ page 14021451 "NS_Labor rate by task list"
                 {
                     ApplicationArea = all;
                 }
-                //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-                field("Job Type"; Rec."NS_Job Type Code")
-                {
-                    ApplicationArea = all;
-                }
-                //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
                 field("Labor Rate"; "NS_Labor Rate")
                 {
                     ApplicationArea = all;

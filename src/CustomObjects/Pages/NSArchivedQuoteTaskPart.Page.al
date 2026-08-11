@@ -1,5 +1,6 @@
 page 14021449 "NS_Archived Quote Task Part"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     //SPLN1.00 2019-02-12 DMT Created to mach BC365 requarements. Copy of page 14021441, changed type to ListPart
     // version PPNA11.00
 
@@ -10,7 +11,6 @@ page 14021449 "NS_Archived Quote Task Part"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-872.JS.1.0  13Sep2021
-    //PRJ-1102.RM.1.0 29Dec2021 | Removed  statement
 
     Caption = 'Archived Quote Task Lines';
     DataCaptionFields = "NS_Job No.";
@@ -51,15 +51,24 @@ page 14021449 "NS_Archived Quote Task Part"
                     var
                         PP_PickAPOCode: Page "NS_Pick APO Code";
                         PP_Description2: Text[50];
+                        // >> Upgrade
+                        JobAct: Code[20];
+                    // << Upgrade
                     begin
                         CLEAR(PP_PickAPOCode);
                         PP_PickAPOCode.LOOKUPMODE(true);
-                        PP_PickAPOCode.NS_SetInput(Rec."NS_Job No.", Rec."NS_Job Task No.", 0);
+                        // >> Upgrade
+                        // PP_PickAPOCode.NS_SetInput("NS_Job No.", "NS_Job Task No.", 0);
+                        PP_PickAPOCode.NS_SetInput("NS_Job No.", "NS_Job Task No.", JobAct, 0);
+                        // << Upgrade
                         if PP_PickAPOCode.RUNMODAL() = ACTION::LookupOK then begin
-                            PP_PickAPOCode.NS_GetResult(Rec."NS_Job Task No.", PP_Description2);
-                            Rec.NS_Description := PP_JobTask.NS_GetJobTaskDescription(Rec."NS_Job No.", Rec."NS_Job Task No.");
-                            if Rec.NS_Description = '' then
-                                Rec.NS_Description := PP_Description2;
+                            // >> Upgrade
+                            // PP_PickAPOCode.NS_GetResult("NS_Job Task No.", PP_Description2);
+                            PP_PickAPOCode.NS_GetResult("NS_Job Task No.", PP_Description2, JobAct);
+                            // << Upgrade
+                            NS_Description := PP_JobTask.NS_GetJobTaskDescription("NS_Job No.", "NS_Job Task No.");
+                            if NS_Description = '' then
+                                NS_Description := PP_Description2;
                         end;
                     end;
                 }
@@ -219,13 +228,13 @@ page 14021449 "NS_Archived Quote Task Part"
                     ApplicationArea = Jobs;
                     ToolTip = 'Specifies the remaining total price ($) as the sum of prices from job planning lines associated with the job task. The calculation occurs when you have specified that there is a usage link between the job ledger and the job planning lines.';
                 }
-                field("EAC (Total Cost)"; Rec.NS_CalcEACTotalCost())
+                field("EAC (Total Cost)"; NS_CalcEACTotalCost())
                 {
                     ApplicationArea = Jobs;
                     Caption = 'EAC (Total Cost)';
                     ToolTip = 'Specifies the estimate at completion (EAC) total cost for a job task line. If the Apply Usage Link check box on the job is selected, then the EAC (Total Cost) field is calculated as follows:';
                 }
-                field("EAC (Total Price)"; Rec.NS_CalcEACTotalPrice())
+                field("EAC (Total Price)"; NS_CalcEACTotalPrice())
                 {
                     ApplicationArea = Jobs;
                     Caption = 'EAC (Total Price)';
@@ -318,16 +327,16 @@ page 14021449 "NS_Archived Quote Task Part"
                         JobPlanningLine: Record "NS_Archived QuotePlanningLine";
                         JobPlanningLines: Page "NS_Archived QuotePlanningLines";
                     begin
-                        Rec.TESTFIELD("NS_Job Task Type", Rec."NS_Job Task Type"::Posting);
-                        Rec.TESTFIELD("NS_Job No.");
-                        Rec.TESTFIELD("NS_Job Task No.");
+                        TESTFIELD("NS_Job Task Type", "NS_Job Task Type"::Posting);
+                        TESTFIELD("NS_Job No.");
+                        TESTFIELD("NS_Job Task No.");
                         JobPlanningLine.FILTERGROUP(2);
-                        JobPlanningLine.SETRANGE("NS_Job No.", Rec."NS_Job No.");
-                        JobPlanningLine.SETRANGE("NS_Job Task No.", Rec."NS_Job Task No.");
-                        JobPlanningLine.SETRANGE(NS_Revision, Rec.NS_Revision);
+                        JobPlanningLine.SETRANGE("NS_Job No.", "NS_Job No.");
+                        JobPlanningLine.SETRANGE("NS_Job Task No.", "NS_Job Task No.");
+                        JobPlanningLine.SETRANGE(NS_Revision, NS_Revision);
                         JobPlanningLine.FILTERGROUP(0);
                         JobPlanningLines.NS_SetJobTaskNoVisible(false);
-                        JobPlanningLines.NS_SetJobNo(Rec."NS_Job No.");
+                        JobPlanningLines.NS_SetJobNo("NS_Job No.");
                         JobPlanningLines.SETTABLEVIEW(JobPlanningLine);
                         JobPlanningLines.RUN();
                     end;
@@ -338,10 +347,10 @@ page 14021449 "NS_Archived Quote Task Part"
 
     trigger OnAfterGetRecord();
     begin
-        DescriptionIndent := Rec.NS_Indentation;
-        StyleIsStrong := Rec."NS_Job Task Type" <> REC."NS_Job Task Type"::Posting;
+        DescriptionIndent := NS_Indentation;
+        StyleIsStrong := "NS_Job Task Type" <> "NS_Job Task Type"::Posting;
 
-        if PP_Job.GET(Rec."NS_Job No.") then
+        if PP_Job.GET("NS_Job No.") then
             PP_JobOSFileName := PP_Job."NS_OS File Name"
         else
             PP_JobOSFileName := '';
@@ -349,21 +358,21 @@ page 14021449 "NS_Archived Quote Task Part"
 
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean;
     begin
-        if (Rec."NS_Quote No." = '') and (QuoteNo <> '') then
-            Rec."NS_Quote No." := QuoteNo;
+        if ("NS_Quote No." = '') and (QuoteNo <> '') then
+            "NS_Quote No." := QuoteNo;
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean);
     begin
-        Rec.NS_ClearTempDim();
+        NS_ClearTempDim;
     end;
 
     trigger OnOpenPage();
     begin
         if PP_CurrentJobNo <> '' then begin
-            Rec.FILTERGROUP := 2;
-            Rec.SETRANGE("NS_Job No.", PP_CurrentJobNo);
-            Rec.FILTERGROUP := 0;
+            FILTERGROUP := 2;
+            SETRANGE("NS_Job No.", PP_CurrentJobNo);
+            FILTERGROUP := 0;
         end;
     end;
 
@@ -412,11 +421,11 @@ page 14021449 "NS_Archived Quote Task Part"
     begin
         PurchLine.SETCURRENTKEY("Document Type", "Job No.", "Job Task No.");
         PurchLine.SETRANGE("Document Type", PurchLine."Document Type"::Order);
-        PurchLine.SETRANGE("Job No.", Rec."NS_Job No.");
-        if Rec."NS_Job Task Type" in [Rec."NS_Job Task Type"::Total, Rec."NS_Job Task Type"::"End-Total"] then
-            PurchLine.SETFILTER("Job Task No.", Rec.NS_Totaling)
+        PurchLine.SETRANGE("Job No.", "NS_Job No.");
+        if "NS_Job Task Type" in ["NS_Job Task Type"::Total, "NS_Job Task Type"::"End-Total"] then
+            PurchLine.SETFILTER("Job Task No.", NS_Totaling)
         else
-            PurchLine.SETRANGE("Job Task No.", Rec."NS_Job Task No.");
+            PurchLine.SETRANGE("Job Task No.", "NS_Job Task No.");
     end;
 
     procedure NS_SetJobNo(CurrentJobNo2: Code[20]);
@@ -426,7 +435,7 @@ page 14021449 "NS_Archived Quote Task Part"
 
     procedure NS_GetTask(): Code[35];
     begin
-        exit(Rec."NS_Job Task No.");
+        exit("NS_Job Task No.");
     end;
 
     procedure NS_ClearJobStartDates();
@@ -434,19 +443,17 @@ page 14021449 "NS_Archived Quote Task Part"
         JobTask: Record "Job Task";
     begin
         //Clear all start dates in Job Task for the job unless a particular task has a fixed start date.
-        //PRJ-1102.RM.1.0.001 29Dec2021 Start
-        // PP_JobTask do begin
-        PP_JobTask.RESET();
-        PP_JobTask.SETRANGE("Job No.", PP_CurrentJobNo);
-        if PP_JobTask.FINDSET() then
-            repeat
-                if not PP_JobTask."NS_Start Date Fixed" then
-                    PP_JobTask."NS_Task Start Date" := 0D;
-                PP_JobTask."NS_Task End Date" := 0D;
-                PP_JobTask.MODIFY();
-            until PP_JobTask.NEXT() = 0;
-        //end;
-        //PRJ-1102.RM.1.0.001 29Dec2021 End
+        with PP_JobTask do begin
+            RESET();
+            SETRANGE("Job No.", PP_CurrentJobNo);
+            if FINDSET() then
+                repeat
+                    if not "NS_Start Date Fixed" then
+                        "NS_Task Start Date" := 0D;
+                    "NS_Task End Date" := 0D;
+                    MODIFY();
+                until NEXT() = 0;
+        end;
     end;
 
     procedure NS_PrepareTasksForExport();
@@ -456,20 +463,18 @@ page 14021449 "NS_Archived Quote Task Part"
         NS_BuildProjectLinkBuffer();
         NS_CalcStartDates();
 
-        //Update table  new calculated dates
-        //PRJ-1102.RM.1.0.002 29Dec2021 Start
-        // PP_TempProjectLinkBuffer do begin
-        PP_TempProjectLinkBuffer.RESET();
-        if PP_TempProjectLinkBuffer.FINDSET() then
-            repeat
-                if PP_JobTask.GET(Rec."NS_Job No.", PP_TempProjectLinkBuffer."NS_Task No.") then begin
-                    PP_JobTask."NS_Task Start Date" := Rec."NS_Start Date";
-                    PP_JobTask."NS_Task End Date" := PP_TempProjectLinkBuffer."NS_Finish Date";
-                    PP_JobTask.MODIFY();
-                end;
-            until PP_TempProjectLinkBuffer.NEXT() = 0;
-        //end;
-        //PRJ-1102.RM.1.0.002 29Dec2021 End
+        //Update table with new calculated dates
+        with PP_TempProjectLinkBuffer do begin
+            RESET();
+            if FINDSET() then
+                repeat
+                    if PP_JobTask.GET("NS_Job No.", "NS_Task No.") then begin
+                        PP_JobTask."NS_Task Start Date" := "NS_Start Date";
+                        PP_JobTask."NS_Task End Date" := "NS_Finish Date";
+                        PP_JobTask.MODIFY();
+                    end;
+                until NEXT() = 0;
+        end;
     end;
 
     procedure NS_BuildProjectLinkBuffer();
@@ -485,73 +490,71 @@ page 14021449 "NS_Archived Quote Task Part"
         //Build the temporary Project Link Buffer table from the Job Tasks
         PP_JobsSetup.GET();
         PP_Separator := PP_JobsSetup."NS_APO Separators";
-        PP_TempProjectLinkBuffer.RESET();
-        PP_TempProjectLinkBuffer.DELETEALL();
+        PP_TempProjectLinkBuffer.RESET;
+        PP_TempProjectLinkBuffer.DELETEALL;
         PP_LineNo := 0;
-        NS_SetJobNo(Rec."NS_Job No.");
-        //PRJ-1102.RM.1.0.003 29Dec2021 Start
-        // PP_JobTask do begin
-        PP_JobTask.RESET();
-        PP_JobTask.SETRANGE("Job No.", PP_CurrentJobNo);
-        if PP_JobTask.FINDSET() then begin
-            if (PP_JobTask."Job Task Type" <> PP_JobTask."Job Task Type"::Total) and (PP_JobTask."Job Task Type" <> PP_JobTask."Job Task Type"::"End-Total") then begin
-                //Create the first line for the job itself
-                PP_TempProjectLinkBuffer.INIT();
-                PP_TempProjectLinkBuffer."NS_Job No." := PP_JobTask."Job No.";
-                PP_LineNo += 1;
-                PP_TempProjectLinkBuffer."NS_Line No." := PP_LineNo;
-                PP_TempProjectLinkBuffer."NS_Master Job No." := PP_JobTask."Job No.";
-                PP_TempProjectLinkBuffer."NS_Job Type" := Text14021108Lbl;
-                PP_TempProjectLinkBuffer."NS_Task Name" := FORMAT(PP_Job.Description, 30);
-                PP_TempProjectLinkBuffer."NS_Outline Level" := 1;
-                PP_TempProjectLinkBuffer."NS_Start Date" := PP_JobTask."NS_Task Start Date";
-                PP_TempProjectLinkBuffer."NS_Finish Date" := PP_JobTask."NS_Task End Date";
-                PP_TempProjectLinkBuffer.INSERT();
-            end;
-
-            //Now do the rest of the job
-            repeat
-                if (PP_JobTask."Job Task Type" <> PP_JobTask."Job Task Type"::Total) and (PP_JobTask."Job Task Type" <> PP_JobTask."Job Task Type"::"End-Total") then begin
-                    PP_SeparatorCount := 0;
-                    PP_JobTaskNo := PP_JobTask."Job Task No.";
-                    PP_APOPosition := STRPOS(PP_JobTaskNo, PP_Separator);
-                    while PP_APOPosition > 0 do begin
-                        PP_SeparatorCount += 1;
-                        PP_JobTaskNo := COPYSTR(PP_JobTaskNo, PP_APOPosition + 1);
-                        PP_APOPosition := STRPOS(PP_JobTaskNo, PP_Separator);
-                    end;
-
-                    //Add a record for the task line
+        NS_SetJobNo("NS_Job No.");
+        with PP_JobTask do begin
+            RESET();
+            SETRANGE("Job No.", PP_CurrentJobNo);
+            if FINDSET() then begin
+                if ("Job Task Type" <> "Job Task Type"::Total) and ("Job Task Type" <> "Job Task Type"::"End-Total") then begin
+                    //Create the first line for the job itself
                     PP_TempProjectLinkBuffer.INIT();
-                    PP_TempProjectLinkBuffer."NS_Job No." := PP_JobTask."Job No.";
+                    PP_TempProjectLinkBuffer."NS_Job No." := "Job No.";
                     PP_LineNo += 1;
                     PP_TempProjectLinkBuffer."NS_Line No." := PP_LineNo;
-                    PP_TempProjectLinkBuffer."NS_Master Job No." := PP_JobTask."Job No.";
+                    PP_TempProjectLinkBuffer."NS_Master Job No." := "Job No.";
                     PP_TempProjectLinkBuffer."NS_Job Type" := Text14021108Lbl;
-                    PP_TempProjectLinkBuffer."NS_Task No." := PP_JobTask."Job Task No.";
-                    PP_TempProjectLinkBuffer."NS_Task Name" := FORMAT(PP_JobTask."Job Task No." + ' ' + PP_JobTask.Description, 30);
-                    PP_TempProjectLinkBuffer."NS_Job Task Type" := PP_JobTask."Job Task Type";
-                    PP_TempProjectLinkBuffer."NS_Task Before" := PP_JobTask."NS_Task Before";
-                    case PP_SeparatorCount of
-                        0:
-                            PP_TempProjectLinkBuffer."NS_Outline Level" := 2;
-                        1:
-                            PP_TempProjectLinkBuffer."NS_Outline Level" := 3;
-                        2:
-                            PP_TempProjectLinkBuffer."NS_Outline Level" := 4;
-                    end;
-                    PP_TempProjectLinkBuffer.NS_Level := Text14021109Lbl;
-                    PP_TempProjectLinkBuffer."NS_Start Date" := PP_JobTask."NS_Task Start Date";
-                    PP_TempProjectLinkBuffer."NS_Finish Date" := PP_JobTask."NS_Task End Date";
-                    PP_TempProjectLinkBuffer."NS_Resource No." := PP_JobTask."NS_Resource No.";
-                    PP_TempProjectLinkBuffer.NS_Duration := PP_JobTask."NS_Task Days";
-                    PP_TempProjectLinkBuffer.NS_Lag := PP_JobTask."NS_Task Lag Days";
+                    PP_TempProjectLinkBuffer."NS_Task Name" := FORMAT(PP_Job.Description, 30);
+                    PP_TempProjectLinkBuffer."NS_Outline Level" := 1;
+                    PP_TempProjectLinkBuffer."NS_Start Date" := "NS_Task Start Date";
+                    PP_TempProjectLinkBuffer."NS_Finish Date" := "NS_Task End Date";
                     PP_TempProjectLinkBuffer.INSERT();
                 end;
-            until PP_JobTask.NEXT() = 0;
+
+                //Now do the rest of the job
+                repeat
+                    if ("Job Task Type" <> "Job Task Type"::Total) and ("Job Task Type" <> "Job Task Type"::"End-Total") then begin
+                        PP_SeparatorCount := 0;
+                        PP_JobTaskNo := "Job Task No.";
+                        PP_APOPosition := STRPOS(PP_JobTaskNo, PP_Separator);
+                        while PP_APOPosition > 0 do begin
+                            PP_SeparatorCount += 1;
+                            PP_JobTaskNo := COPYSTR(PP_JobTaskNo, PP_APOPosition + 1);
+                            PP_APOPosition := STRPOS(PP_JobTaskNo, PP_Separator);
+                        end;
+
+                        //Add a record for the task line
+                        PP_TempProjectLinkBuffer.INIT();
+                        PP_TempProjectLinkBuffer."NS_Job No." := "Job No.";
+                        PP_LineNo += 1;
+                        PP_TempProjectLinkBuffer."NS_Line No." := PP_LineNo;
+                        PP_TempProjectLinkBuffer."NS_Master Job No." := "Job No.";
+                        PP_TempProjectLinkBuffer."NS_Job Type" := Text14021108Lbl;
+                        PP_TempProjectLinkBuffer."NS_Task No." := "Job Task No.";
+                        PP_TempProjectLinkBuffer."NS_Task Name" := FORMAT("Job Task No." + ' ' + Description, 30);
+                        PP_TempProjectLinkBuffer."NS_Job Task Type" := "Job Task Type";
+                        PP_TempProjectLinkBuffer."NS_Task Before" := "NS_Task Before";
+                        case PP_SeparatorCount of
+                            0:
+                                PP_TempProjectLinkBuffer."NS_Outline Level" := 2;
+                            1:
+                                PP_TempProjectLinkBuffer."NS_Outline Level" := 3;
+                            2:
+                                PP_TempProjectLinkBuffer."NS_Outline Level" := 4;
+                        end;
+                        PP_TempProjectLinkBuffer.NS_Level := Text14021109Lbl;
+                        PP_TempProjectLinkBuffer."NS_Start Date" := "NS_Task Start Date";
+                        PP_TempProjectLinkBuffer."NS_Finish Date" := "NS_Task End Date";
+                        PP_TempProjectLinkBuffer."NS_Resource No." := "NS_Resource No.";
+                        PP_TempProjectLinkBuffer.NS_Duration := "NS_Task Days";
+                        PP_TempProjectLinkBuffer.NS_Lag := "NS_Task Lag Days";
+                        PP_TempProjectLinkBuffer.INSERT();
+                    end;
+                until NEXT() = 0;
+            end;
         end;
-        // end;
-        //PRJ-1102.RM.1.0.003 29Dec2021 End
     end;
 
     procedure NS_CopyProjectLinkBuffer();
@@ -559,18 +562,16 @@ page 14021449 "NS_Archived Quote Task Part"
         //Copy the temporary Project Link Buffer table into another table for use by other routines
         PP_ProjLinkBuf.RESET();
         PP_ProjLinkBuf.DELETEALL();
-        //PRJ-1102.RM.1.0.004 29Dec2021 Start
-        // PP_TempProjectLinkBuffer do begin
-        PP_TempProjectLinkBuffer.RESET();
-        if PP_TempProjectLinkBuffer.FINDSET() then begin
-            repeat
-                PP_ProjLinkBuf.INIT();
-                PP_ProjLinkBuf.COPY(PP_TempProjectLinkBuffer);
-                PP_ProjLinkBuf.INSERT()
-        until PP_TempProjectLinkBuffer.NEXT() = 0;
+        with PP_TempProjectLinkBuffer do begin
+            PP_TempProjectLinkBuffer.RESET();
+            if FINDSET() then begin
+                repeat
+                    PP_ProjLinkBuf.INIT();
+                    PP_ProjLinkBuf.COPY(PP_TempProjectLinkBuffer);
+                    PP_ProjLinkBuf.INSERT()
+                until NEXT() = 0;
+            end;
         end;
-        //end;
-        //PRJ-1102.RM.1.0.004 29Dec2021 End
     end;
 
     procedure NS_CalcStartDates();
@@ -579,68 +580,66 @@ page 14021449 "NS_Archived Quote Task Part"
         PP_LineNo: Integer;
         PP_NextStartDate: Date;
     begin
-        //Calculate the start dates of the tasks in the temporary table  ability for a project calendar override value
-        NS_SetPredecessorValues();
-        NS_CopyProjectLinkBuffer();
+        //Calculate the start dates of the tasks in the temporary table with ability for a project calendar override value
+        NS_SetPredecessorValues;
+        NS_CopyProjectLinkBuffer;
 
-        //Fill in the start dates  previous date plus days of duration
+        //Fill in the start dates with previous date plus days of duration
         //  However if the task has its own start date then leave it alone and start over from there.
-        //PRJ-1102.RM.1.0.005 29Dec2021 Start
-        // PP_TempProjectLinkBuffer do begin
-        PP_TaskBeforeHold := '';
-        PP_TempProjectLinkBuffer.RESET();
-        if PP_TempProjectLinkBuffer.FINDSET() then begin
-            if PP_TempProjectLinkBuffer."NS_Start Date" <> 0D then
-                PP_NextStartDate := PP_TempProjectLinkBuffer."NS_Start Date"
-            else
-                ERROR(Text14021103Lbl);
-            repeat
-                if (PP_TempProjectLinkBuffer."NS_Job Task Type" = PP_TempProjectLinkBuffer."NS_Job Task Type"::Posting) and (PP_LineNo > 1) then begin
-                    //Get the predecessor record
-                    PP_ProjLinkBuf.RESET();
-                    PP_ProjLinkBuf.SETCURRENTKEY("NS_Job No.", "NS_Task No.", "NS_Line No.");
-                    PP_ProjLinkBuf.SETRANGE("NS_Job No.", PP_TempProjectLinkBuffer."NS_Job No.");
-                    PP_ProjLinkBuf.SETRANGE("NS_Task No.", PP_TempProjectLinkBuffer."NS_Task Before");
-                    PP_ProjLinkBuf.FINDFIRST();
+        with PP_TempProjectLinkBuffer do begin
+            PP_TaskBeforeHold := '';
+            PP_TempProjectLinkBuffer.RESET();
+            if FINDSET() then begin
+                if "NS_Start Date" <> 0D then
+                    PP_NextStartDate := "NS_Start Date"
+                else
+                    ERROR(Text14021103Lbl);
+                repeat
+                    if ("NS_Job Task Type" = "NS_Job Task Type"::Posting) and (PP_LineNo > 1) then begin
+                        //Get the predecessor record
+                        PP_ProjLinkBuf.RESET;
+                        PP_ProjLinkBuf.SETCURRENTKEY("NS_Job No.", "NS_Task No.", "NS_Line No.");
+                        PP_ProjLinkBuf.SETRANGE("NS_Job No.", "NS_Job No.");
+                        PP_ProjLinkBuf.SETRANGE("NS_Task No.", "NS_Task Before");
+                        PP_ProjLinkBuf.FINDFIRST;
 
-                    if Rec."NS_Start Date" = 0D then begin
-                        //Calculate a new start date
-                        if (PP_ProjLinkBuf.NS_Lag > 0) and (PP_ProjLinkBuf."NS_Finish Date" > 0D) then begin
-                            PP_TempProjectLinkBuffer."NS_Start Date" := CALCDATE('+' + FORMAT(PP_ProjLinkBuf.NS_Lag + 1) + 'D', PP_ProjLinkBuf."NS_Finish Date");
-                            Rec."NS_Start Date" := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", Rec."NS_Start Date", 0);
-                        end else
-                            if PP_ProjLinkBuf."NS_Finish Date" > 0D then
-                                PP_TempProjectLinkBuffer."NS_Start Date" := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", PP_ProjLinkBuf."NS_Finish Date", 1)
-                            else
-                                PP_TempProjectLinkBuffer."NS_Start Date" := PP_NextStartDate;
+                        if "NS_Start Date" = 0D then begin
+                            //Calculate a new start date
+                            if (PP_ProjLinkBuf.NS_Lag > 0) and (PP_ProjLinkBuf."NS_Finish Date" > 0D) then begin
+                                "NS_Start Date" := CALCDATE('+' + FORMAT(PP_ProjLinkBuf.NS_Lag + 1) + 'D', PP_ProjLinkBuf."NS_Finish Date");
+                                "NS_Start Date" := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", "NS_Start Date", 0);
+                            end else
+                                if PP_ProjLinkBuf."NS_Finish Date" > 0D then
+                                    "NS_Start Date" := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", PP_ProjLinkBuf."NS_Finish Date", 1)
+                                else
+                                    "NS_Start Date" := PP_NextStartDate;
+                        end;
+
+                        //Calculate a finish date
+                        if "NS_Start Date" > 0D then
+                            "NS_End Date" := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", "NS_Start Date", NS_Duration - 1);
+
+                        //Update ProjectLinkBuffer
+                        MODIFY();
+
+                        //Update ProjLinkBuf with new values
+                        PP_ProjLinkBuf.RESET();
+                        PP_ProjLinkBuf.SETCURRENTKEY("NS_Job No.", "NS_Task No.", "NS_Line No.");
+                        PP_ProjLinkBuf.SETRANGE("NS_Job No.", "NS_Job No.");
+                        PP_ProjLinkBuf.SETRANGE("NS_Task No.", "NS_Job Task No.");
+                        if PP_ProjLinkBuf.FINDFIRST then begin
+                            PP_ProjLinkBuf."NS_Start Date" := "NS_Start Date";
+                            PP_ProjLinkBuf."NS_Finish Date" := "NS_End Date";
+                            PP_ProjLinkBuf.MODIFY()
+                        end;
+
+                        //Set the next start date
+                        if "NS_End Date" > 0D then
+                            PP_NextStartDate := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", "NS_End Date", 1);
                     end;
-
-                    //Calculate a finish date
-                    if PP_TempProjectLinkBuffer."NS_Start Date" > 0D then
-                        Rec."NS_End Date" := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", PP_TempProjectLinkBuffer."NS_Start Date", PP_TempProjectLinkBuffer.NS_Duration - 1);
-
-                    //Update ProjectLinkBuffer
-                    PP_TempProjectLinkBuffer.MODIFY();
-
-                    //Update ProjLinkBuf with new values
-                    PP_ProjLinkBuf.RESET();
-                    PP_ProjLinkBuf.SETCURRENTKEY("NS_Job No.", "NS_Task No.", "NS_Line No.");
-                    PP_ProjLinkBuf.SETRANGE("NS_Job No.", PP_TempProjectLinkBuffer."NS_Job No.");
-                    PP_ProjLinkBuf.SETRANGE("NS_Task No.", Rec."NS_Job Task No.");
-                    if PP_ProjLinkBuf.FINDFIRST() then begin
-                        PP_ProjLinkBuf."NS_Start Date" := Rec."NS_Start Date";
-                        PP_ProjLinkBuf."NS_Finish Date" := Rec."NS_End Date";
-                        PP_ProjLinkBuf.MODIFY()
-                    end;
-
-                    //Set the next start date
-                    if Rec."NS_End Date" > 0D then
-                        PP_NextStartDate := NS_AddWorkingDays(PP_ProjLinkBuf."NS_Job No.", Rec."NS_End Date", 1);
-                end;
-            until PP_TempProjectLinkBuffer.NEXT() = 0;
+                until NEXT() = 0;
+            end;
         end;
-        //end;
-        //PRJ-1102.RM.1.0.005 29Dec2021 End
     end;
 
     procedure NS_AddWorkingDays(JobNo: Code[20]; WorkDate: Date; Days: Integer): Date;
@@ -680,10 +679,7 @@ page 14021449 "NS_Archived Quote Task Part"
         if JobNo > '' then
             if PP_Job.GET(JobNo) then
                 if PP_Job."NS_Job Calendar Code" > '' then
-                    //PRJCTPR-308.DK.1.0 11June2024 Start
-                    // if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then begin //PRJ-1070.RM.1.0 08Dec2021
-                    if PP_JobsSetup."NS_JobCalendarSource" = PP_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then begin
-                        //PRJCTPR-308.DK.1.0 11June2024 End
+                    if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then begin
                         if PP_BaseCalendar.GET(PP_Job."NS_Job Calendar Code") then
                             PP_CalendarCode := PP_Job."NS_Job Calendar Code"
                         else
@@ -696,10 +692,7 @@ page 14021449 "NS_Archived Quote Task Part"
                     end;
 
         if PP_CalendarCode = '' then
-            //PRJCTPR-308.DK.1.0 11June2024 Start
-            // if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then begin //PRJ-1070.RM.1.0 08Dec2021
-            if PP_JobsSetup."NS_JobCalendarSource" = PP_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then begin
-                //PRJCTPR-308.DK.1.0 11June2024 End
+            if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then begin
                 if PP_BaseCalendar.GET(PP_JobsSetup."NS_Job Calendar Code") then
                     PP_CalendarCode := PP_JobsSetup."NS_Job Calendar Code"
                 else
@@ -719,11 +712,8 @@ page 14021449 "NS_Archived Quote Task Part"
             for PP_DayCount := 1 to Days do begin
                 repeat
                     PP_NewDate := CALCDATE('+1D', PP_NewDate);
-                    //PRJCTPR-308.DK.1.0 11June2024 Start
-                    // if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then //PRJ-1070.RM.1.0 08Dec2021
-                    if PP_JobsSetup."NS_JobCalendarSource" = PP_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then
-                        //PRJCTPR-308.DK.1.0 11June2024 End
-                        // PP_NonWorkingDate := PP_CalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description)//PPNA16.0 Blocked
+                    if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then
+                        //PP_NonWorkingDate := PP_CalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description) //PPNA16.0 Blocked
                         PP_NonWorkingDate := true //PPNA16.0 Added
                     else
                         //PP_NonWorkingDate := PP_JobCalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description) //PPNA16.0 Blocked
@@ -731,23 +721,17 @@ page 14021449 "NS_Archived Quote Task Part"
                 until PP_NonWorkingDate = false;
             end
         else begin
-            //PRJCTPR-308.DK.1.0 11June2024 Start
-            //if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then //PRJ-1070.RM.1.0 08Dec2021
-            if PP_JobsSetup."NS_JobCalendarSource" = PP_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then
-                //PRJCTPR-308.DK.1.0 11June2024 End
-                //PP_NonWorkingDate := PP_CalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description)//PPNA16.0 Blocked
-                PP_NonWorkingDate := true //PPNA16.0 Added
+            if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then
+                //PP_NonWorkingDate := PP_CalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description) //PPNA16.0 Blocked
+                PP_nonworkingDate := true //PPNA16.0 Added
             else
                 //PP_NonWorkingDate := PP_JobCalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description); //PPNA16.0 Blocked
                 PP_NonWorkingDate := true; //PPNA16.0 Added
             if PP_NonWorkingDate then
                 repeat
                     PP_NewDate := CALCDATE('+1D', PP_NewDate);
-                    //PRJCTPR-308.DK.1.0 11June2024 Start
-                    // if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Business Central Calendar" then //PRJ-1070.RM.1.0 08Dec2021
-                    if PP_JobsSetup."NS_JobCalendarSource" = PP_JobsSetup."NS_JobCalendarSource"::"Business Central Calendar" then
-                        //PRJCTPR-308.DK.1.0 11June2024 End
-                        //PP_NonWorkingDate := PP_CalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description)//PPNA16.0 Blocked
+                    if PP_JobsSetup."NS_Job Calendar Source" = PP_JobsSetup."NS_Job Calendar Source"::"Base Navision Calendar" then
+                        //PP_NonWorkingDate := PP_CalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description) //PPNA16.0 Blocked
                         PP_NonWorkingDate := true //PPNA16.0 Added
                     else
                         //PP_NonWorkingDate := PP_JobCalendarManagement.CheckDateStatus(PP_CalendarCode, PP_NewDate, PP_Description); //PPNA16.0 Blocked
@@ -763,42 +747,40 @@ page 14021449 "NS_Archived Quote Task Part"
         PP_TaskBeforeHold: Code[20];
     begin
         //Set the "Task Before" fields for the job based on sequence and any "Task Before" values.  Also sets the predecessor values.
-        //PRJ-1102.RM.1.0.006 29Dec2021 Start
-        // PP_TempProjectLinkBuffer do begin
-        //Fill in the blank "Task Before" values  the preceeding task.
-        //  However if the task has its own start date then leave it alone and start over from there.
-        PP_TaskBeforeHold := '';
-        PP_TempProjectLinkBuffer.RESET();
-        if PP_TempProjectLinkBuffer.FINDSET() then
-            repeat
-                if (PP_TempProjectLinkBuffer."NS_Job Task Type" = PP_TempProjectLinkBuffer."NS_Job Task Type"::Posting) and (PP_TempProjectLinkBuffer."NS_Line No." > 1) then begin
-                    if PP_TaskBeforeHold <> '' then
-                        if PP_TempProjectLinkBuffer."NS_Task Before" = '' then begin
-                            PP_TempProjectLinkBuffer."NS_Task Before" := PP_TaskBeforeHold;
-                            PP_TempProjectLinkBuffer.MODIFY();
-                        end;
-                    PP_TaskBeforeHold := Rec."NS_Job Task No.";
-                end;
-            until PP_TempProjectLinkBuffer.NEXT() = 0;
+        with PP_TempProjectLinkBuffer do begin
+            //Fill in the blank "Task Before" values with the preceeding task.
+            //  However if the task has its own start date then leave it alone and start over from there.
+            PP_TaskBeforeHold := '';
+            PP_TempProjectLinkBuffer.RESET();
+            if FINDSET() then
+                repeat
+                    if ("NS_Job Task Type" = "NS_Job Task Type"::Posting) and ("NS_Line No." > 1) then begin
+                        if PP_TaskBeforeHold <> '' then
+                            if "NS_Task Before" = '' then begin
+                                "NS_Task Before" := PP_TaskBeforeHold;
+                                MODIFY();
+                            end;
+                        PP_TaskBeforeHold := "NS_Job Task No.";
+                    end;
+                until NEXT() = 0;
 
-        NS_CopyProjectLinkBuffer();
-        PP_TempProjectLinkBuffer.RESET();
-        if PP_TempProjectLinkBuffer.FINDSET() then
-            repeat
-                if PP_TempProjectLinkBuffer."NS_Task Before" > '' then begin
-                    PP_ProjLinkBuf.RESET();
-                    PP_ProjLinkBuf.SETCURRENTKEY("NS_Job No.", "NS_Task No.", "NS_Line No.");
-                    PP_ProjLinkBuf.SETRANGE("NS_Job No.", PP_TempProjectLinkBuffer."NS_Job No.");
-                    PP_ProjLinkBuf.SETRANGE("NS_Task No.", PP_TempProjectLinkBuffer."NS_Task Before");
-                    if PP_ProjLinkBuf.FINDFIRST() then begin
-                        PP_TempProjectLinkBuffer.NS_Predecessor := FORMAT(PP_ProjLinkBuf."NS_Line No.");
-                        PP_TempProjectLinkBuffer.MODIFY();
-                    end else
-                        MESSAGE(Text14021102Lbl, PP_TempProjectLinkBuffer."NS_Task Before");
-                end;
-            until PP_TempProjectLinkBuffer.NEXT() = 0;
-        //end;
-        //PRJ-1102.RM.1.0.006 29Dec2021 End
+            NS_CopyProjectLinkBuffer();
+            RESET();
+            if FINDSET() then
+                repeat
+                    if "NS_Task Before" > '' then begin
+                        PP_ProjLinkBuf.RESET;
+                        PP_ProjLinkBuf.SETCURRENTKEY("NS_Job No.", "NS_Task No.", "NS_Line No.");
+                        PP_ProjLinkBuf.SETRANGE("NS_Job No.", "NS_Job No.");
+                        PP_ProjLinkBuf.SETRANGE("NS_Task No.", "NS_Task Before");
+                        if PP_ProjLinkBuf.FINDFIRST() then begin
+                            NS_Predecessor := FORMAT(PP_ProjLinkBuf."NS_Line No.");
+                            MODIFY();
+                        end else
+                            MESSAGE(Text14021102Lbl, "NS_Task Before");
+                    end;
+                until NEXT() = 0;
+        end;
     end;
 
     procedure NS_SetQuoteNo(PassQuoteNo: Code[20]);

@@ -1,5 +1,6 @@
 page 14021358 "NS_BudgAnalysisProfitsFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -11,7 +12,7 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
     //PPAL-12.AM.1.0 - 2JUNE2020 - Changed the property of page
     //PPAL-119.AS.1.0 27AUG20 Bold some captions
     //PRJ-340.SK.1.0 - 12AUG2020 - Addedd condition for skipping calculation of fields on new record.
-    //PE-75.RM.1.0 17May2023 | Added tootlips
+    //PRJ-659.RM.1.0 22Oct2021 | Alligned rows 
 
     Caption = 'Budget Analysis/Profits';
     //PageType=CardPart;//PPAL-12.AM Commented
@@ -32,8 +33,7 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                     {
                         ApplicationArea = All;
                         Editable = false;
-                        // ToolTip = 'Budget Remaining'; //PE-75.RM.1.0 17May2023  commented
-                        ToolTip = 'Specifies the Estimated Budget Remaining, Projected Bugdet Remaining and Variance Budget Remaining of the Job.'; //PE-75.RM.1.0 17May2023 
+                        ToolTip = 'Budget Remaining';
                         Caption = '';
                     }
                     field("FORMAT('Budget Rem%')"; FORMAT('Budget Rem%'))
@@ -93,26 +93,26 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                 }
                 group(Estimated)
                 {
-                    Caption = 'Estimated';
-                    field("FORMAT(CalcValues[1,3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    Caption = '                                               Estimated'; //PRJ-659.RM.1.0 22Oct2021
+                    // field("FORMAT(CalcValues[1,3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues1; Round(CalcValues[1, 3], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Budget Remaining';
-                        ToolTip = 'Specifies the Estimated Budget Remaining, Projected Bugdet Remaining and Variance Budget Remaining of the Job.';  //PE-75.RM.1.0 17May2023
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,4]*100,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')+'%'"; FORMAT(CalcValues[1, 4] * 100, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>') + '%')
+                    // field("FORMAT(CalcValues[1,4]*100,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')+'%'"; FORMAT(CalcValues[1, 4] * 100, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>') + '%') //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues2; Round(CalcValues[1, 4], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Budget Rem %';
-                        ToolTip = 'Specifies the Estimated Budget Remaining %, Projected Bugdet Remaining % and Variance Budget Remaining % of the Job.';  //PE-75.RM.1.0 17May2023
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,5],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 5], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[1,5],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 5], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues3; Round(CalcValues[1, 5], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Profit';
-                        ToolTip = 'Specifies the Estimated Profit, Projected Profit and Variance Profit of the Job.';  //PE-75.RM.1.0 17May2023
                         Editable = false;
                     }
                     //PPAL-119.SK.1.0 Commented Start
@@ -124,29 +124,30 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                     //PPAL-119.SK.1.0 Commented End
 
                     //PPAL-119.SK.1.0 Start
-                    field("'Budgeted'"; ' Budgeted')//PPAL-119.AS.1.0 04Sept20
+                    field("'Budgeted'"; '                                              Budgeted')//PPAL-119.AS.1.0 04Sept20 //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Specifies the Values from the Planning Lines where the Line Type is Budgeted';  //PE-75.RM.1.0 17May2023
                         Style = Strong;//PPAL-119.AS.1.0 27AUG20
                     }
                     //PPAL-119.SK.1.0 End
-                    field("FORMAT(CalcValues[6,1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[6, 1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[6,1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[6, 1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))//PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues4; Round(CalcValues[6, 1], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Labor Hours';
-                        ToolTip = 'Specifies the Total number of Hours from the Job Planning Lines where the Type is Resource (only Person) whose Unit of Measure is HR or HOUR. ';  //PE-75.RM.1.0 17May2023
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,7],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 7], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[1,7],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 7], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues5; Round(CalcValues[1, 7], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Estimated Units';
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,8],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 8], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[1,8],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 8], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues6; Round(CalcValues[1, 8], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Units/Rate';
@@ -155,18 +156,21 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                 }
                 group("        Projected")
                 {
-                    Caption = '        Projected';
-                    field("FORMAT(CalcValues[1,13],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 13], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    Caption = '                                                Projected'; //PRJ-659.RM.1.0 22Oct2021
+                    // field("FORMAT(CalcValues[1,13],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 13], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues7; Round(CalcValues[1, 13], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,14]*100,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')+'%'"; FORMAT(CalcValues[1, 14] * 100, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>') + '%')
+                    // field("FORMAT(CalcValues[1,14]*100,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')+'%'"; FORMAT(CalcValues[1, 14] * 100, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>') + '%') //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues8; Round(CalcValues[1, 14], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[2,7],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[2, 7], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[2,7],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[2, 7], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues9; Round(CalcValues[2, 7], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
@@ -180,7 +184,7 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                     //PPAL-119.SK.1.0 Comment End
 
                     //PPAL-119.Sk.1.0 Start
-                    field("Actual"; '        Actual')//PPAL-119.AS.1.0 02SeptG20
+                    field("Actual"; '                                                    Actual')//PPAL-119.AS.1.0 02SeptG20 //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
@@ -188,17 +192,20 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                         Style = Strong;//PPAL-119.AS.1.0 27AUG20
                     }
                     //PPAL-119.Sk.1.0 End
-                    field("FORMAT(CalcValues[6,2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[6, 2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[6,2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[6, 2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues10; Round(CalcValues[6, 2], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[2,9],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[2, 9], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[2,9],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[2, 9], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues11; Round(CalcValues[2, 9], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,18],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 18], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[1,18],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 18], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues12; Round(CalcValues[1, 18], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
@@ -206,18 +213,21 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                 }
                 group("       Variance")
                 {
-                    Caption = '       Variance';
-                    field("FORMAT(CalcValues[1,13] - CalcValues[1,3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 13] - CalcValues[1, 3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    Caption = '                                                 Variance'; //PRJ-659.RM.1.0 22Oct2021
+                    // field("FORMAT(CalcValues[1,13] - CalcValues[1,3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 13] - CalcValues[1, 3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues13; Round(CalcValues[1, 13], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT((CalcValues[1,14]-CalcValues[1,4])*100,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')+'%'"; FORMAT((CalcValues[1, 14] - CalcValues[1, 4]) * 100, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>') + '%')
+                    // field("FORMAT((CalcValues[1,14]-CalcValues[1,4])*100,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')+'%'"; FORMAT((CalcValues[1, 14] - CalcValues[1, 4]) * 100, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>') + '%') //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues14; Round(CalcValues[1, 14], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[2,7] - CalcValues[1,5],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[2, 7] - CalcValues[1, 5], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[2,7] - CalcValues[1,5],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[2, 7] - CalcValues[1, 5], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues15; Round(CalcValues[2, 7], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
@@ -231,26 +241,28 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
                     //PPAL-119.Sk.1.0 Comment End
 
                     //PPAL-119.Sk.1.0 Start
-                    field("Remaining"; '        Remaining')//PPAL-119.AS.1.0 27AUG20
+                    field("Remaining"; '                                            Remaining')//PPAL-119.AS.1.0 27AUG20 //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Specifies the difference between Budgeted Value and Actual Value.';  //PE-75.RM.1.0 17May2023
                         Style = Strong;//PPAL-119.AS.1.0 27AUG20
                     }
                     //PPAL-119.Sk.1.0 End
-                    field("FORMAT(CalcValues[6,1] - CalcValues[6,2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[6, 1] - CalcValues[6, 2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[6,1] - CalcValues[6,2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[6, 1] - CalcValues[6, 2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues16; Round(CalcValues[6, 1], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         Editable = false;
                         ApplicationArea = All;
                     }
-                    field("FORMAT(CalcValues[1,7] - CalcValues[2,9],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 7] - CalcValues[2, 9], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[1,7] - CalcValues[2,9],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 7] - CalcValues[2, 9], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues17; Round(CalcValues[1, 7], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
                     }
-                    field("FORMAT(CalcValues[1,18] - CalcValues[1,8],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 18] - CalcValues[1, 8], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CalcValues[1,18] - CalcValues[1,8],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CalcValues[1, 18] - CalcValues[1, 8], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 22Oct2021
+                    field(CalcValues18; Round(CalcValues[1, 18], 0.01)) //PRJ-659.RM.1.0 22Oct2021
                     {
                         ApplicationArea = All;
                         Editable = false;
@@ -285,6 +297,10 @@ page 14021358 "NS_BudgAnalysisProfitsFactBox"
 
     procedure CalcStatistics();
     begin
+        //FDD108 Start
+        IF "NS_Sub-Level to Job No." = "No." THEN
+            EXIT;
+        //FDD108 End
         //PRJ-340.SK.1.0 Start
         IF "No." = '' then
             Exit;

@@ -1,10 +1,7 @@
 pageextension 14021144 NS_PostedSalesInvoiceSubForm extends "Posted Sales Invoice Subform"
 {
     // version NAVW111.00.00.19846,NAVNA11.00.00.19846,PPNA11.00
-    //CTSI-42.AS.1.0 21MAY2020 Added Code
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1624.NK.1.0 22Sep2022 | Added Fields
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+//CTSI-42.AS.1.0 21MAY2020 Added Code
     layout
     {
         modify("Job No.")
@@ -93,20 +90,6 @@ pageextension 14021144 NS_PostedSalesInvoiceSubForm extends "Posted Sales Invoic
                 Caption = 'DFR No.';
                 Description = 'JD-10.MS.1.0';
             }
-            //PRJ-1624.NK.1.0 22Sep2022 Start
-            field("NS_Retention %"; Rec."NS_Retention %")
-            {
-                ApplicationArea = all;
-                Caption = 'Retention %';
-                ToolTip = 'Specifies the Retention %';
-            }
-            field("NS_Retention Amount"; Rec."NS_Retention Amount")
-            {
-                ApplicationArea = all;
-                Caption = 'Retention Amount';
-                ToolTip = 'Specifies the Retention Amount';
-            }
-            //PRJ-1624.NK.1.0 22Sep2022 End
         }
     }
 

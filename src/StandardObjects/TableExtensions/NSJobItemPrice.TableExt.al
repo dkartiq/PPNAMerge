@@ -3,7 +3,6 @@ tableextension 14021216 NS_JobItemPrice extends "Job Item Price"
     // version NAVW110.00,PPNA11.00
     //PRJ-440.AS.1.0 18NOV2020 Added code, commented, Changed also
     //PRJ-440.AM.2.0 02DEC2020 Modified Code to resolve UOM error.
-    //PE-39.RM.1.0 17Apr2023 | Added some code
     fields
     {
         modify("Item No.")
@@ -78,24 +77,17 @@ tableextension 14021216 NS_JobItemPrice extends "Job Item Price"
                 //SPLN 1.0 Start
                 NS_UnitCostFactor := "Unit Cost Factor";
                 //SPLN 1.0 End
-                //PE-39 Dk.1.0 14March2023 Start
+
                 //ProjectPro - start
-                //if "NS_Unit Cost" <> 0 then
-                //   VALIDATE("Unit Cost Factor", "Unit Price" / "NS_Unit Cost")
-                // else
-                //   VALIDATE("Unit Cost Factor", 0);
+                if "NS_Unit Cost" <> 0 then
+                    VALIDATE("Unit Cost Factor", "Unit Price" / "NS_Unit Cost")
+                else
+                    VALIDATE("Unit Cost Factor", 0);
                 //ProjectPro - end
-                //PE-39 Dk.1.0 14March2023 End
             end;
 
             trigger OnAfterValidate()
             begin
-                //PE-39 Dk.1.0 14March2023 Start
-                IF ("NS_Unit Cost" <> 0) AND ("Unit Price" <> 0) THEN
-                    "NS_Markup %" := ROUND(100 * ("Unit Price" / "NS_Unit Cost" - 1), NS_GLSetup."Amount Rounding Precision")
-                ELSE
-                    "NS_Markup %" := 0;
-                //PE-39 Dk.1.0 14March2023 Start
                 //SPLN 1.0 Start
                 "Unit Cost Factor" := NS_UnitCostFactor;
                 //SPLN 1.0 End
@@ -119,20 +111,6 @@ tableextension 14021216 NS_JobItemPrice extends "Job Item Price"
                     "NS_Markup %" := 0;
                 //ProjectPro - end
             end;
-            //PE-39.RM.1.0 17Apr2023 start
-            trigger OnAfterValidate()
-            begin
-                "Unit Price" := 0;
-                NS_GLSetup.GET;
-                if "NS_Unit Cost" <> 0 then
-                    if "Unit Cost Factor" <> 0 then
-                        "Unit Price" := ROUND("NS_Unit Cost" * "Unit Cost Factor", NS_GLSetup."Amount Rounding Precision");
-                if ("NS_Unit Cost" <> 0) and ("Unit Price" <> 0) then
-                    "NS_Markup %" := ROUND(100 * ("Unit Price" / "NS_Unit Cost" - 1), NS_GLSetup."Amount Rounding Precision")
-                else
-                    "NS_Markup %" := 0;
-            end;
-            //PE-39.RM.1.0 17Apr2023 End
         }
 
         field(14021152; "NS_Unit Cost"; Decimal)

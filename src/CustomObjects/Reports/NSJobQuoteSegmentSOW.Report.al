@@ -5,9 +5,6 @@ report 14021423 "NS_Job Quote Segment SOW"
     //PPAL-83.NS.1.0 13AUG20 Changed Layout from BC14 as it was working proper there
     //PPAL-83.AS.1.0 13AUG20 Changed Layout from BC16 as it was working proper there
     //PPAL-32.AS.1.0 27Aug2020 Done code for ship to address
-    //PRJ-1180.RM.1.0 10Feb2022 | Added a column to dataitem
-    //PRJ-1595.GK.1.0 01Sep2022 |Changes in Layout for removing INTERNAL USE ONLY caption.
-    //PE-141.RM.1.0 22Aug2023 | Did some changes in the layout.
     DefaultLayout = RDLC;
     Caption = 'Job Quote Segment SOW';
     RDLCLayout = './Layouts/NSJobQuoteSegmentSOW.rdl';
@@ -56,14 +53,9 @@ report 14021423 "NS_Job Quote Segment SOW"
             column(PrintTitleCap; PrintTitleCap)
             {
             }
-            //PE-141.RM.1.0 23Aug2023 start
-            // column(CustInitCap; CustInitCap)
-            // {
-            // }
-            column(NS_Salesperson_User_ID; "NS_Salesperson/User ID")
+            column(CustInitCap; CustInitCap)
             {
             }
-            //PE-141.RM.1.0 23Aug2023
             column(CronusConFiCap; CronusConFiCap)
             {
             }
@@ -100,30 +92,12 @@ report 14021423 "NS_Job Quote Segment SOW"
             column(Company_Pic; CompanyInfo.Picture)
             {
             }
-            //PRJ-1180.RM.1.0 10Feb2022 start
-            column(Company_Name; CompanyInfo.Name)
-            {
-            }
-            //PRJ-1180.RM.1.0 10Feb2022 end
-            //PE-141.RM.1.0 22Aug2023 start
-            column(NS_TextCommaAdd; NS_TextCommaAdd)
-            {
-            }
-            //PE-141.RM.1.0 22Aug2023  end
             column(QuoteNo_JobQuoteHeader; "Job Quote Header"."NS_Quote No.")
             {
             }
-            //PE-141.RM.1.0 23Aug2023 start
-            // column(ProposalDate_JobQuoteHeader; FORMAT("Job Quote Header"."NS_Proposal Date", 0, '<Day,2>/<Month,2>/<Year4>'))
-            // {
-            // }
-            column(NS_Today; format(WorkDate(), 0, '<Month,2>-<Day,2>-<Year4>'))
+            column(ProposalDate_JobQuoteHeader; FORMAT("Job Quote Header"."NS_Proposal Date", 0, '<Day,2>/<Month,2>/<Year4>'))
             {
             }
-            column(ProposalDate_JobQuoteHeader; FORMAT("Job Quote Header"."NS_Proposal Date", 0, '<Month,2>-<Day,2>-<Year4>'))
-            {
-            }
-            //PE-141.RM.1.0 23Aug2023 End
             column(JobQuoteExtDoc; "Job Quote Header"."NS_External Document No.")
             {
             }
@@ -215,13 +189,6 @@ report 14021423 "NS_Job Quote Segment SOW"
                 begin
                     CLEAR(TotalPrice2);
                     CLEAR(TotalBySegment);
-                    //PE-141.RM.1.0 22Aug2023 start
-                    Clear(NS_TextCommaAdd);
-                    if (CompanyInfo.City <> '') and (CompanyInfo.County <> '') then
-                        NS_TextCommaAdd := ','
-                    else
-                        NS_TextCommaAdd := '';
-                    //PE-141.RM.1.0 22Aug2023 End
                     JobTakeoffSegments_G.RESET;
                     JobTakeoffSegments_G.SETRANGE("NS_Job No.", "Job Quote Header"."NS_Quote No.");
                     IF JobTakeoffSegments_G.FINDSET THEN
@@ -393,17 +360,11 @@ report 14021423 "NS_Job Quote Segment SOW"
         AcceptanceCap: Label 'ACCEPTANCE';
         Acceptance1Cap: Label 'This proposal, when accepted by the purchaser, and final approval of Seller''s Official Officer, will constitute a bona fide contract between us, subject to all terms and conditions on the reverse side.';
         Acceptance2Cap: Label 'It is expressly agreed that there are no promises, agreements or understandings, oral or written, not specified in this proposal.';
-        //PE-141.RM.1.0 23Aug2023 start
-        // CompNameCap: Label 'Company Name _____________________________________________________________';
-        // SignDateCap: Label 'Signature ______________________________________________ Date _______________';
-        // PrintNameCap: Label 'Print Name _________________________________________________________________';
-        // PrintTitleCap: Label 'Print Title __________________________________________________________________';
-        // CustInitCap: Label 'Customer Initials_______________   Cronus Construction Initials ___________';
-        CompNameCap: Label 'Company Name';
-        SignDateCap: Label 'Signature';
-        PrintNameCap: Label 'Print Name';
-        PrintTitleCap: Label 'Print Title';
-        //PE-141.RM.1.0 23Aug2023 End
+        CompNameCap: Label 'Company Name _____________________________________________________________';
+        SignDateCap: Label 'Signature ______________________________________________ Date _______________';
+        PrintNameCap: Label 'Print Name _________________________________________________________________';
+        PrintTitleCap: Label 'Print Title __________________________________________________________________';
+        CustInitCap: Label 'Customer Initials_______________   Cronus Construction Initials ___________';
         CronusConFiCap: Label 'Cronus Construction - Confidential';
         QuoteValidCap: Label 'Quotation valid for 30 days';
         ThisDocApplCap: Label 'This document does not reflect any applicable sales tax.';
@@ -417,7 +378,7 @@ report 14021423 "NS_Job Quote Segment SOW"
         TotalBySegment: Decimal;
         JobTakeoffSegments_G: Record "NS_Job Takeoff Segments";
         TotalPrice2: Decimal;
-        NS_TextCommaAdd: Text[10]; //PE-141.RM..1.0 22Aug2023
+
         T222: Record "Ship-to Address";//PPAL-32.AS.1.0 27Aug2020
 }
 

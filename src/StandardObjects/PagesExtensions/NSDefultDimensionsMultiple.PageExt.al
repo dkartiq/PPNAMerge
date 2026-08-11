@@ -1,9 +1,6 @@
 pageextension 14021271 NS_DefultDimensionsMultiple extends "Default Dimensions-Multiple"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Default Dimensions-Multiple'; //PRJ-1330.NK.1.0 25Apr2022
-
     var
         TempDefaultDim2: Record 352;
 

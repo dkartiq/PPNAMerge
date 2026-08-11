@@ -9,13 +9,7 @@ report 14021342 "NS_Progress Payment Invoice"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
-    //PE-114.RM.1.0 31July2023 | Created a Word layout.
-    //PE-215.HS.1.0 30Nov2023 | Add Code and Cosmetic Changes In RDLC and Word Layout 
-    //PE-215.HS.1.0 2Dec2023 | Cosmetic Changes in word layout flowed Description in RDL 
-    //PRJCTPR-291.HS.1.0 11Jan2023 | Corrected Balance to finish value
-
     DefaultLayout = RDLC;
-    WordLayout = './Layouts/NSProgress Payment Invoice.docx'; //PE-114.RM.1.0 31July2023
     RDLCLayout = './Layouts/NSProgress Payment Invoice.rdl';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;
@@ -62,20 +56,18 @@ report 14021342 "NS_Progress Payment Invoice"
             column(CompanyAddress_8; CompanyAddress[8])
             {
             }
-            // column(Invoice_Number_Caption; InvoiceNumberCaptionLbl)
-            // {
-            // }
-            column(Invoice_Number_Caption; RequisitionNumberCaptionLbl) { } //PE-215.HS.1.0 3Jan2024 
+            column(Invoice_Number_Caption; InvoiceNumberCaptionLbl)
+            {
+            }
             column(Progress_Payment_Header_No; "NS_No." + '-' + FORMAT("NS_Requisition No."))
             {
             }
-            // column(Invoice_Date_Caption; InvoiceDateCaptionLbl)
-            // {
-            // }
-            column(Invoice_Date_Caption; RequisitionDateCaptionLbl) { }  //PE-215.HS.1.0 3Jan2024 
-            // column(Requision_Date; format("NS_Requisition Date")) //PE-215.HS.1.0 30Nov2023 Commented
-            // {
-            // }
+            column(Invoice_Date_Caption; InvoiceDateCaptionLbl)
+            {
+            }
+            column(Requision_Date; "NS_Requisition Date")
+            {
+            }
             column(Page_Caption; PageCaptionLbl)
             {
             }
@@ -158,10 +150,7 @@ report 14021342 "NS_Progress Payment Invoice"
             column(Vendor_ID_Caption; VendorIDCaptionLbl)
             {
             }
-            // column(Vendor_ID_No; VendorIDNo)
-            // {
-            // }
-            column(Vendor_ID_No; Subcontract."NS_Buy-from Vendor No.")
+            column(Vendor_ID_No; VendorIDNo)
             {
             }
             column(Vendor_Job_No_Caption; VendorJobNoCaptionLbl)
@@ -320,14 +309,6 @@ report 14021342 "NS_Progress Payment Invoice"
             column(Net_Change_Orders; NetChangeOrders)
             {
             }
-            //PE-215.HS.1.0 30Nov2023 Start
-            column(NS_UserID; NS_UserID) { }
-            column(NS_UserIDCaption; NS_UserIDCaption) { }
-            column(Requision_Date; "NS_Requisition Date") { }
-            column(NS_Requision_Date; Format("NS_Requisition Date")) { }
-            column(NS_PeriodToDate; "NS_Period To") { }
-            column(NS_ContractDate; Subcontract."NS_Creation Date") { }
-            //PE-215.HS.1.0 30Nov2023 End
             dataitem("Progress Payment Line"; "NS_Progress Payment Line")
             {
                 DataItemLink = "NS_Progress Payment No." = FIELD("NS_No."), "NS_Requisition No." = FIELD("NS_Requisition No."), "NS_Version No." = FIELD("NS_Version No.");
@@ -392,39 +373,6 @@ report 14021342 "NS_Progress Payment Invoice"
                 column(DRetention; DRetention)
                 {
                 }
-                //PE-114.RM.1.0 08Aug2023 Start
-                column(NS_ScheduledSum; NS_ScheduledSum)
-                {
-                }
-                column(NS_PreviousPeriodSum; NS_PreviousPeriodSum)
-                {
-                }
-                column(NS_StoredMaterialAmtSum; NS_StoredMaterialAmtSum)
-                {
-                }
-                column(NS_TotalCompledtedAmtSum; NS_TotalCompledtedAmtSum)
-                {
-                }
-                column(NS_BalanceToFinishSum; NS_BalanceToFinishSum)
-                {
-                }
-                column(NS_RetentionSum; NS_RetentionSum)
-                {
-                }
-                column(NS_ThisPeriod; NS_ThisPeriod)
-                {
-                }
-                //PE-114.RM.1.0 08Aug2023 End
-                //PE-215.HS.1.0 1Dec2023 Start
-                column(NSScheduledValueTotal; NSScheduledValueTotal) { }
-                column(NSThisPeriodTotal; NSThisPeriodTotal) { }
-                column(NSStoredMaterialsTotAmt; NSStoredMaterialsTotAmt) { }
-                column(NSTotalCompletedAndStored; NSTotalCompletedAndStored) { }
-                column(NSBalanceToFinishTot; NSBalanceToFinishTot) { }
-                column(NsTotalRetention; NsTotalRetention) { }
-                column(NSPreviousPeriodTotal; NSPreviousPeriodTotal) { }
-                //PE-215.HS.1.0 1Dec2023  End                
-
 
                 trigger OnAfterGetRecord();
                 var
@@ -444,63 +392,28 @@ report 14021342 "NS_Progress Payment Invoice"
                         CurrReport.SKIP;
 
                     DLineNo := DLineNo + 1;
-                    //PRJ-1652.GK.1.0 29Sept2022 start
-                    //DDescription := "NS_Task Description";
-                    // DDescription := "NS_Task Description New"; //PE-215.HS.1.0 12Dec2023 Commented
-                    //PRJ-1652.GK.1.0 29Sept2022 end
-                    DDescription := "NS_No. Description New";//PE-215.HS.1.0 12Dec2023 
+                    DDescription := "NS_Task Description";
                     if "NS_Payment Method" > 0 then begin
-                        NS_ScheduledSum := 0; //PE-114.RM.1.0 08Aug2023 
                         DScheduledValue := NS_LastBase("Progress Payment Line");
-                        //PE-114.RM.1.0 08Aug2023  start
-                        ProgressPaymentLine.Reset();
-                        ProgressPaymentLine.SetRange("NS_Subcontract No.", "Progress Payment Line"."NS_Subcontract No.");
-                        if ProgressPaymentLine.FindSet() then
-                            repeat
-                                NS_ScheduledSum += NS_LastBase(ProgressPaymentLine);
-                                NS_PreviousPeriodSum += NS_LastTotal("Progress Payment Line");
-                            until ProgressPaymentLine.next() = 0;
-                        //PE-114.RM.1.0 08Aug2023 End
                         DPreviousPeriod := NS_LastTotal("Progress Payment Line");
                         DThisPeriod := "NS_Work Amount";
-                        NS_ThisPeriod += "NS_Work Amount"; //PE-114.RM.1.0 08Aug2023 
                         DStoredMaterialsAmount := "NS_Stored Materials Amount";
-                        NS_StoredMaterialAmtSum += "NS_Stored Materials Amount"; //PE-114.RM.1.0 08Aug2023 
                         DTotalCompletedAndStored := DPreviousPeriod + DThisPeriod + DStoredMaterialsAmount;
-                        NS_TotalCompledtedAmtSum += DPreviousPeriod + DThisPeriod + DStoredMaterialsAmount;//PE-114.RM.1.0 08Aug2023 
                         if DScheduledValue <> 0 then
                             DTotalCompletedAndStoredPct := ROUND((DTotalCompletedAndStored / DScheduledValue) * 100, 0.01)
                         else
                             DTotalCompletedAndStoredPct := 0;
-                        // DBalanceToFinish := DScheduledValue - DThisPeriod ;//PRJCTPR-291.HS.1.0 11Jan2023 Commented
-                        DBalanceToFinish := DScheduledValue - DThisPeriod - DPreviousPeriod - DStoredMaterialsAmount; //PRJCTPR-291.HS.1.0 11Jan2023
-                        NS_BalanceToFinishSum += NS_ScheduledSum - NS_ThisPeriod; //PE-114.RM.1.0 08Aug2023
+                        DBalanceToFinish := DScheduledValue - DThisPeriod;
                         DWorkRetention := ROUND(("Progress Payment Header"."NS_Work Retention Percent" / 100) * (DPreviousPeriod + DThisPeriod), 0.01);
                         DMaterialRetention := ROUND(("Progress Payment Header"."NS_Material Retention Percent" / 100) * DStoredMaterialsAmount, 0.01);
                         DRetention := DWorkRetention + DMaterialRetention;
-                        NS_RetentionSum += DWorkRetention + DMaterialRetention; //PE-114.RM.1.0 08Aug2023
-
                     end;
                 end;
 
                 trigger OnPreDataItem();
                 begin
                     ItemNo := 0;
-                    //CurrReport.NEWPAGE; //PRJCTPR-101.NC.1.0 25Apr2023 Block
-                    NS_UserID := UserId; //PE-215.HS.1.0 30Nov2023
-
-                    //PE-215.HS.1.0 1Dec2023 Start
-                    if "Progress Payment Line".FindSet() then
-                        repeat
-                            NSScheduledValueTotal += NS_LastBase("Progress Payment Line");
-                            NSStoredMaterialsTotAmt += "NS_Stored Materials Amount";
-                            NSThisPeriodTotal += "NS_Work Amount";
-                            NSPreviousPeriodTotal += NS_LastTotal("Progress Payment Line");
-                            NSTotalCompletedAndStored += NS_LastTotal("Progress Payment Line") + "NS_Work Amount" + "NS_Stored Materials Amount";
-                            NSBalanceToFinishTot += NS_LastBase("Progress Payment Line") - "NS_Work Amount";
-                            NSTotalRetention += ROUND(("Progress Payment Header"."NS_Work Retention Percent" / 100) * (NS_LastTotal("Progress Payment Line") + "NS_Work Amount"), 0.01) + ROUND(("Progress Payment Header"."NS_Material Retention Percent" / 100) * "NS_Stored Materials Amount", 0.01);
-                        until "Progress Payment Line".next() = 0;
-                    //PE-215.HS.1.0 1Dec2023  End            
+                    CurrReport.NEWPAGE;
                 end;
             }
 
@@ -533,8 +446,7 @@ report 14021342 "NS_Progress Payment Invoice"
                 end;
 
                 JobContact.RESET();
-                // JobContact.SETRANGE("NS_Job No.", Subcontract."NS_No.");   //PE-215.HS.1.0 29Dec2023 Commented
-                JobContact.SETRANGE("NS_Job No.", Subcontract."NS_Job No.");  //PE-215.HS.1.0 29Dec2023
+                JobContact.SETRANGE("NS_Job No.", Subcontract."NS_No.");
                 JobContact.SETRANGE(NS_Type, JobContact.NS_Type::"Architect/Engineer");
                 if JobContact.FINDSET() then
                     NS_FormatAddress.NS_JobContact(AEAddress, JobContact)
@@ -570,10 +482,9 @@ report 14021342 "NS_Progress Payment Invoice"
                     ERROR(Text14021101);
 
                 SubcontractDescription := Subcontract.NS_Description;
-                PeriodTo := FORMAT("NS_Period To"); //PE-215.HS.1.0 30Nov2023 
+                PeriodTo := FORMAT("NS_Period To");
                 VendorJobNo := Subcontract."NS_Vendor Job No.";
-                // ContractDate := FORMAT(Subcontract."NS_Contract Date");  //PE-215.HS.1.0 22Dec2023  Commented
-                ContractDate := Format(Subcontract."NS_Creation Date");  //PE-215.HS.1.0 22Dec2023 
+                ContractDate := FORMAT(Subcontract."NS_Contract Date");
                 OriginalContractSum := NS_ProgressPayBaseAmount("Progress Payment Header");    //Line 1
                 NetChanges := PreviousAdditions - PreviousDeductions + CurrentAdditions - CurrentDeductions;  //Line 2
                 ContractSumToDate := OriginalContractSum + NetChanges;  //Line 3
@@ -600,21 +511,8 @@ report 14021342 "NS_Progress Payment Invoice"
                 end;
                 TotalPaidLessRetention := TotalCompletedAndStoredToDate - TotalRetention;  //Line 6
                 LessPreviousPayments := NS_ProgressPayPreviousInvoice("Progress Payment Header");  //Line 7
-                //PRJCTPR-318.JS.1.0 15FEB2024 - Start
-                if "Progress Payment Header"."NS_Work Retention Percent" + "Progress Payment Header"."NS_Material Retention Percent" <> 0 then begin
-                    CurrentPaymentDue := TotalPaidLessRetention - LessPreviousPayments;  //Line 8
-                    BalanceToFinishIncludingRetention := ContractSumToDate - TotalPaidLessRetention;  //Line 9
-                end else begin
-                    BalanceToFinishIncludingRetention := 0;
-                    CurrentPaymentDue := TotalRetention;
-                    if "NS_Total Retention" = 0 then begin
-                        TotalPaidLessRetention := TotalCompletedAndStoredToDate + TotalRetention;
-                        LessPreviousPayments := TotalPaidLessRetention;
-                    end else
-                        TotalPaidLessRetention := TotalCompletedAndStoredToDate;
-                    TotalRetention := 0;
-                end;
-                //PRJCTPR-318.JS.1.0 15FEB2024 - end
+                CurrentPaymentDue := TotalPaidLessRetention - LessPreviousPayments;  //Line 8
+                BalanceToFinishIncludingRetention := ContractSumToDate - TotalPaidLessRetention;  //Line 9
                 TotalChangesAdditions := PreviousAdditions + CurrentAdditions;  //Line 13a
                 TotalChangesDeductions := PreviousDeductions + CurrentDeductions;  //Line 13b
                 NetChangeOrders := TotalChangesAdditions - TotalChangesDeductions;  //Line 14
@@ -644,7 +542,6 @@ report 14021342 "NS_Progress Payment Invoice"
         CompanyInfo1.GET;
         CompanyInfo2.GET;
         CompanyInfo3.GET;
-        CompanyInfo1.CalcFields(Picture); //PE-114.RM.1.0 04Aug2023
     end;
 
     var
@@ -709,14 +606,9 @@ report 14021342 "NS_Progress Payment Invoice"
         CompanyAddress: array[8] of Text[50];
         ItemNo: Integer;
         Text14021101: Label 'There is no "Period To" date.';
-        // InvoiceCaptionLbl: Label 'INVOICE'; //PE-114.RM.1.0 11Aug2023 commented
-        // InvoiceCaptionLbl: Label 'Progress Payment Report'; //PE-114.RM.1.0 11Aug2023  //PE-215.HS.1.0 22Dec2023 Commented
-        InvoiceCaptionLbl: Label 'Progress Payment Requisition'; //PE-215.HS.1.0 22Dec2023
-        // InvoiceNumberCaptionLbl: Label 'Invoice Number:'; //PE-114.RM.1.0 10Aug2023 commented
-        // InvoiceNumberCaptionLbl: Label 'Invoice No.:'; //PE-114.RM.1.0 10Aug2023 //PE-215.HS.1.0 3Jan2024 Commented
-        // InvoiceDateCaptionLbl: Label 'Invoice Date:'; //PE-215.HS.1.0 3Jan2024 Commented
-        RequisitionNumberCaptionLbl: Label 'Requisition No.:'; //PE-215.HS.1.0 3Jan2024 
-        RequisitionDateCaptionLbl: Label 'Requisition Date:'; //PE-215.HS.1.0 3Jan2024 
+        InvoiceCaptionLbl: Label 'INVOICE';
+        InvoiceNumberCaptionLbl: Label 'Invoice Number:';
+        InvoiceDateCaptionLbl: Label 'Invoice Date:';
         PageCaptionLbl: Label 'Page:';
         ToCaptionLbl: Label 'To:';
         PaymentCaptionLbl: Label 'Payment';
@@ -769,30 +661,5 @@ report 14021342 "NS_Progress Payment Invoice"
         DetailPercentThisPeriodLbl: Label '%';
         DetailBalanceToFinishLbl: Label 'Balance To Finish';
         DetailRetentionLbl: Label 'Retention';
-        NS_ScheduledSum: Decimal; //PE-114.RM.1.0 11Aug2023 start
-        NS_PreviousPeriodSum: Decimal;
-        NS_StoredMaterialAmtSum: Decimal;
-        NS_TotalCompledtedAmtSum: Decimal;
-        NS_BalanceToFinishSum: Decimal;
-        NS_RetentionSum: Decimal;
-        NS_ThisPeriod: Decimal;
-        //PE-215.HS.1.0 30Nov2023 Start
-        NS_UserID: Code[50];
-        NS_UserIDCaption: Label 'User:';
-        NS_RequisitionDate: Text;
-        NS_PeriodTo: text;
-        DScheduledValueWordLayout: Decimal;
-        NSScheduledValueTotal: Decimal;
-        NSThisPeriodTotal: Decimal;
-        NSStoredMaterialsTotAmt: Decimal;
-        NSTotalCompletedAndStored: Decimal;
-        NSBalanceToFinishTot: Decimal;
-        NSTotalRetention: Decimal;
-        NSPreviousPeriodTotal: Decimal;
-        UserIDText: Text;
-        InvoiceDate: Text[30];
-    //PE-215.HS.1.0 30Nov2023 End
-
-    //PE-114.RM.1.0 11Aug2023 End
 }
 

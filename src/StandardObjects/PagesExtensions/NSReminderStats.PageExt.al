@@ -1,8 +1,7 @@
 pageextension 14021254 NS_ReminderStats extends "Reminder Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Reminder Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Cust.""Balance (LCY)""")

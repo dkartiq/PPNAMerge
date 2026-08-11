@@ -136,20 +136,11 @@ page 14021383 "NS_Manager Time Sheet Overview"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Description';
                 }
-                field("Skill Class"; '')//PE-68 Dk.1.0 10April2023
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Skill Class';
-                    Visible = false;//PE-68 Dk.1.0 10April2023
-                }
-                //PE-68 Dk.1.0 10April2023 Start
-                field("Skill Class New"; Rec."NS_Skill Class New")
+                field("Skill Class"; Rec."NS_Skill Class")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Skill Class';
                 }
-
-                //PE-68 Dk.1.0 10April2023 End
                 field("Work Type Code"; Rec."Work Type Code")
                 {
                     ApplicationArea = All;

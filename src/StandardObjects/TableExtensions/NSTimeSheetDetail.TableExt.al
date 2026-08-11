@@ -2,8 +2,7 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
 {
     // version NAVW111.00,PPNA11.00
     //PRJ-841.JS.1.0 19Aug2021 | field Added
-    //PRJ-842.JS.1.0 19Aug2021 | field Added
-    //PRJ-1144.JS.1.0 06FEB2022 | add field 
+    //PRJ-842.JS.1.0 19Aug2021 | field Added 
 
     fields
     {
@@ -216,20 +215,8 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
             Caption = 'Skill Code';
             Editable = false;
             DataClassification = CustomerContent;
-            //PE-68.Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68.Dk.1.0 10April2023 End
+
         }
-        //PE-68.Dk.1.0 10April2023 Start
-        field(14021143; "NS_Skill Code New"; Code[20])
-        {
-            Caption = 'Skill Code';
-            Editable = false;
-            DataClassification = CustomerContent;
-        }
-        //PE-68.Dk.1.0 10April2023 End
         field(14021140; "NS_Segment Code"; Code[20])    //PRJ-842.JS.1.0 19Aug2021
         {
             Caption = 'Segment Code';
@@ -244,14 +231,6 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
             Editable = false;
             DataClassification = CustomerContent;
         }
-
-        field(14021142; "NS_Crew Time Sheet Line No."; Integer)    //PRJ-1144.JS.1.0 06FEB2022
-        {
-            Caption = 'Crew Time Sheet Line No.';
-            Editable = false;
-            DataClassification = CustomerContent;
-        }
-
 
     }
 
@@ -291,15 +270,9 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
                     IF NS_Employee.FINDFIRST THEN BEGIN
                         //Match on Skill Class,Work Type Code,Effective Date
                         NS_EmployeeWageRate.RESET;
-                        //PE-68.Dk.1.0 10April2023 Start
-                        // NS_EmployeeWageRate.SETCURRENTKEY("NS_Skill Class", "NS_Work Type Code", "NS_Effective Date");
-                        NS_EmployeeWageRate.SETCURRENTKEY("NS_Skill Class New", "NS_Work Type Code", "NS_Effective Date");
-                        //PE-68.Dk.1.0 10April2023 End
+                        NS_EmployeeWageRate.SETCURRENTKEY("NS_Skill Class", "NS_Work Type Code", "NS_Effective Date");
                         NS_EmployeeWageRate.SETRANGE("NS_Employee No.", NS_Employee."No.");
-                        //PE-68.Dk.1.0 10April2023 Start
-                        // NS_EmployeeWageRate.SETRANGE("NS_Skill Class", NS_TimeSheetLine."NS_Skill Class"); 
-                        NS_EmployeeWageRate.SETRANGE("NS_Skill Class New", NS_TimeSheetLine."NS_Skill Class New");
-                        //PE-68.Dk.1.0 10April2023 End
+                        NS_EmployeeWageRate.SETRANGE("NS_Skill Class", NS_TimeSheetLine."NS_Skill Class");
                         NS_EmployeeWageRate.SETRANGE("NS_Work Type Code", NS_TimeSheetLine."Work Type Code");
                         NS_EmployeeWageRate.SETFILTER("NS_Effective Date", '..%1', Date);
                         IF NS_EmployeeWageRate.FINDLAST THEN BEGIN
@@ -313,10 +286,7 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
                             "NS_Employee Fringe Total" := NS_EmployeeWageRate."NS_Fringe Total";
                         END ELSE BEGIN
                             //Match on Skill Class=<blank>,Work Type Code,Effective Date
-                            //PE-68.Dk.1.0 10April2023 Start
-                            // NS_EmployeeWageRate.SETRANGE("NS_Skill Class", '');
-                            NS_EmployeeWageRate.SETRANGE("NS_Skill Class New", '');
-                            //PE-68.Dk.1.0 10April2023 End
+                            NS_EmployeeWageRate.SETRANGE("NS_Skill Class", '');
                             IF NS_EmployeeWageRate.FINDFIRST THEN BEGIN
                                 "NS_Employee Wage Rate" := NS_EmployeeWageRate."NS_Wage Rate";
                                 "NS_Employee Fringe - Insurance" := NS_EmployeeWageRate."NS_Fringe - Insurance";
@@ -338,38 +308,26 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
                         NS_JobResourcePrice.SETRANGE(Type, NS_JobResourcePrice.Type::Resource);
                         NS_JobResourcePrice.SETRANGE(Code, "Resource No.");
                         NS_JobResourcePrice.SETRANGE("Work Type Code", NS_TimeSheetLine."Work Type Code");
-                        //PE-68.Dk.1.0 10April2023 Start
-                        //  NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class"); 
-                        NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", NS_TimeSheetLine."NS_Skill Class New");
-                        //PE-68.Dk.1.0 10April2023 End 
+                        NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
                         IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                             "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                             "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
                         END ELSE BEGIN
                             //Match on Job Task No.,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code=<blank>
-                            //PE-68.Dk.1.0 10April2023 Start
-                            // NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                            NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                            //PE-68.Dk.1.0  10April2023 End
+                            NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                             IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                 "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                 "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
                             END ELSE BEGIN
                                 //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code
                                 NS_JobResourcePrice.SETRANGE("Job Task No.", '');
-                                //PE-68.Dk.1.0 10April2023 Start
-                                // NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
-                                NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", NS_TimeSheetLine."NS_Skill Class New");
-                                //PE-68.Dk.1.0 10April2023 End
+                                NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
                                 IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                     "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                     "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
                                 END ELSE BEGIN
                                     //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code=<blank>
-                                    //PE-68.Dk.1.0 10April2023 Start
-                                    //NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", ''); 
-                                    NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                    //PE-68.Dk.1.0 10April2023 End
+                                    NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                     IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                         "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                         "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
@@ -380,38 +338,26 @@ tableextension 14021212 NS_TimeSheetDetail extends "Time Sheet Detail"
                                                 NS_JobResourcePrice.SETRANGE("Job Task No.", "Job Task No.");
                                                 NS_JobResourcePrice.SETRANGE(Type, NS_JobResourcePrice.Type::"Group(Resource)");
                                                 NS_JobResourcePrice.SETRANGE(Code, NS_Resource."Resource Group No.");
-                                                //PE-68.Dk.1.0 10April2023 Start
-                                                // NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
-                                                NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", NS_TimeSheetLine."NS_Skill Class New");
-                                                //PE-68.Dk.1.0 10April2023 End
+                                                NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
                                                 IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                                     "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                                     "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
                                                 END ELSE BEGIN
                                                     //Match on Job Task No.,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code=<blank>
-                                                    //PE-68.Dk.1.0 10April2023 Start
-                                                    // NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                                    NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                                    //PE-68.Dk.1.0 10April2023 End
+                                                    NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                                     IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                                         "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                                         "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
                                                     END ELSE BEGIN
                                                         //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code
                                                         NS_JobResourcePrice.SETRANGE("Job Task No.", '');
-                                                        //PE-68.Dk.1.0 10April2023 Start
-                                                        // NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
-                                                        NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", NS_TimeSheetLine."NS_Skill Class New");
-                                                        //PE-68.Dk.1.0 10April2023 End
+                                                        NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", NS_TimeSheetLine."NS_Skill Class");
                                                         IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                                             "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                                             "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";
                                                         END ELSE BEGIN
                                                             //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code=<blank>
-                                                            //PE-68.Dk.1.0 10April2023 Start
-                                                            // NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                                            NS_JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                                            //PE-68.Dk.1.0 10April2023 End
+                                                            NS_JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                                             IF NS_JobResourcePrice.FINDFIRST THEN BEGIN
                                                                 "NS_Prevailing Wage Rate" := NS_JobResourcePrice."NS_Skill Rate";
                                                                 "NS_Prevailing Fringe Rate" := NS_JobResourcePrice."NS_Fringe Rate";

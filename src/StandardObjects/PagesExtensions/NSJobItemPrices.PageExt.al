@@ -2,8 +2,7 @@ pageextension 14021280 NS_JobItemPrices extends "Job Item Prices"
 {
     //PRJ-440.AM.2.0 | Changed field Properties.
     //PPAL-166.Am.1.0 | Added Caption property.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Job Item Prices'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
 

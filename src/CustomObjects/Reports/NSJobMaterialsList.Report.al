@@ -151,10 +151,7 @@ report 14021190 "NS_Job Materials List"
                         SETFILTER("NS_Activity Code", Job.GETFILTER("NS_Activity Filter"));
                         SETFILTER("NS_Process Code", Job.GETFILTER("NS_Process Filter"));
                         SETFILTER("NS_Operation Code", Job.GETFILTER("NS_Operation Filter"));
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 End);
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                         SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));
                     end;
                 }

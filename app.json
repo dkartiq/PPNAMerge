@@ -1,0 +1,32 @@
+{
+  "id": "a3b03edf-3f59-46a5-9644-a1f4a6b1d289",
+  "name": "ProjectPro - A construction vertical (FW)",
+  "publisher": "Netsmartz LLC",
+  "version": "18.0.16.24946",
+  "brief": "",
+  "description": "",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "dependencies": [ 
+    {
+      "id": "437dbf0e-84ff-417a-965d-ed2bb9650972",
+      "name": "Base Application",
+      "publisher": "Microsoft",
+      "version": "18.5.29545.1"
+    }
+  ],
+  "screenshots": [],
+  "platform": "1.0.0.0",
+  "application": "18.0.29486.1",
+  "idRanges": [
+    {
+      "from": 14021100,
+      "to":14021499
+    }
+  ],
+  "target": "OnPrem",
+  "runtime": "7.2"
+}

@@ -1,8 +1,7 @@
 pageextension 14021227 NS_PurchaseStatistics extends "Purchase Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter(TotalAmount2)
@@ -58,8 +57,7 @@ pageextension 14021227 NS_PurchaseStatistics extends "Purchase Statistics"
                 NS_RetentionBalanceLCY := Vend."Balance (LCY)";
             END;
         end;
-        //NS_FinalTotal := p.NS_P161GetTotalAmount2() - Rec."NS_Retention Amount (LCY)"; //PRJ-1135.NK.1.0 //PRJCTPR-336.NC.1.0 12Mar2024 Block
-        NS_FinalTotal := TotalAmount2 - Rec."NS_Retention Amount (LCY)"; //PRJCTPR-336.NC.1.0 12Mar2024
+        NS_FinalTotal := p.NS_P161GetTotalAmount2() - "NS_Retention Amount (LCY)";
     end;
 
     //Unsupported feature: InsertAfter on "Documentation". Please convert manually.

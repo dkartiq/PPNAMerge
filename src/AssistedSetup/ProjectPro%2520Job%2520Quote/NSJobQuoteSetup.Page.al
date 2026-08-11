@@ -180,13 +180,10 @@ page 14021229 NS_JobQuoteSetupPage
 
     trigger OnQueryClosePage(CloseAction: action): boolean
     var
-        //AssistedSetup: Codeunit "Assisted Setup";  //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-        AssistedSetup: Codeunit "Guided Experience";  //PRJCTPR-155.JS.1.0 09SEP2023 line added
-        NSObjectType: ObjectType;  //PRJCTPR-155.JS.1.0 09SEP2023 line added
+        AssistedSetup: Codeunit "Assisted Setup";
     begin
         if CloseAction = Action::OK then
-            //if AssistedSetup.ExistsAndIsNotComplete(Page::NS_JobQuoteSetupPage) then  //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-            if AssistedSetup.AssistedSetupExistsAndIsNotComplete(NSObjectType::Page, 14021229) then  //PRJCTPR-155.JS.1.0 09SEP2023 line added
+            if AssistedSetup.ExistsAndIsNotComplete(Page::NS_JobQuoteSetupPage) then
                 if not Confirm(NotSetUpQst, false) then
                     Error('');
         PPAssistedSetupMgt.NS_UpdateStatusJobQuoteAssistedSetup();

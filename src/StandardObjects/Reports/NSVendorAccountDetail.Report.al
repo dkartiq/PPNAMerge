@@ -15,14 +15,13 @@ report 14021220 "NS_Vendor Account Detail"
     // +     - OnPreReport() - get Purchases & Payables Setup record
     // +     - Vendor Ledger Entry - OnPreDataItem: add filter on Retention Ledger Code if needed
     // +------------------------------------------------------------
-    //PRJ-1602.NK.1.0 08Sep2022 | Block Code
-  DefaultLayout = RDLC;
+    DefaultLayout = RDLC;
     RDLCLayout = './Layouts/PPVendor Account Detail.rdl';
 
-    // ApplicationArea = Basic, Suite; //PRJ-1602.NK.1.0 08Sep2022 Block
+    ApplicationArea = Basic, Suite;
     Caption = 'Vendor Account Detail';
-    //UsageCategory = ReportsAndAnalysis; //PRJ-1602.NK.1.0 08Sep2022 Block
-    UsageCategory = none;//PRJ-1602.NK.1.0 08Sep2022
+    UsageCategory = ReportsAndAnalysis;
+
     dataset
     {
         dataitem(Header; Integer)

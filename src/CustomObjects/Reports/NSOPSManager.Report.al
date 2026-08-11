@@ -591,12 +591,6 @@ report 14021194 NS_OPSManagerRep
         Clear(CurrentGMBudgetVariance);
 
         //Message('%1..Post', Job."No.");
-        //PRJ-1454.NK.1.0 24Jan2023 Start
-        if JobSetup.Get() then;
-        if JobSetup."NS_Enab. Budg.on Contract Date" then
-            CurrentContractPrice := FindContDaseBaseAmt(Job)
-        else
-            //PRJ-1454.NK.1.0 24Jan2023 End
         CurrentContractPrice := CurrContractPriceMaster + CurrContractPriceSL;
         CurrentContractBudget := CurrContractBudgetMaster + CurrContractBudgetSL;
 
@@ -688,62 +682,7 @@ report 14021194 NS_OPSManagerRep
 
     end;
 
-    //PRJ-1454.NK.1.0 24Jan2023 Start
-    procedure FindContDaseBaseAmt(Job: Record Job) ContAmt: Decimal;
-    var
-        JobPlannLine: Record "Job Planning Line";
-        NSJob: record job;
-        JobNoFilter: Code[100];
-    begin
-        ContAmt := 0;
-        JobNoFilter := '@*' + format(Job."No.") + '*';
-        JobPlannLine.RESET();
-        JobPlannLine.SetRange("Job No.", Job."No.");
-        JobPlannLine.SetFilter("Line Type", '%1|%2', JobPlannLine."Line Type"::Billable, JobPlannLine."Line Type"::"Both Budget and Billable");
-        JobPlannLine.SETFILTER("Job Task No.", Job.GetFilter("NS_Job Task No. Filter"));
-        JobPlannLine.SetFilter("NS_Revenue Category", Job.GetFilter("NS_Revenue Category Filter"));
-        //PE-308.DK.1.0 13JUNE2024 Start
-        //JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_Type Filter"));
-        JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_TypeEnumFilter"));
-        //PE-308.DK.1.0 13JUNE2024 End
-        if NewStatusDateSentIn <> 0D then
-            JobPlannLine.SetFilter("NS_Contract Forecast Date", '..%1', NewStatusDateSentIn);
-        JobPlannLine.SETFILTER(NS_Adjustment, Job.GetFilter("NS_Adjustment Filter"));
-        JobPlannLine.SETFILTER("NS_Shortcut Dimension 1 Code", Job.GetFilter("NS_Global Dimension 1 Filter"));
-        JobPlannLine.SETFILTER("NS_Shortcut Dimension 2 Code", Job.GetFilter("NS_Global Dimension 2 Filter"));
-        JobPlannLine.SETFILTER("NS_Retention Ledger Code", Job.getfilter("NS_Retention Ledger Filter"));
-        if JobPlannLine.FINDSET() then
-            repeat
-                ContAmt := ContAmt + JobPlannLine."Total Price (LCY)";
-            until JobPlannLine.NEXT() = 0;
-        NSJob.Reset();
-        NSJob.SetCurrentKey("NS_Sub-Level to Job No.");
-        NSJob.SetFilter("NS_Sub-Level to Job No.", '%1', JobNoFilter);
-        if NSJob.FindSet() then
-            repeat
-                JobPlannLine.RESET();
-                JobPlannLine.SetRange("Job No.", NSJob."No.");
-                JobPlannLine.SetFilter("Line Type", '%1|%2', JobPlannLine."Line Type"::Billable, JobPlannLine."Line Type"::"Both Budget and Billable");
-                JobPlannLine.SETFILTER("Job Task No.", Job.GetFilter("NS_Job Task No. Filter"));
-                JobPlannLine.SetFilter("NS_Revenue Category", Job.GetFilter("NS_Revenue Category Filter"));
-                //PE-308.DK.1.0 13JUNE2024 Start
-                //JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_Type Filter"));
-                JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_TypeEnumFilter"));
-                //PE-308.DK.1.0 13JUNE2024 END
-                if NewStatusDateSentIn <> 0D then
-                    JobPlannLine.SetFilter("NS_Contract Forecast Date", '..%1', NewStatusDateSentIn);
-                JobPlannLine.SETFILTER(NS_Adjustment, Job.GetFilter("NS_Adjustment Filter"));
-                JobPlannLine.SETFILTER("NS_Shortcut Dimension 1 Code", Job.GetFilter("NS_Global Dimension 1 Filter"));
-                JobPlannLine.SETFILTER("NS_Shortcut Dimension 2 Code", Job.GetFilter("NS_Global Dimension 2 Filter"));
-                JobPlannLine.SETFILTER("NS_Retention Ledger Code", Job.getfilter("NS_Retention Ledger Filter"));
-                if JobPlannLine.FINDSET() then
-                    repeat
-                        ContAmt := ContAmt + JobPlannLine."Total Price (LCY)";
-                    until JobPlannLine.NEXT() = 0;
-            until NSJob.Next() = 0;
-        exit(ContAmt);
-    end;
-    //PRJ-1454.NK.1.0 24Jan2023 End
+
     var
         ExcelBuf: Record "Excel Buffer";
         CompanyInformation: Record "Company Information";

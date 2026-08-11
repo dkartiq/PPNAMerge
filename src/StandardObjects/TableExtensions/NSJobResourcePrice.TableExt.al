@@ -4,7 +4,6 @@ tableextension 14021215 NS_JobResourcePrice extends "Job Resource Price"
     //PRJ-152 VT 09-03-20 Table relation Added
     //PRJ-158/159 VT 02-04-20 Code  Code added and Commented as Skill Class is not the part of Key
     //PRJ-464.AM.1.0 23NOV2020 | Created a New field and code .
-    //PE-132.RM.1.0 19July2023 | Added some code
     fields
     {
         field(14021100; "NS_Skill Class Code"; Code[10])
@@ -12,71 +11,9 @@ tableextension 14021215 NS_JobResourcePrice extends "Job Resource Price"
             DataClassification = CustomerContent;
             TableRelation = "NS_Skill Class";//PRJ-152 VT 09-03-20
             Caption = 'Skill Class';
-            //PE-68.Dk.1.0 14March2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68.Dk.1.0 14March2023 End
-            //PRJ-1557.GK.1.0 07Sept2022 start
-            trigger OnLookup()
-            var
-                NSResourceSkillClass: Record NS_ResourceSkillClass;
-                NSSkillClass: Record "NS_Skill Class";
-                NSFilter: Text;
-                NSResourceSkillClass1: Record NS_ResourceSkillClass;
-            begin
-                Clear(NSFilter);
-                if (Type = Type::Resource) AND (Code <> '') then begin
-                    NSResourceSkillClass.Reset();
-                    NSResourceSkillClass.SetRange("NS_Resource No.", Code);
-                    if NSResourceSkillClass.FindFirst() then begin
-                        NSResourceSkillClass1.Reset();
-                        NSResourceSkillClass1.SetFilter("NS_Resource No.", Code);
-                        If Page.RunModal(Page::NS_ResourceSkillClass, NSResourceSkillClass1) = Action::LookupOK then
-                            Validate("NS_Skill Class Code", NSResourceSkillClass1."NS_Skill Class Code");
-                    end else
-                        if Page.RunModal(Page::"NS_Skill Classes", NSSkillClass) = Action::LookupOK then
-                            Validate("NS_Skill Class Code", NSSkillClass.NS_Code);
-                end else
-                    if Page.RunModal(Page::"NS_Skill Classes", NSSkillClass) = Action::LookupOK then
-                        Validate("NS_Skill Class Code", NSSkillClass.NS_Code);
-            end;
-            //PRJ-1557.GK.1.0 07Sept2022 end
 
         }
-        //PE-68.Dk.1.0 14March2023 Start
-        field(14021106; "NS_Skill Class Code New"; Code[20])
-        {
-            DataClassification = CustomerContent;
-            TableRelation = "NS_Skill Class";
-            Caption = 'Skill Class';
-            trigger OnLookup()
-            var
-                NSResourceSkillClass: Record NS_ResourceSkillClass;
-                NSSkillClass: Record "NS_Skill Class";
-                NSFilter: Text;
-                NSResourceSkillClass1: Record NS_ResourceSkillClass;
-            begin
-                Clear(NSFilter);
-                if (Type = Type::Resource) AND (Code <> '') then begin
-                    NSResourceSkillClass.Reset();
-                    NSResourceSkillClass.SetRange("NS_Resource No.", Code);
-                    if NSResourceSkillClass.FindFirst() then begin
-                        NSResourceSkillClass1.Reset();
-                        NSResourceSkillClass1.SetFilter("NS_Resource No.", Code);
-                        If Page.RunModal(Page::NS_ResourceSkillClass, NSResourceSkillClass1) = Action::LookupOK then
-                            Validate("NS_Skill Class Code New", NSResourceSkillClass1."NS_Skill Class Code");
-                    end else
-                        if Page.RunModal(Page::"NS_Skill Classes", NSSkillClass) = Action::LookupOK then
-                            Validate("NS_Skill Class Code New", NSSkillClass.NS_Code);
-                end else
-                    if Page.RunModal(Page::"NS_Skill Classes", NSSkillClass) = Action::LookupOK then
-                        Validate("NS_Skill Class Code New", NSSkillClass.NS_Code);
-            end;
-            //PE-68.Dk.1.0 14March2023 End
-
-        }
-        //  PRJ-464.AM.1.0 Start
+        //PRJ-464.AM.1.0 Start
         field(14021103; "NS_Unit of Measure Code"; Code[10])
         {
             Caption = 'Unit of Measure Code';
@@ -91,8 +28,6 @@ tableextension 14021215 NS_JobResourcePrice extends "Job Resource Price"
             var
                 Res: Record 156;
                 ResGrp: Record 152;
-                NSEmployee: Record Employee;//PRJ-1557.GK.1.0 26Aug2022
-                NSResourceSkillClass: Record NS_ResourceSkillClass;//PRJ-1557.GK.1.0 26Aug2022
             begin
                 CASE Type OF
                     Type::Resource:
@@ -103,23 +38,6 @@ tableextension 14021215 NS_JobResourcePrice extends "Job Resource Price"
                             "Unit Price" := Res."Unit Price";
                             "NS_Unit of Measure Code" := Res."Base Unit of Measure";//PRJ-464.AM.1.0
                             //ProjectPro - end
-                            //PRJ-1557.GK.1.0 26Aug2022 start
-                            if Type = Type::Resource then begin
-                                NSResourceSkillClass.Reset();
-                                NSResourceSkillClass.SetRange("NS_Resource No.", Code);
-                                NSResourceSkillClass.SetRange(NS_Default, true);
-                                if NSResourceSkillClass.FindFirst() then begin
-                                    //PE-68.Dk.1.0 14March2023 Start
-                                    //    Rec.Validate("NS_Skill Class Code", NSResourceSkillClass."NS_Skill Class Code");
-                                    Rec.Validate("NS_Skill Class Code New", NSResourceSkillClass."NS_Skill Class Code");
-                                end else begin
-                                    //  Rec."NS_Skill Class Code" := '';
-                                    Rec."NS_Skill Class Code New" := '';
-                                    //PE-68.Dk.1.0 14March2023 End
-                                end;
-                            end;
-                            //PRJ-1557.GK.1.0 26Aug2022 end
-
                         END;
                     Type::"Group(Resource)":
                         BEGIN
@@ -148,13 +66,7 @@ tableextension 14021215 NS_JobResourcePrice extends "Job Resource Price"
                         VALIDATE("Unit Cost Factor", "Unit Price" / "NS_Unit Cost")
                     ELSE
                         VALIDATE("Unit Cost Factor", 0);
-                //ProjectPro - end   
-                //PE-39 Dk.1.0 14March2023 Start
-                IF ("NS_Unit Cost" <> 0) AND ("Unit Price" <> 0) THEN
-                    "NS_Markup %" := ROUND(100 * ("Unit Price" / "NS_Unit Cost" - 1), NS_GLSetup."Amount Rounding Precision")
-                ELSE
-                    "NS_Markup %" := 0;
-                //PE-39 Dk.1.0 14March2023 End
+                //ProjectPro - end                   
             end;
         }
 
@@ -207,11 +119,7 @@ tableextension 14021215 NS_JobResourcePrice extends "Job Resource Price"
             Caption = 'Cost Burden Multiplier';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PE-132.RM.1.0 19July2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in upcoming build';
-            ObsoleteTag = 'Will be removed in upcoming build';
-            //PE-132.RM.1.0 19July2023 End
+
             trigger OnValidate();
             var
                 Text14021100: Label 'Job Burden Multiplier must be 1.00\because burden is applied through payroll rather than in the time journal.';

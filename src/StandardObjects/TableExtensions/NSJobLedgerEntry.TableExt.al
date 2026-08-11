@@ -7,9 +7,6 @@ tableextension 14021132 NS_JobLedgerEntry extends "Job Ledger Entry"
     //PRJ-772.JS.1.0 26JULY2021 | field added
     //PRJ-817.JS.1.0 04Aug2021 | Add field work unit completed
     //PRJ-841.JS.1.0 16Aug2021 | field added skill code
-    //PRJ-1015.JS.1.0 10Oct2021 | Add one field
-    //PRJ-1571.NK.1.0 18Aug2022 | Add Code
-    //PRJCTPR-2.RM.1.0 13Dec2022 | Added a new field
     fields
     {
         modify(Type)
@@ -207,21 +204,7 @@ tableextension 14021132 NS_JobLedgerEntry extends "Job Ledger Entry"
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
             TableRelation = "NS_Skill Class";
-            //PE-68 Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68 Dk.1.0 10April2023 End
         }
-        //PE-68 Dk.1.0 10April2023 Start
-        field(14021187; "NS_Skill Class New"; Code[20])
-        {
-            Caption = 'Skill Class';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = "NS_Skill Class";
-        }
-        //PE-68 Dk.1.0 10April2023 End
         field(14021300; "NS_Subcontract No."; Code[20])
         {
             Caption = 'Subcontract No.';
@@ -264,21 +247,18 @@ tableextension 14021132 NS_JobLedgerEntry extends "Job Ledger Entry"
         {
             DataClassification = SystemMetadata;
             Caption = 'Activity Code';
-            CaptionClass = '50999,0,0'; //PRJ-1571.NK.1.0 18Aug2022
             Editable = false;
         }
         field(14021380; "NS_Process Code"; Code[10])
         {
             DataClassification = SystemMetadata;
             Caption = 'Process Code';
-            CaptionClass = '50999,1,0'; //PRJ-1571.NK.1.0 18Aug2022
             Editable = false;
         }
         field(14021381; "NS_Operation Code"; Code[10])
         {
             DataClassification = SystemMetadata;
             Caption = 'Operation Code';
-            CaptionClass = '50999,2,0'; //PRJ-1571.NK.1.0 18Aug2022
             Editable = false;
         }
         //PRJ-9.SK.1.0 End
@@ -287,7 +267,6 @@ tableextension 14021132 NS_JobLedgerEntry extends "Job Ledger Entry"
         {
             DataClassification = CustomerContent;
             Caption = 'Section Code';
-            CaptionClass = '50999,3,0'; //PRJ-1571.NK.1.0 18Aug2022
             Editable = false;
         }
         //PRJ-688.AM.1.0
@@ -352,65 +331,9 @@ tableextension 14021132 NS_JobLedgerEntry extends "Job Ledger Entry"
             Caption = 'Skill Code';
             Editable = false;
             DataClassification = CustomerContent;
-            //PE-68 Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68 Dk.1.0 10April2023 End
 
         }
-        //PE-68 Dk.1.0 10April2023 Start
-        field(14021424; "NS_Skill Code New"; Code[20])
-        {
-            Caption = 'Skill Code';
-            Editable = false;
-            DataClassification = CustomerContent;
 
-        }
-        //PE-68 Dk.1.0 10April2023 End
-
-        field(14021423; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0 10Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            Editable = false;
-            TableRelation = Job;
-        }
-        //PRJ-1696.GK.1.0 15Dec2022 start
-        field(14021426; "NS_Interim Entry"; Boolean)
-        {
-            Caption = 'Interim Entry';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021427; "NS_Accural Status"; Enum "NS_Accrual Status")
-        {
-            Caption = 'Accural Status';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021428; "NS_Receipt No."; Code[20])
-        {
-            Caption = 'Receipt No.';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021429; "NS_Receipt Line No."; Integer)
-        {
-            Caption = 'Receipt Line No.';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PRJ-1696.GK.1.0 15Dec2022 end
-        //PRJCTPR-2.RM.1.0 13Dec2022 start
-        field(14021430; "NS_Union Code"; Code[10])
-        {
-            Caption = 'Union Code';
-            DataClassification = CustomerContent;
-            TableRelation = Union;
-        }
-        //PRJCTPR-2.RM.1.0 13Dec2022 end
     }
 
     trigger OnBeforeInsert();

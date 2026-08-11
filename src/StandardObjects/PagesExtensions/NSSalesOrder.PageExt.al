@@ -2,13 +2,8 @@ pageextension 14021112 NS_SalesOrder extends "Sales Order"
 {
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
     //PRJ-552.SK.1.0 Added caption
-    //PRJ-659.RS.1.0 18June21 | NS_�should�be�removed�from�every�page�rest�mention�the�page�ID�and�Name.
-    //PRJ-999.JS.1.0 19Nov2021 | Add code to flow job dimension
-    //PRJ-1087.JS.1.0 18Dec2021 | Add condition for dimension
-    //PRJ-1099.JS.1.0 31Dec2021 | Modify code for dimension on condition basis
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJCTPR-75 DK.1.0. 2March2023 | Job no field Editable & Visible false
-    Caption = 'Sales Order'; //PRJ-1330.NK.1.0 25Apr2022
+     //PRJ-659.RS.1.0 18June21 | NS_�should�be�removed�from�every�page�rest�mention�the�page�ID�and�Name.
+
     layout
     {
         addafter("Assigned User ID")
@@ -17,40 +12,12 @@ pageextension 14021112 NS_SalesOrder extends "Sales Order"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Job No.';
-                Visible = false;  //PRJCTPR-75 DK.1.0.2March2023
-                Editable = false;//PRJCTPR-75 DK.1.0.2March2023
+
                 trigger OnValidate();
-                var
-                    //PRJ-1099.JS.1.0 30Dec2021-start
-                    NS_Job: Record Job;
-                    NS_JobsSetup: Record "Jobs Setup";
-                    NS_ProgrBillHead: Record "NS_Progress Billing Header";
-                    NS_DefaultDim: Record "Default Dimension";
                 begin
                     //ProjectPro - start
-                    if Rec."NS_Job No." <> xRec."NS_Job No." then begin   //PRJ-1099.JS.1.0 add begin and Rec command
-                        NS_JobsSetup.Get();
-                        If NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                            IF Rec."NS_Job No." <> '' then
-                                if NS_Job.Get(Rec."NS_Job No.") then begin
-                                    Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                    Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                                    Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                                end;
-                        end else
-                            if NS_Job.get(Rec."NS_Job No.") then begin
-                                NS_DefaultDim.Reset();
-                                NS_DefaultDim.SetRange("Table ID", 23);
-                                NS_DefaultDim.SetRange("No.", Rec."Sell-to Customer No.");
-                                if NS_DefaultDim.IsEmpty() then begin
-                                    Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                    Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                                    Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                                end;
-                            end;
-                    end;
-                    CurrPage.UPDATE();
-                    //PRJ-1099.JS.1.0 30Dec2021-end
+                    if "NS_Job No." <> xRec."NS_Job No." then
+                        CurrPage.UPDATE;
                     //ProjectPro - end
                 end;
             }
@@ -63,9 +30,9 @@ pageextension 14021112 NS_SalesOrder extends "Sales Order"
                 Caption = 'Retention';
                 field("NS_Retention Base Amount"; NS_RetentionBaseAmount)
                 {
-                    Caption = 'Retention Base Amount';//PRJ-659.RS.1.0 18June21
                     ApplicationArea = All;
                     Editable = false;
+                    Caption = 'Retention Base Amount'; //PRJ-552.SK.1.0 Added Caption//PRJ-659.RS.1.0 18June21
                     ToolTip = 'Specifies the Retention Base Amount';
                 }
                 field("NS_Retention Percent"; Rec."NS_Retention Percent")
@@ -146,25 +113,10 @@ pageextension 14021112 NS_SalesOrder extends "Sales Order"
     end;
 
     trigger OnAfterGetRecord();
-    var
-        NS_Jobs: record Job;  //PRJ-999.JS.1.0 18Nov2021
-        NS_JobSetup: Record "Jobs Setup";  //PRJ-1087.JS.1.0 18Dec2021  
     begin
         //ProjectPro - start
         NS_RetentionCalcs();
         //ProjectPro - end
-        //PRJ-999.JS.1.0 18Nov2021 Start
-        //PRJ-1099.JS.1.0 31Dec2021-Start
-        // NS_JobSetup.Get();   //PRJ-1087.JS.1.0 18Dec2021 add line
-        // if NS_JobSetup."NS_Flow Job Card Dimension" = true then    //PRJ-1087.JS.1.0 18Dec2021 add line
-        //     IF Rec."NS_Job No." <> '' then
-        //         if NS_Jobs.Get(Rec."NS_Job No.") then begin
-        //             Rec."Shortcut Dimension 1 Code" := NS_Jobs."Global Dimension 1 Code";
-        //             Rec."Shortcut Dimension 2 Code" := NS_Jobs."Global Dimension 2 Code";
-        //             Rec."Dimension Set ID" := Rec.NS_GetDimensionNoFromJob(Rec."NS_Job No.");
-        //         end;
-        //PRJ-1099.JS.1.0 31Dec2021-Start        
-        //PRJ-999.JS.1.0 18Nov2021 end         
     end;
 
     procedure NS_RetentionCalcs();

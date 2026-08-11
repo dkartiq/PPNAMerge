@@ -11,10 +11,6 @@ pageextension 14021102 NS_CustomerCard extends "Customer Card"
     //PRJ-472.MS.1.0 resolve the issue of blank record when click on Bal fields
     //PRJ-827.JS.1.0�09Aug2021 | Optimize code while opening customer card in OnAfterGetRecord trigger
     //PRJ-882.JS.1.0 27Aug2021 | Add on new field for total Sales
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Customer Card'; //PRJ-1330.NK.1.0 25Apr2022
-    //PRJ-1537.JS.1.0 25JULY2022 | Reverce Balance Due ($) Sinage condition
-    //PRJ-1579.RM.1.0 22Aug2022 | Added some code
     layout
     {
 
@@ -71,8 +67,6 @@ pageextension 14021102 NS_CustomerCard extends "Customer Card"
             field(NS_BalanceDueLcy_NToshow; BalanceDueLcy_NToshow)
             {
                 Caption = 'Balance Due ($)';
-                // ToolTip = 'Specifies the Balance Due($)'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                ToolTip = 'Specifies the Balance Due ($)'; //PRJ-1579.RM.2.0 
                 Description = 'Field used to show Balance wdue LCY';
                 Editable = false;
                 ApplicationArea = All;
@@ -103,8 +97,7 @@ pageextension 14021102 NS_CustomerCard extends "Customer Card"
                 Caption = 'Retention Balance ($)';
                 Editable = false;
                 ApplicationArea = All;
-                // ToolTip = 'Retention Balance'; //PRJ-1579.RM.1.0  commented
-                ToolTip = 'Specifies the Retention Balance ($)'; //PRJ-1579.RM.1.0 
+                ToolTip = 'Retention Balance';
 
                 trigger OnDrillDown();
                 begin
@@ -126,7 +119,6 @@ pageextension 14021102 NS_CustomerCard extends "Customer Card"
             field(NS_BalanceWTRetention; BalanceWTRetention)
             {
                 Caption = 'Balance Without Retention($)';
-                ToolTip = 'Specifies the balance without retention ($)'; //PRJ-1579.RM.1.0 
                 Editable = false;
                 ApplicationArea = All;
 
@@ -432,11 +424,6 @@ pageextension 14021102 NS_CustomerCard extends "Customer Card"
             until CustLegEnt_G.Next = 0;
 
         BalanceDueLcy_NToshow := Abs(BalanceDueLcy_N);
-        //PRJ-1537.JS.1.0 25JULY2022 - Start
-        Rec.CalcFields("Balance (LCY)");
-        If Rec."Balance (LCY)" < 0 then
-            BalanceDueLcy_NToshow := BalanceDueLcy_NToshow * -1;
-        //PRJ-1537.JS.1.0 25JULY2022 - end    
         //PRJ-250:AS:10JUNE2020 - END
         //       rec.Reset();//PRJ-472.MS.1.0//PRJ-713.AS.1.0 Commented
 

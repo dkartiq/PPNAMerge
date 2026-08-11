@@ -362,18 +362,12 @@
 //                     var
 //                         ItemTrackingNavigate: Report "Item Tracking Navigate";
 //                         DocumentEntries: Report "Document Entries";
-//    NSItemTracing: page "Item Tracing";  //PE-267.JS.1.0 05MAR2024
-//    NSTraceMethod2: Option "Origin->Usage","Usage->Origin"; //PE-267.JS.1.0 05MAR2024
-//    NSShowComponents2: Option No,"Item-tracked Only",All; //PE-267.JS.1.0 05MAR2024
 //                     begin
 //                         if NS_ItemTrackingSearch then begin
 //                             Clear(ItemTrackingNavigate);
 //                             ItemTrackingNavigate.TransferDocEntries(Rec);
 //                             ItemTrackingNavigate.TransferRecordBuffer(TempRecordBuffer);
-//PE-267.JS.1.0 05MAR2024 - Start
-//ItemTrackingNavigate.TransferFilters(SerialNoFilter, LotNoFilter, '', '');                            
-//NSItemTracing.SetItemFilters(NSTraceMethod2::"Usage->Origin", NSShowComponents2::All, SerialNoFilter, LotNoFilter, '', '');
-//PE-267.JS.1.0 05MAR2024 - end
+//                             ItemTrackingNavigate.TransferFilters(SerialNoFilter, LotNoFilter, '', '');
 //                             ItemTrackingNavigate.Run;
 //                         end else begin
 //                             //PPDA.1.0 Start

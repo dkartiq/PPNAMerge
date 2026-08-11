@@ -63,9 +63,6 @@ table 14021176 "NS_Job Cost Category"
         key(Key2; "NS_Activity Code")
         {
         }
-        key(Key3; "NS_G/L Account No.")    //PRJCTPR-185.JS.1.0 01Sep2023
-        {
-        }
     }
 
     fieldgroups

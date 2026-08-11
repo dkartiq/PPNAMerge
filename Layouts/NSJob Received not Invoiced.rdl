@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="JobNo">
+          <DataField>JobNo</DataField>
+        </Field>
+        <Field Name="JobManager">
+          <DataField>JobManager</DataField>
+        </Field>
+        <Field Name="JobCustAddress">
+          <DataField>JobCustAddress</DataField>
+        </Field>
+        <Field Name="JobCustAddress2">
+          <DataField>JobCustAddress2</DataField>
+        </Field>
+        <Field Name="JobCustName">
+          <DataField>JobCustName</DataField>
+        </Field>
+        <Field Name="JobCustPhone">
+          <DataField>JobCustPhone</DataField>
+        </Field>
+        <Field Name="JobDescription">
+          <DataField>JobDescription</DataField>
+        </Field>
+        <Field Name="JobCostCategory">
+          <DataField>JobCostCategory</DataField>
+        </Field>
+        <Field Name="JobCostCatDesc">
+          <DataField>JobCostCatDesc</DataField>
+        </Field>
+        <Field Name="Detail_CostCategory">
+          <DataField>Detail_CostCategory</DataField>
+        </Field>
+        <Field Name="Detail_DocNumber">
+          <DataField>Detail_DocNumber</DataField>
+        </Field>
+        <Field Name="Detail_DocLineNum">
+          <DataField>Detail_DocLineNum</DataField>
+        </Field>
+        <Field Name="Detail_No">
+          <DataField>Detail_No</DataField>
+        </Field>
+        <Field Name="Detail_Description">
+          <DataField>Detail_Description</DataField>
+        </Field>
+        <Field Name="Detail_Quantity">
+          <DataField>Detail_Quantity</DataField>
+        </Field>
+        <Field Name="Detail_QuantityFormat">
+          <DataField>Detail_QuantityFormat</DataField>
+        </Field>
+        <Field Name="Detail_Rate">
+          <DataField>Detail_Rate</DataField>
+        </Field>
+        <Field Name="Detail_RateFormat">
+          <DataField>Detail_RateFormat</DataField>
+        </Field>
+        <Field Name="Detail_Total">
+          <DataField>Detail_Total</DataField>
+        </Field>
+        <Field Name="Detail_TotalFormat">
+          <DataField>Detail_TotalFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

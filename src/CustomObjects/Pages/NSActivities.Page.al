@@ -9,16 +9,12 @@ page 14021156 NS_Activities
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-192:AS:09APRIL2020 : Changed page type to list page as scrolling feature was not enabled on webclient due to wrong page type card.
-    //PRJ-1085.RM.1.0 16Dec2021 | Added Page url
-    //PRJ-917.NK.1.0 09Mar2022 | Add One Field
-    ContextSensitiveHelpPage = 'user-guide/role-center/activities/'; //PRJ-1085.RM.1.0 16Dec2021
 
-    Caption = 'Job Activities'; //PRJ-917.NK.1.0
+    Caption = 'Activities';
     PageType = List;//PRJ-192:AS:09APRIL2020
     SourceTable = "NS_Job Activity";
     UsageCategory = Administration;
     ApplicationArea = all;
-
 
     layout
     {
@@ -91,13 +87,6 @@ page 14021156 NS_Activities
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Default Task for Job Type';
                 }
-                //PRJ-917.NK.1.0 09Mar2022 Start
-                field(NS_Blocked; Rec.NS_Blocked)
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Specifies the Blocked';
-                }
-                //PRJ-917.NK.1.0 09Mar2022 End
             }
         }
     }

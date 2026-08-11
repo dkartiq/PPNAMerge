@@ -8,7 +8,6 @@
         <ConnectString />
       </ConnectionProperties>
       <rd:SecurityType>None</rd:SecurityType>
-      <rd:DataSourceID>c52bb55d-f31e-48aa-9147-495134f85e05</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <ReportSections>
@@ -51,7 +50,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.45861cm</Height>
+                  <Height>0.35278cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -77,7 +76,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -106,7 +105,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -137,7 +136,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -166,7 +165,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -194,7 +193,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <Style>
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -223,7 +222,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -252,7 +251,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -281,7 +280,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -310,7 +309,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -339,7 +338,7 @@
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
+                            <VerticalAlign>Bottom</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -347,7 +346,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.45861cm</Height>
+                  <Height>0.35278cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -650,7 +649,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.45861cm</Height>
+                  <Height>0.35278cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -947,7 +946,7 @@
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.45861cm</Height>
+                  <Height>0.35278cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -962,7 +961,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -994,7 +992,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1024,7 +1021,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DScheduled_ValueFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1054,7 +1050,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DPrevious_PeriodFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1084,7 +1079,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DThis_PeriodFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1114,7 +1108,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DStored_Materials_AmountFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1144,7 +1137,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DTotal_Completed_And_StoredFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1174,7 +1166,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1204,7 +1195,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DBalance_To_FinishFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1234,7 +1224,6 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>7pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
                                     <Format>=First(Fields!DRetentionFormat.Value, "DataSet_Result")</Format>
                                   </Style>
                                 </TextRun>
@@ -1289,9 +1278,9 @@
             <PageBreak>
               <BreakLocation>Start</BreakLocation>
             </PageBreak>
-            <Top>17.95397cm</Top>
-            <Left>0.25689cm</Left>
-            <Height>1.83444cm</Height>
+            <Top>21.63697cm</Top>
+            <Left>0.07055cm</Left>
+            <Height>1.41112cm</Height>
             <Width>18.05035cm</Width>
             <Style>
               <Border>
@@ -1317,9 +1306,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>8.18505cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00117pt</Height>
+            <Top>11.90332cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>1</ZIndex>
             <Style>
@@ -1346,9 +1335,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>8.18509cm</Top>
-            <Left>1.76615cm</Left>
-            <Height>12.00003pt</Height>
+            <Top>11.90336cm</Top>
+            <Left>1.50925cm</Left>
+            <Height>10pt</Height>
             <Width>7.30722cm</Width>
             <ZIndex>2</ZIndex>
             <Style>
@@ -1376,9 +1365,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>8.08694cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>11.78119pt</Height>
+            <Top>11.90332cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>3</ZIndex>
             <Style>
@@ -1405,9 +1394,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>8.67894cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>12.39721cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>4</ZIndex>
             <Style>
@@ -1434,9 +1423,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>8.67898cm</Top>
-            <Left>1.76615cm</Left>
-            <Height>11.99924pt</Height>
+            <Top>12.39725cm</Top>
+            <Left>1.50925cm</Left>
+            <Height>10pt</Height>
             <Width>7.30722cm</Width>
             <ZIndex>5</ZIndex>
             <Style>
@@ -1464,9 +1453,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>8.60838cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>12.00003pt</Height>
+            <Top>12.39721cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>6</ZIndex>
             <Style>
@@ -1493,9 +1482,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>9.20811cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00094pt</Height>
+            <Top>12.92638cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>7</ZIndex>
             <Style>
@@ -1522,9 +1511,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>9.20812cm</Top>
-            <Left>1.76615cm</Left>
-            <Height>12.00066pt</Height>
+            <Top>12.92639cm</Top>
+            <Left>1.50925cm</Left>
+            <Height>10pt</Height>
             <Width>7.30722cm</Width>
             <ZIndex>8</ZIndex>
             <Style>
@@ -1552,9 +1541,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>9.13755cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>12.92638cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>9</ZIndex>
             <Style>
@@ -1581,9 +1570,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>9.73727cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>13.45554cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>10</ZIndex>
             <Style>
@@ -1610,9 +1599,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>9.73731cm</Top>
-            <Left>1.76615cm</Left>
-            <Height>13.00009pt</Height>
+            <Top>13.45558cm</Top>
+            <Left>1.50925cm</Left>
+            <Height>10pt</Height>
             <Width>7.30722cm</Width>
             <ZIndex>11</ZIndex>
             <Style>
@@ -1640,9 +1629,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>9.73727cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>13.45554cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>12</ZIndex>
             <Style>
@@ -1669,9 +1658,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>10.26644cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00038pt</Height>
+            <Top>13.98471cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>13</ZIndex>
             <Style>
@@ -1698,9 +1687,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>10.26648cm</Top>
-            <Left>1.76615cm</Left>
-            <Height>11.99924pt</Height>
+            <Top>13.98475cm</Top>
+            <Left>1.50925cm</Left>
+            <Height>10pt</Height>
             <Width>7.30722cm</Width>
             <ZIndex>14</ZIndex>
             <Style>
@@ -1729,9 +1718,9 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>10.79562cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>11.99953pt</Height>
+            <Top>14.51389cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>15</ZIndex>
             <Style>
@@ -1758,9 +1747,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>10.79562cm</Top>
-            <Left>2.66841cm</Left>
-            <Height>13.00066pt</Height>
+            <Top>14.51389cm</Top>
+            <Left>2.41151cm</Left>
+            <Height>10pt</Height>
             <Width>6.40496cm</Width>
             <ZIndex>16</ZIndex>
             <Style>
@@ -1788,9 +1777,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>10.79562cm</Top>
-            <Left>11.45407cm</Left>
-            <Height>12.00066pt</Height>
+            <Top>14.51389cm</Top>
+            <Left>11.19717cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>17</ZIndex>
             <Style>
@@ -1819,9 +1808,9 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>11.32477cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00123pt</Height>
+            <Top>15.04304cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>18</ZIndex>
             <Style>
@@ -1848,9 +1837,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>11.32481cm</Top>
-            <Left>2.66841cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>15.04308cm</Top>
+            <Left>2.41151cm</Left>
+            <Height>10pt</Height>
             <Width>6.40496cm</Width>
             <ZIndex>19</ZIndex>
             <Style>
@@ -1878,9 +1867,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>11.32481cm</Top>
-            <Left>11.45407cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>15.04308cm</Top>
+            <Left>11.19717cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>20</ZIndex>
             <Style>
@@ -1907,9 +1896,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>11.78343cm</Top>
-            <Left>1.76615cm</Left>
-            <Height>12pt</Height>
+            <Top>15.57225cm</Top>
+            <Left>1.81391cm</Left>
+            <Height>10pt</Height>
             <Width>7.00256cm</Width>
             <ZIndex>21</ZIndex>
             <Style>
@@ -1937,9 +1926,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>11.85398cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>12pt</Height>
+            <Top>15.57221cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>22</ZIndex>
             <Style>
@@ -1966,9 +1955,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>12.38315cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>11.91802pt</Height>
+            <Top>16.16908cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>23</ZIndex>
             <Style>
@@ -1995,9 +1984,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>12.38315cm</Top>
-            <Left>1.74237cm</Left>
-            <Height>11.91802pt</Height>
+            <Top>16.16908cm</Top>
+            <Left>1.48547cm</Left>
+            <Height>10pt</Height>
             <Width>7.331cm</Width>
             <ZIndex>24</ZIndex>
             <Style>
@@ -2025,9 +2014,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>12.38315cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>11.91802pt</Height>
+            <Top>16.16908cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>25</ZIndex>
             <Style>
@@ -2054,9 +2043,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>12.90942cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>16.69825cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>26</ZIndex>
             <Style>
@@ -2083,9 +2072,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>12.90942cm</Top>
-            <Left>1.74237cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>16.69825cm</Top>
+            <Left>1.48547cm</Left>
+            <Height>10pt</Height>
             <Width>7.331cm</Width>
             <ZIndex>27</ZIndex>
             <Style>
@@ -2113,9 +2102,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>12.90942cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>16.69825cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>28</ZIndex>
             <Style>
@@ -2142,9 +2131,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>13.43859cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>17.22742cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>29</ZIndex>
             <Style>
@@ -2171,9 +2160,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>13.43859cm</Top>
-            <Left>1.74237cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>17.22742cm</Top>
+            <Left>1.48547cm</Left>
+            <Height>10pt</Height>
             <Width>7.331cm</Width>
             <ZIndex>30</ZIndex>
             <Style>
@@ -2201,9 +2190,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>13.43859cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>12.00009pt</Height>
+            <Top>17.22742cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>31</ZIndex>
             <Style>
@@ -2230,9 +2219,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>13.93248cm</Top>
-            <Left>0.5765cm</Left>
-            <Height>12.99981pt</Height>
+            <Top>17.75658cm</Top>
+            <Left>0.3196cm</Left>
+            <Height>10pt</Height>
             <Width>0.84845cm</Width>
             <ZIndex>32</ZIndex>
             <Style>
@@ -2259,9 +2248,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>13.96776cm</Top>
-            <Left>1.74237cm</Left>
-            <Height>11.99981pt</Height>
+            <Top>17.75658cm</Top>
+            <Left>1.48547cm</Left>
+            <Height>10pt</Height>
             <Width>7.331cm</Width>
             <ZIndex>33</ZIndex>
             <Style>
@@ -2289,9 +2278,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>13.96776cm</Top>
-            <Left>15.26088cm</Left>
-            <Height>11.99981pt</Height>
+            <Top>17.75658cm</Top>
+            <Left>15.00398cm</Left>
+            <Height>10pt</Height>
             <Width>3.0659cm</Width>
             <ZIndex>34</ZIndex>
             <Style>
@@ -2318,9 +2307,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>14.95054cm</Top>
-            <Left>0.55272cm</Left>
-            <Height>12.40022pt</Height>
+            <Top>18.66881cm</Top>
+            <Left>0.29582cm</Left>
+            <Height>10pt</Height>
             <Width>6.8548cm</Width>
             <ZIndex>35</ZIndex>
             <Style>
@@ -2349,9 +2338,9 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>14.95054cm</Top>
-            <Left>8.03631cm</Left>
-            <Height>12.40022pt</Height>
+            <Top>18.66881cm</Top>
+            <Left>7.77941cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>36</ZIndex>
             <Style>
@@ -2380,9 +2369,9 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>14.92938cm</Top>
-            <Left>11.13803cm</Left>
-            <Height>13.00003pt</Height>
+            <Top>18.64765cm</Top>
+            <Left>10.88113cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>37</ZIndex>
             <Style>
@@ -2409,9 +2398,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>15.42327cm</Top>
-            <Left>0.55272cm</Left>
-            <Height>12.4005pt</Height>
+            <Top>19.14154cm</Top>
+            <Left>0.29582cm</Left>
+            <Height>10pt</Height>
             <Width>6.8548cm</Width>
             <ZIndex>38</ZIndex>
             <Style>
@@ -2439,9 +2428,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>15.42327cm</Top>
-            <Left>8.03631cm</Left>
-            <Height>13.4005pt</Height>
+            <Top>19.14154cm</Top>
+            <Left>7.77941cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>39</ZIndex>
             <Style>
@@ -2469,9 +2458,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>15.42327cm</Top>
-            <Left>11.146cm</Left>
-            <Height>13.4005pt</Height>
+            <Top>19.14154cm</Top>
+            <Left>10.8891cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>40</ZIndex>
             <Style>
@@ -2498,9 +2487,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>15.89601cm</Top>
-            <Left>0.55272cm</Left>
-            <Height>12.39937pt</Height>
+            <Top>19.61428cm</Top>
+            <Left>0.29582cm</Left>
+            <Height>10pt</Height>
             <Width>6.8548cm</Width>
             <ZIndex>41</ZIndex>
             <Style>
@@ -2528,9 +2517,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>15.89601cm</Top>
-            <Left>8.03631cm</Left>
-            <Height>12.39937pt</Height>
+            <Top>19.61428cm</Top>
+            <Left>7.77941cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>42</ZIndex>
             <Style>
@@ -2558,9 +2547,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>15.89601cm</Top>
-            <Left>11.146cm</Left>
-            <Height>11.39937pt</Height>
+            <Top>19.61428cm</Top>
+            <Left>10.8891cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>43</ZIndex>
             <Style>
@@ -2587,9 +2576,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>16.36871cm</Top>
-            <Left>0.55272cm</Left>
-            <Height>14.20019pt</Height>
+            <Top>20.08698cm</Top>
+            <Left>0.29582cm</Left>
+            <Height>10pt</Height>
             <Width>6.8548cm</Width>
             <ZIndex>44</ZIndex>
             <Style>
@@ -2617,9 +2606,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>16.36871cm</Top>
-            <Left>8.03631cm</Left>
-            <Height>14.20019pt</Height>
+            <Top>20.08698cm</Top>
+            <Left>7.77941cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>45</ZIndex>
             <Style>
@@ -2647,9 +2636,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>16.36871cm</Top>
-            <Left>11.146cm</Left>
-            <Height>14.20019pt</Height>
+            <Top>20.08698cm</Top>
+            <Left>10.8891cm</Left>
+            <Height>10pt</Height>
             <Width>2.55976cm</Width>
             <ZIndex>46</ZIndex>
             <Style>
@@ -2676,9 +2665,9 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>17.04605cm</Top>
-            <Left>0.55272cm</Left>
-            <Height>14.20019pt</Height>
+            <Top>20.76432cm</Top>
+            <Left>0.29582cm</Left>
+            <Height>10pt</Height>
             <Width>6.8548cm</Width>
             <ZIndex>47</ZIndex>
             <Style>
@@ -2708,11 +2697,172 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>17.04605cm</Top>
-            <Left>8.02442cm</Left>
-            <Height>14.20019pt</Height>
+            <Top>20.76432cm</Top>
+            <Left>7.76752cm</Left>
+            <Height>10pt</Height>
             <Width>5.67337cm</Width>
             <ZIndex>48</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="InvoiceDateCaption1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Invoice_Date_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.13562cm</Top>
+            <Left>11.8881cm</Left>
+            <Height>9.74999pt</Height>
+            <Width>2.95844cm</Width>
+            <ZIndex>49</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="InvoiceNumberCaption1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Invoice_Number_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.78285cm</Top>
+            <Left>11.8881cm</Left>
+            <Height>9.75pt</Height>
+            <Width>2.95844cm</Width>
+            <ZIndex>50</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="DocumentText1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Invoice_Header_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.69762cm</Top>
+            <Left>11.86881cm</Left>
+            <Height>20pt</Height>
+            <Width>5.81418cm</Width>
+            <ZIndex>51</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CompanyAddress81">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_8.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.86204cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>52</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CompanyAddress71">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_7.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.50926cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>53</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="InvoiceHeaderNo1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Progress_Payment_Header_No.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.78285cm</Top>
+            <Left>14.87287cm</Left>
+            <Height>9.75pt</Height>
+            <Width>1.12431in</Width>
+            <ZIndex>54</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2737,18 +2887,42 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Left>6.79885in</Left>
-            <Height>11.3372pt</Height>
-            <Width>1.09749cm</Width>
-            <ZIndex>49</ZIndex>
-            <Visibility>
-              <Hidden>true</Hidden>
-            </Visibility>
+            <Top>5.36419cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>55</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
             </Style>
+          </Textbox>
+          <Textbox Name="CompanyAddress61">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_6.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.15649cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>56</ZIndex>
+            <Style />
           </Textbox>
           <Textbox Name="CompanyAddress51">
             <KeepTogether>true</KeepTogether>
@@ -2769,11 +2943,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>1.6694cm</Top>
-            <Left>0.10114in</Left>
-            <Height>12pt</Height>
+            <Top>3.80371cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
             <Width>11.67571cm</Width>
-            <ZIndex>50</ZIndex>
+            <ZIndex>57</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CompanyAddress41">
@@ -2795,11 +2969,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>1.28135cm</Top>
-            <Left>0.10114in</Left>
-            <Height>11.00006pt</Height>
+            <Top>3.45093cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
             <Width>11.67571cm</Width>
-            <ZIndex>51</ZIndex>
+            <ZIndex>58</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CompanyAddress31">
@@ -2821,11 +2995,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>0.88976cm</Top>
-            <Left>0.10142in</Left>
-            <Height>11.00013pt</Height>
+            <Top>3.09815cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
             <Width>11.67571cm</Width>
-            <ZIndex>52</ZIndex>
+            <ZIndex>59</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CompanyAddress21">
@@ -2847,11 +3021,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>0.49465cm</Top>
-            <Left>0.10114in</Left>
-            <Height>12pt</Height>
+            <Top>2.74537cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
             <Width>11.67571cm</Width>
-            <ZIndex>53</ZIndex>
+            <ZIndex>60</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CompanyAddress11">
@@ -2873,13 +3047,102 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>0.00782cm</Top>
-            <Left>0.10114in</Left>
-            <Height>11.99978pt</Height>
+            <Top>2.3926cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
             <Width>11.67571cm</Width>
-            <ZIndex>54</ZIndex>
+            <ZIndex>61</ZIndex>
             <Style />
           </Textbox>
+          <Textbox Name="InvoiceDateBox">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Requision_Date.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>d</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.13562cm</Top>
+            <Left>14.87284cm</Left>
+            <Height>9.74999pt</Height>
+            <Width>2.85578cm</Width>
+            <ZIndex>62</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Image Name="CompanyInfo2Picture1">
+            <Source>Database</Source>
+            <Value>=Convert.ToBase64String(Fields!CompanyInfo2Picture.Value)</Value>
+            <MIMEType>image/bmp</MIMEType>
+            <Sizing>Fit</Sizing>
+            <Top>0.03225in</Top>
+            <Left>4.67277in</Left>
+            <Height>40pt</Height>
+            <Width>5.85979cm</Width>
+            <ZIndex>63</ZIndex>
+            <Visibility>
+              <Hidden>=iif(IsNothing(Fields!CompanyInfo2Picture.Value) = true,true,false)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+          <Image Name="CompanyInfo1Picture1">
+            <Source>Database</Source>
+            <Value>=Convert.ToBase64String(Fields!CompanyInfo1Picture.Value)</Value>
+            <MIMEType>image/bmp</MIMEType>
+            <Sizing>Fit</Sizing>
+            <Top>0.03225in</Top>
+            <Left>2.29077in</Left>
+            <Height>40pt</Height>
+            <Width>5.85979cm</Width>
+            <ZIndex>64</ZIndex>
+            <Visibility>
+              <Hidden>=iif(IsNothing(Fields!CompanyInfo1Picture.Value) = true,true,false)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
+          <Image Name="CompanyInformationPicture1">
+            <Source>Database</Source>
+            <Value>=Convert.ToBase64String(Fields!CompanyInfo1Picture.Value)</Value>
+            <MIMEType>image/bmp</MIMEType>
+            <Sizing>Fit</Sizing>
+            <Top>0.03225in</Top>
+            <Left>0.02778in</Left>
+            <Height>40pt</Height>
+            <Width>5.57161cm</Width>
+            <ZIndex>65</ZIndex>
+            <Visibility>
+              <Hidden>=iif(IsNothing(Fields!CompanyInfo1Picture.Value) = true,true,false)</Hidden>
+            </Visibility>
+            <DataElementOutput>NoOutput</DataElementOutput>
+            <Style>
+              <Border />
+            </Style>
+          </Image>
           <Textbox Name="ToCaption2">
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
@@ -2897,11 +3160,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.94778cm</Top>
-            <Left>10.19822cm</Left>
-            <Height>12.44699pt</Height>
+            <Top>6.39088cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
             <Width>0.75756cm</Width>
-            <ZIndex>55</ZIndex>
+            <ZIndex>66</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="AECaption">
@@ -2921,11 +3184,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.52444cm</Top>
-            <Left>10.19821cm</Left>
-            <Height>11pt</Height>
+            <Top>6.0381cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
             <Width>7.91177cm</Width>
-            <ZIndex>56</ZIndex>
+            <ZIndex>67</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="ToCaption1">
@@ -2945,11 +3208,10 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.97932cm</Top>
-            <Left>0.2569cm</Left>
-            <Height>11.55279pt</Height>
-            <Width>0.98401cm</Width>
-            <ZIndex>57</ZIndex>
+            <Top>6.39088cm</Top>
+            <Height>10pt</Height>
+            <Width>0.6107cm</Width>
+            <ZIndex>68</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillCaption">
@@ -2969,12 +3231,41 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.52444cm</Top>
-            <Left>0.2569cm</Left>
-            <Height>12.44728pt</Height>
+            <Top>6.0381cm</Top>
+            <Height>10pt</Height>
             <Width>8.37682cm</Width>
-            <ZIndex>58</ZIndex>
+            <ZIndex>69</ZIndex>
             <Style />
+          </Textbox>
+          <Textbox Name="AEAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_3.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.02094cm</Top>
+            <Left>11.02343cm</Left>
+            <Height>10pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>70</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
           </Textbox>
           <Textbox Name="BillToAddress8">
             <KeepTogether>true</KeepTogether>
@@ -2993,12 +3284,72 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.96215cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>8.86032cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>59</ZIndex>
+            <ZIndex>71</ZIndex>
             <Style />
+          </Textbox>
+          <Textbox Name="AEAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_2.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.66816cm</Top>
+            <Left>11.02344cm</Left>
+            <Height>10pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>72</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AEAddress1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_1.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.31538cm</Top>
+            <Left>11.02344cm</Left>
+            <Height>10pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>73</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
           </Textbox>
           <Textbox Name="ShipToAddress4">
             <KeepTogether>true</KeepTogether>
@@ -3019,11 +3370,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>4.14721cm</Top>
-            <Left>11.28034cm</Left>
-            <Height>11.00006pt</Height>
+            <Top>7.41393cm</Top>
+            <Left>11.02344cm</Left>
+            <Height>10pt</Height>
             <Width>6.82965cm</Width>
-            <ZIndex>60</ZIndex>
+            <ZIndex>74</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3049,11 +3400,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>3.72388cm</Top>
-            <Left>11.28034cm</Left>
-            <Height>12pt</Height>
+            <Top>7.06115cm</Top>
+            <Left>11.02344cm</Left>
+            <Height>10pt</Height>
             <Width>6.82965cm</Width>
-            <ZIndex>61</ZIndex>
+            <ZIndex>75</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3079,11 +3430,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>3.33583cm</Top>
-            <Left>11.28034cm</Left>
-            <Height>10.99972pt</Height>
+            <Top>6.74366cm</Top>
+            <Left>11.02344cm</Left>
+            <Height>10pt</Height>
             <Width>6.82965cm</Width>
-            <ZIndex>62</ZIndex>
+            <ZIndex>76</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3109,11 +3460,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>2.9125cm</Top>
-            <Left>11.28034cm</Left>
-            <Height>12pt</Height>
+            <Top>6.39088cm</Top>
+            <Left>11.02344cm</Left>
+            <Height>10pt</Height>
             <Width>6.82965cm</Width>
-            <ZIndex>63</ZIndex>
+            <ZIndex>77</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress7">
@@ -3133,11 +3484,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.5546cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>8.50754cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>64</ZIndex>
+            <ZIndex>78</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress6">
@@ -3157,11 +3508,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>5.11176cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>8.15477cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>65</ZIndex>
+            <ZIndex>79</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress5">
@@ -3181,11 +3532,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.69215cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>7.80199cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>66</ZIndex>
+            <ZIndex>80</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress4">
@@ -3205,11 +3556,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>4.26882cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>7.44921cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>67</ZIndex>
+            <ZIndex>81</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress3">
@@ -3229,11 +3580,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.84549cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>7.09643cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>68</ZIndex>
+            <ZIndex>82</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress2">
@@ -3253,11 +3604,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>3.42216cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>6.74366cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>69</ZIndex>
+            <ZIndex>83</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="BillToAddress1">
@@ -3277,11 +3628,89 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>2.97932cm</Top>
-            <Left>2.24343cm</Left>
-            <Height>11.55279pt</Height>
+            <Top>6.39088cm</Top>
+            <Left>0.71653cm</Left>
+            <Height>10pt</Height>
             <Width>7.66029cm</Width>
-            <ZIndex>70</ZIndex>
+            <ZIndex>84</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="AEAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_4.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.37371cm</Top>
+            <Left>11.02343cm</Left>
+            <Height>10pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>85</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="ToCaption3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Addr_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.31538cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
+            <Width>0.75756cm</Width>
+            <ZIndex>86</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="ShipCaption2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!A_E_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.95621cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
+            <Width>7.91177cm</Width>
+            <ZIndex>87</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="ContractDateCaption">
@@ -3301,11 +3730,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>7.3965cm</Top>
-            <Left>10.19822cm</Left>
-            <Height>12.57141pt</Height>
+            <Top>11.11477cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
             <Width>2.76924cm</Width>
-            <ZIndex>71</ZIndex>
+            <ZIndex>88</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CustomerJobNoCaption">
@@ -3325,11 +3754,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>6.93788cm</Top>
-            <Left>10.19822cm</Left>
-            <Height>11.00025pt</Height>
+            <Top>10.65615cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
             <Width>2.76924cm</Width>
-            <ZIndex>72</ZIndex>
+            <ZIndex>89</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CustomerIDCaption">
@@ -3349,11 +3778,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>6.444cm</Top>
-            <Left>10.19822cm</Left>
-            <Height>12.99975pt</Height>
+            <Top>10.16227cm</Top>
+            <Left>9.94132cm</Left>
+            <Height>10pt</Height>
             <Width>2.76924cm</Width>
-            <ZIndex>73</ZIndex>
+            <ZIndex>90</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="PeriodToCaption1">
@@ -3375,11 +3804,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>6.90261cm</Top>
-            <Left>0.12892in</Left>
-            <Height>12pt</Height>
-            <Width>1.5134cm</Width>
-            <ZIndex>74</ZIndex>
+            <Top>10.65615cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
+            <Width>1.91027cm</Width>
+            <ZIndex>91</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="PeriodTo">
@@ -3388,25 +3817,22 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!NS_PeriodToDate.Value, "DataSet_Result")</Value>
+                    <Value>=First(Fields!Period_To.Value, "DataSet_Result")</Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Segoe UI</FontFamily>
                       <FontSize>8pt</FontSize>
-                      <Format>d</Format>
                     </Style>
                   </TextRun>
                 </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
+                <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>6.90261cm</Top>
-            <Left>2.15836cm</Left>
-            <Height>12pt</Height>
-            <Width>7.73884cm</Width>
-            <ZIndex>75</ZIndex>
+            <Top>10.65615cm</Top>
+            <Left>2.0161cm</Left>
+            <Height>10pt</Height>
+            <Width>7.3067cm</Width>
+            <ZIndex>92</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="ContractDate">
@@ -3415,7 +3841,7 @@
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>=First(Fields!NS_ContractDate.Value, "DataSet_Result")</Value>
+                    <Value>=First(Fields!Contract_Date.Value, "DataSet_Result")</Value>
                     <Style>
                       <FontStyle>Normal</FontStyle>
                       <FontFamily>Segoe UI</FontFamily>
@@ -3429,11 +3855,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>7.3965cm</Top>
-            <Left>12.96746cm</Left>
-            <Height>12.57141pt</Height>
+            <Top>11.11477cm</Top>
+            <Left>12.71056cm</Left>
+            <Height>10pt</Height>
             <Width>5.35932cm</Width>
-            <ZIndex>76</ZIndex>
+            <ZIndex>93</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CustomerJobNo">
@@ -3455,11 +3881,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>6.93788cm</Top>
-            <Left>12.96746cm</Left>
-            <Height>11.00025pt</Height>
+            <Top>10.65615cm</Top>
+            <Left>12.71056cm</Left>
+            <Height>10pt</Height>
             <Width>5.35932cm</Width>
-            <ZIndex>77</ZIndex>
+            <ZIndex>94</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="CustomerID">
@@ -3481,11 +3907,11 @@
                 </Style>
               </Paragraph>
             </Paragraphs>
-            <Top>6.444cm</Top>
-            <Left>12.96746cm</Left>
-            <Height>12.99975pt</Height>
+            <Top>10.16227cm</Top>
+            <Left>12.71056cm</Left>
+            <Height>10pt</Height>
             <Width>5.35932cm</Width>
-            <ZIndex>78</ZIndex>
+            <ZIndex>95</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="DescriptionCaption">
@@ -3505,11 +3931,11 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>6.444cm</Top>
-            <Left>0.12892in</Left>
-            <Height>12pt</Height>
-            <Width>1.5134cm</Width>
-            <ZIndex>79</ZIndex>
+            <Top>10.16227cm</Top>
+            <Left>0.02778in</Left>
+            <Height>10pt</Height>
+            <Width>1.91027cm</Width>
+            <ZIndex>96</ZIndex>
             <Style />
           </Textbox>
           <Textbox Name="Description">
@@ -3529,22 +3955,21 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>6.444cm</Top>
-            <Left>2.15836cm</Left>
-            <Height>12pt</Height>
-            <Width>7.73884cm</Width>
-            <ZIndex>80</ZIndex>
+            <Top>10.16227cm</Top>
+            <Left>2.0161cm</Left>
+            <Height>10pt</Height>
+            <Width>7.3067cm</Width>
+            <ZIndex>97</ZIndex>
             <Style />
           </Textbox>
         </ReportItems>
-        <Height>20.06357cm</Height>
+        <Height>23.29531cm</Height>
         <Style />
       </Body>
-      <Width>18.52534cm</Width>
+      <Width>18.1209cm</Width>
       <Page>
         <PageHeader>
-          <Height>1.03632in</Height>
-          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <Height>0.35998in</Height>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
             <Textbox Name="InvoiceNumberCaption">
@@ -3560,14 +3985,21 @@
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.03494cm</Top>
+              <Left>0.07055cm</Left>
+              <Height>10pt</Height>
+              <Width>2.24143cm</Width>
+              <Style />
+            </Textbox>
+            <Textbox Name="InvoiceHeaderNo">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Progress_Payment_Header_No.Value, "DataSet_Result")</Value>
                       <Style>
@@ -3580,18 +4012,12 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.03494cm</Top>
-              <Left>0.25689cm</Left>
-              <Height>12.49043pt</Height>
-              <Width>4.77703cm</Width>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
+              <Top>0cm</Top>
+              <Left>2.37988cm</Left>
+              <Height>10pt</Height>
+              <Width>1.12431in</Width>
+              <ZIndex>1</ZIndex>
+              <Style />
             </Textbox>
             <Textbox Name="InvoiceDateCaption">
               <KeepTogether>true</KeepTogether>
@@ -3606,14 +4032,22 @@
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.45828cm</Top>
+              <Left>0.07055cm</Left>
+              <Height>10pt</Height>
+              <Width>2.23878cm</Width>
+              <ZIndex>2</ZIndex>
+              <Style />
+            </Textbox>
+            <Textbox Name="InvoiceDate">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Requision_Date.Value, "DataSet_Result")</Value>
                       <Style>
@@ -3624,24 +4058,45 @@
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style />
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.51438cm</Top>
-              <Left>0.25689cm</Left>
-              <Height>13.91859pt</Height>
-              <Width>4.77703cm</Width>
-              <ZIndex>1</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
+              <Top>0.45861cm</Top>
+              <Left>2.37988cm</Left>
+              <Height>10pt</Height>
+              <Width>2.85575cm</Width>
+              <ZIndex>3</ZIndex>
+              <Style />
             </Textbox>
-            <Textbox Name="PeriodToHdr">
+            <Textbox Name="PageCaption">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Page_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.03494cm</Top>
+              <Left>14.77849cm</Left>
+              <Height>10pt</Height>
+              <Width>3.24129cm</Width>
+              <ZIndex>4</ZIndex>
+              <Style />
+            </Textbox>
+            <Textbox Name="PeriodToCaption">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
@@ -3654,346 +4109,43 @@
                         <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=First(Fields!NS_PeriodToDate.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <Format>d</Format>
-                      </Style>
-                    </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Height>13.48086pt</Height>
-              <Width>18.49358cm</Width>
-              <ZIndex>2</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Textbox>
-            <Textbox Name="DocumentText1">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!Invoice_Header_Caption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>12pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>0.09525cm</Top>
-              <Height>19.00957pt</Height>
-              <Width>18.49358cm</Width>
-              <ZIndex>3</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Textbox Name="InvoiceHeaderNo1">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!Invoice_Number_Caption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=First(Fields!Progress_Payment_Header_No.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>0.76906cm</Top>
-              <Height>13.62471pt</Height>
-              <Width>7.28094in</Width>
-              <ZIndex>4</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Textbox Name="PageCaption2">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Page  </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Globals!PageNumber</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value> of </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Globals!TotalPages</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>0.49774cm</Top>
-              <Height>14.69055pt</Height>
-              <Width>18.49358cm</Width>
+              <Top>0.45861cm</Top>
+              <Left>5.81831in</Left>
+              <Height>10pt</Height>
+              <Width>1.41417cm</Width>
               <ZIndex>5</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
-              </Visibility>
-              <Style>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
+              <Style />
             </Textbox>
-            <Textbox Name="InvoiceDateBox">
+            <Textbox Name="PeriodToHdr">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!Invoice_Date_Caption.Value, "DataSet_Result")</Value>
+                      <Value>=First(Fields!Period_To.Value, "DataSet_Result")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=First(Fields!Requision_Date.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <Format>d</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>1.2744cm</Top>
-              <Height>11.79998pt</Height>
-              <Width>18.49358cm</Width>
+              <Top>0.45475cm</Top>
+              <Left>16.22796cm</Left>
+              <Height>10pt</Height>
+              <Width>1.79182cm</Width>
               <ZIndex>6</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
+              <Style />
             </Textbox>
-            <Textbox Name="Textbox4">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value> User: </Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=User!UserID</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>1.69773cm</Top>
-              <Left>0.03175cm</Left>
-              <Height>0.45861cm</Height>
-              <Width>18.49359cm</Width>
-              <ZIndex>7</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="PageCaption">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Page  </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Globals!PageNumber</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value> of </Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=Globals!TotalPages</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <Top>2.15634cm</Top>
-              <Height>11.69055pt</Height>
-              <Width>18.46183cm</Width>
-              <ZIndex>8</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
-              </Visibility>
-              <Style>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Image Name="CompanyInformationPicture1">
-              <Source>Database</Source>
-              <Value>=Convert.ToBase64String(Fields!CompanyInfo1Picture.Value)</Value>
-              <MIMEType>image/bmp</MIMEType>
-              <Sizing>Fit</Sizing>
-              <Top>0.03876in</Top>
-              <Left>0.07614in</Left>
-              <Height>0.8352in</Height>
-              <Width>0.87915in</Width>
-              <ZIndex>9</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
-              </Visibility>
-              <DataElementOutput>NoOutput</DataElementOutput>
-              <Style>
-                <Border />
-              </Style>
-            </Image>
           </ReportItems>
           <Style>
             <Border>
@@ -4001,10 +4153,12 @@
             </Border>
           </Style>
         </PageHeader>
-        <PageHeight>23cm</PageHeight>
-        <PageWidth>21.59cm</PageWidth>
+        <PageHeight>29.7cm</PageHeight>
+        <PageWidth>20.87cm</PageWidth>
         <LeftMargin>1cm</LeftMargin>
+        <RightMargin>0cm</RightMargin>
         <TopMargin>1cm</TopMargin>
+        <BottomMargin>0cm</BottomMargin>
         <Style />
       </Page>
     </ReportSection>
@@ -4093,7 +4247,6 @@ End Function</Code>
   <Language>=User!Language</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>13cf33b5-6ed1-4571-a30a-9948ca63b354</rd:ReportID>
   <DataSets>
     <DataSet Name="DataSet_Result">
       <Fields>
@@ -4141,6 +4294,9 @@ End Function</Code>
         </Field>
         <Field Name="Invoice_Date_Caption">
           <DataField>Invoice_Date_Caption</DataField>
+        </Field>
+        <Field Name="Requision_Date">
+          <DataField>Requision_Date</DataField>
         </Field>
         <Field Name="Page_Caption">
           <DataField>Page_Caption</DataField>
@@ -4436,24 +4592,6 @@ End Function</Code>
         <Field Name="Net_Change_OrdersFormat">
           <DataField>Net_Change_OrdersFormat</DataField>
         </Field>
-        <Field Name="NS_UserID">
-          <DataField>NS_UserID</DataField>
-        </Field>
-        <Field Name="NS_UserIDCaption">
-          <DataField>NS_UserIDCaption</DataField>
-        </Field>
-        <Field Name="Requision_Date">
-          <DataField>Requision_Date</DataField>
-        </Field>
-        <Field Name="NS_Requision_Date">
-          <DataField>NS_Requision_Date</DataField>
-        </Field>
-        <Field Name="NS_PeriodToDate">
-          <DataField>NS_PeriodToDate</DataField>
-        </Field>
-        <Field Name="NS_ContractDate">
-          <DataField>NS_ContractDate</DataField>
-        </Field>
         <Field Name="Detail_Item_Lbl">
           <DataField>Detail_Item_Lbl</DataField>
         </Field>
@@ -4537,90 +4675,6 @@ End Function</Code>
         </Field>
         <Field Name="DRetentionFormat">
           <DataField>DRetentionFormat</DataField>
-        </Field>
-        <Field Name="NS_ScheduledSum">
-          <DataField>NS_ScheduledSum</DataField>
-        </Field>
-        <Field Name="NS_ScheduledSumFormat">
-          <DataField>NS_ScheduledSumFormat</DataField>
-        </Field>
-        <Field Name="NS_PreviousPeriodSum">
-          <DataField>NS_PreviousPeriodSum</DataField>
-        </Field>
-        <Field Name="NS_PreviousPeriodSumFormat">
-          <DataField>NS_PreviousPeriodSumFormat</DataField>
-        </Field>
-        <Field Name="NS_StoredMaterialAmtSum">
-          <DataField>NS_StoredMaterialAmtSum</DataField>
-        </Field>
-        <Field Name="NS_StoredMaterialAmtSumFormat">
-          <DataField>NS_StoredMaterialAmtSumFormat</DataField>
-        </Field>
-        <Field Name="NS_TotalCompledtedAmtSum">
-          <DataField>NS_TotalCompledtedAmtSum</DataField>
-        </Field>
-        <Field Name="NS_TotalCompledtedAmtSumFormat">
-          <DataField>NS_TotalCompledtedAmtSumFormat</DataField>
-        </Field>
-        <Field Name="NS_BalanceToFinishSum">
-          <DataField>NS_BalanceToFinishSum</DataField>
-        </Field>
-        <Field Name="NS_BalanceToFinishSumFormat">
-          <DataField>NS_BalanceToFinishSumFormat</DataField>
-        </Field>
-        <Field Name="NS_RetentionSum">
-          <DataField>NS_RetentionSum</DataField>
-        </Field>
-        <Field Name="NS_RetentionSumFormat">
-          <DataField>NS_RetentionSumFormat</DataField>
-        </Field>
-        <Field Name="NS_ThisPeriod">
-          <DataField>NS_ThisPeriod</DataField>
-        </Field>
-        <Field Name="NS_ThisPeriodFormat">
-          <DataField>NS_ThisPeriodFormat</DataField>
-        </Field>
-        <Field Name="NSScheduledValueTotal">
-          <DataField>NSScheduledValueTotal</DataField>
-        </Field>
-        <Field Name="NSScheduledValueTotalFormat">
-          <DataField>NSScheduledValueTotalFormat</DataField>
-        </Field>
-        <Field Name="NSThisPeriodTotal">
-          <DataField>NSThisPeriodTotal</DataField>
-        </Field>
-        <Field Name="NSThisPeriodTotalFormat">
-          <DataField>NSThisPeriodTotalFormat</DataField>
-        </Field>
-        <Field Name="NSStoredMaterialsTotAmt">
-          <DataField>NSStoredMaterialsTotAmt</DataField>
-        </Field>
-        <Field Name="NSStoredMaterialsTotAmtFormat">
-          <DataField>NSStoredMaterialsTotAmtFormat</DataField>
-        </Field>
-        <Field Name="NSTotalCompletedAndStored">
-          <DataField>NSTotalCompletedAndStored</DataField>
-        </Field>
-        <Field Name="NSTotalCompletedAndStoredFormat">
-          <DataField>NSTotalCompletedAndStoredFormat</DataField>
-        </Field>
-        <Field Name="NSBalanceToFinishTot">
-          <DataField>NSBalanceToFinishTot</DataField>
-        </Field>
-        <Field Name="NSBalanceToFinishTotFormat">
-          <DataField>NSBalanceToFinishTotFormat</DataField>
-        </Field>
-        <Field Name="NsTotalRetention">
-          <DataField>NsTotalRetention</DataField>
-        </Field>
-        <Field Name="NsTotalRetentionFormat">
-          <DataField>NsTotalRetentionFormat</DataField>
-        </Field>
-        <Field Name="NSPreviousPeriodTotal">
-          <DataField>NSPreviousPeriodTotal</DataField>
-        </Field>
-        <Field Name="NSPreviousPeriodTotalFormat">
-          <DataField>NSPreviousPeriodTotalFormat</DataField>
         </Field>
       </Fields>
       <Query>

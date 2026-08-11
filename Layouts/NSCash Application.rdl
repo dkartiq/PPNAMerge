@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="PaymentDateString">
+          <DataField>PaymentDateString</DataField>
+        </Field>
+        <Field Name="LastDueDate">
+          <DataField>LastDueDate</DataField>
+        </Field>
+        <Field Name="TakeDiscounts">
+          <DataField>TakeDiscounts</DataField>
+        </Field>
+        <Field Name="PrintAmountsInLocal">
+          <DataField>PrintAmountsInLocal</DataField>
+        </Field>
+        <Field Name="UseExternalDocNo">
+          <DataField>UseExternalDocNo</DataField>
+        </Field>
+        <Field Name="FilterString">
+          <DataField>FilterString</DataField>
+        </Field>
+        <Field Name="Invoices_are_included_which_are_due_through_____FORMAT_LastDueDate_______">
+          <DataField>Invoices_are_included_which_are_due_through_____FORMAT_LastDueDate_______</DataField>
+        </Field>
+        <Field Name="DataItem14">
+          <DataField>DataItem14</DataField>
+        </Field>
+        <Field Name="Document_Number_is______Vendor_Ledger_Entry__FIELDCAPTION__External_Document_No___">
+          <DataField>Document_Number_is______Vendor_Ledger_Entry__FIELDCAPTION__External_Document_No___</DataField>
+        </Field>
+        <Field Name="Vendor_TABLECAPTION__________FilterString">
+          <DataField>Vendor_TABLECAPTION__________FilterString</DataField>
+        </Field>
+        <Field Name="Vendor__No__">
+          <DataField>Vendor__No__</DataField>
+        </Field>
+        <Field Name="Vendor_Name">
+          <DataField>Vendor_Name</DataField>
+        </Field>
+        <Field Name="BlockedDescription">
+          <DataField>BlockedDescription</DataField>
+        </Field>
+        <Field Name="Vendor__Phone_No__">
+          <DataField>Vendor__Phone_No__</DataField>
+        </Field>
+        <Field Name="Vendor_Contact">
+          <DataField>Vendor_Contact</DataField>
+        </Field>
+        <Field Name="GTotAmountDue">
+          <DataField>GTotAmountDue</DataField>
+        </Field>
+        <Field Name="GTotAmountDueFormat">
+          <DataField>GTotAmountDueFormat</DataField>
+        </Field>
+        <Field Name="GTotDiscountToTake">
+          <DataField>GTotDiscountToTake</DataField>
+        </Field>
+        <Field Name="GTotDiscountToTakeFormat">
+          <DataField>GTotDiscountToTakeFormat</DataField>
+        </Field>
+        <Field Name="GTotAmountToPay">
+          <DataField>GTotAmountToPay</DataField>
+        </Field>
+        <Field Name="GTotAmountToPayFormat">
+          <DataField>GTotAmountToPayFormat</DataField>
+        </Field>
+        <Field Name="Vendor_Global_Dimension_1_Filter">
+          <DataField>Vendor_Global_Dimension_1_Filter</DataField>
+        </Field>
+        <Field Name="Vendor_Global_Dimension_2_Filter">
+          <DataField>Vendor_Global_Dimension_2_Filter</DataField>
+        </Field>
+        <Field Name="Cash_Application_WorksheetCaption">
+          <DataField>Cash_Application_WorksheetCaption</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="No_invoices_which_are_due_are_included_Caption">
+          <DataField>No_invoices_which_are_due_are_included_Caption</DataField>
+        </Field>
+        <Field Name="Control17Caption">
+          <DataField>Control17Caption</DataField>
+        </Field>
+        <Field Name="DocumentCaption">
+          <DataField>DocumentCaption</DataField>
+        </Field>
+        <Field Name="Vendor__No__Caption">
+          <DataField>Vendor__No__Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Document_Type_Caption">
+          <DataField>Vendor_Ledger_Entry__Document_Type_Caption</DataField>
+        </Field>
+        <Field Name="DocNoCaption">
+          <DataField>DocNoCaption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Due_Date_Caption">
+          <DataField>Vendor_Ledger_Entry__Due_Date_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Pmt__Discount_Date_Caption">
+          <DataField>Vendor_Ledger_Entry__Pmt__Discount_Date_Caption</DataField>
+        </Field>
+        <Field Name="InvoiceAmountCaption">
+          <DataField>InvoiceAmountCaption</DataField>
+        </Field>
+        <Field Name="AmountDueCaption">
+          <DataField>AmountDueCaption</DataField>
+        </Field>
+        <Field Name="DiscountToTakeCaption">
+          <DataField>DiscountToTakeCaption</DataField>
+        </Field>
+        <Field Name="AmountToPayCaption">
+          <DataField>AmountToPayCaption</DataField>
+        </Field>
+        <Field Name="Actual_Amount_to_PayCaption">
+          <DataField>Actual_Amount_to_PayCaption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Currency_Code_Caption">
+          <DataField>Vendor_Ledger_Entry__Currency_Code_Caption</DataField>
+        </Field>
+        <Field Name="Vendor__Phone_No__Caption">
+          <DataField>Vendor__Phone_No__Caption</DataField>
+        </Field>
+        <Field Name="Vendor_ContactCaption">
+          <DataField>Vendor_ContactCaption</DataField>
+        </Field>
+        <Field Name="Control1020000Caption">
+          <DataField>Control1020000Caption</DataField>
+        </Field>
+        <Field Name="Control44Caption">
+          <DataField>Control44Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Document_Type_">
+          <DataField>Vendor_Ledger_Entry__Document_Type_</DataField>
+        </Field>
+        <Field Name="DocNo">
+          <DataField>DocNo</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Due_Date_">
+          <DataField>Vendor_Ledger_Entry__Due_Date_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Pmt__Discount_Date_">
+          <DataField>Vendor_Ledger_Entry__Pmt__Discount_Date_</DataField>
+        </Field>
+        <Field Name="InvoiceAmount">
+          <DataField>InvoiceAmount</DataField>
+        </Field>
+        <Field Name="InvoiceAmountFormat">
+          <DataField>InvoiceAmountFormat</DataField>
+        </Field>
+        <Field Name="AmountDue">
+          <DataField>AmountDue</DataField>
+        </Field>
+        <Field Name="AmountDueFormat">
+          <DataField>AmountDueFormat</DataField>
+        </Field>
+        <Field Name="DiscountToTake">
+          <DataField>DiscountToTake</DataField>
+        </Field>
+        <Field Name="DiscountToTakeFormat">
+          <DataField>DiscountToTakeFormat</DataField>
+        </Field>
+        <Field Name="AmountToPay">
+          <DataField>AmountToPay</DataField>
+        </Field>
+        <Field Name="AmountToPayFormat">
+          <DataField>AmountToPayFormat</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Currency_Code_">
+          <DataField>Vendor_Ledger_Entry__Currency_Code_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Entry_No_">
+          <DataField>Vendor_Ledger_Entry_Entry_No_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Vendor_No_">
+          <DataField>Vendor_Ledger_Entry_Vendor_No_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Global_Dimension_1_Code">
+          <DataField>Vendor_Ledger_Entry_Global_Dimension_1_Code</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Global_Dimension_2_Code">
+          <DataField>Vendor_Ledger_Entry_Global_Dimension_2_Code</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2__Document_Type_">
+          <DataField>Vendor_Ledger_Entry_2__Document_Type_</DataField>
+        </Field>
+        <Field Name="DocNo_Control54">
+          <DataField>DocNo_Control54</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2__Due_Date_">
+          <DataField>Vendor_Ledger_Entry_2__Due_Date_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2__Pmt__Discount_Date_">
+          <DataField>Vendor_Ledger_Entry_2__Pmt__Discount_Date_</DataField>
+        </Field>
+        <Field Name="InvoiceAmount_Control57">
+          <DataField>InvoiceAmount_Control57</DataField>
+        </Field>
+        <Field Name="InvoiceAmount_Control57Format">
+          <DataField>InvoiceAmount_Control57Format</DataField>
+        </Field>
+        <Field Name="AmountDue_Control58">
+          <DataField>AmountDue_Control58</DataField>
+        </Field>
+        <Field Name="AmountDue_Control58Format">
+          <DataField>AmountDue_Control58Format</DataField>
+        </Field>
+        <Field Name="DiscountToTake_Control59">
+          <DataField>DiscountToTake_Control59</DataField>
+        </Field>
+        <Field Name="DiscountToTake_Control59Format">
+          <DataField>DiscountToTake_Control59Format</DataField>
+        </Field>
+        <Field Name="AmountToPay_Control60">
+          <DataField>AmountToPay_Control60</DataField>
+        </Field>
+        <Field Name="AmountToPay_Control60Format">
+          <DataField>AmountToPay_Control60Format</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2__Currency_Code_">
+          <DataField>Vendor_Ledger_Entry_2__Currency_Code_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2_Entry_No_">
+          <DataField>Vendor_Ledger_Entry_2_Entry_No_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2_Vendor_No_">
+          <DataField>Vendor_Ledger_Entry_2_Vendor_No_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2_Global_Dimension_1_Code">
+          <DataField>Vendor_Ledger_Entry_2_Global_Dimension_1_Code</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_2_Global_Dimension_2_Code">
+          <DataField>Vendor_Ledger_Entry_2_Global_Dimension_2_Code</DataField>
+        </Field>
+        <Field Name="Vendor__No___Control61">
+          <DataField>Vendor__No___Control61</DataField>
+        </Field>
+        <Field Name="VTotAmountDue">
+          <DataField>VTotAmountDue</DataField>
+        </Field>
+        <Field Name="VTotAmountDueFormat">
+          <DataField>VTotAmountDueFormat</DataField>
+        </Field>
+        <Field Name="VTotDiscountToTake">
+          <DataField>VTotDiscountToTake</DataField>
+        </Field>
+        <Field Name="VTotDiscountToTakeFormat">
+          <DataField>VTotDiscountToTakeFormat</DataField>
+        </Field>
+        <Field Name="VTotAmountToPay">
+          <DataField>VTotAmountToPay</DataField>
+        </Field>
+        <Field Name="VTotAmountToPayFormat">
+          <DataField>VTotAmountToPayFormat</DataField>
+        </Field>
+        <Field Name="Vendor_Totals_Number">
+          <DataField>Vendor_Totals_Number</DataField>
+        </Field>
+        <Field Name="Control1020001Caption">
+          <DataField>Control1020001Caption</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

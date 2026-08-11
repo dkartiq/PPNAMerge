@@ -1,7 +1,6 @@
 tableextension 14021140 NS_JobPostingBufferExt extends "Job Posting Buffer"
 {
     // version NAVW111.00.00.20783,PPNA11.00
-    //PRJCTPR-197 Dk.1.0 31March2023  | Job No. Rewrite Issue.
 
     fields
     {
@@ -41,23 +40,9 @@ tableextension 14021140 NS_JobPostingBufferExt extends "Job Posting Buffer"
         {
             Caption = 'Job Type';
             Description = 'ProjectPro';
-            //TableRelation = Job; //PRJCTPR-197 Dk.1.0 31March2023 
-            DataClassification = CustomerContent;
-            //PRJCTPR-197 Dk.1.0 31March2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_Job Type New" because of length mismatch with';
-            ObsoleteTag = 'This field will remove in ProjectPro Upcoming App build no 21.0.xx.49984';
-            //PRJCTPR-197 Dk.1.0 31March2023 End
-        }
-        //PRJCTPR-197 Dk.1.0 31March2023  Start
-        field(14021152; "NS_Job Type New"; Code[20])
-        {
-            Caption = 'Job Type';
-            Description = 'ProjectPro';
-            TableRelation = Job; //PRJCTPR-197 Dk.1.0 31March2023 
+            TableRelation = Job;
             DataClassification = CustomerContent;
         }
-        //PRJCTPR-197 Dk.1.0 31March2023 End
         //PRJ-603.AS.1.0 13APRIL2021 - START
         field(14021151; "NS_Job Task No."; Code[20])
         {

@@ -7,13 +7,10 @@ codeunit 14021122 "NS_PPAppSecureManagement"
 
     var
         [NonDebuggable]
-        NS_Int: Integer;//PRJ-1686.GK.1.0 26Oct2022|Added
-                        //UserName: label 'jetinder.saini';
-                        // UserName: label 'Appsecuser';
-    [NonDebuggable]
-    // Password: Label 'DCeCJagUw+anlq5R0sAFfrEUu5jfse7rwz+JWSC7W7g=';     //PRJ-1237.JS.1.0  line commented //PRJ-1686.GK.1.0 26Oct2022|Comment
-    //Password: Label 'BiLOKM226QO+mBFw7uv9beU1e+Q6PxvGzt4w+U6mRwg=';   //PRJ-1237.JS.1.0 line commented
-    //Password: Label 'fqeopdXxeEqzEoL4B+sSgiT4zYvdk3vHWZM5QQRiEUk=';
+        UserName: label 'sudarshan.khandal';
+        // UserName: label 'Appsecuser';
+        [NonDebuggable]
+        Password: Label 'fqeopdXxeEqzEoL4B+sSgiT4zYvdk3vHWZM5QQRiEUk=';
     // Password: label 'MrU0K+GJ99poYU+Fq7mN+i2IdDpmPwUMCCeXHr24ZEQ=';
 
     procedure NS_GetJsonTokenText(JsonObject: JsonObject; TokenKey: Text) Jsontoken: JsonToken;
@@ -51,8 +48,6 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         VlU, VlF : text;
 
     begin
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //PRJ-1641.JS.1.0 23SEP2022 - Start
         Clear(URL);
         TenantIdVar := '''' + TenantId() + '''';
         TenantIdVar := CopyStr(TenantIdVar, 1, StrLen(TenantIdVar));
@@ -63,10 +58,7 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         WebRequest.SetRequestUri(URL);
         WebRequest.Method('Get');
         ClearLastError;
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
-        NS_AddHttpOAuthHeader(HttpClientVar);
-        //PRJ-1686.GK.1.0 26Oct2022 end
+        NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
         HttpClientVar.Send(WebRequest, WebReseponse);
         WebReseponse.Content.ReadAs(ResponseText);
         if not WebReseponse.IsSuccessStatusCode then
@@ -99,8 +91,6 @@ codeunit 14021122 "NS_PPAppSecureManagement"
                     NS_UpdateClientDetails2(Expired, Active, Trial, ValiFrom, ValidUpto, InstallingPerson, InstallingContactEmail, LicenceId, ContactNo);
             end;
         end;
-        //PRJ-1641.JS.1.0 23SEP2022 - end
-        //PRJ-1686.GK.1.0 26Oct2022 end
     end;
 
     [NonDebuggable]
@@ -166,74 +156,11 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         AuthString: Text;
         Base64Helpers: Codeunit "Base64 Convert";
     begin
-        //PRJ-1641.JS.1.0 23SEP2022 - Start
-        //AuthString := STRSUBSTNO('%1:%2', UserName, Password);
-        //AuthString := Base64Helpers.ToBase64(AuthString);
-        //AuthString := STRSUBSTNO('Basic %1', AuthString);
-        //HttpClient.DefaultRequestHeaders().Add('Authorization', AuthString);
-        //PRJ-1641.JS.1.0 23SEP2022 - end
+        AuthString := STRSUBSTNO('%1:%2', UserName, Password);
+        AuthString := Base64Helpers.ToBase64(AuthString);
+        AuthString := STRSUBSTNO('Basic %1', AuthString);
+        HttpClient.DefaultRequestHeaders().Add('Authorization', AuthString);
     end;
-
-    //PRJ-1686.GK.1.0 26Oct2022 start
-    /// <summary>
-    /// NS_GetAccessToken.
-    /// </summary>
-    /// <returns>Return value of type Text.</returns>
-    procedure NS_GetAccessToken(): Text
-    var
-        NSlClient: HttpClient;
-        NSlResponse: HttpResponseMessage;
-        NslContent: HttpContent;
-        NSlHeaders: HttpHeaders;
-        NSlUrl: Text;
-        NSlJsonObj: JsonObject;
-        NSlJsonToken: JsonToken;
-        NSToken: text;
-        NSlClientID: text[250];
-        NSlSecret: text[250];
-        NSBaseTxt: Text[1024];
-        NSAPITokenLocal: Text;
-    begin
-        NSlUrl := 'https://login.microsoftonline.com/' + 'add67cd2-c8b2-416c-b171-b61b22be92f4' + '/oauth2/v2.0/token';
-        NSlClientID := '94369b48-2306-4823-b813-79918b663e01';
-        NSlSecret := 'sQh8Q~5On62LSkWFHTV~BAIisV9VfTgpSsSWZb8E';
-        NSBaseTxt := 'grant_type=client_credentials' + '&scope=https://api.businesscentral.dynamics.com/.default' + '&client_id=' + NSlClientID + '&client_secret=' + NSlSecret;
-        NslContent.Clear();
-        NSlContent.WriteFrom(NSBaseTxt);
-        NSlHeaders.Clear();
-        NslContent.GetHeaders(NSlHeaders);
-        NslHeaders.Remove('Content-Type');
-        NslHeaders.Add('Content-Type', 'application/x-www-form-urlencoded');
-        NSlContent.GetHeaders(NSlHeaders);
-        if NSlClient.Post(NSlUrl, NslContent, NSlResponse) then begin
-            if NSlResponse.HttpStatusCode = 200 then begin
-                NSlResponse.Content().ReadAs(NSToken);
-                NslJsonObj.ReadFrom(NSToken);
-                NSlJsonObj.Get('access_token', NSlJsonToken);
-                NSlJsonToken.WriteTo(NSAPITokenLocal);
-                NSAPITokenLocal := DelChr(NSAPITokenLocal, '=', '"');
-                Exit(NSAPITokenLocal);
-            end else
-                exit(GetLastErrorText());
-        end
-
-    end;
-
-    /// <summary>
-    /// NS_AddHttpOAuthHeader.
-    /// </summary>
-    /// <param name="HttpClient">VAR HttpClient.</param>
-    [NonDebuggable]
-    procedure NS_AddHttpOAuthHeader(var HttpClient: HttpClient);
-    var
-        NSAccessToken: Text;
-    begin
-        Clear(NSAccessToken);
-        NSAccessToken := NS_GetAccessToken();
-        HttpClient.DefaultRequestHeaders().Add('Authorization', 'Bearer ' + NSAccessToken);
-    end;
-    //PRJ-1686.GK.1.0 26Oct2022 end
-
 
 
     [NonDebuggable]
@@ -256,8 +183,6 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         LicenseReqVar: text[5];
         DateVar: text[20];
     begin
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //PRJ-1641.JS.1.0 23SEP2022 - Start
         Clear(PayLoad);
         Clear(ActiveVar);
         Clear(IsTrialVar);
@@ -316,17 +241,14 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         HttpHeaderVar.Add('Content-Type', 'application/json');
         WebRequest.Content := HttpContentVar;
         WebRequest.SetRequestUri(URL);
+
         WebRequest.Method('Post');
         ClearLastError;
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
-        NS_AddHttpOAuthHeader(HttpClientVar);
-        //PRJ-1686.GK.1.0 26Oct2022 end
+        NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
         HttpClientVar.Send(WebRequest, WebReseponse);
         if not WebReseponse.IsSuccessStatusCode then
             exit(false)
-        //PRJ-1641.JS.1.0 23SEP2022 - end
-        //PRJ-1686.GK.1.0 26Oct2022 end
+
     end;
 
     [NonDebuggable]
@@ -387,8 +309,6 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         LicenseID: Label '{"licenceid":';
         SortedEtag: text[250];
     begin
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //PRJ-1641.JS.1.0 23SEP2022 - Start
         NS_GetClientLicenseDetail(Etag, True);
         SortedEtag := DELCHR(Etag, '=', '\');
         Clear(URL);
@@ -440,18 +360,14 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         WebRequest.SetRequestUri(URL);
         WebRequest.Method('Patch');
         ClearLastError;
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
-        NS_AddHttpOAuthHeader(HttpClientVar);
-        //PRJ-1686.GK.1.0 26Oct2022 end
+        NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
         HttpClientVar.DefaultRequestHeaders.Add('If-Match', SortedEtag);
         HttpClientVar.Send(WebRequest, WebReseponse);
         if not WebReseponse.IsSuccessStatusCode then
             exit(false)
         else
             exit(true);
-        //PRJ-1641.JS.1.0 23SEP2022 - end
-        //PRJ-1686.GK.1.0 26Oct2022 end
+
     end;
 
     [EventSubscriber(ObjectType::Page, Page::NS_PPClientLicenseInformation, 'OnAfterLicenseActivationRequested', '', false, false)]
@@ -485,8 +401,10 @@ codeunit 14021122 "NS_PPAppSecureManagement"
     begin
 
         CheckClientExistence(TenantID, IsExist);
-        IF IsExist then
-            NS_GetClientLicenseDetail(Etag, false);
+        IF IsExist then;
+        // >> Upgrade
+        // NS_GetClientLicenseDetail(Etag, false);
+        // << Upgrade
 
     end;
 
@@ -656,8 +574,6 @@ codeunit 14021122 "NS_PPAppSecureManagement"
         Odatacontext: JsonObject;
         OdataToken: JsonToken;
     begin
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //PRJ-1641.JS.1.0 23SEP2022 - Start
 
         URL := 'https://api.businesscentral.dynamics.com/v2.0/netsmartz.com/PPNAV17/ODataV4/LicenseStatus_TenantActiveLicenseExist?company=9257fcbf-4323-eb11-bb73-000d3a244a02';
         PayLoad := StrSubstNo('{"tenantID" : "%1"}', LowerCase(TenantID));
@@ -671,10 +587,7 @@ codeunit 14021122 "NS_PPAppSecureManagement"
 
         WebRequest.Method('Post');
         ClearLastError;
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
-        NS_AddHttpOAuthHeader(HttpClientVar);
-        //PRJ-1686.GK.1.0 26Oct2022 end
+        NS_AddHttpBasicAuthHeader(UserName, Password, HttpClientVar);
         HttpClientVar.Send(WebRequest, WebReseponse);
         if WebReseponse.IsSuccessStatusCode then begin
             WebReseponse.Content.ReadAs(ResponseText);
@@ -683,8 +596,7 @@ codeunit 14021122 "NS_PPAppSecureManagement"
             Odatacontext.SelectToken('value', OdataToken);
             IsExist := OdataToken.AsValue().AsBoolean();
         end;
-        //PRJ-1641.JS.1.0 23SEP2022 - end
-        //PRJ-1686.GK.1.0 26Oct2022 end
+
     end;
 
 }

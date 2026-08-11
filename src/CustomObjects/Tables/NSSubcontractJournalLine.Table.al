@@ -723,8 +723,6 @@ table 14021304 "NS_Subcontract Journal Line"
     var
         TableID: array[10] of Integer;
         No: array[10] of Code[20];
-        _NSDefaultDimSource: List of [Dictionary of [Integer, Code[20]]];   //PRJCTPR-155.JS.1.0 08Sep2023
-        _DimMgt: codeunit DimensionManagement; //PRJCTPR-155.JS.1.0 08Sep2023
     begin
         TableID[1] := Type1;
         No[1] := No1;
@@ -734,24 +732,8 @@ table 14021304 "NS_Subcontract Journal Line"
         No[3] := No3;
         "NS_Shortcut Dimension 1 Code" := '';
         "NS_Shortcut Dimension 2 Code" := '';
-        //PRJCTPR-155.JS.1.0 08Sep2023 - Start
-        if (TableID[1] <> 0) and (No[1] <> '') then begin
-            _DimMgt.AddDimSource(_NSDefaultDimSource, TableID[1], No[1]);
-            "NS_Dimension Set ID" :=
-              //DimMgt.GetDefaultDimID(TableID, No, "NS_Source Code", "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code", 0, 0);  
-              DimMgt.GetDefaultDimID(_NSDefaultDimSource, "NS_Source Code", "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code", 0, 0);
-        end;
-        if (TableID[2] <> 0) and (No[2] <> '') then begin
-            _DimMgt.AddDimSource(_NSDefaultDimSource, TableID[2], No[2]);
-            "NS_Dimension Set ID" :=
-              DimMgt.GetDefaultDimID(_NSDefaultDimSource, "NS_Source Code", "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code", 0, 0);
-        end;
-        if (TableID[3] <> 0) and (No[3] <> '') then begin
-            _DimMgt.AddDimSource(_NSDefaultDimSource, TableID[2], No[2]);
-            "NS_Dimension Set ID" :=
-              DimMgt.GetDefaultDimID(_NSDefaultDimSource, "NS_Source Code", "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code", 0, 0);
-        end;
-        //PRJCTPR-155.JS.1.0 08Sep2023 - end  
+        "NS_Dimension Set ID" :=
+          DimMgt.GetDefaultDimID(TableID, No, "NS_Source Code", "NS_Shortcut Dimension 1 Code", "NS_Shortcut Dimension 2 Code", 0, 0);
     end;
 
     procedure ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20]);

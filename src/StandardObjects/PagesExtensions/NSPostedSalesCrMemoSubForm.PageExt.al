@@ -1,8 +1,7 @@
 pageextension 14021146 NS_PostedSalesCrMemoSubForm extends "Posted Sales Cr. Memo Subform"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job No.")

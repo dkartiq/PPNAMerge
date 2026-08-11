@@ -1,8 +1,6 @@
 pageextension 14021140 NS_GLRegisters extends "G/L Registers"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'G/L Registers'; //PRJ-1330.NK.1.0 25Apr2022
     actions
     {
         modify("Trial Balance")

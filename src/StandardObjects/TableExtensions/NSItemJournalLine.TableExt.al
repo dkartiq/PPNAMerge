@@ -19,7 +19,7 @@ tableextension 14021114 NS_ItemJnlLineExt extends "Item Journal Line"
         }
         field(14021101; NS_Category; Code[10])
         {
-            Caption = 'Job Cost Category';  //PRJCTPR-222.JS.1.0 08NOV2023
+            Caption = 'Category';
             Description = 'ProjectPro';
             TableRelation = "NS_Job Cost Category";
             DataClassification = CustomerContent;

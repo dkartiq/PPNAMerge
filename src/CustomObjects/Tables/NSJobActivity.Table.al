@@ -1,5 +1,7 @@
 table 14021153 "NS_Job Activity"
 {
+
+
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -10,7 +12,7 @@ table 14021153 "NS_Job Activity"
     // +------------------------------------------------------------
     //PRJ-449.AS.1.0 19NOV2020 Increased decription length from 30 to 100 chars
     //PRJ-881.JS.1.0 24Aug2021 | Add one field
-    //PRJ-917.NK.1.0 09Mar2022 | Add Three fields
+
     Caption = 'Job Activity';
     DrillDownPageID = "NS_Activities List";
     LookupPageID = "NS_Activities List";
@@ -148,6 +150,7 @@ table 14021153 "NS_Job Activity"
             Caption = 'Default Service Burden Percent';
             DataClassification = CustomerContent;
         }
+
         field(14021400; "NS_DefaultTaskforJobType"; Code[20])
         {
             Caption = 'Default Task for Job Type';
@@ -159,87 +162,6 @@ table 14021153 "NS_Job Activity"
             Caption = 'Job Setup Job Quote';
             DataClassification = CustomerContent;
         }
-        //PRJ-917.NK.1.0 09Mar2022 Start
-        field(14021411; "NS_Blocked"; Boolean)
-        {
-            Caption = 'Blocked';
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-                JobProcess: Record "NS_Job Process";
-                JobOperation: Record "NS_Job Operation";
-                NS_Sections: Record NS_Sections;
-                UserSetup: Record "User Setup";
-            begin
-                if UserSetup.Get(UserId) then;
-                UserSetup.TestField("NS_Allow To Block APO");
-                if NS_Blocked then begin
-                    JobProcess.Reset();
-                    JobProcess.SetRange("NS_Activity Code", Rec.NS_Code);
-                    if JobProcess.FindFirst() then
-                        repeat
-                            JobProcess.NS_Blocked := true;
-                            JobProcess.Modify();
-                            JobOperation.Reset();
-                            JobOperation.SetRange("NS_Activity Code", Rec.NS_Code);
-                            JobOperation.SetRange("NS_Process Code", JobProcess.NS_Code);
-                            if JobOperation.FindFirst() then
-                                repeat
-                                    JobOperation.NS_Blocked := true;
-                                    JobOperation.Modify();
-                                    NS_Sections.Reset();
-                                    NS_Sections.SetRange("NS_Activity Code", Rec.NS_Code);
-                                    NS_Sections.SetRange("NS_Process Code", JobProcess.NS_Code);
-                                    NS_Sections.SetRange("NS_Operation Code", JobOperation.NS_Code);
-                                    if NS_Sections.FindFirst() then
-                                        repeat
-                                            NS_Sections.NS_Blocked := true;
-                                            NS_Sections.Modify();
-                                        until NS_Sections.Next() = 0;
-                                until JobOperation.Next() = 0;
-                        until JobProcess.Next() = 0;
-                end else begin
-                    JobProcess.Reset();
-                    JobProcess.SetRange("NS_Activity Code", Rec.NS_Code);
-                    if JobProcess.FindFirst() then
-                        repeat
-                            JobProcess.NS_Blocked := false;
-                            JobProcess.Modify();
-                            JobOperation.Reset();
-                            JobOperation.SetRange("NS_Activity Code", Rec.NS_Code);
-                            JobOperation.SetRange("NS_Process Code", JobProcess.NS_Code);
-                            if JobOperation.FindFirst() then
-                                repeat
-                                    JobOperation.NS_Blocked := false;
-                                    JobOperation.Modify();
-                                    NS_Sections.Reset();
-                                    NS_Sections.SetRange("NS_Activity Code", Rec.NS_Code);
-                                    NS_Sections.SetRange("NS_Process Code", JobProcess.NS_Code);
-                                    NS_Sections.SetRange("NS_Operation Code", JobOperation.NS_Code);
-                                    if NS_Sections.FindFirst() then
-                                        repeat
-                                            NS_Sections.NS_Blocked := false;
-                                            NS_Sections.Modify();
-                                        until NS_Sections.Next() = 0;
-                                until JobOperation.Next() = 0;
-                        until JobProcess.Next() = 0;
-
-                end;
-            end;
-        }
-        field(14021412; "NS_Last Modified By"; Code[50])
-        {
-            Caption = 'Last Modified By';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021413; "NS_Last Modified Date"; Date)
-        {
-            Caption = 'Last Modified Date';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PRJ-917.NK.1.0 09Mar2022 End
 
     }
 
@@ -296,13 +218,6 @@ table 14021153 "NS_Job Activity"
                 JobOperation.MODIFY();
             until JobOperation.NEXT() = 0;
     end;
-    //PRJ-917.NK.1.0 09Mar2022 Start
-    trigger OnModify()
-    begin
-        "NS_Last Modified By" := UserId();
-        "NS_Last Modified Date" := WorkDate();
-    end;
-    //PRJ-917.NK.1.0 09Mar2022 End    
 
     var
         JobProcess: Record "NS_Job Process";

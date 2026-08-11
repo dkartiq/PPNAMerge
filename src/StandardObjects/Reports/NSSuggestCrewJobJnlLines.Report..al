@@ -3,7 +3,6 @@
 /// </summary>
 /// //PRJ-841.JS.1.0 16Aug2021 | add code line
 /// //PRJ-842.JS.1.0 16Aug2021 |  add code line
-///  //PRJCTPR-2.RM.1.0 13Dec2022 | Added some code
 report 14021391 "NS_Suggest Crew Job Jnl. Lines"
 {
     Caption = 'Suggest Crew Job Jnl. Line';
@@ -77,30 +76,13 @@ report 14021391 "NS_Suggest Crew Job Jnl. Lines"
                             JobTaskNoFilter := JobTask."Job Task No.";
                         end;
                     }
-                    //PE-121.PS.1.0 7Jul2023 Start
-                    field(NS_DocNo; NS_DocNo)
-                    {
-                        Caption = 'Document No.';
-                        ApplicationArea = All;
-                        ToolTip = 'Specify “Document No.” to assign the same on all the Job Journal lines. This field is mandatory to fill in to post the entries.'; //PE-121.PS.2.0 20Jul2023
-                    }
-                    //PE-121.PS.1.0 7Jul2023 End
                 }
             }
         }
-        //PE-121.PS.1.0 12Jul2023 Start
 
-        trigger OnQueryClosePage(CloseAction: Action): Boolean
-        var
-        begin
-            if CloseAction = Action::OK then begin  //PE-121.PS.2.0 20Jul2023
-                if NS_DocNo = '' then
-                    Error('Document No. should not be Blank');
-            end;
-        end;
-
-        //PE-121.PS.1.0 12Jul2023 End 
-
+        actions
+        {
+        }
     }
 
     labels
@@ -172,25 +154,12 @@ report 14021391 "NS_Suggest Crew Job Jnl. Lines"
                             JobJnlLine.Validate(Chargeable, TempTimeSheetLine.Chargeable);
                             JobJnlLine."NS_Crew Time Unique Line ID" := TempTimeSheetLine."NS_Crew Time Unique Line ID"; //PRJ-772.JS.1.0 26JULY2021
                             JobJnlLine."NS_Segment Code" := TempTimeSheetLine."NS_Segment Code";  //PRJ-842.JS.1.0 16Aug2021
-                            JobJnlLine."NS_Union Code" := TempTimeSheetLine."NS_Union Code"; //PRJCTPR-2.RM.1.0 13Dec2022
-                            JobJnlLine.Description := TempTimeSheetLine."NS_Resource Name New"; //PE-121.PS.1.0 12Jul2023 
-                            //PE-68 Dk.1.0 10April2023 Start
-                            //JobJnlLine."NS_Skill Code" := TempTimeSheetLine."NS_Skill Code";  //PRJ-841.JS.1.0 16Aug2021 
-                            JobJnlLine."NS_Skill Code New" := TempTimeSheetLine."NS_Skill Code New";
-                            //PE-68 Dk.1.0 10April2023 End
+                            JobJnlLine."NS_Skill Code" := TempTimeSheetLine."NS_Skill Code";  //PRJ-841.JS.1.0 16Aug2021
                             JobJnlLine."Time Sheet No." := TimeSheetDetail."Time Sheet No.";            //PRJ-772.JS.1.0 28JULY2021
                             JobJnlLine."Work Type Code" := TimeSheetDetail."NS_Work Type Code";         //PRJ-772.JS.1.0 28JULY2021
                             JobJnlLine."NS_Crew Time Sheet Date" := TimeSheetDetail."NS_Crew Time Sheet Date";    //PRJ-772.JS.1.0 28JULY2021
                             JobJnlLine."Reason Code" := JobJnlBatch."Reason Code";
-                            //PE-68 Dk.1.0 10April2023 Start
-                            //JobJnlLine.Validate("NS_Skill Class", TempTimeSheetLine."NS_Skill Code");   //PRJ-1315.JS.1.0 18APR2022  
-                            JobJnlLine.Validate("NS_Skill Class New", TempTimeSheetLine."NS_Skill Code New");
-                            //PE-68 Dk.1.0 10April2023 End                                                                              
                             //NS_OnAfterTransferTimeSheetDetailToJobJnlLine(JobJnlLine, JobJnlTemplate, TempTimeSheetLine, TimeSheetDetail, JobJnlBatch);
-                            //PE-121.PS.1.0 06Jul2023 start
-                            if NS_DocNo <> '' then
-                                JobJnlLine."Document No." := NS_DocNo;
-                            //PE-121.PS.1.0 06Jul2023 End
                             JobJnlLine.Insert();
                         end;
                     until TimeSheetDetail.Next() = 0;
@@ -214,7 +183,6 @@ report 14021391 "NS_Suggest Crew Job Jnl. Lines"
         EndingDate: Date;
         DateFilter: Text[30];
         CrewNoFilter: code[20];
-        NS_DocNo: Code[20];//PE-121.PS.1.0 
 
     procedure NS_etJobJnlLine(NewJobJnlLine: Record "Job Journal Line")
     begin

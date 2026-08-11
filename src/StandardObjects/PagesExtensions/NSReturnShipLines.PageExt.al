@@ -1,8 +1,7 @@
 pageextension 14021184 NS_ReturnShipLines extends "Return Shipment Lines"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Return Shipment Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job No.")

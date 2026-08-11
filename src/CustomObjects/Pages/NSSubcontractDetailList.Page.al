@@ -67,13 +67,6 @@ page 14021310 "NS_Subcontract Detail List"
                     ToolTip = 'Specifies the PO Line No.';
                 }
                 //PRJ-274 VT1.0 21-05-20 end
-                //PRJCTPR-237 AT.0.1 12Dec2023 Start
-                field("NS_Segment Code"; rec."NS_Segment Code")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the segment code.';
-                }
-                //PRJCTPR-237 AT.0.1 12Dec2023 END
             }
         }
     }

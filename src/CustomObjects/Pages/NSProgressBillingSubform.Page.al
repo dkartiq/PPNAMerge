@@ -15,9 +15,7 @@ page 14021326 "NS_Progress Billing Subform"
     //TM-10.AM.1.0 | Added Field.
     //PRJ-464.AM.1.0 | Added code to validate Current work unit when Values is entered in NS_Total first.
     // +------------------------------------------------------------
-    //PRJ-492.RS.1.0 11May2021 | Hide/Unhide Fields
-    //PRJ-999.JS.1.0 09Nov2021 | Add fields and Action
-    //PRJ-1519.NK.1.0 10Aug2022 | Add Fields
+    //PRJ-492.RS.1.0 11May2021 | Hide/Unhide Fields 
     AutoSplitKey = true;
     Caption = 'Progress Billing Subform';
     PageType = ListPart;
@@ -100,7 +98,7 @@ page 14021326 "NS_Progress Billing Subform"
                         NS_RevenueCategoryOnAfterValidate;
                     end;
                 }
-                //CTSI-41.AS.1.0 21MAY2020 - START
+    //CTSI-41.AS.1.0 21MAY2020 - START
                 field("NS_Revenue Cat Description"; REC."NS_Revenue Cat Description")
                 {
                     ApplicationArea = all;
@@ -238,16 +236,6 @@ page 14021326 "NS_Progress Billing Subform"
                         NS_CheckDocument;
                     end;
                 }
-                //PRJ-1519.NK.1.0 12Sep2022 Start
-                field(StorePreviousBillings; StorePreviousBillings)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Store Previous Billings';
-
-                    ToolTip = 'Store Previous Billings';
-                    Editable = false;
-                }
-                //PRJ-1519.NK.1.0 12Sep2022 End
                 field("Material Retention Percent"; Rec."NS_Material Retention Percent")
                 {
                     ApplicationArea = All;
@@ -298,18 +286,10 @@ page 14021326 "NS_Progress Billing Subform"
                         if ProgressBillingHeader."NS_Work Retention Percent" <> 0 then
                             ERROR(Text003Lbl)
                         else begin
-                            if not ProgressBillingHeader."NS_Multiple Retention on Lines" then begin //PRJ-1624.NK.1.0 07Nov2022
-                                if Rec."NS_Work Amount" <> 0 then //PRJ-1131.NK.1.0
-                                    Rec."NS_Work Retention Amount" := ROUND((Rec."NS_Work Retention Percent" / 100) * Rec."NS_Work Amount", 0.01) //PRJ-1131.NK.1.0
-                                else
-                                    Rec."NS_Work Retention Amount" := ROUND((Rec."NS_Work Retention Percent" / 100) * Rec.NS_Total, 0.01); //PRJ-1131.NK.1.0
-
-                                //PRJ-1648.PS.1.0 14Dec2022 Start
-                                if ProgressBillingHeader."NS_R_Reduction & Invoicing" then
-                                    Rec."NS_Work Retention Amount" := ROUND((Rec."NS_Work Retention Percent" / 100) * Rec.NS_Total, 0.01);
-                                //PRJ-1648.PS.1.0 14Dec2022 End 
-
-                            end; //PRJ-1624.NK.1.0 07Nov2022
+                            if "NS_Work Amount" <> 0 then
+                                "NS_Work Retention Amount" := ROUND(("NS_Work Retention Percent" / 100) * "NS_Work Amount", 0.01)
+                            else
+                                "NS_Work Retention Amount" := ROUND(("NS_Work Retention Percent" / 100) * NS_Total, 0.01);
                         end;
                     end;
                 }
@@ -318,23 +298,6 @@ page 14021326 "NS_Progress Billing Subform"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Work Retention Amount';
                 }
-                //PRJ-1519.NK.1.0 10Aug2022 Start
-                field("NS_Stored Material Retention %"; Rec."NS_Stored Material Retention %")
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Stored Material Retention Percentage';
-                    trigger OnValidate()
-                    begin
-                        if ProgressBillingHeader."NS_Material Retention Percent" <> 0 then
-                            ERROR(Text003Lbl)
-                    end;
-                }
-                field("NS_Stored Material Retention Amt"; Rec."NS_Stored Mat. Retention Amt")
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Stored Material Retention Amount';
-                }
-                //PRJ-1519.NK.1.0 10Aug2022 End
                 field("Planing Line No."; Rec."NS_Planing Line No.")
                 {
                     ApplicationArea = all;
@@ -344,78 +307,20 @@ page 14021326 "NS_Progress Billing Subform"
                     //Visible = false; //PRJ-492.AS.1.0 //Doubt//PRJ-492.RS.1.0 11May2021 comment
                     Visible = true;//PRJ-492.RS.1.0 11May2021
                 }
-                //PRJ-999.JS.1.0 09Nov2021 - Start
-                field("NS_Shortcut Dimension 1 Code"; Rec."NS_Shortcut Dimension 1 Code")
-                {
-                    ToolTip = 'Specifies the value of the Shortcut Dimension 1 Code field.';
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("NS_Shortcut Dimension 2 Code"; Rec."NS_Shortcut Dimension 2 Code")
-                {
-                    ToolTip = 'Specifies the value of the Shortcut Dimension 2 Code field.';
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                //PRJ-999.JS.1.0 09Nov2021 - end                
-
-                //PRJ-1708.JS.1.0 12DEC2022 - Start
-                field("NS_Contract Forecast Date"; Rec."NS_Contract Forecast Date")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the Contract Forecaset Date field.';
-                }
-                field("NS_Change Order"; Rec."NS_Change Order")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the _Change Order field.';
-                }
-                //PRJ-1708.JS.1.0 12DEC2022 - end
-                // PRJCTPR-174.PS.1.0 10Aug2023 Start
-                field("NS_PreviousRetPer %"; Rec."NS_PreviousRetPer %")
-                {
-                    ApplicationArea = all;
-                }
-                // PRJCTPR-174.PS.1.0 10Aug2023 End
             }
         }
     }
 
     actions
     {
-        //PRJ-999.JS.1.0 09Nov2021 Start
-        area(processing)
-        {
-            group(Line)
-            {
-                Caption = 'Line';
-                action(NS_Dimensions)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Dimensions';
-
-                    ToolTip = 'Dimensions';
-                    Image = Dimensions;
-                    ShortCutKey = 'Shift+Ctrl+D';
-
-                    trigger OnAction();
-                    begin
-                        Rec.ShowDimensions()
-                    end;
-                }
-            }
-        }
-        //PRJ-999.JS.1.0 09Nov2021 end         
     }
 
     trigger OnAfterGetRecord();
     begin
         RecordExists := true;
-        WorkPreviousBillings := Rec.NS_LastTotal(Rec);
-        StorePreviousBillings := Rec.NS_LastStotrBilling(Rec); //PRJ-1519.NK.1.0 12Sep2022
-        PreviousWorkUnit := Rec.NS_GetPreviousWorkunit(rec); //GLEI-11.MS.1.0001 //PRJ-203:AS:21APRIL2020
-        Rec."NS_PreviousRetPer %" := Rec.NS_GetPreviousRetetionkunit(Rec); //PRJCTPR-174.PS.1.0 10Aug2023
-        if ProgressBillingHeader.GET(Rec."NS_Progress Billing No.", Rec."NS_Requisition No.", Rec."NS_Version No.") then;
+        WorkPreviousBillings := NS_LastTotal(Rec);
+        PreviousWorkUnit := NS_GetPreviousWorkunit(rec); //GLEI-11.MS.1.0001 //PRJ-203:AS:21APRIL2020
+        if ProgressBillingHeader.GET("NS_Progress Billing No.", "NS_Requisition No.", "NS_Version No.") then;
     end;
 
     trigger OnInit();
@@ -466,27 +371,15 @@ page 14021326 "NS_Progress Billing Subform"
     begin
         RecordExists := false;
         WorkPreviousBillings := 0;
-        StorePreviousBillings := 0; //PRJ-1519.NK.1.0 12Sep2022
         PreviousWorkUnit := 0; //PRJ-203:AS:21APRIL2020
-        PreviousRetUnit := 0;//PRJCTPR-174.PS.1.0 10Aug2023
     end;
-    //PE-118.NC.1.0 07Aug2023 Start
-    trigger OnDeleteRecord(): Boolean
-    begin
-        ProgressBillingHeader.GET(Rec."NS_Progress Billing No.", Rec."NS_Requisition No.", Rec."NS_Version No."); //PRJ-1131.NK.1.0
-        if ProgressBillingHeader."NS_Sales Document No." > '' then
-            ERROR(Text001Lbl);
-    end;
-    //PE-118.NC.1.0 07Aug2023 End
 
     var
         JobPlanningLine: Record "Job Planning Line";
         ProgressBillingHeader: Record "NS_Progress Billing Header";
         Job: Record Job;
         WorkPreviousBillings: Decimal;
-        StorePreviousBillings: Decimal; //PRJ-1519.NK.1.0 12Sep2022
         PreviousWorkUnit: Decimal; //PRJ-203:AS:21APRIL2020
-        PreviousRetUnit: Decimal; //PRJCTPR-174.PS.1.0 10Aug2023
         RecordExists: Boolean;
         [InDataSet]
         "Billing MethodEditable": Boolean;
@@ -494,7 +387,6 @@ page 14021326 "NS_Progress Billing Subform"
         Text002Lbl: Label 'Category %1 does not exist in job budget for job %2';
         Text003Lbl: Label 'A value cannot be entered here because a retainage percent value has been entered for the entire requisition.';
         Text004Lbl: Label 'There is no work contract for this Category abd APO on this job.';
-        Text005Lbl: Label 'A value cannot be entered here because a Material retainage percent value has been entered for the entire requisition.'; //PRJ-1519.NK.1.0 30Aug2022
 
     procedure NS_GetData(Final: Boolean);
     begin

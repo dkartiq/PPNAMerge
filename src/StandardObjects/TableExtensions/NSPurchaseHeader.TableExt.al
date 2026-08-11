@@ -9,14 +9,6 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
     //PRJ-809.RS.1.0 13July21 | Filter subcontracts by job on Purchase Order
     //PRJ-889.GK.1.0 13Sep2021 |Add one field
     //PRJ-967.GK.1.0 11Oct2021 |Add one field
-    //PRJ-999.JS.1.0 10Nov2021 | Add code for job dimension
-    //PRJ-1049.JS.1.0 22Nov2021 | Add Code for dimension
-    //PRJ-1087.JS.1.0 18Dec2021 | add condition for dimension
-    //PRJ-1099.JS.1.0 30Dec2021 | Modify code for dimension on condition basis
-    //PRJ-1380.NK.1.0 13May2022 | Add Fields
-    //PRJCTPR-303.HS.1.0 23Jan2024 | Added Code
-    //PRJCTPR-115.AT.1.0 17May2023 | Add Fields
-    LookupPageId = "Purchase Order List";//PE-252.PS.1.0 13Feb2024
     fields
     {
         modify("Pay-to Vendor No.")
@@ -66,27 +58,7 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
                 Jobs: Record Job;
                 JobSetup: Record "Jobs Setup";
                 VendorRec: Record Vendor;
-                NS_JobSetup2: Record "Jobs Setup";  //PRJ-1087.JS.1.0 18Dec2021 add line
-                NS_ProgrBillHead: Record "NS_Progress Billing Header";  //PRJ-1099.JS.1.0  30Dec2021
-                NS_DefaultDim: Record "Default Dimension";  //PRJ-1099.JS.1.0  30Dec2021
                 IncompatibleLines: Boolean;
-                NSDimCreate: List of [Dictionary of [Integer, Code[20]]];  //PRJCTPR-155.JS.1.0 11Sep2023
-                NSDataPosition: Dictionary of [Integer, Code[20]];      //PRJCTPR-155.JS.1.0 11Sep2023 
-                                                                        //PRJCTPR-199.JS.1.0 24NOV2023 - Start
-                NS_JobSetup: Record "Jobs Setup";
-                NS_Jobs: Record job;
-                NS_JobTesks: Record "Job Task";
-                NS_BillingHeader: Record "NS_Progress Billing Header";
-                NSDimBufferTemp: record "Dimension Buffer" temporary;
-                NSVendor: Record Vendor;
-                NSDefaultDim: record "Default Dimension";
-                NSJobTaskDimension: record "Job Task Dimension";
-                NSDimMgt: codeunit DimensionManagement;
-                NSGLedgSetup: record "General Ledger Setup";
-                //PRJCTPR-199.JS.1.0 24NOV2023 - end  
-                NS_Job: Record Job;   //PRJCTPR-363.PS.1.0 03May2024  
-                NS_JobJobLineType: Record Job; //PRJCTPR-363.PS.1.0 22May2024 
-                NS_PurchaseLineL: Record "Purchase Line"; //PRJCTPR-363.PS.1.0  31May2024                        
 
             begin
                 //ProjectPro - start
@@ -97,33 +69,12 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
                     if Jobs.GET("NS_Job No.") then begin
                         "NS_Customer Account Name" := Jobs."Bill-to Name";
                         "NS_Job Name" := Jobs.Description;
-                        "NS_Field Manager" := Jobs."NS_Field Manager";//PE-211.AS
                         //PRJ-145.SK.1.0 Start
                         // IF Jobs."NS_Gen. Bus. Posting Group" <> '' then //PRJ-831.AS.1.0 12OCT2021 Comment old
                         //     VALIDATE("Gen. Bus. Posting Group", Jobs."NS_Gen. Bus. Posting Group")//PRJ-120.SK.1.0 Added //PRJ-831.AS.1.0 12OCT2021 Comment old
-                        //PRJ-1610.GK.1.0 start-comment
-                        //IF Jobs."NS_Gen. Bus. Posting Group New" <> '' then //PRJ-831.AS.1.0 12OCT2021 Add New
-                        //VALIDATE("Gen. Bus. Posting Group", Jobs."NS_Gen. Bus. Posting Group New"); //PRJ-120.SK.1.0 Added //PRJ-831.AS.1.0 12OCT2021 Add New //PRJ-999.JS.1.0 10Nov2021
-                        //PRJ-1610.GK.1.0 end
-                        //PRJ-999.JS.1.0 10Nov2021 - Start //PRJ-1049.JS.1.0 02Dec2021
-                        NS_JobSetup2.Get();  //PRJ-1087.JS.1.0 18Dec2021 line added
-                        if NS_JobSetup2."NS_Flow Job Card Dimension" = true then begin   //PRJ-1087.JS.1.0 18Dec2021 add line
-                            "Shortcut Dimension 1 Code" := Jobs."Global Dimension 1 Code";
-                            "Shortcut Dimension 2 Code" := Jobs."Global Dimension 2 Code";
-                            "Dimension Set ID" := GetDimensionNoFromJob("NS_Job No.");
-                            //PRJ-1099.JS.1.0 30Dec2021-Start
-                        end else begin   //PRJ-1087.JS.1.0 18Dec2021 add line
-                                         //PRJ-999.JS.1.0 10Nov2021 - end  //PRJ-1049.JS.1.0 02Dec2021
-                            NS_DefaultDim.Reset();
-                            NS_DefaultDim.SetRange("Table ID", 23);
-                            NS_DefaultDim.SetRange("No.", Rec."Buy-from Vendor No.");
-                            if NS_DefaultDim.IsEmpty() then begin
-                                Rec."Shortcut Dimension 1 Code" := Jobs."Global Dimension 1 Code";
-                                Rec."Shortcut Dimension 2 Code" := Jobs."Global Dimension 2 Code";
-                                Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                            end;
-                        end;
-                        //PRJ-1099.JS.1.0 30Dec2021-End                             
+
+                        IF Jobs."NS_Gen. Bus. Posting Group New" <> '' then //PRJ-831.AS.1.0 12OCT2021 Add New
+                            VALIDATE("Gen. Bus. Posting Group", Jobs."NS_Gen. Bus. Posting Group New")//PRJ-120.SK.1.0 Added //PRJ-831.AS.1.0 12OCT2021 Add New
                     end;
                     //PRJ-145.SK.1.0 End;
                     //ProjectPro - end
@@ -163,82 +114,28 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
                                                 if JobPlanningLine.COUNT() = 0 then
                                                     "Job Task No." := '';
                                             end;
-                                            //PRJCTPR-363.PS.1.0 08May2024 Start 
-
-                                            if Rec."NS_Job No." <> ' ' then begin
-                                                if NS_Job.Get(Rec."NS_Job No.") then;
-                                                PurchaseLine."Job No." := NS_Job."No.";
-                                                if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::" " then
-                                                    PurchaseLine."Job Line Type" := PurchaseLine."Job Line Type"::" ";
-                                                if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::Billable then
-                                                    PurchaseLine."Job Line Type" := PurchaseLine."Job Line Type"::Billable;
-                                                if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::Budget then
-                                                    PurchaseLine."Job Line Type" := PurchaseLine."Job Line Type"::Budget;
-                                                if NS_Job."NS_Line Type" = NS_Job."NS_Line Type"::"Both Budget and Billable" then
-                                                    PurchaseLine."Job Line Type" := PurchaseLine."Job Line Type"::"Both Budget and Billable";
-                                            end;
-                                            PurchaseLine.MODIFY();
+                                            MODIFY();
                                         end;
-                                    until PurchaseLine.NEXT() = 0;
+                                    until NEXT() = 0;
                             end;
-                        //PRJCTPR-363.PS.1.0 08May2024 End 
-
-                        //  p.NS_T38SetCreateDim(DATABASE::Job, "NS_Job No."); //PRJCTPR-199.JS.1.0 11DEC2023 line commented
-
-
-                        //PRJCTPR-155.JS.1.0 11Sep2023 - Start
-                        // CreateDim(
-                        //   DATABASE::Vendor, "Pay-to Vendor No.",
-                        //   DATABASE::"Salesperson/Purchaser", "Purchaser Code",
-                        //   DATABASE::Campaign, "Campaign No.",
-                        //   DATABASE::"Responsibility Center", "Responsibility Center");
-
-                        //PRJCTPR-363.PS.1.0 31May2024 Start 
-                        if NS_JobJobLineType.Get(Rec."NS_Job No.") then;
-                        if NS_JobJobLineType."NS_Time And Material" = false then begin
-                            NS_PurchaseLineL.RESET();
-                            NS_PurchaseLineL.SETRANGE("Document Type", Rec."Document Type");
-                            NS_PurchaseLineL.SETRANGE("Document No.", Rec."No.");
-                            if NS_PurchaseLineL.FindSet() then begin
-                                repeat
-                                    NS_PurchaseLineL."Job Line Type" := NS_PurchaseLineL."Job Line Type"::" ";
-                                    NS_PurchaseLineL.Modify;
-                                until NS_PurchaseLineL.Next = 0;
-                            end;
-                        end;
                     end;
-                    //PRJCTPR-363.PS.1.0 31May2024 End
 
-                    NSDataPosition.Add(DATABASE::Vendor, "Pay-to Vendor No.");
-                    NSDataPosition.Add(DATABASE::"Salesperson/Purchaser", "Purchaser Code");
-                    NSDataPosition.Add(DATABASE::Campaign, "Campaign No.");
-                    NSDataPosition.Add(DATABASE::"Responsibility Center", "Responsibility Center");
-
-                    NSDimCreate.Add(NSDataPosition);
-                    CreateDim(NSDimCreate);
-                    //PRJCTPR-155.JS.1.0 11Sep2023 - end 
-                    CreateDimFromDefaultDim(Rec.FieldNo("NS_Job No."));   //PRJCTPR-199.JS.1.0 line adeed
-                end;
-                //PRJ-1610.GK.1.0 09Sept2022 start
+                    p.NS_T38SetCreateDim(DATABASE::Job, "NS_Job No.");
+                    CreateDim(
+                      DATABASE::Vendor, "Pay-to Vendor No.",
+                      DATABASE::"Salesperson/Purchaser", "Purchaser Code",
+                      DATABASE::Campaign, "Campaign No.",
+                      DATABASE::"Responsibility Center", "Responsibility Center");
+                end
                 //PRJ-145.SK.1.0 Start
-                if "NS_Job No." <> '' then begin
-                    if JobSetup.Get() then;
-                    IF Jobs."NS_Gen. Bus. Posting Group New" <> '' then //PRJ-831.AS.1.0 12OCT2021 Add New
-                        VALIDATE("Gen. Bus. Posting Group", Jobs."NS_Gen. Bus. Posting Group New") //PRJ-120.SK.1.0 Added //PRJ-831.AS.1.0 12OCT2021 Add New //PRJ-999.JS.1.0 10Nov2021
+                else
+                    IF JobSetup."NS_Gen. Bus. Posting Group" <> '' then
+                        Validate("Gen. Bus. Posting Group", JobSetup."NS_Gen. Bus. Posting Group")
                     else
-                        IF JobSetup."NS_Gen. Bus. Posting Group" <> '' then
-                            Validate("Gen. Bus. Posting Group", JobSetup."NS_Gen. Bus. Posting Group")
-                        else
-                            IF VendorRec.Get(Rec."Buy-from Vendor No.") then
-                                IF VendorRec."Gen. Bus. Posting Group" <> '' then
-                                    Validate("Gen. Bus. Posting Group", VendorRec."Gen. Bus. Posting Group");
-                end else begin
-                    IF VendorRec.Get(Rec."Buy-from Vendor No.") then
-                        IF VendorRec."Gen. Bus. Posting Group" <> '' then
-                            Validate("Gen. Bus. Posting Group", VendorRec."Gen. Bus. Posting Group");
-                end;
+                        IF VendorRec.Get(Rec."Buy-from Vendor No.") then
+                            IF VendorRec."Gen. Bus. Posting Group" <> '' then
+                                Validate("Gen. Bus. Posting Group", VendorRec."Gen. Bus. Posting Group");
                 //PRJ-145.SK.1.0 End
-                //PRJ-1610.GK.1.0 09Sept2022 end
 
                 NS_AssignDefaultValuesToTaxFields();
                 if (xRec."Tax Liable" <> "Tax Liable") or
@@ -257,18 +154,6 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
             TableRelation = NS_Draw."NS_No." WHERE("NS_Job No." = FIELD("NS_Job No."),
                                               NS_Closed = CONST(false));
             DataClassification = CustomerContent;
-            //PE-130.NC.1.0 17July2023 Start
-            trigger OnValidate()
-            var
-                JobSetup: Record "Jobs Setup";
-            begin
-                if JobSetup.Get() then;
-                if ((JobSetup."NS_Default Draw Pay Terms Code" <> '') and ("NS_Draw No." <> '')) then
-                    Validate("Payment Terms Code", JobSetup."NS_Default Draw Pay Terms Code")
-                else
-                    Validate("Payment Terms Code", '');
-            end;
-            //PE-130.NC.1.0 17July2023 End
         }
         field(14021130; "NS_RetentionInvoiceDiscAmount"; Decimal)
         {
@@ -447,10 +332,6 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
             DataClassification = CustomerContent;
 
             trigger OnValidate();
-            var
-                NS_PurchaseLine: Record "Purchase Line"; //PRJCTPR-303.HS.1.0 23Jan2024 
-                NS_JobSetup: Record "Jobs Setup"; // PRJCTPR-333.PS.1.0 19March2024
-                NS_PurchaseLineL: Record "Purchase Line"; // PRJCTPR-333.PS.1.0 19March2024
             begin
                 //ProjectPro - start
                 if "NS_Retention Document" = true then begin
@@ -458,80 +339,7 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
                     TESTFIELD("NS_Retention Percent", 0);
                     TESTFIELD("NS_Retention Date", 0D);
                 end;
-
-
-                // PRJCTPR-333.PS.1.0 19March2024 Start
                 //ProjectPro - end
-                if NS_JobSetup.Get() then;
-
-                if Rec."NS_Retention Document" then begin
-                    NS_PurchaseLine.Reset();
-                    NS_PurchaseLine.SetRange("Document No.", Rec."No.");
-                    if not NS_PurchaseLine.FindFirst() then begin
-                        NS_PurchaseLineL.Init();
-                        NS_PurchaseLineL.Validate("Document Type", Rec."Document Type");
-                        NS_PurchaseLineL.Validate("Document No.", Rec."No.");
-                        NS_PurchaseLineL.Validate("Line No.", 10000);
-                        NS_PurchaseLineL.Type := NS_PurchaseLineL.type::NS_Ledger;
-                        NS_PurchaseLineL.Validate("No.", NS_Jobsetup."NS_Retention Payable Ledger");
-                        NS_PurchaseLineL.Insert();
-
-                    end else begin
-                        // PRJCTPR-333.PS.2.0 02April2024 Start
-                        Message('The lines already exist on Invoice No. %1 Enabling it will delete all the lines and a new line with type ledger and No. %2 will be created.', Rec."No.", NS_JobSetup."NS_Retention Payable Ledger");
-                        if not confirm('Are you sure you want to continue?', true, true) then
-                            Error('');
-                        // PRJCTPR-333.PS.2.0 02April2024 End
-                        NS_PurchaseLine.DeleteAll();
-                        NS_PurchaseLineL.Init();
-                        NS_PurchaseLineL.Validate("Document Type", Rec."Document Type");
-                        NS_PurchaseLineL.Validate("Document No.", Rec."No.");
-                        NS_PurchaseLineL.Validate("Line No.", 10000);
-                        NS_PurchaseLineL.Type := NS_PurchaseLineL.type::NS_Ledger;
-                        NS_PurchaseLineL.Validate("No.", NS_Jobsetup."NS_Retention Payable Ledger");
-                        NS_PurchaseLineL.Insert();
-
-                    end;
-
-                end;
-
-                if not Rec."NS_Retention Document" then begin
-                    // PRJCTPR-333.PS.2.0 02April2024 Start
-                    if not confirm('There exists a line with the type Ledger and No. %1 Disabling it will delete the line. Are you sure you want to continue?', true, NS_JobSetup."NS_Retention Payable Ledger", true) then
-                        Error('');
-                    // PRJCTPR-333.PS.2.0 02April2024 End
-                    NS_PurchaseLine.Reset();
-                    NS_PurchaseLine.SetRange("Document No.", Rec."No.");
-                    NS_PurchaseLine.SetRange(Type, NS_PurchaseLine.Type::NS_Ledger);
-                    NS_PurchaseLine.SetRange("No.", NS_Jobsetup."NS_Retention Receivable Ledger");
-                    if NS_PurchaseLine.FindSet() then begin
-                        repeat
-                            NS_PurchaseLine."Unit Price (LCY)" := 0;
-                            NS_PurchaseLine."Unit Cost" := 0;
-                            NS_PurchaseLine."Unit Cost (LCY)" := 0;
-                            NS_PurchaseLine."Direct Unit Cost" := 0;
-                            NS_PurchaseLine.Quantity := 0;
-                            NS_PurchaseLine.Validate(Description, '');
-                            NS_PurchaseLine.type := NS_PurchaseLine.Type::" ";
-                            NS_PurchaseLine."No." := '';
-                            NS_PurchaseLine.Modify(true);
-                        until NS_PurchaseLine.Next = 0;
-                    end;
-                end;
-
-                // // PRJCTPR-303.HS.1.0 23Jan2024 Start
-                // if not rec."NS_Retention Document" then begin
-                //     NS_PurchaseLine.Reset();
-                //     NS_PurchaseLine.SetRange("Document No.", Rec."No.");
-                //     if NS_PurchaseLine.FindFirst() then begin
-                //         if (NS_PurchaseLine.Type = NS_PurchaseLine.Type::NS_Ledger) and (NS_PurchaseLine."No." = 'RETENTION') then
-                //             Error('You cannot disable "Retention Document" due to existing lines with "Type = Ledger".');
-                //     end;
-                // end;
-                // // PRJCTPR-303.HS.1.0 23Jan2024 End  
-                // PRJCTPR-333.PS.1.0 19March2024 End  
-
-
             end;
         }
         field(14021300; "NS_Subcontract No."; Code[20])
@@ -623,59 +431,6 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
             Description = 'ProjectPro';
         }
         //PRJ-967.GK.1.0 11Oct2021 end
-        //PRJ-1380.NK.1.0 13May2022 Start
-        field(14021330; "NS_Job Purchaser"; Code[20])
-        {
-            Caption = 'Job Purchaser';
-            Description = 'PRJ-1380.NK.1.0';
-            TableRelation = Resource;
-            DataClassification = CustomerContent;
-        }
-        field(14021331; "NS_Job Manager"; Code[20])
-        {
-            Caption = 'Job Manager';
-            Description = 'PRJ-1380.NK.1.0';
-            DataClassification = CustomerContent;
-            TableRelation = Resource;
-        }
-        //PRJ-1380.NK.1.0 13May2022 End
-        //PRJCTPR-115.AT 18May2023 Start
-
-        field(14021332; "NS_Created By JMP"; Boolean)
-        {
-            Caption = 'NS_Created By JMP';
-            Description = 'PRJCTPR-115.AT.1.0';
-            DataClassification = CustomerContent;
-
-        }
-        //PRJCTPR-115.AT 18May2023 End
-
-        //PE-211.AS start
-        field(14021488; "NS_Field Manager"; Code[50])
-        {
-            Caption = 'Field Manager';
-            TableRelation = "User Setup";
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-211.AS end
-        //PE-260.JS.1.0 20FEB2024 - Start
-        field(14021323; "NS_Multiple Jobs on Lines"; Boolean)
-        {
-            Caption = 'Multiple Jobs on Purchase Lines';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-
-            trigger OnValidate()
-            begin
-                if ("NS_Subcontract No." <> '') and ("NS_Multiple Jobs on Lines" = true) then
-                    error('This functionality not applicable on JMP and Subcontract purchase orders/invoices');
-                if ("NS_Created By JMP" = true) and ("NS_Multiple Jobs on Lines" = true) then
-                    error('This functionality not applicable on JMP and Subcontract purchase orders/invoices');
-            end;
-        }
-        //PE-260.JS.1.0 20FEB2024 - end            
-
     }
     keys
     {
@@ -688,16 +443,8 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
     }
 
     trigger OnAfterInsert()
-    var
-        jbrec2: Record Job;//PE-211.AS
     begin
         "Doc. No. Occurrence" := ArchiveManagement.GetNextOccurrenceNo(DATABASE::"Purchase Header", "Document Type".AsInteger(), "No.");
-
-        //PE-211.AS start
-        if Rec."NS_Job No." <> '' then
-            if jbrec2.get(Rec."NS_Job No.") then
-                Rec."NS_Field Manager" := jbrec2."NS_Field Manager";
-        //PE-211.AS end
         Modify(false);
     end;
     //PRJ-1010.GK.1.0 10Nov2021 start
@@ -1154,39 +901,7 @@ tableextension 14021110 NS_PurchaseHeader extends "Purchase Header"
 
         Confirmed: Boolean;
         Text018_Txt: Label 'You must delete the existing purchase lines before you can change %1.', Comment = '%1 = Field Caption';
-        //RecreatePurchLinesMsg: Label 'If you change %1, the existing purchase lines will be deleted and new purchase lines based on the new information in the header will be created.\\Do you want to continue?;ESM=Si cambia %1, las l¡neas de compra existentes ser n eliminadas y se crear n nuevas l¡neas de compra basadas en la nueva informaci¢n en el encabezado.\\¨Desea continuar?;FRC=Si vous modifiez %1, les lignes achat existantes seront supprim‚es et de nouvelles lignes achat bas‚es sur les nouvelles informations dans l''en-tˆte seront cr‚‚es.\\Voulez-vous continuer?', Comment = '%1 = Field Caption'; //PRJ-1251.GK.1.0 16march2022 -comment
-        RecreatePurchLinesMsg: Label 'If you change %1, the existing purchase lines will be deleted and new purchase lines based on the new information in the header will be created.\\Do you want to continue?', Comment = '%1 = Field Caption';//PRJ-1251.GK.1.0 16march2022-Added
-
-    //PRJ-999.JS.1.0 10Nov2021 -Start //PRJ-1049.JS.1.0 22Nov2021
-    procedure GetDimensionNoFromJob(JobNo: Code[20]) DimensionNo: Integer;
-    var
-        DefaultDimension: Record "Default Dimension";
-        DimensionSetEntryTemp: Record "Dimension Set Entry" temporary;
-        DimensionValue: Record "Dimension Value";
-        DimMgt: Codeunit DimensionManagement;
-    begin
-        DimensionNo := 0;
-        with DefaultDimension do begin
-            DefaultDimension.RESET();
-            DefaultDimension.SETRANGE("Table ID", DATABASE::Job);
-            DefaultDimension.SETRANGE("No.", JobNo);
-            if DefaultDimension.FINDSET() then
-                repeat
-                    DimensionValue.RESET();
-                    DimensionValue.SETRANGE("Dimension Code", "Dimension Code");
-                    DimensionValue.SETRANGE(Code, "Dimension Value Code");
-                    if DimensionValue.FINDFIRST() then begin
-                        DimensionSetEntryTemp.INIT();
-                        DimensionSetEntryTemp."Dimension Code" := DimensionValue."Dimension Code";
-                        DimensionSetEntryTemp."Dimension Value ID" := DimensionValue."Dimension Value ID";
-                        DimensionSetEntryTemp."Dimension Value Code" := DimensionValue.Code;
-                        DimensionSetEntryTemp.INSERT();
-                    end;
-                until DefaultDimension.NEXT() = 0;
-            DimensionNo := DimMgt.GetDimensionSetID(DimensionSetEntryTemp);
-        end;
-    end;
-    //PRJ-999.JS.1.0 10Nov2021 -end //PRJ-1049.JS.1.0 22Nov2021
+        RecreatePurchLinesMsg: Label 'If you change %1, the existing purchase lines will be deleted and new purchase lines based on the new information in the header will be created.\\Do you want to continue?;ESM=Si cambia %1, las l¡neas de compra existentes ser n eliminadas y se crear n nuevas l¡neas de compra basadas en la nueva informaci¢n en el encabezado.\\¨Desea continuar?;FRC=Si vous modifiez %1, les lignes achat existantes seront supprim‚es et de nouvelles lignes achat bas‚es sur les nouvelles informations dans l''en-tˆte seront cr‚‚es.\\Voulez-vous continuer?', Comment = '%1 = Field Caption';
     /*+-----------------------------------------------------
       +ProjectPro
       +  - Added field(s):

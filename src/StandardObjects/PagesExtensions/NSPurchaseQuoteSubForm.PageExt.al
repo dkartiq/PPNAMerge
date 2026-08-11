@@ -4,10 +4,7 @@ pageextension 14021136 NS_PurchaseQuoteSubForm extends "Purchase Quote Subform"
     //TM-10.AM.1.0 20OCT2020 | Added Field.
     //PRJ-490.MS.1.0 added new field
     //PRJ-492.RS.1.0 27May2021 | Hide/Unhide Fields 
-    //PRJ-1221.JS.1.0 24FEB2022 | chenge item creoss reference
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1415.RM.1.0 2June2022 | Added some code
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify(Type)
@@ -24,19 +21,11 @@ pageextension 14021136 NS_PurchaseQuoteSubForm extends "Purchase Quote Subform"
                 NS_SetJobCostCategory;
             end;
         }
-        //PRJ-1221.JS.1.0 24FEB2022-start
-        // modify("Cross-Reference No.")
-        // {
-        //     trigger OnBeforeValidate();
-        //     begin
-        //         NS_SetJobCostCategory;
-        //     end;
-        // }
-        modify("Item Reference No.")
+        modify("Cross-Reference No.")
         {
             trigger OnBeforeValidate();
             begin
-                NS_SetJobCostCategory();
+                NS_SetJobCostCategory;
             end;
         }
         modify(Description)
@@ -46,7 +35,6 @@ pageextension 14021136 NS_PurchaseQuoteSubForm extends "Purchase Quote Subform"
                 NS_SetJobCostCategory;
             end;
         }
-        //PRJ-1221.JS.1.0 24FEB2022-end
         //addafter("Variant Code")//PRJ-492.RS.2.0 27May2021 Comment
         addafter(Description)//PRJ-492.RS.2.0 27May2021
         {
@@ -192,26 +180,9 @@ pageextension 14021136 NS_PurchaseQuoteSubForm extends "Purchase Quote Subform"
                 Caption = 'Get Job &Planning Line';
 
                 trigger OnAction();
-                //PRJ-1415.RM.1.0 start
-                var
-                    JobPlanningList: Page "NS_Get Job Planning Line";
-                    PP_JobPlanningLine: Record "job planning line";
-                    PP_PurchaseHeader: Record "Purchase header";
                 begin
-
-                    PP_PurchaseHeader.GET(Rec."Document Type", Rec."Document No.");
-                    PP_PurchaseHeader.TESTFIELD("NS_Job No.");
-                    JobPlanningList.LOOKUPMODE := true;
-                    PP_JobPlanningLine.RESET;
-                    PP_JobPlanningLine.SETRANGE("Job No.", PP_PurchaseHeader."NS_Job No.");
-                    JobPlanningList.SETTABLEVIEW(PP_JobPlanningLine);
-                    JobPlanningList.NS_SetGetFrom(Rec."Document Type", 2, Rec."Document No.");
-                    JobPlanningList.NS_Set('', PP_PurchaseHeader."NS_Job No.", '', '', '', 0);
-                    JobPlanningList.RUNMODAL;
-                    CLEAR(JobPlanningList);
-                    //PRJ-1415.RM.1.0 end
                     //ProjectPro - start
-                    //GetJobBudget(''); //PRJ-1415.RM.1.0 commented
+                    GetJobBudget('');
                     //ProjectPro - end
                 end;
             }

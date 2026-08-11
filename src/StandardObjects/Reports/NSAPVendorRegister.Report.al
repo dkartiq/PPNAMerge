@@ -18,7 +18,7 @@ report 14021222 "NS_AP - Vendor Register"
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSAP - Vendor Register.rdl';
 
-    Caption = 'Job AP - Vendor Register';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'AP - Vendor Register';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

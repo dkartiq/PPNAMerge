@@ -3760,15 +3760,6 @@ End Function</Code>
         <Field Name="ProcessDescription">
           <DataField>ProcessDescription</DataField>
         </Field>
-        <Field Name="Process_Description">
-          <DataField>Process_Description</DataField>
-        </Field>
-        <Field Name="Operation_Description">
-          <DataField>Operation_Description</DataField>
-        </Field>
-        <Field Name="Show_Operations">
-          <DataField>Show_Operations</DataField>
-        </Field>
         <Field Name="OperationDescription">
           <DataField>OperationDescription</DataField>
         </Field>

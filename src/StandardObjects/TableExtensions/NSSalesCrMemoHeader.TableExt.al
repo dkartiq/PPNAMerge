@@ -84,22 +84,6 @@ tableextension 14021122 NS_SalesCrMemoHeader extends "Sales Cr.Memo Header"
             Description = 'ProjectPro';
             TableRelation = "NS_Retention Ledger Code".NS_Code;
         }
-        //PE-302.JS.1.0 29MAY24-Start
-        field(14021311; "NS_AppliesToDocument Type"; Enum "Gen. Journal Document Type")
-        {
-            Caption = 'AppliesToDocument Type';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document Type" is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        field(14021312; "NS_AppliesToDocument No."; code[20])
-        {
-            Caption = 'AppliesToDocument No.';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document No." is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        //PE-302.JS.1.0 29MAY24-end  
     }
     PROCEDURE GetRetentionBase(No: Code[20]): Decimal;
     VAR

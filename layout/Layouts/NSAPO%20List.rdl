@@ -1076,15 +1076,6 @@ End Function
         <Field Name="COMPANYNAME">
           <DataField>COMPANYNAME</DataField>
         </Field>
-        <Field Name="JobActivity">
-          <DataField>JobActivity</DataField>
-        </Field>
-        <Field Name="JobProcess">
-          <DataField>JobProcess</DataField>
-        </Field>
-        <Field Name="JobOperation">
-          <DataField>JobOperation</DataField>
-        </Field>
         <Field Name="CurrReport_PAGENO">
           <DataField>CurrReport_PAGENO</DataField>
         </Field>

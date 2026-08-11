@@ -16,7 +16,7 @@ report 14021204 "NS_Carry Out Act Msg. - Req."
     // +     - Updated Request Page properties to not save settings
     // +------------------------------------------------------------
 
-    Caption = 'Job Carry Out Action Msg. - Req.';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Carry Out Action Msg. - Req.';
     ProcessingOnly = true;
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = Jobs;

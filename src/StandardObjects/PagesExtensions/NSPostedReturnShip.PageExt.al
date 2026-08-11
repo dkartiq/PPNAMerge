@@ -1,8 +1,7 @@
 pageextension 14021181 NS_PostedReturnShip extends "Posted Return Shipment"
 {
     // version NAVW111.00.00.19846,NAVNA11.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Return Shipment'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("No. Printed")

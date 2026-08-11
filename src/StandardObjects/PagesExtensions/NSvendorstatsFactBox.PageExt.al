@@ -1,8 +1,7 @@
 pageextension 14021456 NS_VendorStatsFactBox extends "Vendor Statistics FactBox"
 {
     // version NAVW111.00.00.20348,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Vendor Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Balance (LCY)")

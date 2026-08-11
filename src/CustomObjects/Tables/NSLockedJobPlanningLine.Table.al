@@ -1,5 +1,6 @@
 table 14021165 "NS_Locked Job Planning Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -8,7 +9,7 @@ table 14021165 "NS_Locked Job Planning Line"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1420.NK.1.0 30May2022 | Add Field
+
     Caption = 'Locked Job Planning Line';
 
     fields
@@ -58,11 +59,14 @@ table 14021165 "NS_Locked Job Planning Line"
             IF (NS_Type = CONST("Resource (Group)")) "Resource Group";
             DataClassification = CustomerContent;
         }
-        field(8; NS_Description; Text[50])
+        // >> Upgrade
+        //field(8; NS_Description; Text[50])
+        field(8; NS_Description; Text[100])
         {
             Caption = 'Description';
             DataClassification = CustomerContent;
         }
+        // << Upgrade
         field(9; NS_Quantity; Decimal)
         {
             Caption = 'Quantity';
@@ -164,7 +168,7 @@ table 14021165 "NS_Locked Job Planning Line"
             ObsoleteReason = 'Will be removed in next build';//PRJ-831.AS.2.0 13OCT2021 Obselete
             Caption = 'Gen. Bus. Posting Group';
             Editable = true;
-            //TableRelation = "Gen. Business Posting Group";//PRJ-1684.AS.1.0 TABLE RELATION REMOVED
+            TableRelation = "Gen. Business Posting Group";
             DataClassification = CustomerContent;
         }
         field(81; "NS_Gen. Prod. Posting Group"; Code[10])
@@ -173,7 +177,7 @@ table 14021165 "NS_Locked Job Planning Line"
             ObsoleteReason = 'Will be removed in next build';//PRJ-831.AS.2.0 13OCT2021 Obselete
             Caption = 'Gen. Prod. Posting Group';
             Editable = true;
-            //TableRelation = "Gen. Product Posting Group";//PRJ-1684.AS.1.0 TABLE RELATION REMOVED
+            TableRelation = "Gen. Product Posting Group";
             DataClassification = CustomerContent;
         }
         field(83; "NS_Document Date"; Date)
@@ -922,13 +926,6 @@ table 14021165 "NS_Locked Job Planning Line"
             Caption = 'Template No.';
             DataClassification = CustomerContent;
         }
-        //PRJ-1420.NK.1.0 30May2022 Start
-        field(14021484; NS_DescriptionNew; Text[100])
-        {
-            Caption = 'Description';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1420.NK.1.0 30May2022 End
     }
 
     keys

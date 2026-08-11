@@ -1,5 +1,6 @@
 report 14021180 "NS_Committed Cost DetailReport"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -11,7 +12,6 @@ report 14021180 "NS_Committed Cost DetailReport"
     //PRJ-84.SK.1.0 Added report to search
     //GLEI-63:AS:24APRIL2020 Increased the length of "Vendorname" variable from 30 char to 100 char.(For UPP also)
     //PRJ-691.RS.1.0 26May2021| Actual Cost/Billings fast tab does not include Purchase Invoices
-    //PRJCTPR-213.HS.1.0 23Oct2023| Done chnages In RDL to increased length of type column.
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSCommitted Cost Detail Report.rdl';
     UsageCategory = ReportsAndAnalysis;

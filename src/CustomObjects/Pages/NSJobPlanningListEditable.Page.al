@@ -1,5 +1,7 @@
 page 14021217 "NS_Job PlanningList(Editable)"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+    // 001 23.10.2021  PREM  bugfix
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -16,7 +18,6 @@ page 14021217 "NS_Job PlanningList(Editable)"
     //PRJ-761.AS.1.0 Done code for line description job value
     //PRJ-770.RS.1.0 12July2021 | Error in job planning line during the function "Edit Planning lines"
     //PRJ-895.GK.1.0 27Aug2021 | Added two field Use Tax Sku & Use Tax Amount.
-    //PRJ-1717.SD.1.06Dec2022 | Added Code for Drill Down Page "Job Invoices".    
     Caption = 'Job Planning List (Editable)';
     DataCaptionExpression = Caption;
     DelayedInsert = true;
@@ -178,8 +179,6 @@ page 14021217 "NS_Job PlanningList(Editable)"
                         Res: Record Resource;
                         Res2: Record Resource;
                         JobTaskRec: Record "Job Task";//PRJ-568.AS.1.0 18MAR2021
-                        JQHeader: Record "NS_Job Quote Header";//PRJ-1068.AS.1.0
-                        TLaborRatebyTask: Record "NS_Labor rate by task list";//PRJ-1068.AS.1.0
                     begin
                         if (Rec.Type = Rec.Type::Item) and (Rec."NS_Get Linked Resource" = true) and (Rec."NS_Linked Resource" <> '') then begin
                             JPLRec.reset;
@@ -191,7 +190,7 @@ page 14021217 "NS_Job PlanningList(Editable)"
 
                             JPLRec.Reset();
                             JPLRec.SetRange("Job No.", Rec."Job No.");
-                            JPLRec.SetRange("Job Task No.",Rec."Job Task No.");
+                            //JPLRec.SetRange("Line No.", Rec."Line No.");
                             if JPLRec.FindLast() then begin
                                 JPLRec2.INIT;
                                 JPLRec2."Line No." := JPLRec."Line No." + 10000;
@@ -203,11 +202,20 @@ page 14021217 "NS_Job PlanningList(Editable)"
                                 JPLRec2."Planning Date" := Rec."Planning Date";
                                 JPLRec2."NS_Shortcut Dimension 1 Code" := Rec."NS_Shortcut Dimension 1 Code";
                                 JPLRec2."NS_Shortcut Dimension 2 Code" := Rec."NS_Shortcut Dimension 2 Code";
+                                // JPLRec2."DFR Created" := Rec."DFR Created";
+                                // JPLRec2."DFR Locked" := Rec."DFR Locked";
+                                // JPLRec2."DFR No." := rec."DFR No.";
+                                // JPLRec2."Vendor No." := Rec."Vendor No.";
+                                // JPLRec2."Vendor Quote No." := Rec."Vendor Quote No.";
+                                // JPLRec2."Quote No." := Rec."Quote No.";
+                                // JPLRec2."Quote Line No." := Rec."Quote Line No.";
                                 JPLRec2."Planned Delivery Date" := Rec."Planned Delivery Date";
+                                // JPLRec2."Progress Billing Line" := Rec."Progress Billing Line";
                                 JPLRec2."NS_Progress Billing Method" := Rec."NS_Progress Billing Method";
+                                // JPLRec2."Purchase Order No." := Rec."Purchase Order No.";
                                 JPLRec2.Type := JPLRec2.Type::Resource;
                                 JPLRec2."No." := Rec."NS_Linked Resource";
-                                IF Res.GET(rec."NS_Linked Resource") Then begin
+                                IF Res.GET("NS_Linked Resource") Then begin
                                     IF Res."NS_Job Revenue Category" <> '' THEN
                                         JPLRec2."NS_Revenue Category" := Res."NS_Job Revenue Category";
                                     IF Res."NS_Job Cost Category" <> '' THEN
@@ -217,21 +225,7 @@ page 14021217 "NS_Job PlanningList(Editable)"
                                     JPLRec2."Gen. Prod. Posting Group" := Res."Gen. Prod. Posting Group";
                                     JPLRec2."Resource Group No." := Res."Resource Group No.";
                                     JPLRec2."Unit of Measure Code" := Res."Base Unit of Measure";
-                                    //PRJ-1068.AS.1.0 START
-                                    if Res.Type = Res.Type::Person then begin
-                                        if JQHeader.get(Rec."Job No.") then begin
-                                            if JQHeader."NS_Job Type Code" <> '' then begin
-                                                TLaborRatebyTask.Reset();
-                                                TLaborRatebyTask.SetRange("NS_Job Type Code", JQHeader."NS_Job Type Code");
-                                                if TLaborRatebyTask.FindFirst() then
-                                                    JPLRec2.Validate("Unit Cost", TLaborRatebyTask."NS_Labor Rate");
-                                            end;
-                                        end;
-                                    end;
-
-                                    if NOT JQHeader.get(Rec."Job No.") then
-                                        JPLRec2."Unit Cost" := Res."Unit Cost";
-                                    //PRJ-1068.AS.1.0 END
+                                    JPLRec2."Unit Cost" := Res."Unit Cost";
                                     JPLRec2."Unit Price" := Res."Unit Price";
                                 end;
                                 JPLRec2.Validate(Quantity, Rec.Quantity * Rec."NS_Labor Hours per Qty.");
@@ -363,19 +357,14 @@ page 14021217 "NS_Job PlanningList(Editable)"
 
                     //PRJ-588.AS.1.0 16MARCH2021 - START
                     trigger OnValidate()
-                    var
-                        NS_JobSetup: Record "Jobs Setup"; // PE-229.HS.1.0 14Dec2023
                     begin
-                        if NS_JobSetup.Get() then; // PE-229.HS.1.0 14Dec2023
-                        if not NS_JobSetup."NS_Disable Qty for % Method" then begin    // PE-229.HS.1.0 14Dec2023
-                            if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
-                                if (Rec.Quantity > 1) then
-                                    Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                                if (Rec.Quantity < 0) then
-                                    Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                            end;
+                        if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
+                            if (Rec.Quantity > 1) then
+                                Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
+                            if (Rec.Quantity < 0) then
+                                Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
                         end;
-                    end;  // PE-229.HS.1.0 14Dec2023
+                    end;
                     //PRJ-588.AS.1.0 16MARCH2021 - END
                 }
                 //PRJ-492.RS.1.0 21May2021 End
@@ -424,27 +413,14 @@ page 14021217 "NS_Job PlanningList(Editable)"
                     ToolTip = 'Specifies the Quantity';
                     //PRJ-588.AS.1.0 16MARCH2021 - START
                     trigger OnValidate()
-                    var
-                        //PRJ-1068.GK.1.0 07Dec2021 start
-                        JPLRec: Record "Job Planning Line";
-                        JPLRec2: Record "Job Planning Line";
-                        jobTblRec: Record Job;
-                        Res: Record Resource;
-                        Res2: Record Resource;
-                        JobTaskRec: Record "Job Task";
-                        NS_JobSetup: Record "Jobs Setup"; // PE-229.HS.1.0 14Dec2023
-                    //PRJ-1068.GK.1.0 07Dec2021 end
                     begin
-                        if NS_JobSetup.Get() then; // PE-229.HS.1.0 14Dec2023
-                        if not NS_JobSetup."NS_Disable Qty for % Method" then begin    // PE-229.HS.1.0 14Dec2023
-                            if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
-                                if (Rec.Quantity > 1) then
-                                    Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                                if (Rec.Quantity < 0) then
-                                    Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
-                            end;
+                        if (rec."Line Type" <> Rec."Line Type"::Budget) and (Rec."NS_Progress Billing Method" = Rec."NS_Progress Billing Method"::"%") then begin
+                            if (Rec.Quantity > 1) then
+                                Error('Qty cannot be greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
+                            if (Rec.Quantity < 0) then
+                                Error('Qty cannot be  greater than 1 for Line type Billable Or Both Budget and Billable, in case of Progress Billing Method = %');
                         end;
-                    end;  // PE-229.HS.1.0 14Dec2023
+                    end;
                     //PRJ-588.AS.1.0 16MARCH2021 - END
                 }
                 field("Unit Cost"; Rec."Unit Cost")//PRJ-492.RS.1.0 21May2021
@@ -492,12 +468,6 @@ page 14021217 "NS_Job PlanningList(Editable)"
                 {
                     ApplicationArea = All;
                     Visible = false;//PRJ-492.RS.2.0 27May2021
-                    //PRJ-1717.SD.1.06Dec2022
-                    trigger OnDrillDown()
-                    begin
-                        Rec.DrillDownJobInvoices();
-                    end;
-                    //PRJ-1717.SD.1.06Dec2022
                 }
                 field("Qty. to Invoice"; "Qty. to Invoice")
                 {
@@ -1059,7 +1029,10 @@ page 14021217 "NS_Job PlanningList(Editable)"
         //ProjectPro - start
         NS_LineJobDescription := '';
         if NS_Job.GET("Job No.") then
-            NS_LineJobDescription := NS_Job.Description;
+            // >> 001
+            //NS_LineJobDescription := NS_Job.Description;
+        NS_LineJobDescription := CopyStr(NS_Job.Description, 1, MaxStrLen(NS_LineJobDescription));
+        // << 001
         //ProjectPro - end
     end;
     //PRJ-492.RS.1.0 21May2021 end

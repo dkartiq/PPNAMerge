@@ -1,9 +1,7 @@
 pageextension 14021236 NS_CashRcptJournalExt extends "Cash Receipt Journal"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,NSNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Cash Receipt Journals'; //PRJ-1330.NK.1.0 25Apr2022
-    //ZEL-6 Dk.1.0 23March2023 | Add  field NS_Retention Ledger Code,Job No,Job Task No
+
     layout
     {
         addafter("Bal. Account No.")
@@ -76,41 +74,6 @@ pageextension 14021236 NS_CashRcptJournalExt extends "Cash Receipt Journal"
                 Visible = false;
             }
         }
-        //ZEL-6 Dk.1.0 23March2023 Start
-        addafter("NS Bal. Ledger No.")
-        {
-            field("NS_Retention Ledger Code"; Rec."NS_Retention Ledger Code")
-            {
-                ToolTip = 'Specifies the Retention Ledger Code';
-                ApplicationArea = All;
-
-            }
-        }
-        addafter("Account No.")
-        {
-            field("NSJob No."; Rec."Job No.")
-            {
-                ToolTip = 'Specifies the Job No.';
-                ApplicationArea = All;
-            }
-            field("NSJob Task No."; Rec."Job Task No.")
-            {
-                ToolTip = 'Specifies the Job Task No.';
-                ApplicationArea = All;
-            }
-        }
-        //ZEL-6 Dk.1.0 23March2023 End
-
-        //PE-200.AS.11.0 START
-        addafter("NSJob No.")
-        {
-            field("NS_Draw No."; Rec."NS_Draw No.")
-            {
-                ToolTip = 'Specifies the Draw No.';
-                ApplicationArea = All;
-            }
-        }
-        //PE-200.AS.11.0 END
     }
     var
         NS_GLSetup: Record "General Ledger Setup";

@@ -3,8 +3,7 @@ pageextension 14021118 NS_PurchaseQuote extends "Purchase Quote"
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
     //PRJ-387.AM.1.0 9OCT2020 | Made Field Posting Date Visible On page .
     //TM-10.AM.1.0 20NOV2020 | Added validation before action MakeOrder.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Quote'; //PRJ-1330.NK.1.0 25Apr2022
+
 
 
     layout

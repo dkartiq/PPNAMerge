@@ -8,15 +8,6 @@ pageextension 14021132 NS_JobList extends "Job List"
     //PRJ-464.AM.1.0 23NOV2020 | Added field on page layout.
     //CTSI-196.MS.1.0 added new field
     //PRJ-659.RS.1.0�22June21�|�NS_�should�be�removed�from�every�page�rest�mention�the�page�ID�and�Name.
-    //PRJ-1299.JS.1.0 25APR2022 | Add toolTip
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1710.RM.1.0 23Nov2022 | Added a tooltip
-    //PRJ-1711.RP.1.0 24Nov2022 | Added a tooltip
-    //PE-149.RM.1.0 21Aug2023 | Added a field
-    //PE-210.HS.1.0 23Nov2023| Add Code
-    //PE-210.HS.1.0 7Dec2023 | Block Code for color change on % completed field
-    //PE-311.PP.1.0 11JUN2024 | Added the action for newly created Work order report.
-    Caption = 'Jobs'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         modify(Control1905650007)
@@ -27,45 +18,7 @@ pageextension 14021132 NS_JobList extends "Job List"
         {
             Visible = true;
         }
-        //PE-47.PS.1.0 01March2023 Start
-        addafter("Bill-to Customer No.")
-        {
-            field("NS_Open Job Backlog New"; Rec."NS_Open Job Backlog")
-            {
-                ApplicationArea = all;
-                Caption = 'Open Job Backlog';
 
-                //PRJCTPR-122.PS.1.0 19Jun2023 Start
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Because of already added this filed on same page';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                Visible = false; //PRJCTPR-163.PS.1.0 19Jul2023
-                //PRJCTPR-122.PS.1.0 19Jun2023 End
-
-            }
-
-            field("NS_Billable/Invoiced Difference"; '')
-            {
-                ApplicationArea = all;
-                Caption = 'Billable/Invoiced Difference';
-                //PRJCTPR-122.PS.1.0 19Jun2023 Start
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Because of length  the table field name NS_Billable/Invoiced Difference  must not exceed 30 characters.';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                Visible = false; //PRJCTPR-163.PS.1.0 19Jul2023
-                //PRJCTPR-122.PS.1.0 19Jun2023 End
-            }
-
-
-            field("NS_New Billable/Inv Dif"; Rec."NS_New Billable/Inv Dif")  //PRJCTPR-122.PS.1.0 14Jun2023
-            {
-                ApplicationArea = all;
-                Caption = 'Billable/Invoiced Difference';
-                ToolTip = 'Specifies the difference between the "Total Invoiced Price" and the "Total Contract Price" including Master & the Sub Levels Jobs'; //PRJCTPR-163.PS.1.0 19Jul2023//PE-173.PS.1.0 18Oct2023
-
-            }
-        }
-        //PE-47.PS.1.0 01March2023 End
 
         addafter(Description)
         {
@@ -80,12 +33,6 @@ pageextension 14021132 NS_JobList extends "Job List"
                 ApplicationArea = all;
             }
             //PRJ-464.AM.1.0 End
-            //PE-193.PS.1.0 03Nov2023 Start
-            field("NS_Change Request to Job No."; Rec."NS_Change Request to Job No.")
-            {
-                ApplicationArea = all;
-            }
-            //PE-193.PS.1.0 03Nov2023 End 
             field("NS_Budgeted Cost (LCY)"; Rec."NS_Budgeted Cost (LCY)")
             {
                 ApplicationArea = All;
@@ -96,37 +43,6 @@ pageextension 14021132 NS_JobList extends "Job List"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Budgeted Price (LCY)';
             }
-            //PE-67.Dk.1.0 5May2023 Start
-            field("NS_Usage (Cost) (LCY)"; Rec."NS_Usage (Cost) (LCY)")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the Usage (Cost) (LCY)';
-                StyleExpr = NS_Color;//PE-210.HS.1.0 23Nov2023
-            }
-            field("NS_Invoiced Price (LCY)"; Rec."NS_Invoiced Price (LCY)")
-            {
-                ApplicationArea = all;
-                ToolTip = 'Specifies the Invoiced Price (LCY)';
-                StyleExpr = NS_InvColor; //PE-210.HS.1.0 23Nov2023 
-            }
-            //PE-67.Dk.1.0 5May2023 End 
-            //PE-149.RM.1.0 28Aug2023 start
-            field("NS_Act Invd Less Act Cost"; Rec.NS_ActInvdLessActCost)
-            {
-                Caption = 'Actual Invoiced Less Actual Cost (Margin)';
-                ApplicationArea = all;
-                ToolTip = 'To calculate the values under this column, click on "Calculate Margin" option available under Actions and then Functions.';
-            }
-            //PE-149.RM.1.0 28Aug2023 end
-            //PE-193.PS.1.0 16OCt2023 Start
-            field("NS_Margin %"; Rec."NS_Margin %")
-            {
-                Caption = 'Margin %';
-                ApplicationArea = all;
-                ToolTip = 'Specifies Margin % based on Actual invoiced less Actual Cost. To calculate the values under this column, click on "Calculate Margin" option available under Actions and then Functions.';//PE-193.PS.1.0 08Dec2023
-            }
-            //PE-193.PS.1.0 16OCt2023 End 
-
         }
         addafter("Search Description")
         {
@@ -144,7 +60,6 @@ pageextension 14021132 NS_JobList extends "Job List"
             {
                 ApplicationArea = all;
                 Description = 'CTSI-196.MS.1.0';
-                ToolTip = 'Specifies the last Forecast Posted Date';   //PRJ-1299.JS.1.0 25APR2022
             }
         }
         addafter(Control1905650007)
@@ -164,72 +79,15 @@ pageextension 14021132 NS_JobList extends "Job List"
                 SubPageLink = "No." = FIELD("No.");
             }
             //-->HK Start
-            //PE-267.JS.1.0 05MAR2024 - Start below control is removed by Base BC in Version 2024
-            //part(NS_Control1903710908; "Power BI Report FactBox")
-            part(NS_Control1903710908; "Power BI Embedded Report Part")
+            part(NS_Control1903710908; "Power BI Report FactBox")
             {
                 ApplicationArea = All;
             }
-            //PE-267.JS.1.0 05MAR2024
             //<-- HK End
-
-
-
         }
-        //PRJ-1262.GK.1.0 03June2022 start
-        addafter("NS_Last Forecast Posted Date")
-        {
-            field("NS_Open Job Backlog"; Rec."NS_Open Job Backlog")
-            {
-                Caption = 'Open Job Backlog';
-                //ToolTip = 'Open Job Backlog specifies the value which is the difference between the “Total Contract Price including Master & Sub Levels Jobs” minus “Total Invoiced Price including Master & the Sub Levels Jobs”. Open Job Backlog Batch can be run from the Job card & on the ProjectPro Manager Role Center. Note: Open Job Backlog calculation includes Jobs only with status “Open or Planning”, in addition to this “Manager Job Status” should be "Planning".'; //PRJ-1710.RM.1.0  //PRJ-1711.RP.1.0 01Dec2022 commented
-                //ToolTip = 'Open Job backlog Specifies the Value which is the difference between the "Total Contract Price including Master & Sub Levels Jobs" minus "Total Invoiced Price including Master & the Sub Levels Jobs". Open Job Backlog Batch can be run from the Job card & on the ProjectPro Manager Role Center. Note: Open Job Backlog calculation includes Jobs only with status "Open or Planning", in addition to this "Manager Job Status" should be "Running."';//PRJ-1711.RP.1.0 01Dec2022 //PRJ-1710.RM.1.0 06dec //PRJCTPR-122.PS.1.0 20Jun2023 //PRJCTPR-163.PS.1.0 20Jul2023
-                // ToolTip = 'Specifies the difference between the "Total Contract Price” and the "Total Invoiced Price” including Master & the Sub Levels Jobs. The value under this field will get updated only when the “Open Job Backlog Batch” is run. Note: Open Job Backlog calculation includes Jobs only with the status "Open” or “Planning", and in addition to this the "Manager Job Status" should also be set to "Planning."'; //PRJCTPR-163.PS.1.0 20Jul2023 //PE-173.PS.1.0 09Oct2023 Commented
-                ToolTip = 'Specifies the job backlog value calculated when "Open Job Backlog Batch" was run last time. It shows the difference between the "Total Contract Price” and the "Total Invoiced Price" including Master & the Sub-Level Jobs based on the Jobs Setup.Note: The calculation occurs only for the Jobs with Status set to "Open" or "Planning", and the "Manager Job Status" set to "Running."'; //PE-173.PS.1.0 09Oct2023
-                Editable = false;
-                ApplicationArea = all;
-            }
-            //PRJCTPR-39.JS.1.0 23JAN2023 - Start
-            field("NS_Contract Date"; Rec."NS_Contract Date")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the Contract Date of the Job';
-                Caption = 'Contract Date';
-            }
-            //PRJCTPR-39.JS.1.0 23JAN2023 - ends
-        }
-        //PRJ-1262.GK.1.0 03June2022 end
-
     }
     actions
     {
-
-        //PRJ-1616.AS.1.0 29SEPT2022 start
-        modify(CopyJob)
-        {
-            Promoted = false;
-        }
-        //PRJ-1616.AS.1.0 29SEPT2022 end
-        //PE-149.RM.1.0 28Aug2023 start
-        addafter(CopyJob)
-        {
-            action(NS_ActIvdLessActCost)
-            {
-                ApplicationArea = all;
-                image = Calculate;
-                Caption = 'Calculate Margin';
-                ToolTip = 'This function will calculate the value under "Actual Invoiced Less Actual Cost (Margin)" column for each Job on the Job list page.';
-                trigger OnAction()
-                var
-                    NS_ActReport: Report NS_ActInvdLessActCostMargin;
-                begin
-                    NS_ActReport.RunModal();
-                    CurrPage.Update();
-                end;
-            }
-        }
-        //PE-149.RM.1.0 28Aug2023
-
         modify("&Prices")
         {
             Caption = 'Cost/&Price';
@@ -314,77 +172,7 @@ pageextension 14021132 NS_JobList extends "Job List"
         {
             Visible = false;
         }
-        //PRJCTPR-122.AT.1.0.0 27June23 Start
-        addafter("Co&mments")
-        {
-            action(NS_ImportFromExcel)
-            {
-                ApplicationArea = Basic, Suite;
-                Caption = 'Import from Excel';
-                Image = ImportExcel;
-                ToolTip = 'Import the Jobs data in excel format.';
-                trigger OnAction()
-                var
-                    ImportPoDate: XmlPort "NS_JobImport XML";
-                begin
-
-                    ImportPoDate.Run();
-                    CurrPage.UPDATE();
-                end;
-
-            }
-            action(Ns_ExportData)
-            {
-                Caption = 'Export To Excel';
-                ApplicationArea = All;
-                Image = ExportToExcel;
-                ToolTip = 'Export the jobs data in excel format';
-                trigger OnAction()
-                var
-                    ImportPoDate: XmlPort "NS_JobsExport XML";
-                    TempBlob: Codeunit "Temp Blob";
-                    CSVOutStream: OutStream;
-                    FileMgt: Codeunit "File Management";
-                begin
-
-                    ImportPoDate.SetTableView(Rec);
-                    TempBlob.CreateOutStream(CSVOutStream);
-                    ImportPoDate.SetDestination(CSVOutStream);
-                    ImportPoDate.Export();
-                    FileMgt.BLOBExport(TempBlob, 'Jobs.csv', true);
-                    CurrPage.UPDATE();
-                end;
-            }
-            //PRJCTPR-122.AT.1.0.0 27June23 End
-        }
-
         //PPAL-80.AS.1.0 31JULY2020 - END
-
-        //PRJ-1616.AS.1.0 29SEPT2022 start
-        addbefore("Create Job &Sales Invoice")
-        {
-            action(NS_CopyJob)
-            {
-                ApplicationArea = Jobs;
-                Caption = '&Copy Job';
-                Ellipsis = true;
-                Image = CopyFromTask;
-                Promoted = true;
-                PromotedCategory = Process;
-                PromotedIsBig = true;
-                ToolTip = 'Copy a job and its job tasks, planning lines, and prices.';
-
-                trigger OnAction()
-                var
-                    CopyJob: Page "NS Copy JobList";
-                begin
-                    CopyJob.SetFromJob(Rec);
-                    CopyJob.RunModal;
-                end;
-            }
-        }
-        //PRJ-1616.AS.1.0 29SEPT2022 end
-
         addafter("Job Task &Lines")
         {
             action("NS_Job Planning Lns (Editable)")
@@ -715,27 +503,6 @@ pageextension 14021132 NS_JobList extends "Job List"
                     RunObject = Report "NS_Committed Cost DetailReport";
                     ApplicationArea = All;
                 }
-                //PE-311.PP.1.0 11JUN2024 Start
-                action("NS_Work Order Report")
-                {
-                    ApplicationArea = all;
-                    Caption = 'Work Order';
-                    ToolTip = 'Specifies the Work Order Report';
-                    Image = Report;
-                    Promoted = true;
-                    PromotedCategory = Report;
-                    trigger OnAction()
-                    var
-                        NS_WorkOrder: Report "NS_WorkOrder";
-                        NS_JobRec: Record Job;
-                    begin
-                        NS_JobRec.Reset();
-                        NS_JobRec.SetRange("No.", Rec."No.");
-                        report.RunModal(14021488, true, false, NS_JobRec);
-                    end;
-
-                }
-                //PE-311.PP.1.0 11JUN2024 End
             }
         }
         addafter(History)
@@ -772,7 +539,7 @@ pageextension 14021132 NS_JobList extends "Job List"
 
     var
         PowerBIUserConfiguration: Record "Power BI User Configuration";
-        //SetPowerBIUserConfig: Codeunit "Set Power BI User Config";   //PE-267.JS.1.0 05MAR2024
+        SetPowerBIUserConfig: Codeunit "Set Power BI User Config";
         PowerBIVisible: Boolean;
         JobSimplificationAvailable: Boolean;
         JobSubContractList: Page "NS_Job Subcontract List";
@@ -783,35 +550,11 @@ pageextension 14021132 NS_JobList extends "Job List"
         Contact: Record Contact;
         JobClass: Option " ","Master Job",SubJob,"Change Order","Extra Work",Proposed,Template;
         JobType: Code[20];
-        NS_Color: Text; //PE-210.HS.1.0 23Nov2023 
-        NS_InvColor: Text; //PE-210.HS.1.0 23Nov2023 
 
     procedure InitVar(lJobClass: Option " ","Master Job",SubJob,"Change Order","Extra Work",Proposed,Template; lJobType: Code[20]);
     begin
         JobClass := lJobClass;
         JobType := lJobType;
-    end;
-
-    trigger OnAfterGetRecord()
-    var
-        JobSetup: Record "Jobs Setup";
-    begin
-        //PE-210.HS.1.0 23Nov2023 Start
-        Clear(NS_Color);
-        Clear(NS_InvColor);
-        if JobSetup.Get() then;
-        if JobSetup.NS_CostExceedsColor then begin
-            if rec."NS_Budgeted Cost (LCY)" < rec."NS_Usage (Cost) (LCY)" then
-                NS_Color := 'Unfavorable'
-            else
-                NS_Color := 'standardaccent';
-
-            if rec."NS_Budgeted Price (LCY)" < rec."NS_Invoiced Price (LCY)" then
-                NS_InvColor := 'Unfavorable'
-            else
-                NS_InvColor := 'standardaccent';
-        end
-        //PE-210.HS.1.0 23Nov2023 End
     end;
 
     /* Documentation 

@@ -2,8 +2,7 @@ pageextension 14021101 NS_GeneralLedgerEntries extends "General Ledger Entries"
 {
     // version NAVW111.00.00.24232,PPNA11.00
     //PRJ-490.AM.1.0 Added Fields.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'General Ledger Entries'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("FA Entry No.")
@@ -33,20 +32,6 @@ pageextension 14021101 NS_GeneralLedgerEntries extends "General Ledger Entries"
                 Editable = false;
             }
             //PRJ-490.AM.1.0 End
-            //PE-136.JS.1.0 03Oct2023 - Start
-            field("NS_RevRec GenJnl Document No."; rec."NS_RevRec GenJnl Document No.")
-            {
-                ApplicationArea = all;
-                Caption = 'RevRec GenJnl Document No.';
-                Editable = false;
-            }
-            field("NS_RevRec Reverced Entry Job"; Rec."NS_RevRec Reverced Entry Job")
-            {
-                ApplicationArea = all;
-                Caption = 'RevRec Reverced Entry Job';
-                Editable = false;
-            }
-            //PE-136.JS.1.0 03Oct2023 - End
         }
     }
     /*

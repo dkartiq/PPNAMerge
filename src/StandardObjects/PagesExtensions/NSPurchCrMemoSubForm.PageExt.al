@@ -3,8 +3,7 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
     // version NAVW111.00.00.23019,NAVNA11.00.00.23019,PPNA11.00
     //PPAL-171.AM.1.0 |Added code to flow segment code.
     //PRJ-939.JS.1.0 27Sep2021 | Add fields
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("No.")
@@ -12,15 +11,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
             Visible = false;
             Enabled = false;
         }
-
-        //PRJCTPR-333.PS.1.0 14may2024 Start
-
-        modify(Type)
-        {
-            Editable = NS_TypeNonEditeable;
-        }
-
-        //PRJCTPR-333.PS.1.0 14may2024 End
         addafter(FilteredTypeField)
         {
             field("NS_No.2"; Rec."No.")
@@ -29,7 +19,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
                 ToolTip = 'Specifies the number of a general ledger account, an item, an additional cost or a fixed asset, depending on what you selected in the Type field.';
                 ApplicationArea = All;
                 ShowMandatory = NOT IsCommentLine;
-                Editable = NS_TypeNonEditeable; //PRJCTPR-333.PS.1.0 14may2024 
                 trigger OnValidate();
                 begin
                     ShowShortcutDimCode(ShortcutDimCode);
@@ -117,32 +106,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
                     //ProjectPro - end
                 end;
             }
-            //PE-43.JS.1.0 16FEB2023-Start
-            field("NS_FA Job Task No."; Rec."NS_FA Job Task No.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the  FA Job Task No. field.';
-                Editable = NSMarkeditable;
-            }
-            field("NS_FA Segment Code"; Rec."NS_FA Segment Code")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Select the Segment ';
-                Editable = NSMarkeditable;
-            }
-            field("NS_FA Job Usage"; Rec."NS_FA Job Usage")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the FA Job Usage field.';
-                Editable = NSMarkeditable;
-            }
-            field("NS_FA Job No."; Rec."NS_FA Job No.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the FA Job No. field.';
-                Editable = NSMarkeditable;
-            }
-            //PE-43.JS.1.0 16FEB2023-end            
         }
         addafter("Variant Code")
         {
@@ -156,7 +119,7 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Gen. Prod. Posting Group';
             }
-            //PRJ-939.JS.1.0 27Sep2021
+             //PRJ-939.JS.1.0 27Sep2021
             field("NS_Retention Base Amount"; Rec."NS_Retention Base Amount")
             {
                 ToolTip = 'Specifies the value of the Retention Base Amount field';
@@ -214,25 +177,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
         TypeAsText: Text[30];
         TempOptionLookupBuffer: Record 1670;
 
-        NSMarkeditable: Boolean;  //PE-43.JS.1.0 20FEB2023
-        NS_NoNonediteable: Boolean; //PRJCTPR-333.PS.1.0 14MAy2024
-        NS_TypeNonEditeable: Boolean; //PRJCTPR-333.PS.1.0 14MAy2024
-
-    //PE-43.JS.1.0 20FEB2023 - Start
-    trigger OnAfterGetCurrRecord()
-    var
-    begin
-        NSMarkeditable := true;
-        if (Rec.Type = Rec.Type::"Fixed Asset") and (Rec."Return Shipment No." <> '') then
-            NSMarkeditable := false;
-
-        //PRJCTPR-333.PS.1.0 14MAy2024 Start
-        NS_TypeNonEditeable := true;
-        NS_TypeNonEditeable := NSTypeNonEditeable();
-        //PRJCTPR-333.PS.1.0 14MAy2024 End
-    end;
-    //PE-43.JS.1.0 20FEB2023 - end  
-
     LOCAL PROCEDURE NS_NoOnAfterValidate();
     BEGIN
         InsertExtendedText(FALSE);
@@ -275,9 +219,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
         NS_Job: Record Job;
         NS_PurchHeader: Record "Purchase Header";
         NS_PurchLine: Record "Purchase Line";
-        NSJobTask1: record "Job Task"; //PRJCTPR-199.JS.1.0 07NOV2023
-        NSJobSetup1: record "Jobs Setup";   //PRJCTPR-199.JS.1.0 07NOV2023
-        NSBillingHeader: record "NS_Progress Billing Header"; //PRJCTPR-199.JS.1.0 07NOV2023
         NS_JobNo: Code[20];
         NS_JobTaskNo: Code[35];
         NS_LineNo: Integer;
@@ -286,7 +227,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
         NS_GetJobPlanningLine: Page "NS_Get Job Planning Line";
         NS_EnterJobNo: Page "NS_Enter Job No.";
     begin
-        if NSJobSetup1.get() then;  //PRJCTPR-199.JS.1.0 07NOV2023
         //ProjectPro - start
         NS_WasBlank := false;
         if "Job No." = '' then begin
@@ -311,12 +251,7 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
         if NS_GetJobPlanningLine.RUNMODAL = ACTION::LookupOK then begin
             NS_GetJobPlanningLine.NS_Get(NS_JobNo, NS_JobTaskNo, NS_LineNo);
             NS_JobPlanningLine.GET(NS_JobNo, NS_JobTaskNo, NS_LineNo);
-            NS_PurchHeader.GET(Rec."Document Type", Rec."Document No."); //PRJ-1135.NK.1.0
-            //PE-260.JS.1.0 07MAR2024 - Start
-            if (NS_PurchHeader."NS_Job No." <> '') and (NS_PurchHeader."NS_Multiple Jobs on Lines" = false) then
-                if NS_PurchHeader."NS_Job No." <> NS_JobPlanningLine."Job No." then
-                    error('Please enable "Multiple Jobs on Lines" in %1 no. %2 on "Purchase %3 Header"', NS_PurchHeader."Document Type", NS_PurchHeader."No.", NS_PurchHeader."Document Type");
-            //PE-260.JS.1.0 07MAR2024 - end
+            NS_PurchHeader.GET("Document Type", "Document No.");
             NS_LineNo := 0;
             NS_PurchLine.RESET;
             NS_PurchLine.SETRANGE("Document Type", NS_PurchHeader."Document Type");
@@ -351,15 +286,12 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
                 "Unit Cost" := NS_JobPlanningLine."Unit Cost";
                 "Unit Cost (LCY)" := NS_JobPlanningLine."Unit Cost (LCY)";
                 "Job No." := NS_JobPlanningLine."Job No.";
-                //"Job Task No." := NS_JobPlanningLine."Job Task No.";//PRJCTPR-199.JS.1.0 11DEC2023 line commented
-                Validate("Job Task No.", NS_JobPlanningLine."Job Task No.");   //PRJCTPR-199.JS.1.0 11DEC2023 line added
+                "Job Task No." := NS_JobPlanningLine."Job Task No.";
                 "NS_Job Cost Category" := NS_JobPlanningLine."NS_Cost Category";
                 "NS_Job Revenue Category" := NS_JobPlanningLine."NS_Revenue Category";
-                //PRJCTPR-199.JS.1.0 07NOV2023 - Start
-                // "Shortcut Dimension 1 Code" := NS_JobPlanningLine."NS_Shortcut Dimension 1 Code";
-                // "Shortcut Dimension 2 Code" := NS_JobPlanningLine."NS_Shortcut Dimension 2 Code";
-                // "Dimension Set ID" := NS_JobPlanningLine."NS_Dimension Set ID";
-                //PRJCTPR-199.JS.1.0 07NOV2023 - end
+                "Shortcut Dimension 1 Code" := NS_JobPlanningLine."NS_Shortcut Dimension 1 Code";
+                "Shortcut Dimension 2 Code" := NS_JobPlanningLine."NS_Shortcut Dimension 2 Code";
+                "Dimension Set ID" := NS_JobPlanningLine."NS_Dimension Set ID";
                 "NS_Segment Code" := NS_JobPlanningLine."NS_Segment Code";//PPAL-171.AM.1.0
                 INSERT;
             end;
@@ -372,24 +304,6 @@ pageextension 14021137 NS_PurchCrMemoSubForm extends "Purch. Cr. Memo Subform"
         CLEAR(NS_EnterJobNo);
         //ProjectPro - end
     end;
-
-    //PRJCTPR-333.PS.4.0 03May2024 End 
-    Local procedure NSTypeNonEditeable(): Boolean
-    var
-        NS_PurchaseHeader: Record "Purchase Header";
-    begin
-        NS_NoNonediteable := true;
-        NS_PurchaseHeader.Reset();
-        NS_PurchaseHeader.SetRange("Document Type", Rec."Document Type");
-        NS_PurchaseHeader.SetRange("No.", Rec."Document No.");
-        NS_PurchaseHeader.SetRange("NS_Retention Document", true);
-        if NS_PurchaseHeader.FindFirst() then
-            NS_NoNonediteable := false;
-        exit(NS_NoNonediteable);
-
-    end;
-
-    //PRJCTPR-333.PS.1.0 20March2024 End 
 
     /* Documentation
       +---------------------------------------------------------------------------------------------

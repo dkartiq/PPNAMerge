@@ -2,8 +2,7 @@ tableextension 14021129 NS_PurchCrMemoLine extends "Purch. Cr. Memo Line"
 {
     // version NAVW111.00.00.24742,NAVNA11.00.00.24742,PPNA11.00
     //PRJ-817.JS.1.0�04Aug2021 | Add fields work unit and work unit of measure
-    //PRJ-1015.JS.1.0 22Oct2021 | field Added
-    //PE-43.RM.1.0 24Feb2023 | Added some code
+
     fields
     {
 
@@ -128,43 +127,6 @@ tableextension 14021129 NS_PurchCrMemoLine extends "Purch. Cr. Memo Line"
         }
         //PRJ-817.JS.1.0�04Aug2021-end
 
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-
-        //PE-43.RM.1.0 24Feb2023 start
-        field(14021415; "NS_FA Job Usage"; Boolean)
-        {
-            Caption = 'FA Job Usage';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-
-        }
-        field(14021416; "NS_FA Job No."; Code[20])
-        {
-            Caption = 'FA Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-
-        }
-        field(14021417; "NS_FA Job Task No."; Code[20])
-        {
-            Caption = ' FA Job Task No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        field(14021418; "NS_FA Segment Code"; Code[20])
-        {
-            Caption = 'FA Segment Code';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PE-43.RM.1.0 24Feb2023 end
     }
     keys
     {

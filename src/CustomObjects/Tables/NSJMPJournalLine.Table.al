@@ -232,11 +232,7 @@ table 14021100 "NS_JMP Journal Line"
                         PurchLine."NS_JMP Document No." := JournalLine."NS_JMP Document No.";
                         PurchLine."Currency Code" := PurchHeader."Currency Code";
                         PurchLine.VALIDATE("Job No.", JournalLine."NS_Job No.");
-                        //PRJCTPR-256.JS.1.0 - Start
-                        //PurchLine."NS_JMP Details" := JournalLine.NS_Details;
-                        PurchLine."NS_JMP Details" := copystr(JournalLine.NS_Details, 1, 20);
-                        PurchLine."NS_PPJMP Details" := JournalLine.NS_Details;
-                        //PRJCTPR-256.JS.1.0 - end
+                        PurchLine."NS_JMP Details" := JournalLine.NS_Details;
                         PurchLine."Job Task No." := JournalLine."NS_Job Task No.";
                         PurchLine.VALIDATE(Quantity);
                         PurchLine.INSERT(true);

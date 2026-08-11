@@ -11,7 +11,6 @@ report 14021230 "NS_Sales Invoice CTSI"
     //CTSI-147.AS.1.0 14SEPT2020 Added code & done change in Layout
     //CTSI-162.AS.1.0 29Sept2020 Done sorting
     //CTSI-175.AS.1.0 14OCT2020 Added Work description, Removed INvoice Discount, Commented code for that & done change in layout to add it
-    //PRJCTPR-170.DK.1.0 10AUG2023 | Only change in Report Layout
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSSales Invoice CTSI.rdl';
 
@@ -918,7 +917,7 @@ report 14021230 "NS_Sales Invoice CTSI"
         if CompanyInformation."Address 2" = '' then
             CompAddress := CompanyInformation.Address;
         if CompanyInformation."Address 2" <> '' then
-            CompAddress := CompanyInformation.Address + ', ' + CompanyInformation."Address 2"; //PE-141.DK.1.0 3Aug2023 Add Space B/w Address1 and Address2
+            CompAddress := CompanyInformation.Address + CompanyInformation."Address 2";
         CompFinalAddrLine := CompanyInformation.City + ',' + CompanyInformation.County + ' ' + CompanyInformation."Post Code";
         //CTSI-147.AS.1.0 14SEPT2020 - end
         SalesSetup.GET;

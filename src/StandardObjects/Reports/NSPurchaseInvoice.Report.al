@@ -26,7 +26,7 @@
 //     DefaultLayout = RDLC;
 //     RDLCLayout = './Layouts/NSPurchase Invoice.rdl';
 
-//     Caption = 'Job Purchase Invoice';//PE-141.NK.1.0 03Aug2023 updated name
+//     Caption = 'Purchase Invoice';
 
 //     dataset
 //     {
@@ -207,16 +207,16 @@
 //                     column(TaxIdentTypeCaption; TaxIdentTypeCaptionLbl)
 //                     {
 //                     }
-// PRJ-847.GK.1.0 17Aug2021 start
-//column(VendorOrderNoCaptions; NS_VendorOrderNoCaption)
-//{
+ // PRJ-847.GK.1.0 17Aug2021 start
+                    //column(VendorOrderNoCaptions; NS_VendorOrderNoCaption)
+                    //{
 
-//}
-//column(VendorOrderNo_PurchInvHeader; "Purch. Inv. Header"."Vendor Order No.")
-//{
+                    //}
+                    //column(VendorOrderNo_PurchInvHeader; "Purch. Inv. Header"."Vendor Order No.")
+                    //{
 
-//}
-// PRJ-847.GK.1.0 17Aug2021 end
+                    //}
+                    // PRJ-847.GK.1.0 17Aug2021 end
 //                     dataitem("Purch. Inv. Line"; "Purch. Inv. Line")
 //                     {
 //                         DataItemLink = "Document No." = FIELD("No.");

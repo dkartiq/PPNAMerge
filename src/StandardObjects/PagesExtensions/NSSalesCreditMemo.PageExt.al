@@ -2,11 +2,6 @@ pageextension 14021114 NS_SalesCreditMemo extends "Sales Credit Memo"
 {
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
     //TM-10.AM.1.0 30OCT2020 | added validation on Post Action.
-    //PRJ-999.JS.1.0 19Nov2021 | add code to flow dimension
-    //PRJ-1087.JS.1.0 18Dec2021 | Add condition for dimension
-    //PRJ-1099.JS.1.0 31Dec2021 | Modify code for dimension on condition basis
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Credit Memo'; //PRJ-1330.NK.1.0 25Apr2022
 
     layout
     {
@@ -18,54 +13,13 @@ pageextension 14021114 NS_SalesCreditMemo extends "Sales Credit Memo"
                 ToolTip = 'Specifies the Job No.';
 
                 trigger OnValidate();
-                var
-                    //PRJ-1099.JS.1.0 30Dec2021-start
-                    NS_Job: Record Job;
-                    NS_JobsSetup: Record "Jobs Setup";
-                    NS_ProgrBillHead: Record "NS_Progress Billing Header";
-                    NS_DefaultDim: Record "Default Dimension";
                 begin
                     //ProjectPro - start
-                    if Rec."NS_Job No." <> xRec."NS_Job No." then begin   //PRJ-1099.JS.1.0 add begin and Rec command
-                        NS_JobsSetup.Get();
-                        If NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                            IF Rec."NS_Job No." <> '' then
-                                if NS_Job.Get(Rec."NS_Job No.") then begin
-                                    Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                    Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                                    Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                                end;
-                        end else
-                            if NS_Job.get(Rec."NS_Job No.") then begin
-                                NS_DefaultDim.Reset();
-                                NS_DefaultDim.SetRange("Table ID", 23);
-                                NS_DefaultDim.SetRange("No.", Rec."Sell-to Customer No.");
-                                if NS_DefaultDim.IsEmpty() then begin
-                                    Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                    Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                                    Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                                end;
-                            end;
-                    end;
-                    CurrPage.UPDATE();
-                    //PRJ-1099.JS.1.0 30Dec2021-end
+                    if "NS_Job No." <> xRec."NS_Job No." then
+                        CurrPage.UPDATE;
                     //ProjectPro - end
                 end;
             }
-            //PE-302.JS.1.0 30MAY2023-Start
-            field("NS_AppliesToDocument Type"; Rec."NS_AppliesToDocument Type")
-            {
-                Caption = 'ProjectPro Applies Doc. Type';
-                ApplicationArea = All;
-                ToolTip = '"Applies To Document Type" is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            }
-            field("NS_AppliesToDocument No."; Rec."NS_AppliesToDocument No.")
-            {
-                Caption = 'ProjectPro Applies Doc. No.';
-                ApplicationArea = All;
-                ToolTip = '"Applies To Document No." is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            }
-            //PE-302.JS.1.0 30MAY2023-end
             field("NS_Retention Document"; Rec."NS_Retention Document")
             {
                 ApplicationArea = All;
@@ -231,25 +185,10 @@ pageextension 14021114 NS_SalesCreditMemo extends "Sales Credit Memo"
 
 
     trigger OnAfterGetRecord();
-    var
-        NS_Jobs: record job;   //PRJ-999.JS.1.0 18Nov2021
-        NS_JobSetup: Record "Jobs Setup";    //PRJ-1087.JS.1.0 18Dec2021   
     begin
         //ProjectPro - start
         NS_RetentionCalcs;
         //ProjectPro - end
-        //PRJ-999.JS.1.0 18Nov2021 Start
-        //PRJ-1099.JS.1.0 31Dec2021-Start
-        // NS_JobSetup.Get();   //PRJ-1087.JS.1.0 18Dec2021 add line
-        // if NS_JobSetup."NS_Flow Job Card Dimension" = true then    //PRJ-1087.JS.1.0 18Dec2021 add line
-        //     IF Rec."NS_Job No." <> '' then
-        //         if NS_Jobs.Get(Rec."NS_Job No.") then begin
-        //             Rec."Shortcut Dimension 1 Code" := NS_Jobs."Global Dimension 1 Code";
-        //             Rec."Shortcut Dimension 2 Code" := NS_Jobs."Global Dimension 2 Code";
-        //             Rec."Dimension Set ID" := Rec.NS_GetDimensionNoFromJob(Rec."NS_Job No.");
-        //         end;
-        //PRJ-1099.JS.1.0 31Dec2021-End      
-        //PRJ-999.JS.1.0 18Nov2021 end           
     end;
 
     trigger OnOpenPage();
@@ -362,7 +301,7 @@ pageextension 14021114 NS_SalesCreditMemo extends "Sales Credit Memo"
                             if NS_SalesLine."Tax Liable" then
                                 if NS_SalesLine."Tax Area Code" <> '' then
                                     if NS_Job.GET("NS_Job No.") then
-                                        NS_SalesLine.VALIDATE("Tax Group Code", NS_Job."NS_Tax Group Code New");
+                                        NS_SalesLine.VALIDATE("Tax Group Code", NS_Job."NS_Tax Group Code");
                             NS_SalesLine.INSERT;
 
 

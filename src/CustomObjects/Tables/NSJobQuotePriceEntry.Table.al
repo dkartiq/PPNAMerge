@@ -264,8 +264,7 @@ table 14021418 "NS_Job Quote Price Entry"
         {
             Caption = 'Product Group Code';
             DataClassification = CustomerContent;
-            //TableRelation = "Product Group".Code WHERE("Item Category Code" = FIELD("NS_Item Category Code"));  //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-            TableRelation = "Item Category".Code WHERE(Code = FIELD("NS_Item Category Code")); //PRJCTPR-155.JS.1.0 09SEP2023 line added
+            TableRelation = "Product Group".Code WHERE("Item Category Code" = FIELD("NS_Item Category Code"));
         }
         field(5903; "NS_Service Order Type Code"; Code[10])
         {

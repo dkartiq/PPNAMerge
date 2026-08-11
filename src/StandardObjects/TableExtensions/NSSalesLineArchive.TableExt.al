@@ -1,7 +1,6 @@
 tableextension 14021222 NS_SalesLineArchive extends "Sales Line Archive"
 {
     // version NAVW111.00.00.22292,NAVNA11.00.00.22292,PPNA11.00
-    //PRJ-1015.JS.1.0 22Oct2021 | field Added
 
     fields
     {
@@ -31,16 +30,6 @@ tableextension 14021222 NS_SalesLineArchive extends "Sales Line Archive"
             DataClassification = CustomerContent;
             Caption = 'Retention Applies';
         }
-
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-
     }
 
     keys

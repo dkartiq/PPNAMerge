@@ -10,7 +10,6 @@ table 14021382 "NS_Payroll Register Ledger"
     // +------------------------------------------------------------
     //PRJ-221.AS.1.0 29MAY2020 - Added Skill Class & Payroll No. field
     //PRJ-384.AS.1.0 11SEPT2020 Removed Inverted commas from Gender field
-    //PE-63.RM.1.0 23March2023 | Added 
     Caption = 'Payroll Register Ledger';
 
     fields
@@ -194,8 +193,7 @@ table 14021382 "NS_Payroll Register Ledger"
         }
         field(36; "NS_Voulentary Deductions"; Decimal)
         {
-            // Caption = 'Voulentary Deductions'; //PE-63.RM.1.0 23March2023 commented
-            Caption = 'Voluntary Deductions'; //PE-63.RM.1.0 23March2023
+            Caption = 'Voulentary Deductions';
             DataClassification = CustomerContent;
         }
         field(37; "NS_Direct Deposit Amount"; Decimal)

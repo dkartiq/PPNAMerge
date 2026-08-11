@@ -228,12 +228,6 @@ table 14021495 "NS_Assembley BOM Components"
             end;
 
         }
-        field(22; "NS_SourceASMBOMLineNo."; Integer)//prj-1616
-        {
-            Caption = 'NS_SourceASMBOMLineNo';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
     }
 
     keys
@@ -241,9 +235,6 @@ table 14021495 "NS_Assembley BOM Components"
         key(Key1; "NS_Job No.", "NS_Job Task No.", "NS_Line No.")
         {
         }
-        // key(key2; "NS_Job No.", "NS_Job Task No.", "NS_Ref. JPL Line No.", "NS_Ref. JPL Parent Item No.")//PRJ-1224.AS.1.0 Addded key
-        // {
-        // }
     }
 
     trigger OnModify()

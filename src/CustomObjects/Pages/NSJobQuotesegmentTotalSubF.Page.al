@@ -10,9 +10,6 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
     // +------------------------------------------------------------
     //PPAL-172.MS.1.0 added new action Select Package for package functionality
     //PRJ-659.RS.1.0 22June21 | NS_�should�be�removed�from�every�page�rest�mention�the�page�ID�and�Name.
-    //PRJ-735.JS.1.0 01Dec2021 | Add code
-    //PRJ-1104.JS.1.0 02FEB2022 
-    //PRJ-1312.NK.1.0 03May2022 | Add Code
     PageType = ListPart;
     SourceTable = "NS_Job Takeoff Segments";
     UsageCategory = Lists;
@@ -59,15 +56,6 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Total Contract Price';
                 }
-
-                //PRJCTPR-319.JS.1.0 07MAR2024 - Start
-                field("NS_Freeze Total Contract Price"; Rec."NS_Freeze Total Contract Price")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Enable this field allow to freeze segment "Total Contarct Price" to avoid any further change in "Total Contract Price" value.';
-                }
-                //PRJCTPR-319.JS.1.0 07MAR2024 - end
-
                 field("Remaining (Total Cost)"; Rec."NS_Remaining (Total Cost)")
                 {
                     ApplicationArea = All;
@@ -163,8 +151,7 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
                         PlanningLines: Record "Job Planning Line";
                         PlanningLinesPg: Page "Job Planning Lines";
                     begin
-                        PlanningLinesPg.InitVar(Rec."NS_Job No.", '', false, ''); //PRJ-1131.RM.1.0
-                        PlanningLinesPg.NS_GetQuoteSegmentLineVars(rec."NS_Job No.", rec."NS_Segment Code");  //PRJCTPR-319.JS.1.0 13MAR2024 line added
+                        PlanningLinesPg.InitVar("NS_Job No.", '', false, '');
                         PlanningLinesPg.EDITABLE(true);
                         if PlanningLinesPg.RUNMODAL = ACTION::OK then begin
                             CurrPage.UPDATE;
@@ -181,8 +168,7 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
                         PlanningLines: Record "Job Planning Line";
                         PlanningLinesPg: Page "Job Planning Lines";
                     begin
-                        PlanningLinesPg.InitVar(Rec."NS_Job No.", '', true, ''); //PRJ-1131.RM.1.0
-                        PlanningLinesPg.NS_GetQuoteSegmentLineVars(rec."NS_Job No.", rec."NS_Segment Code");  //PRJCTPR-319.JS.1.0 13MAR2024 line added
+                        PlanningLinesPg.InitVar("NS_Job No.", '', true, '');
                         PlanningLinesPg.EDITABLE(true);
                         if PlanningLinesPg.RUNMODAL = ACTION::OK then begin
                             CurrPage.UPDATE;
@@ -203,7 +189,6 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
                         PlanningLinesPg.InitVar("NS_Job No.", '', true, "NS_Segment Code");
                         PlanningLinesPg.EDITABLE(true);
                         //if PlanningLinesPg.RUNMODAL = ACTION::OK then begin
-                        PlanningLinesPg.NS_GetQuoteSegmentLineVars(rec."NS_Job No.", rec."NS_Segment Code");  //PRJCTPR-319.JS.1.0 25FEB2024 line added
                         PlanningLinesPg.Run();//Test //ppal-172 
                         CurrPage.UPDATE;
                         // end;
@@ -309,7 +294,6 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
                         ScopeOfWork.SETRANGE("NS_Quote No.", "NS_Job No.");
                         ScopeOfWork.SETRANGE("NS_Segment Code", "NS_Segment Code");
                         ScopeOfWorkPg.SETTABLEVIEW(ScopeOfWork);
-                        ScopeOfWorkPg.NS_InitValue(Rec."NS_Job No.", Rec."NS_Segment Code");    //PRJ-735.JS.1.0 01Dec2021
                         ScopeOfWorkPg.RUNMODAL();
                     end;
                 }
@@ -327,95 +311,14 @@ page 14021431 "NS_Job Quote Segment TotalSubF"
                         JobTempListP.RunModal();
                     end;
                 }
-                //PRJCTPR-319.JS.1.0 11MAR2024 - Start
-                action("NS_Freeze Contract Price")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Freeze Contract Price';
-                    ToolTip = 'This action is use to freeze "Total Contract Price" on all segment lines for this quote, in single click';
-                    Image = Ledger;
-
-                    trigger OnAction();
-                    var
-                        NSJobQuoteTakeoffSegemnt: record "NS_Job Takeoff Segments";
-                    begin
-                        NSJobQuoteTakeoffSegemnt.Reset();
-                        NSJobQuoteTakeoffSegemnt.SetRange("NS_Job No.", Rec."NS_Job No.");
-                        if NSJobQuoteTakeoffSegemnt.FindSet() then
-                            repeat
-                                if NSJobQuoteTakeoffSegemnt."NS_Total Contract Price" <> 0 then begin
-                                    NSJobQuoteTakeoffSegemnt."NS_Freeze Total Contract Price" := true;
-                                    NSJobQuoteTakeoffSegemnt.Modify();
-                                end;
-                            until NSJobQuoteTakeoffSegemnt.next() = 0;
-                        CurrPage.UPDATE;
-                    end;
-                }
-                action("NS_UNFreeze Contract Price")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Un-Freeze Contract Price';
-                    ToolTip = 'This action is use to un-freeze "Total Contract Price" on all segment lines for this quote, in single click';
-                    Image = UndoFluent;
-
-                    trigger OnAction();
-                    var
-                        NSJobQuoteTakeoffSegemnt: record "NS_Job Takeoff Segments";
-                    begin
-                        NSJobQuoteTakeoffSegemnt.Reset();
-                        NSJobQuoteTakeoffSegemnt.SetRange("NS_Job No.", Rec."NS_Job No.");
-                        if NSJobQuoteTakeoffSegemnt.FindSet() then
-                            repeat
-                                NSJobQuoteTakeoffSegemnt."NS_Freeze Total Contract Price" := false;
-                                NSJobQuoteTakeoffSegemnt.Modify();
-                            until NSJobQuoteTakeoffSegemnt.next() = 0;
-                        CurrPage.UPDATE;
-                    end;
-                }
-                //PRJCTPR-319.JS.1.0 11MAR2024 - end                
             }
-
-            //PRJ-1265.AS.1.0 START
-            action("NS_RefreshSegmentValues")
-            {
-                ApplicationArea = all;
-                Caption = 'Refresh Segment Values';
-                Image = Refresh;
-                Promoted = true;
-                PromotedCategory = Process;
-                trigger OnAction();
-                begin
-                    CurrPage.Update();
-                end;
-            }
-            //PRJ-1265.AS.1.0 END
         }
     }
 
     trigger OnAfterGetRecord();
     begin
-        //PRJ-1104.JS.1.0 02FEB2022-Start
-        //PRJ-1104.AS.1.0 START Commented the codes
-        //if "NS_Total Contract Price" = 0 then
-        // "NS_Total Contract Price" := "NS_Schedule (Total Price)";
-        //Rec.Validate("NS_Total Contract Price", "NS_Schedule (Total Price)");
-        //PRJ-1104.AS.1.0 END Commented the code
-        // if Rec."NS_Total Contract Price" = 0 then//PRJCTPR-82.AS.1.0 31MARCH2023
-        //Rec."NS_Total Contract Price" := Rec."NS_Schedule (Total Price)"; //PRJ-1312.NK.1.0 03May2022 Block
-        If Rec."NS_Total Contract Price" = 0 then  //PRJCTPR-145.PS.1.0 05Jul2023
-            Rec.Validate("NS_Total Contract Price", Rec."NS_Schedule (Total Price)"); //PRJ-1312.NK.1.0 03May2022
-        //PRJ-1104.AS.1.0 END Commented the code  
-        //PRJ-1104.JS.1.0 02FEB2022-end  
-    end;
-
-    trigger OnAfterGetCurrRecord();
-    begin
-        //PRJ-1104.JS.1.0 02FEB2022-Start
-        //PRJ-1104.AS.1.0 START
-        //Rec.CalcFields("NS_Schedule (Total Price)");
-        //Rec.Validate("NS_Total Contract Price", Rec."NS_Schedule (Total Price)");
-        //PRJ-1104.AS.1.0 END
-        //PRJ-1104.JS.1.0 02FEB2022-end
+        if "NS_Total Contract Price" = 0 then
+            "NS_Total Contract Price" := "NS_Schedule (Total Price)";
     end;
 
     var

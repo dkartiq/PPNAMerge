@@ -10,14 +10,8 @@ report 14021400 "NS_Job Quote/Proposal"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //PPAL-32.AS.1.0 14Aug2020 Done code for ship to address and also removed a useless variable Shiptoaddress[5] from layout
-    //PRJ-1595.GK.1.0 01Sep2022 |Changes in Layout for removing 'INTERNAL USE ONLY' caption.
-    // PE-114.RM.1.0 11Aug2023 | Created a Word Layout Report.
-    //PE-114.RM.1.0 11Aug2023 start 
-    //PE-141.RM.1.0 23Aug2023 | Did some changes in the report.
-    DefaultRenderingLayout = RDLLayout; //PE-114.RM.1.0 25Aug2023 start
-    // DefaultLayout = RDLC;  
-    // RDLCLayout = './Layouts/NSJob QuoteProposal.rdl';  
-    // WordLayout = './Layouts/NSJob QuoteProposal.docx'; //PE-114.RM.1.0 25Aug2023 end
+    DefaultLayout = RDLC;
+    RDLCLayout = './Layouts/NSJob QuoteProposal.rdl';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;
     Caption = 'Quote/Proposal';
@@ -31,21 +25,6 @@ report 14021400 "NS_Job Quote/Proposal"
             column(QuoteHeader_Title; DocumentTitle)
             {
             }
-            //PE-114.RM.1.0 16Aug2023 start
-            column(CompanyInfo_Pic; CompanyInfo.Picture)
-            {
-            }
-            column(NS_TextCommaAdd; NS_TextCommaAdd)
-            {
-            }
-            column(CompanyInfo_Name; CompanyInfo.Name)
-            {
-            }
-            column(NS_SalesPerson_ID; QuoteHeader."NS_Salesperson/User ID")
-            {
-            }
-
-            //PE-114.RM.1.0 16Aug2023 end
             column(QuoteHeader_Draft; Draft)
             {
             }
@@ -55,41 +34,15 @@ report 14021400 "NS_Job Quote/Proposal"
             column(QuoteHeader_RevisionNo_; QuoteHeader.NS_Revision)
             {
             }
-            column(NS_PrintSalesTax; NS_PrintSalesTax)
-            {
-            }
-            column(NS_QuoteLineAmtIncVat; NS_QuoteLineAmtIncVat)
-            {
-            }
-            column(NS_SalesTax; NS_SalesTax)
-            {
-            }
-            //PE-114.RM.1.0 22Aug2023 start
-            column(NS_QHeaderRevNo; NS_QHeaderRevNo)
-            {
-            }
-            //PE-114.RM.1.0 22Aug2023 end
             column(QuoteHeader_Proposal; QuoteHeader."NS_Equipment Only")
             {
             }
             column(QuoteHeader_LinkToQuoteNo_; QuoteHeader."NS_Link-to Quote No.")
             {
             }
-            //PE-114.RM.1.0 17Aug2023 start
-            // column(QuoteHeader_ProposalDate; QuoteHeader."NS_Proposal Date")
-            // {
-            // }
-
-            column(QuoteHeader_ProposalDate; Format(QuoteHeader."NS_Proposal Date", 0, '<Month,2>-<Day,2>-<Year4>'))
+            column(QuoteHeader_ProposalDate; QuoteHeader."NS_Proposal Date")
             {
             }
-            column(NS_Today; format(WorkDate(), 0, '<Month,2>-<Day,2>-<Year4>'))
-            {
-            }
-            column(NS_DepositReqd; NS_DepositReqd)
-            {
-            }
-            //PE-114.RM.1.0 17Aug2023 end
             column(QuoteHeader_SellToCustomerNo_; QuoteHeader."NS_Sell-to Customer No.")
             {
             }
@@ -289,39 +242,11 @@ report 14021400 "NS_Job Quote/Proposal"
                     TempBuf.FINDSET(false)
                 else
                     if TempBuf.NEXT = 0 then;
-                NS_SalesTax := TempBuf."NS_Amount Including VAT" - TempBuf.NS_Amount; //PE-114.RM.1.0 28Aug2023
-
             end;
 
             trigger OnPreDataItem();
             begin
-                //PE-114.RM.1.0 16Aug2023 start
-                Clear(NS_TextCommaAdd);
-                if (CompanyInfo.City <> '') and (CompanyInfo.County <> '') then
-                    NS_TextCommaAdd := ','
-                else
-                    NS_TextCommaAdd := '';
-                //PE-114.RM.1.0 16Aug2023 End
                 SETRANGE(Number, 1, TempBuf.COUNT);
-                //PE-114.RM.1.0 22Aug2023 start
-                if QuoteHeader.NS_Revision <> 0 then
-                    NS_QHeaderRevNo := Format(QuoteHeader.NS_Revision)
-                else
-                    NS_QHeaderRevNo := '';
-                //PE-114.RM.1.0 22Aug2023
-                //PE-114.RM.1.0 28Aug2023 start
-                if QuoteHeader."NS_Print Sales Tax" = false then begin
-                    NS_PrintSalesTax := 'TOTAL PRICE:';
-                    NS_QuoteLineAmtIncVat := QuoteHeader.NS_Amount
-
-                end else
-                    NS_PrintSalesTax := 'TOTAL AMOUNT';
-                NS_QuoteLineAmtIncVat := QuoteHeader."NS_Amount Including VAT";
-                if QuoteHeader."NS_Deposit Required" = 0 then
-                    NS_DepositReqd := 0
-                else
-                    NS_DepositReqd := QuoteHeader."NS_Deposit Required" + QuoteHeader."NS_Amount Including VAT" + QuoteHeader."NS_Deposit Required";
-                //PE-114.RM.1.0 28Aug2023 end
             end;
         }
     }
@@ -394,32 +319,6 @@ report 14021400 "NS_Job Quote/Proposal"
         {
         }
     }
-    //PE-114.RM.1.0 25Aug2023 start
-    rendering
-    {
-        layout(RDLLayout)
-        {
-            Type = RDLC;
-            Caption = 'Quote/Proposal';
-            Summary = 'Quote/Proposal';
-            LayoutFile = './Layouts/NSJob QuoteProposal.rdl';
-        }
-        layout(WordLayout1)
-        {
-            Type = Word;
-            Caption = 'Quote/Proposal';
-            Summary = 'Quote/Proposal';
-            LayoutFile = './Layouts/NSJob QuoteProposal.docx';
-        }
-        layout(WordLayout2)
-        {
-            Type = Word;
-            Caption = 'Quote/Proposal';
-            Summary = 'Quote/Proposal';
-            LayoutFile = './Layouts/NSJob QuoteProposal2.docx';
-        }
-    }
-    //PE-114.RM.1.0 25Aug2023 end
 
     labels
     {
@@ -428,7 +327,6 @@ report 14021400 "NS_Job Quote/Proposal"
     trigger OnPreReport();
     begin
         CompanyInfo.GET;
-        CompanyInfo.CalcFields(Picture); //PE-114.RM.1.0 16Aug2023
         DocumentTitle := Text000;  // Quotation
 
         if QuoteHeader."NS_Link-to Quote No." = '' then
@@ -467,13 +365,6 @@ report 14021400 "NS_Job Quote/Proposal"
         SellToAddress: array[8] of Text[50];
         FormatAddress: Codeunit "Format Address";
         BySegment: Boolean;
-        NS_TextCommaAdd: Text[10]; //PE-114.RM..1.0 16Aug2023
-        NS_QHeaderRevNo: Text; //PE-114.RM.1.0 17Aug2023
-        NS_SalesTax: Decimal; //PE-114.RM.1.0 28Aug2023 start
-        NS_PrintSalesTax: Text[30];
-        NS_DepositReqd: Decimal;
-        NS_QuoteLineAmtIncVat: Decimal; //PE-114.RM.1.0 28Aug2023 end
-
 
     procedure InsertTempBuf(var _TempBuf: Record "NS_Job Quote Sel. Buf." temporary);
     begin

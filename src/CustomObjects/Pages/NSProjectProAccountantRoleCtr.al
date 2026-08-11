@@ -25,11 +25,6 @@ page 14021198 "NS_ProjectProAccountantRoleCtr"
                 part(Control1904926908; "NS_ProjectPro KPIs")
                 {
                     ApplicationArea = All;
-                    //PE-109.PS.1.0 16JUNE2023 START
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Because of Performance issue while loading the role center page';
-                    ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                    //PE-109.PS.1.0 16JUNE2023 END
                 }
                 systempart(Control1901420308; Outlook)
                 {
@@ -504,17 +499,7 @@ page 14021198 "NS_ProjectProAccountantRoleCtr"
                                         Recurring = CONST(false));
                     ToolTip = 'Cash Receipt Journals';
                 }
-//PE-200.AS.9.0 START
-                action("NS_UpdateDueDatePayWhenPaid")
-                {
-                    ApplicationArea = all;
-                    Image = PostBatch;
-                    Caption = 'Update Due Dates- Pay When Paid';
-                    ToolTip = 'Update Due Dates- Pay When Paid';
-                    RunObject = report "NS_UpdateDueDatePayWhenPaid";
 
-                }
-                //PE-200.AS.9.0 END
                 //PPDA.1.0.TBA Start
                 // action(Deposit)
                 // {

@@ -7,7 +7,7 @@ report 14021390 "NS_CopyCrew to CustomTimesheet"
     //PRJ-842.JS.1.0 20Aug2021 | added code to add Job Segment
     //PRJ-924.JS.1.0 17Sep2021
     /// PRJ-949.GK.1.0 01Oct2021| Added Code and Changes in code.
-    //PRJ-1242.NK.1.0 16Mar2022| Skip duplicate Value
+
     Caption = 'Generate Time Entries';
     ProcessingOnly = true;
 
@@ -20,15 +20,10 @@ report 14021390 "NS_CopyCrew to CustomTimesheet"
             trigger OnAfterGetRecord();
             var
                 resourceRec: Record Resource;
-                HumanResSetup: Record "Human Resources Setup";//PE-158.AS.1.0 04SEPT2023
-                ResRec: Record Resource;//PE-158.AS.1.0 04SEPT2023
-                NS_Employee: Record Employee; //PE-158.AS.1.0
             begin
                 Clear(NoOfDays);
                 Clear(NoOfPeriods);
                 Clear(j);
-
-                if HumanResSetup.Get() then;//PE-158.AS.1.0 04SEPT2023
 
                 //if "NS_Work Period Start Date " = 0D then
                 //    Error('Please select Work Period Start Date');
@@ -90,33 +85,10 @@ report 14021390 "NS_CopyCrew to CustomTimesheet"
                             CrewLine2.SetRange("NS_Lead Person", true);
                             IF CrewLine2.FindFirst() then
                                 TimesSheetCustLine2."NS_Lead Person" := CrewLine2."NS_Resource No.";
-                            // TimesSheetCustLine2.VALIDATE("NS_Resource No.", CrewLine."NS_Resource No.");//PE-158.AS.1.0 comment
+                            TimesSheetCustLine2.VALIDATE("NS_Resource No.", CrewLine."NS_Resource No.");
 
-                            TimesSheetCustLine2."NS_Resource No." := CrewLine."NS_Resource No.";//PE-158.AS.1.0 Add
-
-                            //PE-158.AS.1.0 start
-                            NS_Employee.RESET();
-                            NS_Employee.SETCURRENTKEY("Resource No.");
-                            NS_Employee.SETRANGE("Resource No.", CrewLine."NS_Resource No."); //PRJ-1135.NK.1.0
-                            IF NS_Employee.FINDFIRST() THEN
-                                TimesSheetCustLine2."NS_Union Code" := NS_Employee."Union Code"
-                            ELSE
-                                TimesSheetCustLine2."NS_Union Code" := '';
-                            //PE-158.AS.1.0 end
-
-                            //PRJ-1452.GK.1.0 13June2022 start
-                            if resourceRec.Get(TimesSheetCustLine2."NS_Lead Person") then begin
-                                TimesSheetCustLine2."NS_Time Sheet Owner User ID" := resourceRec."Time Sheet Owner User ID";
-                                TimesSheetCustLine2."NS_Time Sheet Approver User ID" := resourceRec."Time Sheet Approver User ID";
-                            end;
-                            //PRJ-1452.GK.1.0 13June2022 end
-                            //PE-274.JS.1.0 02APR2024 - start
-                            if resourceRec.Get(TimesSheetCustLine2."NS_Resource No.") then begin
-                                //TimesSheetCustLine2."NS_Resource Name" := resourceRec.Name;//PRJ-1074.AS.1.0 28DEC2021 Commented code for old field "NS_Resource Name"
-                                TimesSheetCustLine2."NS_Resource Name New" := resourceRec.Name;//PRJ-1074.AS.1.0 28DEC2021 Add New code for new field "NS_Resource Name New"
-                                TimesSheetCustLine2."NS_CTS Resource Group No." := resourceRec."Resource Group No.";   //PE-274.JS.1.0 02APR2024 line added
-                            end;
-                            //PE-274.JS.1.0 02APR2024 - end
+                            if resourceRec.Get(TimesSheetCustLine2."NS_Resource No.") then
+                                TimesSheetCustLine2."NS_Resource Name" := resourceRec.Name;
 
                             //TimesSheetCustLine2.VALIDATE("NS_Working Hours", "NS_Working Hours");
                             //TimesSheetCustLine2."NS_Working Date" := InitializeDate;
@@ -137,105 +109,24 @@ report 14021390 "NS_CopyCrew to CustomTimesheet"
                             TimesSheetCustLine2."NS_Work Type Code" := WorkTypeFilter;
                             //PRJ-841|842.JS.1.0 20Aug2021-Start
                             TimesSheetCustLine2."NS_Segment Code" := JobSegment;
-
-                            if HumanResSetup.NS_EnableResourceSkillClass = false then begin //PE-158.AS.1.0 04SEPT2023 .. Putted old code inside NS_EnableResourceSkillClass Boolean condition begin..end
-                                                                                            //PE-274.JS.1.0 29APR2024-Start Below code blocked as per new requirement
-                                                                                            // JobResourcePrice.Reset();
-                                                                                            // JobResourcePrice.SetRange(Type, JobResourcePrice.Type::Resource);
-                                                                                            // JobResourcePrice.Setfilter("Job No.", '%1', jobNoFilter);
-                                                                                            // //JobResourcePrice.SetFilter("Job Task No.", '%1', jobtaskNofilter);  //PRJ-924.JS.1.0 17Sep2021 line commented
-                                                                                            // JobResourcePrice.SetFilter(code, '%1', TimesSheetCustLine2."NS_Resource No.");
-                                                                                            // //PE-68.Dk.1.0 16may2023 Start
-                                                                                            // // if JobResourcePrice.FindFirst() then
-                                                                                            // //     TimesSheetCustLine2."NS_Skill Code" := JobResourcePrice."NS_Skill Class Code";
-                                                                                            // //PE-224.JS.1.1 24JAN2024 - Start
-                                                                                            // if JobResourcePrice.FindFirst() then begin
-                                                                                            //     TimesSheetCustLine2."NS_Skill Code New" := JobResourcePrice."NS_Skill Class Code New";
-                                                                                            // end;
-                                                                                            // if TimesSheetCustLine2."NS_Skill Code New" = '' then begin
-                                                                                            //     if ResRec.Get(TimesSheetCustLine2."NS_Resource No.") then
-                                                                                            //         TimesSheetCustLine2."NS_Skill Code New" := ResRec."NS_Skill Class Code";
-                                                                                            //     //PE-68.Dk.1.0 16may2023 End
-                                                                                            // end;
-                                                                                            //PE-224.JS.1.1 24JAN2024 - Start
-                                                                                            //PE-274.JS.1.0 29APR2024-End
-
-                                //PE-274.JS.1.0 29APR2024-Start bewlo adding new code
-                                NSJobResourcePrice.Reset();
-                                NSJobResourcePrice.SetRange(Type, NSJobResourcePrice.Type::Resource);
-                                NSJobResourcePrice.Setfilter("Job No.", '%1', TimesSheetCustLine2."NS_Job No.");
-                                NSJobResourcePrice.SetFilter("Job Task No.", '%1', TimesSheetCustLine2."NS_Job Task No.");
-                                NSJobResourcePrice.SetFilter(code, '%1', TimesSheetCustLine2."NS_Resource No.");
-                                if NSJobResourcePrice.findset() then begin
-                                    TimesSheetCustLine2."NS_Skill Code New" := NSJobResourcePrice."NS_Skill Class Code New";
-                                end else begin
-                                    NSJobResourcePrice.Reset();
-                                    NSJobResourcePrice.SetRange(Type, NSJobResourcePrice.Type::Resource);
-                                    NSJobResourcePrice.Setfilter("Job No.", '%1', TimesSheetCustLine2."NS_Job No.");
-                                    NSJobResourcePrice.SetFilter(code, '%1', TimesSheetCustLine2."NS_Resource No.");
-                                    if NSJobResourcePrice.findset() then begin
-                                        TimesSheetCustLine2."NS_Skill Code New" := NSJobResourcePrice."NS_Skill Class Code New";
-                                    end else begin
-                                        NSJobResourcePrice.Reset();
-                                        NSJobResourcePrice.SetRange(Type, NSJobResourcePrice.Type::"Group(Resource)");
-                                        NSJobResourcePrice.SetRange(Code, TimesSheetCustLine2."NS_CTS Resource Group No.");
-                                        NSJobResourcePrice.Setfilter("Job No.", '%1', TimesSheetCustLine2."NS_Job No.");
-                                        if NSJobResourcePrice.findset() then begin
-                                            TimesSheetCustLine2."NS_Skill Code New" := NSJobResourcePrice."NS_Skill Class Code New";
-                                        end else begin
-                                            NSJobResourcePrice.Reset();
-                                            NSJobResourcePrice.SetRange(Type, NSJobResourcePrice.Type::All);
-                                            NSJobResourcePrice.Setfilter("Job No.", '%1', TimesSheetCustLine2."NS_Job No.");
-                                            if NSJobResourcePrice.findset() then begin
-                                                TimesSheetCustLine2."NS_Skill Code New" := NSJobResourcePrice."NS_Skill Class Code New";
-                                            end else begin
-                                                NSResourceSkillClass.Reset();
-                                                NSResourceSkillClass.setrange("NS_Resource No.", TimesSheetCustLine2."NS_Resource No.");
-                                                NSResourceSkillClass.setrange(NS_Default, true);
-                                                if NSResourceSkillClass.FindFirst then begin
-                                                    if TimesSheetCustLine2."NS_Skill Code New" = '' then
-                                                        TimesSheetCustLine2."NS_Skill Code New" := NSResourceSkillClass."NS_Skill Class Code";
-                                                end else begin
-                                                    NSJobResourcePrice.Reset();
-                                                    NSJobResourcePrice.SetRange(Type, NSJobResourcePrice.Type::Resource);
-                                                    NSJobResourcePrice.Setfilter("Job No.", '%1', TimesSheetCustLine2."NS_Job No.");
-                                                    NSJobResourcePrice.SetFilter(code, '%1', TimesSheetCustLine2."NS_Resource No.");
-                                                    if PAGE.RUNMODAL(0, NSJobResourcePrice) = ACTION::LookupOK then
-                                                        TimesSheetCustLine2."NS_Skill Code New" := NSJobResourcePrice."NS_Skill Class Code New";
-                                                end;
-                                            end;
-                                        end;
-                                    end;
-                                end;
-                            end else begin
-                                //PE-158.AS.1.0 04SEPT2023 START
-                                if ResRec.Get(TimesSheetCustLine2."NS_Resource No.") then begin
-                                    TimesSheetCustLine2."NS_Skill Code New" := ResRec."NS_Skill Class Code";
-                                end;
-                                //PE-158.AS.1.0 04SEPT2023 END
-                            end;
-
+                            JobResourcePrice.Reset();
+                            JobResourcePrice.SetRange(Type, JobResourcePrice.Type::Resource);
+                            JobResourcePrice.Setfilter("Job No.", '%1', jobNoFilter);
+                            //JobResourcePrice.SetFilter("Job Task No.", '%1', jobtaskNofilter);  //PRJ-924.JS.1.0 17Sep2021 line commented
+                            JobResourcePrice.SetFilter(code, '%1', TimesSheetCustLine2."NS_Resource No.");
+                            if JobResourcePrice.FindFirst() then
+                                TimesSheetCustLine2."NS_Skill Code" := JobResourcePrice."NS_Skill Class Code";
                             // ResourceSkils.Reset();
                             // ResourceSkils.SetRange("No.", resourceRec."No.");
                             // IF ResourceSkils.FindFirst() then
                             //     TimesSheetCustLine2."NS_Skill Code" := ResourceSkils."Skill Code";
                             //PRJ-841|842.JS.1.0 20Aug2021-End
-                            if ExitTimesSheetCustLine(NS_TimesheetHdrCustom."NS_No.", CrewLine."NS_Resource No.", TimesSheetCustLine2."NS_Working Date") then begin  //PRJ-1242.NK.1.0 16Mar2022
-                                TimesSheetCustLine2.INSERT(true);
-                                InsertCount += 1;
-                            end; //PRJ-1242.NK.1.0 16Mar2022
+                            TimesSheetCustLine2.INSERT(true);
+                            InsertCount += 1;
                         until CrewLine.NEXT() = 0;
 
                     Commit();
-                    //PRJ-1452.GK.1.0 13June2022 start
-                    TimesSheetCustLine3.RESET();
-                    TimesSheetCustLine3.SETRANGE("NS_TimeSheetNo.", NS_TimesheetHdrCustom."NS_No.");
-                    TimesSheetCustLine3.SetFilter("NS_Lead Person", '<>%1', '');
-                    if TimesSheetCustLine3.FindFirst() then
-                        if resourceRec.Get(TimesSheetCustLine3."NS_Lead Person") then begin
-                            NS_TimesheetHdrCustom."NS_Time Sheet Owner User ID" := resourceRec."Time Sheet Owner User ID";
-                        end;
-                    //PRJ-1452.GK.1.0 13June2022 end
+
                     NS_TimesheetHdrCustom."NS_Crew code" := CrewNo;
                     NS_TimesheetHdrCustom."NS_Job No." := jobNoFilter;
                     NS_TimesheetHdrCustom."NS_Job Task No." := jobtaskNofilter;
@@ -403,8 +294,6 @@ report 14021390 "NS_CopyCrew to CustomTimesheet"
         TimesSheetCustLine1: Record NS_TimeSheetLineCustom;
         TimesSheetCustLine2: Record NS_TimeSheetLineCustom;
         TimesSheetCustLine3: Record NS_TimeSheetLineCustom;
-        NSJobResourcePrice: Record "Job Resource Price";  //PE-274.JS.1.0 29APR2024
-        NSResourceSkillClass: Record "NS_ResourceSkillClass";   //PE-274.JS.1.0 29APR2024
         NoOfPeriods: Integer;
         NextLineNo: Integer;
         InsertCount: Integer;
@@ -438,26 +327,5 @@ report 14021390 "NS_CopyCrew to CustomTimesheet"
         TSNOSentIn := TSNO;
     end;
 
-    //PRJ-1242.NK.1.0 16Mar2022 Start
-    procedure ExitTimesSheetCustLine(Var NSNo: code[20]; ResourceNo: Code[20]; WorkDate: Date): Boolean;
-    var
-        TimesSheetCustLine: Record NS_TimeSheetLineCustom;
-    //TimesheetPage: page "Manager Time Sheet";
-    begin
-        TimesSheetCustLine.Reset();
-        TimesSheetCustLine.SetRange("NS_TimeSheetNo.", NSNo);
-        TimesSheetCustLine.SetRange("NS_Job No.", jobNoFilter);
-        TimesSheetCustLine.SetRange("NS_Crew code", CrewNo);
-        TimesSheetCustLine.SetRange("NS_Resource No.", ResourceNo);
-        TimesSheetCustLine.SetRange("NS_Work Type Code", WorkTypeFilter);
-        TimesSheetCustLine.SetRange("NS_Job Task No.", jobtaskNofilter);
-        TimesSheetCustLine.SetRange("NS_Working Date", WorkDate);
-        TimesSheetCustLine.SetRange("NS_Segment Code", JobSegment);
-        if TimesSheetCustLine.IsEmpty then
-            exit(true)
-        else
-            exit(false);
-    end;
-    //PRJ-1242.NK.1.0 16Mar2022 End
 }
 

@@ -18,11 +18,7 @@ report 14021179 "NS_Percentage of Completion"
     //CTSI-220.MS.1.0 added new req.filter of glob dim 2 and save value
     //PRJ-831.AS.1.0 12OCT2021 Replaced Job Table field Gen Bus Posting Grp with Gen Bus Posting Grp New
     //PRJ-1018.JS.1.0  26Oct2021  | Inilize Variable
-    //PRJ-1056.JS.1.0 24Nov2021 | Change code for To Date Estimated value
-    //PRJ-1454.NK.1.0 06Jul2022 | Added Code
-    //PE-141.AS.1.0 16AUG2023 Done change in layout to Add comp logo, user id, timedate, page
-    //PE-123.Nk.1.0 01Sep2023 | in layout added Backlog column
-    //PE-317 AT.1.0 25June2024 | Change in layout
+
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSPercentage of Completion.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -48,17 +44,6 @@ report 14021179 "NS_Percentage of Completion"
             column(CompanyInformation_Name; CompanyInformation.Name)
             {
             }
-            //PE-141.AS.1.0 16AUG2023 start
-            column(CompanyInformationPic; CompanyInformation.Picture) { }
-            column(CompanyInformationAdd; CompanyInformation.Address) { }
-            column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-            column(CompanyInformationcity; CompanyInformation.City) { }
-            column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-            column(CompanyInformationpost; CompanyInformation."Post Code") { }
-            column(CompanyInformationCountry; CompanyInformation.County) { }
-            column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-            column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }//PE-141.AS.1.0 24AUG2023
-            //PE-141.AS.1.0 16AUG2023 end
             column(ShowJobSummaries; ShowJobSummaries)
             {
             }
@@ -287,12 +272,8 @@ report 14021179 "NS_Percentage of Completion"
                             CurrReport.skip;
                     end;
                     //CTSI-202.AM.1.0 - end
-
-                    //PRJ-1544.AS.1.0 start Comment
-                    // if ("NS_Revenue Recognized" = true) then
-                    //     CurrReport.skip;
-                    //PRJ-1544.AS.1.0 end Comment
-
+                    if ("NS_Revenue Recognized" = true) then
+                        CurrReport.skip;
                     JobRecRef.SETPOSITION(Job.GETPOSITION);
 
                     if DoNotShowSubLevels and ("NS_Sub-Level to Job No." > '') then
@@ -365,7 +346,6 @@ report 14021179 "NS_Percentage of Completion"
 
                             SLJobs.RESET;
                             SLJobs.SETRANGE("NS_Sub-Level to Job No.", Job."No.");
-                            SLJobs.SetFilter(Status, Job.GetFilter(Status));//PRJ-1544.AS.1.0 Add code 12AUG2022
                             if JobSetupRecord."NS_GBPG for Job Forecast" > '' then//PRJ-585.AS.2.0 12APRIL2021
                                                                                   //SLJobs.SetFilter("NS_Gen. Bus. Posting Group", JobsetupRec."NS_GBPG for Job Forecast");//PRJ-585.AS.2.0 12APRIL2021 //PRJ-831.AS.1.0 12OCT2021 Comment old
                                 SLJobs.SetFilter("NS_Gen. Bus. Posting Group New", JobsetupRec."NS_GBPG for Job Forecast");//PRJ-585.AS.2.0 12APRIL2021 //PRJ-831.AS.1.0 12OCT2021 Add New
@@ -579,7 +559,6 @@ report 14021179 "NS_Percentage of Completion"
                     field(UseJobForecastWorksheet; UseJobForecastWorksheet)
                     {
                         Caption = 'Use Job Forecast Worksheet';
-                        ToolTip = 'Check this boolean if you want to see the Job Forecast Worksheet calculations in the report'; //PRJCTPR-127.DK.1.0 24june2023
                         ApplicationArea = All;
 
                         trigger OnValidate();
@@ -613,13 +592,11 @@ report 14021179 "NS_Percentage of Completion"
                     field(ShowJobSummaries; ShowJobSummaries)
                     {
                         Caption = 'Show Job Summaries';
-                        ToolTip = 'If this boolean is checked then a summary of Job will be shown in the report';//PRJCTPR-127.DK.1.0 24june2023
                         ApplicationArea = All;
                     }
                     field(ShowReportSummary; ShowReportSummary)
                     {
                         Caption = 'Show Report Summary';
-                        ToolTip = 'If this boolean is checked then a summary of Job will be shown on the basis of a Pie Chart'; //PRJCTPR-127.DK.1.0 24june2023
                         ApplicationArea = All;
                     }
                     //CTSI-121.N.S.1.0 18Aug2020 Start
@@ -675,39 +652,8 @@ report 14021179 "NS_Percentage of Completion"
     end;
 
     trigger OnPreReport();
-    var
-        JobsSetup: Record "Jobs Setup"; //PRJ-1571.NK.1.0 25Aug2022
-        ApoSetup: Record NS_APOSetup; //PRJ-1571.NK.1.0 25Aug2022
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.AS.1.0 16AUG2023
-
-        //PE-141.AS.1.0 start 24Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.AS.1.0 start 24Aug2023
-
         //CTSI-202.AM.1.0 Start
         JobsetupRec.Get;
         Clear(GBPGValTxt);
@@ -725,22 +671,6 @@ report 14021179 "NS_Percentage of Completion"
                 else
                     if (ManagerValue = '') and (ResponsiblePerson = '') then
                         JobFilter := Job.GETFILTERS;
-        //PRJ-1571.NK.1.0 25Aug2022 Start
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then begin
-            TextActivity := ApoSetup."Activity Code" + ' Filter';
-            TextProcess := ApoSetup."Process Code" + ' Filter';
-            TextOperation := ApoSetup."Operation Code" + ' Filter';
-        end else begin
-            TextActivity := 'Activity Filter';
-            TextProcess := 'Process Filter';
-            TextOperation := 'Operation Filter';
-        end;
-        JobFilter := ReplaceString(JobFilter, 'Activity Filter', TextActivity);
-        JobFilter := ReplaceString(JobFilter, 'Process Filter', TextProcess);
-        JobFilter := ReplaceString(JobFilter, 'Operation Filter', TextOperation);
-        //PRJ-1571.NK.1.0 25Aug2022 End
         //CTSI-121.N.S.1.0 19Aug2020 start Filtervalue print
         // JobFilter := Job.GETFILTERS;CTSI-121.N.S.1.0 19Aug2020 comment
 
@@ -768,15 +698,6 @@ report 14021179 "NS_Percentage of Completion"
 
     var
         CompanyInformation: Record "Company Information";
-        //PE-141.AS.1.0 start 24Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.AS.1.0 24Aug2023 
         JobTable: Record Job;//PRJ-585.AS.2.0 12APRIL2021
         JobSetupRecord: Record "Jobs Setup";//PRJ-585.AS.2.0 12APRIL2021
         PrintCostEstimateSummDetails: Decimal;//PRJ-585.AS.1.0
@@ -901,10 +822,7 @@ report 14021179 "NS_Percentage of Completion"
         ManagerValue: Code[20];//CTSI-121.N.S.1.0 18Aug2020;
         ResponsiblePerson: Code[20];//CTSI-121.N.S.1.0 18Aug2020;
         DateFilter: text;//CTSI-284;
-        MaxDate: Date;//CTSI-284;
-        TextActivity: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TextProcess: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TextOperation: Text; //PRJ-1571.NK.1.0 25Aug2022        
+        MaxDate: Date;//CTSI-284;        
 
     procedure FindUsageCost(Job: Record Job) Usage: Decimal;
     begin
@@ -1105,22 +1023,14 @@ report 14021179 "NS_Percentage of Completion"
     end;
 
     procedure ForecastedCompletedCost(Job: Record Job; Worksheet: Boolean; Manual: Boolean; var BudgetedPrice: Decimal; var ActualCost: Decimal; var ActualBillings: Decimal; var CostEstimate: Decimal; var Source: Text[1]);
-    var
-        JobSetup: Record "Jobs Setup"; //PRJ-1454.NK.1.0 06Jul2022
     begin
         with Job do begin
             Job.COPYFILTERS(JobFilters);
 
             //Get budget values
-            Job.COPYFILTER("NS_Date Filter", Job."Posting Date Filter");
-            Job.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
-            //PRJ-1454.NK.1.0 06Jul2022 Start
-            JobSetup.Get();
-            if JobSetup."NS_Enab. Budg.on Contract Date" then
-                BudgetedPrice := FindContDaseBaseAmt(Job)
-            else
-                //PRJ-1454.NK.1.0 06Jul2022 End
-                BudgetedPrice := Job."NS_Budgeted Price (LCY)";
+            COPYFILTER("NS_Date Filter", Job."Posting Date Filter");
+            CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
+            BudgetedPrice := "NS_Budgeted Price (LCY)";
 
             //Get actual values
             ActualCost := FindUsageCost(Job);
@@ -1141,8 +1051,7 @@ report 14021179 "NS_Percentage of Completion"
             case true of
                 Worksheet:
                     begin                             // Using the Cost To Complete Worksheet
-                        //CostEstimate := JobForecast.NS_ForecastedCompletedAmt(2, Job."No.", '', Job.GETFILTER("NS_Date Filter")); //PRJ-1056.JS.1.0 24Nov2021
-                        CostEstimate := JobForecast.NS_ForecastedCompletedAmtPOC(2, Job."No.", '', Job.GETFILTER("NS_Date Filter"));//PRJ-1056
+                        CostEstimate := JobForecast.ForecastedCompletedAmt(2, Job."No.", '', Job.GETFILTER("NS_Date Filter"));
                         //CostEstimate := JobForecast.ForeCostAtCompFromWorksheet(Job."No.",'',Job.GETFILTER("Date Filter"));
                         Source := WorksheetCode;
                         if Manual and  // If Manual percent is available AND
@@ -1176,9 +1085,9 @@ report 14021179 "NS_Percentage of Completion"
                     end;
 
                 else begin                                         // Neither the Worksheet nor the Manual percent is being used
-                    CostEstimate := Job."NS_Budgeted Cost (LCY)";
-                    Source := CalculatedCode;
-                end;
+                        CostEstimate := Job."NS_Budgeted Cost (LCY)";
+                        Source := CalculatedCode;
+                    end;
             end;
         end;
     end;
@@ -1210,7 +1119,6 @@ report 14021179 "NS_Percentage of Completion"
             RESET;
             SETCURRENTKEY("NS_Sub-Level to Job No.");
             SETRANGE("NS_Sub-Level to Job No.", ParentJob."No.");
-            SetFilter(Status, Job.GetFilter(Status));//PRJ-1544.AS.1.0 Add code 12AUG2022
             //CTSI-202.AM.1.0 start
             SetRange("NS_Exclude from Job Forecast", false);
             if GBPGValTxt > '' then
@@ -1243,51 +1151,4 @@ report 14021179 "NS_Percentage of Completion"
                 until NEXT = 0;
         end;
     end;
-
-    //PRJ-1454.NK.1.0 06Jul2022 Start
-    procedure FindContDaseBaseAmt(Job: Record Job) ContAmt: Decimal;
-    var
-        JobPlannLine: Record "Job Planning Line";
-    begin
-        ContAmt := 0;
-        Job.COPYFILTERS(JobFilters);
-        JobPlannLine.RESET();
-        JobPlannLine.SETRANGE("Job No.", Job."No.");
-        JobPlannLine.SetFilter("Line Type", '%1|%2', JobPlannLine."Line Type"::Billable, JobPlannLine."Line Type"::"Both Budget and Billable");
-        JobPlannLine.SETFILTER("Job Task No.", job.GetFilter("NS_Job Task No. Filter"));
-        JobPlannLine.SetFilter("NS_Revenue Category", Job.GetFilter("NS_Revenue Category Filter"));
-        //PE-308.DK.1.0 13JUNE2024 Start
-        //JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_Type Filter"));
-        JobPlannLine.SETFILTER(Type, Job.GetFilter("NS_TypeEnumFilter"));
-        //PE-308.DK.1.0 13JUNE2024 END
-        if Job.GetFilter("Posting Date Filter") <> '' then //PRJ-1554.NK.1.0 20Sep2022 
-            JobPlannLine.SETFILTER("NS_Contract Forecast Date", Job.GetFilter("Posting Date Filter"));
-        if Job.GetFilter("NS_Date Filter") <> '' then //PRJ-1554.NK.1.0 20Sep2022 
-            JobPlannLine.SETFILTER("NS_Contract Forecast Date", Job.GetFilter("NS_Date Filter")); //PRJ-1554.NK.1.0 20Sep2022 
-        JobPlannLine.SETFILTER(NS_Adjustment, Job.GetFilter("NS_Adjustment Filter"));
-        JobPlannLine.SETFILTER("NS_Shortcut Dimension 1 Code", Job.GetFilter("NS_Global Dimension 1 Filter"));
-        JobPlannLine.SETFILTER("NS_Shortcut Dimension 2 Code", Job.GetFilter("NS_Global Dimension 2 Filter"));
-        JobPlannLine.SETFILTER("NS_Retention Ledger Code", Job.getfilter("NS_Retention Ledger Filter"));
-        if JobPlannLine.FINDSET() then
-            repeat
-                ContAmt := ContAmt + JobPlannLine."Total Price (LCY)";
-            until JobPlannLine.NEXT() = 0;
-        exit(ContAmt);
-    end;
-    //PRJ-1454.NK.1.0 06Jul2022 End
-
-    //PRJ-1571.NK.1.0 25Aug2022 Start
-    procedure ReplaceString(OldString: Text; FindWhat: Text; ReplaceWith: Text) NewString: Text;
-    var
-        FindPos: Integer;
-    begin
-        FindPos := STRPOS(OldString, FindWhat);
-        WHILE FindPos > 0 DO BEGIN
-            NewString += DELSTR(OldString, FindPos) + ReplaceWith;
-            OldString := COPYSTR(OldString, FindPos + STRLEN(FindWhat));
-            FindPos := STRPOS(OldString, FindWhat);
-        END;
-        NewString += OldString;
-    end;
-    //PRJ-1571.NK.1.0 25Aug2022 End
 }

@@ -10,7 +10,7 @@ page 14021440 "NS_Archived QuotePlanningLines"
     // +------------------------------------------------------------
     //PRJ-659.RS.1.0�18June21�|�NS_�should�be�removed�from�every�page�rest�mention�the�page�ID�and�Name.
     //PRJ-872.JS.1.0  13Sep2021
-    //PRJ-1221.JS,10 24FEB2022 | change code for SMTP setup
+
     AutoSplitKey = true;
     Caption = 'Archived Quote Planning Lines';
     DataCaptionExpression = NS_Caption();
@@ -251,7 +251,6 @@ page 14021440 "NS_Archived QuotePlanningLines"
                 {
                     ApplicationArea = All;
                     Visible = false;
-                    ToolTip = 'PP Shortcut Dimension 2 Code'; //PE-75.RM.1.0 23May2023 
                 }
                 field("Location Code"; Rec."NS_Location Code")
                 {
@@ -706,13 +705,8 @@ page 14021440 "NS_Archived QuotePlanningLines"
 
     trigger OnInit();
     var
-        //PRJ-1221.JS,10 24FEB2022 - start
-        //SMTPMailSetup: Record "SMTP Mail Setup";
-        NSEmailSetup: record "Email Account";
-        //MailManagement: Codeunit "Mail Management";
-        NSEmailAccount: Codeunit "Email Account";
-    //PRJ-1221.JS,10 24FEB2022 - end
-
+        SMTPMailSetup: Record "SMTP Mail Setup";
+        MailManagement: Codeunit "Mail Management";
     begin
         UnitCostEditable := true;
         LineAmountEditable := true;
@@ -732,10 +726,7 @@ page 14021440 "NS_Archived QuotePlanningLines"
 
         JobTaskNoVisible := true;
 
-        //PRJ-1221.JS.1.0 24FEB2022 - start
-        //CanSendToCalendar := MailManagement.IsSMTPEnabled and not SMTPMailSetup.ISEMPTY;  
-        CanSendToCalendar := NSEmailAccount.IsAnyAccountRegistered() and not NSEmailSetup.IsEmpty;
-        //PRJ-1221.JS.1.0 24FEB2022 - end
+        CanSendToCalendar := MailManagement.IsSMTPEnabled and not SMTPMailSetup.ISEMPTY;
         PP_SkillClassEditable := true;
     end;
 

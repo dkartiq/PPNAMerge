@@ -4,10 +4,9 @@ tableextension 14021127 NS_PurchInvLine extends "Purch. Inv. Line"
     //TM-10.AM.1.0 | Added Field.
     //PRJ-490.AM.1.0 | Added Fields
     //PRJ-817.JS.1.0�04Aug2021 | Add fields work unit and work unit of measure
-    //PRJ-939.JS.1.0 27Sep2021 | Add code
-    //PRJ-1015.JS.1.0 22Oct2021 | field Added
-
-    fields
+   //PRJ-939.JS.1.0 27Sep2021 | Add code
+  
+  fields
     {
 
         //Unsupported feature: Change OptionString on "Type(Field 5)". Please convert manually.
@@ -106,11 +105,6 @@ tableextension 14021127 NS_PurchInvLine extends "Purch. Inv. Line"
             Caption = 'JMP Details';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PRJCTPR-256.JS.1.0 14DEC2023 - Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Replaced by new field “JMP Details” with increased length 100 characters';
-            ObsoleteTag = 'Repleace in ProjectPro Upcomming release 23.0.XX.XXXX';
-            //PRJCTPR-256.JS.1.0 14DEC2023 - end 
         }
         field(14021409; "NS_Segment Code"; Code[20])
         {
@@ -172,8 +166,8 @@ tableextension 14021127 NS_PurchInvLine extends "Purch. Inv. Line"
             Editable = false;
         }
         //PRJ-817.JS.1.0�04Aug2021-end     
-
-        //PRJ-939.JS.1.0 27Sep2021 - start
+        
+         //PRJ-939.JS.1.0 27Sep2021 - start
         field(14021140; "NS_Retention Base Amount"; Decimal)
         {
             Caption = 'Retention Base Amount';
@@ -189,25 +183,7 @@ tableextension 14021127 NS_PurchInvLine extends "Purch. Inv. Line"
             editable = false;
         }
         //PRJ-939.JS.1.0 27Sep2021 - end     
-
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-        //PRJCTPR-256.JS.1.0 - Start
-        field(14021322; "NS_PPJMP Details"; Text[100])
-        {
-            Caption = 'JMP Details';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-256.JS.1.0 - end 
-
-
+   
     }
     keys
     {

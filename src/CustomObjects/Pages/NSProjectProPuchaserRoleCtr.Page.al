@@ -11,21 +11,13 @@ page 14021199 "NS_ProjectPro PuchaserRoleCtr"
 
     Caption = 'ProjectPro Purchaser Role Center';
     PageType = RoleCenter;
-    //PE-124.DK.1.0 17july2023 Start
-    ObsoleteReason = 'Because of Performance issue while loading the role centre page';  //PRJCTPR-235.JS.1.1 27JAN2023
-    ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-    ObsoleteState = Pending;
-    //PE-124.DK.1.0 17july2023 End
+
     layout
     {
         area(rolecenter)
         {
-            //PRJ-1188.GK.1.0 start
             group(Control1900724808)
             {
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'This Control will be no longer available in our upcoming build.';
                 part(Control1903710908; "NS_ProjectProManagerActivities")
                 {
                     ApplicationArea = All;
@@ -33,11 +25,6 @@ page 14021199 "NS_ProjectPro PuchaserRoleCtr"
                 part(Control1904926908; "NS_ProjectPro KPIs")
                 {
                     ApplicationArea = All;
-                    //PE-109.PS.1.0 16JUNE2023 START
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Because of Performance issue while loading the role centre page';  //PRJCTPR-235.JS.1.1 27JAN2023
-                    ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                    //PE-109.PS.1.0 16JUNE2023 END
                 }
                 systempart(Control1901420308; Outlook)
                 {
@@ -45,33 +32,8 @@ page 14021199 "NS_ProjectPro PuchaserRoleCtr"
                     Visible = false;
                 }
             }
-            part(Control1903710909; "NS_ProjectProManagerActivities")
-            {
-                ApplicationArea = All;
-            }
-            group(Control1900724711)
-            {
-
-                part(Control1904926910; "NS_ProjectPro KPIs")
-                {
-                    ApplicationArea = All;
-                    //PE-109.PS.1.0 16JUNE2023 START
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Because of Performance issue while loading the role centre page';  //PRJCTPR-235.JS.1.1 27JAN2023
-                    ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                    //PE-109.PS.1.0 16JUNE2023 END
-                }
-                systempart(Control1901420311; Outlook)
-                {
-                    ApplicationArea = All;
-                    Visible = false;
-                }
-            }
-            //PRJ-1188.GK.1.0 end
-
             group(Control1900724708)
             {
-
                 part(Control1903602108; "NS_ProjectPro My Jobs")
                 {
                     ApplicationArea = All;
