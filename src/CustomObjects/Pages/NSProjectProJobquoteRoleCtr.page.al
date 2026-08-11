@@ -25,11 +25,6 @@ page 14021349 "NS_Proj Pro Job Quote Role Ctr"
                 part(Control1904926908; "NS_ProjectPro KPIs")
                 {
                     ApplicationArea = All;
-                    //PE-109.PS.1.0 16JUNE2023 START
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Because of Performance issue while loading the role center page';
-                    ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                    //PE-109.PS.1.0 16JUNE2023 END
                 }
                 systempart(Control1901420308; Outlook)
                 {

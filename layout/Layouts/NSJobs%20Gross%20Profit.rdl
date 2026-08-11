@@ -44,7 +44,7 @@
                   <Width>5.00334cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>8.28695cm</Width>
+                  <Width>8.62209cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.8cm</Width>
@@ -56,10 +56,10 @@
                   <Width>1.8cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.41764cm</Width>
+                  <Width>1.0825cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.14831cm</Width>
+                  <Width>0.07938cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.07938cm</Width>
@@ -1010,7 +1010,7 @@
             <DataSetName>DataSet_Result</DataSetName>
             <Top>1.692cm</Top>
             <Height>2.11503cm</Height>
-            <Width>20.49438cm</Width>
+            <Width>20.42545cm</Width>
             <ZIndex>1</ZIndex>
             <Style />
           </Tablix>
@@ -1066,31 +1066,39 @@
       <Width>20.49438cm</Width>
       <Page>
         <PageHeader>
-          <Height>4.65676cm</Height>
+          <Height>1.692cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Image Name="Image1">
-              <Source>Database</Source>
-              <Value>=First(Fields!CompanyInformationPic.Value, "DataSet_Result")</Value>
-              <MIMEType>image/jpeg</MIMEType>
-              <Sizing>FitProportional</Sizing>
-              <Left>0.00993cm</Left>
-              <Height>1.76389cm</Height>
-              <Width>4.02801cm</Width>
+            <Textbox Name="CompanyInformation_Name1">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=ReportItems!CompanyInformation_Name.Value</Value>
+                      <Style>
+                        <FontSize>7pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.423cm</Top>
+              <Height>0.423cm</Height>
+              <Width>10.65cm</Width>
               <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
               </Style>
-            </Image>
+            </Textbox>
             <Textbox Name="CurrReport_PAGENOCaption1">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Page</Value>
+                      <Value>=ReportItems!CurrReport_PAGENOCaption.Value</Value>
                       <Style>
                         <FontSize>7pt</FontSize>
                       </Style>
@@ -1101,11 +1109,59 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.20776cm</Top>
-              <Left>19.2186cm</Left>
+              <Top>0.423cm</Top>
+              <Left>16.95cm</Left>
               <Height>0.423cm</Height>
               <Width>0.75cm</Width>
               <ZIndex>1</ZIndex>
+              <Style>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="Job_Gross_ProfitCaption1">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=ReportItems!Job_Gross_ProfitCaption.Value</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Height>0.423cm</Height>
+              <Width>10.65cm</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="TIME1">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=ReportItems!TIME.Value</Value>
+                      <Style>
+                        <FontSize>7pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Left>17.1cm</Left>
+              <Height>0.423cm</Height>
+              <Width>1.05cm</Width>
+              <ZIndex>3</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -1127,11 +1183,11 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.20776cm</Top>
-              <Left>19.9686cm</Left>
+              <Top>0.423cm</Top>
+              <Left>17.7cm</Left>
               <Height>0.423cm</Height>
               <Width>0.45cm</Width>
-              <ZIndex>2</ZIndex>
+              <ZIndex>4</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -1153,204 +1209,13 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.04678cm</Top>
-              <Left>14.87127cm</Left>
+              <Top>0.846cm</Top>
+              <Left>14.03604cm</Left>
               <Height>0.423cm</Height>
-              <Width>5.54733cm</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Textbox Name="Job_Gross_ProfitCaption1">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=ReportItems!Job_Gross_ProfitCaption.Value</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <Top>1.621in</Top>
-              <Left>0.00993cm</Left>
-              <Height>0.423cm</Height>
-              <Width>10.65cm</Width>
-              <ZIndex>4</ZIndex>
-              <Style>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Textbox Name="ReportCompanyName">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=First(Fields!CompanyInformation_Name.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <Top>1.83817cm</Top>
-              <Height>0.423cm</Height>
-              <Width>10.65455cm</Width>
+              <Width>4.11396cm</Width>
               <ZIndex>5</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox7">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!CompanyInformationAdd.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>0.90273in</Top>
-              <Left>0in</Left>
-              <Height>0.15278in</Height>
-              <Width>4.1947in</Width>
-              <ZIndex>6</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox11">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!NS_CompanyFullAddress.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>1.20273in</Top>
-              <Left>0in</Left>
-              <Height>0.15278in</Height>
-              <Width>4.1947in</Width>
-              <ZIndex>7</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox13">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>Phone No. - </Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=First(Fields!CompanyInformationPhone.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox9</rd:DefaultName>
-              <Top>1.35551in</Top>
-              <Left>0in</Left>
-              <Height>0.17778in</Height>
-              <Width>4.1947in</Width>
-              <ZIndex>8</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox14">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!CompanyInformationadd2.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.05551in</Top>
-              <Left>0.00179in</Left>
-              <Height>0.14722in</Height>
-              <Width>4.19291in</Width>
-              <ZIndex>9</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="ExecutionTimeTextBox">
@@ -1362,7 +1227,7 @@
                       <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontSize>7pt</FontSize>
-                        <Format>MM/dd/yyyy</Format>
+                        <Format>g</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -1371,15 +1236,11 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.22245in</Top>
-              <Left>17.0026cm</Left>
+              <Left>14.55cm</Left>
               <Height>0.423cm</Height>
-              <Width>3.416cm</Width>
-              <ZIndex>10</ZIndex>
+              <Width>2.4cm</Width>
+              <ZIndex>6</ZIndex>
               <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
@@ -1451,48 +1312,6 @@ End Function
         </Field>
         <Field Name="CompanyInformation_Name">
           <DataField>CompanyInformation_Name</DataField>
-        </Field>
-        <Field Name="CompanyInformation_Address">
-          <DataField>CompanyInformation_Address</DataField>
-        </Field>
-        <Field Name="CompanyInformation_Address_2">
-          <DataField>CompanyInformation_Address_2</DataField>
-        </Field>
-        <Field Name="CompanyInformation_City">
-          <DataField>CompanyInformation_City</DataField>
-        </Field>
-        <Field Name="CompanyInformation_State">
-          <DataField>CompanyInformation_State</DataField>
-        </Field>
-        <Field Name="CompanyInformation_StateZipCode">
-          <DataField>CompanyInformation_StateZipCode</DataField>
-        </Field>
-        <Field Name="CompanyInformationPic">
-          <DataField>CompanyInformationPic</DataField>
-        </Field>
-        <Field Name="CompanyInformationAdd">
-          <DataField>CompanyInformationAdd</DataField>
-        </Field>
-        <Field Name="CompanyInformationadd2">
-          <DataField>CompanyInformationadd2</DataField>
-        </Field>
-        <Field Name="CompanyInformationcity">
-          <DataField>CompanyInformationcity</DataField>
-        </Field>
-        <Field Name="CompanyInformationRegion">
-          <DataField>CompanyInformationRegion</DataField>
-        </Field>
-        <Field Name="CompanyInformationpost">
-          <DataField>CompanyInformationpost</DataField>
-        </Field>
-        <Field Name="CompanyInformationCountry">
-          <DataField>CompanyInformationCountry</DataField>
-        </Field>
-        <Field Name="CompanyInformationPhone">
-          <DataField>CompanyInformationPhone</DataField>
-        </Field>
-        <Field Name="NS_CompanyFullAddress">
-          <DataField>NS_CompanyFullAddress</DataField>
         </Field>
         <Field Name="Sub_LevelsText_">
           <DataField>Sub_LevelsText_</DataField>

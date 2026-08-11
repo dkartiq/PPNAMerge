@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Job_No_">
+          <DataField>Job_No_</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="STRSUBSTNO_Text000_Job__No___">
+          <DataField>STRSUBSTNO_Text000_Job__No___</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="Job_TABLECAPTION_____Filters______JobFilter">
+          <DataField>Job_TABLECAPTION_____Filters______JobFilter</DataField>
+        </Field>
+        <Field Name="Job__Description_2_">
+          <DataField>Job__Description_2_</DataField>
+        </Field>
+        <Field Name="Job_FIELDCAPTION__Ending_Date____________FORMAT_Job__Ending_Date__">
+          <DataField>Job_FIELDCAPTION__Ending_Date____________FORMAT_Job__Ending_Date__</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Job_FIELDCAPTION__Starting_Date____________FORMAT_Job__Starting_Date__">
+          <DataField>Job_FIELDCAPTION__Starting_Date____________FORMAT_Job__Starting_Date__</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Job_Sub_Levels_are_combined_Caption">
+          <DataField>Job_Sub_Levels_are_combined_Caption</DataField>
+        </Field>
+        <Field Name="Job_DescriptionCaption">
+          <DataField>Job_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="No_Caption">
+          <DataField>No_Caption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Actual_Material_QtyCaption">
+          <DataField>Actual_Material_QtyCaption</DataField>
+        </Field>
+        <Field Name="Budgeted_Material_QtyCaption">
+          <DataField>Budgeted_Material_QtyCaption</DataField>
+        </Field>
+        <Field Name="Qty_VarianceCaption">
+          <DataField>Qty_VarianceCaption</DataField>
+        </Field>
+        <Field Name="Qty_Percent_VarianceCaption">
+          <DataField>Qty_Percent_VarianceCaption</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Job_No__Caption">
+          <DataField>JobAnalysisBuffer__Job_No__Caption</DataField>
+        </Field>
+        <Field Name="PageHeader_Number">
+          <DataField>PageHeader_Number</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__No__">
+          <DataField>JobAnalysisBuffer__No__</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer_Description">
+          <DataField>JobAnalysisBuffer_Description</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Actual_Cost_Qty__">
+          <DataField>JobAnalysisBuffer__Actual_Cost_Qty__</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Actual_Cost_Qty__Format">
+          <DataField>JobAnalysisBuffer__Actual_Cost_Qty__Format</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Budgeted_Cost_Qty__">
+          <DataField>JobAnalysisBuffer__Budgeted_Cost_Qty__</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Budgeted_Cost_Qty__Format">
+          <DataField>JobAnalysisBuffer__Budgeted_Cost_Qty__Format</DataField>
+        </Field>
+        <Field Name="QtyVariance">
+          <DataField>QtyVariance</DataField>
+        </Field>
+        <Field Name="QtyVarianceFormat">
+          <DataField>QtyVarianceFormat</DataField>
+        </Field>
+        <Field Name="QtyVariancePct">
+          <DataField>QtyVariancePct</DataField>
+        </Field>
+        <Field Name="QtyVariancePctFormat">
+          <DataField>QtyVariancePctFormat</DataField>
+        </Field>
+        <Field Name="JobAnalysisBuffer__Job_No__">
+          <DataField>JobAnalysisBuffer__Job_No__</DataField>
+        </Field>
+        <Field Name="Integer_Number">
+          <DataField>Integer_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

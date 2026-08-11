@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Date_Filter">
+          <DataField>Date_Filter</DataField>
+        </Field>
+        <Field Name="Jobfilter">
+          <DataField>Jobfilter</DataField>
+        </Field>
+        <Field Name="PostingDate">
+          <DataField>PostingDate</DataField>
+        </Field>
+        <Field Name="No_">
+          <DataField>No_</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="EntryTypeLbl">
+          <DataField>EntryTypeLbl</DataField>
+        </Field>
+        <Field Name="CurrContractlbl">
+          <DataField>CurrContractlbl</DataField>
+        </Field>
+        <Field Name="CurrCostCompletionLbl">
+          <DataField>CurrCostCompletionLbl</DataField>
+        </Field>
+        <Field Name="ActualCostsTodateLbl">
+          <DataField>ActualCostsTodateLbl</DataField>
+        </Field>
+        <Field Name="PeriodCostsLbl">
+          <DataField>PeriodCostsLbl</DataField>
+        </Field>
+        <Field Name="POCLbl">
+          <DataField>POCLbl</DataField>
+        </Field>
+        <Field Name="CurrentGMLbl">
+          <DataField>CurrentGMLbl</DataField>
+        </Field>
+        <Field Name="GrossProfitLbl">
+          <DataField>GrossProfitLbl</DataField>
+        </Field>
+        <Field Name="GrossRevLbl">
+          <DataField>GrossRevLbl</DataField>
+        </Field>
+        <Field Name="NetProfitLbl">
+          <DataField>NetProfitLbl</DataField>
+        </Field>
+        <Field Name="NetRevenueLbl">
+          <DataField>NetRevenueLbl</DataField>
+        </Field>
+        <Field Name="PDate">
+          <DataField>PDate</DataField>
+        </Field>
+        <Field Name="EntryType">
+          <DataField>EntryType</DataField>
+        </Field>
+        <Field Name="CurrContract">
+          <DataField>CurrContract</DataField>
+        </Field>
+        <Field Name="CurrContractFormat">
+          <DataField>CurrContractFormat</DataField>
+        </Field>
+        <Field Name="CurrCostCompletion">
+          <DataField>CurrCostCompletion</DataField>
+        </Field>
+        <Field Name="CurrCostCompletionFormat">
+          <DataField>CurrCostCompletionFormat</DataField>
+        </Field>
+        <Field Name="NetProfit">
+          <DataField>NetProfit</DataField>
+        </Field>
+        <Field Name="NetProfitFormat">
+          <DataField>NetProfitFormat</DataField>
+        </Field>
+        <Field Name="NetRevenue">
+          <DataField>NetRevenue</DataField>
+        </Field>
+        <Field Name="NetRevenueFormat">
+          <DataField>NetRevenueFormat</DataField>
+        </Field>
+        <Field Name="GrossProfit">
+          <DataField>GrossProfit</DataField>
+        </Field>
+        <Field Name="GrossProfitFormat">
+          <DataField>GrossProfitFormat</DataField>
+        </Field>
+        <Field Name="GrossRev">
+          <DataField>GrossRev</DataField>
+        </Field>
+        <Field Name="GrossRevFormat">
+          <DataField>GrossRevFormat</DataField>
+        </Field>
+        <Field Name="POC">
+          <DataField>POC</DataField>
+        </Field>
+        <Field Name="POCFormat">
+          <DataField>POCFormat</DataField>
+        </Field>
+        <Field Name="CurrentGM">
+          <DataField>CurrentGM</DataField>
+        </Field>
+        <Field Name="CurrentGMFormat">
+          <DataField>CurrentGMFormat</DataField>
+        </Field>
+        <Field Name="PeriodCosts">
+          <DataField>PeriodCosts</DataField>
+        </Field>
+        <Field Name="PeriodCostsFormat">
+          <DataField>PeriodCostsFormat</DataField>
+        </Field>
+        <Field Name="ActualCostsTodate">
+          <DataField>ActualCostsTodate</DataField>
+        </Field>
+        <Field Name="ActualCostsTodateFormat">
+          <DataField>ActualCostsTodateFormat</DataField>
+        </Field>
+        <Field Name="BillingToDate">
+          <DataField>BillingToDate</DataField>
+        </Field>
+        <Field Name="BillingToDateFormat">
+          <DataField>BillingToDateFormat</DataField>
+        </Field>
+        <Field Name="Overbilling">
+          <DataField>Overbilling</DataField>
+        </Field>
+        <Field Name="OverbillingFormat">
+          <DataField>OverbillingFormat</DataField>
+        </Field>
+        <Field Name="Underbilling">
+          <DataField>Underbilling</DataField>
+        </Field>
+        <Field Name="UnderbillingFormat">
+          <DataField>UnderbillingFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

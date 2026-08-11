@@ -20,7 +20,7 @@ report 14021212 "NS_Export Electronic Payments"
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSExport Electronic Payments.rdl';
 
-    Caption = 'Job Export Electronic Payments';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Export Electronic Payments';
 
     dataset
     {

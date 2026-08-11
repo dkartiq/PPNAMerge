@@ -9,7 +9,6 @@ report 14021169 "NS_Get Job Usage"
     // +  - www.gemko.com
 
     //SMPL - Renamed report from - Get Job Usage to NS_Get Job Usage
-    //PRJCTPR-197 Dk.1.0 31March2023 | Job No. Rewrite Issue.
 
     Caption = 'Get Job Usage';
     Permissions = TableData "Job Ledger Entry" = rimd;
@@ -344,16 +343,10 @@ report 14021169 "NS_Get Job Usage"
                                            JobLedgEntry."NS_Activity Code",
                                            JobLedgEntry."NS_Operation Code") then
                             ;
-                        //PRJCTPR-197 Dk.1.0 Start
-                        // if JobPostingGr.GET(Job."NS_Job Type") then begin
-                        //     JobPostingGr.TESTFIELD("Recognized Sales Account");
-                        //     SalesLine."No." := JobPostingGr."Recognized Sales Account";
-                        // end;
-                        if JobPostingGr.GET(Job."NS_Job Type New") then begin
+                        if JobPostingGr.GET(Job."NS_Job Type") then begin
                             JobPostingGr.TESTFIELD("Recognized Sales Account");
                             SalesLine."No." := JobPostingGr."Recognized Sales Account";
                         end;
-                        //PRJCTPR-197 Dk.1.0 End
                     end else
                         SalesLine."No." := "No.";
                     SalesLine."Document Type" := CurrentSalesLine."Document Type";

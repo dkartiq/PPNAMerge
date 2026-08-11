@@ -12,7 +12,6 @@ report 14021176 "NS_Job Ledger"
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-301.N.S.1.0 24sep 2020 Change varible length
     //PRJ-410.AM.1.0 10OCT2020 | Made Changes in layout to avoid printing alternate blank pages.
-    //PRJCTPR-213.HS.1.0 23Oct2023 | Done changes in RDL To increase column length of entry type,type, category code and removed time from header 
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSJob Ledger.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -127,10 +126,7 @@ report 14021176 "NS_Job Ledger"
             }
             dataitem("Job Ledger Entry"; "Job Ledger Entry")
             {
-                //PE-308.DK.1.0 13JUNE2024 Start
-                //DataItemLink = "Job No." = FIELD("No."), "Posting Date" = FIELD("NS_Date Filter"), Type = FIELD("NS_Type Filter"), "NS_Activity Code" = FIELD("NS_Activity Filter"), "NS_Process Code" = FIELD("NS_Process Filter"), "NS_Operation Code" = FIELD("NS_Operation Filter"), "Resource Group No." = FIELD("Resource Gr. Filter");
-                DataItemLink = "Job No." = FIELD("No."), "Posting Date" = FIELD("NS_Date Filter"), Type = FIELD("NS_TypeEnumFilter"), "NS_Activity Code" = FIELD("NS_Activity Filter"), "NS_Process Code" = FIELD("NS_Process Filter"), "NS_Operation Code" = FIELD("NS_Operation Filter"), "Resource Group No." = FIELD("Resource Gr. Filter");
-                //PE-308.DK.1.0 13JUNE2024 END
+                DataItemLink = "Job No." = FIELD("No."), "Posting Date" = FIELD("NS_Date Filter"), Type = FIELD("NS_Type Filter"), "NS_Activity Code" = FIELD("NS_Activity Filter"), "NS_Process Code" = FIELD("NS_Process Filter"), "NS_Operation Code" = FIELD("NS_Operation Filter"), "Resource Group No." = FIELD("Resource Gr. Filter");
                 DataItemTableView = SORTING("Job No.", "Posting Date") WHERE("Entry Type" = FILTER(< NS_Payment));
                 RequestFilterFields = "Entry Type", "NS_Activity Code";
                 RequestFilterHeading = 'Job Ledger Entry';

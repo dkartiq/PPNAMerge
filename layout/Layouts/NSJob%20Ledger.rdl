@@ -22,10 +22,10 @@
                   <Width>1.56248cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.09937cm</Width>
+                  <Width>0.5875cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.48718cm</Width>
+                  <Width>1.2cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.35001cm</Width>
@@ -43,7 +43,7 @@
                   <Width>2.99999cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.39536cm</Width>
+                  <Width>0.59103cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.12146cm</Width>
@@ -519,6 +519,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -2346,7 +2347,7 @@
             <DataSetName>DataSet_Result</DataSetName>
             <Top>1.269cm</Top>
             <Height>2.53804cm</Height>
-            <Width>26.62487cm</Width>
+            <Width>25.02146cm</Width>
             <Style />
           </Tablix>
           <Textbox Name="Job_Ledger_Entry__TABLECAPTION__________JobLedgerEntryFilter">
@@ -2398,7 +2399,7 @@
         <Height>3.80704cm</Height>
         <Style />
       </Body>
-      <Width>26.62487cm</Width>
+      <Width>25.02146cm</Width>
       <Page>
         <PageHeader>
           <Height>1.692cm</Height>
@@ -2445,7 +2446,7 @@
                 </Paragraph>
               </Paragraphs>
               <Top>0.423cm</Top>
-              <Left>23.13338cm</Left>
+              <Left>22.4125cm</Left>
               <Height>0.423cm</Height>
               <Width>0.75cm</Width>
               <ZIndex>1</ZIndex>
@@ -2485,7 +2486,6 @@
                       <Value>=ReportItems!TIME.Value</Value>
                       <Style>
                         <FontSize>7pt</FontSize>
-                        <Format>d</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2494,9 +2494,9 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Left>22.98338cm</Left>
+              <Left>22.5625cm</Left>
               <Height>0.423cm</Height>
-              <Width>1.35001cm</Width>
+              <Width>1.05cm</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -2520,7 +2520,7 @@
                 </Paragraph>
               </Paragraphs>
               <Top>0.423cm</Top>
-              <Left>23.88338cm</Left>
+              <Left>23.1625cm</Left>
               <Height>0.423cm</Height>
               <Width>0.45cm</Width>
               <ZIndex>4</ZIndex>
@@ -2546,7 +2546,7 @@
                 </Paragraph>
               </Paragraphs>
               <Top>0.846cm</Top>
-              <Left>20.32526cm</Left>
+              <Left>19.60438cm</Left>
               <Height>0.423cm</Height>
               <Width>4.00813cm</Width>
               <ZIndex>5</ZIndex>
@@ -2572,9 +2572,9 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Left>20.54287cm</Left>
+              <Left>20.3125cm</Left>
               <Height>0.423cm</Height>
-              <Width>2.40001cm</Width>
+              <Width>2.1cm</Width>
               <ZIndex>6</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>

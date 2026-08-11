@@ -1,5 +1,6 @@
 page 14021363 "NS_ProjectPro ManagerActivity3"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -91,12 +92,12 @@ page 14021363 "NS_ProjectPro ManagerActivity3"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings
-                JobCalc.NS_CalculateActualCostToDate(JobCalc, ActualCostToDate, true);
-                JobCalc.CalculateInvoiceBilled(JobCalc, InvoiceBilled, true);
+                JobCalc.NS_CalculateActualCostToDate(JobCalc, ActualCostToDate, true, WorkDate());
+                JobCalc.CalculateInvoiceBilled(JobCalc, InvoiceBilled, true, WorkDate());
                 if ActualCostToDate[3] > InvoiceBilled[3] then
                     "NS_Job CostExceedsContBillings" += 1;
 
@@ -139,10 +140,7 @@ page 14021363 "NS_ProjectPro ManagerActivity3"
     end;
 
     trigger OnOpenPage();
-    var
-        NSConfPersonalizationMgt: Codeunit "Conf./Personalization Mgt."; //PRJ-1686.GK.4.0 18Dec2022
     begin
-        NSConfPersonalizationMgt.RaiseOnOpenRoleCenterEvent();//PRJ-1686.GK.4.0 18Dec2022
         RESET();
         if not GET() then begin
             INIT();

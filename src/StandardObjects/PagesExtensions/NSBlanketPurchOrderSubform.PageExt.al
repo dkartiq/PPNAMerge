@@ -1,8 +1,7 @@
 pageextension 14021262 NS_BlanketPurchOrderSubForm extends "Blanket Purchase Order Subform"
 {
     // version NAVW111.00.00.23019,NAVNA11.00.00.23019,NSNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
 

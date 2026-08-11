@@ -2,7 +2,6 @@ tableextension 14021224 NS_PurchaseLineArchive extends "Purchase Line Archive"
 {
     // version NAVW111.00,NAVNA11.00,PPNA11.00
     //PRJ-817.JS.1.0�04Aug2021 | Add fields work unit and work unit of measure
-    //PRJ-1015.JS.1.0 22Oct2021 | Add field
 
     fields
     {
@@ -155,15 +154,6 @@ tableextension 14021224 NS_PurchaseLineArchive extends "Purchase Line Archive"
             Editable = false;
         }
         //PRJ-817.JS.1.0�04Aug2021-end
-
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
 
     }
 

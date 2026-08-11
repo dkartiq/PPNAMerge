@@ -10,7 +10,6 @@ report 14021172 "NS_Job Detail by Task"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //CTSI-158.AS.1.0 21SEPT2020 Increased lengths of Text
-    //PRJ-1571.NK.1.0 18Aug2022 Add Code
     DefaultLayout = RDLC;
     Caption = 'Job Detail by Task';
     RDLCLayout = './Layouts/NSJob Detail by Task.rdl';
@@ -311,7 +310,7 @@ report 14021172 "NS_Job Detail by Task"
                     {
                         Caption = 'Show Processes';
                         ApplicationArea = All;
-                        CaptionClass = '50995,1,0'; //PRJ-1571.NK.1.0 18Aug2022
+
                         trigger OnValidate();
                         begin
                             if not ShowProcesses then
@@ -322,7 +321,7 @@ report 14021172 "NS_Job Detail by Task"
                     {
                         Caption = 'Show Operations';
                         ApplicationArea = All;
-                        CaptionClass = '50995,2,0'; //PRJ-1571.NK.1.0 18Aug2022
+
                         trigger OnValidate();
                         begin
                             if ShowOperations then
@@ -348,33 +347,10 @@ report 14021172 "NS_Job Detail by Task"
     end;
 
     trigger OnPreReport();
-    var
-        JobsSetup: Record "Jobs Setup"; //PRJ-1571.NK.1.0 22Aug2022
-        ApoSetup: Record NS_APOSetup; //PRJ-1571.NK.1.0 22Aug2022
     begin
         JobFilters := Job.GETFILTERS;
         "Sub-LevelsText" := STRSUBSTNO(Text14021105, ' ' + notLbl + ' ');
         ;
-        //PRJ-1571.NK.1.0 22Aug2022 Start
-        Text14021101 := '';
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then begin
-            Text14021101 := ApoSetup."Activity Code" + ' %1';
-            Text14021102 := ApoSetup."Process Code" + ' %1';
-            Text14021103 := ApoSetup."Operation Code" + ' %1';
-            TotalOperationLbl := 'Total ' + ApoSetup."Operation Code";
-            TotalProcessLbl := 'Total ' + ApoSetup."Process Code";
-            TotalActivityLbl := 'Total ' + ApoSetup."Activity Code";
-        end else begin
-            Text14021101 := 'Activity  %1';
-            Text14021102 := 'Process %1';
-            Text14021103 := 'Operation %1';
-            TotalOperationLbl := 'Total Operation';
-            TotalProcessLbl := 'Total Process';
-            TotalActivityLbl := 'Total Activity';
-        end;
-        //PRJ-1571.NK.1.0 22Aug2022 End
     end;
 
     var
@@ -387,12 +363,9 @@ report 14021172 "NS_Job Detail by Task"
         ShowProcesses: Boolean;
         ShowOperations: Boolean;
         Text14021100: Label 'Job: %1';
-        // Text14021101: Label 'Activity  %1'; //PRJ-1571.NK.1.0 22Aug2022 Block
-        // Text14021102: Label 'Process %1'; //PRJ-1571.NK.1.0 22Aug2022 Block
-        // Text14021103: Label 'Operation %1'; //PRJ-1571.NK.1.0 22Aug2022 Block
-        Text14021101: Text; //PRJ-1571.NK.1.0 22Aug2022 
-        Text14021102: Text; //PRJ-1571.NK.1.0 22Aug2022 
-        Text14021103: Text; //PRJ-1571.NK.1.0 22Aug2022
+        Text14021101: Label 'Activity  %1';
+        Text14021102: Label 'Process %1';
+        Text14021103: Label 'Operation %1';
         Text14021104: Label 'Totals for Job %1 - %2';
         Text14021105: Label 'Sub-Levels are%1 included in jobs';
         Text14021106: Label '%1 thru %2';
@@ -417,12 +390,9 @@ report 14021172 "NS_Job Detail by Task"
         UnitCostLbl: Label 'Unit Cost';
         AmountLbl: Label 'Amount';
         TotalJobCategoryLbl: Label 'Total Job Category';
-        //TotalOperationLbl: Label 'Total Operation'; //PRJ-1571.NK.1.0 25Aug2022 Block
-        //TotalProcessLbl: Label 'Total Process'; //PRJ-1571.NK.1.0 25Aug2022 Block
-        //TotalActivityLbl: Label 'Total Activity'; //PRJ-1571.NK.1.0 25Aug2022 Block
-        TotalOperationLbl: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TotalProcessLbl: text; //PRJ-1571.NK.1.0 25Aug2022 
-        TotalActivityLbl: Text; //PRJ-1571.NK.1.0 25Aug2022
+        TotalOperationLbl: Label 'Total Operation';
+        TotalProcessLbl: Label 'Total Process';
+        TotalActivityLbl: Label 'Total Activity';
         TotalRevenueLbl: Label 'Total Revenue';
         TotalExpenseLbl: Label 'Total Expense';
         TotalNetDifferenceLbl: Label 'Total Net Difference';

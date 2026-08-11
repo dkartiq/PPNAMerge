@@ -143,8 +143,7 @@ page 14021226 NS_ProgressBillingSetupPage
                         JobSetup."NS_AIA Form Expiration Date" := AIAFormExpirationDate;
                         JobSetup."NS_AIA G702 Show With Page No." := AIAG702ShowWithPageNo;
                         JobSetup."NS_AIA G703 Start As Page No." := AIAG703STartAsPageNo;
-                        //JobSetup."NS_Prog. Bill Gen. ProdPostGr." := GenProdPosGroup;//PRJ-1684.AS.1.0 Commented
-                        JobSetup."NS_ProgBillGenProdPostGr New" := GenProdPosGroup;//PRJ-1684.AS.1.0 Add
+                        JobSetup."NS_Prog. Bill Gen. ProdPostGr." := GenProdPosGroup;
                         JobSetup.Modify(true);
                     end
                     else begin
@@ -153,8 +152,7 @@ page 14021226 NS_ProgressBillingSetupPage
                         JobSetup."NS_AIA Form Expiration Date" := AIAFormExpirationDate;
                         JobSetup."NS_AIA G702 Show With Page No." := AIAG702ShowWithPageNo;
                         JobSetup."NS_AIA G703 Start As Page No." := AIAG703STartAsPageNo;
-                        //JobSetup."NS_Prog. Bill Gen. ProdPostGr." := GenProdPosGroup;//PRJ-1684.AS.1.0 Commented
-                        JobSetup."NS_ProgBillGenProdPostGr New" := GenProdPosGroup;//PRJ-1684.AS.1.0 Add
+                        JobSetup."NS_Prog. Bill Gen. ProdPostGr." := GenProdPosGroup;
                         JobSetup.insert(true);
                     end;
                     CurrPage.close;
@@ -191,13 +189,10 @@ page 14021226 NS_ProgressBillingSetupPage
 
     trigger OnQueryClosePage(CloseAction: action): boolean
     var
-        //AssistedSetup: Codeunit "Assisted Setup";  //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-        AssistedSetup: Codeunit "Guided Experience";  //PRJCTPR-155.JS.1.0 09SEP2023 line added
-        NSObjectType: ObjectType;  //PRJCTPR-155.JS.1.0 09SEP2023 line added
+        AssistedSetup: Codeunit "Assisted Setup";
     begin
         if CloseAction = Action::OK then
-            //if AssistedSetup.ExistsAndIsNotComplete(Page::NS_ProgressBillingSetupPage) then  //PRJCTPR-155.JS.1.0 09SEP2023 line commented
-            if AssistedSetup.AssistedSetupExistsAndIsNotComplete(NSObjectType::Page, 14021226) then  //PRJCTPR-155.JS.1.0 09SEP2023 line added            
+            if AssistedSetup.ExistsAndIsNotComplete(Page::NS_ProgressBillingSetupPage) then
                 if not Confirm(NotSetUpQst, false) then
                     Error('');
         PPAssistedSetupMgt.NS_UpdateStatusProgressBillingAssistedSetup();

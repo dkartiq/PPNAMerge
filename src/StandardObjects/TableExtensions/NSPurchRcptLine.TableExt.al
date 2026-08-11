@@ -3,7 +3,6 @@ tableextension 14021125 NS_PurchRcptLine extends "Purch. Rcpt. Line"
     // version NAVW111.00.00.23572,PPNA11.00
     //TM-10.AM.1.0 | Added Field
     //PRJ-817.JS.1.0�04Aug2021 | Add fields work unit and work unit of measure
-    //PRJ-1015.JS.1.0 22Oct2021 | Add field
 
     fields
     {
@@ -139,40 +138,6 @@ tableextension 14021125 NS_PurchRcptLine extends "Purch. Rcpt. Line"
             Editable = false;
         }
         //PRJ-817.JS.1.0�04Aug2021-end
-
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-        //PRJ-1681.GK.1.0 19Oct2022 start
-        field(14021434; "NS_JMP Line No."; Integer)
-        {
-            caption = 'JMP Line No.';
-            description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            Editable = false;
-
-        }
-        //PRJ-1681.GK.1.0 19Oct2022 end
-        //PRJCTPR-256.JS.1.0 - Start
-        field(14021409; "NS_PPSegment Code"; Code[20])
-        {
-            Caption = 'Segment Code';
-            TableRelation = "NS_Job Takeoff Segments"."NS_Segment Code" WHERE("NS_Job No." = FIELD("Job No."));
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        field(14021322; "NS_PPJMP Details"; Text[100])
-        {
-            Caption = 'JMP Details';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-256.JS.1.0 - end  
 
     }
     keys

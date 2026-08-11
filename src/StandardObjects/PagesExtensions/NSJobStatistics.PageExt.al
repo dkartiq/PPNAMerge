@@ -1,8 +1,6 @@
 //PRJ-659.RM.1.0 22Oct2021 start| add new extension.
 pageextension 14021449 NS_JobStatisticsExt extends "Job Statistics"
 {
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Job Statistics'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         // Add changes to page layout here

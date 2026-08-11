@@ -1,8 +1,7 @@
 pageextension 14021110 NS_ItemJournal extends "Item Journal"
 {
     // version NAVW111.00.00.23572,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Item Journals'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Item No.")
@@ -61,13 +60,13 @@ pageextension 14021110 NS_ItemJournal extends "Item Journal"
             field("NS_Retention Ledger Code"; Rec."NS_Retention Ledger Code")
             {
                 ApplicationArea = All;
-                Caption = 'Retention Ledger Code';
+Caption = 'Retention Ledger Code';
                 ToolTip = 'Specifies the Retention Ledger Code';
             }
             field("NS_Job No."; Rec."Job No.")
             {
                 ApplicationArea = All;
-                Caption = 'Job No.';
+Caption = 'Job No.';
                 ToolTip = 'Specifies the Job No.';
 
                 trigger OnValidate();
@@ -82,7 +81,7 @@ pageextension 14021110 NS_ItemJournal extends "Item Journal"
             field("NS_Subcontract No."; Rec."NS_Subcontract No.")
             {
                 Editable = NS_SubcontractNoEditable;
-                Caption = 'Subcontract No.';
+Caption = 'Subcontract No.';
                 ToolTip = 'Specifies the Subcontract No.';
                 ApplicationArea = All;
 
@@ -110,7 +109,7 @@ pageextension 14021110 NS_ItemJournal extends "Item Journal"
             {
                 Editable = NS_JobTaskNoEditable;
                 ToolTip = 'Specifies the Job Task No.';
-                Caption = 'Job Task No.';
+Caption= 'Job Task No.';
                 ApplicationArea = All;
 
                 trigger OnValidate();
@@ -127,7 +126,7 @@ pageextension 14021110 NS_ItemJournal extends "Item Journal"
             {
                 ToolTip = 'Specifies the Job Unit Cost';
                 ApplicationArea = All;
-                Caption = 'Job Unit Cost';
+Caption = 'Job Unit Cost';
             }
             field("NS_Job Cost"; Rec."NS_Job Cost")
             {

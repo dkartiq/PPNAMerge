@@ -1,5 +1,6 @@
 page 14021405 "NS_Job Quote"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -14,25 +15,14 @@ page 14021405 "NS_Job Quote"
     //PRJ-872.JS.1.0  13Sep2021 | link quote revisions
     //PRJ-933.JS.1.0  05Oct2021 | Add one field
     //PRJ-1043.GK.1.0 10Nov2021 | Change caption.
-    //PRJ-1077.AS.1.0 15DEC21 Moved Estimated start date, Estimated completion date from Job Tab to General tab
-    //PRJ-1085.RM.1.0 16Dec2021 | Added Page Help link
-    //PRJ-1179.RM.1.0 10Feb2022 | Modified code of area(factbox)
-    //PRJ-1215.JS.1.0 23Feb2022 | correct code 
-    //PRJ-1279.NK.1.0 04Apr2022 | Add code  
-    //PRJ-1312.NK.1.0 03May2022 | Add Code
-    //PRJ-1487.NK.1.0 01Jul2022 | Added Code
-    //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
-    //PRJCTPR-23.NK.1.0 06jan2023| added subpage view and subpagelink on task total and segment total Tab
-    //PE-6.NK.1.0 24Mar2022 Add New Field
-    //PRJCTPR-130.RM.1.0 18July2023 Adde some code.
+
     Caption = 'Job Quote';
     PageType = Card;
-    RefreshOnActivate = true; //PRJ-1312.NK.1.0 03May2022
-    //PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs'; //PE-221.NC.1.0 22Jan2024 Block
-    PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs,Analytics'; //PE-221.NC.1.0 22Jan2024
+    PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs';
     SourceTable = "NS_Job Quote Header";
-     ContextSensitiveHelpPage = 'user-guide/job-quotes/defining-a-job-quote/'; //PRJ-1085.RM.1.0 16Dec2021
-
+    // >> Upgrade
+    RefreshOnActivate = true;
+    // << Upgrade
     layout
     {
         area(content)
@@ -50,45 +40,6 @@ page 14021405 "NS_Job Quote"
                     Importance = Promoted;
                     ToolTip = 'Specifies the Description/Nickname';
                 }
-
-                //PE-128.PS.1.0 12March2024 Start
-                field("Job No. Series"; Rec."NS_Job No. Series")
-                {
-                    ApplicationArea = All;
-                    ShowMandatory = true;
-                    NotBlank = true;
-                    ToolTip = 'Specifies the no. series to be used for job no. used when the quote is converted into job.';
-                    trigger OnLookup(Var Test: Text): Boolean
-                    var
-                        NS_NoSeriesPage: Page "No. Series";
-                        NS_NSSeriesRec: Record "No. Series";
-                        NS_NoSeriesRelationship: Record "No. Series Relationship";
-                        NS_JobSetup: Record "Jobs Setup";
-                    begin
-                        if NS_JobSetup.Get() then;
-                        NS_NSSeriesRec.Reset();
-                        NS_NoSeriesRelationship.SetRange(Code, NS_JobSetup."Job Nos.");
-                        if NS_NoSeriesRelationship.FindSet() then
-                            repeat
-                                NS_NSSeriesRec.Code := NS_NoSeriesRelationship."Series Code";
-                                NS_NSSeriesRec.Mark := true;
-                            until NS_NoSeriesRelationship.Next() = 0;
-                        if NS_NSSeriesRec.Get(NS_JobSetup."Job Nos.") then
-                            NS_NSSeriesRec.Mark := true;
-                        NS_NSSeriesRec.MarkedOnly := true;
-                        if PAGE.RunModal(0, NS_NSSeriesRec) = ACTION::LookupOK then
-                            Rec.Validate("NS_Job No. Series", NS_NSSeriesRec.Code);
-                    end;
-                }
-
-                field("NS_Manual Job No."; Rec."NS_Manual Job No.")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specify if you have any specific Job No. to be used for Job No. when the quote is converted into a job. Please note that this can only be defined if the above field is selected with the "Manual" option On.';
-
-                }
-                //PE-128.PS.1.0 12March2024 End
-
                 field("Quote Type Code"; Rec."NS_Quote Type Code")
                 {
                     ApplicationArea = All;
@@ -118,15 +69,21 @@ page 14021405 "NS_Job Quote"
                     ApplicationArea = All;
                     Caption = 'Sell-to Customer No.';
                     Importance = Promoted;
-                    ToolTip = 'Select the Customer No.'; //PRJ-1579.RM.3.0
                 }
                 field("Sell-to Customer Name"; Rec."NS_Sell-to Customer Name")
                 {
                     ApplicationArea = All;
                     Caption = 'Sell-to Customer Name';
                     Importance = Promoted;
-                    ToolTip = 'Sepcifies the name of the Customer'; //PRJ-1579.RM.2.0 
                 }
+                // >> Upgrade
+                field("Customer Job No."; Rec."Customer Job No.")
+                {
+                    ToolTip = 'Specifies the value of the Customer Job No. field.';
+                    ApplicationArea = All;
+                }
+                // << Upgrade
+
                 field("Contract Line Method"; Rec."NS_Contract Line Method")
                 {
                     ApplicationArea = All;
@@ -175,14 +132,11 @@ page 14021405 "NS_Job Quote"
                     ToolTip = 'Specifies the Sell-to Customer Template Code';
                     Visible = false;
                 }
-                //PE-300.DK.1.0 29May2024 Start
-                field("Probability to Close"; Rec."NS_QuotePro to Close")   //PE-300.JS.1.0 21JUN2024
+                field("Probability to Close"; Rec."NS_Probability to Close")
                 {
-                    Caption = 'Probability to Close';
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Probability to Close';
                 }
-                //PE-300.DK.1.0 29May2024 End
                 field("Use Tax Liable"; Rec."NS_Use Tax Liable")
                 {
                     ApplicationArea = All;
@@ -251,35 +205,13 @@ page 14021405 "NS_Job Quote"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Lump Sum';
                 }
-                //PE-6.NK.1.0 24Mar2022 Start
-                field(NS_Opportunity; Rec.NS_Opportunity)
+                field(Status; Rec.NS_Status)
                 {
-                    ApplicationArea = all;
-                    ToolTip = 'Opportunity';
-
-                }
-                //PE-6.NK.1.0 24Mar2022 End
-                //PE-300.JS.1.0 21JUN2024-Start
-                field(Status; Rec."NS_Quote Status")
-                {
-                    Caption = 'Status';
                     ApplicationArea = All;
                     Editable = true;
                     Importance = Promoted;
                     ToolTip = 'Specifies the Status';
                 }
-                //PE-300.JS.1.0 21JUN2024-Start
-                //PRJ-1156.AS.1.0 21JAN2022 START
-                field("NS_Date Converted to Order"; Rec."NS_Date Converted to Order")
-                {
-                    ApplicationArea = All;
-                    //Caption = 'Date Converted to Order';//PRJ-1156.AS.2.0 25FEB2022 Commented
-                    Caption = 'Date Converted to Job';//PRJ-1156.AS.2.0 25FEB2022 Added
-                    // ToolTip = 'Specifies the Date Converted to Order';//PRJ-1156.AS.2.0 25FEB2022 Commented
-                    ToolTip = 'Specifies the Date Converted to Job';//PRJ-1156.AS.2.0 25FEB2022 Added
-                    Editable = false;
-                }
-                //PRJ-1156.AS.1.0 21JAN2022 END
                 field("Job Ship-to Code"; Rec."NS_Job Ship-to Code")
                 {
                     ApplicationArea = All;
@@ -358,60 +290,6 @@ page 14021405 "NS_Job Quote"
                     ApplicationArea = All;
                     Visible = false;
                 }
-                //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-                field("Item Quote Costs"; Rec."NS_Item Quote Costs")
-                {
-                    ApplicationArea = all;
-                    editable = false;
-                }
-                field("Labour Rate"; Rec."NS_Labour Rate")
-                {
-                    ApplicationArea = all;
-                    editable = false;
-                    // ToolTip = 'If enabled, the item card "Quote Cost" will be used. If disabled then item standard cost will be used. If this option is grayed out then to enable go to "Job Setup".'; //PRJ-1579.RM.1.0  //PRJ-1579.RM.2.0 commented                 
-                    ToolTip = 'If enabled, the Item Card "Quote Cost" will be used. If disabled then Item Standard Cost will be used. If this option is "grayed" out then to enable go to "Job Setup".'; //PRJ-1579.RM.2.0               
-                }
-                //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-
-                field("Estimated Start Date"; Rec."NS_Estimated Start Date")//PRJ-1077.AS.1.0 15DEC21
-                {
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                    ToolTip = 'Specifies the Estimated Start Date';
-                }
-                field("Estimated Completion Date"; Rec."NS_Estimated Completion Date")//PRJ-1077.AS.1.0 15DEC21
-                {
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                    ToolTip = 'Specifies the Estimated Completion Date';
-                }
-                //PRJ-1443.AS.1.0 START
-                field("NS_EnblGLNResGMCalc"; Rec."NS_EnblGLNResGMCalc")
-                {
-                    ApplicationArea = All;
-                    Importance = Promoted;
-                    ToolTip = 'Specifies Enable Resources in Gross Marg. Calc.';
-
-                    trigger OnValidate()
-                    begin
-                        // CurrPage.UPDATE(false);
-                    end;
-                }
-                //PRJ-1443.AS.1.0 END
-                //PE-221.NC.1.0 29Dec2023 Start
-                field("NS_Total Units"; Rec."NS_Total Units")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Total Units field.';
-                }
-                field("NS_Unit of Measure Code"; Rec."NS_Unit of Measure")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Unit of Measure field.';
-                }
-
-                //PE-221.NC.1.0 29Dec2023 End
-
             }
             group("Order")
             {
@@ -497,16 +375,14 @@ page 14021405 "NS_Job Quote"
             {
                 ApplicationArea = All;
                 Caption = 'Task Totals';
-                SubPageLink = "NS_Quote No." = FIELD("NS_Quote No."), "Job No." = field("NS_Job No.");//PRJCTPR-23.NK.1.0  06jan2023 
+                SubPageLink = "NS_Quote No." = FIELD("NS_Quote No.");
             }
             part("Segment Totals"; "NS_Job Quote Segment TotalSubF")
             {
                 ApplicationArea = All;
                 Caption = 'Segment Totals';
-                SubPageView = where("NS_Job No." = filter(<> ''));//PRJCTPR-23.NK.1.0  06jan2023
-                SubPageLink = "NS_Job No." = field("NS_Job No.");
-
-                //  UpdatePropagation = Both; //comment //PRJCTPR-23.NK.1.0  06jan2023
+                SubPageLink = "NS_Job No." = FIELD("NS_Job No.");
+                UpdatePropagation = Both;
             }
             group(Margins)
             {
@@ -729,46 +605,6 @@ page 14021405 "NS_Job Quote"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Job Type Code';
-                    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-                    trigger OnValidate()
-                    Var
-                        Rec_LabourRatebyTask: Record "NS_Labor rate by task list";
-                        Rec_JPL: Record "Job Planning Line";//PRJ-1068.GK.1.0 07Dec2021
-                        Rec_Resource: Record Resource;//PRJ-1068.GK.1.0 07Dec2021
-                    begin
-                        IF Rec."NS_Labour Rate" then begin
-                            Rec_LabourRatebyTask.Reset();
-                            Rec_LabourRatebyTask.SetRange("NS_Job Type Code", Rec."NS_Job Type Code");
-                            IF NOT Rec_LabourRatebyTask.FindFirst() then
-                                Error('Please define the Job Type Code %1 in Labor by Task Table', Rec."NS_Job Type Code");
-                        end;
-                        //PRJ-1068.GK.1.0 07Dec2021 start
-                        IF Rec."NS_Labour Rate" then begin
-                            IF Confirm('Do you want to update all Job Planning Lines for this Quote with new Labor rate ?') then begin
-                                Rec_LabourRatebyTask.Reset();
-                                Rec_LabourRatebyTask.SetRange("NS_Job Type Code", Rec."NS_Job Type Code");
-                                IF Rec_LabourRatebyTask.FindFirst() then;
-                                IF Rec_LabourRatebyTask."NS_Labor Rate" = 0 then
-                                    Error('Please define the Labor rate value in Labour Rates by Task Table for Job Task Code %1', Rec_LabourRatebyTask."NS_Job Type Code");
-
-                                Rec_JPL.Reset();
-                                Rec_JPL.SetRange("Job No.", Rec."NS_Quote No.");
-                                Rec_JPL.SetRange(Type, Rec_JPL.Type::Resource);
-                                IF Rec_JPL.FindSet() then
-                                    repeat
-                                        IF Rec_Resource.Get(Rec_JPL."No.") then;
-                                        IF Rec_Resource.Type = Rec_Resource.Type::Person then begin
-                                            Rec_JPL.validate("Unit Cost", Rec_LabourRatebyTask."NS_Labor Rate");
-                                            Rec_JPL.Modify();
-                                        end;
-                                    until Rec_JPL.next = 0;
-                                //Message('Process Complete !');
-                            end;
-                        end;
-                        //PRJ-1068.GK.1.0 07Dec2021 end
-                    end;
-
-                    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
                 }
                 field("Job Class"; Rec."NS_Job Class")
                 {
@@ -870,8 +706,18 @@ page 14021405 "NS_Job Quote"
                     ToolTip = 'Specifies the Billing Cutoff Day of Month';
                     Visible = false;
                 }
-
-
+                field("Estimated Start Date"; Rec."NS_Estimated Start Date")
+                {
+                    ApplicationArea = All;
+                    Importance = Promoted;
+                    ToolTip = 'Specifies the Estimated Start Date';
+                }
+                field("Estimated Completion Date"; Rec."NS_Estimated Completion Date")
+                {
+                    ApplicationArea = All;
+                    Importance = Promoted;
+                    ToolTip = 'Specifies the Estimated Completion Date';
+                }
             }
             group("Schedule of Values")
             {
@@ -992,35 +838,8 @@ page 14021405 "NS_Job Quote"
             }
             systempart(Control1240060019; Links)
             {
-                ApplicationArea = RecordLinks; //PRJ-1113.GK.1.0 12Jan2022
-            }
-            //PRJ-1113.GK.1.0 12Jan2022 start
-            part("Attached Documents"; "Document Attachment Factbox")
-            {
-                //Visible = false; //PRJ-1487.NK.1.0 01Jul2022 block //PRJCTPR-342.DK.1.0 block again
                 ApplicationArea = All;
-                ObsoleteState = Pending;
-
-                //ObsoleteState = Pending; //PRJ-1487.NK.1.0 01Jul2022 Block
-                SubPageLink = "Table ID" = CONST(14021402), "No." = field("NS_Quote No."); //PRJ-1487.NK.1.0 01Jul2022
-                //ObsoleteReason = 'This functionality will be removed in our upcoming release because it is replaced by another factbox named as "Attachments"';//PRJ-1487.NK.1.0 01Jul2022 Block
             }
-            //PRJ-1179.RM.1.0 10Feb2022
-            part("NS_job Quote Factbox"; "NS Job Quote Factbox")//PRJ-1179.RM.1.0 10Feb2022
-            {
-                Visible = false; //PRJ-1487.NK.1.0 01Jul2022 
-                ApplicationArea = All;
-                Caption = 'Attachments';
-                ObsoleteState = Pending; //PRJ-1487.NK.1.0 01Jul2022
-                SubPageLink = "Table ID" = CONST(14021402), "No." = field("NS_Quote No."); //PRJ-1179.RM.1.0 10Feb2022
-                ObsoleteReason = 'This functionality will be removed in our upcoming release because it is replaced by another factbox named as "Attachments"';//PRJ-1487.NK.1.0 01Jul2022
-            }
-            systempart(Control1905767507; Notes)
-            {
-                ApplicationArea = Notes;
-            }
-
-            //PRJ-1113.GK.1.0 12Jan2022 end
         }
     }
 
@@ -1067,8 +886,6 @@ page 14021405 "NS_Job Quote"
                         ShiptoList: Page "Ship-to Address List";
                         ShiptoAddress2: Record "Ship-to Address";
                     begin
-                        Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                        Clear(ShiptoList);    //PRJ-1279.NK.1.0 04Apr2022
                         ShiptoAddress.SETCURRENTKEY("NS_No.");
                         ShiptoAddress.ASCENDING(false);
                         ShiptoAddress.SETRANGE("Customer No.", "NS_Sell-to Customer No.");
@@ -1105,8 +922,6 @@ page 14021405 "NS_Job Quote"
                         PlanningLines: Record "Job Planning Line";
                         PlanningLinesPg: Page "Job Planning Lines";
                     begin
-                        Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                        Clear(PlanningLinesPg); //PRJ-1279.NK.1.0 04Apr2022
                         PlanningLinesPg.InitVar("NS_Job No.", '', true, '');
                         PlanningLinesPg.EDITABLE(true);
                         if PlanningLinesPg.RUNMODAL = ACTION::OK then;
@@ -1126,8 +941,6 @@ page 14021405 "NS_Job Quote"
                         PlanningLines: Record "Job Planning Line";
                         PlanningLinesPg: Page "Job Planning Lines";
                     begin
-                        Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                        Clear(PlanningLinesPg); //PRJ-1279.NK.1.0 04Apr2022
                         PlanningLinesPg.InitVar("NS_Job No.", '', false, '');
                         PlanningLinesPg.EDITABLE(true);
                         if PlanningLinesPg.RUNMODAL = ACTION::OK then;
@@ -1238,22 +1051,7 @@ page 14021405 "NS_Job Quote"
                     RunPageLink = "NS_Quote No." = FIELD("NS_Quote No.");
                     ToolTip = 'View quote revisions for current quote';
                 }
-                //PRJ-872.JS.1.0  13Sep2021
-                //PE-178.JS.1.0 16NOV2023 - Start
-                action(NSProjectProAI)
-                {
-                    ApplicationArea = All;
-                    Caption = 'ProjectPro AI';
-                    Image = Info;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    //InFooterBar = true;
-                    trigger OnAction()
-                    begin
-                        Hyperlink('https://webchat.botframework.com/embed/ChatBotAIUS-bot?s=AsNjejE0XXs.6dxHmclWNW1hYkEGoPRwb_tzwWFLSo4r2tDOwbZRxmc');
-                    end;
-                }
-                //PE-178.JS.1.0 16NOV2023 - end                                   
+                //PRJ-872.JS.1.0  13Sep2021               
             }
         }
         area(processing)
@@ -1270,7 +1068,10 @@ page 14021405 "NS_Job Quote"
 
                 trigger OnAction();
                 begin
-                    QuoteMgt.NS_CreateRevisionJQ(Rec);
+                    // >> Upgrade
+                    //QuoteMgt.NS_CreateRevisionJQ(Rec);
+                    QuoteMgt.NS_CreateRevisionJQ(Rec, true);
+                    // << Upgrade
                 end;
             }
             action(CopyDocument)
@@ -1289,10 +1090,8 @@ page 14021405 "NS_Job Quote"
                     CustomerNo: Code[20];
                     CustomerLU: Record Customer;
                 begin
-                    Commit();  //PRJ-1215.JS.1.0 line added
-                    Clear(CustomerList);  //PRJ-1215.JS.1.0 line added
                     CustomerList.LOOKUPMODE(true);
-                    if CustomerList.RUNMODAL() = ACTION::LookupOK then begin  //PRJ-1215.JS.1.0 add open and close braket
+                    if CustomerList.RUNMODAL = ACTION::LookupOK then begin
                         CustomerList.GETRECORD(CustomerLU);
                         CustomerNo := CustomerLU."No.";
                     end;
@@ -1318,23 +1117,6 @@ page 14021405 "NS_Job Quote"
                     QuoteMgt.NS_QuoteSelection(Rec);
                 end;
             }
-            //PE-221.NC.1.0 22Jan2024 Start
-            group("NS_Quote Analytics")
-            {
-                Caption = 'Quote Analytics';
-                Image = Statistics;
-                action("NS_Standard Estimate Report")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Quote Unit Analysis';
-                    Image = Statistics;
-                    Promoted = true;
-                    PromotedCategory = Category9;
-                    RunObject = Page NS_QuoteUnitAnalysis;
-                    RunPageLink = "NS_Quote No." = field("NS_Quote No.");
-                }
-            }
-            //PE-221.NC.1.0 22Jan2024 End
             action(MakeOrder)
             {
                 ApplicationArea = All;
@@ -1396,7 +1178,10 @@ page 14021405 "NS_Job Quote"
 
                 trigger OnAction();
                 begin
-                    QuoteMgt.NS_SetStatusReleased(Rec);
+                    // >> Upgrade
+                    //FDD109
+                    //QuoteMgt.NS_SetStatusReleased(Rec);
+                    // << Upgrade
                 end;
             }
             action(ShareQuote)
@@ -1500,37 +1285,14 @@ page 14021405 "NS_Job Quote"
                     Contact: Record Contact;
                     ContBusRel: Record "Contact Business Relation";
                     Cust: Record Customer;
-                    jobtbl: Record Job;//PRJ-914.AS.1.0
-                    NS_NoSeries: Record "No. Series";//PE-128.PS.2.0 29March2024
                 begin
-                    //PRJ-914.AS.1.0 start
-                    jobtbl.Reset();
-                    jobtbl.SetRange("NS_Created from Quote No.", Rec."NS_Quote No.");//PRJ-1131.RM.1.0
-                    if jobtbl.FindFirst() then
-                        Error('Job Quote No. %1 is already converted to Job Order No. %2', Rec."NS_Quote No.", jobtbl."No.");//PRJ-1131.RM.1.0
-                                                                                                                             //PRJ-914.AS.1.0 end
-
-                    //PE-128.PS.2.0 29March2024 Start
-                    if Rec."NS_Job No. Series" <> '' then begin
-                        if NS_NoSeries.Get(Rec."NS_Job No. Series") then;
-                        If (NS_NoSeries."Manual Nos." = true) And (Rec."NS_Manual Job No." = '') And (NS_NoSeries."Default Nos." = false) then
-                            Error('You must define a value in the "Manual Job no." field on the Quote %1 before converting it into a Job.', Rec."NS_Quote No.")
-                    end else
-                        Error('You must define a value in the "Job No. Series" field on the Quote "%1" before converting into a Job.', Rec."NS_Quote No.");
-
-
-
-
-                    //PE-128.PS.2.0 29March2024 End 
-
                     //create customer if only a contact was setup
                     if ("NS_Sell-to Customer No." = '') and Contact.GET("NS_Contact No.") then begin
 
 
                         if not ContBusRel.FindByContact(ContBusRel."Link to Table"::Customer.AsInteger(), Contact."No.") then begin
                             Contact.SetHideValidationDialog(true);
-                            // Contact.CreateCustomer(Contact.ChooseCustomerTemplate);//PRJ-1620.AS.1.0 COMMENTED
-                            Contact.CreateCustomerFromTemplate((Contact.ChooseNewCustomerTemplate()));//PRJ-1620.AS.1.0 ADD
+                            Contact.CreateCustomer(Contact.ChooseCustomerTemplate);
                         end;
 
                         //Check if a customer has already been created
@@ -1582,27 +1344,6 @@ page 14021405 "NS_Job Quote"
                     QuoteMgt.NS_PrintQuote(Rec, false);
                 end;
             }
-            //PRJ-1046.RM.1.0 11Nov2021 Start
-            action(PrintDocumentByTask)
-            {
-                ApplicationArea = All;
-                Caption = 'Print By Tasks';
-                Image = PrintDocument;
-                Promoted = true;
-                PromotedCategory = "Report";
-                PromotedIsBig = true;
-
-                trigger OnAction();
-                var
-                    JobQuoteHdr: Record "NS_Job Quote Header";
-                begin
-                    Commit(); //PRJ-1279.NK.1.0 04Apr2022
-                    JobQuoteHdr.Reset;
-                    JobQuoteHdr.SetRange("NS_Quote No.", Rec."NS_Quote No.");
-                    REPORT.RUNMODAL(14021497, true, false, JobQuoteHdr);
-                end;
-            }
-            //PRJ-1046.RM.1.0 11Nov2021 End
             action(PrintDocumentBySegmentWithScopeOfWork)
             {
                 ApplicationArea = All;
@@ -1615,8 +1356,6 @@ page 14021405 "NS_Job Quote"
 
                 trigger OnAction();
                 begin
-                    Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                    Clear(QuoteMgt); //PRJ-1279.NK.1.0 04Apr2022
                     QuoteMgt.NS_SetBySegment(true);
                     QuoteMgt.PrintQuoteWithSegmentScope(Rec, false);
                 end;
@@ -1636,7 +1375,6 @@ page 14021405 "NS_Job Quote"
                 var
                     JobQuoteHdr: Record "NS_Job Quote Header";
                 begin
-                    Commit(); //PRJ-1279.NK.1.0 04Apr2022
                     JobQuoteHdr.Reset;
                     JobQuoteHdr.SetRange("NS_Quote No.", Rec."NS_Quote No.");
                     REPORT.RUNMODAL(14021423, true, false, JobQuoteHdr);
@@ -1657,33 +1395,10 @@ page 14021405 "NS_Job Quote"
                 var
                     CustomReports: Page "Custom Report Layouts";
                 begin
-                    Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                    Clear(CustomReports); //PRJ-1279.NK.1.0 04Apr2022
                     CustomReports.RUNMODAL;
                     CLEAR(CustomReports);
                 end;
             }
-              //PRJCTPR-130.RM.1.0 19July2023 start
-            action(JobQuoteEstimation)
-            {
-                ApplicationArea = all;
-                Image = Report;
-                Promoted = true;
-                PromotedCategory = "Report";
-                PromotedIsBig = true;
-                Caption = 'Job Quote Estimation Report';
-                ToolTip = 'This Report shows the estimate of the Job Quote Cost & Job Quote Price details.';
-                trigger OnAction();
-                var
-                    JobQuoteHdr: Record "NS_Job Quote Header";
-                begin
-                    Commit();
-                    JobQuoteHdr.Reset();
-                    JobQuoteHdr.SetRange("NS_Quote No.", Rec."NS_Quote No.");
-                    REPORT.RUNMODAL(14021332, true, false, JobQuoteHdr);
-                end;
-            }
-            //PRJCTPR-130.RM.1.0 19July2023 End
             action(UseTaxQuestionnaire)
             {
                 ApplicationArea = All;
@@ -1757,7 +1472,6 @@ page 14021405 "NS_Job Quote"
                 var
                     _QuotePipelineUpdate: Page "NS_Job Quote Pipeline Upd ";
                 begin
-                    Commit(); //PRJ-1279.NK.1.0 04Apr2022
                     CLEAR(_QuotePipelineUpdate);
                     _QuotePipelineUpdate.NS_SetQuote("NS_Quote No.", false);
                     _QuotePipelineUpdate.RUNMODAL;
@@ -1807,8 +1521,6 @@ page 14021405 "NS_Job Quote"
                     lJob: Record Job;
                     lJobCostBudget: Report "NS_Job Cost Budget withSorting";
                 begin
-                    Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                    Clear(lJobCostBudget); //PRJ-1279.NK.1.0 04Apr2022
                     lJob.SETRANGE("No.", "NS_Quote No.");
                     lJobCostBudget.SETTABLEVIEW(lJob);
                     lJobCostBudget.RUNMODAL;
@@ -1831,8 +1543,6 @@ page 14021405 "NS_Job Quote"
                     var
                         JobSegment: Page "NS_Job Takeoff Worksheet";
                     begin
-                        Commit();   //PRJ-1279.NK.1.0 04Apr2022
-                        Clear(JobSegment); //PRJ-1279.NK.1.0 04Apr2022
                         JobSegment.NS_InitPage("NS_Job No.", '');
                         JobSegment.RUNMODAL;
                     end;
@@ -1853,7 +1563,6 @@ page 14021405 "NS_Job Quote"
 
                     trigger OnAction();
                     begin
-                        Commit(); //PRJ-1279.NK.1.0 04Apr2022
                         NS_CreateInteraction;
                     end;
                 }
@@ -1868,169 +1577,24 @@ page 14021405 "NS_Job Quote"
                     ShortCutKey = 'Ctrl+F7';
                     ToolTip = 'View a list of the interactions that you have logged, for example, when you create an interaction, print a cover sheet, a sales order, and so on.';
                 }
-                //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-                action("Factor & Markup")
-                {
-                    ApplicationArea = all;
-                    Caption = 'Factor & Markup';
-                    Image = ListPage;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    RunObject = page "NS_Job Cost Category Prices";
-                    RunPageLink = "NS_Job No." = FIELD("NS_Quote No.");
-                    trigger OnAction();
-                    begin
-                    end;
-                }
-                 //PE-6.NK.1.0 21APR2022 Start
-                action("Create Opportunity")
-                {
-                    ApplicationArea = all;
-                    Caption = 'Create Opportunity';
-                    Image = ListPage;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    trigger OnAction();
-                    var
-                        Opportunity: Record Opportunity;
-                        MrkSetup: Record "Marketing Setup";
-                        OpporNo: Code[20];
-                        NoSeriesMgt: Codeunit NoSeriesManagement;
-                    begin
-                        Rec.TestField("NS_Contact No.");
-                        if not Confirm('Do you want to Create Opportunity?', false) then
-                            exit;
-                        MrkSetup.Get();
-                        OpporNo := NoSeriesMgt.GetNextNo(MrkSetup."Opportunity Nos.", Today, true);
-                        Opportunity.Init();
-                        Opportunity.validate("No.", OpporNo);
-                        Opportunity.Description := Rec."NS_Description/Nickname";
-                        Opportunity.Validate("Contact No.", Rec."NS_Contact No.");
-                        Opportunity.NS_JobQuoteNo := Rec."NS_Quote No.";
-                        Opportunity.Validate("Salesperson Code", Rec."NS_Salesperson Code New");
-                        Opportunity."Creation Date" := Today();
-                        Opportunity.Insert();
-                    end;
-                }
-                action("NS_Update Opportunity")
-                {
-                    ApplicationArea = all;
-                    Caption = 'Update Opportunity';
-                    Image = UpdateUnitCost;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    trigger OnAction();
-                    var
-                        NS_Opportunity: Record Opportunity;
-                    begin
-                        if NS_Opportunity.Get(Rec.NS_Opportunity) then begin
-                            NS_Opportunity."NS_Contract Price" := Rec."NS_Total Contract Price";
-                            NS_Opportunity.Modify();
-                        end;
-                    end;
-                }
-                //PE-6.NK.1.0 21APR2022 End
-
-                action("NS_Update Labor Rates")
-                {
-                    ApplicationArea = all;
-                    Caption = 'Update Labor Rates';
-                    Image = Process;
-                    Promoted = true;
-                    Visible = false;//PRJ-1068.GK.1.0 07Dec2021
-                    PromotedCategory = Process;
-                    trigger OnAction();
-                    var
-                        Rec_LabourRatebyTask: Record "NS_Labor rate by task list";
-                        Rec_JPL: Record "Job Planning Line";
-                        Rec_Resource: Record Resource;
-                    begin
-                        IF Rec."NS_Labour Rate" then begin
-                            IF Confirm('Do you want to update all Job Planning Lines for this Quote with new Labor rate ?') then begin
-                                Rec_LabourRatebyTask.Reset();
-                                Rec_LabourRatebyTask.SetRange("NS_Job Type Code", Rec."NS_Job Type Code");
-                                IF Rec_LabourRatebyTask.FindFirst() then;
-                                IF Rec_LabourRatebyTask."NS_Labor Rate" = 0 then
-                                    Error('Please define the Labor rate value in Labour Rates by Task Table for Job Task Code %1', Rec_LabourRatebyTask."NS_Job Type Code");
-
-                                Rec_JPL.Reset();
-                                Rec_JPL.SetRange("Job No.", Rec."NS_Quote No.");
-                                Rec_JPL.SetRange(Type, Rec_JPL.Type::Resource);
-                                IF Rec_JPL.FindSet() then
-                                    repeat
-                                        IF Rec_Resource.Get(Rec_JPL."No.") then;
-                                        IF Rec_Resource.Type = Rec_Resource.Type::Person then begin
-                                            Rec_JPL.validate("Unit Cost", Rec_LabourRatebyTask."NS_Labor Rate");
-                                            Rec_JPL.Modify();
-                                        end;
-                                    until Rec_JPL.next = 0;
-                                Message('Process Complete !');
-                            end;
-                        end;
-                    end;
-                }
-
-                //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
             }
+
         }
+
     }
-
-    trigger OnOpenPage()
+    // >> Upgrade
+    trigger OnNextRecord(Steps: Integer): Integer
     var
-        TJobTakOff: Record "NS_Job Takeoff Segments";
+        CurrentSteps: Integer;
     begin
-        ////Rec.NS_TotalContractPrice(); //PRJ-1312.NK.1.0 09May2022 Block
-        //PRJ-1312.NK.1.0 03May2022 Start Block
-        //PRJ-1155.AS.1.0 START
-        // TJobTakOff.Reset();
-        // TJobTakOff.SetRange("NS_Job No.", Rec."NS_Job No.");
-        // TJobTakOff.CalcSums("NS_Total Contract Price");
-        // if TJobTakOff."NS_Total Contract Price" <> 0 then begin
-        //     Rec.VALIDATE("NS_Total Contract Price", TJobTakOff."NS_Total Contract Price");
-        //     Rec.Modify();
-        // end;
-        //PRJ-1155.AS.1.0 END
-        //PRJ-1312.NK.1.0 03May2022 End Block
+        OnBeforeNextRecord(Rec, Steps, CurrentSteps);
+        exit(CurrentSteps);
     end;
-
+    // << Upgrade
 
     trigger OnAfterGetCurrRecord();
-    var
-        TJobTakOff: Record "NS_Job Takeoff Segments";//PRJ-1155.AS.1.0
     begin
-        Rec.NS_UpdateMinSellPrice();//PRJ-1131.RM.1.0
-        Rec.NS_TotalContractPrice(); //PRJ-1312.NK.1.0 03May2022
-        //PRJ-1312.NK.1.0 03May2022 Start Block
-        //PRJ-1155.AS.1.0 START
-        // TJobTakOff.Reset();
-        // TJobTakOff.SetRange("NS_Job No.", Rec."NS_Job No.");
-        // TJobTakOff.CalcSums("NS_Total Contract Price");
-        // if TJobTakOff."NS_Total Contract Price" <> 0 then begin
-        //     Rec.VALIDATE("NS_Total Contract Price", TJobTakOff."NS_Total Contract Price");
-        //     Rec.Modify();
-        // end;
-        //PRJ-1155.AS.1.0 END
-        //PRJ-1312.NK.1.0 03May2022 End Block
-    end;
-
-    trigger OnAfterGetRecord();
-    var
-        TJobTakOff: Record "NS_Job Takeoff Segments";
-    begin
-        Rec.NS_UpdateMinSellPrice();
-
-        //PRJ-1155.AS.1.0 START
-        rec.NS_TotalContractPrice(); //PRJ-1312.NK.1.0 03May2022
-        //PRJ-1312.NK.1.0 03May2022 Start Block
-        // TJobTakOff.Reset();
-        // TJobTakOff.SetRange("NS_Job No.", Rec."NS_Job No.");
-        // TJobTakOff.CalcSums("NS_Total Contract Price");
-        // if TJobTakOff."NS_Total Contract Price" <> 0 then begin
-        //     Rec.VALIDATE("NS_Total Contract Price", TJobTakOff."NS_Total Contract Price");
-        //     Rec.Modify();
-        // end;
-        //PRJ-1155.AS.1.0 END
-        //PRJ-1312.NK.1.0 03May2022 End Block
+        NS_UpdateMinSellPrice;
     end;
 
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean;
@@ -2056,5 +1620,14 @@ page 14021405 "NS_Job Quote"
         Text14021400: Label 'Currently there are not any segments for Quote %1, Do you wish to use the Defaults?';
         Text14021401: Label 'A Site Customer must be chosen';
         Text14021402: Label '"Total Schedule Percentage must be 100% : "';
+    // >> Upgrade
+
+    [IntegrationEvent(false, false)]
+    procedure OnBeforeNextRecord(var CurrRec: Record "NS_Job Quote Header"; var Steps: Integer; var CurrentSteps: Integer)
+    begin
+
+    end;
+    // << Upgrade
+
 }
 

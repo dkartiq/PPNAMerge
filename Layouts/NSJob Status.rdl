@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="PageNoCaption">
+          <DataField>PageNoCaption</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="SubTitle">
+          <DataField>SubTitle</DataField>
+        </Field>
+        <Field Name="DateTitle">
+          <DataField>DateTitle</DataField>
+        </Field>
+        <Field Name="JobNoCaption">
+          <DataField>JobNoCaption</DataField>
+        </Field>
+        <Field Name="Job_No_">
+          <DataField>Job_No_</DataField>
+        </Field>
+        <Field Name="JobDescriptionCaption">
+          <DataField>JobDescriptionCaption</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Job_Description_2">
+          <DataField>Job_Description_2</DataField>
+        </Field>
+        <Field Name="JobStatusCaption">
+          <DataField>JobStatusCaption</DataField>
+        </Field>
+        <Field Name="Job_Status">
+          <DataField>Job_Status</DataField>
+        </Field>
+        <Field Name="JobStatusDateCaption">
+          <DataField>JobStatusDateCaption</DataField>
+        </Field>
+        <Field Name="Job_Job_Status_Date">
+          <DataField>Job_Job_Status_Date</DataField>
+        </Field>
+        <Field Name="JobContractNoCaption">
+          <DataField>JobContractNoCaption</DataField>
+        </Field>
+        <Field Name="Job_Contract_No_">
+          <DataField>Job_Contract_No_</DataField>
+        </Field>
+        <Field Name="JobContractDateCaption">
+          <DataField>JobContractDateCaption</DataField>
+        </Field>
+        <Field Name="Job_Contract_Date">
+          <DataField>Job_Contract_Date</DataField>
+        </Field>
+        <Field Name="JobSubLevelToJobNoCaption">
+          <DataField>JobSubLevelToJobNoCaption</DataField>
+        </Field>
+        <Field Name="Job_Sub_Level_to_Job_No_">
+          <DataField>Job_Sub_Level_to_Job_No_</DataField>
+        </Field>
+        <Field Name="CONTRACTINFOCaption">
+          <DataField>CONTRACTINFOCaption</DataField>
+        </Field>
+        <Field Name="JobBudgetedPriceCaption">
+          <DataField>JobBudgetedPriceCaption</DataField>
+        </Field>
+        <Field Name="Job_Budgeted_Price__LCY_">
+          <DataField>Job_Budgeted_Price__LCY_</DataField>
+        </Field>
+        <Field Name="Job_Budgeted_Price__LCY_Format">
+          <DataField>Job_Budgeted_Price__LCY_Format</DataField>
+        </Field>
+        <Field Name="SubLevelesPriceCaption">
+          <DataField>SubLevelesPriceCaption</DataField>
+        </Field>
+        <Field Name="Sub_LevelsPrice">
+          <DataField>Sub_LevelsPrice</DataField>
+        </Field>
+        <Field Name="Sub_LevelsPriceFormat">
+          <DataField>Sub_LevelsPriceFormat</DataField>
+        </Field>
+        <Field Name="NetPriceCaption">
+          <DataField>NetPriceCaption</DataField>
+        </Field>
+        <Field Name="NetPrice">
+          <DataField>NetPrice</DataField>
+        </Field>
+        <Field Name="NetPriceFormat">
+          <DataField>NetPriceFormat</DataField>
+        </Field>
+        <Field Name="JOBINFOCaption">
+          <DataField>JOBINFOCaption</DataField>
+        </Field>
+        <Field Name="JobAddressCaption">
+          <DataField>JobAddressCaption</DataField>
+        </Field>
+        <Field Name="JobSiteAddress_1_">
+          <DataField>JobSiteAddress_1_</DataField>
+        </Field>
+        <Field Name="JobSiteAddress_2_">
+          <DataField>JobSiteAddress_2_</DataField>
+        </Field>
+        <Field Name="JobSiteAddress_3_">
+          <DataField>JobSiteAddress_3_</DataField>
+        </Field>
+        <Field Name="JobSiteAddress_4_">
+          <DataField>JobSiteAddress_4_</DataField>
+        </Field>
+        <Field Name="JobSiteAddress_5_">
+          <DataField>JobSiteAddress_5_</DataField>
+        </Field>
+        <Field Name="JobContactCaption">
+          <DataField>JobContactCaption</DataField>
+        </Field>
+        <Field Name="Job_Job_Contact">
+          <DataField>Job_Job_Contact</DataField>
+        </Field>
+        <Field Name="JobJobPhoneCaption">
+          <DataField>JobJobPhoneCaption</DataField>
+        </Field>
+        <Field Name="Job_Job_Phone">
+          <DataField>Job_Job_Phone</DataField>
+        </Field>
+        <Field Name="JobEstimatorCaption">
+          <DataField>JobEstimatorCaption</DataField>
+        </Field>
+        <Field Name="Job_Estimator">
+          <DataField>Job_Estimator</DataField>
+        </Field>
+        <Field Name="JobManagerCaption">
+          <DataField>JobManagerCaption</DataField>
+        </Field>
+        <Field Name="Job_Manager">
+          <DataField>Job_Manager</DataField>
+        </Field>
+        <Field Name="CUSTOMERINFOCaption">
+          <DataField>CUSTOMERINFOCaption</DataField>
+        </Field>
+        <Field Name="CustAddressCaption">
+          <DataField>CustAddressCaption</DataField>
+        </Field>
+        <Field Name="JobBillToAddress_1_">
+          <DataField>JobBillToAddress_1_</DataField>
+        </Field>
+        <Field Name="JobBillToAddress_2_">
+          <DataField>JobBillToAddress_2_</DataField>
+        </Field>
+        <Field Name="JobBillToAddress_3_">
+          <DataField>JobBillToAddress_3_</DataField>
+        </Field>
+        <Field Name="JobBillToAddress_4_">
+          <DataField>JobBillToAddress_4_</DataField>
+        </Field>
+        <Field Name="JobBillToAddress_5_">
+          <DataField>JobBillToAddress_5_</DataField>
+        </Field>
+        <Field Name="CustContactCaption">
+          <DataField>CustContactCaption</DataField>
+        </Field>
+        <Field Name="Job_Bill_to_Contact">
+          <DataField>Job_Bill_to_Contact</DataField>
+        </Field>
+        <Field Name="BILLINGINFOCaption">
+          <DataField>BILLINGINFOCaption</DataField>
+        </Field>
+        <Field Name="PONumberCaption">
+          <DataField>PONumberCaption</DataField>
+        </Field>
+        <Field Name="Job_Customer_PO_Number">
+          <DataField>Job_Customer_PO_Number</DataField>
+        </Field>
+        <Field Name="BillingMethodCaption">
+          <DataField>BillingMethodCaption</DataField>
+        </Field>
+        <Field Name="Job_Billing_Method">
+          <DataField>Job_Billing_Method</DataField>
+        </Field>
+        <Field Name="CONTRACTBILLINGSCaption">
+          <DataField>CONTRACTBILLINGSCaption</DataField>
+        </Field>
+        <Field Name="GrossBillingCaption">
+          <DataField>GrossBillingCaption</DataField>
+        </Field>
+        <Field Name="RetentionCaption">
+          <DataField>RetentionCaption</DataField>
+        </Field>
+        <Field Name="NetBillingsCaption">
+          <DataField>NetBillingsCaption</DataField>
+        </Field>
+        <Field Name="PaymentsCaption">
+          <DataField>PaymentsCaption</DataField>
+        </Field>
+        <Field Name="BalanceCaption">
+          <DataField>BalanceCaption</DataField>
+        </Field>
+        <Field Name="InvoicedPrice">
+          <DataField>InvoicedPrice</DataField>
+        </Field>
+        <Field Name="InvoicedPriceFormat">
+          <DataField>InvoicedPriceFormat</DataField>
+        </Field>
+        <Field Name="RetentionAmount">
+          <DataField>RetentionAmount</DataField>
+        </Field>
+        <Field Name="RetentionAmountFormat">
+          <DataField>RetentionAmountFormat</DataField>
+        </Field>
+        <Field Name="NetBillings">
+          <DataField>NetBillings</DataField>
+        </Field>
+        <Field Name="NetBillingsFormat">
+          <DataField>NetBillingsFormat</DataField>
+        </Field>
+        <Field Name="PaymentReceived">
+          <DataField>PaymentReceived</DataField>
+        </Field>
+        <Field Name="PaymentReceivedFormat">
+          <DataField>PaymentReceivedFormat</DataField>
+        </Field>
+        <Field Name="Balance">
+          <DataField>Balance</DataField>
+        </Field>
+        <Field Name="BalanceFormat">
+          <DataField>BalanceFormat</DataField>
+        </Field>
+        <Field Name="JOBCOSTINGINFOCaption">
+          <DataField>JOBCOSTINGINFOCaption</DataField>
+        </Field>
+        <Field Name="CurrentPeriodCaption">
+          <DataField>CurrentPeriodCaption</DataField>
+        </Field>
+        <Field Name="YearToDateCaption">
+          <DataField>YearToDateCaption</DataField>
+        </Field>
+        <Field Name="TotalJobCostCaption">
+          <DataField>TotalJobCostCaption</DataField>
+        </Field>
+        <Field Name="TotalJobBillingCaption">
+          <DataField>TotalJobBillingCaption</DataField>
+        </Field>
+        <Field Name="BillingCostCaption">
+          <DataField>BillingCostCaption</DataField>
+        </Field>
+        <Field Name="OpenARCaption">
+          <DataField>OpenARCaption</DataField>
+        </Field>
+        <Field Name="OpenAPCaption">
+          <DataField>OpenAPCaption</DataField>
+        </Field>
+        <Field Name="CashFlowCaption">
+          <DataField>CashFlowCaption</DataField>
+        </Field>
+        <Field Name="CurrentPeriod">
+          <DataField>CurrentPeriod</DataField>
+        </Field>
+        <Field Name="CurrentPeriodFormat">
+          <DataField>CurrentPeriodFormat</DataField>
+        </Field>
+        <Field Name="YearToDate">
+          <DataField>YearToDate</DataField>
+        </Field>
+        <Field Name="YearToDateFormat">
+          <DataField>YearToDateFormat</DataField>
+        </Field>
+        <Field Name="UsageCost">
+          <DataField>UsageCost</DataField>
+        </Field>
+        <Field Name="UsageCostFormat">
+          <DataField>UsageCostFormat</DataField>
+        </Field>
+        <Field Name="Billing_Cost">
+          <DataField>Billing_Cost</DataField>
+        </Field>
+        <Field Name="Billing_CostFormat">
+          <DataField>Billing_CostFormat</DataField>
+        </Field>
+        <Field Name="OpenAR">
+          <DataField>OpenAR</DataField>
+        </Field>
+        <Field Name="OpenARFormat">
+          <DataField>OpenARFormat</DataField>
+        </Field>
+        <Field Name="OpenAP">
+          <DataField>OpenAP</DataField>
+        </Field>
+        <Field Name="OpenAPFormat">
+          <DataField>OpenAPFormat</DataField>
+        </Field>
+        <Field Name="CashFlow">
+          <DataField>CashFlow</DataField>
+        </Field>
+        <Field Name="CashFlowFormat">
+          <DataField>CashFlowFormat</DataField>
+        </Field>
+        <Field Name="JOBDATESINFOCaption">
+          <DataField>JOBDATESINFOCaption</DataField>
+        </Field>
+        <Field Name="CreationDateCaption">
+          <DataField>CreationDateCaption</DataField>
+        </Field>
+        <Field Name="EstimatedStartDateCaption">
+          <DataField>EstimatedStartDateCaption</DataField>
+        </Field>
+        <Field Name="StartDateCaption">
+          <DataField>StartDateCaption</DataField>
+        </Field>
+        <Field Name="EstimatedCompletionDateCaption">
+          <DataField>EstimatedCompletionDateCaption</DataField>
+        </Field>
+        <Field Name="CompletionDateCaption">
+          <DataField>CompletionDateCaption</DataField>
+        </Field>
+        <Field Name="EndingDateCaption">
+          <DataField>EndingDateCaption</DataField>
+        </Field>
+        <Field Name="Job_Creation_Date">
+          <DataField>Job_Creation_Date</DataField>
+        </Field>
+        <Field Name="Job_Estimated_Start_Date">
+          <DataField>Job_Estimated_Start_Date</DataField>
+        </Field>
+        <Field Name="Job_Starting_Date">
+          <DataField>Job_Starting_Date</DataField>
+        </Field>
+        <Field Name="Job_Estimated_Completion_Date">
+          <DataField>Job_Estimated_Completion_Date</DataField>
+        </Field>
+        <Field Name="Job_Completion_Date">
+          <DataField>Job_Completion_Date</DataField>
+        </Field>
+        <Field Name="Job_Ending_Date">
+          <DataField>Job_Ending_Date</DataField>
+        </Field>
+        <Field Name="BUDGETVSACTUALCaption">
+          <DataField>BUDGETVSACTUALCaption</DataField>
+        </Field>
+        <Field Name="BudgetedCostCaption">
+          <DataField>BudgetedCostCaption</DataField>
+        </Field>
+        <Field Name="BudgetedPriceCaption">
+          <DataField>BudgetedPriceCaption</DataField>
+        </Field>
+        <Field Name="BudgetedProfitCaption">
+          <DataField>BudgetedProfitCaption</DataField>
+        </Field>
+        <Field Name="ActualCostCaption">
+          <DataField>ActualCostCaption</DataField>
+        </Field>
+        <Field Name="ActualPriceCaption">
+          <DataField>ActualPriceCaption</DataField>
+        </Field>
+        <Field Name="ActualProfitToDateCaption">
+          <DataField>ActualProfitToDateCaption</DataField>
+        </Field>
+        <Field Name="BudgetedCost">
+          <DataField>BudgetedCost</DataField>
+        </Field>
+        <Field Name="BudgetedCostFormat">
+          <DataField>BudgetedCostFormat</DataField>
+        </Field>
+        <Field Name="BudgetedPrice">
+          <DataField>BudgetedPrice</DataField>
+        </Field>
+        <Field Name="BudgetedPriceFormat">
+          <DataField>BudgetedPriceFormat</DataField>
+        </Field>
+        <Field Name="BudgetedProfit">
+          <DataField>BudgetedProfit</DataField>
+        </Field>
+        <Field Name="BudgetedProfitFormat">
+          <DataField>BudgetedProfitFormat</DataField>
+        </Field>
+        <Field Name="BudgetVariancePercentCaption">
+          <DataField>BudgetVariancePercentCaption</DataField>
+        </Field>
+        <Field Name="ActCostVariance_">
+          <DataField>ActCostVariance_</DataField>
+        </Field>
+        <Field Name="ActCostVariance_Format">
+          <DataField>ActCostVariance_Format</DataField>
+        </Field>
+        <Field Name="ActPriceVariance_">
+          <DataField>ActPriceVariance_</DataField>
+        </Field>
+        <Field Name="ActPriceVariance_Format">
+          <DataField>ActPriceVariance_Format</DataField>
+        </Field>
+        <Field Name="ActProfitVariance_">
+          <DataField>ActProfitVariance_</DataField>
+        </Field>
+        <Field Name="ActProfitVariance_Format">
+          <DataField>ActProfitVariance_Format</DataField>
+        </Field>
+        <Field Name="Comment_Line_Date">
+          <DataField>Comment_Line_Date</DataField>
+        </Field>
+        <Field Name="Comment_Line_Comment">
+          <DataField>Comment_Line_Comment</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

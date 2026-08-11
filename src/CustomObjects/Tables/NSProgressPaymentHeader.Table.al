@@ -1,5 +1,6 @@
 table 14021340 "NS_Progress Payment Header"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -9,8 +10,7 @@ table 14021340 "NS_Progress Payment Header"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-499.MS.1.0 new changes for progress payment
-    //PRJ-1194.NK.1.0 02Mar2022 | Create New Field.
-    //PRJCTPR-279.HS.1.0 15Jan2024 | Added Code
+
     Caption = 'Progress Payment Header';
     DrillDownPageID = "NS_Progress Billing List";
     LookupPageID = "NS_Progress Billing List";
@@ -80,7 +80,7 @@ table 14021340 "NS_Progress Payment Header"
         {
             Caption = 'Work Retention Percent';
             DataClassification = CustomerContent;
-            MinValue = 0; //PRJ-1194.NK 
+
             trigger OnValidate();
             begin
                 if "NS_Work Retention Percent" <> xRec."NS_Work Retention Percent" then
@@ -193,10 +193,8 @@ table 14021340 "NS_Progress Payment Header"
         field(60; "NS_Subcontract Draw No."; Code[25])
         {
             Caption = 'Subcontract Draw No.';
-            // TableRelation = "NS_Subcontract Draw"."NS_No." WHERE("NS_Subcontract No." = FIELD("NS_No."),
-            //                                                 NS_Closed = CONST(false));//PE-183.AS.1.0 COMMENTED OLD TR
-            TableRelation = NS_Draw."NS_No." WHERE("NS_Job No." = FIELD("NS_Job No."),
-                                                            NS_Closed = CONST(false));//PE-183.AS.1.0 Add corrected
+            TableRelation = "NS_Subcontract Draw"."NS_No." WHERE("NS_Subcontract No." = FIELD("NS_No."),
+                                                            NS_Closed = CONST(false));
             DataClassification = CustomerContent;
         }
         field(500; "NS_Subcontract No. Filter"; Code[20])
@@ -236,14 +234,11 @@ table 14021340 "NS_Progress Payment Header"
 
             trigger OnValidate();
             begin
-                if "NS_Manual Retention Amount" = 0 then begin//PE-183.AS.1.0 end   Putted old code inside begin..end
+                if "NS_Manual Retention Amount" = 0 then
                     if xRec."NS_Manual Retention Amount" <> 0 then begin
                         "NS_Work Retention Percent" := 0;
                         "NS_Material Retention Percent" := 0;
                     end;
-                    CalcFields(Rec.NS_RetentionBaseAmt);
-                    Rec.NS_RetentionAmt := (Rec.NS_RetentionBaseAmt * Rec."NS_Work Retention Percent") / 100;//PE-183.AS.1.0 Added
-                end;//PE-183.AS.1.0 end
 
                 if "NS_Manual Retention Amount" <> 0 then begin
                     CALCFIELDS("NS_Line Work Amount", "NS_Line Material Amount");
@@ -256,38 +251,9 @@ table 14021340 "NS_Progress Payment Header"
                             "NS_Material Retention Percent" := "NS_Manual Retention Amount" / "NS_Line Material Amount" * 100;
                     end else
                         "NS_Manual Retention Amount" := 0;
-                    Rec.NS_RetentionAmt := 0;//PE-183.AS.1.0
                 end;
             end;
         }
-        //PRJ-1194.NK.1.0 02Mar2022 Start
-        field(602; "NS_Retention Reduction Invoice"; Boolean)
-        {
-            Caption = 'Retention Reduction Invoice';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1194.NK.1.0 02Mar2022 End
-
-        //PE-183.AS.1.0 START
-        field(603; "NS_RetentionBaseAmt"; Decimal)
-        {
-            CalcFormula = Sum("NS_Progress Payment Line"."NS_Work Amount" WHERE("NS_Progress Payment No." = FIELD("NS_No."),
-                                                                                        "NS_Requisition No." = FIELD("NS_Requisition No."),
-                                                                                        "NS_Version No." = FIELD("NS_Version No.")));
-            Caption = 'Retention Base Amount';
-            FieldClass = FlowField;
-            Editable = false;
-        }
-        field(604; "NS_RetentionAmt"; Decimal)
-        {
-            Caption = 'Retention Amount';
-            DataClassification = CustomerContent;
-            Editable = false;
-            trigger OnValidate()
-            begin
-            end;
-        }
-        //PE-183.AS.1.0 END
     }
 
     keys
@@ -372,7 +338,10 @@ table 14021340 "NS_Progress Payment Header"
             ProgressPaymentLine.SETRANGE("NS_Version No.", "NS_Version No.");
             if ProgressPaymentLine.FINDSET() then
                 repeat
-                    ProgressPaymentLine.NS_LineCalculations(ProgressPaymentLine);
+                    // >> Upgrade
+                    //ProgressPaymentLine.NS_LineCalculations(ProgressPaymentLine);
+                    ProgressPaymentLine.NS_LineCalculations(ProgressPaymentLine, true);
+                    // << Upgrade
                     ProgressPaymentLine.MODIFY();
                 until ProgressPaymentLine.NEXT() = 0;
 
@@ -700,6 +669,9 @@ table 14021340 "NS_Progress Payment Header"
         ProgressPaymentCommentLine2: Record "NS_Progress PaymentCommentLine";
         JobsSetup: Record "Jobs Setup";
         NewNumber: Integer;
+        // >> Upgrade
+        Subcontract: Record NS_Subcontract;
+    // << Upgrade
     begin
         NewNumber := -1;
         with PaymentHeader do begin
@@ -723,6 +695,11 @@ table 14021340 "NS_Progress Payment Header"
                     "NS_Material Retention Percent" := ProgressPaymentHeader."NS_Material Retention Percent";
                     "NS_Round Amounts" := ProgressPaymentHeader."NS_Round Amounts";
                     NS_Final := false;
+                    // >> Upgrade
+                    OnBeforeInsertNewRequisition(PaymentHeader, Subcontract);
+                    // << Upgrade
+
+                    Insert;
                     INSERT();
 
                     ProgressPaymentLine.RESET();
@@ -736,14 +713,10 @@ table 14021340 "NS_Progress Payment Header"
                             ProgressPaymentLine2."NS_Requisition No." := PaymentHeader."NS_Requisition No.";
                             ProgressPaymentLine2."NS_Version No." := 0;
                             ProgressPaymentLine2.INSERT();
-                            ProgressPaymentLine2.NS_LineCalculations(ProgressPaymentLine2);
-                            //PRJCTPR-318.JS.1.0 15FEB2024 - Start
-                            if (PaymentHeader."NS_Retention Reduction Invoice" = true) and
-                                (PaymentHeader."NS_Work Retention Percent" + PaymentHeader."NS_Material Retention Percent" = 0) then begin
-                                ProgressPaymentLine2."NS_Work Retention Amount" := 0;
-                                ProgressPaymentLine2."NS_Work Retention Percent" := 0;
-                            end;
-                            //PRJCTPR-318.JS.1.0 15FEB2024 - end
+                            // >> Upgrade
+                            OnBeforeInsertNewRequisition2(ProgressPaymentLine2, ProgressPaymentLine);
+                            ProgressPaymentLine2.NS_LineCalculations(ProgressPaymentLine2, false); // #RG008
+                            // << Upgrade
                             ProgressPaymentLine2.MODIFY();
                         until ProgressPaymentLine.NEXT() = 0;
 
@@ -789,6 +762,9 @@ table 14021340 "NS_Progress Payment Header"
         Text0002: Label 'There must be an existing requisition showing.';
         Text0003: Label 'The existing requisition must not be Paid.';
         Text0004: Label 'This requisition is final.';
+        // >> Upgrade
+        Subcontract: Record NS_Subcontract;
+    // << Upgrade
     begin
         NewNumber := -1;
 
@@ -812,6 +788,9 @@ table 14021340 "NS_Progress Payment Header"
                             ProgressPaymentHeader2."NS_Requisition No." := ProgressPaymentHeader."NS_Requisition No.";
                             ProgressPaymentHeader2."NS_Version No." := ProgressPaymentHeader."NS_Version No." + 1;
                             ProgressPaymentHeader2.NS_Status := NS_Status::Open;
+                            // >> Upgrade
+                            OnNewVersion1(ProgressPaymentHeader, ProgressPaymentHeader2, Subcontract);
+                            // << Upgrade
                             ProgressPaymentHeader2.INSERT();
 
                             ProgressPaymentLine.RESET();
@@ -824,7 +803,10 @@ table 14021340 "NS_Progress Payment Header"
                                     ProgressPaymentLine2.TRANSFERFIELDS(ProgressPaymentLine);
                                     ProgressPaymentLine2."NS_Version No." := ProgressPaymentHeader2."NS_Version No.";
                                     ProgressPaymentLine2.INSERT();
-                                    ProgressPaymentLine2.NS_LineCalculations(ProgressPaymentLine2);
+                                    // >> Upgrade
+                                    //ProgressPaymentLine2.NS_LineCalculations(ProgressPaymentLine2);
+                                    ProgressPaymentLine2.NS_LineCalculations(ProgressPaymentLine2, false); // #RG008
+                                                                                                           // << Upgrade
                                 until ProgressPaymentLine.NEXT() = 0;
 
                             CALCFIELDS("NS_Line Work Amount");
@@ -931,9 +913,17 @@ table 14021340 "NS_Progress Payment Header"
         StoredMaterialToPay: Decimal;
         LineNumber: Integer;
         ModCount: Integer;
-        PurHdrRec: Record "Purchase Header"; //PE-183.AS.1.0
+        // >> Upgrade
+        TotalPOValue: Decimal;
+        SubconPaymentValue: Decimal;
+        ClaimPercent: Decimal;
+        QtyToReceive: Decimal;
+    // << Upgrade
     begin
         //Update the Payables Document Lines
+        // >> Upgrade
+        OnBeforeUpdatePurchaseOrderLines(PaymentHeader, PurchaseHeader);
+        // << Upgrade
         with ProgressPaymentLine do begin
             JobsSetup.GET();
             GLSetup.GET();
@@ -943,6 +933,18 @@ table 14021340 "NS_Progress Payment Header"
             SETRANGE("NS_Progress Payment No.", PaymentHeader."NS_No.");
             SETRANGE("NS_Requisition No.", PaymentHeader."NS_Requisition No.");
             SETRANGE("NS_Version No.", PaymentHeader."NS_Version No.");
+            // >> Upgrade
+            // >> 003
+            PurchaseLine.SetRange("Document Type", PurchaseLine."Document Type"::Order);
+            PurchaseLine.SetRange("Document No.", PaymentHeader."NS_Purchase Order No.");
+            PurchaseLine.CalcSums("Line Amount");
+            TotalPOValue := PurchaseLine."Line Amount";
+
+            ProgressPaymentLine.CalcSums(NS_Total);
+            SubconPaymentValue := ProgressPaymentLine.NS_Total;
+            ClaimPercent := SubconPaymentValue / TotalPOValue;
+            // << 003
+            // << Upgrade
             if FINDSET() then
                 repeat
                     //Look for line retention calculations
@@ -960,23 +962,55 @@ table 14021340 "NS_Progress Payment Header"
                         StoredMaterialToPay := 0;
 
                     //Calculate and modify the "Qty. to Receive" on the Purchase Line
-                    //if PurchaseLine.GET(PurchaseLine."Document Type"::Order, "NS_Purchase Order No.", "NS_Line No.") then begin //PRJ-1106.GK.1.0 29Dec2021 |Comment
-                    if PurchaseLine.GET(PurchaseLine."Document Type"::Order, "NS_Purchase Order No.", "NS_PO Line No.") then begin //PRJ-1106.GK.1.0 29Dec2021 |add new line
+                    if PurchaseLine.GET(PurchaseLine."Document Type"::Order, "NS_Purchase Order No.", "NS_Line No.") then begin
                         //PurchaseLine."Qty. to Receive" := NS_Total - PurchaseLine."Quantity Received";//PRJ-499.MS.1.0 comment
                         //PurchaseLine.VALIDATE(PurchaseLine."Qty. to Receive");PRJ-499.MS.1.0 comment
                         //PRJ-499.MS.1.0 start
-                        if (PurchaseLine."NS_Subcontract Payment Percent" = 0) and (PurchaseLine."Quantity Received" < PurchaseLine.Quantity) then
+                        // >> Upgrade
+                        // if (PurchaseLine."NS_Subcontract Payment Percent" = 0) and (PurchaseLine."Quantity Received" < PurchaseLine.Quantity) then
+                        //     if PurchaseLine.Quantity <> 0 then
+                        //         PurchaseLine."NS_Subcontract Payment Percent" := PurchaseLine."Quantity Received" / PurchaseLine.Quantity * 100
+                        //     else
+                        //         ERROR(Text14021102);
+                        // PurchaseLine.validate("NS_Subcontract Payment Percent", NS_Quantity);
+                        // PurchaseLine."NS_Subcontract Payment Value" := PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100) * PurchaseLine."Direct Unit Cost";
+                        // PurchaseLine."Qty. to Receive" := (PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100)) - PurchaseLine."Quantity Received";
+                        // if PurchaseLine."Qty. to Receive" < 0 then
+                        //     ERROR(Text14021104, FORMAT(PurchaseLine."Quantity Received"), FORMAT(PurchaseLine."Quantity Received" + PurchaseLine."Qty. to Receive"));
+                        // PurchaseLine.VALIDATE("Amount Including VAT");
+                        // PurchaseLine.VALIDATE("Qty. to Receive");
+                        //This code added
+                        if ProgressPaymentLine."NS_No." <> '' then begin
                             if PurchaseLine.Quantity <> 0 then
-                                PurchaseLine."NS_Subcontract Payment Percent" := PurchaseLine."Quantity Received" / PurchaseLine.Quantity * 100
+                                PurchaseLine."NS_Subcontract Payment Percent" := ProgressPaymentLine.NS_Quantity
                             else
-                                ERROR(Text14021102);
-                        PurchaseLine.validate("NS_Subcontract Payment Percent", NS_Quantity);
-                        PurchaseLine."NS_Subcontract Payment Value" := PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100) * PurchaseLine."Direct Unit Cost";
-                        PurchaseLine."Qty. to Receive" := (PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100)) - PurchaseLine."Quantity Received";
-                        if PurchaseLine."Qty. to Receive" < 0 then
-                            ERROR(Text14021104, FORMAT(PurchaseLine."Quantity Received"), FORMAT(PurchaseLine."Quantity Received" + PurchaseLine."Qty. to Receive"));
-                        PurchaseLine.VALIDATE("Amount Including VAT");
-                        PurchaseLine.VALIDATE("Qty. to Receive");
+                                PurchaseLine."NS_Subcontract Payment Percent" := 0;
+
+                            PurchaseLine.Validate("NS_Subcontract Payment Value", ProgressPaymentLine.NS_Total);
+
+                        end else begin
+                            if PurchaseLine.Quantity <> 0 then
+                                PurchaseLine."NS_Subcontract Payment Percent" := Round(ClaimPercent * 100, 0.0001, '=')
+                            else
+                                PurchaseLine."NS_Subcontract Payment Percent" := 0;
+
+                            PurchaseLine.Validate("NS_Subcontract Payment Value", PurchaseLine."Line Amount" * ClaimPercent);
+
+                        end;
+
+                        QtyToReceive := Round((PurchaseLine."NS_Subcontract Payment Value" / PurchaseLine."Line Amount") * PurchaseLine.Quantity, 0.000001, '=') - PurchaseLine."Quantity Received";
+                        if (PurchaseLine."Line Amount" <> 0) and (QtyToReceive > 0) then
+                            PurchaseLine.Validate("Qty. to Receive", QtyToReceive)
+                        else
+                            PurchaseLine.Validate("Qty. to Receive", 0);
+
+                        // << 003
+
+                        // >> 006
+                        OnBeforeUpdatePurchaseOrderLines2(PurchaseLine, ProgressPaymentLine);
+                        //PurchaseLine."Progress Payment Retention Amt" := ProgressPaymentLine."NS_Work Retention Amount";
+                        // << 006
+                        // << Upgrade
                         //PRJ-499.MS.1.0 end
                         PurchaseLine.MODIFY();
                         ModCount := ModCount + 1;
@@ -986,18 +1020,10 @@ table 14021340 "NS_Progress Payment Header"
             //Update the Progress Payment Header Status
             PaymentHeader.NS_Status := PaymentHeader.NS_Status::Invoiced;
             PaymentHeader.MODIFY();
-
-            //PE-183.AS.1.0 start
-            // Commit();
-            if PurHdrRec.get(PurHdrRec."Document Type"::Order, PaymentHeader."NS_Purchase Order No.") then begin
-                PurHdrRec."NS_Retention Amount (LCY)" := PaymentHeader.NS_RetentionAmt;
-                PurHdrRec."NS_Retention Percent" := PaymentHeader."NS_Work Retention Percent";
-                PurHdrRec."NS_Draw No." := PaymentHeader."NS_Subcontract Draw No.";
-                PurHdrRec.Modify();
-            end;
-            //PE-183.AS.1.0 end
-
-            MESSAGE(Text02);
+            // >> Upgrade
+            OnAfterUpdatePurchaseOrderLines(PurchaseHeader);
+            //MESSAGE(Text02);
+            // << Upgrade
         end;
     end;
 
@@ -1164,146 +1190,36 @@ table 14021340 "NS_Progress Payment Header"
             exit(PurchaseHeader."Posting Date");
         exit(WORKDATE);
     end;
-
-    //PRJ-1194.NK.1.0 02Mar2022 Start
-    procedure CreateRetentionReductionInv(PaymentHeader: Record "NS_Progress Payment Header"; vendorNo: Code[20]);
-    var
-        PurchaseHeader: Record "Purchase Header";
-        PurchaseDocumentNo: Code[20];
-        NoSeriesMgt: Codeunit NoSeriesManagement;
-        PurchSetup: Record "Purchases & Payables Setup";
-        PurchInvHead: Record "Purchase Header";
-        PurchLine: Record "Purchase Line";
-        ProgrPaymLine: Record "NS_Progress Payment Line";
-        NSProgressPaymentHead: record "NS_Progress Payment Header"; //PRJCTPR-318.JS.1.0 12FEB2024
-        NSPaymrntTerms: record "Payment Terms";  //PRJCTPR-294.JS.1.0 12FEB2024
-        NSPreviousLineRetentionAmt: Decimal; //PRJCTPR-318.JS.1.0 14FEB2024
-        NSRetentionPercentOnHeader: Decimal; //PRJCTPR-318.JS.1.0 14FEB2024
-        LineAmt: Decimal;
-        Answer: Boolean;
-        text0001: Label 'Purchase Invoice ';
-        text0002: Label '\Would you like to go there now?';
-        NS_RetenLedCode: Record "NS_Retention Ledger Code";
-        Jobs: Record job;
-        PurchHeader: Record "Purchase Header";
-        // PRJCTPR-279.HS.1.0 15Jan2024  Start
-        NS_VendorPostGroup: Record "Vendor Posting Group";
-        NS_Vendor: Record Vendor;
-        NS_GLAccount: Record "G/L Account";
-    //PRJCTPR-279.HS.1.0 15Jan2024 End
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeInsertNewRequisition(var PaymentHeader: Record "NS_Progress Payment Header"; var Subcontract: Record NS_Subcontract)
     begin
-        clear(NSPreviousLineRetentionAmt);   //PRJCTPR-318.JS.1.0 14FEB2024
-        clear(NSRetentionPercentOnHeader);  //PRJCTPR-318.JS.1.0 14FEB2024
-        PurchaseDocumentNo := '';
-        if PurchSetup.Get() then;
-        PurchaseDocumentNo := NoSeriesMgt.GetNextNo(PurchSetup."Invoice Nos.", WORKDATE(), true);
-        PurchInvHead.init();
-        PurchInvHead."Document Type" := PurchInvHead."Document Type"::Invoice;
-        PurchInvHead."No." := PurchaseDocumentNo;
-        PurchInvHead.Validate("Buy-from Vendor No.", vendorNo);
-        PurchInvHead."Vendor Order No." := PaymentHeader."NS_Purchase Order No.";
-        PurchInvHead."NS_Subcontract No." := PaymentHeader."NS_Subcontract No.";
-        PurchInvHead.Validate("NS_Job No.", PaymentHeader."NS_Job No.");
-        PurchInvHead."NS_Retention Document" := true;
-        PurchInvHead.Insert(true);
-        //PRJCTPR-294.JS.1.0 05JAN2024 - Start
-        if NS_Vendor.get(vendorNo) then begin
-            if (NS_Vendor."Payment Terms Code" = '') and (PurchInvHead."Due Date" = 0D) then
-                PurchInvHead.validate("Due Date", Today)
-            else begin
-                if NSPaymrntTerms.get(NS_Vendor."Payment Terms Code") then
-                    PurchInvHead.validate("Due Date", CalcDate(NSPaymrntTerms."Due Date Calculation", Today));
-            end;
-            PurchInvHead.modify();
-        end;
-        //PRJCTPR-294.JS.1.0 05JAN2024 - end
-
-        PurchLine.Init();
-        PurchLine."Document Type" := PurchLine."Document Type"::Invoice;
-        PurchLine."Document No." := PurchaseDocumentNo;
-        PurchLine."Line No." := 10000;
-        PurchLine.Type := PurchLine.Type::NS_Ledger;
-        PurchLine.validate("No.", 'RETENTION');
-        if NS_RetenLedCode.Get('RETENTION') then
-            PurchLine.Description := NS_RetenLedCode.NS_Description;
-
-        PurchLine.Validate(Quantity, 1);
-        LineAmt := 0;
-        ProgrPaymLine.Reset();
-        ProgrPaymLine.SetRange("NS_Subcontract No.", PaymentHeader."NS_Subcontract No.");
-        ProgrPaymLine.SetRange("NS_Progress Payment No.", PaymentHeader."NS_No.");
-        ProgrPaymLine.SetRange("NS_Requisition No.", PaymentHeader."NS_Requisition No.");
-        ProgrPaymLine.SetRange("NS_Version No.", PaymentHeader."NS_Version No.");
-        if ProgrPaymLine.FindFirst() then begin
-            ProgrPaymLine.CalcSums("NS_Work Retention Amount");
-            LineAmt += ProgrPaymLine."NS_Work Retention Amount";
-
-            PurchLine."Job Task No." := ProgrPaymLine."NS_Job Task No.";
-        end;
-        //PRJCTPR-318.JS.1.0 12FEB2024 - Start
-        NSRetentionPercentOnHeader := PaymentHeader."NS_Work Retention Percent" + PaymentHeader."NS_Material Retention Percent";
-        NSProgressPaymentHead.Reset();
-        NSProgressPaymentHead.setrange("NS_Subcontract No.", PaymentHeader."NS_Subcontract No.");
-        NSProgressPaymentHead.setrange("NS_No.", PaymentHeader."NS_No.");
-        NSProgressPaymentHead.setrange(NS_Status, NSProgressPaymentHead.NS_Status::Invoiced);
-        if NSProgressPaymentHead.FindLast() then begin
-            ProgrPaymLine.Reset();
-            ProgrPaymLine.SetRange("NS_Subcontract No.", NSProgressPaymentHead."NS_Subcontract No.");
-            ProgrPaymLine.SetRange("NS_Progress Payment No.", NSProgressPaymentHead."NS_No.");
-            ProgrPaymLine.SetRange("NS_Requisition No.", NSProgressPaymentHead."NS_Requisition No.");
-            ProgrPaymLine.SetRange("NS_Version No.", NSProgressPaymentHead."NS_Version No.");
-            if ProgrPaymLine.FindFirst() then begin
-                ProgrPaymLine.CalcSums("NS_Work Retention Amount");
-                NSPreviousLineRetentionAmt := ProgrPaymLine."NS_Work Retention Amount";
-            end;
-        end;
-        //PRJCTPR-318.JS.1.0 12FEB2024 - Start
-        if Jobs.Get(PaymentHeader."NS_Job No.") then;
-        //PRJ-1489.GK.1.0 start
-        //PurchLine."Gen. Prod. Posting Group" := Jobs."NS_Gen. Prod. Posting Group"; 
-        // PurchLine."Gen. Prod. Posting Group" := Jobs."NS_Gen. Prod. Posting Group New";  //PRJCTPR-279.HS.1.0 15Jan2024 Commented
-        //PRJ-1489.GK.1.0 end
-        //PRJCTPR-279.HS.1.0 15Jan2024 Start
-        if NS_Vendor.Get(vendorNo) then;
-        NS_VendorPostGroup.Reset();
-        NS_VendorPostGroup.SetRange(Code, NS_Vendor."Vendor Posting Group");
-        if NS_VendorPostGroup.FindFirst() then begin
-            if NS_GLAccount.Get(NS_VendorPostGroup."NS_Retention Payables Account") then
-                PurchLine."Gen. Prod. Posting Group" := NS_GLAccount."Gen. Prod. Posting Group";
-        end;
-        //PRJCTPR-279.HS.1.0 15Jan2024 End
-        PurchLine.Validate("Direct Unit Cost", LineAmt);
-        //PRJCTPR-318.JS.1.0 14FEB2024 - Start
-        if NSRetentionPercentOnHeader > 0 then
-            PurchLine.Validate("Direct Unit Cost", NSPreviousLineRetentionAmt - LineAmt)
-        else
-            PurchLine.Validate("Direct Unit Cost", LineAmt);
-        //PRJCTPR-318.JS.1.0 14FEB2024 - end
-        PurchLine."NS_Subcontract No." := PaymentHeader."NS_Subcontract No."; //PRJ-1194.NK.1.0 09May2022
-        PurchLine.Insert();
-        //PRJ-1194.NK.1.1 02Mar2022  Start
-        Rec.NS_Status := Rec.NS_Status::Invoiced;
-        Rec.Modify();
-        if PurchHeader.get(PurchHeader."Document Type"::Order, Rec."NS_Purchase Order No.") then begin
-            PurchHeader.Status := PurchHeader.Status::Open;
-            PurchHeader.Modify();
-        end;
-        Commit();
-        if PurchHeader.get(PurchHeader."Document Type"::Order, Rec."NS_Purchase Order No.") then begin
-            PurchHeader.validate("NS_Retention Percent", Rec."NS_Work Retention Percent");
-            PurchHeader.Status := PurchHeader.Status::Released;
-            PurchHeader.Modify();
-        end;
-        //PRJ-1194.NK.1.1 02Mar2022  End
-
-        //Message(text0001, PurchaseDocumentNo);
-        PurchaseHeader.Reset();
-        PurchaseHeader.SetRange("No.", PurchaseDocumentNo);
-        if CONFIRM(text0001 + PurchaseDocumentNo + text0002, true) then
-            PurchaseHeader.Reset();
-        PurchaseHeader.SetRange("No.", PurchaseDocumentNo);
-        PAGE.RUN(51, PurchaseHeader);
     end;
-    //PRJ-1194.NK.1.0 02Mar2022 End
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeInsertNewRequisition2(var ProgressPaymentLine2: Record "NS_Progress Payment Line"; var ProgressPaymentLine: Record "NS_Progress Payment Line")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnNewVersion1(var ProgressPaymentHeader: Record "NS_Progress Payment Header"; var ProgressPaymentHeader2: Record "NS_Progress Payment Header"; var Subcontract: Record NS_Subcontract)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeUpdatePurchaseOrderLines(var PaymentHeader: Record "NS_Progress Payment Header"; var PurchaseHeader: Record "Purchase Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeUpdatePurchaseOrderLines2(var PurchaseLine: Record "Purchase Line"; var ProgressPaymentLine: Record "NS_Progress Payment Line")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterUpdatePurchaseOrderLines(var PurchaseHeader: Record "Purchase Header")
+    begin
+    end;
+    // << Upgrade
 }
 

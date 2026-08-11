@@ -9,8 +9,7 @@ page 14021436 "NS_Job Quote CreateInteraction"
     // +  - www.gemko.com
     // +------------------------------------------------------------
 
-   //PE-6.NK.1.0 28Feb2023 Added Fields
-   Caption = 'Create Interaction';
+    Caption = 'Create Interaction';
     DataCaptionExpression = NS_Caption();
     DeleteAllowed = false;
     InsertAllowed = false;
@@ -277,36 +276,6 @@ page 14021436 "NS_Job Quote CreateInteraction"
                         end;
                     end;
                 }
-                //PE-6.NK.1.0 28Feb2023 Start
-                field("NS_Job Quote No."; Rec."NS_Job Quote No.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the Job Quote No. field.';
-                }
-                field("NS_Job No."; Rec."NS_Job No.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the Job No. field.';
-                }
-
-                field("NS_Job Task No."; Rec."NS_Job Task No.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the Job Task No. field.';
-                }
-                field("NS_Subcontract No."; Rec."NS_Subcontract No.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the Subcontract No. field.';
-                }
-
-                field("NS_Progess Billing No."; Rec."NS_Progess Billing No.")
-                {
-                    ApplicationArea = Jobs;
-                    ToolTip = 'Specifies the value of the Progess Billing No. field.';
-                }
-                //PE-6.NK.1.0 28Feb2023 End
-
             }
         }
     }

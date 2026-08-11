@@ -11,7 +11,7 @@ table 14021164 "NS_Crew Line"
     ////PRJ-744.JS.1.0�23July2021 Add field NS_Active
     //PRJ-949.GK.1.0 01Oct2021 |Added Code
     //PRJ-991.GK.2.0 22Oct2021 | Added code
-    //PRJ-1270.NK.1.0 29Mar2022 | Added code
+
     Caption = 'Crew Line';
 
     fields
@@ -39,8 +39,6 @@ table 14021164 "NS_Crew Line"
             var
                 NS_CrewLine: Record "NS_Crew Line"; //PRJ-991.GK.2.0 22Oct2021
                 Txt14021141Lbl: Label 'Resource Line already exist.'; //PRJ-991.GK.2.0 22Oct2021
-                ReSource: Record Resource; //PRJ-1270.NK.1.0 29Mar2022
-                Txt14021142Lbl: Label 'Sorry! Resource is Blocked.'; //PRJ-1270.NK.1.0 29Mar2022
             begin
                 //PRJ-991.GK.2.0 22Oct2021 start
                 NS_CrewLine.Reset();
@@ -49,15 +47,8 @@ table 14021164 "NS_Crew Line"
                 if not NS_CrewLine.IsEmpty() then
                     Error(Txt14021141Lbl);
                 //PRJ-991.GK.2.0 22Oct2021 end
-                //PRJ-1270.NK.1.0 29Mar2022 Start
-                if ReSource.get("NS_Resource No.") then;
-                if ReSource.Blocked then
-                    Error(Txt14021142Lbl);
-                //PRJ-1270.NK.1.0 29Mar2022 End
-
                 if "NS_Resource No." <> '' then
                     Validate(NS_Active, true);
-
             end;
             //PRJ-949.GK.1.0 01Oct2021 end
         }

@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Page_Caption">
+          <DataField>Page_Caption</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="Job_FilterCaption">
+          <DataField>Job_FilterCaption</DataField>
+        </Field>
+        <Field Name="Subcontract_FilterCaption">
+          <DataField>Subcontract_FilterCaption</DataField>
+        </Field>
+        <Field Name="Job_No_">
+          <DataField>Job_No_</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Report_TitleCaption">
+          <DataField>Report_TitleCaption</DataField>
+        </Field>
+        <Field Name="Job_NoCaption">
+          <DataField>Job_NoCaption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Subcontract_NoCaption">
+          <DataField>Subcontract_NoCaption</DataField>
+        </Field>
+        <Field Name="Starting_DateCaption">
+          <DataField>Starting_DateCaption</DataField>
+        </Field>
+        <Field Name="Contract_AmountCaption">
+          <DataField>Contract_AmountCaption</DataField>
+        </Field>
+        <Field Name="Invoiced_AmountCaption">
+          <DataField>Invoiced_AmountCaption</DataField>
+        </Field>
+        <Field Name="Retention_BalanceCaption">
+          <DataField>Retention_BalanceCaption</DataField>
+        </Field>
+        <Field Name="Payment_AmountCaption">
+          <DataField>Payment_AmountCaption</DataField>
+        </Field>
+        <Field Name="Balance_DueCaption">
+          <DataField>Balance_DueCaption</DataField>
+        </Field>
+        <Field Name="Contract_BalanceCaption">
+          <DataField>Contract_BalanceCaption</DataField>
+        </Field>
+        <Field Name="JobFilter">
+          <DataField>JobFilter</DataField>
+        </Field>
+        <Field Name="SubcontractFilter">
+          <DataField>SubcontractFilter</DataField>
+        </Field>
+        <Field Name="ShowSubcontractDetail">
+          <DataField>ShowSubcontractDetail</DataField>
+        </Field>
+        <Field Name="ShowLineDetail">
+          <DataField>ShowLineDetail</DataField>
+        </Field>
+        <Field Name="Job_No">
+          <DataField>Job_No</DataField>
+        </Field>
+        <Field Name="No">
+          <DataField>No</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Starting_Date">
+          <DataField>Starting_Date</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Budgeted_Cost">
+          <DataField>TotalToPrint_Budgeted_Cost</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Budgeted_CostFormat">
+          <DataField>TotalToPrint_Budgeted_CostFormat</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Invoiced_Cost">
+          <DataField>TotalToPrint_Invoiced_Cost</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Invoiced_CostFormat">
+          <DataField>TotalToPrint_Invoiced_CostFormat</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Contract_Balance">
+          <DataField>TotalToPrint_Contract_Balance</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Contract_BalanceFormat">
+          <DataField>TotalToPrint_Contract_BalanceFormat</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Retention_Amount">
+          <DataField>TotalToPrint_Retention_Amount</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Retention_AmountFormat">
+          <DataField>TotalToPrint_Retention_AmountFormat</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Payment_Made">
+          <DataField>TotalToPrint_Payment_Made</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Payment_MadeFormat">
+          <DataField>TotalToPrint_Payment_MadeFormat</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Balance_Due">
+          <DataField>TotalToPrint_Balance_Due</DataField>
+        </Field>
+        <Field Name="TotalToPrint_Balance_DueFormat">
+          <DataField>TotalToPrint_Balance_DueFormat</DataField>
+        </Field>
+        <Field Name="Job_No_Totals">
+          <DataField>Job_No_Totals</DataField>
+        </Field>
+        <Field Name="A_SubContractLineNo">
+          <DataField>A_SubContractLineNo</DataField>
+        </Field>
+        <Field Name="A_Subcontract_No">
+          <DataField>A_Subcontract_No</DataField>
+        </Field>
+        <Field Name="A_Subcontract_Description">
+          <DataField>A_Subcontract_Description</DataField>
+        </Field>
+        <Field Name="A_Starting_Date">
+          <DataField>A_Starting_Date</DataField>
+        </Field>
+        <Field Name="A_Contract_Amount">
+          <DataField>A_Contract_Amount</DataField>
+        </Field>
+        <Field Name="A_Contract_AmountFormat">
+          <DataField>A_Contract_AmountFormat</DataField>
+        </Field>
+        <Field Name="A_Invoiced_Amount">
+          <DataField>A_Invoiced_Amount</DataField>
+        </Field>
+        <Field Name="A_Invoiced_AmountFormat">
+          <DataField>A_Invoiced_AmountFormat</DataField>
+        </Field>
+        <Field Name="A_Contract_Balance">
+          <DataField>A_Contract_Balance</DataField>
+        </Field>
+        <Field Name="A_Contract_BalanceFormat">
+          <DataField>A_Contract_BalanceFormat</DataField>
+        </Field>
+        <Field Name="A_Retention_Balance">
+          <DataField>A_Retention_Balance</DataField>
+        </Field>
+        <Field Name="A_Retention_BalanceFormat">
+          <DataField>A_Retention_BalanceFormat</DataField>
+        </Field>
+        <Field Name="A_Payment_Amount">
+          <DataField>A_Payment_Amount</DataField>
+        </Field>
+        <Field Name="A_Payment_AmountFormat">
+          <DataField>A_Payment_AmountFormat</DataField>
+        </Field>
+        <Field Name="A_Balance_Due">
+          <DataField>A_Balance_Due</DataField>
+        </Field>
+        <Field Name="A_Balance_DueFormat">
+          <DataField>A_Balance_DueFormat</DataField>
+        </Field>
+        <Field Name="B_Job_TaskCaption">
+          <DataField>B_Job_TaskCaption</DataField>
+        </Field>
+        <Field Name="B_DescriptionCaption">
+          <DataField>B_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="B_TypeCaption">
+          <DataField>B_TypeCaption</DataField>
+        </Field>
+        <Field Name="B_NoCaption">
+          <DataField>B_NoCaption</DataField>
+        </Field>
+        <Field Name="B_QuantityCaption">
+          <DataField>B_QuantityCaption</DataField>
+        </Field>
+        <Field Name="B_Unit_Of_MeasureCaption">
+          <DataField>B_Unit_Of_MeasureCaption</DataField>
+        </Field>
+        <Field Name="B_Unit_CostCaption">
+          <DataField>B_Unit_CostCaption</DataField>
+        </Field>
+        <Field Name="B_Total_CostCaption">
+          <DataField>B_Total_CostCaption</DataField>
+        </Field>
+        <Field Name="B_Job_Task_No">
+          <DataField>B_Job_Task_No</DataField>
+        </Field>
+        <Field Name="B_Description">
+          <DataField>B_Description</DataField>
+        </Field>
+        <Field Name="B_Type">
+          <DataField>B_Type</DataField>
+        </Field>
+        <Field Name="B_No">
+          <DataField>B_No</DataField>
+        </Field>
+        <Field Name="B_Quantity">
+          <DataField>B_Quantity</DataField>
+        </Field>
+        <Field Name="B_QuantityFormat">
+          <DataField>B_QuantityFormat</DataField>
+        </Field>
+        <Field Name="B_Unit_Of_Measure_Code">
+          <DataField>B_Unit_Of_Measure_Code</DataField>
+        </Field>
+        <Field Name="B_Unit_Cost">
+          <DataField>B_Unit_Cost</DataField>
+        </Field>
+        <Field Name="B_Unit_CostFormat">
+          <DataField>B_Unit_CostFormat</DataField>
+        </Field>
+        <Field Name="B_Total_Cost">
+          <DataField>B_Total_Cost</DataField>
+        </Field>
+        <Field Name="B_Total_CostFormat">
+          <DataField>B_Total_CostFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

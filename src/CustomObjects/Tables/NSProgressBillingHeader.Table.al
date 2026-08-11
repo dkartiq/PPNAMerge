@@ -1,5 +1,6 @@
 table 14021325 "NS_Progress Billing Header"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -14,16 +15,7 @@ table 14021325 "NS_Progress Billing Header"
     //CTSI-121.N.S.1.0 18Aug2020 Add field manager & person responsible
     //PRJ-913.JS.1.0�14Sep2021 |Add procedure to flow dimension set ID as per job task lines
     //PRJ-980.MS.1.0 21Oct2021 | increase decimal places from 2 to 8
-    //PRJ-999.JS.1.0 09Nov2021 | Add fields    
-    //PRJ-1132.NK.1.0 13Jan2022 | Removed with statement
-    //PRJ-1216.JS.1.0 04MAR2022 | Create new procedure
-    //PRJ-1216.JS.2.0 25MAR2022 | Correct code as per Normal Tax
-    //PRJ-1216.JS.3.0 28MAR2022
-    //PRJ-1519.NK.1.0 15Jul2022 | Added Code
-    //PRJ-1624.NK.1.0 22Sep2022 | Added Field
-    //PRJ-1632.RM.1.0 28Sept2022 | Added some code
-    //PE-53.RM.1.0 07March2023 | Added a field
-    //PE-22.JS.1.0 21FEB2023 | Add new field
+
     Caption = 'Progress Billing Header';
     DrillDownPageID = "NS_Progress Billing List";
     LookupPageID = "NS_Progress Billing List";
@@ -68,19 +60,6 @@ table 14021325 "NS_Progress Billing Header"
             Caption = 'Job No.';
             TableRelation = Job;
             DataClassification = CustomerContent;
-            // //PRJ-999.JS.1.0  09Nov2021 Start
-            // trigger OnValidate()
-            // var
-            //     Job_L: Record Job;
-            // begin
-            //     if Job_L.get("NS_Job No.") then Begin
-            //         "NS_Person Responsible" := Job_L."Person Responsible";
-            //         Rec."NS_Global Dimension 1 Code" := Job_L."Global Dimension 1 Code";
-            //         Rec."NS_Global Dimension 2 Code" := Job_L."Global Dimension 2 Code";
-            //         Rec."NS_Dimension Set ID" := GetDimensionNoFromJob("NS_Job No.");
-            //     end;
-            // end;
-            // //PRJ-999.JS.1.0  09Nov2021 end            
         }
         field(10; "NS_Requisition Date"; Date)
         {
@@ -95,12 +74,8 @@ table 14021325 "NS_Progress Billing Header"
         field(20; NS_Status; Option)
         {
             Caption = 'Status';
-            //PRJ-1332.JS.1.0 03MAY2022 Change - Start
-            //OptionCaption = 'Open,Invoiced,Accepted,Paid,Void,Invoice Posted';//PRJ-1332.GK.1.0 25Apr2022 Add new option
-            //OptionMembers = Open,Invoiced,Accepted,Paid,Void,"Invoice Posted"; //PRJ-1332.GK.1.0 25Apr2022 Add new option
             OptionCaption = 'Open,Invoiced,Accepted,Paid,Void';
             OptionMembers = Open,Invoiced,Accepted,Paid,Void;
-            //PRJ-1332.JS.1.0 03MAY2022 Change - end
             DataClassification = CustomerContent;
 
 
@@ -122,8 +97,8 @@ table 14021325 "NS_Progress Billing Header"
         {
             Caption = 'Work Retention Percent';
             DataClassification = CustomerContent;
-            //DecimalPlaces = 2 : 8;     //PRJ-980.MS.1.0  21Oct2021 //PRJ-1519.NK.1.0 15Jul2022 Block
-            DecimalPlaces = 2 : 15; //PRJ-1519.NK.1.0 15Jul2022
+            DecimalPlaces = 2 : 8;     //PRJ-980.MS.1.0  21Oct2021
+
             trigger OnValidate();
             begin
                 if "NS_Work Retention Percent" <> xRec."NS_Work Retention Percent" then
@@ -135,15 +110,6 @@ table 14021325 "NS_Progress Billing Header"
         {
             Caption = 'Material Retention Percent';
             DataClassification = CustomerContent;
-            DecimalPlaces = 2 : 15; //PRJ-1519.NK.1.0 15Jul2022
-            //PRJ-1519.NK.1.0 30Aug2022 Start
-            trigger OnValidate()
-            begin
-                if "NS_Material Retention Percent" <> xRec."NS_Material Retention Percent" then
-                    if "NS_Manual Stored Mat. Ret. Amt" <> 0 then
-                        ERROR(Text13);
-            end;
-            //PRJ-1519.NK.1.0 30Aug2022 End
         }
         field(30; NS_Comment; Boolean)
         {
@@ -317,14 +283,10 @@ table 14021325 "NS_Progress Billing Header"
         }
         field(601; "NS_Manual Retention Amount"; Decimal)
         {
-            //Caption = 'Manual Retention Amount'; //PRJ-1519.NK.1.0 30Aug2022 Block
-            Caption = 'Manual Work Retention Amount'; //PRJ-1519.NK.1.0 30Aug2022
+            Caption = 'Manual Retention Amount';
             DataClassification = CustomerContent;
 
             trigger OnValidate();
-            var
-                ProgBillLine: Record "NS_Progress Billing Line"; //PRJ-1519.NK.1.0 16Jul2022
-                TotRetAmt: Decimal; //PRJ-1519.NK.1.0 19Jul2022
             begin
                 if "NS_Manual Retention Amount" = 0 then
                     if xRec."NS_Manual Retention Amount" <> 0 then begin
@@ -332,48 +294,18 @@ table 14021325 "NS_Progress Billing Header"
                         "NS_Material Retention Percent" := 0;
                     end;
 
-                //PRJ-1519.NK.1.0 19Jul2022 Start
-                TotRetAmt := 0;
-                ProgBillLine.Reset();
-                ProgBillLine.SetRange("NS_Job No.", Rec."NS_Job No.");
-                ProgBillLine.SetRange("NS_Progress Billing No.", Rec."NS_No.");
-                ProgBillLine.SetRange("NS_Requisition No.", Rec."NS_Requisition No.");
-                ProgBillLine.SetRange("NS_Version No.", Rec."NS_Version No.");
-                IF ProgBillLine.FindSet() then
-                    repeat
-                        TotRetAmt += ProgBillLine.NS_Total;
-                    until ProgBillLine.Next() = 0;
-                //PRJ-1519.NK.1.0 19Jul2022 End
-
                 if "NS_Manual Retention Amount" <> 0 then begin
                     CALCFIELDS("NS_Line Work Amount", "NS_Line Material Amount");
                     if "NS_Line Work Amount" + "NS_Line Material Amount" = 0 then
                         ERROR(Text11);
                     if CONFIRM(Text10) then begin
-                        //if "NS_Line Work Amount" <> 0 then //PRJ-1519.NK.1.0 19Jul2022 Block
-                        //"NS_Work Retention Percent" := "NS_Manual Retention Amount" / "NS_Line Work Amount" * 100; //PRJ-1519.NK.1.0 19Jul2022 Block
-                        if TotRetAmt <> 0 then //PRJ-1519.NK.1.0 19Jul2022
-                            "NS_Work Retention Percent" := "NS_Manual Retention Amount" / TotRetAmt * 100; //PRJ-1519.NK.1.0 19Jul2022
-                                                                                                           //if "NS_Line Material Amount" <> 0 then //PRJ-1519.NK.1.0 30Aug2022 Block
-                                                                                                           //  "NS_Material Retention Percent" := "NS_Manual Retention Amount" / "NS_Line Material Amount" * 100;//PRJ-1519.NK.1.0 30Aug2022 Block
-                    end //else
-                        //"NS_Manual Retention Amount" := 0; //PRJ-1519.NK.1.0 30Aug2022 Block
+                        if "NS_Line Work Amount" <> 0 then
+                            "NS_Work Retention Percent" := "NS_Manual Retention Amount" / "NS_Line Work Amount" * 100;
+                        if "NS_Line Material Amount" <> 0 then
+                            "NS_Material Retention Percent" := "NS_Manual Retention Amount" / "NS_Line Material Amount" * 100;
+                    end else
+                        "NS_Manual Retention Amount" := 0;
                 end;
-                //PRJ-1519.NK.1.0 16Jul2022 Start
-                ProgBillLine.Reset();
-                ProgBillLine.SetRange("NS_Job No.", Rec."NS_Job No.");
-                ProgBillLine.SetRange("NS_Progress Billing No.", Rec."NS_No.");
-                ProgBillLine.SetRange("NS_Requisition No.", Rec."NS_Requisition No.");
-                ProgBillLine.SetRange("NS_Version No.", Rec."NS_Version No.");
-                IF ProgBillLine.FindSet() then
-                    repeat
-                        if ProgBillLine."NS_Work Amount" <> 0 then
-                            ProgBillLine.validate("NS_Work Retention Percent", rec."NS_Work Retention Percent")
-                        else
-                            ProgBillLine.Validate("NS_Work Retention Percent", 0);
-                        ProgBillLine.Modify();
-                    until ProgBillLine.Next() = 0;
-                //PRJ-1519.NK.1.0 15Jul2022 End 
             end;
         }
         field(602; "NS_No. Series"; Code[10])
@@ -382,213 +314,6 @@ table 14021325 "NS_Progress Billing Header"
             TableRelation = "No. Series".Code;
             DataClassification = CustomerContent;
         }
-
-        //PRJ-999.JS.1.0 09Nov2021-Start
-        field(603; "NS_Global Dimension 1 Code"; Code[20])
-        {
-            CaptionClass = '1,1,1';
-            Caption = 'Global Dimension 1 Code';
-            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(1));
-            DataClassification = CustomerContent;
-
-            trigger OnValidate();
-            begin
-                NS_ValidateShortcutDimCode(1, "NS_Global Dimension 1 Code");
-                MODIFY();
-            end;
-        }
-        field(604; "NS_Global Dimension 2 Code"; Code[20])
-        {
-            CaptionClass = '1,1,2';
-            Caption = 'Global Dimension 2 Code';
-            TableRelation = "Dimension Value".Code WHERE("Global Dimension No." = CONST(2));
-            DataClassification = CustomerContent;
-
-            trigger OnValidate();
-            begin
-                NS_ValidateShortcutDimCode(2, "NS_Global Dimension 2 Code");
-                MODIFY();
-            end;
-        }
-        field(480; "NS_Dimension Set ID"; Integer)
-        {
-            Caption = 'Dimension Set ID';
-            Editable = false;
-            TableRelation = "Dimension Set Entry";
-            DataClassification = CustomerContent;
-
-            trigger OnLookup();
-            begin
-                NS_ShowDocDim();
-            end;
-        }
-        //PRJ-999.JS.1.0 09Nov2021-end 
-
-        //PRJ-1332.GK.2.0 12May2022 start  
-        field(481; "NS_Posted Sales Invoice No."; Code[20])
-        {
-            Caption = 'Posted Sales Invoice No.';
-            Editable = false;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1332.GK.2.0 12May2022 end
-        //PRJ-1519.NK.1.0 22Jul2022 Start
-        field(483; "NS_Lines Total Retention Amt"; Decimal)
-        {
-            //Caption = 'Lines Total Retention Amount'; //PRJ-1519.NK.1.0 30Aug2022 Block
-            Caption = 'Work Retention Amount'; //PRJ-1519.NK.1.0 30Aug2022
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = Sum("NS_Progress Billing Line"."NS_Work Retention Amount" WHERE("NS_Progress Billing No." = FIELD("NS_No."),
-                                                                                            "NS_Requisition No." = FIELD("NS_Requisition No."),
-                                                                                            "NS_Version No." = FIELD("NS_Version No.")));
-        }
-        field(484; "NS_Manual Stored Mat. Ret. Amt"; Decimal)
-        {
-            Caption = 'Manual Stored Material Retention Amount';
-            DataClassification = CustomerContent;
-            trigger OnValidate();
-            var
-                ProgBillLine: Record "NS_Progress Billing Line";
-                TotStoreRetAmt: Decimal;
-            begin
-                if NOT CONFIRM(Text10) then
-                    exit;
-                TotStoreRetAmt := 0;
-                ProgBillLine.Reset();
-                ProgBillLine.SetRange("NS_Job No.", Rec."NS_Job No.");
-                ProgBillLine.SetRange("NS_Progress Billing No.", Rec."NS_No.");
-                ProgBillLine.SetRange("NS_Requisition No.", Rec."NS_Requisition No.");
-                ProgBillLine.SetRange("NS_Version No.", Rec."NS_Version No.");
-                IF ProgBillLine.FindSet() then
-                    repeat
-                        TotStoreRetAmt += ProgBillLine."NS_Stored Materials Amount";
-                    until ProgBillLine.Next() = 0;
-                if TotStoreRetAmt <> 0 then
-                    "NS_Material Retention Percent" := "NS_Manual Stored Mat. Ret. Amt" / TotStoreRetAmt * 100
-                else
-                    "NS_Material Retention Percent" := 0;
-
-                ProgBillLine.Reset();
-                ProgBillLine.SetRange("NS_Job No.", Rec."NS_Job No.");
-                ProgBillLine.SetRange("NS_Progress Billing No.", Rec."NS_No.");
-                ProgBillLine.SetRange("NS_Requisition No.", Rec."NS_Requisition No.");
-                ProgBillLine.SetRange("NS_Version No.", Rec."NS_Version No.");
-                IF ProgBillLine.FindSet() then
-                    repeat
-                        if ProgBillLine."NS_Stored Materials Amount" <> 0 then
-                            ProgBillLine.validate("NS_Material Retention Percent", rec."NS_Material Retention Percent")
-                        else
-                            ProgBillLine.validate("NS_Material Retention Percent", 0);
-                        ProgBillLine.Modify();
-                    until ProgBillLine.Next() = 0;
-            end;
-        }
-        field(485; "NS_Stored Material Ret. Amt"; Decimal)
-        {
-            Caption = 'Stored Material Retention Amount';
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = Sum("NS_Progress Billing Line"."NS_Stored Mat. Retention Amt" WHERE("NS_Progress Billing No." = FIELD("NS_No."),
-                                                                                            "NS_Requisition No." = FIELD("NS_Requisition No."),
-                                                                                            "NS_Version No." = FIELD("NS_Version No.")));
-        }
-        //PRJ-1519.NK.1.0 22Jul2022 End
-        //PRJ-1624.NK.1.0 22Sep2022 Start
-        field(486; "NS_Multiple Retention on Lines"; Boolean)
-        {
-            Caption = 'Multiple Retention on Lines';
-            DataClassification = CustomerContent;
-            Description = 'Multiple Retention on Lines';
-        }
-        //PRJ-1624.NK.1.0 22Sep2022 End
-        //PRJ-1632.RM.1.0 start
-        field(487; "NS_Amount Due"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-
-        field(488; "NS_Total Amt."; Decimal)
-        {
-            Caption = 'Total';
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = Sum("NS_Progress Billing Line".NS_Total WHERE("NS_Progress Billing No." = FIELD("NS_No."),
-                                                                                            "NS_Requisition No." = FIELD("NS_Requisition No."),
-                                                                                            "NS_Version No." = FIELD("NS_Version No.")));
-        }
-        //PRJ-1632.RM.1.0 end
-
-        //PRJ-1648.PS.1.0 09OCT2022 - Start
-
-        field(489; "NS_R_Reduction & Invoicing"; Boolean)
-        {
-            DataClassification = CustomerContent;
-
-        }
-
-        field(490; "NS_Lines Total Retention New"; Decimal)
-        {
-
-            Caption = 'Work Retention Amount New'; //PRJ-1648.PS.1.0 19Dec2022
-            FieldClass = FlowField;
-            Editable = false;
-            CalcFormula = Sum("NS_Progress Billing Line"."NS_Line Label Retetion" WHERE("NS_Progress Billing No." = FIELD("NS_No."),
-                                                                                            "NS_Requisition No." = FIELD("NS_Requisition No."),
-                                                                                            "NS_Version No." = FIELD("NS_Version No.")));
-        }
-        //PRJ-1648.PS.1.0 09OCT2022 - End
-
-        //PE-22.JS.1.0 21FEB2023 - Start
-        field(510; "NS_Invoiced Currency Code"; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Invoiced Currency Code';
-            Description = 'Invoiced Currency Code';
-            Editable = false;
-        }
-        //PE-22.JS.1.0 21FEB2023 - end
-
-        //PE-53.RM.1.0 07March2023 Start
-        field(491; "NS_Balance Due"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Balance Due';
-        }
-
-        field(492; "NS_Billed Amount"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Billed Amount';
-        }
-        //PE-53.RM.1.0 07March2023 End
-
-        //PE-211.AS start
-        field(14021488; "NS_Field Manager"; Code[50])
-        {
-            Caption = 'Field Manager';
-            TableRelation = "User Setup";
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-211.AS end
-        //PE-320.JS.1.0 04July2024-Start
-        field(14021490; "NS_Disable Auto Post Cr. Memo"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Disable Auto Post Cr. Memo';
-
-            trigger OnValidate()
-            begin
-                if rec."NS_Disable Auto Post Cr. Memo" = true then begin
-                    if rec.NS_Status <> rec.NS_Status::Invoiced then
-                        Error('Progress billing status should be invoiced.');
-                end;
-            end;
-
-        }
-        //PE-320.JS.1.0 04July2024-end 
     }
 
     keys
@@ -616,18 +341,13 @@ table 14021325 "NS_Progress Billing Header"
     var
         ProgressBillingHeader: Record "NS_Progress Billing Header";
         Text001: Label 'There are already requisitions for this job.\\Use the new menu to make a new requisition or version.';
-        jbrec: Record job;//PE-211.AS
-        IsHandled: Boolean; //PE-255 AT.1.0 13Feb2024
     begin
-        //PE-255 AT.1.0 13Feb2024 Start
-        IsHandled := false;
-        OnBeforeOnInsert(Rec, IsHandled);
-        if IsHandled then
-            exit;
-        //PE-255 AT.1.0 13Feb2024 End
         if "NS_Job No." = '' then
             if GETFILTER("NS_Job No.") <> '' then
-                "NS_Job No." := GETFILTER("NS_Job No.");
+                // >> Upgrade
+                // "NS_Job No." := GETFILTER("NS_Job No.");
+                Validate("NS_Job No.", GETFILTER("NS_Job No."));
+        // << Upgrade
 
         if "NS_No." = '' then begin
             JobsSetup.GET();
@@ -646,37 +366,14 @@ table 14021325 "NS_Progress Billing Header"
                 if Job.GET("NS_Job No.") then begin
                     "NS_Work Retention Percent" := Job."NS_Default Job Retention";
                     "NS_Material Retention Percent" := Job."NS_Default Job Retention";
-                    //PRJ-999.JS.1.0 12Nov2021 - Start
-                    "NS_Global Dimension 1 Code" := Job."Global Dimension 1 Code";
-                    "NS_Global Dimension 2 Code" := Job."Global Dimension 2 Code";
-                    "NS_Dimension Set ID" := GetDimensionNoFromJob("NS_Job No.");
-                    //PRJ-999.JS.1.0 12Nov2021 - end  
-
-                    //PE-211.AS start
-                    "NS_Field Manager" := Job."NS_Field Manager";
-                    //PE-211.AS end
                 end;
         end;
-
-        //PE-211.AS start
-        if Rec."NS_Job No." <> '' then
-            if jbrec.get(Rec."NS_Job No.") then
-                rec."NS_Field Manager" := jbrec."NS_Field Manager";
-        //PE-211.AS end
     end;
 
     trigger OnModify();
-    var
-        jbrec1: record job;//PE-211.AS
     begin
         if xRec.NS_Status > NS_Status then
             ERROR(Text01);
-
-        //PE-211.AS start
-        if Rec."NS_Job No." <> '' then
-            if jbrec1.get(Rec."NS_Job No.") then
-                rec."NS_Field Manager" := jbrec1."NS_Field Manager";
-        //PE-211.AS end
     end;
 
     var
@@ -689,13 +386,11 @@ table 14021325 "NS_Progress Billing Header"
         Text10: Label 'Have you completed the adjustments to the Progress Billing Lines?';
         Text11: Label 'The sum of the Work Amounts and Material Amounts on the lines cannot be 0.';
         Text12: Label 'You must set the Manual Retention Amount to 0 before changing the retention percent."';
-        Text13: Label 'You must set the Manual Stored Material Retention Amount to 0 before changing the material retention percent."';
         Customer: Record Customer;
         Currency: Record Currency;
         CurrExchRate: Record "Currency Exchange Rate";
         JobDimensionNo: Integer;
         PBDocProcess: Codeunit "NS_Progress BillingMakeSaleDoc";
-        DimMgt: Codeunit DimensionManagement;   //PRJ-999.JS.1.0 09Nov2021        
         ProgressBillingCommentLine: Record "NS_Progress BillingCommentLine";
         ProgressBillingManagement: Codeunit "NS_Progress Billing Management";
 
@@ -737,7 +432,6 @@ table 14021325 "NS_Progress Billing Header"
             SETRANGE("NS_Progress Billing No.", Rec."NS_No.");
             SETRANGE("NS_Requisition No.", Rec."NS_Requisition No.");
             SETRANGE("NS_Version No.", Rec."NS_Version No.");
-            SetRange("NS_Change Order", false); //PE-142.NC.1.0 11Aug2023
             if FINDSET() then
                 repeat
                     if "NS_Billing Method" > 0 then begin
@@ -976,111 +670,7 @@ table 14021325 "NS_Progress Billing Header"
 
             until Job.NEXT() = 0;
     end;
-    //PRJCTPR-208.NC.1.0 30Oct2023 Start
-    procedure NS_GetChangeOrderValuesPL(JobNo: Code[20]; PeriodFrom: Date; PeriodTo: Date; var PreviousAdditions: Decimal; var PreviousDeductions: Decimal; var CurrentAdditions: Decimal; var CurrentDeductions: Decimal);
-    var
-        NSJob: Record Job;
-        NSJobNumfilter: code[20];
-        NSProgressBillingLines: Record "NS_Progress Billing Line";
-        NSPreviousMonthStartDate: Date;
-        NSPreviousMonthEndDate: Date;
 
-    begin
-        PreviousAdditions := 0;
-        PreviousDeductions := 0;
-        CurrentAdditions := 0;
-        CurrentDeductions := 0;
-        NSPreviousMonthStartDate := 0D;
-        NSPreviousMonthEndDate := 0D;
-        NSPreviousMonthStartDate := CalcDate('-1M', rec."NS_Requisition Date");
-        NSPreviousMonthEndDate := CalcDate('+CM', NSPreviousMonthStartDate);
-
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '>%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            repeat
-                NSJob.Reset();
-                NSJob.SetRange("No.", NSProgressBillingLines."NS_Job No.");
-                NSJob.SetRange("NS_Job Class", NSJob."NS_Job Class"::"Change Order");
-                if NSJob.FindFirst() then begin
-                    if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                        CurrentAdditions := CurrentAdditions + ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01)
-                    else
-                        CurrentAdditions := CurrentAdditions + NSProgressBillingLines."NS_Base Amount";
-                end;
-            until NSProgressBillingLines.NEXT() = 0;
-        end;
-
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '<%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            repeat
-                NSJob.Reset();
-                NSJob.SetRange("No.", NSProgressBillingLines."NS_Job No.");
-                NSJob.SetRange("NS_Job Class", NSJob."NS_Job Class"::"Change Order");
-                if NSJob.FindFirst() then begin
-                    if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                        CurrentDeductions := CurrentDeductions + Abs(ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01))
-                    else
-                        CurrentDeductions := CurrentDeductions + Abs(NSProgressBillingLines."NS_Base Amount");
-                end;
-            until NSProgressBillingLines.NEXT() = 0;
-        end;
-
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '<%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '>%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            repeat
-                NSJob.Reset();
-                NSJob.SetRange("No.", NSProgressBillingLines."NS_Job No.");
-                NSJob.SetRange("NS_Job Class", NSJob."NS_Job Class"::"Change Order");
-                if NSJob.FindFirst() then begin
-                    if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                        PreviousAdditions := PreviousAdditions + ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01)
-                    else
-                        PreviousAdditions := PreviousAdditions + NSProgressBillingLines."NS_Base Amount";
-                end;
-            until NSProgressBillingLines.NEXT() = 0;
-        end;
-
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '<%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '<%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            repeat
-                NSJob.Reset();
-                NSJob.SetRange("No.", NSProgressBillingLines."NS_Job No.");
-                NSJob.SetRange("NS_Job Class", NSJob."NS_Job Class"::"Change Order");
-                if NSJob.FindFirst() then begin
-                    if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                        PreviousDeductions := PreviousDeductions + Abs(ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01))
-                    else
-                        PreviousDeductions := PreviousDeductions + Abs(NSProgressBillingLines."NS_Base Amount");
-                end;
-            until NSProgressBillingLines.NEXT() = 0;
-        end;
-    end;
-    //PRJCTPR-208.NC.1.0 30Oct2023 End
-    //PRJ-1648.PS.1.0 21Dec2022 Start 
     procedure NS_GetPeriodFromDate(ProgressBillingNo: Code[20]; PeriodTo: Date) PeriodFromDate: Date;
     var
         ProgressBillingHeader: Record "NS_Progress Billing Header";
@@ -1130,7 +720,7 @@ table 14021325 "NS_Progress Billing Header"
                         ReturnCode := 1
                     else
                         if FINDLAST() then begin
-                            if (NS_Status >= 1) and (NS_Status <> 4) then//PRJ-1216.GK.1.0 Add
+                            if (NS_Status >= 1) and (NS_Status <> 4) then
                                 ReturnCode := 1
                             else
                                 ReturnCode := 2;
@@ -1433,530 +1023,5 @@ table 14021325 "NS_Progress Billing Header"
     end;
     //PRJ-913.JS.1.0�13Sep2021-end
 
-    //PRJ-999.JS.1.0   09Nov2021 - Start
-    procedure NS_ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20]);
-    begin
-        DimMgt.ValidateDimValueCode(FieldNumber, ShortcutDimCode);
-        DimMgt.SaveDefaultDim(DATABASE::"NS_Progress Billing Header", "NS_No.", FieldNumber, ShortcutDimCode);
-        MODIFY();
-    end;
-
-    procedure NS_ShowDocDim();
-    var
-        OldDimSetID: Integer;
-    begin
-        OldDimSetID := "NS_Dimension Set ID";
-        "NS_Dimension Set ID" :=
-          DimMgt.EditDimensionSet(
-            "NS_Dimension Set ID", "NS_No.", "NS_Global Dimension 1 Code", "NS_Global Dimension 2 Code");
-    end;
-
-    procedure GetDimensionNoFromJob(JobNo: Code[20]) DimensionNo: Integer;
-    var
-        DefaultDimension: Record "Default Dimension";
-        DimensionSetEntryTemp: Record "Dimension Set Entry" temporary;
-        DimensionValue: Record "Dimension Value";
-        DimMgt: Codeunit DimensionManagement;
-    begin
-        DimensionNo := 0;
-        with DefaultDimension do begin
-            DefaultDimension.RESET();
-            DefaultDimension.SETRANGE("Table ID", DATABASE::Job);
-            DefaultDimension.SETRANGE("No.", JobNo);
-            if DefaultDimension.FINDSET() then
-                repeat
-                    DimensionValue.RESET();
-                    DimensionValue.SETRANGE("Dimension Code", "Dimension Code");
-                    DimensionValue.SETRANGE(Code, "Dimension Value Code");
-                    if DimensionValue.FINDFIRST() then begin
-                        DimensionSetEntryTemp.INIT();
-                        DimensionSetEntryTemp."Dimension Code" := DimensionValue."Dimension Code";
-                        DimensionSetEntryTemp."Dimension Value ID" := DimensionValue."Dimension Value ID";
-                        DimensionSetEntryTemp."Dimension Value Code" := DimensionValue.Code;
-                        DimensionSetEntryTemp.INSERT();
-                    end;
-                until DefaultDimension.NEXT() = 0;
-            DimensionNo := DimMgt.GetDimensionSetID(DimensionSetEntryTemp);
-        end;
-    end;
-    //PRJ-999.JS.1.0   09Nov2021 - end     
-
-    //PRJ-1216.JS.1.0 03MAR2022 - Start
-    procedure NS_ProgressBillPreviousInvoiceNew(Rec: Record "NS_Progress Billing Header"): Decimal;
-    var
-        ProgressBillingHeader: Record "NS_Progress Billing Header";
-        PostesSalesInvHead: Record "Sales Invoice Header";
-        PostedSalesInvLine: Record "Sales Invoice Line";
-        NSCurrency: Record Currency;  //PE-22.JS.1.0 13FEB2023
-        LastInvoiceAmount: Decimal;
-        LineMaterialAmount1: Decimal;
-        LineMaterialAmount2: Decimal;
-        LineRetentionAmount: Decimal;
-        LastInvoiceAmount2: Decimal;
-        LineAmountIncludingTax: Decimal;
-        TotalRetentionAmount: Decimal;
-        SalsesCreditMemoHdr: record "Sales Cr.Memo Header";//PRJCTPR-274.AS.1.0
-        TotalRetentionAmtSCM: Decimal;//PRJCTPR-274.AS.1.0
-    begin
-        //Returns the value of the previous progress bill (Current Payment Due)
-        //   This is done by adding all previous "Requisition Total"s and subtracting out only the
-        //     previous "Effective Work Retention" and "Effective Material Retention".
-        LastInvoiceAmount := 0;
-        LineMaterialAmount1 := 0;
-        LineMaterialAmount2 := 0;
-        LineRetentionAmount := 0;
-        LastInvoiceAmount2 := 0;
-        LineAmountIncludingTax := 0;
-        TotalRetentionAmount := 0;
-        TotalRetentionAmtSCM := 0;//PRJCTPR-274.AS.1.0
-
-        //PRJ-1132.NK.1.0 Start
-        //with ProgressBillingHeader do begin
-        ProgressBillingHeader.RESET();
-        ProgressBillingHeader.SETRANGE("NS_No.", Rec."NS_No.");
-        ProgressBillingHeader.SETFILTER("NS_Requisition No.", '<%1', Rec."NS_Requisition No.");
-        ProgressBillingHeader.SETFILTER(NS_Status, '<>%1', ProgressBillingHeader.NS_Status::Void);
-        if ProgressBillingHeader.FINDSET() then begin
-            repeat
-                ProgressBillingHeader.CALCFIELDS("NS_Requisition Total", "NS_Line Material Amount");
-                //LastInvoiceAmount := LastInvoiceAmount + ProgressBillingHeader."NS_Requisition Total";
-                //LineMaterialAmount1 := LineMaterialAmount1 + LineMaterialAmount2;
-                //LineMaterialAmount2 := ProgressBillingHeader."NS_Line Material Amount";
-                //LineRetentionAmount := LineRetentionAmount + ProgressBillingHeader."NS_Total Retention";
-                if ProgressBillingHeader.NS_Status = ProgressBillingHeader.NS_Status::Invoiced then begin
-                    //OR (ProgressBillingHeader.NS_Status = ProgressBillingHeader.NS_Status::"Invoice Posted") then begin //PRJ-1289.JS.1.0| Add OR new condition //PRJ-1332.JS.1.0 03MAR2022 comment or condition
-                    PostesSalesInvHead.Reset();
-                    // PostesSalesInvHead.SetRange("Pre-Assigned No.", ProgressBillingHeader."NS_Sales Document No.");//PE-15.PS.1.0 12Jan2023
-                    PostesSalesInvHead.SetRange("NS_From ProgressBillingReq.No.", ProgressBillingHeader."NS_Requisition No."); //PE-15.PS.1.0 12Jan2023
-                    PostesSalesInvHead.SetRange("NS_From Progress Billing No.", ProgressBillingHeader."NS_No."); //PE-15.PS.1.0 12Jan2023
-                    PostesSalesInvHead.SetRange("NS_From ProgressBillingVer.No.", ProgressBillingHeader."NS_Version No.");//PE-15.PS.1.0 12Jan2023
-                    if PostesSalesInvHead.FindSet() then begin //PE-15.PS.1.0 12Jan2023
-                        repeat  //PE-15.PS.1.0 12Jan2023
-                            if NSCurrency.get(PostesSalesInvHead."Currency Code") then;//PE-22.JS.1.0 14FEB2023 
-                            PostedSalesInvLine.Reset();
-                            PostedSalesInvLine.SetRange("Document No.", PostesSalesInvHead."No.");
-                            PostedSalesInvLine.SetFilter("Line Amount", '<>%1', 0);
-                            if PostedSalesInvLine.FindSet() then begin
-                                //PRJ-1216.JS.2.0  25MAR2022- Start
-                                PostedSalesInvLine.CalcSums("VAT Base Amount", "Line Amount");  //PRJ-1216.JS.2.0  25MAR2022- Start
-                                                                                                //if PostedSalesInvLine."VAT Base Amount" <> 0 then
-                                                                                                //    LastInvoiceAmount2 := LastInvoiceAmount2 + PostedSalesInvLine."VAT Base Amount"
-                                                                                                //else
-                                                                                                //PE-22.JS.1.0 14FEB2023 Start
-                                if (PostesSalesInvHead."Currency Factor" <> 0) and (PostesSalesInvHead."Currency Code" <> '') then
-                                    LineAmountIncludingTax := LineAmountIncludingTax + Round((PostedSalesInvLine."Line Amount" / PostesSalesInvHead."Currency Factor"), NSCurrency."Amount Rounding Precision")
-                                else
-                                    LineAmountIncludingTax := LineAmountIncludingTax + PostedSalesInvLine."Line Amount";
-                                //PE-22.JS.1.0 14FEB2023 End
-                                //LastInvoiceAmount2 := LastInvoiceAmount2 + PostedSalesInvLine."VAT Base Amount";
-                            end;
-                            //PRJ-1216.JS.4.0 28MAR2022
-                            //PE-22.JS.1.0 14FEB2023 - start
-                            if (PostesSalesInvHead."Currency Factor" <> 0) and (PostesSalesInvHead."Currency Code" <> '') then begin
-                                if NSCurrency.get(PostesSalesInvHead."Currency Code") then;
-                                if PostesSalesInvHead."NS_Retention Amount" <> 0 then
-                                    TotalRetentionAmount := TotalRetentionAmount + Round((PostesSalesInvHead."NS_Retention Amount" / PostesSalesInvHead."Currency Factor"), NSCurrency."Amount Rounding Precision");
-                            end else
-                                //PE-22.JS.1.0 14FEB2023 - end
-                                if PostesSalesInvHead."NS_Retention Amount" <> 0 then
-                                    TotalRetentionAmount := TotalRetentionAmount + PostesSalesInvHead."NS_Retention Amount";
-                        //if ((PostesSalesInvHead."NS_Retention Amount" <> 0) and (LineAmountIncludingTax <> 0)) then
-                        //   LastInvoiceAmount2 := LineAmountIncludingTax - PostesSalesInvHead."NS_Retention Amount";
-                        //PRJ-1216.JS.2.0 25MAR2022 - end    
-                        Until PostesSalesInvHead.Next() = 0;   //PE-15.PS.1.0 12Jan2023
-                    end
-                    //PRJCTPR-274.AS.1.0 START
-                    else
-                        if NOT PostesSalesInvHead.FindSet() then begin
-                            SalsesCreditMemoHdr.Reset();
-                            SalsesCreditMemoHdr.SetRange("NS_From ProgressBillingReq.No.", ProgressBillingHeader."NS_Requisition No.");
-                            SalsesCreditMemoHdr.SetRange("NS_From Progress Billing No.", ProgressBillingHeader."NS_No.");
-                            SalsesCreditMemoHdr.SetRange("NS_From ProgressBillingVer.No.", ProgressBillingHeader."NS_Version No.");
-                            if SalsesCreditMemoHdr.FindFirst() then begin
-                                if SalsesCreditMemoHdr."NS_Retention Amount" <> 0 then
-                                    TotalRetentionAmtSCM := TotalRetentionAmtSCM + SalsesCreditMemoHdr."NS_Retention Amount";
-                            end;
-
-                            LastInvoiceAmount := LastInvoiceAmount + ProgressBillingHeader."NS_Requisition Total";
-                            LineRetentionAmount := LineRetentionAmount - TotalRetentionAmtSCM;
-                        end
-                        //PRJCTPR-274.AS.1.0 END
-                        else begin
-                            LastInvoiceAmount := LastInvoiceAmount + ProgressBillingHeader."NS_Requisition Total";
-                            //LineMaterialAmount1 := LineMaterialAmount1 + LineMaterialAmount2;
-                            //LineMaterialAmount2 := ProgressBillingHeader."NS_Line Material Amount";
-                            LineRetentionAmount := LineRetentionAmount + ProgressBillingHeader."NS_Total Retention";
-                        end;
-                end;
-                //PRJ-1216.JS.8.0 31MAR2022 - start
-                if TotalRetentionAmount + LineRetentionAmount <> 0 then
-                    LastInvoiceAmount2 := (LastInvoiceAmount + LineAmountIncludingTax) - (TotalRetentionAmount + LineRetentionAmount)
-                else
-                    LastInvoiceAmount2 := LineAmountIncludingTax + LastInvoiceAmount;
-            //PRJ-1216.JS.8.0 31MAR2022 - end           
-            //PRJ-1216.JS.4.0 28MAR2022     
-            until ProgressBillingHeader.NEXT() = 0;
-            ProgressBillingHeader.CALCFIELDS("NS_Effective Work Retention", "NS_EffectiveMaterialRetention", "NS_Line Material Amount");
-            LastInvoiceAmount := LastInvoiceAmount -
-                                 ProgressBillingHeader."NS_Effective Work Retention" -
-                                 ProgressBillingHeader."NS_EffectiveMaterialRetention" -
-                                 LineMaterialAmount1 - LineRetentionAmount;
-        end;
-        //end;
-        //PRJ-1132.NK.1.0 End
-
-        //exit(LastInvoiceAmount);
-        exit(LastInvoiceAmount2);
-    end;
-
-    procedure NS_ProgressBillPreviousInvoiceNewOne(Rec: Record "NS_Progress Billing Header"): Decimal;
-    var
-        ProgressBillingHeader: Record "NS_Progress Billing Header";
-        LastInvoiceAmount: Decimal;
-        LineMaterialAmount1: Decimal;
-        LineMaterialAmount2: Decimal;
-        EffectiveWorkRetention: Decimal;   //PRJ-1216.JS.3.0 28MAR2022
-
-    begin
-        //Returns the value of the previous progress bill (Current Payment Due)
-        //   This is done by adding all previous "Requisition Total"s and subtracting out only the
-        //     previous "Effective Work Retention" and "Effective Material Retention".
-        LastInvoiceAmount := 0;
-        LineMaterialAmount1 := 0;
-        LineMaterialAmount2 := 0;
-        EffectiveWorkRetention := 0;  //PRJ-1216.JS.3.0 28MAR2022
-
-        //PRJ-1132.NK.1.0 Start
-        //with ProgressBillingHeader do begin
-        ProgressBillingHeader.RESET();
-        ProgressBillingHeader.SETRANGE("NS_No.", Rec."NS_No.");
-        ProgressBillingHeader.SETFILTER("NS_Requisition No.", '<%1', Rec."NS_Requisition No.");
-        ProgressBillingHeader.SETFILTER(NS_Status, '<>%1', ProgressBillingHeader.NS_Status::Void);
-        if ProgressBillingHeader.FINDSET() then begin
-            repeat
-                ProgressBillingHeader.CALCFIELDS("NS_Requisition Total", "NS_Line Material Amount");
-                LastInvoiceAmount := LastInvoiceAmount + ProgressBillingHeader."NS_Requisition Total";
-                LineMaterialAmount1 := LineMaterialAmount1 + LineMaterialAmount2;
-                LineMaterialAmount2 := ProgressBillingHeader."NS_Line Material Amount";
-            until ProgressBillingHeader.NEXT() = 0;
-            ProgressBillingHeader.CALCFIELDS("NS_Effective Work Retention", "NS_EffectiveMaterialRetention", "NS_Line Material Amount");
-
-            //PRJ-1216.JS.3.0 28MAR2022 start
-            IF ProgressBillingHeader."NS_Work Retention Percent" <> 0 then
-                If ProgressBillingHeader."NS_Effective Work Retention" = 0 then
-                    EffectiveWorkRetention := round((ProgressBillingHeader."NS_Requisition Total" * ProgressBillingHeader."NS_Work Retention Percent") / 100, 0.01, '=');
-
-
-            // LastInvoiceAmount := LastInvoiceAmount -
-            //                      ProgressBillingHeader."NS_Effective Work Retention" -
-            //                      ProgressBillingHeader."NS_EffectiveMaterialRetention" -
-            //                      LineMaterialAmount1;
-
-            LastInvoiceAmount := LastInvoiceAmount -
-                                 ProgressBillingHeader."NS_Effective Work Retention" -
-                                 ProgressBillingHeader."NS_EffectiveMaterialRetention" -
-                                 LineMaterialAmount1 - EffectiveWorkRetention;
-            //PRJ-1216.JS.3.0 28MAR2022 end                                                       
-        end;
-        //end;
-        //PRJ-1132.NK.1.0 End
-
-        exit(LastInvoiceAmount);
-    end;
-
-    //PRJ-1216.JS.1.0 03MAR2022 - end      
-
-    //PRJ-1708.JS.1.0 15DEC2022 - Start
-    /// <summary>
-    /// NS_GetChangeOrderValuesNew.
-    /// </summary>
-    /// <param name="JobNo">Code[20].</param>
-    /// <param name="PeriodFrom">Date.</param>
-    /// <param name="PeriodTo">Date.</param>
-    /// <param name="PreviousAdditions">VAR Decimal.</param>
-    /// <param name="PreviousDeductions">VAR Decimal.</param>
-    /// <param name="CurrentAdditions">VAR Decimal.</param>
-    /// <param name="CurrentDeductions">VAR Decimal.</param>
-    procedure NS_GetChangeOrderValuesNew(JobNo: Code[20]; PeriodFrom: Date; PeriodTo: Date; var PreviousAdditions: Decimal; var PreviousDeductions: Decimal; var CurrentAdditions: Decimal; var CurrentDeductions: Decimal);
-    var
-        NSJob: Record Job;
-        NSJobNumfilter: code[20];
-    begin
-        //Returns values of the change orders in a Job
-        //   This is done by catagorizing "Budget Price" into four category values that are passed back.
-        //     Additions have a positive budget value, deductions have a negative budget value.
-        //     All Jobs to be accumulated must have a status of 'Order' or higher.
-        //     Price budgets must have a type of 'Contract'.
-        //     Values are considered 'Current' if the Job's "Contract Date" is between PeriodFrom and PeriodTo.
-        //     Values are considered 'Previous' if the Job's "Contract Date" is before PeriodFrom.
-        PreviousAdditions := 0;
-        PreviousDeductions := 0;
-        CurrentAdditions := 0;
-        CurrentDeductions := 0;
-
-        NSJobNumfilter := '';
-        NSJobNumfilter := '*' + format(JobNo) + '*';
-        NSJob.RESET();
-        NSJob.SETCURRENTKEY("NS_Sub-Level to Job No.", "NS_Contract Date");
-        NSJob.SetFilter("NS_Sub-Level to Job No.", '%1', NSJobNumfilter);
-        NSJob.SetRange("NS_Progress Billing Sub-Level", true);
-        if NSJob.FINDSET() then
-            repeat
-                if (NSJob."NS_Contract Date" > 0D) and
-                   (NSJob.Status.AsInteger() >= NSJob.Status::Open.AsInteger()) and
-                   (NSJob."NS_Contract Date" <= PeriodTo) then begin
-                    NSJob.CALCFIELDS("NS_Budgeted Price (LCY)");
-                    if NSJob."NS_Budgeted Price (LCY)" > 0 then
-                        if (NSJob."NS_Contract Date" <= PeriodFrom) and (PeriodFrom > 0D) then
-                            PreviousAdditions := PreviousAdditions + NSJob."NS_Budgeted Price (LCY)"
-                        else
-                            CurrentAdditions := CurrentAdditions + NSJob."NS_Budgeted Price (LCY)"
-                    else
-                        if (NSJob."NS_Contract Date" <= PeriodFrom) and (PeriodFrom > 0D) then
-                            PreviousDeductions := PreviousDeductions - NSJob."NS_Budgeted Price (LCY)"
-                        else
-                            CurrentDeductions := CurrentDeductions - NSJob."NS_Budgeted Price (LCY)";
-                end;
-            until NSJob.NEXT() = 0;
-    end;
-
-    /// <summary>
-    /// NS_GetChangeOrderValuesBasedonPBLines.
-    /// </summary>
-    /// <param name="JobNo">Code[20].</param>
-    /// <param name="PeriodFrom">Date.</param>
-    /// <param name="PeriodTo">Date.</param>
-    /// <param name="PreviousAdditions">VAR Decimal.</param>
-    /// <param name="PreviousDeductions">VAR Decimal.</param>
-    /// <param name="CurrentAdditions">VAR Decimal.</param>
-    /// <param name="CurrentDeductions">VAR Decimal.</param>
-    procedure NS_GetChangeOrderValuesBasedonPBLines(JobNo: Code[20]; PeriodFrom: Date; PeriodTo: Date; var PreviousAdditions: Decimal; var PreviousDeductions: Decimal; var CurrentAdditions: Decimal; var CurrentDeductions: Decimal);
-    var
-        NSJob: Record Job;
-        NSJobNumfilter: code[20];
-        NSProgressBillingLines: Record "NS_Progress Billing Line";
-        NSPreviousMonthStartDate: Date;
-        NSPreviousMonthEndDate: Date;
-
-    begin
-        //Returns values of the change orders in a Job
-        //   This is done by catagorizing "Budget Price" into four category values that are passed back.
-        //     Additions have a positive budget value, deductions have a negative budget value.
-        //     All Jobs to be accumulated must have a status of 'Order' or higher.
-        //     Price budgets must have a type of 'Contract'.
-        //     Values are considered 'Current' if the Job's "Contract Date" is between PeriodFrom and PeriodTo.
-        //     Values are considered 'Previous' if the Job's "Contract Date" is before PeriodFrom.
-        PreviousAdditions := 0;
-        PreviousDeductions := 0;
-        CurrentAdditions := 0;
-        CurrentDeductions := 0;
-        NSPreviousMonthStartDate := 0D;
-        NSPreviousMonthEndDate := 0D;
-        NSPreviousMonthStartDate := CalcDate('-1M', rec."NS_Requisition Date");
-        NSPreviousMonthEndDate := CalcDate('+CM', NSPreviousMonthStartDate);
-
-        //Goto progress billing line Currenct additions
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '>%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            //NSProgressBillingLines.CalcSums("NS_Base Amount"); //PRJCTPR-208.NC.1.0 26Oct2023 Block
-            //CurrentAdditions := NSProgressBillingLines."NS_Base Amount"; //PRJCTPR-208.NC.1.0 26Oct2023 Block
-            //PRJCTPR-208.NC.1.0 26Oct2023 Start
-            repeat
-                if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                    CurrentAdditions := CurrentAdditions + ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01)
-                else
-                    CurrentAdditions := CurrentAdditions + NSProgressBillingLines."NS_Base Amount";
-            until NSProgressBillingLines.NEXT() = 0;
-            //PRJCTPR-208.NC.1.0 26Oct2023 End
-        end;
-
-        //Goto progress billing line Currenct deductions
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '<%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            //NSProgressBillingLines.CalcSums("NS_Base Amount"); //PRJCTPR-208.NC.1.0 26Oct2023 Block
-            //CurrentDeductions := ABS(NSProgressBillingLines."NS_Base Amount"); //PRJCTPR-208.NC.1.0 26Oct2023 Block
-            //PRJCTPR-208.NC.1.0 26Oct2023 Start
-            repeat
-                if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                    CurrentDeductions := CurrentDeductions + Abs(ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01))
-                else
-                    CurrentDeductions := CurrentDeductions + Abs(NSProgressBillingLines."NS_Base Amount");
-            until NSProgressBillingLines.NEXT() = 0;
-            //PRJCTPR-208.NC.1.0 26Oct2023 End
-        end;
-
-        //Goto progress billing line Previous months addition
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '<%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '>%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            //NSProgressBillingLines.CalcSums("NS_Base Amount"); //PRJCTPR-208.NC.1.0 16Oct2023 Block
-            //PreviousAdditions := NSProgressBillingLines."NS_Base Amount"; //PRJCTPR-208.NC.1.0 16Oct2023 Block
-            //PRJCTPR-208.NC.1.0 16Oct2023 Start
-            repeat
-                if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                    PreviousAdditions := PreviousAdditions + ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01)
-                else
-                    PreviousAdditions := PreviousAdditions + NSProgressBillingLines."NS_Base Amount";
-            until NSProgressBillingLines.NEXT() = 0;
-            //PRJCTPR-208.NC.1.0 16Oct2023 End
-        end;
-
-        //Goto progress billing line Previous months deduction
-        NSProgressBillingLines.Reset();
-        NSProgressBillingLines.Setrange("NS_Progress Billing No.", Rec."NS_No.");
-        NSProgressBillingLines.setrange("NS_Requisition No.", rec."NS_Requisition No.");
-        NSProgressBillingLines.setrange("NS_Version No.", rec."NS_Version No.");
-        NSProgressBillingLines.Setrange("NS_Change Order", true);
-        NSProgressBillingLines.setfilter("NS_Contract Forecast Date", '<%1', rec."NS_Period To");
-        NSProgressBillingLines.setfilter("NS_Base Amount", '<%1', 0);
-        if NSProgressBillingLines.FindSet() then begin
-            //NSProgressBillingLines.CalcSums("NS_Base Amount"); //PRJCTPR-208.NC.1.0 16Oct2023 Block
-            //PreviousDeductions := ABS(NSProgressBillingLines."NS_Base Amount");  //PRJCTPR-208.NC.1.0 16Oct2023 Block
-            //PRJCTPR-208.NC.1.0 16Oct2023 Start
-            repeat
-                if NSProgressBillingLines."NS_Billing Method" = NSProgressBillingLines."NS_Billing Method"::Unit then
-                    PreviousDeductions := PreviousDeductions + Abs(ROUND(NSProgressBillingLines."NS_Base Amount" * NSProgressBillingLines."NS_Contract Quantity", 0.01))
-                else
-                    PreviousDeductions := PreviousDeductions + Abs(NSProgressBillingLines."NS_Base Amount");
-            until NSProgressBillingLines.NEXT() = 0;
-            //PRJCTPR-208.NC.1.0 16Oct2023 End
-        end;
-
-        // NSJobNumfilter := '';
-        // NSJobNumfilter := '*' + format(JobNo) + '*';
-        // NSJob.RESET();
-        // NSJob.SETCURRENTKEY("NS_Sub-Level to Job No.", "NS_Contract Date");
-        // NSJob.SetFilter("NS_Sub-Level to Job No.", '%1', NSJobNumfilter);
-        // NSJob.SetRange("NS_Progress Billing Sub-Level", true);
-        // if NSJob.FINDSET() then
-        //     repeat
-        //         if (NSJob."NS_Contract Date" > 0D) and
-        //            (NSJob.Status.AsInteger() >= NSJob.Status::Open.AsInteger()) and
-        //            (NSJob."NS_Contract Date" <= PeriodTo) then begin
-        //             NSJob.CALCFIELDS("NS_Budgeted Price (LCY)");
-        //             if NSJob."NS_Budgeted Price (LCY)" > 0 then
-        //                 if (NSJob."NS_Contract Date" <= PeriodFrom) and (PeriodFrom > 0D) then
-        //                     PreviousAdditions := PreviousAdditions + NSJob."NS_Budgeted Price (LCY)"
-        //                 else
-        //                     CurrentAdditions := CurrentAdditions + NSJob."NS_Budgeted Price (LCY)"
-        //             else
-        //                 if (NSJob."NS_Contract Date" <= PeriodFrom) and (PeriodFrom > 0D) then
-        //                     PreviousDeductions := PreviousDeductions - NSJob."NS_Budgeted Price (LCY)"
-        //                 else
-        //                     CurrentDeductions := CurrentDeductions - NSJob."NS_Budgeted Price (LCY)";
-        //         end;
-        //     until NSJob.NEXT() = 0;
-    end;
-    //PRJ-1708.JS.1.0 15DEC2022 - end 
-
-
-    //PRJ-1648.PS.1.0 21Dec2022 Start 
-
-    procedure NS_LastRetentionTotalInvoice(P_ProgressBillingHeader: Record "NS_Progress Billing Header"): Decimal;
-    var
-        ProgressBillingHeader: Record "NS_Progress Billing Header";
-        LastRetentiontotalAmount: Decimal;
-        ProgressBillingLine: Record "NS_Progress Billing Line";
-
-    begin
-        LastRetentiontotalAmount := 0;
-        ProgressBillingHeader.RESET();
-        ProgressBillingHeader.SETRANGE("NS_No.", P_ProgressBillingHeader."NS_No.");
-        ProgressBillingHeader.SETFILTER("NS_Requisition No.", '<%1', P_ProgressBillingHeader."NS_Requisition No.");
-        ProgressBillingHeader.SETFILTER(NS_Status, '<>%1', ProgressBillingHeader.NS_Status::Void);
-        if ProgressBillingHeader.FINDLAST() then begin
-            ProgressBillingLine.Reset();
-            ProgressBillingLine.SetRange("NS_Progress Billing No.", ProgressBillingHeader."NS_No.");
-            ProgressBillingLine.SetRange("NS_Requisition No.", ProgressBillingHeader."NS_Requisition No.");
-            ProgressBillingLine.SetRange("NS_Version No.", ProgressBillingHeader."NS_Version No.");
-            if ProgressBillingLine.FindSet() then begin
-                repeat
-                    LastRetentiontotalAmount += ProgressBillingLine."NS_Work Ret Amt Reduction";
-                until ProgressBillingLine.Next = 0;
-            end;
-        end;
-        exit(LastRetentiontotalAmount);
-    end;
-
-
-    procedure NS_CurrentRetentionTotalInvoice(P_ProgressBillingHeader: Record "NS_Progress Billing Header"): Decimal;
-    var
-        ProgressBillingHeader: Record "NS_Progress Billing Header";
-        CurrentRettotalAmt: Decimal;
-        ProgressBillingLine: Record "NS_Progress Billing Line";
-
-    begin
-        CurrentRettotalAmt := 0;
-        ProgressBillingLine.Reset();
-        ProgressBillingLine.SetRange("NS_Progress Billing No.", P_ProgressBillingHeader."NS_No.");
-        ProgressBillingLine.SetRange("NS_Requisition No.", P_ProgressBillingHeader."NS_Requisition No.");
-        ProgressBillingLine.SetRange("NS_Version No.", P_ProgressBillingHeader."NS_Version No.");
-        if ProgressBillingLine.FindSet() then begin
-            repeat
-                CurrentRettotalAmt += ProgressBillingLine."NS_Work Ret Amt Reduction";
-            until ProgressBillingLine.Next = 0;
-        end;
-        exit(CurrentRettotalAmt);
-    end;
-    //PRJ-1648.PS.1.0 21Dec2022 End 
-    //PRJCTPR-208.NC.1.0 27Oct2023 Start   
-    procedure NS_RequisitionTotal(Reco: Record "NS_Progress Billing Header"): Decimal;
-    var
-        ProgressBillingLine: Record "NS_Progress Billing Line";
-        ProgressBillingHeader: Record "NS_Progress Billing Header";
-        RecJob: Record Job;
-        TotReqAmt: Decimal;
-
-    begin
-        TotReqAmt := 0;
-        ProgressBillingLine.RESET();
-        ProgressBillingLine.SETRANGE("NS_Progress Billing No.", Reco."NS_No.");
-        ProgressBillingLine.SETRANGE("NS_Requisition No.", Reco."NS_Requisition No.");
-        ProgressBillingLine.SETRANGE("NS_Version No.", Reco."NS_Version No.");
-        if ProgressBillingLine.FINDSET() then
-            repeat
-                ProgressBillingHeader.GET(ProgressBillingLine."NS_Progress Billing No.", ProgressBillingLine."NS_Requisition No.", ProgressBillingLine."NS_Version No.");
-                if ProgressBillingHeader.NS_Status <> ProgressBillingHeader.NS_Status::Void then begin
-                    RecJob.Reset();
-                    RecJob.SetRange("No.", ProgressBillingLine."NS_Job No.");
-                    RecJob.SetFilter("NS_Job Class", '<>%1', RecJob."NS_Job Class"::"Change Order");
-                    if RecJob.FindFirst() then begin
-                        if ProgressBillingLine."NS_Change Order" then
-                            TotReqAmt := TotReqAmt
-                        else
-                            //TotReqAmt := TotReqAmt + ProgressBillingLine."NS_Work Amount"; //PRJCTPR-384.JS.1.0 line commented 08Apr2024
-                            TotReqAmt := TotReqAmt + ProgressBillingLine."NS_Work Amount" + ProgressBillingLine."NS_Stored Materials Amount"; //PRJCTPR-384.JS.1.0 08Apr2024 line added
-                    end else
-                        //TotReqAmt := TotReqAmt + ProgressBillingLine."NS_Work Amount";  //PRJCTPR-384.JS.1.0 line commented 08Apr2024
-                            TotReqAmt := TotReqAmt + ProgressBillingLine."NS_Work Amount" + ProgressBillingLine."NS_Stored Materials Amount"; //PRJCTPR-384.JS.1.0 08Apr2024 line added
-                end;
-            until ProgressBillingLine.NEXT() = 0;
-
-        exit(TotReqAmt);
-    end;
-    //PRJCTPR-208.NC.1.0 27Oct2023 End
-    //PE-255 AT.1.0 13Feb2024 Start
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeOnInsert(var NS_ProgressBillingHeader: Record "NS_Progress Billing Header"; var IsHandled: Boolean)
-    begin
-    end;
-    //PE-255 AT.1.0 13Feb2024 End
 }
 

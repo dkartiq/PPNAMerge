@@ -11,7 +11,6 @@ report 14021173 "NS_Pct of Completion by Dim"
     //SMPL - Caption = 'RequestPage' not supported on area
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-902.JS.1.0  10Sep2021 | Correct key parameters in get function to run report
-    //PRJ-1065.JS.1.0 | 10Dec2021 | Correction Regaridng Dimensions
 
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSPct of Completion by Dim.rdl';
@@ -26,7 +25,6 @@ report 14021173 "NS_Pct of Completion by Dim"
         {
             DataItemTableView = SORTING("No.") ORDER(Ascending);
             RequestFilterFields = "No.", "Bill-to Customer No.", "NS_Date Filter", Status, "NS_Activity Filter", "NS_Process Filter", "NS_Operation Filter";
-
             dataitem(JobTaskBuilding; "Job Task")
             {
                 DataItemLink = "Job No." = FIELD("No.");
@@ -77,7 +75,6 @@ report 14021173 "NS_Pct of Completion by Dim"
                                 "NS_No." := Job."NS_Sub-Level to Job No.";
                                 "NS_Is Locked" := true;
                                 "NS_Entry No." := JobAnaBuffEntryNo;
-                                "NS_Global Dimension 1 Code" := GlobalDimensionCode;   //PRJ-1065.JS.1.0  08Dec2021
                                 //PRJ-902.JS.1.0 10Sep2021 end
                                 "NS_Posting Date" := WORKDATE;
                                 Description := Job.Description;
@@ -169,8 +166,7 @@ report 14021173 "NS_Pct of Completion by Dim"
 
                             JobAnalysisBuffer.RESET;
                             JobAnalysisBuffer.SETRANGE("NS_Job No.", "NS_No.");
-                            //JobAnalysisBuffer.SETRANGE("NS_Posting Date", "NS_Posting Date");   //PRJ-1065.JS.1.0  08Dec2021 line commented
-                            JobAnalysisBuffer.Setrange("NS_Global Dimension 1 Code", "NS_Global Dimension 1 Code");    //PRJ-1065.JS.1.0  08Dec2021 line added
+                            JobAnalysisBuffer.SETRANGE("NS_Posting Date", "NS_Posting Date");
                             if not JobAnalysisBuffer.FINDSET then begin
                                 JobAnalysisBuffer.INIT;
                                 JobAnalysisBuffer."NS_Posting Date" := "NS_Posting Date";
@@ -181,7 +177,6 @@ report 14021173 "NS_Pct of Completion by Dim"
                                 JobAnalysisBuffer."NS_Actual Price" := "NS_Actual Price";
                                 JobAnalysisBuffer."NS_Budgeted Cost" := "NS_Budgeted Cost";
                                 JobAnalysisBuffer."NS_Calculation Source Code" := "NS_Calculation Source Code";
-                                JobAnalysisBuffer."NS_Global Dimension 1 Code" := "NS_Global Dimension 1 Code";    //PRJ-1065.JS.1.0  08Dec2021 line added
                                 if JobAnalysisBuffer.INSERT then;
                             end else begin
                                 JobAnalysisBuffer."NS_Budgeted Price" := JobAnalysisBuffer."NS_Budgeted Price" + "NS_Budgeted Price";
@@ -378,7 +373,7 @@ report 14021173 "NS_Pct of Completion by Dim"
                             "NS_Percent Value" := 100;
 
                         //Fill in columns on the report
-                        GlobalDimensionCode := "NS_Global Dimension 1 Code"; //prj-1065.JS.1.0 08Dec2021
+                        ///  GlobalDimensionCode := "Posting Date";
                         JobNo := "NS_Job No.";
                         JobDescription := NS_Description;
                         A := "NS_Budgeted Price";
@@ -546,29 +541,11 @@ report 14021173 "NS_Pct of Completion by Dim"
     }
 
     trigger OnPreReport();
-    var
-        JobsSetup: Record "Jobs Setup"; //PRJ-1571.NK.1.0 25Aug2022
-        ApoSetup: Record NS_APOSetup; //PRJ-1571.NK.1.0 25Aug2022
     begin
         CompanyInformation.GET;
         GLSetup.GET;
         JobFilter := Job.GETFILTERS;
-        //PRJ-1571.NK.1.0 25Aug2022 Start
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then begin
-            TextActivity := ApoSetup."Activity Code" + ' Filter';
-            TextProcess := ApoSetup."Process Code" + ' Filter';
-            TextOperation := ApoSetup."Operation Code" + ' Filter';
-        end else begin
-            TextActivity := 'Activity Filter';
-            TextProcess := 'Process Filter';
-            TextOperation := 'Operation Filter';
-        end;
-        JobFilter := ReplaceString(JobFilter, 'Activity Filter', TextActivity);
-        JobFilter := ReplaceString(JobFilter, 'Process Filter', TextProcess);
-        JobFilter := ReplaceString(JobFilter, 'Operation Filter', TextOperation);
-        //PRJ-1571.NK.1.0 25Aug2022 End
+
         if "ShowSub-Levels" then
             "Sub-LevelsText" := Text002
         else
@@ -602,7 +579,6 @@ report 14021173 "NS_Pct of Completion by Dim"
         JobAnaBuffEntryNo: Integer;  //PRJ-902.JS.1.0 10Sep2021
         ProcessDimensionCode: Integer;
         JobFilter: Text[250];
-        JobFilterNew: Text[250]; //PRJ-1571
         GlobalDimensionCodeHeader: Text[25];
         GlobalDimensionCode: Code[20];
         ToPrintContract: Decimal;
@@ -664,9 +640,6 @@ report 14021173 "NS_Pct of Completion by Dim"
         OperationFilter: Text[50];
         xAddCount: Integer;
         xModifyCount: Integer;
-        TextActivity: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TextProcess: Text; //PRJ-1571.NK.1.0 25Aug2022 
-        TextOperation: Text; //PRJ-1571.NK.1.0 25Aug2022
 
     procedure FindUsageCost(Job: Record Job; TaskNo: Code[20]) Usage: Decimal;
     begin
@@ -871,20 +844,5 @@ report 14021173 "NS_Pct of Completion by Dim"
             end;
         end;
     end;
-
-    //PRJ-1571.NK.1.0 25Aug2022 Start
-    procedure ReplaceString(OldString: Text; FindWhat: Text; ReplaceWith: Text) NewString: Text;
-    var
-        FindPos: Integer;
-    begin
-        FindPos := STRPOS(OldString, FindWhat);
-        WHILE FindPos > 0 DO BEGIN
-            NewString += DELSTR(OldString, FindPos) + ReplaceWith;
-            OldString := COPYSTR(OldString, FindPos + STRLEN(FindWhat));
-            FindPos := STRPOS(OldString, FindWhat);
-        END;
-        NewString += OldString;
-    end;
-    //PRJ-1571.NK.1.0 25Aug2022 End
 }
 

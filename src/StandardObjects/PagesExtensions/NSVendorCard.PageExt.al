@@ -9,11 +9,6 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
     //PRJ-197:AS:17APRIL2020 :Hide the "Balance (LCY)" field & Added Balance "BalanceWTFilters" field before "Balance Due (LCY)" field.
     //PRJ-251 AS1.0 29-04-20 Code Commented
     //PRJ-250:AS:10JUNE2020 Added & Commented code
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Vendor Card'; //PRJ-1330.NK.1.0 25Apr2022
-    //PRJ-1537.JS.1.0 25JULY2022 | Reverce Balance Due ($) Sinage condition
-    //PRJ-1579.RM.1.0 22Aug2022 | Added some code
-    //ZEL-12.RM.1.0 19Apr2023 | Changed the caption.
     layout
     {
 
@@ -39,7 +34,6 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
                 Description = 'Field used to show balance without using ';
                 Editable = false;
                 ApplicationArea = All;
-                ToolTip = 'Specifies the Balance ($)'; //PRJ-1579.RM.1.0 
 
                 trigger OnDrillDown();
                 begin
@@ -60,8 +54,7 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
                 Description = 'Field used to show Balance wdue LCY';
                 Editable = false;
                 ApplicationArea = All;
-                // ToolTip = 'Specifies the Balance Due($)'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 'commented
-                ToolTip = 'Specifies the Balance Due ($)'; //PRJ-1579.RM.2.0 '
+
                 trigger OnDrillDown();
                 var
                     VendLegEnt: Record "Vendor Ledger Entry";
@@ -85,7 +78,6 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
             field("NS_Retention Balance"; NS_RetentionBalance)
             {
                 Caption = 'Retention Balance ($)';
-                ToolTip = 'Specifies the Retention Balance ($)'; //PRJ-1579.RM.1.0 
                 Editable = false;
                 ApplicationArea = All;
 
@@ -108,9 +100,7 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
             //PRJ-197:AS:10APRIL2020  - START
             field(NS_BalanceWTRetention; BalanceWTRetention)
             {
-                // Caption = 'Balance Without Retention($)'; //PRJ-1579.RM.2.0 commented
-                Caption = 'Balance Without Retention ($)'; //PRJ-1579.RM.2.0
-                ToolTip = 'Specifies the balance without retention ($)'; //PRJ-1579.RM.1.0 
+                Caption = 'Balance Without Retention($)';
                 Editable = false;
                 ApplicationArea = All;
 
@@ -330,8 +320,7 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
             //Rec.CALCFIELDS("Balance (LCY)");//PRJ-713.AS.1.0 Commented
             // NS_RetentionBalance := "Balance (LCY)"; //PRJ-197:AS:10APRIL2020 old commented
             //PRJ-197:AS:10APRIL2020 - start
-            //PRJCTPR-166.NC.1.0 24July2023 Start Block
-            /* NS_DtldVendLedgEntry1.Reset;
+            NS_DtldVendLedgEntry1.Reset;
             NS_DtldVendLedgEntry1.SetRange("Vendor No.", Rec."No.");
             //NS_DtldVendLedgEntry1.SetRange("Initial Entry Global Dim. 1", "Global Dimension 1 Code");//PRJ-250:AS:10JUNE2020 Commented
             //NS_DtldVendLedgEntry1.SetRange("Initial Entry Global Dim. 2", "Global Dimension 2 Code");//PRJ-250:AS:10JUNE2020 Commented
@@ -340,31 +329,12 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
             NS_DtldVendLedgEntry1.SetRange("NS_Retention Ledger Code", NS_JobsSetup."NS_Retention Payable Ledger");//PRJ-250:AS:10JUNE2020 Added
             //NS_DtldVendLedgEntry1.SetRange("Currency Code", "Currency Filter");//PRJ-250:AS:10JUNE2020 Added
             Rec.COPYFILTER("Currency Filter", NS_DtldVendLedgEntry1."Currency Code");//PRJ-250:AS:10JUNE2020 Added
-            //PRJ-860.JS.1.0 30Aug2021-Start
-            if NS_DtldVendLedgEntry1.FindSet() then begin
-                NS_DtldVendLedgEntry1.CalcSums(NS_DtldVendLedgEntry1."Amount (LCY)");
-                NS_RetentionBalanceToshow := NS_DtldVendLedgEntry1."Amount (LCY)";
-                // repeat
-                //     NS_RetentionBalanceToshow += NS_DtldVendLedgEntry1."Amount (LCY)";
-                // until NS_DtldVendLedgEntry1.Next = 0;
+            if NS_DtldVendLedgEntry1.FindSet then
+                repeat
+                    NS_RetentionBalanceToshow += NS_DtldVendLedgEntry1."Amount (LCY)";
+                until NS_DtldVendLedgEntry1.Next = 0;
 
-                NS_RetentionBalance := -(NS_RetentionBalanceToshow);
-            end;
-            */
-            //PRJCTPR-166.NC.1.0 24July2023 End Block
-            //PRJCTPR-166.NC.1.0 24July2023 Start 
-            NS_VendLedgEntry.RESET;
-            NS_VendLedgEntry.SETRANGE("Vendor No.", Rec."No.");
-            NS_VendLedgEntry.SETRANGE("NS_Retention Ledger Code", NS_JobsSetup."NS_Retention Payable Ledger");
-            NS_VendLedgEntry.SETRANGE(Open, true);
-            if NS_VendLedgEntry.FindSet() then begin
-                NS_VendLedgEntry.CalcSums("NS_Retention Amount (LCY)");
-                NS_RetentionBalanceToshow += NS_VendLedgEntry."NS_Retention Amount (LCY)";
-                NS_RetentionBalance := -(NS_RetentionBalanceToshow);
-
-            end;
-            //PRJCTPR-166.NC.1.0 24July2023 End
-            //PRJ-860.JS.1.0 30Aug2021-end
+            NS_RetentionBalance := -(NS_RetentionBalanceToshow);
             //PRJ-197:AS:10APRIL2020 - end
             //Rec.SETFILTER("NS_Retention Ledger CodeFilter", NS_PurchSetup."NS_Normal Vendor Ledger No.");//PRJ-713.AS.1.0 Commented
         end;
@@ -430,11 +400,6 @@ pageextension 14021105 NS_VendorCard extends "Vendor Card"
             until VendLegEnt_G.Next = 0;
 
         BalanceDueLcy_NToshow := Abs(BalanceDueLcy_N);
-        //PRJ-1537.JS.1.0 25JULY2022 - Start
-        Rec.calcfields("Balance (LCY)");
-        If rec."Balance (LCY)" < 0 then
-            BalanceDueLcy_NToshow := BalanceDueLcy_NToshow * -1;
-        //PRJ-1537.JS.1.0 25JULY2022 - Start    
         //PRJ-713.AS.1.0 - END
 
         //PRJ-197:AS:17APRIL2020 - END

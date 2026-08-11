@@ -1,0 +1,386 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Report_Name">
+          <DataField>Report_Name</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="ShowJobSummaries">
+          <DataField>ShowJobSummaries</DataField>
+        </Field>
+        <Field Name="ShowReportSummary">
+          <DataField>ShowReportSummary</DataField>
+        </Field>
+        <Field Name="IncludeAdjustmentsText">
+          <DataField>IncludeAdjustmentsText</DataField>
+        </Field>
+        <Field Name="CompletePercentText">
+          <DataField>CompletePercentText</DataField>
+        </Field>
+        <Field Name="Sub_LevelsText_">
+          <DataField>Sub_LevelsText_</DataField>
+        </Field>
+        <Field Name="WorksheetText">
+          <DataField>WorksheetText</DataField>
+        </Field>
+        <Field Name="Job_TABLECAPTION_____Filters______JobFilter">
+          <DataField>Job_TABLECAPTION_____Filters______JobFilter</DataField>
+        </Field>
+        <Field Name="ReportHeadings_Number">
+          <DataField>ReportHeadings_Number</DataField>
+        </Field>
+        <Field Name="Job_No_Caption">
+          <DataField>Job_No_Caption</DataField>
+        </Field>
+        <Field Name="Job_DescriptionCaption">
+          <DataField>Job_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Contract_PriceCaption">
+          <DataField>Contract_PriceCaption</DataField>
+        </Field>
+        <Field Name="To_Date_BillingsCaption">
+          <DataField>To_Date_BillingsCaption</DataField>
+        </Field>
+        <Field Name="To_Date_CostCaption">
+          <DataField>To_Date_CostCaption</DataField>
+        </Field>
+        <Field Name="Total_Cost_EstimateCaption">
+          <DataField>Total_Cost_EstimateCaption</DataField>
+        </Field>
+        <Field Name="Percent_CompletionCaption">
+          <DataField>Percent_CompletionCaption</DataField>
+        </Field>
+        <Field Name="Recognized_RevenueCaption">
+          <DataField>Recognized_RevenueCaption</DataField>
+        </Field>
+        <Field Name="Recognized_Profit_LossCaption">
+          <DataField>Recognized_Profit_LossCaption</DataField>
+        </Field>
+        <Field Name="Over_BillingsCaption">
+          <DataField>Over_BillingsCaption</DataField>
+        </Field>
+        <Field Name="Under_BillingsCaption">
+          <DataField>Under_BillingsCaption</DataField>
+        </Field>
+        <Field Name="JobLocationLbl">
+          <DataField>JobLocationLbl</DataField>
+        </Field>
+        <Field Name="CustomerAccountNameLbl">
+          <DataField>CustomerAccountNameLbl</DataField>
+        </Field>
+        <Field Name="JobDescriptionLbl">
+          <DataField>JobDescriptionLbl</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="A">
+          <DataField>A</DataField>
+        </Field>
+        <Field Name="AFormat">
+          <DataField>AFormat</DataField>
+        </Field>
+        <Field Name="B">
+          <DataField>B</DataField>
+        </Field>
+        <Field Name="BFormat">
+          <DataField>BFormat</DataField>
+        </Field>
+        <Field Name="C">
+          <DataField>C</DataField>
+        </Field>
+        <Field Name="CFormat">
+          <DataField>CFormat</DataField>
+        </Field>
+        <Field Name="D">
+          <DataField>D</DataField>
+        </Field>
+        <Field Name="DFormat">
+          <DataField>DFormat</DataField>
+        </Field>
+        <Field Name="E">
+          <DataField>E</DataField>
+        </Field>
+        <Field Name="EFormat">
+          <DataField>EFormat</DataField>
+        </Field>
+        <Field Name="F">
+          <DataField>F</DataField>
+        </Field>
+        <Field Name="FFormat">
+          <DataField>FFormat</DataField>
+        </Field>
+        <Field Name="G">
+          <DataField>G</DataField>
+        </Field>
+        <Field Name="GFormat">
+          <DataField>GFormat</DataField>
+        </Field>
+        <Field Name="H">
+          <DataField>H</DataField>
+        </Field>
+        <Field Name="HFormat">
+          <DataField>HFormat</DataField>
+        </Field>
+        <Field Name="I">
+          <DataField>I</DataField>
+        </Field>
+        <Field Name="IFormat">
+          <DataField>IFormat</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="FORMAT_JobRecRef_0_10_">
+          <DataField>FORMAT_JobRecRef_0_10_</DataField>
+        </Field>
+        <Field Name="PercentType">
+          <DataField>PercentType</DataField>
+        </Field>
+        <Field Name="A_Total">
+          <DataField>A_Total</DataField>
+        </Field>
+        <Field Name="A_TotalFormat">
+          <DataField>A_TotalFormat</DataField>
+        </Field>
+        <Field Name="B_Total">
+          <DataField>B_Total</DataField>
+        </Field>
+        <Field Name="B_TotalFormat">
+          <DataField>B_TotalFormat</DataField>
+        </Field>
+        <Field Name="C_Total">
+          <DataField>C_Total</DataField>
+        </Field>
+        <Field Name="C_TotalFormat">
+          <DataField>C_TotalFormat</DataField>
+        </Field>
+        <Field Name="D_Total">
+          <DataField>D_Total</DataField>
+        </Field>
+        <Field Name="D_TotalFormat">
+          <DataField>D_TotalFormat</DataField>
+        </Field>
+        <Field Name="F_Total">
+          <DataField>F_Total</DataField>
+        </Field>
+        <Field Name="F_TotalFormat">
+          <DataField>F_TotalFormat</DataField>
+        </Field>
+        <Field Name="G_Total">
+          <DataField>G_Total</DataField>
+        </Field>
+        <Field Name="G_TotalFormat">
+          <DataField>G_TotalFormat</DataField>
+        </Field>
+        <Field Name="H_Total">
+          <DataField>H_Total</DataField>
+        </Field>
+        <Field Name="H_TotalFormat">
+          <DataField>H_TotalFormat</DataField>
+        </Field>
+        <Field Name="I_Total">
+          <DataField>I_Total</DataField>
+        </Field>
+        <Field Name="I_TotalFormat">
+          <DataField>I_TotalFormat</DataField>
+        </Field>
+        <Field Name="TotalsCaption">
+          <DataField>TotalsCaption</DataField>
+        </Field>
+        <Field Name="SummaryA_Number_">
+          <DataField>SummaryA_Number_</DataField>
+        </Field>
+        <Field Name="SummaryA_Number_Format">
+          <DataField>SummaryA_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryB_Number_">
+          <DataField>SummaryB_Number_</DataField>
+        </Field>
+        <Field Name="SummaryB_Number_Format">
+          <DataField>SummaryB_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryC_Number_">
+          <DataField>SummaryC_Number_</DataField>
+        </Field>
+        <Field Name="SummaryC_Number_Format">
+          <DataField>SummaryC_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryD_Number_">
+          <DataField>SummaryD_Number_</DataField>
+        </Field>
+        <Field Name="SummaryD_Number_Format">
+          <DataField>SummaryD_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryE_Number_">
+          <DataField>SummaryE_Number_</DataField>
+        </Field>
+        <Field Name="SummaryE_Number_Format">
+          <DataField>SummaryE_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryF_Number_">
+          <DataField>SummaryF_Number_</DataField>
+        </Field>
+        <Field Name="SummaryF_Number_Format">
+          <DataField>SummaryF_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryG_Number_">
+          <DataField>SummaryG_Number_</DataField>
+        </Field>
+        <Field Name="SummaryG_Number_Format">
+          <DataField>SummaryG_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryGlobalDim1_Number_">
+          <DataField>SummaryGlobalDim1_Number_</DataField>
+        </Field>
+        <Field Name="SummaryH_Number_">
+          <DataField>SummaryH_Number_</DataField>
+        </Field>
+        <Field Name="SummaryH_Number_Format">
+          <DataField>SummaryH_Number_Format</DataField>
+        </Field>
+        <Field Name="SummaryI_Number_">
+          <DataField>SummaryI_Number_</DataField>
+        </Field>
+        <Field Name="SummaryI_Number_Format">
+          <DataField>SummaryI_Number_Format</DataField>
+        </Field>
+        <Field Name="JobSummary_Number">
+          <DataField>JobSummary_Number</DataField>
+        </Field>
+        <Field Name="FinalSummaryA_Number_">
+          <DataField>FinalSummaryA_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryA_Number_Format">
+          <DataField>FinalSummaryA_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryB_Number_">
+          <DataField>FinalSummaryB_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryB_Number_Format">
+          <DataField>FinalSummaryB_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryC_Number_">
+          <DataField>FinalSummaryC_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryC_Number_Format">
+          <DataField>FinalSummaryC_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryD_Number_">
+          <DataField>FinalSummaryD_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryD_Number_Format">
+          <DataField>FinalSummaryD_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryF_Number_">
+          <DataField>FinalSummaryF_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryF_Number_Format">
+          <DataField>FinalSummaryF_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryG_Number_">
+          <DataField>FinalSummaryG_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryG_Number_Format">
+          <DataField>FinalSummaryG_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryGlobalDim1_Number_">
+          <DataField>FinalSummaryGlobalDim1_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryH_Number_">
+          <DataField>FinalSummaryH_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryH_Number_Format">
+          <DataField>FinalSummaryH_Number_Format</DataField>
+        </Field>
+        <Field Name="FinalSummaryI_Number_">
+          <DataField>FinalSummaryI_Number_</DataField>
+        </Field>
+        <Field Name="FinalSummaryI_Number_Format">
+          <DataField>FinalSummaryI_Number_Format</DataField>
+        </Field>
+        <Field Name="Report_SummaryCaption">
+          <DataField>Report_SummaryCaption</DataField>
+        </Field>
+        <Field Name="ReportSummary_Number">
+          <DataField>ReportSummary_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

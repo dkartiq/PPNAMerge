@@ -3,9 +3,7 @@ pageextension 14021129 NS_ResourceCard extends "Resource Card"
     // version NAVW111.00.00.21836,NAVNA11.00.00.21836,PPNA11.00
     //PRJ-490.MS.1.0 added new field
     //PRJ-991.GK.2.0 22Oct2021
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Resource Card'; //PRJ-1330.NK.1.0 25Apr2022
-    //PE-61.NK.1.0 16Mar2023 | Add Filed
+
     layout
     {
         //PRJ-568.AS.1.0 18FEB2021 - START
@@ -17,15 +15,6 @@ pageextension 14021129 NS_ResourceCard extends "Resource Card"
                 Caption = 'Default Job Task No.';
                 Editable = true;
             }
-            //PE-253.PS.1.0 19Feb2024 Start
-            field("NS_Production Work Units"; Rec."NS_Production Work Units")
-            {
-                ApplicationArea = All;
-                Caption = 'Production Work Units';
-                ToolTip = 'Enable to use this resource for posting work units from the Job Daily Log through Job Journal. Set the Resource Type to Person.';
-
-            }
-            //PE-253.PS.1.0 19Feb2024 End 
         }
         //PRJ-568.AS.1.0 18FEB2021 - END
         addafter("Last Date Modified")
@@ -94,18 +83,6 @@ pageextension 14021129 NS_ResourceCard extends "Resource Card"
             //PRJ-991.GK.2.0 22Oct2021 end
 
         }
-        //PE-61.NK.1.0 16Mar2023 Start
-        addafter("Employment Date")
-        {
-            field("NS_Skill Class Code"; Rec."NS_Skill Class Code")
-            {
-                ApplicationArea = all;
-                ToolTip = 'Specifies the Skill Class Code';
-                caption = 'Default Skill Class Code';    //PE-152.JS.1.0 21aug2023
-                Editable = false;   //PE-152.JS.1.0 21aug2023
-            }
-        }
-        //PE-61.NK.1.0 16Mar2023 End
     }
     actions
     {
@@ -113,19 +90,6 @@ pageextension 14021129 NS_ResourceCard extends "Resource Card"
         {
             Caption = 'Cost/&Price';
         }
-        //PRJ-1557.GK.1.0 26Aug2022 start
-        addafter(History)
-        {
-            action(NS_SkillClass)
-            {
-                ApplicationArea = All;
-                RunObject = page NS_ResourceSkillClass;
-                RunPageLink = "NS_Resource No." = field("No.");
-                Caption = 'Skill Class';
-                Image = Skills;
-            }
-        }
-        //PRJ-1557.GK.1.0 26Aug2022 end
     }
 
     var

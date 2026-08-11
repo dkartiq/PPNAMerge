@@ -1,7 +1,6 @@
 tableextension 14021119 NS_SalesShipmentLine extends "Sales Shipment Line"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
-    //PRJ-1015.JS.1.0  22Oct2021 | field added
 
     fields
     {
@@ -35,17 +34,6 @@ tableextension 14021119 NS_SalesShipmentLine extends "Sales Shipment Line"
             TableRelation = "NS_Job Revenue Category";
             DataClassification = CustomerContent;
         }
-
-        field(14021433; "NS_Sub-Level to Job No."; Code[20])    //PRJ-1015.JS.1.0  19Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-
-
     }
 
     /* +---------------------------------------------------------------------------------------------

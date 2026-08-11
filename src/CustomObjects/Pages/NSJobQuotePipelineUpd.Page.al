@@ -1,5 +1,6 @@
 page 14021419 "NS_Job Quote Pipeline Upd "
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -143,10 +144,12 @@ page 14021419 "NS_Job Quote Pipeline Upd "
         EstMoToBill: Option " ",Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec;
         EstMoToClose: Option " ",Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec;
         ProbabilityToClose: Option Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
-
-        NSProbabilityToClose: Enum "NS_QuotePro to Close";  //PE-300.JS.1.0 02JUN2024
-        Description: Text[50];
-        SiteCustomerName: Text[50];
+        // >> Upgrade
+        // Description: Text[50];
+        // SiteCustomerName: Text[50];
+        Description: Text[100];
+        SiteCustomerName: Text[100];
+        // << Upgrade
         Text000: Label 'Quote %1 has been updated.';
         Text001: Label 'Update quote?';
         Text002: Label 'In some cases, marking a quote inactive is not easily reversible.  Continue?';
@@ -168,16 +171,10 @@ page 14021419 "NS_Job Quote Pipeline Upd "
     procedure NS_MarkInactive();
     begin
         QuoteHeader.GET(QuoteNo);
-        //PE-300.Dk.1.0  29May2024 Start
-        // if QuoteHeader.NS_Status > QuoteHeader.NS_Status::Released then
-        //     QuoteHeader.FIELDERROR(NS_Status);
-        // if CONFIRM(Text002, false) then begin
-        //     QuoteHeader.NS_Status := QuoteHeader.NS_Status::Inactive;
-        if QuoteHeader."NS_Quote Status".AsInteger() > QuoteHeader."NS_Quote Status".AsInteger() then
-            QuoteHeader.FIELDERROR("NS_Quote Status");
+        if QuoteHeader.NS_Status > QuoteHeader.NS_Status::Submitted then
+            QuoteHeader.FIELDERROR(NS_Status);
         if CONFIRM(Text002, false) then begin
-            QuoteHeader."NS_Quote Status" := QuoteHeader."NS_Quote Status"::Inactive;
-            //PE-300.Dk.1.0  29May2024 End
+            QuoteHeader.NS_Status := QuoteHeader.NS_Status::"On Hold";
             QuoteHeader.MODIFY;
             MESSAGE(Text003);
             CurrPage.CLOSE;
@@ -199,10 +196,7 @@ page 14021419 "NS_Job Quote Pipeline Upd "
         EstPctToBill := QuoteHeader."NS_Estimated % to Bill";
         EstMoToBill := QuoteHeader."NS_Estimated Month to Bill";
         EstMoToClose := QuoteHeader."NS_Estimated Month to Close";
-        //PE-300-DK.1.0 29May2024 Start
-        //ProbabilityToClose := QuoteHeader."NS_Probability to Close";
-        NSProbabilityToClose := QuoteHeader."NS_QuotePro to Close";
-        //PE-300-DK.1.0 29May2024 End
+        ProbabilityToClose := QuoteHeader."NS_Probability to Close";
         Description := QuoteHeader."NS_Description/Nickname";
         SiteCustomerName := QuoteHeader."NS_Sell-to Customer Name";
         JQSalesperson := QuoteHeader."NS_Salesperson/User ID";
@@ -216,10 +210,7 @@ page 14021419 "NS_Job Quote Pipeline Upd "
         QuoteHeader.TESTFIELD("NS_Quote No.");
         if not CONFIRM(Text001, false) then
             exit;
-        //PE-300-DK.1.0 29May2024 Start
-        // QuoteHeader."NS_Probability to Close" := ProbabilityToClose;
-        QuoteHeader."NS_QuotePro to Close" := NSProbabilityToClose;
-        //PE-300-DK.1.0 29May2024 End
+        QuoteHeader."NS_Probability to Close" := ProbabilityToClose;
         QuoteHeader."NS_Estimated Month to Close" := EstMoToClose;
         QuoteHeader."NS_Estimated Month to Bill" := EstMoToBill;
         QuoteHeader."NS_Estimated % to Bill" := EstPctToBill;

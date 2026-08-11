@@ -1,8 +1,7 @@
 pageextension 14021457 NS_GLEntriesDimOverMatrix extends "G/L Entries Dim. Overv. Matrix"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'G/L Entries Dim. Overv. Matrix'; //PRJ-1330.NK.1.0 25Apr2022
+
     actions
     {
         modify("<Action16>")

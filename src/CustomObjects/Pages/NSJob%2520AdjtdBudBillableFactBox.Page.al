@@ -1,5 +1,6 @@
 page 14021365 "NS_Job AdjtdBudBillableFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -29,7 +30,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Original Title'; //PE-75.RM.1.0 23May2023
                     }
                     field(OriginalAdjTitle; OriginalAdjTitle)
                     {
@@ -39,7 +39,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         HideValue = OriginalBudAdj = 0;
                         Visible = OriginalBudAdj <> 0;
                         Caption = '';
-                        ToolTip = 'Original Adj Title'; //PE-75.RM.1.0 23May2023
                     }
                     field(TotalOriginalTitle; TotalOriginalTitle)
                     {
@@ -47,35 +46,30 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Editable = false;
                         Visible = OriginalBudAdj <> 0;
                         Caption = '';
-                        ToolTip = 'Total Original Title'; //PE-75.RM.1.0 23May2023
                     }
                     field(AdjustmentsTitle; AdjustmentsTitle)
                     {
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Adjustments Title'; //PE-75.RM.1.0 23May2023
                     }
                     field(JobLevelTitle; JobLevelTitle)
                     {
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Job Level Title'; //PE-75.RM.1.0 23May2023
                     }
                     field(SubLevelTitle; SubLevelTitle)
                     {
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Sub Level Title'; //PE-75.RM.1.0 23May2023
                     }
                     field(TotalTitle; TotalTitle)
                     {
                         ApplicationArea = All;
                         Editable = false;
                         Caption = '';
-                        ToolTip = 'Total Title'; //PE-75.RM.1.0 23May2023
                     }
                 }
                 group("Budget (Cost)")
@@ -86,7 +80,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Original Budget';
                         Editable = false;
-                        ToolTip = 'Original Budget'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -108,7 +101,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Enabled = OriginalBudAdj <> 0;
                         HideValue = OriginalBudAdj = 0;
                         Visible = OriginalBudAdj <> 0;
-                        ToolTip = 'Original Bud Adj'; //PE-75.RM.1.0 23May2023
                     }
                     field(OriginalBudTotal; FORMAT(OriginalBudTotal, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
                     {
@@ -116,7 +108,7 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Caption = 'Original Budget Total';
                         Editable = false;
                         Visible = OriginalBudAdj <> 0;
-                        ToolTip = 'Original Bud Total'; //PE-75.RM.1.0 23May2023
+
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 0);
@@ -130,7 +122,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Budget Adjustments';
                         Editable = false;
-                        ToolTip = 'Adjustment Budget'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -145,7 +136,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Job-Level';
                         Editable = false;
-                        ToolTip = 'Budgeted Cost LCY'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -159,7 +149,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Sub-Levels';
                         Editable = false;
-                        ToolTip = 'Sub Level Cost'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -175,7 +164,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Total';
                         Editable = false;
-                        ToolTip = 'Job Level Budget'; //PE-75.RM.1.0 23May2023
                     }
                 }
                 group("Billable (Price)")
@@ -187,7 +175,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Caption = 'Original Contract';
                         DrillDownPageID = "Job Planning Lines";
                         Editable = false;
-                        ToolTip = 'Original Contract'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -208,7 +195,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Enabled = OriginalContAdj <> 0;
                         HideValue = OriginalBudAdj = 0;
                         Visible = OriginalContAdj <> 0;
-                        ToolTip = 'Original Contract Adj'; //PE-75.RM.1.0 23May2023
                     }
                     field(OriginalContractTotal; FORMAT(OriginalContTotal, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
                     {
@@ -216,14 +202,12 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Caption = 'Original Contract Total';
                         Editable = false;
                         Visible = OriginalContAdj <> 0;
-                        ToolTip = 'Original Contract Total'; //PE-75.RM.1.0 23May2023
                     }
                     field(AdjustmentContract; FORMAT(AdjustmentContract, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
                     {
                         ApplicationArea = All;
                         Caption = 'Contract Adjustments';
                         Editable = false;
-                        ToolTip = 'Adjustment Contract'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -239,7 +223,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         Caption = 'Contract Amount';
                         DrillDownPageID = "Job Planning Lines";
                         Editable = false;
-                        ToolTip = 'Budgeted Price LCY'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -253,7 +236,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Contract Sub-Levels';
                         Editable = false;
-                        ToolTip = 'Sub Levels Price'; //PE-75.RM.1.0 23May2023
 
                         trigger OnDrillDown();
                         begin
@@ -269,7 +251,6 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
                         ApplicationArea = All;
                         Caption = 'Total Contract';
                         Editable = false;
-                        ToolTip = 'Job Level Contract'; //PE-75.RM.1.0 23May2023
                     }
                 }
             }
@@ -325,6 +306,12 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
         //PRJ-340.SK.1.0 End
         JobCalc := Rec;
         JobCalc.RESET();
+        // >> Upgrade
+        //FDD108 Start
+        if "NS_Sub-Level to Job No." = "No." then
+            exit;
+        //FDD108 End
+        // << Upgrade
 
         //Calculate original amounts
         JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');

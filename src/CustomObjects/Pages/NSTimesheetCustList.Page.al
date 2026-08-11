@@ -1,11 +1,7 @@
 page 14021332 NS_TimesheeCustomizedList
 {
     //PRJ-772.AS.1.0 12July2021 New page
-    //PRJCTPR-28.GK.1.0 16March2023 start
     CardPageID = NS_TimesheetCustomizeCard;
-    // CardPageID = NS_TimesheetCustomizeDocument; //Requried only for Mobile app
-    //PRJCTPR-28.GK.1.0 16March2023 end
-    //PE-156.HS.1.0 12SEPT2023| Added Caption
     Caption = 'Crew Time Sheet List';
     Editable = false;
     PageType = List;
@@ -23,7 +19,6 @@ page 14021332 NS_TimesheeCustomizedList
                 {
                     Editable = false;
                     ApplicationArea = All;
-                    Caption = 'Time Sheet No.'; //PE-156.HS.1.0 12SEPT2023
                 }
                 field("NS_Description"; Rec."NS_Description")
                 {

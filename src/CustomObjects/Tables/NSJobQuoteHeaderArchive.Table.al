@@ -196,7 +196,7 @@ table 14021422 "NS_Job Quote Header Archive"
             ObsoleteReason = 'Will be removed in Next Build';//PRJ-867.AS.1.0 23SEPT2021
             Caption = 'Salesperson Code';
             DataClassification = CustomerContent;
-            // TableRelation = "Salesperson/Purchaser";//PRJCTPR-47.AS.1.0 TABLE RELATION REMOVED
+            TableRelation = "Salesperson/Purchaser";
         }
         field(142; "NS_Salesperson Code New"; Code[20])//PRJ-867.AS.1.0 23SEPT2021 Add New field
         {
@@ -636,8 +636,7 @@ table 14021422 "NS_Job Quote Header Archive"
         field(5051; "NS_Sell-toCustomerTemplateCode"; Code[10])
         {
             Caption = 'Sell-to Customer Template Code';
-            //TableRelation = "Customer Template";   //PRJCTPR-155.JS.1.0 line commented
-            TableRelation = "Customer Templ.";  //PRJCTPR-155.JS.1.0 line added
+            TableRelation = "Customer Template";
             DataClassification = CustomerContent;
         }
         field(5053; "NS_Bill-to Contact No."; Code[20])
@@ -649,8 +648,7 @@ table 14021422 "NS_Job Quote Header Archive"
         field(5054; "NS_Bill-toCustomerTemplateCode"; Code[10])
         {
             Caption = 'Bill-to Customer Template Code';
-            //TableRelation = "Customer Template";   //PRJCTPR-155.JS.1.0 line commented
-            TableRelation = "Customer Templ.";  //PRJCTPR-155.JS.1.0 line added        
+            TableRelation = "Customer Template";
             DataClassification = CustomerContent;
         }
         field(5400; "NS_Lump Sum"; Boolean)
@@ -952,7 +950,7 @@ table 14021422 "NS_Job Quote Header Archive"
             ObsoleteReason = 'Will be removed in Next build'; //PRJ-993.AS.1.0 12OCT2021
             Caption = 'Job Posting Group';//PRJ-993.AS.1.0 18OCT2021
             DataClassification = CustomerContent;
-            //TableRelation = "Job Posting Group";//PE-233.AS.2.0 COMMENT
+            TableRelation = "Job Posting Group";
         }
         field(14021446; "NS_Minimum Selling Price"; Decimal)
         {
@@ -1045,15 +1043,8 @@ table 14021422 "NS_Job Quote Header Archive"
         JobQuote.NS_Revision := 0;
         JobQuote."NS_Quote No." := '';
         JobQuote."NS_Duplicated-from Quote No." := ArchQuote."NS_Quote No.";
-        JobQuote."NS_Revision Reference" := ArchQuote.NS_Revision;//PRJ-1163.AS.2.0
         QuoteMgt.NS_OnInsertQuote(JobQuote, true);
         JobQuote.INSERT();
-
-        if JobQuote."NS_Shortcut Dimension 1 Code" <> '' then
-            JobQuote.VALIDATE("NS_Shortcut Dimension 1 Code");
-        if JobQuote."NS_Shortcut Dimension 2 Code" <> '' then
-            JobQuote.VALIDATE("NS_Shortcut Dimension 2 Code");
-        JobQuote.MODIFY(true);
 
         ArchQuoteLine.SETRANGE("NS_Quote No.", ArchQuote."NS_Quote No.");
         ArchQuoteLine.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
@@ -1062,23 +1053,20 @@ table 14021422 "NS_Job Quote Header Archive"
                 QuoteLine.INIT();
                 QuoteLine.TRANSFERFIELDS(ArchQuoteLine);
                 QuoteLine."NS_Quote No." := JobQuote."NS_Quote No.";
-                // QuoteLine.NS_Revision := 0; //PRJ-1163.AS.3.0 COMMENT
-                QuoteLine.NS_Revision := JobQuote."NS_Revision Reference";//PRJ-1163.AS.3.0 ADD
+                QuoteLine.NS_Revision := 0;
                 QuoteLine.INSERT();
             until ArchQuoteLine.NEXT() = 0;
 
-        //PRJ-1163.AS.2.0 03MARCH2022 START COMMENTED FUNCTION
-        // ArchPlanLine.SETRANGE("NS_Quote No.", ArchQuote."NS_Quote No.");
-        // ArchPlanLine.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
-        // if ArchPlanLine.FINDSET() then
-        //     repeat
-        //         PlanLine.INIT();
-        //         PlanLine.TRANSFERFIELDS(ArchPlanLine);
-        //         PlanLine."NS_Quote No." := JobQuote."NS_Quote No.";
-        //         PlanLine."Job No." := JobQuote."NS_Job No.";
-        //         PlanLine.INSERT();
-        //     until ArchPlanLine.NEXT() = 0;
-        //PRJ-1163.AS.2.0 03MARCH2022 END COMMENTED FUNCTION
+        ArchPlanLine.SETRANGE("NS_Quote No.", ArchQuote."NS_Quote No.");
+        ArchPlanLine.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
+        if ArchPlanLine.FINDSET() then
+            repeat
+                PlanLine.INIT();
+                PlanLine.TRANSFERFIELDS(ArchPlanLine);
+                PlanLine."NS_Quote No." := JobQuote."NS_Quote No.";
+                PlanLine."Job No." := JobQuote."NS_Job No.";
+                PlanLine.INSERT();
+            until ArchPlanLine.NEXT() = 0;
 
         ArchTask.SETRANGE("NS_Quote No.", ArchQuote."NS_Quote No.");
         ArchTask.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
@@ -1088,11 +1076,18 @@ table 14021422 "NS_Job Quote Header Archive"
                 JobTask.TRANSFERFIELDS(ArchTask);
                 JobTask."NS_Quote No." := JobQuote."NS_Quote No.";
                 JobTask."Job No." := JobQuote."NS_Job No.";
-                JobTask."NS_Revision No." := JobQuote."NS_Revision Reference";
                 JobTask.INSERT();
             until ArchTask.NEXT() = 0;
 
-        NS_MoveRevisiondatatoJobPlanLine(ArchQuote, JobQuote);//PRJ-1163.AS.2.0 03MARCH2022 Added Cod
+        ArchSegment.SETRANGE("NS_Job No.", ArchQuote."NS_Quote No.");
+        ArchSegment.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
+        if ArchSegment.FINDSET() then
+            repeat
+                Segment.INIT();
+                Segment.TRANSFERFIELDS(ArchSegment);
+                Segment."NS_Job No." := JobQuote."NS_Job No.";
+                Segment.INSERT();
+            until ArchSegment.NEXT() = 0;
 
         ArchSOW.SETRANGE("NS_Quote No.", ArchQuote."NS_Quote No.");
         ArchSOW.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
@@ -1105,206 +1100,13 @@ table 14021422 "NS_Job Quote Header Archive"
                 SOW.INSERT();
             until ArchSOW.NEXT = 0;
 
-        ArchSegment.SETRANGE("NS_Job No.", ArchQuote."NS_Quote No.");
-        ArchSegment.SETRANGE(NS_Revision, ArchQuote.NS_Revision);
-        if ArchSegment.FINDSET() then
-            repeat
-                Segment.INIT();
-                // Segment.TRANSFERFIELDS(ArchSegment);//PRJ-1163.AS.2.0 03MARCH2022 COMMENTED
-                //PRJ-1163.AS.2.0 03MARCH2022 - start Added code
-                Segment.NS_Type := ArchSegment.NS_Type;
-                Segment."NS_Job No." := JobQuote."NS_Job No.";
-                Segment."NS_Segment Code" := ArchSegment."NS_Segment Code";
-                Segment."NS_Size of Weld" := ArchSegment."NS_Size of Weld";
-                Segment."NS_Segment Name" := ArchSegment."NS_Segment Name";
-                Segment."NS_Is Total" := ArchSegment."NS_Is Total";
-                Segment."NS_Weld Time (Hours)" := ArchSegment."NS_Weld Time (Hours)";
-                Segment.NS_Default := ArchSegment.NS_Default;
-                Segment."NS_Schedule (Total Cost)" := ArchSegment."NS_Schedule (Total Cost)";
-                Segment."NS_Schedule (Total Price)" := ArchSegment."NS_Schedule (Total Price)";
-                Segment."NS_Remaining (Total Cost)" := ArchSegment."NS_Remaining (Total Cost)";
-                Segment."NS_Remaining (Total Price)" := ArchSegment."NS_Remaining (Total Price)";
-                Segment."NS_Amt. Rcd. Not Invoiced" := ArchSegment."NS_Amt. Rcd. Not Invoiced";
-                Segment."NS_Mark-up" := ArchSegment."NS_Mark-up";
-                Segment."NS_Gross Profit" := ArchSegment."NS_Gross Profit";
-                Segment."NS_Gross Profit Percent" := ArchSegment."NS_Gross Profit Percent";
-                Segment."NS_Line Amount Incl. Tax" := ArchSegment."NS_Line Amount Incl. Tax";
-                Segment."NS_Total Contract Price" := ArchSegment."NS_Total Contract Price";
-                Segment."NS_Template No." := ArchSegment."NS_Template No.";
-                Segment."NS_Work Units" := ArchSegment."NS_Work Units";
-                Segment."NS_Work Unit of Measure" := ArchSegment."NS_Work Unit of Measure";
-                Segment.INSERT;
-            //PRJ-1163.AS.2.0 03MARCH2022 - end Added code
-            until ArchSegment.NEXT() = 0;
-
+        if JobQuote."NS_Shortcut Dimension 1 Code" <> '' then
+            JobQuote.VALIDATE("NS_Shortcut Dimension 1 Code");
+        if JobQuote."NS_Shortcut Dimension 2 Code" <> '' then
+            JobQuote.VALIDATE("NS_Shortcut Dimension 2 Code");
+        JobQuote.MODIFY();
 
         MESSAGE('Job Quote: ' + JobQuote."NS_Quote No." + ' has been successfully created');
     end;
-
-
-    //PRJ-1163.AS.2.0 03MARCH2022 - start Function to move ArchiveJPL data to JPL data
-    procedure NS_MoveRevisiondatatoJobPlanLine(qQuoteHeader_L: Record "NS_Job Quote Header Archive"; qQuotHdrT: Record "NS_Job Quote Header");
-    var
-        PlanLine_L: Record "Job Planning Line";
-        ArchivePlanLine_L: Record "NS_Archived QuotePlanningLine";
-        PLLine: Record "Job Planning Line";
-    begin
-        ArchivePlanLine_L.RESET;
-        ArchivePlanLine_L.SetCurrentKey("NS_Job No.", "NS_Job Task No.", "NS_Line No.");
-        ArchivePlanLine_L.SETRANGE("NS_Job No.", qQuoteHeader_L."NS_Job No.");
-        ArchivePlanLine_L.SetRange(NS_Revision, qQuoteHeader_L.NS_Revision);
-        if ArchivePlanLine_L.FINDSET then
-            repeat
-                PlanLine_L.INIT;
-                PlanLine_L."Job No." := qQuotHdrT."NS_Job No.";
-                PlanLine_L."Job Task No." := ArchivePlanLine_L."NS_Job Task No.";
-                PlanLine_L."Line No." := ArchivePlanLine_L."NS_Line No.";
-                //PlanLine_L."NS_Quote No." := ArchivePlanLine_L."NS_Quote No.";//girish
-                PlanLine_L.Description := ArchivePlanLine_L.NS_Description;
-                PlanLine_L."Description 2" := ArchivePlanLine_L."NS_Description 2";
-                PlanLine_L."Planning Date" := ArchivePlanLine_L."NS_Planning Date";
-                PlanLine_L."Planning Due Date" := ArchivePlanLine_L."NS_Planning Date";
-                PlanLine_L."Planned Delivery Date" := ArchivePlanLine_L."NS_Planned Delivery Date";
-                PlanLine_L."Document No." := ArchivePlanLine_L."NS_Document No.";
-                PlanLine_L.Type := ArchivePlanLine_L.NS_Type;
-                PlanLine_L."No." := ArchivePlanLine_L."NS_No.";
-                PlanLine_L.Description := ArchivePlanLine_L.NS_Description;
-                PlanLine_L.Quantity := ArchivePlanLine_L.NS_Quantity;
-                PlanLine_L."Direct Unit Cost (LCY)" := ArchivePlanLine_L."NS_Direct Unit Cost (LCY)";
-                PlanLine_L."Unit Cost (LCY)" := ArchivePlanLine_L."NS_Unit Cost (LCY)";
-                PlanLine_L."Total Cost (LCY)" := ArchivePlanLine_L."NS_Total Cost (LCY)";
-                PlanLine_L."Unit Price (LCY)" := ArchivePlanLine_L."NS_Unit Price (LCY)";
-                PlanLine_L."Total Price (LCY)" := ArchivePlanLine_L."NS_Total Price (LCY)";
-                PlanLine_L."Resource Group No." := ArchivePlanLine_L."NS_Resource Group No.";
-                PlanLine_L."Unit of Measure Code" := ArchivePlanLine_L."NS_Unit of Measure Code";
-                PlanLine_L."Location Code" := ArchivePlanLine_L."NS_Location Code";
-                PlanLine_L."Last Date Modified" := ArchivePlanLine_L."NS_Last Date Modified";
-                PlanLine_L."User ID" := ArchivePlanLine_L."NS_User ID";
-                PlanLine_L."Work Type Code" := ArchivePlanLine_L."NS_Work Type Code";
-                PlanLine_L."Customer Price Group" := ArchivePlanLine_L."NS_Customer Price Group";
-                PlanLine_L."Country/Region Code" := ArchivePlanLine_L."NS_Country/Region Code";
-                PlanLine_L."Gen. Bus. Posting Group" := ArchivePlanLine_L."NS_Gen. Bus. Posting Group";
-                PlanLine_L."Gen. Prod. Posting Group" := ArchivePlanLine_L."NS_Gen. Prod. Posting Group";
-                PlanLine_L."Document Date" := ArchivePlanLine_L."NS_Document Date";
-                PlanLine_L."Job Task No." := ArchivePlanLine_L."NS_Job Task No.";
-                PlanLine_L."Line Amount (LCY)" := ArchivePlanLine_L."NS_Line Amount (LCY)";
-                PlanLine_L."Unit Cost" := ArchivePlanLine_L."NS_Unit Cost";
-                PlanLine_L."Total Cost" := ArchivePlanLine_L."NS_Total Cost";
-                PlanLine_L."Unit Price" := ArchivePlanLine_L."NS_Unit Price";
-                PlanLine_L."Total Price" := ArchivePlanLine_L."NS_Total Price";
-                PlanLine_L."Line Amount" := ArchivePlanLine_L."NS_Line Amount";
-                PlanLine_L."Line Discount Amount" := ArchivePlanLine_L."NS_Line Discount Amount";
-                PlanLine_L."Cost Factor" := ArchivePlanLine_L."NS_Cost Factor";
-                PlanLine_L."Serial No." := ArchivePlanLine_L."NS_Serial No.";
-                PlanLine_L."Lot No." := ArchivePlanLine_L."NS_Lot No.";
-                PlanLine_L."Line Discount %" := ArchivePlanLine_L."NS_Line Discount %";
-                PlanLine_L."Line Type" := ArchivePlanLine_L."NS_Line Type";
-                PlanLine_L."Currency Code" := ArchivePlanLine_L."NS_Currency Code";
-                PlanLine_L."Currency Date" := ArchivePlanLine_L."NS_Currency Date";
-                PlanLine_L."Currency Factor" := ArchivePlanLine_L."NS_Currency Factor";
-                PlanLine_L."Schedule Line" := ArchivePlanLine_L."NS_Schedule Line";
-                PlanLine_L."Contract Line" := ArchivePlanLine_L."NS_Contract Line";
-                PlanLine_L."Job Contract Entry No." := ArchivePlanLine_L."NS_Job Contract Entry No.";
-                PlanLine_L."Invoiced Amount (LCY)" := ArchivePlanLine_L."NS_Invoiced Amount (LCY)";
-                PlanLine_L."Invoiced Cost Amount (LCY)" := ArchivePlanLine_L."NS_Invoiced Cost Amount (LCY)";
-                PlanLine_L."VAT Unit Price" := ArchivePlanLine_L."NS_VAT Unit Price";
-                PlanLine_L."Line Discount Amount" := ArchivePlanLine_L."NS_VAT Line Discount Amount";
-                PlanLine_L."VAT Line Amount" := ArchivePlanLine_L."NS_VAT Line Amount";
-                PlanLine_L."VAT %" := ArchivePlanLine_L."NS_VAT %";
-                PlanLine_L."Description 2" := ArchivePlanLine_L."NS_Description 2";
-                //PlanLine_L."Job Ledger Entry No." := ArchivePlanLine_L."NS_Job Ledger Entry No.";
-                PlanLine_L.Status := ArchivePlanLine_L.NS_Status;
-                PlanLine_L."Ledger Entry Type" := ArchivePlanLine_L."NS_Ledger Entry Type";
-                PlanLine_L."Ledger Entry No." := ArchivePlanLine_L."NS_Ledger Entry No.";
-                PlanLine_L."System-Created Entry" := ArchivePlanLine_L."NS_System-Created Entry";
-                PlanLine_L."Usage Link" := ArchivePlanLine_L."NS_Usage Link";
-                PlanLine_L."Remaining Qty." := ArchivePlanLine_L."NS_Remaining Qty.";
-                PlanLine_L."Remaining Qty. (Base)" := ArchivePlanLine_L."NS_Remaining Qty. (Base)";
-                PlanLine_L."Remaining Total Cost" := ArchivePlanLine_L."NS_Remaining Total Cost";
-                PlanLine_L."Remaining Total Cost (LCY)" := ArchivePlanLine_L."NS_Remaining Total Cost (LCY)";
-                PlanLine_L."Remaining Line Amount" := ArchivePlanLine_L."NS_Remaining Line Amount";
-                PlanLine_L."Remaining Line Amount (LCY)" := ArchivePlanLine_L."NS_Remaining Line Amount (LCY)";
-                PlanLine_L."Qty. Posted" := ArchivePlanLine_L."NS_Qty. Posted";
-                PlanLine_L."Qty. to Transfer to Journal" := ArchivePlanLine_L."NS_Qty. to Transfer to Journal";
-                PlanLine_L."Posted Total Cost" := ArchivePlanLine_L."NS_Posted Total Cost";
-                PlanLine_L."Posted Total Cost (LCY)" := ArchivePlanLine_L."NS_Posted Total Cost (LCY)";
-                PlanLine_L."Posted Line Amount" := ArchivePlanLine_L."NS_Posted Line Amount";
-                PlanLine_L."Posted Line Amount (LCY)" := ArchivePlanLine_L."NS_Posted Line Amount (LCY)";
-                PlanLine_L."Qty. Transferred to Invoice" := ArchivePlanLine_L."NS_Qty. Transferred to Invoice";
-                PlanLine_L."Qty. to Transfer to Invoice" := ArchivePlanLine_L."NS_Qty. to Transfer to Invoice";
-                PlanLine_L."Qty. Invoiced" := ArchivePlanLine_L."NS_Qty. Invoiced";
-                PlanLine_L."Qty. to Invoice" := ArchivePlanLine_L."NS_Qty. to Invoice";
-                PlanLine_L."Reserved Quantity" := ArchivePlanLine_L."NS_Reserved Quantity";
-                PlanLine_L."Reserved Qty. (Base)" := ArchivePlanLine_L."NS_Reserved Qty. (Base)";
-                PlanLine_L.Reserve := ArchivePlanLine_L.NS_Reserve;
-                PlanLine_L.Planned := ArchivePlanLine_L.NS_Planned;
-                PlanLine_L."Variant Code" := ArchivePlanLine_L."NS_Variant Code";
-                PlanLine_L."Bin Code" := ArchivePlanLine_L."NS_Bin Code";
-                PlanLine_L."Qty. per Unit of Measure" := ArchivePlanLine_L."NS_Qty. per Unit of Measure";
-                PlanLine_L."Quantity (Base)" := ArchivePlanLine_L."NS_Quantity (Base)";
-                PlanLine_L."Requested Delivery Date" := ArchivePlanLine_L."NS_Requested Delivery Date";
-                PlanLine_L."Promised Delivery Date" := ArchivePlanLine_L."NS_Promised Delivery Date";
-                PlanLine_L."Planned Delivery Date" := ArchivePlanLine_L."NS_Planned Delivery Date";
-                PlanLine_L."Service Order No." := ArchivePlanLine_L."NS_Service Order No.";
-                PlanLine_L."NS_Cost Category" := ArchivePlanLine_L."NS_Cost Category";
-                PlanLine_L."NS_Revenue Category" := ArchivePlanLine_L."NS_Revenue Category";
-                PlanLine_L."NS_Cost Factor Set By Category" := ArchivePlanLine_L."NS_Cost Factor Set By Category";
-                PlanLine_L."NS_Shortcut Dimension 1 Code" := ArchivePlanLine_L."NS_Shortcut Dimension 1 Code";
-                PlanLine_L."NS_Shortcut Dimension 2 Code" := ArchivePlanLine_L."NS_Shortcut Dimension 2 Code";
-                PlanLine_L."NS_Activity Code" := ArchivePlanLine_L."NS_Activity Code";
-                PlanLine_L."NS_Process Code" := ArchivePlanLine_L."NS_Process Code";
-                PlanLine_L."NS_Operation Code" := ArchivePlanLine_L."NS_Operation Code";
-                PlanLine_L."NS_Section Code" := ArchivePlanLine_L."NS_Section Code";
-                PlanLine_L."NS_Work Units" := ArchivePlanLine_L."NS_Work Units";
-                PlanLine_L."NS_Work Unit of Measure" := ArchivePlanLine_L."NS_Work Unit of Measure";
-                PlanLine_L."NS_Skill Class" := ArchivePlanLine_L."NS_Skill Class";
-                PlanLine_L."NS_Entry Type" := ArchivePlanLine_L."NS_Entry Type";
-                PlanLine_L."NS_Adjustment" := ArchivePlanLine_L.NS_Adjustment;
-                PlanLine_L."NS_Rate Type" := ArchivePlanLine_L."NS_Rate Type";
-                PlanLine_L."NS_Rate Type Value" := ArchivePlanLine_L."NS_Rate Type Value";
-                PlanLine_L."NS_Not To Exceed" := ArchivePlanLine_L."NS_Not To Exceed";
-                PlanLine_L."NS_Subcontract No." := ArchivePlanLine_L."NS_Subcontract No.";
-                PlanLine_L."NS_Subcontract Line No." := ArchivePlanLine_L."NS_Subcontract Line No.";
-                PlanLine_L."NS_Progress Billing Method" := ArchivePlanLine_L."NS_Progress Billing Method";
-                PlanLine_L."NS_Progress Payment Method" := ArchivePlanLine_L."NS_Progress Payment Method";
-                PlanLine_L.NS_TempNo := ArchivePlanLine_L.NS_TempNo;
-                PlanLine_L.NS_TempLocation := ArchivePlanLine_L.NS_TempLocation;
-                PlanLine_L.NS_TempVariant := ArchivePlanLine_L.NS_TempVariant;
-                PlanLine_L.NS_TempUM := ArchivePlanLine_L.NS_TempUM;
-                PlanLine_L.NS_TempWorkType := ArchivePlanLine_L.NS_TempWorkType;
-                PlanLine_L.NS_TempSkillClass := ArchivePlanLine_L.NS_TempSkillClass;
-                PlanLine_L.NS_Welding := ArchivePlanLine_L.NS_Welding;
-                PlanLine_L."NS_Size of Weld" := ArchivePlanLine_L."NS_Size of Weld";
-                PlanLine_L."NS_Weld Time (Hours)" := ArchivePlanLine_L."NS_Weld Time (Hours)";
-                PlanLine_L."NS_No. 2" := ArchivePlanLine_L."NS_No. 2";
-                PlanLine_L."NS_Quote No." := qQuotHdrT."NS_Quote No.";
-                PlanLine_L."NS_Quote Line No." := ArchivePlanLine_L."NS_Quote Line No.";
-                PlanLine_L."NS_Purchase Order No." := ArchivePlanLine_L."NS_Purchase Order No.";
-                PlanLine_L."NS_Use Tax SKU" := ArchivePlanLine_L."NS_Use Tax SKU";
-                PlanLine_L."NS_Use Tax Amount" := ArchivePlanLine_L."NS_Use Tax Amount";
-                PlanLine_L."NS_Vendor No." := ArchivePlanLine_L."NS_Vendor No.";
-                PlanLine_L."NS_Vendor Quote No." := ArchivePlanLine_L."NS_Vendor Quote No.";
-                PlanLine_L."NS_Manufacturer Code" := ArchivePlanLine_L."NS_Manufacturer Code";
-                PlanLine_L."NS_Defaulted Entry" := ArchivePlanLine_L."NS_Defaulted Entry";
-                PlanLine_L."NS_Gross Profit" := ArchivePlanLine_L."NS_Gross Profit";
-                PlanLine_L."NS_Total Number of Welds" := ArchivePlanLine_L."NS_Total Number of Welds";
-                PlanLine_L."NS_Gross Profit Percentage" := ArchivePlanLine_L."NS_Gross Profit Percentage";
-                PlanLine_L."NS_Original Total Price" := ArchivePlanLine_L."NS_Original Total Price";
-                PlanLine_L."NS_Original Total Price (LCY)" := ArchivePlanLine_L."NS_Original Total Price (LCY)";
-                PlanLine_L."NS_Original Quantity" := ArchivePlanLine_L."NS_Original Quantity";
-                PlanLine_L."NS_Item Not Found" := ArchivePlanLine_L."NS_Item Not Found";
-                PlanLine_L."NS_Segment Type" := ArchivePlanLine_L."NS_Segment Type";
-                PlanLine_L."NS_Segment Code" := ArchivePlanLine_L."NS_Segment Code";
-                PlanLine_L."NS_Segment Name" := ArchivePlanLine_L."NS_Segment Name";
-                PlanLine_L."NS_Matrix Updated" := ArchivePlanLine_L."NS_Matrix Updated";
-                PlanLine_L."NS_Progress Billing Line" := ArchivePlanLine_L."NS_Progress Billing Line";
-                PlanLine_L."NS_Dimension Set ID" := ArchivePlanLine_L."NS_Dimension Set ID";
-                PlanLine_L."NS_Retention Ledger Code" := ArchivePlanLine_L."NS_Retention Ledger Code";
-                PlanLine_L."NS_Line Amount Incl. Tax" := ArchivePlanLine_L."NS_Line Amount Incl. Tax";
-                PlanLine_L.Insert();
-            //end;
-            until ArchivePlanLine_L.NEXT = 0;
-    end;
-    //PRJ-1163.AS.2.0 03MARCH2022 - end
 }
 

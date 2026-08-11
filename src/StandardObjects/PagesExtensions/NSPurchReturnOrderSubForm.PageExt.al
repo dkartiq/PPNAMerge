@@ -1,8 +1,7 @@
 pageextension 14021179 NS_PurchReturnOrderSubForm extends "Purchase Return Order Subform"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("No.")
@@ -93,29 +92,6 @@ pageextension 14021179 NS_PurchReturnOrderSubForm extends "Purchase Return Order
                     //ProjectPro - end
                 end;
             }
-            //PE-43.JS.1.0 16FEB2023-Start
-            field("NS_FA Job Task No."; Rec."NS_FA Job Task No.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the  FA Job Task No. field.';
-            }
-            field("NS_FA Segment Code"; Rec."NS_FA Segment Code")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Select the Segment ';
-            }
-            field("NS_FA Job Usage"; Rec."NS_FA Job Usage")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the FA Job Usage field.';
-            }
-            field("NS_FA Job No."; Rec."NS_FA Job No.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the FA Job No. field.';
-            }
-            //PE-43.JS.1.0 16FEB2023-end
-
         }
     }
 

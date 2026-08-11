@@ -6,23 +6,8 @@ pageextension 14021124 NS_PurchInvoiceSubForm extends "Purch. Invoice Subform"
     //PRJ-490.MS.1.0 added new field
     //PRJ-492.RS.1.0 10May2021 | Hide/Unhide Fields
     //PRJ-817.JS.1.0�26July2021 | Add fields
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
-
-
-        //PRJCTPR-333.PS.1.0 19March2024 Start
-        modify(Type)
-        {
-            Editable = NS_TypeEditeable;
-        }
-        modify("No.")
-        {
-            Editable = NS_TypeEditeable;
-        }
-        //PRJCTPR-333.PS.1.0 19March2024 End
-
         // addafter("Job Task No.")//PRJ-492.N.S.1.0
 
         movebefore(Description; "Job Task No.") //PRJ-492.N.S.1.0
@@ -62,7 +47,6 @@ pageextension 14021124 NS_PurchInvoiceSubForm extends "Purch. Invoice Subform"
             {
                 ApplicationArea = all;
                 Visible = false;//PRJ-492.N.S.1.0 
-                Editable = markeditable; //PE-43.NK.1.0 09Feb2023
 
             }
             field("NS_Segment Code"; Rec."NS_Segment Code")
@@ -107,7 +91,6 @@ pageextension 14021124 NS_PurchInvoiceSubForm extends "Purch. Invoice Subform"
                 ApplicationArea = all;
                 Description = 'PRJ-490.MS.1.0';
                 Visible = false; //PRJ-492.N.S.1.0
-                Editable = markeditable; //PE-43.NK.1.0 09Feb2023
 
             }
             //PRJ-490.AM.1.0 Start
@@ -115,14 +98,11 @@ pageextension 14021124 NS_PurchInvoiceSubForm extends "Purch. Invoice Subform"
             {
                 ApplicationArea = all;
                 Visible = false;//PRJ-492.N.S.1.0
-                Editable = markeditable; //PE-43.NK.1.0 09Feb2023
-
             }
             field("NS_FA Job Task No."; "NS_FA Job Task No.")
             {
                 ApplicationArea = all;
                 Visible = false;//PRJ-492.N.S.1.0
-                Editable = markeditable;//PE-43.NK.1.0 09Feb2023
             }
             //PRJ-490.AM.1.0 End
         }
@@ -229,52 +209,12 @@ pageextension 14021124 NS_PurchInvoiceSubForm extends "Purch. Invoice Subform"
 
     var
         PurchHeader: Record "Purchase Header";
-        NS_NoNonediteable: Boolean; //PRJCTPR-333.PS.1.0 11April2024
-
 
     var
         NS_GetJobPlanningLine: Page "NS_Get Job Planning Line";
         NS_Job: Record Job;
-        markeditable: Boolean; //PE-43.NK.1.0 09Feb2023 start
-        PurchInv: Record "Purchase Line";
         NS_Resource: Record Resource;
         Text14021100: Label '"Job No.: "';
-        NS_TypeEditeable: Boolean; //PRJCTPR-333.PS.1.0 19March2024 
-
-    //PE-204.AS.4.0 START
-    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
-    var
-        PLRec: Record "Purchase Line";
-    begin
-        //PE-204.AS.4.0 START
-        if (Rec."Document Type" = Rec."Document Type"::Invoice) AND (Rec.Type = Rec.Type::NS_Ledger) AND (Rec."No." = 'RETENTION') then begin
-            PLRec.Reset();
-            PLRec.SetRange("Document Type", PLRec."Document Type"::Invoice);
-            PLRec.SetRange("Document No.", Rec."Document No.");
-            PLRec.SetRange(Type, PLRec.Type::NS_Ledger);
-            PLRec.SetRange("No.", 'RETENTION');
-            if PLRec.FindFirst() then begin
-                //PRJCTPR-354.DK.1.0 Start
-                PLRec.DeleteAll();
-                // Error('You cannot enter more than 1 line with Type "Ledger" and No. "RETENTION"');
-                //PRJCTPR-354.DK.1.0 End
-            end;
-        end;
-        //PE-204.AS.4.0 END
-        //PRJCTPR-354.DK.1.0 Start
-        if (Rec."Document Type" = Rec."Document Type"::"Credit Memo") AND (Rec.Type = Rec.Type::NS_Ledger) AND (Rec."No." = 'RETENTION') then begin
-            PLRec.Reset();
-            PLRec.SetRange("Document Type", PLRec."Document Type"::"Credit Memo");
-            PLRec.SetRange("Document No.", Rec."Document No.");
-            PLRec.SetRange(Type, PLRec.Type::NS_Ledger);
-            PLRec.SetRange("No.", 'RETENTION');
-            if PLRec.FindFirst() then begin
-                PLRec.DeleteAll();
-            end;
-        end;
-        //PRJCTPR-354.DK.1.0 End
-    end;
-    //PE-204.AS.4.0 END
 
     trigger OnNewRecord(BelowxRec: Boolean);
     var
@@ -289,45 +229,6 @@ pageextension 14021124 NS_PurchInvoiceSubForm extends "Purch. Invoice Subform"
         //ProjectPro - end
     end;
 
-    trigger OnAfterGetCurrRecord()
-    var
-    begin
-        //PE-43.NK.1.0 09Feb2023 start
-        markeditable := true;
-        if (Rec.Type = Rec.Type::"Fixed Asset") and (Rec."Receipt No." <> '') then
-            markeditable := false;
-        //PE-43.NK.1.0 09Feb2023 end
-        //PRJCTPR-333.PS.1.0 20March2024 Start
-        NS_TypeEditeable := true;
-        NS_TypeEditeable := NSTypeNonEditeable;
-        //PRJCTPR-333.PS.1.0 20March2024 End 
-
-    end;
-    //PRJCTPR-333.PS.1.0 20March2024 Start
-
-    trigger OnAfterGetRecord()
-    var
-        myInt: Integer;
-    begin
-        NS_TypeEditeable := NSTypeNonEditeable;
-    end;
-
-    Local procedure NSTypeNonEditeable(): Boolean
-    var
-        NS_PurchaseHeader: Record "Purchase Header";
-    begin
-        NS_NoNonediteable := true;
-        NS_PurchaseHeader.Reset();
-        NS_PurchaseHeader.SetRange("Document Type", Rec."Document Type");
-        NS_PurchaseHeader.SetRange("No.", Rec."Document No.");
-        NS_PurchaseHeader.SetRange("NS_Retention Document", true);
-        if NS_PurchaseHeader.FindFirst() then
-            NS_NoNonediteable := false;
-        exit(NS_NoNonediteable);
-
-    end;
-
-    //PRJCTPR-333.PS.1.0 20March2024 End 
     procedure NS_GetJobBudget(VendNo: Code[20]);
     var
         NS_JobPlanningLine: Record "Job Planning Line";

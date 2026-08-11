@@ -1,8 +1,7 @@
 pageextension 14021145 NS_PostedSalesCreditMemo extends "Posted Sales Credit Memo"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Sales Credit Memo'; //PRJ-1330.NK.1.0 25Apr2022
+
     Editable = false;
 
     layout
@@ -62,30 +61,6 @@ pageextension 14021145 NS_PostedSalesCreditMemo extends "Posted Sales Credit Mem
             }
         }
     }
-
-    //PE-302.JS.1.0 30MAY24-Start
-    var
-        NSSalesInvHeader: Record "Sales Invoice Header";
-        NSSalesCreditMemoHdr: Record "Sales Cr.Memo Header";
-        NS_SalesSetup: Record "Sales & Receivables Setup";
-        NSCorrectPostedSalInv: Codeunit "Correct Posted Sales Invoice";
-        NSSalesHeaderApplyCud: Codeunit "NS_Sales Header Apply";
-
-
-    trigger OnAfterGetCurrRecord()
-    begin
-        if NS_SalesSetup.get() then;
-        if NS_SalesSetup."NS_AutoApplySCM After Posting" = true then begin
-            if ((rec."NS_From Progress Billing No." <> '') and (rec."NS_Retention Percent" <> 0)
-                and (rec."NS_AppliesToDocument No." <> '') and (rec."NS_Retention Document" = false)) then begin
-                NSSalesHeaderApplyCud.NSFlowNSAppliesDocTypeAndNSAppliesDocNoInRetentionCLE(Rec);
-                NSSalesHeaderApplyCud.NSApplyNormalSCMFromNormalInvoice(Rec);
-                NSSalesHeaderApplyCud.NSApplyRetentionSCMFromRetentionInvoice(Rec);
-            end;
-        end;
-    end;
-    //PE-302.JS.1.0 29MAY24-end
-
 
     //   +---------------------------------------------------------------------------------------------
     //   +ProjectPro

@@ -1,18 +1,17 @@
 pageextension 14021111 NS_SalesQuote extends "Sales Quote"
 {
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Quote'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
-        modify("Sell-to Customer Templ. Code") //PRJ-1620.AS.1.0 as per V21 validation changed "Sell-to Customer Template Code" to "Sell-to Customer Templ. Code"
+        modify("Sell-to Customer Template Code")
         {
             Visible = false;
             Enabled = false;
         }
         addafter("Sell-to Contact")
         {
-            field("NS_Sell to customer template code"; Rec."Sell-to Customer Templ. Code")//PRJ-1620.AS.1.0 as per V21 validation changed "Sell-to Customer Template Code" to "Sell-to Customer Templ. Code"
+            field("NS_Sell to customer template code"; Rec."Sell-to Customer Template Code")
             {
                 Caption = 'Customer Template Code';
                 ToolTip = 'Specifies the code for the template to create a new customer';

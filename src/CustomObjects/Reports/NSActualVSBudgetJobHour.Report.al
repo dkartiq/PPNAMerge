@@ -10,8 +10,6 @@ report 14021182 "NS_Actual vs Budget Job Hour"
     // +------------------------------------------------------------
     //SMPL - Caption = 'RequestPage' can't be used on Area  
     //PRJ-84.SK.1.0 Added report to search
-    //PE-79.RM.1.0 21Apr2023 | Changes in Layout only
-    //PE-134.DK.1.0 26July2023| Add ToolTip
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSActual vs Budget Job Hour.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -39,18 +37,6 @@ report 14021182 "NS_Actual vs Budget Job Hour"
             column(CompanyInformation_Name; CompanyInformation.Name)
             {
             }
-            //PE-141.NK.1.0 start 11Aug2023
-            column(CompanyInformationPic; CompanyInformation.Picture) { }
-            column(CompanyInformationAdd; CompanyInformation.Address) { }
-            column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-            column(CompanyInformationcity; CompanyInformation.City) { }
-            column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-            column(CompanyInformationpost; CompanyInformation."Post Code") { }
-            column(CompanyInformationCountry; CompanyInformation.County) { }
-            column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-            column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }
-            //PE-141.NK.1.0 end 11Aug2023
-
             column(Sub_LevelsText_; "Sub-LevelsText")
             {
             }
@@ -144,7 +130,7 @@ report 14021182 "NS_Actual vs Budget Job Hour"
                 "MarkSub-Levels"(Job, "IncludeSub-Levels");
                 COPYFILTERS(JobHold);
 
-                // CurrReport.CREATETOTALS(BudgetedHours, ActualHours); //PRJCTPR-101.NC.1.0 25Apr2023 Block
+                CurrReport.CREATETOTALS(BudgetedHours, ActualHours);
                 if not "ShowSub-Levels" then
                     SETRANGE("NS_Sub-Level to Job No.", '');
             end;
@@ -164,7 +150,6 @@ report 14021182 "NS_Actual vs Budget Job Hour"
                     field("Include Sub-Levels"; "IncludeSub-Levels")
                     {
                         ApplicationArea = All;
-                        ToolTip = 'Enabling this will include the Sub Level Jobs with the master Job.';  //PE-134.DK.1.0 26July2023
                     }
                     field("Show Sub-Levels"; "ShowSub-Levels")
                     {
@@ -186,7 +171,6 @@ report 14021182 "NS_Actual vs Budget Job Hour"
     trigger OnPreReport();
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.NK.1.0 start 11Aug2023
         JobFilter := Job.GETFILTERS;
 
         if not "ShowSub-Levels" then
@@ -196,31 +180,6 @@ report 14021182 "NS_Actual vs Budget Job Hour"
                 "Sub-LevelsText" := Text002
         else
             "Sub-LevelsText" := Text002;
-        //PE-141.NK.1.0 start 11Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.NK.1.0 start 11Aug2023
     end;
 
     var
@@ -233,16 +192,6 @@ report 14021182 "NS_Actual vs Budget Job Hour"
         ActualHours: Decimal;
         BudgetedHours: Decimal;
         Variance: Decimal;
-        //PE-141.NK.1.0 start 23Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.NK.1.0 end 23Aug2023 
-
         "Variance%": Decimal;
         TotaltoPrintBudget: Decimal;
         TotaltoPrintActual: Decimal;

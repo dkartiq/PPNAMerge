@@ -57,15 +57,14 @@ report 14021166 "NS_Initialize Job Link List"
 
                 end;
             end;
-            //PE-120.NC.1.0 27Jun2023 Start Block
-            // trigger OnPreDataItem();
-            // begin
-            //     JobLinks.RESET;
-            //     JobLinks.DELETEALL;
 
-            //     JobsSetup.GET;
-            // end;
-            //PE-120.NC.1.0 27Jun2023 End Block
+            trigger OnPreDataItem();
+            begin
+                JobLinks.RESET;
+                JobLinks.DELETEALL;
+
+                JobsSetup.GET;
+            end;
         }
     }
 
@@ -76,20 +75,17 @@ report 14021166 "NS_Initialize Job Link List"
         {
             area(content)
             {
-                group(WARNING) //PE-120.NC.1.0 27Jun2023
-                //group(Control1100773004) //PE-120.NC.1.0 27Jun2023  Block
+                group(Control1100773004)
                 {
-                    //PE-120.NC.1.0 27Jun2023 Start Block
-                    // field("WARNING!!    WARNING!!    WARNING!!    WARNING!!"; '')
-                    // {
-                    //     Caption = 'WARNING!!    WARNING!!    WARNING!!    WARNING!!';
-                    //     ApplicationArea = All;
-                    // }
-                    // field(Control1100773002; '')
-                    // {
-                    //     ApplicationArea = All;
-                    // }
-                    //PE-120.NC.1.0 27Jun2023 End Block
+                    field("WARNING!!    WARNING!!    WARNING!!    WARNING!!"; '')
+                    {
+                        Caption = 'WARNING!!    WARNING!!    WARNING!!    WARNING!!';
+                        ApplicationArea = All;
+                    }
+                    field(Control1100773002; '')
+                    {
+                        ApplicationArea = All;
+                    }
                     field("This routine will clear ALL job links and create new links based"; '')
                     {
                         Caption = 'This routine will clear ALL job links and create new links based';
@@ -110,12 +106,10 @@ report 14021166 "NS_Initialize Job Link List"
                         Caption = 'recreated.';
                         ApplicationArea = All;
                     }
-                    //PE-120.NC.1.0 27Jun2023 Start Block
-                    // field(Control1100773008; '')
-                    // {
-                    //     ApplicationArea = All;
-                    // }
-                    //PE-120.NC.1.0 27Jun2023 End Block
+                    field(Control1100773008; '')
+                    {
+                        ApplicationArea = All;
+                    }
                     field("Job links are automatically created as new jobs and change"; '')
                     {
                         Caption = 'Job links are automatically created as new jobs and change';
@@ -131,12 +125,10 @@ report 14021166 "NS_Initialize Job Link List"
                         Caption = 'from the Job page.';
                         ApplicationArea = All;
                     }
-                    //PE-120.NC.1.0 27Jun2023 Start Block
-                    // field(Control1100773015; '')
-                    // {
-                    //     ApplicationArea = All;
-                    // }
-                    //PE-120.NC.1.0 27Jun2023 End Block
+                    field(Control1100773015; '')
+                    {
+                        ApplicationArea = All;
+                    }
                     field("The main purpose in using this function is to create job links"; '')
                     {
                         Caption = 'The main purpose in using this function is to create job links';
@@ -164,20 +156,6 @@ report 14021166 "NS_Initialize Job Link List"
     labels
     {
     }
-    //PE-120.NC.1.0 27Jun2023 Start 
-    trigger OnInitReport()
-    begin
-        if JobsSetup.GET() then;
-        if not JobsSetup."NS_Job List Auto Link Create" then
-            Error('Please enable Job List Auto Link Create in Job Setup.');
-    end;
-
-    trigger OnPreReport()
-    begin
-        JobLinks.RESET;
-        JobLinks.DELETEALL;
-    end;
-    //PE-120.NC.1.0 27Jun2023 End
 
     var
         JobLinks: Record "NS_Job Links";

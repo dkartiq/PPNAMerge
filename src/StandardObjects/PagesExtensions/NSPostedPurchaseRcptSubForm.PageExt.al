@@ -2,8 +2,7 @@ pageextension 14021148 NS_PostedPurchaseRcptSubForm extends "Posted Purchase Rcp
 {
     // version NAVW111.00.00.23572,PPNA11.00
     //TM-10.AM.1.0 | Added Field.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Job No.")

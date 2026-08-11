@@ -10,7 +10,7 @@
 //     DefaultLayout = RDLC;
 //     RDLCLayout = './Layouts/PP Sales Invoice Customized.rdl';
 
-//     Caption = 'Job Sales - Invoice';//PE-141.NK.1.0 03Aug2023 updated name
+//     Caption = 'Sales - Invoice';
 //     UsageCategory = ReportsAndAnalysis;
 //     ApplicationArea = Jobs;
 

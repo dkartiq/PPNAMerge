@@ -8,7 +8,7 @@ page 14021214 "NS_Job List (Formatted)"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJCTPR-230.HS.1.0 8Dec2023 | Obselete level L6 to L10
+
     Caption = 'Job List';
     CardPageID = "Job Card";
     PageType = Card;
@@ -25,7 +25,6 @@ page 14021214 "NS_Job List (Formatted)"
                 ApplicationArea = All;
                 Caption = 'Job No.';
                 ToolTip = 'Specifies the Job No.';
-                TableRelation = Job."No."; //PE-120.NC.1.0 27Jun2023
 
                 trigger OnValidate();
                 begin
@@ -470,12 +469,6 @@ page 14021214 "NS_Job List (Formatted)"
                 ApplicationArea = All;
                 Promoted = true;
                 PromotedCategory = Process;
-                //PRJCTPR-230.HS.1.0 8Dec2023 Start
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in next build';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                //PRJCTPR-230.HS.1.0 8Dec2023 End
 
                 trigger OnAction();
                 begin
@@ -494,13 +487,6 @@ page 14021214 "NS_Job List (Formatted)"
                 Image = IndentChartOfAccounts;
                 Promoted = true;
                 PromotedCategory = Process;
-                //PRJCTPR-230.HS.1.0 8Dec2023 Start
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in next build';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                //PRJCTPR-230.HS.1.0 8Dec2023 End
-
 
                 trigger OnAction();
                 begin
@@ -519,12 +505,6 @@ page 14021214 "NS_Job List (Formatted)"
                 Image = IndentChartOfAccounts;
                 Promoted = true;
                 PromotedCategory = Process;
-                //PRJCTPR-230.HS.1.0 8Dec2023 Start
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in next build';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                //PRJCTPR-230.HS.1.0 8Dec2023 End
 
                 trigger OnAction();
                 begin
@@ -543,12 +523,6 @@ page 14021214 "NS_Job List (Formatted)"
                 Image = IndentChartOfAccounts;
                 Promoted = true;
                 PromotedCategory = Process;
-                //PRJCTPR-230.HS.1.0 8Dec2023 Start
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in next build';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                //PRJCTPR-230.HS.1.0 8Dec2023 End
 
                 trigger OnAction();
                 begin
@@ -567,12 +541,6 @@ page 14021214 "NS_Job List (Formatted)"
                 Image = IndentChartOfAccounts;
                 Promoted = true;
                 PromotedCategory = Process;
-                //PRJCTPR-230.HS.1.0 8Dec2023 Start
-                Visible = false;
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in next build';
-                ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-                //PRJCTPR-230.HS.1.0 8Dec2023 End
 
                 trigger OnAction();
                 begin

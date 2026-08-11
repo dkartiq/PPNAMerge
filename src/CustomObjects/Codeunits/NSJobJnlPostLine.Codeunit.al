@@ -15,12 +15,6 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
     //PRJ-841.JS.1.0 16Aug2021 | Code Added
     //PRJ-842.JS.1.0 16Aug2021 | Code Added
     //PRJ-866.JS.1.0 18Aug2021 | code change as per the requirement for apply usage links
-    //PRJ-1015.JS.1.0 10Oct2021 | Add code to flow Sub Leve to Job Number
-    //PRJ-1295.NK.1.0 12Apr2022 | Add Code
-    //PRJ-1436.JS.1.0 07JUN2022 | Add condition
-    //PRJ-1436.VC.1.0 08JUL2022 | Corrected the condition written by JS.
-    //PE-247.HS.1.0 6Feb2024 | Added code
-
     Permissions = TableData "Job Ledger Entry" = imd,
                   TableData "Job Register" = imd,
                   TableData "Value Entry" = rimd;
@@ -191,51 +185,36 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
         ResJnlPostLine: Codeunit "Res. Jnl.-Post Line";
         NS_JobsSetup: Record "Jobs Setup";
     begin
-        //PRJ-1170.NK.1.0 Start
-        //with ResJnlLine do begin
-        NS_JobsSetup.Get(); //PRJ-1295.NK.1.0 12Apr2022
-        ResJnlLine.Init();
-        ResJnlLine.CopyFromJobJnlLine(JobJnlLine2);
-        ResLedgEntry.LockTable();
-        //ProjectPro - start
-        IF NOT JobJournalLine."Job Posting Only" THEN
-            IF JobJnlLine2."Entry Type" = JobJnlLine2."Entry Type"::Usage THEN
-                //ProjectPro - end
-                ResJnlPostLine.RunWithCheck(ResJnlLine);
-        JobJnlLine2."Resource Group No." := ResJnlLine."Resource Group No.";
-        EntryNo := NS_CreateJobLedgEntry(JobJnlLine2);
-        //ProjectPro - start
-        // IF (JobJnlLine2."Journal Batch Name" = 'PAYROLL') THEN //PE-247.HS.1.0 6Feb2024 Commented
-        // IF NS_JobsSetup."NS_Post Job Labor to G/L" THEN  //PE-247.HS.1.0 6Feb2024 Commented
-
-        //PE-247.HS.1.0 6Feb2024 Start
-        IF NS_JobsSetup."NS_Enable Job Labor to G/L" THEN begin
-            if JobJnlLine2."Journal Batch Name" = NS_JobsSetup."NS_Labor Job Journal Batch" then
-                NS_PostLaborToGL(JobJournalLine);
-            //PE-247.HS.1.0 6Feb2024 End
+        with ResJnlLine do begin
+            Init;
+            CopyFromJobJnlLine(JobJnlLine2);
+            ResLedgEntry.LockTable();
+            //ProjectPro - start
+            IF NOT JobJournalLine."Job Posting Only" THEN
+                IF JobJnlLine2."Entry Type" = JobJnlLine2."Entry Type"::Usage THEN
+                    //ProjectPro - end
+                    ResJnlPostLine.RunWithCheck(ResJnlLine);
+            JobJnlLine2."Resource Group No." := "Resource Group No.";
+            EntryNo := NS_CreateJobLedgEntry(JobJnlLine2);
+            //ProjectPro - start
+            IF (JobJnlLine2."Journal Batch Name" = 'PAYROLL') THEN
+                IF NS_JobsSetup."NS_Post Job Labor to G/L" THEN
+                    NS_PostLaborToGL(JobJournalLine);
+            //ProjectPro - end
+            IsHandled := true;
         end;
-        //ProjectPro - end
-        IsHandled := true;
-        //end;
-        //PRJ-1170.NK.1.0 End
     end;
 
 
     //PPAL-46.SK.1.0 Start
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Job Jnl.-Post Line", 'OnBeforeCreateJobLedgEntryFromPostItem', '', False, false)]
     local procedure NS_C1012OnBeforeCreateJobLedgEntryFromPostItem(var IsHandled: Boolean; var JobJournalLine: Record "Job Journal Line"; var ValueEntry: Record "Value Entry")
-    var
-        InvStp: Record "Inventory Setup";//PRJCTPR-198.AS.1.0
     begin
-        if InvStp.Get() then;//PRJCTPR-198.AS.1.0
-
-        if InvStp.NS_AllowZeroCostJLE = false then begin //PRJCTPR-198.AS.1.0 Added old code inside begin..end
-            IF (JobJournalLine."Total Cost (LCY)" <> 0) OR (JobJournalLine."Total Price (LCY)" <> 0) then
-                IsHandled := false
-            else
-                IsHandled := True;
-        end;
-    End;
+        IF (JobJournalLine."Total Cost (LCY)" <> 0) OR (JobJournalLine."Total Price (LCY)" <> 0) then
+            IsHandled := false
+        else
+            IsHandled := True;
+    end;
     //PPAL-46.SK.1.0 End
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Job Jnl.-Post Line", 'OnPostItemOnBeforeAssignItemJnlLine', '', false, false)]
@@ -287,20 +266,7 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
             // if WorkDate > Licdate then
             //     Error('Your free trial has expired.Please contact your administrator.');
 
-            //PRJ-1686.GK.1.0 26Oct2022 start
-            //PRJ-1641.JS.1.0 23SEP2022 - Start		
-            // Licdate := DMY2Date(30, 11, 2022);
-            // Licdate := DMY2Date(31, 12, 2022);
-            // Licdate := DMY2Date(31, 1, 2023);
-            // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-            // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-            //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-            // if WorkDate > Licdate then
-            //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-            OnCheckPPLicenseExpire();   //PRJ-1641.JS.1.0 23SEP2022 line commented
-            //PRJ-1641.JS.1.0 23SEP2022 - end
-            //PRJ-1686.GK.1.0 26Oct2022 end
-
+            OnCheckPPLicenseExpire();
         end;
         //PRJ-516.ms.1.0 end
 
@@ -335,22 +301,8 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
         end else begin
             JobLedgEntry.Quantity := JobJnlLine2.Quantity;
             JobLedgEntry."Quantity (Base)" := JobJnlLine2."Quantity (Base)";
-            //PRJ-1436.VC.1.0 08JUL2022 - Start Commented
-            // JobLedgEntry."Total Cost (LCY)" := JobJnlLine2."Total Cost (LCY)";
-            // JobLedgEntry."Total Cost" := JobJnlLine2."Total Cost";
-            //PRJ-1436.VC.1.0 08JUL2022 - End
-            //PRJ-1436.VC.1.0 08JUL2022 - Start
-            if JobJnlLine2."NS_Payroll Burden Amount" = 0 then begin
-                JobLedgEntry."Total Cost (LCY)" := JobJnlLine2."Total Cost (LCY)";
-                JobLedgEntry."Total Cost" := JobJnlLine2."Total Cost";
-            end else begin
-                JobLedgEntry."Total Cost (LCY)" := JobJnlLine2."Total Cost (LCY)" + JobJnlLine2."NS_Payroll Burden Amount";
-                //PRJ-1436.VC.1.0 13JUL2022 - Start
-                //JobLedgEntry."Total Cost" := JobJnlLine2."Total Cost";              
-                JobLedgEntry."Total Cost" := JobJnlLine2."Total Cost" + JobJnlLine2."NS_Payroll Burden Amount";
-                //PRJ-1436.VC.1.0 13JUL2022 - End
-            end;
-            //PRJ-1436.VC.1.0 08JUL2022 - End
+            JobLedgEntry."Total Cost (LCY)" := JobJnlLine2."Total Cost (LCY)";
+            JobLedgEntry."Total Cost" := JobJnlLine2."Total Cost";
             JobLedgEntry."Total Price (LCY)" := JobJnlLine2."Total Price (LCY)";
             JobLedgEntry."Total Price" := JobJnlLine2."Total Price";
             JobLedgEntry."Line Amount (LCY)" := JobJnlLine2."Line Amount (LCY)";
@@ -380,14 +332,7 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
         //PRJ-772.AS.1.0 - END
         JobLedgEntry."NS_Crew Time Unique Line ID" := JobJnlLine2."NS_Crew Time Unique Line ID"; //PRJ-772.JS.1.0 26July2021
         JobLedgEntry."NS_Segment Code" := JobJnlLine2."NS_Segment Code";   //PRJ-842.JS.1.0 16Aug2021
-                                                                           //PE-68 Dk.1.0 10April2023 Start
-                                                                           // JobLedgEntry."NS_Skill Code" := JobJnlLine2."NS_Skill Code";   //PRJ-841.JS.1.0 16Aug2021-Start 
-        JobLedgEntry."NS_Skill Code New" := JobJnlLine2."NS_Skill Code New";
-        //PE-68 Dk.1.0 10April2023 End
-        //PRJ-1015.JS.1.0 10Oct2021 -Start
-        If Job.get(JobJnlLine2."Job No.") then
-            JobLedgEntry."NS_Sub-Level to Job No." := Job."NS_Sub-Level to Job No.";
-        //PRJ-1015.JS.1.0 10Oct2021 -end           
+        JobLedgEntry."NS_Skill Code" := JobJnlLine2."NS_Skill Code";   //PRJ-841.JS.1.0 16Aug2021-Start
 
         with JobJnlLine2 do
             case Type of
@@ -418,8 +363,6 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
             TimeSheetDetail.SetRange("NS_Crew Code", JobJnlLine2."NS_Crew Code");
             TimeSheetDetail.SetRange("Resource No.", JobJnlLine2."No.");
             TimeSheetDetail.SetRange("NS_Crew Time Sheet Date", JobJnlLine2."NS_Crew Time Sheet Date");
-            TimeSheetDetail.SetRange("NS_Work Type Code", JobJnlLine2."Work Type Code");  //PE-346.JS.1.0 30July2024
-            TimeSheetDetail.SetRange("NS_Crew Time Unique Line ID", JobJnlLine2."NS_Crew Time Unique Line ID");  //PE-346.JS.1.0 30July2024
             IF TimeSheetDetail.FindFirst() then begin
                 NSCrewTimeSheetLine.Reset();
                 NSCrewTimeSheetLine.SetRange("NS_TimeSheetNo.", TimeSheetDetail."NS_Crew Time Sheet Ref. No.");
@@ -451,7 +394,6 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
 
         END;
         //PRJ-623.MS.1.0 end 
-        OnBeforeJobLedgEntryInsert(JobLedgEntry); //PRJ-1410.GK.1.0 19May2022
         JobLedgEntry.Insert(true);
 
         JobReg."To Entry No." := GlobalNextEntryNo;
@@ -509,8 +451,7 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
     begin
 
         IF JobJournalLine.NS_Staged then
-            // IsHandled := true; //comment by PE-154.NK.1.0 as this functinality needs to update in case of Staged also
-            IsHandled := false; //PE-154.NK.1.0 start 07Sept2023
+            IsHandled := true;
 
     end;
 
@@ -525,13 +466,10 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
         LaborToJobAcct: Code[20];
         LaborToJobOffset: Code[20];
         NS_JobsSetup: Record "Jobs Setup";
-        GenJnlPostCU: Codeunit "Gen. Jnl.-Post Line";//PE-247.HS.1.0
-        GenJnlLinePost: Record "Gen. Journal Line";//PE-247.HS.1.0
     begin
-        // JnlTemplate := 'GENERAL'; //PE-247.HS.1.0 6Feb2024 Commented
+        JnlTemplate := 'GENERAL';
         NS_JobsSetup.Get;
         BatchName := NS_JobsSetup."NS_Labor to Job Batch Name";
-        JnlTemplate := NS_JobsSetup."NS_Labor G/L Journal Template";  //PE-247.HS.1.0 6Feb2024
         LaborToJobAcct := NS_JobsSetup."NS_LaborAllocated toJob -Debit";
         LaborToJobOffset := NS_JobsSetup."NS_Labor to JobOffset - Credit";
         GenJnlLine.Reset;
@@ -553,38 +491,15 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
         GenJnlLine.Validate("Bal. Account Type", GenJnlLine."Bal. Account Type"::"G/L Account");
         GenJnlLine.Validate("Bal. Account No.", LaborToJobOffset);
         GenJnlLine.Validate("Currency Code", PassJobJnlLine."Currency Code");
-        //PRJ-1436.VC.1.0 08JUL2022 - Commented Start
-        // //PRJ-1436.JS.1.0 07JUN2022 - Start
-        // if PassJobJnlLine."NS_Burden Amount" = 0 then
-        //     GenJnlLine.Validate(Amount, PassJobJnlLine."Total Cost")
-        // else
-        //     GenJnlLine.Validate(Amount, PassJobJnlLine."Total Cost" + PassJobJnlLine."NS_Burden Amount");
-        // //PRJ-1436.JS.1.0 07JUN2022 - end
-        //PRJ-1436.VC.1.0 08JUL2022 - Commented End
-        //PRJ-1436.VC.1.0 08JUL2022 - Start
-        if PassJobJnlLine."NS_Payroll Burden Amount" = 0 then
-            GenJnlLine.Validate(Amount, PassJobJnlLine."Total Cost")
-        else
-            GenJnlLine.Validate(Amount, PassJobJnlLine."Total Cost" + PassJobJnlLine."NS_Payroll Burden Amount");
-        //PRJ-1436.VC.1.0 08JUL2022 - end    
+        GenJnlLine.Validate(Amount, PassJobJnlLine."Total Cost");
         GenJnlLine.Validate("Source Code", 'GENJNL');
         GenJnlLine.Validate("Job No.", PassJobJnlLine."Job No.");
         GenJnlLine.Validate("Job Task No.", PassJobJnlLine."Job Task No.");
         GenJnlLine."Gen. Posting Type" := GenJnlLine."Gen. Posting Type"::Settlement;
-        //GenJnlLine."VAT Calculation Type" := GenJnlLine."VAT Calculation Type"::"Sales Tax"; //PRJ-1295.NK.1.0 12Apr2022 Block
+        GenJnlLine."VAT Calculation Type" := GenJnlLine."VAT Calculation Type"::"Sales Tax";
         GenJnlLine."Job Quantity" := PassJobJnlLine.Quantity;
         GenJnlLine.Insert(true);
-        //GenJnlPost.Run(GenJnlLinePost); //PE-247.HS.1.0 comment
-        //PE-247.HS.1.0 6Feb2024 Start
-        if NS_JobsSetup."NS_Post Job Labor to G/L" then begin
-            GenJnlLinePost.SetRange("Journal Template Name", GenJnlLine."Journal Template Name");
-            GenJnlLinePost.SetRange("Journal Batch Name", GenJnlLine."Journal Batch Name");
-            GenJnlLinePost.SetRange("Document No.", GenJnlLine."Document No.");
-            if GenJnlLinePost.FindSet() then
-                GenJnlPost.Run(GenJnlLinePost);
-        end;
-        //PE-247.HS.1.0 6Feb2024  End
-
+        GenJnlPost.Run(GenJnlLine);
     end;
 
 
@@ -593,14 +508,12 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
     var
         SourceCodeSetupRec: Record "Source Code Setup"; //PRJ-444.MS.1.0V17 12Jan2021
         JobMatPlan: Record "NS_Job Material Planning";
-        NS_ILE: Record "Item Ledger Entry"; //PE-146.NK.1.0 16Aug2023
     begin
         SourceCodeSetupRec.get; //PRJ-444.MS.1.0V17 12Jan2021
 
         With JobJournalLine Do Begin
             //ProjectPro - start
-            //   IF Type = Type::Item THEN BEGIN 
-            IF (JobJournalLine.Type = JobJournalLine.Type::Item) and (JobJournalLine.NS_Staged = true) THEN BEGIN//PE-146.NK.1.0 Start 16Aug2023 added and condition of staged
+            IF Type = Type::Item THEN BEGIN
                 IF "NS_Purch. Receipt Doc. No." = '' THEN BEGIN
                     if SourceCodeSetupRec."Adjust Cost" <> "Source Code" then begin //PRJ-444.MS.1.0V17 12Jan2021 Added code in this condition - start
                         JobMatPlan.RESET;
@@ -609,47 +522,12 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
                         JobMatPlan.SETRANGE("NS_Part No.", "No.");
                         IF JobMatPlan.FINDFIRST THEN BEGIN
                             JobMatPlan."NS_Inventory Qty. Staged" += Quantity;
-                            JobMatPlan."NS_Total Quantity Staged" += JobJournalLine.Quantity; //PE-146.NK.1.0 start 18Aug2023
                             JobMatPlan.MODIFY;
                         END;
                     END;//PRJ-444.MS.1.0V17 12Jan2021 Added code in this condition - end
                 END;
             END;
-
         End;
-        //PE-146.NK.1.0 start 16Aug2023
-        IF (JobJournalLine.Type = JobJournalLine.Type::Item) THEN BEGIN//PE-146.NK.1.0 Start 16Aug2023 added and condition of staged
-            IF JobJournalLine."NS_Purch. Receipt Doc. No." = '' THEN BEGIN
-                if SourceCodeSetupRec."Adjust Cost" <> JobJournalLine."Source Code" then begin //PRJ-444.MS.1.0V17 12Jan2021 Added code in this condition - start
-                    JobMatPlan.RESET();
-                    JobMatPlan.SETRANGE("NS_Worksheet Job No.", JobJournalLine."Job No.");
-                    JobMatPlan.SETRANGE("NS_Document No.", JobJournalLine."Document No.");
-                    JobMatPlan.SETRANGE("NS_Part No.", JobJournalLine."No.");
-                    IF JobMatPlan.FINDFIRST() THEN BEGIN
-                        NS_ILE.Reset();
-                        NS_ILE.SetRange("Item No.", JobMatPlan."NS_Part No.");
-                        NS_ILE.CALCSUMS(Quantity);
-                        if JobJournalLine.NS_Staged = true then
-                            JobMatPlan."NS_Inv. Avail" := NS_ILE.Quantity;
-                        JobMatPlan.Modify();
-                    END;
-                END;
-            END;
-        END;
-        IF (JobJournalLine.Type = JobJournalLine.Type::Item) and (JobJournalLine.NS_Staged = false) THEN BEGIN
-            JobMatPlan.RESET();
-            JobMatPlan.SETRANGE("NS_Worksheet Job No.", JobJournalLine."Job No.");
-            JobMatPlan.SETRANGE("NS_Document No.", JobJournalLine."Document No.");
-            JobMatPlan.SETRANGE("NS_Part No.", JobJournalLine."No.");
-            IF JobMatPlan.FINDFIRST() THEN BEGIN
-                NS_ILE.Reset();
-                NS_ILE.SetRange("Item No.", JobMatPlan."NS_Part No.");
-                NS_ILE.CALCSUMS(Quantity);
-                JobMatPlan."NS_Inv. Avail" := NS_ILE.Quantity;
-                JobMatPlan.Modify();
-            END;
-        END;
-        //PE-146.NK.1.0 end 16Aug2023
         //ProjectPro - end
     end;
 
@@ -874,33 +752,7 @@ codeunit 14021119 "NS_Job Jnl.-Post Line"
         end;
         //ProjectPro - end
     end;
-    //PRJ-1410.GK.1.0 19May2022 - start
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeJobLedgEntryInsert(var JobLedgerEntry: Record "Job Ledger Entry")
-    begin
-    end;
-    //PRJ-1410.GK.1.0 19May2022 - end
-    //PE-253.PS.1.0 21Feb2024 Start
 
-    [EventSubscriber(ObjectType::Table, 169, 'OnAfterInsertEvent', '', false, false)]
-    local procedure NSInsertJobLedgerEntriesbefore(var Rec: Record "Job Ledger Entry")
-    var
-
-        NS_DailyJobLog: Record "NS_Daily Job Log Sub.";
-    begin
-        NS_DailyJobLog.Reset();
-        NS_DailyJobLog.SetRange("Documnet Job No.", Rec."Job No.");
-        NS_DailyJobLog.SetRange("NS_Job Tasks", Rec."Job Task No.");
-        NS_DailyJobLog.SetRange("Documnet No.", Rec."Document No.");
-        if NS_DailyJobLog.FindSet() then begin
-            repeat
-                NS_DailyJobLog.NS_PostedJobJournal := true;
-                NS_DailyJobLog.Modify();
-            until NS_DailyJobLog.Next = 0;
-
-        end;
-    End;
-    //PE-253.PS.1.0 21Feb2024 End 
 
     Var
         GlobalNextEntryNo: Integer;

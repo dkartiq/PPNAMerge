@@ -13,7 +13,6 @@ page 14021379 "NS_PayrollInterfaceJnlBatches"
     UsageCategory = Lists;//PRJ-542.AM.1.0
     Caption = 'Payroll Interface Jnl Batches';
     SourceTable = "NS_Payroll Interface Jnl Batch";
-    ApplicationArea = all;   //PRJ-1442.JS.1.0 07JUN2022
 
     layout
     {

@@ -19,7 +19,7 @@ report 14021221 "NS_Vendor Purchase Statistics"
     RDLCLayout = './Layouts/NSVendor Purchase Statistics.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Vendor Purchase Statistics';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Vendor Purchase Statistics';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

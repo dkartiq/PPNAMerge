@@ -19,7 +19,7 @@ report 14021207 "NS_Update Contact Classifi."
     // +------------------------------------------------------------
 
     ApplicationArea = RelationshipMgmt;
-    Caption = 'Job Update Contact Classification';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Update Contact Classification';
     ProcessingOnly = true;
     UsageCategory = Tasks;
 

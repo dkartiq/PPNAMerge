@@ -146,10 +146,7 @@ page 14021193 "NS_Job Custom CalEntriesSubfm"
         CurrentAdditionalSourceCode: Code[20];
         Nonworking: Boolean;
         JobCalendarMgmt: Codeunit "NS_Job Calendar Management";
-        //PE-59.GK.1.0 14Mar2023 start
-        //PeriodFormMgt: Codeunit PeriodFormManagement;
-        PeriodFormMgt: Codeunit PeriodPageManagement;
-        //PE-59.GK.1.0 14Mar2023 end
+        PeriodFormMgt: Codeunit PeriodFormManagement;
         WeekNo: Integer;
 
     procedure NS_SetJobCalendarCode(SourceType: Option Company,Customer,Vendor,Location,"Shipping Agent"; SourceCode: Code[20]; AdditionalSourceCode: Code[20]; JobCalendarCode: Code[10]);

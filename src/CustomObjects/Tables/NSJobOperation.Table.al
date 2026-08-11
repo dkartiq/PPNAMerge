@@ -9,7 +9,7 @@ table 14021155 "NS_Job Operation"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-449.AS.1.0 19NOV2020 Increased decription length from 30 to 100 chars
-    //PRJ-917.NK.1.0 09Mar2022 | Add Three fields
+
     Caption = 'Job Operation';
     DrillDownPageID = "NS_Operations List";
     LookupPageID = "NS_Operations List";
@@ -147,55 +147,6 @@ table 14021155 "NS_Job Operation"
             TableRelation = "NS_Job Type".NS_Code;
             DataClassification = CustomerContent;
         }
-        //PRJ-917.NK.1.0 09Mar2022 Start
-        field(14021411; "NS_Blocked"; Boolean)
-        {
-            Caption = 'Blocked';
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-                UserSetup: Record "User Setup";
-                JobOperation: Record "NS_Job Operation";
-                NS_Sections: Record NS_Sections;
-            begin
-                if UserSetup.Get(UserId) then;
-                UserSetup.TestField("NS_Allow To Block APO");
-                if NS_Blocked then begin
-                    NS_Sections.Reset();
-                    NS_Sections.SetRange("NS_Activity Code", Rec."NS_Activity Code");
-                    NS_Sections.SetRange("NS_Process Code", Rec."NS_Process Code");
-                    NS_Sections.SetRange("NS_Operation Code", Rec.NS_Code);
-                    if NS_Sections.FindFirst() then
-                        repeat
-                            NS_Sections.NS_Blocked := true;
-                            NS_Sections.Modify();
-                        until NS_Sections.Next() = 0;
-                end else begin
-                    NS_Sections.Reset();
-                    NS_Sections.SetRange("NS_Activity Code", Rec."NS_Activity Code");
-                    NS_Sections.SetRange("NS_Process Code", Rec."NS_Process Code");
-                    NS_Sections.SetRange("NS_Operation Code", Rec.NS_Code);
-                    if NS_Sections.FindFirst() then
-                        repeat
-                            NS_Sections.NS_Blocked := false;
-                            NS_Sections.Modify();
-                        until NS_Sections.Next() = 0;
-                end;
-            end;
-        }
-        field(14021412; "NS_Last Modified By"; Code[50])
-        {
-            Caption = 'Last Modified By';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021413; "NS_Last Modified Date"; Date)
-        {
-            Caption = 'Last Modified Date';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PRJ-917.NK.1.0 09Mar2022 End
     }
 
     keys
@@ -240,13 +191,6 @@ table 14021155 "NS_Job Operation"
             until JobSections.NEXT() = 0;
     end;
     //PRJ-688.AM.1.0 End
-    //PRJ-917.NK.1.0 09Mar2022 Start
-    trigger OnModify()
-    begin
-        "NS_Last Modified By" := UserId();
-        "NS_Last Modified Date" := WorkDate();
-    end;
-    //PRJ-917.NK.1.0 09Mar2022 End    
 
     var
         JobSections: Record NS_Sections;//PRJ-688.AM.1.0

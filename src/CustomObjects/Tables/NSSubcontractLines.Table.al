@@ -1,5 +1,6 @@
 table 14021301 "NS_Subcontract Lines"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -14,8 +15,7 @@ table 14021301 "NS_Subcontract Lines"
     //PRJ-616.N.S.1.0 Add Restrication on new line insert when  Subcontract PO is posted
     //PRJ-866.JS.1.0 18Aug2021 | add one field
     //PRJ-948.JS.1.0  29Sep2021 | Add table releation
-    //PRJ-1060.JS.1.0 29Nov201 | Correct for dimension error in subcontract line
-    //PRJ-1374.RM.1.0 13May2022 | Added a new field
+
     Caption = 'Subcontract Lines';
 
     fields
@@ -49,7 +49,14 @@ table 14021301 "NS_Subcontract Lines"
         field(5; "NS_Job Task Description"; Code[100]) //PRJ-301.MS.1.0
         {
             Caption = 'Job Task Description';
-            DataClassification = CustomerContent;
+            // >> Upgrade
+            // DataClassification = CustomerContent;
+            //CalcFormula = Lookup("Job Task".Description WHERE("Job No." = FIELD("NS_Job No."),
+            // "Job Task No." = FIELD("NS_Job Task No.")));
+            Description = '#RG008';
+            Editable = false;
+            //FieldClass = FlowField;
+            // << Upgrade
         }
         field(7; "NS_Job Cost Category"; Code[10])
         {
@@ -65,19 +72,14 @@ table 14021301 "NS_Subcontract Lines"
         field(10; NS_Type; Option)
         {
             Caption = 'Type';
-            OptionCaption = ' ,Resource,Item,G/L Account';
-            OptionMembers = " ",Resource,Item,"G/L Account";
+            // OptionCaption = ' ,Resource,Item,G/L Account';
+            // OptionMembers = " ",Resource,Item,"G/L Account";
+            // >> Upgrade
+            Description = '001 "Fixed Asset" added to Option String';
+            OptionCaption = ' ,Resource,Item,G/L Account,Fixed Asset';
+            OptionMembers = " ",Resource,Item,"G/L Account","Fixed Asset";
+            // << Upgrade
             DataClassification = CustomerContent;
-            //PE-137.DK.1.0 Start 26July2023
-            trigger OnValidate();
-            var
-                NS_Subcontract_Rec: Record NS_Subcontract;
-            begin
-                if ((NS_Type = NS_Type::Item) or (NS_Type = NS_Type::"G/L Account") or (NS_Type = NS_Type::Resource)) then
-                    if NS_Subcontract_Rec.Get(Rec."NS_Subcontract No.") then
-                        Rec."NS_Job No." := NS_Subcontract_Rec."NS_Job No.";
-            end;
-            //PE-137.DK.1.0 End 26July2023
         }
         field(11; "NS_No."; Code[20])
         {
@@ -89,9 +91,10 @@ table 14021301 "NS_Subcontract Lines"
                 Resource: Record Resource;
                 Item: Record Item;
                 GLAccount: Record "G/L Account";
-                JobSetup: Record "Jobs Setup"; //PE-301.NC.1.0 28May2024
+                // >> Upgrade
+                FixedAsset: Record "Fixed Asset";
+            // << Upgrade
             begin
-                if JobSetup.Get() then; //PE-301.NC.1.0 28May2024
                 case NS_Type of
                     NS_Type::Resource:
                         begin
@@ -111,12 +114,7 @@ table 14021301 "NS_Subcontract Lines"
                                 "NS_No." := Item."No.";
                                 NS_Description := Item.Description;
                                 "NS_Job Cost Category" := Item."NS_Job Cost Category";//PRJ-616.N.S.1.0
-                                //PE-301.NC.1.0 28May2024 Start
-                                if JobSetup."NS_Subcontract Use of UOM" = JobSetup."NS_Subcontract Use of UOM"::"Default only if none provided" then
-                                    "NS_Unit of Measure Code" := NS_GetUOMfromItem(Item."No.")
-                                else //PE-301.NC.1.0 28May2024 End
-                                    "NS_Unit of Measure Code" := Item."Base Unit of Measure";//PRJ-616.N.S.1.0 
-
+                                "NS_Unit of Measure Code" := Item."Base Unit of Measure";//PRJ-616.N.S.1.0
                                 "NS_Unit Cost" := Item."Unit Cost";//PRJ-616.N.S.1.0
                             end;
                         end;
@@ -128,14 +126,29 @@ table 14021301 "NS_Subcontract Lines"
                                 NS_Description := GLAccount.Name;
                             end;
                         end;
+                    // >> Upgrade
+                    // >> 001
+                    NS_Type::"Fixed Asset":
+                        begin
+                            FixedAsset.Reset;
+                            if PAGE.RunModal(0, FixedAsset) = ACTION::LookupOK then begin
+                                FixedAsset.TestField(Inactive, false);
+                                FixedAsset.TestField(Blocked, false);
+                                "NS_No." := FixedAsset."No.";
+                                NS_Description := FixedAsset.Description;
+                            end;
+                        end;
+                // << 001
+                // << Upgrade
                 end;
             end;
 
             trigger OnValidate();
+            // >> Upgrade
             var
-                JobSetup: Record "Jobs Setup"; //PE-301.NC.1.0 28May2024
+                FixedAsset: Record "Fixed Asset";
+            // << Upgrade
             begin
-                if JobSetup.Get() then; //PE-301.NC.1.0 28May2024
                 if "NS_No." = '' then
                     exit;
 
@@ -154,12 +167,7 @@ table 14021301 "NS_Subcontract Lines"
                             NS_Description := Item.Description;
                             "NS_Direct Unit Cost" := Item."Unit Cost";
                             "NS_Unit Cost" := Item."Unit Cost";
-                            //PE-301.NC.1.0 28May2024 Start
-                            if JobSetup."NS_Subcontract Use of UOM" = JobSetup."NS_Subcontract Use of UOM"::"Default only if none provided" then
-                                "NS_Unit of Measure Code" := NS_GetUOMfromItem("NS_No.")
-                            else //PE-301.NC.1.0 28May2024 end
-                                "NS_Unit of Measure Code" := Item."Base Unit of Measure";
-
+                            "NS_Unit of Measure Code" := Item."Base Unit of Measure";
                         end;
                     NS_Type::"G/L Account":
                         begin
@@ -167,8 +175,18 @@ table 14021301 "NS_Subcontract Lines"
                             GLAcc.CheckGLAcc();
                             GLAcc.TESTFIELD("Direct Posting", true);
                             NS_Description := GLAcc.Name;
-                            "NS_Job Cost Category" := GLAcc."NS_Cost Category"; //PE-315.DK.1.0 21JUNE2024
                         end;
+                    // >> Upgrade
+                    // >> 001
+                    NS_Type::"Fixed Asset":
+                        begin
+                            FixedAsset.Get("NS_No.");
+                            FixedAsset.TestField(Inactive, false);
+                            FixedAsset.TestField(Blocked, false);
+                            NS_Description := FixedAsset.Description;
+                        end;
+                // << 001
+                // << Upgrade
                 end;
             end;
         }
@@ -360,31 +378,7 @@ table 14021301 "NS_Subcontract Lines"
             Editable = false;
             DataClassification = CustomerContent;
         }
-        //PRJ-1374.RM.1.0 start
-        field(14021351; "NS_Location Code"; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Location Code';
-            Editable = true;
-            TableRelation = Location;
-        }
-        //PRJ-1374.RM.1.0 end
-        //PE-177.DK.1.0 10Nov2023 Start
-        field(14021336; "NS_Change Request No."; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-177.DK.1.0 10Nov2023 End
-        //PRJCTPR-237 AT.0.1 12Dec2023 Start
-        field(14021337; "NS_Segment Code"; Code[20])
-        {
-            Caption = 'Segment Code';
-            Description = 'Segment Code';
-            TableRelation = "NS_Job Takeoff Segments"."NS_Segment Code" WHERE("NS_Job No." = FIELD("NS_Job No."));
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-237 AT.0.1 12Dec2023 End
+
     }
 
     keys
@@ -439,36 +433,8 @@ table 14021301 "NS_Subcontract Lines"
     var
         JobPlanningLine: Record "Job Planning Line";
         SubContract: Record NS_Subcontract;
-        //PRJ-1106.GK.1.0 29Dec2021 start
-        NS_PurchLine: Record "Purchase Line";
-        NS_PurInvHeader: Record "Purch. Inv. Header";
-        NS_PurInvLine: Record "Purch. Inv. Line";
-    //PRJ-1106.GK.1.0 29Dec2021 end
 
     begin
-        //PRJ-1106.GK.1.0 29Dec2021 start
-        if ("NS_PO No." <> '') and ("NS_PO Line No." <> 0) then begin
-            NS_PurchLine.Reset();
-            NS_PurchLine.SetRange("Document Type", NS_PurchLine."Document Type"::Order);
-            NS_PurchLine.SetRange("Document No.", "NS_PO No.");
-            NS_PurchLine.SetRange("Line No.", "NS_PO Line No.");
-            NS_PurchLine.SetFilter("Quantity Received", '<>%1', 0);
-            if NS_PurchLine.FindFirst() then begin
-                Error('You can not delete the Line because PO Line is already being posted');
-            end;
-            NS_PurInvHeader.Reset();
-            NS_PurInvHeader.SetRange("Order No.", "NS_PO No.");
-            if NS_PurInvHeader.FindFirst() then begin
-                NS_PurInvLine.Reset();
-                NS_PurInvLine.SetRange("Document No.", NS_PurInvHeader."No.");
-                NS_PurInvLine.SetRange("Line No.", "NS_PO Line No.");
-                if NS_PurInvLine.FindFirst() then begin
-                    Error('You can not delete the Line because PO Line is already being posted');
-                end;
-            end;
-
-        end;
-        //PRJ-1106.GK.1.0 29Dec2021 end
         SubContract.get("NS_Subcontract No.");
         //SubContract.TestField("NS_Purchase Document No.", '');//PRJ-616.N.S.1.0 Comment
         Rec.TestField("NS_PO No.", '');//PRJ-616.N.S.1.0
@@ -512,11 +478,8 @@ table 14021301 "NS_Subcontract Lines"
 
     procedure NS_ValidateShortcutDimCode(FieldNumber: Integer; var ShortcutDimCode: Code[20]);
     begin
-        //DimMgt.ValidateDimValueCode(FieldNumber, ShortcutDimCode);//PRJ-1060.JS.1.0 29Nov201 line blocked
-
-        DimMgt.ValidateShortcutDimValues(FieldNumber, ShortcutDimCode, "NS_Dimension Set ID");  //PRJ-1060.JS.1.0 29Nov201 line added
-
-        //DimMgt.SaveDefaultDim(DATABASE::NS_Subcontract, "NS_No.", FieldNumber, ShortcutDimCode);//PRJ-1060.JS.1.0 29Nov201 line blocked
+        DimMgt.ValidateDimValueCode(FieldNumber, ShortcutDimCode);
+        DimMgt.SaveDefaultDim(DATABASE::NS_Subcontract, "NS_No.", FieldNumber, ShortcutDimCode);
         MODIFY();
     end;
 
@@ -528,25 +491,5 @@ table 14021301 "NS_Subcontract Lines"
     end;
 
     //SMPL Replaced DimensionManagement named reference to ID (symbols bug)
-    //PE-301.NC.1.0 28May2024 Start
-    procedure NS_GetUOMfromItem(ItemNo: Code[20]): Code[20];
-    var
-        Item: Record Item;
-        NS_JobsSetup: Record "Jobs Setup";
-    begin
-        if NS_JobsSetup.GET() then;
-        if NS_JobsSetup."NS_Subcontract Use of UOM" = NS_JobsSetup."NS_Subcontract Use of UOM"::"Default only if none provided" then begin
-            if Item.Get(ItemNo) then;
-            if Item."Purch. Unit of Measure" <> '' then
-                exit(Item."Purch. Unit of Measure");
-            if Item."Ns_Parent Item UOM" <> '' then
-                exit(Item."Ns_Parent Item UOM");
-            if Item."Base Unit of Measure" <> '' then
-                exit(Item."Base Unit of Measure");
-            if NS_JobsSetup."NS_Subcontract Default UOM" <> '' then
-                exit(NS_JobsSetup."NS_Subcontract Default UOM");
-        end;
-    end;
-    //PE-301.NC.1.0 28May2024 End
 }
 

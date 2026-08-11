@@ -6,15 +6,10 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
     //PRJ-177.SK.1.0 Added permissons for objects that are modifying by this codeunit
     //Test comment
     //TM-10.AM.1.0 | added code to flow Segment Code.
-    //PRJ-1143.JS.1.0 19JAN2022 | block code to flow additional currency amount issue for G/L inconsistency
     Permissions = tabledata "Vendor Ledger Entry" = rimd, tabledata "Cust. Ledger Entry" = rimd, tabledata "Job Ledger Entry" = rimd;
     ; //PRJ-177.SK.1.0 Added  //CTSI-254.AS.1.0 Added Job ledger entry permission
 
-    //PRJ-1143.JS.1.0 18JAN2022 | Block code related to Add currency issue
-    //PRJ-1203.JS.1.0 22FEB2022 | Correct Code for Retention Documents
-    //PRJ-1194.NK.1.0 29Apr2022 | Add Code
-    //PRJCTPR-224.VC.1.0 16Nov2023 | Sale Invoice with Foreign Currency
-    //PRJCTPR-260.HS.1.0 8Jan2024 | Added Procedure To True the IsHandled boolean
+
     trigger OnRun()
     begin
     end;
@@ -80,33 +75,25 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
         NewCVLedgEntryBuf: Record "CV Ledger Entry Buffer";
     begin
         //ProjectPro - start
-        //PRJ-1157.NK.1.0  24JAN2022 - start
         //OldVendLedgEntry.TESTFIELD(Positive,NOT NewCVLedgEntryBuf.Positive)
-        // IF NewCVLedgEntryBuf.get(CVLedgerEntryBuffer."Entry No.") then begin
-        //     NS_PurchSetup.Get;
-        //     if not NS_PurchSetup."NS_Purchase Retention Inactive" then begin
-        //         OldVendorLedgerEntry.SetRange("NS_Retention Ledger Code", NewCVLedgEntryBuf."NS_Retention Ledger Code");
-        //         if not OldVendorLedgerEntry.FindFirst then begin
-        //             OldVendorLedgerEntry.SetRange("NS_Retention Ledger Code", GenJournalLine."NS_Retention Ledger Code");
-        //             OldVendorLedgerEntry.FindFirst;
-        //             //Probably OldVendLedgEntry.Positive value will not pass following testfield statement.
-        //             //In this case need to play like C12OnPrepareTempCustLedgEntryPositiveCheck
-        //         end;
-        //     end;
-        // end;
-        NS_PurchSetup.Get;
-        if not NS_PurchSetup."NS_Purchase Retention Inactive" then
-            OldVendorLedgerEntry.SetRange("NS_Retention Ledger Code", GenJournalLine."NS_Retention Ledger Code");
-        //PRJ-1157.NK.1.0  24JAN2022 - end
+        IF NewCVLedgEntryBuf.get(CVLedgerEntryBuffer."Entry No.") then begin
+            NS_PurchSetup.Get;
+            if not NS_PurchSetup."NS_Purchase Retention Inactive" then begin
+                OldVendorLedgerEntry.SetRange("NS_Retention Ledger Code", NewCVLedgEntryBuf."NS_Retention Ledger Code");
+                if not OldVendorLedgerEntry.FindFirst then begin
+                    OldVendorLedgerEntry.SetRange("NS_Retention Ledger Code", GenJournalLine."NS_Retention Ledger Code");
+                    OldVendorLedgerEntry.FindFirst;
+                    //Probably OldVendLedgEntry.Positive value will not pass following testfield statement.
+                    //In this case need to play like C12OnPrepareTempCustLedgEntryPositiveCheck
+                end;
+            end;
+        end;
         //ProjectPro - end
     end;
     //PPNA16.0 Modified Event End
 
-    //PPNA17.0 Opened Start OnPostDtldCustLedgEntriesCreateGLEntriesForTotalAmounts
-    //PE-59.GK.1.0 14Mar2023 start
-    //[EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnPostDtldCustLedgEntriesOnBeforeCreateGLEntriesForTotalAmounts', '', false, false)]
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnPostDtldCustLedgEntriesOnBeforeCreateGLEntriesForTotalAmountsV19', '', false, false)]
-    //PE-59.GK.1.0 14Mar2023 end
+    //PPNA17.0 Opened Start OnPostDtldCustLedgEntriesCreateGLEntriesForTotalAmounts 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnPostDtldCustLedgEntriesOnBeforeCreateGLEntriesForTotalAmounts', '', false, false)]
     local procedure NS_C12OnPostDtldCustLedgEntriesCreateGLEntriesForTotalAmounts(var CustPostingGr: Record "Customer Posting Group"; DtldCVLedgEntryBuf: Record "Detailed CV Ledg. Entry Buffer")
     begin
         //ProjectPro - start
@@ -127,11 +114,8 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnPrepareTempCustLedgEntryOnBeforeTempOldCustLedgEntryInsert', '', false, false)]
     local procedure NS_C12OnPrepareTempCustLedgEntryOnBeforeTempOldCustLedgEntryInsert(var CustLedgerEntry: Record "Cust. Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
     begin
-        IF CustLedgerEntry."Document Type" <> CustLedgerEntry."Document Type"::Invoice Then begin //PRJ-70.TY.1.0 added
-            p.NS_C12SetNewCVLedgEntryBufPositive(CustLedgerEntry.Positive);//PRJ-1566.AS.1.0 22AUG2022
-            CustLedgerEntry.Positive := p.NS_C12GetNewCVLedgEntryBufPositive();
-        end;
-
+        IF CustLedgerEntry."Document Type" <> CustLedgerEntry."Document Type"::Invoice Then //PRJ-70.TY.1.0 added
+            CustLedgerEntry.Positive := p.NS_C12GetNewCVLedgEntryBufPositive;
     end;
 
     //PPNA16.0 Modified Event Start
@@ -275,7 +259,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                 VendorLedgerEntry."NS_Lien Release Print Status" := VendorLedgerEntry."NS_Lien Release Print Status"::Requested;
             VendorLedgerEntry."NS_Lien Release Type" := "NS_Print Lien Release";
             VendorLedgerEntry."NS_Draw No." := "NS_Draw No.";
-            VendorLedgerEntry."NS_Retention Document" := "NS_Retention Document"; //PRJ-1194.NK.1.0 29Apr2022 
             //ProjectPro - end
         end;
     end;
@@ -306,7 +289,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
         NS_ClosedByCLE: Record "Cust. Ledger Entry";
         NS_Draw: Record NS_Draw;
         NS_VendLedgEntry: Record "Vendor Ledger Entry";
-        NSSalesRecSetup: Record "Sales & Receivables Setup";  //PE-302.JS.1.0 15July2024
     begin
         with GenJournalLine do begin
             NS_SalesSetup.Get;
@@ -377,16 +359,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     end;
                 until NS_ClosedByCLE.Next = 0;
             //ProjectPro - end
-            //PE-302.JS.1.0 15July20024-Start
-            if NSSalesRecSetup.get() then begin
-                if NSSalesRecSetup."NS_AutoApplySCM After Posting" = true then begin
-                    if GenJournalLine."Document Type" = GenJournalLine."Document Type"::"Credit Memo" then begin
-                        CustLedgerEntry."NS_AppliesToDocument Type" := GenJournalLine."NS_AppliesToDocument Type";
-                        CustLedgerEntry."NS_AppliesToDocument No." := GenJournalLine."NS_AppliesToDocument No.";
-                    end;
-                end;
-            end;
-            //PE-302.JS.1.0 15July20024-end
 
             if GenJournalLine."NS_Retention Document" and DtldLedgEntryInserted then
                 DtldLedgEntryInserted := false; //to prevent execute: DtldCustLedgEntry.SetZeroTransNo(NextTransactionNo)
@@ -411,13 +383,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     CustLedgerEntry."Pmt. Disc. Given (LCY)" := -CustLedgerEntry."Pmt. Disc. Given (LCY)";
                     CustLedgerEntry.Positive := not CustLedgerEntry.Positive;
                     CustLedgerEntry."Remaining Pmt. Disc. Possible" := -CustLedgerEntry."Remaining Pmt. Disc. Possible";
-                    //PE-302.JS.1.0 15July2024-Start
-                    if ((GenJournalLine."Document Type" = GenJournalLine."Document Type"::"Credit Memo") and
-                        (GenJournalLine."NS_Retention Percent" <> 0)) then begin
-                        CustLedgerEntry."NS_AppliesToDocument Type" := GenJournalLine."NS_AppliesToDocument Type";
-                        CustLedgerEntry."NS_AppliesToDocument No." := GenJournalLine."NS_AppliesToDocument No.";
-                    end;
-                    //PE-302.JS.1.0 15July2024-end
                 end;
         end;
     end;
@@ -428,14 +393,7 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
     var
         NS_TempAmount: Decimal;
         NS_TempAmountLCY: Decimal;
-        NS_Currency: Record Currency;  //PRJ-1203.JS.1.0 21FEB2022
-        IsHandled: Boolean; //FGH-163.SM.14052024  //PRJCTPR-371.JS.1.0
     begin
-        //FGH-163.SM.14052024 START  //PRJCTPR-371.JS.1.0
-        OnBeforeNS_T383OnAfterCopyFromGenJnlLine(DtldCVLedgEntryBuffer, GenJnlLine, IsHandled);
-        if IsHandled then
-            exit;
-        //FGH-163.SM.14052024 END  //PRJCTPR-371.JS.1.0
         with GenJnlLine do begin
             if "Account Type" = "Account Type"::Vendor then begin
                 DtldCVLedgEntryBuffer."NS_Retention Ledger Code" := "NS_Retention Ledger Code";
@@ -459,31 +417,18 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     end;
                     DtldCVLedgEntryBuffer.Amount := NS_TempAmount - "NS_Retention Amount";
                     DtldCVLedgEntryBuffer."Amount (LCY)" := NS_TempAmountLCY - "NS_Retention Amount (LCY)";
-                    //PRJ-1203.JS.1.0 21FEB2022-Start
-                    if ((GenJnlLine."NS_Retention Document" = true) And (GenJnlLine."Currency Code" <> '') and
-                    (GenJnlLine."Document Type" = GenJnlLine."Document Type"::Invoice) and (GenJnlLine."NS_Retention Ledger Code" = 'RETENTION')) then
-                        if GenJnlLine."Currency Factor" <> 0 then begin
-                            NS_Currency.GET(GenJnlLine."Currency Code");
-                            DtldCVLedgEntryBuffer.Amount := ROUND((GenJnlLine.Amount * GenJnlLine."Currency Factor"), NS_Currency."Amount Rounding Precision");
-                        end;
-                    //PRJ-1203.JS.1.0 21FEB2022-end 
                 end;
                 DtldCVLedgEntryBuffer."NS_Job No." := "Job No.";
                 DtldCVLedgEntryBuffer."NS_Subcontract No." := "NS_Subcontract No.";
                 DtldCVLedgEntryBuffer."NS_Retention Ledger Code" := "NS_Retention Ledger Code";
             end;
-            //DtldCVLedgEntryBuffer."Additional-Currency Amount" := 0;   //PRJ-1143.JS.1.0 18JAN2022
+
+            DtldCVLedgEntryBuffer."Additional-Currency Amount" := 0;
         end;
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnAfterInitCustLedgEntry', '', false, false)]
     local procedure NS_C12OnAfterInitCustLedgEntry(var CustLedgerEntry: Record "Cust. Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
-    //PRJCTPR-242.PS.1.0 08Dec2023 Start Commented 
-    //PRJCTPR-214.VC.1.0 Start
-    var
-    //  NS_CLE: Record "Cust. Ledger Entry";
-    //PRJCTPR-214.VC.1.0 End
-    //PRJCTPR-242.PS.1.0 08Dec2023 End Commented
     begin
         with GenJournalLine do begin
             //ProjectPro - start
@@ -498,12 +443,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                 CustLedgerEntry."NS_Retention Date" := "NS_Retention Date";
                 CustLedgerEntry."NS_Retention Base Amount" := "NS_Retention Base Amount";
                 CustLedgerEntry."NS_Retention Document" := "NS_Retention Document";
-                //PRJ-1044.GK.2.0 16Dec2021 start
-                if CustLedgerEntry."NS_Retention Document" = true then begin
-                    CustLedgerEntry."Sales (LCY)" := 0;
-                    CustLedgerEntry."NS_Retention Base Amount" := 0
-                end;
-                //PRJ-1044.GK.2.0 16Dec2021 end
                 if p.NS_C12GetNS_RetentionLinkedEntryNo = 0 then
                     if ("NS_Retention Ledger Code" = NS_JobsSetup."NS_Retention Receivable Ledger") and
                        ("NS_Retention Amount" <> 0) then begin
@@ -519,28 +458,9 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     CustLedgerEntry."NS_Entry No. Link" := p.NS_C12GetNS_RetentionLinkedEntryNo;
                 end;
             end;
+            CustLedgerEntry."NS_Job No." := "Job No.";
+            //ProjectPro - end
         end;
-        CustLedgerEntry."NS_Job No." := GenJournalLine."Job No.";
-        //PE-302.JS.1.0 12July2024-Start
-        if ((GenJournalLine."Document Type" = GenJournalLine."Document Type"::"Credit Memo") and
-            (GenJournalLine."NS_Retention Percent" <> 0)) then begin
-            CustLedgerEntry."NS_AppliesToDocument No." := GenJournalLine."NS_AppliesToDocument No.";
-            CustLedgerEntry."NS_AppliesToDocument Type" := GenJournalLine."NS_AppliesToDocument Type";
-        end;
-        //PE-302.JS.1.0 12July2024-end
-        //PRJCTPR-242.PS.1.0 08Dec2023 Start Commented 
-        //PRJCTPR-214.VC.1.0 Start
-        // If NS_CLE.Get(CustLedgerEntry."NS_Entry No. Link") and (NS_CLE."NS_Retention Ledger Code" = 'RETENTION') then begin
-        //     NS_CLE.CalcFields("Remaining Amount");
-        //     If (NS_CLE."Remaining Amount" <> 0) then
-        //         NS_CLE.Open := true
-        //     else
-        //         NS_CLE.Open := false;
-        //     NS_CLE.Modify();
-        // end;
-        // //PRJCTPR-214.VC.1.0 End
-        //PRJCTPR-242.PS.1.0 08Dec2023 End Commented
-        CustLedgerEntry."NS_Draw No." := GenJournalLine."NS_Draw No.";//PE-200.AS.1.0 24SEPT2023 ADD
     end;
 
 
@@ -689,13 +609,11 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
 
         IF UnRealizedGainLossLCY <> 0 THEN
             IF UnRealizedGainLossLCY < 0 THEN
-                //TempDtldCVLedgEntryBuf.InitDtldCVLedgEntryBuf(//PRJ-1620.AS.1.0 COMMENTED As per V21 Validations not allowing it
-                    TempDtldCVLedgEntryBuf.InitDetailedCVLedgEntryBuf(//PRJ-1620.AS.1.0 Added/Replace As per V21 Validations
+                TempDtldCVLedgEntryBuf.InitDtldCVLedgEntryBuf(
                   GenJnlLine, CVLedgEntryBuf, TempDtldCVLedgEntryBuf,
                   TempDtldCVLedgEntryBuf."Entry Type"::"Unrealized Loss", 0, -UnRealizedGainLossLCY, 0, 0, 0, 0)
             ELSE
-                // TempDtldCVLedgEntryBuf.InitDtldCVLedgEntryBuf(//PRJ-1620.AS.1.0 COMMENTED As per V21 Validations not allowing it
-                    TempDtldCVLedgEntryBuf.InitDetailedCVLedgEntryBuf(//PRJ-1620.AS.1.0 Added/Replace As per V21 Validations
+                TempDtldCVLedgEntryBuf.InitDtldCVLedgEntryBuf(
                   GenJnlLine, CVLedgEntryBuf, TempDtldCVLedgEntryBuf,
                   TempDtldCVLedgEntryBuf."Entry Type"::"Unrealized Gain", 0, -UnRealizedGainLossLCY, 0, 0, 0, 0);
 
@@ -790,26 +708,20 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     VendPostingGr.TESTFIELD("NS_Retention Payables Account");
 
                     // //PRJ-516.ms.1.0 start
-                    //PRJ-1686.GK.1.0 26Oct2022 start
-                    //PRJ-1641.JS.1.0 23SEP2022 - Start
-                    if EnvInfoCU.IsSaaS() then begin
-                        //     //     //Licdate := DMY2Date(31, 3, 2021);//PRJ-516.AS.1.0 16MARCH2021 Comment
-                        //     //     Licdate := DMY2Date(31, 5, 2021);//PRJ-516.AS.1.0 16MARCH2021 Added Change date
-                        //     Licdate := DMY2Date(30, 11, 2022);
-                        // Licdate := DMY2Date(31, 12, 2022);
-                        // Licdate := DMY2Date(31, 1, 2023);
-                        // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-                        // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-                        //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-                        // if WorkDate > Licdate then
-                        //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-                        // end;
-                        // //PRJ-516.ms.1.0 end
+                    // if EnvInfoCU.IsSaaS() then begin
+                    //     //Licdate := DMY2Date(31, 3, 2021);//PRJ-516.AS.1.0 16MARCH2021 Comment
+                    //     Licdate := DMY2Date(31, 5, 2021);//PRJ-516.AS.1.0 16MARCH2021 Added Change date
+                    //     EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
+                    //     if (WorkDate > (Licdate - 6)) and (WorkDate <= Licdate) then
+                    //         Message('Your free trial is going to expire in %1 days.Please contact your administrator.', NoOfDays);
+                    //     if WorkDate > Licdate then
+                    //         Error('Your free trial has expired.Please contact your administrator.');
+                    // end;
+                    // //PRJ-516.ms.1.0 end
 
-                        OnCheckPPLicenseExpire();   //PRJ-1641.JS.1.0 23SEP2022 line commented
-                        //PRJ-1641.JS.1.0 23SEP2022 - end
-                    end;
-                    //PRJ-1686.GK.1.0 26Oct2022 end
+                    OnCheckPPLicenseExpire();
+
+
                     VendLedgEntry.INIT;
                     VendLedgEntry."Vendor No." := "Account No.";
                     VendLedgEntry."Posting Date" := "Posting Date";
@@ -846,9 +758,9 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     VendLedgEntry."No. Series" := "Posting No. Series";
                     //PPDA.1.0 Start
                     OnBeforeAssignCustomVLEFields(VendLedgEntry, GenJnlLine); //PPDA.1.0
-                                                                              // VendLedgEntry."IRS 1099 Code" := "IRS 1099 Code"; //Moved in dependent app
-                                                                              // VendLedgEntry."IRS 1099 Amount" := "IRS 1099 Amount";
-                                                                              //PPDA.1.0 End
+                    // VendLedgEntry."IRS 1099 Code" := "IRS 1099 Code"; //Moved in dependent app
+                    // VendLedgEntry."IRS 1099 Amount" := "IRS 1099 Amount";
+                    //PPDA.1.0 End
                     VendLedgEntry."IC Partner Code" := "IC Partner Code";
                     VendLedgEntry.Prepayment := Prepayment;
                     VendLedgEntry."NS_Retention Percent" := "NS_Retention Percent";
@@ -955,13 +867,13 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
 
                     // Post the application
                     Sender.ApplyVendLedgEntry(CVLedgEntryBuf, TempDtldCVLedgEntryBuf, GenJnlLine, NS_Vend); //PPNA17.0 Opened
-                                                                                                            // Post Vendor entry
+                    // Post Vendor entry
                     CVLedgEntryBuf.CopyFromVendLedgEntry(VendLedgEntry);
                     VendLedgEntry."Amount to Apply" := 0;
                     VendLedgEntry."Applies-to Doc. No." := '';
                     VendLedgEntry."NS_Job No." := "Job No.";
                     VendLedgEntry."NS_Subcontract No." := "NS_Subcontract No.";
-                    VendLedgEntry.Positive := CVLedgEntryBuf."Remaining Amount" > 0; //PRJCTPR-369.NC.1.0 21May2024
+
                     VendLedgEntry.INSERT;
 
                     // Post Dtld Vendor entry
@@ -1050,7 +962,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
         NS_GLAcctDesc: Text[50];
         NS_Currency: Record Currency;
         NS_Cust: Record Customer;
-        NSJobs: Record Job; //PRJCTPR-355.JS.1.0 19APR2024
         NS_SalesSetup: Record "Sales & Receivables Setup";
         //TransferCustomFields: Codeunit "Transfer Custom Fields"; //PPDA.1.0 Added
         OldCustLedgEntry: Record "Cust. Ledger Entry";
@@ -1062,35 +973,20 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
         Licdate: date;//PRJ-516
         NoOfDays: Text;//PRJ-516
         EnvInfoCU: Codeunit "Environment Information";//PRJ-516
-        IsHandled: Boolean;  //PRJCTPr-235.JS.1.0 25JAN2024   //FGH-163.SM.14052024  //PRJCTPR-371.JS.1.0
-        SalesReceivablesSetup: Record "Sales & Receivables Setup"; //PRJCTPR-312 AT.1.0
     begin
-        //PRJ-1686.GK.1.0 26Oct2022 start
-        //PRJ-1641.JS.1.0 23SEP2022 - Start
-        //FGH-163.SM.14052024 START  //PRJCTPR-371.JS.1.0
-        OnBeforeNS_PostCustJob(Sender, GenJnlLine, CustLedgEntry, CVLedgEntryBuf, tempDtldCVLedgEntryBuf, CustPostingGr, IsHandled);
-        if IsHandled then
-            exit;
-        //FGH-163.SM.14052024 END  //PRJCTPR-371.JS.1.0
         //PRJ-516.ms.1.0 start
-        if EnvInfoCU.IsSaaS() then begin
-            //     //Licdate := DMY2Date(31, 3, 2021);//PRJ-516.AS.1.0 16MARCH2021 Comment
-            //     //Licdate := DMY2Date(31, 5, 2021);//PRJ-516.AS.1.0 16MARCH2021 Added Change date
-            //     Licdate := DMY2Date(30, 11, 2022);
-            // Licdate := DMY2Date(31, 12, 2022);
-            // Licdate := DMY2Date(31, 1, 2023);
-            // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-            // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-            //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-            // if WorkDate > Licdate then
-            //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-            // END;
-            //PRJ-516.ms.1.0 end
+        // if EnvInfoCU.IsSaaS() then begin
+        //     //Licdate := DMY2Date(31, 3, 2021);//PRJ-516.AS.1.0 16MARCH2021 Comment
+        //     Licdate := DMY2Date(31, 5, 2021);//PRJ-516.AS.1.0 16MARCH2021 Added Change date
+        //     EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
+        //     if (WorkDate > (Licdate - 6)) and (WorkDate <= Licdate) then
+        //         Message('Your free trial is going to expire in %1 days.Please contact your administrator.', NoOfDays);
+        //     if WorkDate > Licdate then
+        //         Error('Your free trial has expired.Please contact your administrator.');
+        // END;
+        //PRJ-516.ms.1.0 end
 
-            OnCheckPPLicenseExpire();
-        end;    //PRJ-1641.JS.1.0 23SEP2022 - line commented
-        //PRJ-1641.JS.1.0 23SEP2022 - end
-        //PRJ-1686.GK.1.0 26Oct2022 end
+        OnCheckPPLicenseExpire();
 
         //ProjectPro - start
         WITH GenJnlLine DO BEGIN
@@ -1124,7 +1020,7 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     CustLedgEntry."External Document No." := "External Document No.";
                     CustLedgEntry.Description := Description;
                     CustLedgEntry."Currency Code" := "Currency Code";
-                    //CustLedgEntry."Sales (LCY)" := "NS_Retention Amount (LCY)";  //PRJ-1044.GK.1.0 22Nov2021
+                    CustLedgEntry."Sales (LCY)" := "NS_Retention Amount (LCY)";
                     CustLedgEntry."Profit (LCY)" := "NS_Retention Amount (LCY)";
                     CustLedgEntry."Inv. Discount (LCY)" := 0;
                     CustLedgEntry."Sell-to Customer No." := "Sell-to/Buy-from No.";
@@ -1152,34 +1048,16 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     CustLedgEntry."No. Series" := "Posting No. Series";
                     CustLedgEntry."IC Partner Code" := "IC Partner Code";
                     CustLedgEntry.Prepayment := Prepayment;
-                    //PRJ-1044.GK.1.0 22Nov2021 start
-                    //CustLedgEntry."NS_Retention Percent" := "NS_Retention Percent"; 
-                    // CustLedgEntry."NS_Retention Amount" := "NS_Retention Amount";
-                    // CustLedgEntry."NS_Retention Amount (LCY)" := "NS_Retention Amount (LCY)";
-                    // CustLedgEntry."NS_Retention Date" := "NS_Retention Date";
-                    //CustLedgEntry."NS_Retention Base Amount" := "NS_Retention Base Amount"; 
-                    //PRJ-1044.GK.1.0 22Nov2021 end
+                    CustLedgEntry."NS_Retention Percent" := "NS_Retention Percent";
+                    CustLedgEntry."NS_Retention Amount" := "NS_Retention Amount";
+                    CustLedgEntry."NS_Retention Amount (LCY)" := "NS_Retention Amount (LCY)";
+                    CustLedgEntry."NS_Retention Date" := "NS_Retention Date";
+                    CustLedgEntry."NS_Retention Base Amount" := "NS_Retention Base Amount";
                     CustLedgEntry."NS_Retention Document" := "NS_Retention Document";
-                    //PRJCTPR-224.VC.1.0 Start Comment
-                    //CustLedgEntry."Remaining Amount" := "NS_Retention Amount";
-                    //CustLedgEntry."Remaining Amt. (LCY)" := "NS_Retention Amount (LCY)";
-                    //PRJCTPR-224.VC.1.0 End Comment
-                    //PRJCTPR-242.PS.1.0 08Dec2023 Start Commented 
-                    //PRJCTPR-214.VC.1.2 Start
-                    CustLedgEntry.Open := TRUE;//PRJCTPR-214.VC.1.2 Comment  //PRJCTPR-242.PS.1.0 08Dec2023 Uncommnetd              
-                                               //  CustLedgEntry.CalcFields("Remaining Amount");
-                                               // CustLedgEntry.Open := CustLedgEntry."Remaining Amount" <> 0;
-                                               //PRJCTPR-214.VC.1.2 End
-                                               //PRJCTPR-242.PS.1.0 08Dec2023 End Commented 
-
-                    //PRJCTPR-214.AS.1.0 14DEC2023 START
-                    CustLedgEntry."NS_Retention Document" := GenJnlLine."NS_Retention Document";
-
-                    CustLedgEntry.CalcFields("Remaining Amount", "Remaining Amt. (LCY)");
-                    CustLedgEntry."Remaining Amount" := GenJnlLine."NS_Retention Amount";
-                    CustLedgEntry."Remaining Amt. (LCY)" := GenJnlLine."NS_Retention Amount (LCY)";
+                    CustLedgEntry."Remaining Amount" := "NS_Retention Amount";
+                    CustLedgEntry."Remaining Amt. (LCY)" := "NS_Retention Amount (LCY)";
                     CustLedgEntry.Open := TRUE;
-                    //PRJCTPR-214.AS.1.0 14DEC2023 END
+                    //PPDA.1.0 Start
                     OnBeforeTransferCustomFields(GenJnlLine, CustLedgEntry);
                     //TransferCustomFields.GenJnlLineTOCustLedgEntry(GenJnlLine, CustLedgEntry);
                     //PPDA.1.0 End
@@ -1229,27 +1107,25 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                     CVLedgEntryBuf."Adjusted Currency Factor" := CVLedgEntryBuf."Original Currency Factor";
 
                     // Check the document no.
-                    if SalesReceivablesSetup.get() then; //PRJCTPR-312 AT.1.0
-                    if not SalesReceivablesSetup."NS_Skip Recurring Method" then begin //PRJCTPR-312 AT.1.0                   
-                        IF "Recurring Method" = 0 THEN
-                            IF "Document Type" IN
-                              ["Document Type"::Invoice,
-                               "Document Type"::"Credit Memo",
-                               "Document Type"::"Finance Charge Memo",
-                               "Document Type"::Reminder]
-                            THEN BEGIN
-                                OldCustLedgEntry.RESET;
-                                IF NOT RECORDLEVELLOCKING THEN
-                                    OldCustLedgEntry.SETCURRENTKEY("Document No.");
-                                OldCustLedgEntry.SETRANGE("Document No.", CVLedgEntryBuf."Document No.");
-                                OldCustLedgEntry.SETRANGE("Document Type", CVLedgEntryBuf."Document Type");
-                                OldCustLedgEntry.SETRANGE("NS_Retention Ledger Code", CVLedgEntryBuf."NS_Retention Ledger Code");
-                                IF NOT OldCustLedgEntry.ISEMPTY THEN
-                                    ERROR(
-                                      NS_Text001,
-                                      "Document Type", "Document No.");
-                            END;
-                    end; //PRJCTPR-312 AT.1.0
+                    IF "Recurring Method" = 0 THEN
+                        IF "Document Type" IN
+                          ["Document Type"::Invoice,
+                           "Document Type"::"Credit Memo",
+                           "Document Type"::"Finance Charge Memo",
+                           "Document Type"::Reminder]
+                        THEN BEGIN
+                            OldCustLedgEntry.RESET;
+                            IF NOT RECORDLEVELLOCKING THEN
+                                OldCustLedgEntry.SETCURRENTKEY("Document No.");
+                            OldCustLedgEntry.SETRANGE("Document No.", CVLedgEntryBuf."Document No.");
+                            OldCustLedgEntry.SETRANGE("Document Type", CVLedgEntryBuf."Document Type");
+                            OldCustLedgEntry.SETRANGE("NS_Retention Ledger Code", CVLedgEntryBuf."NS_Retention Ledger Code");
+                            IF NOT OldCustLedgEntry.ISEMPTY THEN
+                                ERROR(
+                                  NS_Text001,
+                                  "Document Type", "Document No.");
+                        END;
+
                     IF NS_SalesSetup."Ext. Doc. No. Mandatory" THEN
                         TESTFIELD("External Document No.");
 
@@ -1309,7 +1185,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                 END;
 
                 //Create the Job Journal Line to Post
-                if NSJobs.get(GenJnlLine."Job No.") then;  //PRJCTPR-355.JS.1.0 19APR2024
                 NS_JobJnlLine.INIT;
                 NS_JobJnlLine."Posting Date" := GenJnlLine."Posting Date";
                 NS_JobJnlLine."Document Date" := GenJnlLine."Document Date";
@@ -1326,10 +1201,6 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
                 NS_JobJnlLine."Entry Type" := NS_JobJnlLine."Entry Type"::NS_Payment;//PPNA17.0 Opened
                 NS_JobJnlLine."Document No." := GenJnlLine."Document No.";
                 NS_JobJnlLine."External Document No." := GenJnlLine."External Document No.";
-                //PRJCTPR-355.JS.1.0 17APR2024 - Start
-                if (GenJnlLine."Currency Code" <> '') and (NSJobs."Currency Code" <> '') then
-                    NS_JobJnlLine."Currency Code" := GenJnlLine."Currency Code";
-                //PRJCTPR-355.JS.1.0 17APR2024 - end
                 NS_JobJnlLine.Quantity := 1;
                 NS_JobJnlLine."Quantity (Base)" := 1;
                 NS_JobJnlLine."Unit Price" := -GenJnlLine.Amount;
@@ -1350,6 +1221,7 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
         END;
         //ProjectPro - end
     end;
+
 
 
     //Dependent App Events starts from here
@@ -1377,25 +1249,5 @@ codeunit 14021114 "NS_Event Subscr. Codeunit 12"
     local procedure OnCheckPPLicenseExpire()
     begin
     end;
-
-    //PRJCTPR-260.HS.1.0 8Jan2024 Start
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Gen. Jnl.-Post Line", 'OnInitVATOnBeforeVATPostingSetupCheck', '', false, false)]
-    local procedure OnInitVATOnBeforeVATPostingSetupCheck(var GenJournalLine: Record "Gen. Journal Line"; var IsHandled: Boolean)
-    begin
-        IsHandled := true;
-    end;
-    //PRJCTPR-260.HS.1.0 8Jan2024 End
-    //FGH-163.SM.14052024 START  //PRJCTPR-371.JS.1.0
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeNS_T383OnAfterCopyFromGenJnlLine(var DtldCVLedgEntryBuffer: Record "Detailed CV Ledg. Entry Buffer"; GenJnlLine: Record "Gen. Journal Line"; var IsHandled: Boolean)
-    begin
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeNS_PostCustJob(var Sender: Codeunit "Gen. Jnl.-Post Line"; VAR GenJnlLine: Record "Gen. Journal Line"; VAR CustLedgEntry: Record "Cust. Ledger Entry"; VAR CVLedgEntryBuf: Record "CV Ledger Entry Buffer"; VAR tempDtldCVLedgEntryBuf: Record "Detailed CV Ledg. Entry Buffer"; VAR CustPostingGr: Record "Customer Posting Group"; var IsHandled: Boolean)
-    begin
-    end;
-    //FGH-163.SM.14052024 END //PRJCTPR-371.JS.1.0
-
 }
 

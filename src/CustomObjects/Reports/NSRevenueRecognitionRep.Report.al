@@ -264,7 +264,7 @@ report 14021151 NS_RevenueRecognitionRep
                     RevenueRecSummaryVoid.Reset();
                     RevenueRecSummaryVoid.SetCurrentKey("NS_Entry No.");
                     RevenueRecSummaryVoid.SetRange("NS_Job No.", job."No.");
-                    //  RevenueRecSummaryVoid.setfilter(NS_Posted, '%1', false); //PE-136.JS.1.0 29MAY2024
+                    RevenueRecSummaryVoid.setfilter(NS_Posted, '%1', false);
                     //RevenueRecSummaryVoid.SetFilter("True-Up Posted", '%1', false);//CTSI-286 rollback
                     RevenueRecSummaryVoid.setrange("NS_Posting Date", PostingDate);
                     RevenueRecSummaryVoid.SetFilter(NS_Voided, '%1', false);
@@ -294,14 +294,6 @@ report 14021151 NS_RevenueRecognitionRep
                     RevenueRecSummaryTab_N."NS_Billings to Date" := BillingToDate;//PRJ-830
                     RevenueRecSummaryTab_N."NS_Over Billings" := Overbilling;//PRJ-830
                     RevenueRecSummaryTab_N."NS_Under Billings" := Underbilling;//PRJ-830
-                    //PRJCTPR-297.NC.1.0 18Jan2024 Start
-                    RevenueRecSummaryTab_N."NS_Global Dimension 1 Code" := job."Global Dimension 1 Code";
-                    RevenueRecSummaryTab_N."NS_Global Dimension 2 Code" := job."Global Dimension 2 Code";
-                    RevenueRecSummaryTab_N."NS_Dimension Set ID" := RevenueRecSummaryTab_N.GetDimensionNoFromJob(Job."No.");
-                    //PRJCTPR-297.NC.1.0 18Jan2024 End
-                    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-                    NS_OnAfterGetRecordRevRec(RevenueRecSummaryTab_N, Job);
-                    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
                     RevenueRecSummaryTab_N.Insert();
                     //PRJ-658.AS.1.0 04MAY2021 changed variables from RevenueRecSummaryTab_N = RevenueRecSummaryTab - END
                 end;
@@ -529,12 +521,5 @@ report 14021151 NS_RevenueRecognitionRep
 
     end;
     //PRJ-830.MS.1.0 end
-
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-    [IntegrationEvent(False, false)]
-    local procedure NS_OnAfterGetRecordRevRec(var RevRec: record NS_RevenueRecSummaryTab; JobVar: Record Job)
-    begin
-    end;
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
 
 }

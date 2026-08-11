@@ -13,11 +13,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
     //PRJ-437.MS.1.0 new changes for report
     //PRJ-437.AS.1.0 Code comented, as UNKNOWN APOs are not needed
     //PRJ-754.AS.1.0 21JUN2021 Done changes in Layout for APOS naming, added & commented codes
-    //PRJ-1210.AS.1.0 Pick task description from job task lines table. Also done changes to layout to achieve this
-    //PRJ-1348.NK.1.0 08Jun2022 | Add Caption
-    //PRJ-1555.NK.1.0 03Aug2022 | Change Code
-    //PE-134.DK.1.0 26July2023| Add ToolTip
-    //PRJCTPR-367.Dk.1.0 23May2024 Change in Only Layout
     DefaultLayout = RDLC;
     Caption = 'Act vs Bud Cost by APO w Qty';
     RDLCLayout = './Layouts/NSAct vs Bud Cost by APO w Qty.rdl';
@@ -51,10 +46,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                     SETFILTER("Job No.", Job."No.");
                     SETFILTER("NS_Entry Type", '%1|%2', "NS_Entry Type"::Cost, "NS_Entry Type"::Both);
                     SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                    SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 END
+                    SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                     SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));
                 end;
             }
@@ -75,10 +67,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                     SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
                     SETFILTER("Entry Type", FORMAT("Entry Type"::Usage));
                     SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                    SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 END
+                    SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                 end;
             }
             dataitem("Sub-Levels"; Job)
@@ -99,10 +88,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                     begin
                         //Get sub-level Job Planning Lines into the buffer
                         SETFILTER("NS_Entry Type", '%1|%2', "NS_Entry Type"::Cost, "NS_Entry Type"::Both);
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        // SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 END
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                         SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));
                         SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
                     end;
@@ -123,10 +109,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                         SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
                         SETFILTER("Entry Type", FORMAT("Entry Type"::Usage));
                         SETFILTER("Posting Date", Job.GETFILTER("NS_Date Filter"));
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        // SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 END
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                     end;
                 }
 
@@ -233,17 +216,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                 column(CompanyInformation_Name; CompanyInformation.Name)
                 {
                 }
-                //PE-141.NK.1.0 start 11Aug2023
-                column(CompanyInformationPic; CompanyInformation.Picture) { }
-                column(CompanyInformationAdd; CompanyInformation.Address) { }
-                column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-                column(CompanyInformationcity; CompanyInformation.City) { }
-                column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-                column(CompanyInformationpost; CompanyInformation."Post Code") { }
-                column(CompanyInformationCountry; CompanyInformation.County) { }
-                column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-                column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }
-                //PE-141.NK.1.0 end 11Aug2023
                 column(PageCaption; PageLbl)
                 {
                 }
@@ -422,9 +394,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                             column(Job_Name; JobRec.Description)
                             {
                             }
-                            column(JobTaskRecDesc; JobTaskRecDesc)//PRJ-1210.AS.1.0 Added column
-                            {
-                            }
 
                             trigger OnAfterGetRecord();
                             begin
@@ -433,8 +402,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
 
                                     if JobDetail.Number > 1 then
                                         JobReportBuffer1.NEXT;
-
-                                    Clear(JobTaskRecDesc);//PRJ-1210.AS.1.0
 
                                     JobRec.GET(JobReportBuffer1."NS_Job No.");
                                     if not Contact.GET(COPYSTR(JobRec."NS_Customer Account", 1, 20)) then
@@ -450,27 +417,21 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                                     //PRJ-184.VT.1.0 24-03-20 Begin
                                     if JobTask.GET(JobReportBuffer1."NS_Job No.", JobReportBuffer1."NS_Job Task No.") then; //PRJ-437.MS.1.0 written "if get..then"
 
-                                    JobTaskRecDesc := JobTask.Description;//PRJ-1210.AS.1.0
-
                                     FindActivityOrProcessExists(JobReportBuffer1."NS_Job Task No.");
                                     CLEAR(ProcessDesc);
                                     CLEAR(OperationsDesc);
                                     Clear(Sectiondesc);//PRJ-688.AM.1.0
 
-                                    //PRJ-1555.NK.1.0 03Aug2022  Start   
-                                    // IF JobProcess.NS_Code <> '' THEN BEGIN
-                                    //     IF JobOperation.NS_Code <> '' THEN BEGIN
-                                    //         ProcessDesc := JobProcess.NS_Description
-                                    //     END
-                                    //     ELSE BEGIN
-                                    //         ProcessDesc := JobTask.Description
-                                    //     END;
+                                    IF JobProcess.NS_Code <> '' THEN BEGIN
+                                        IF JobOperation.NS_Code <> '' THEN BEGIN
+                                            ProcessDesc := JobProcess.NS_Description
+                                        END
+                                        ELSE BEGIN
+                                            ProcessDesc := JobTask.Description
+                                        END;
 
-                                    // END;
-                                    //IF JobOperation.NS_Code <> '' THEN
-                                    ProcessDesc := JobProcess.NS_Description;
 
-                                    //PRJ-1555.NK.1.0 03Aug2022  End
+                                    END;
 
                                     IF JobOperation.NS_Description <> '' THEN
                                         OperationsDesc := JobTask.Description
@@ -631,7 +592,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                 {
                     Caption = 'Include Change Orders';
                     ApplicationArea = All;
-                    ToolTip = 'Enabling this will include the Sub Level Jobs with the master Job.';  //PE-134.DK.1.0 26July2023
                 }
                 field("Show Sub-Levels"; "ShowSub-Levels")
                 {
@@ -642,7 +602,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                 {
                     Caption = 'Show Processes';
                     ApplicationArea = All;
-                    CaptionClass = '50995,1,0'; //PRJ-1348.NK.1.0 08Jun2022
+
                     trigger OnValidate();
                     begin
                         if not ShowProcesses then
@@ -653,7 +613,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                 {
                     Caption = 'Show Operations';
                     ApplicationArea = All;
-                    CaptionClass = '50995,2,0'; //PRJ-1348.NK.1.0 08Jun2022
+
                     trigger OnValidate();
                     begin
                         if ShowOperations then
@@ -665,13 +625,11 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
                 {
                     Caption = 'Show Sections';
                     ApplicationArea = All;
-                    CaptionClass = '50995,3,0'; //PRJ-1348.NK.1.0 08Jun2022
+
                     trigger OnValidate();
                     begin
-                        if ShowSections then begin
+                        if ShowSections then
                             ShowOperations := true;
-                            ShowProcesses := TRUE; //PRJ-1555.NK.1.0 04Aug2022
-                        end; //PRJ-1555.NK.1.0 04Aug2022
                     end;
                 }
                 //PRJ-688.AM.1.0
@@ -723,38 +681,10 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
     trigger OnInitReport();
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.NK.1.0 start 11Aug2023
         JobsSetup.GET;
-        //PE-141.NK.1.0 start 11Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.NK.1.0 start 11Aug2023
     end;
 
     trigger OnPreReport();
-    var
-        ApoSetup: Record NS_APOSetup; //PRJ-1348.NK.1.0 12Jul2022
     begin
         if JobNumFilter <> '' then
             Job.SETRANGE("No.", JobNumFilter);
@@ -768,15 +698,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
             NoHeadingLbl := NoLbl;
             TypeHeadingLbl := TypeHeading;
         end;
-        //PRJ-1348.NK.1.0 12Jul2022 Start
-        ActivityProcessOperationLbl := '';
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then
-            ActivityProcessOperationLbl := ApoSetup."Activity Code" + ' / ' + ApoSetup."Process Code" + ' / ' + ApoSetup."Operation Code" + ' / ' + ApoSetup."Section Code"
-        else
-            ActivityProcessOperationLbl := 'Activity / Process / Operation / Sections';
-        //PRJ-1348.NK.1.0 12Jul2022 End
     end;
 
     var
@@ -791,17 +712,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
         CompanyInformation: Record "Company Information";
         JobsSetup: Record "Jobs Setup";
         Contact: Record Contact;
-
-        //PE-141.NK.1.0 start 23Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.NK.1.0 end 23Aug2023 
-
         RecordSource: Option Job,SubJob;
         APOTotals: array[10] of Decimal;//PRJ-688.AM.1.0
         LastEntryNo: Integer;
@@ -853,8 +763,7 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
         BudgetRemainingLbl: Label 'Budget Remaining';
         BudgetedCostLbl: Label 'Budgeted Cost';
         ActualCostLbl: Label 'Actual Cost';
-        //ActivityProcessOperationLbl: Label 'Activity / Process / Operation / Sections';//PRJ-688.AM.1.0 //PRJ-1348.NK.1.0 12Jul2022 Block
-        ActivityProcessOperationLbl: text; //PRJ-1348.NK.1.0 12Jul2022
+        ActivityProcessOperationLbl: Label 'Activity / Process / Operation / Sections';//PRJ-688.AM.1.0
         PctOfBudUsedLbl: Label '% of Bud Used';
         CommittedQuantityLbl: Label 'Committed JMP Qty';
         CommittedCostLbl: Label 'Committed JMP Cost';
@@ -877,7 +786,6 @@ report 14021161 "NS_Act vs Bud Cost by APOwQty"
         ProcessDesc: Text;
         OperationsDesc: Text;
         Sectiondesc: Text;//PRJ-688.AM.1.0
-        JobTaskRecDesc: Text;//PRJ-1210.AS.1.0
 
     procedure SendJobBudgetsToBuffer(JobPlanningLine: Record "Job Planning Line"; RecordSource: Option Job,SubJob);
     begin

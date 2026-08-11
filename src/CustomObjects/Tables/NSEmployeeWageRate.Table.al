@@ -31,60 +31,7 @@ table 14021375 "NS_Employee Wage Rate"
             Caption = 'Skill Class';
             TableRelation = "NS_Skill Class";
             DataClassification = CustomerContent;
-            //PE-68.Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68.Dk.1.0 10April2023 End
-            //PRJ-1557.GK.1.0 26Aug2022 start
-            trigger OnValidate()
-            var
-                NSResourceSkillClass: Record NS_ResourceSkillClass;
-                NSEmployee: Record Employee;
-                NSResourceSkillClass2: Record NS_ResourceSkillClass;
-            begin
-                if ("NS_Skill Class" <> '') AND ("NS_Employee No." <> '') then
-                    if NSEmployee.Get("NS_Employee No.") AND (NSEmployee."Resource No." <> '') then begin
-                        NSResourceSkillClass.Reset();
-                        NSResourceSkillClass.SetRange("NS_Resource No.", NSEmployee."Resource No.");
-                        NSResourceSkillClass.SetRange("NS_Skill Class Code", "NS_Skill Class");
-                        if not NSResourceSkillClass.FindFirst() then begin
-                            NSResourceSkillClass2.Init();
-                            NSResourceSkillClass2.Validate("NS_Resource No.", NSEmployee."Resource No.");
-                            NSResourceSkillClass2.Validate("NS_Skill Class Code", "NS_Skill Class");
-                            NSResourceSkillClass2.Insert();
-                        end;
-                    end;
-            end;
-            // PRJ-1557.GK.1.0 26Aug2022 end
         }
-        //PE-68.Dk.1.0 10April2023 Start
-        field(11; "NS_Skill Class New"; Code[20])
-        {
-            Caption = 'Skill Class';
-            TableRelation = "NS_Skill Class";
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-                NSResourceSkillClass: Record NS_ResourceSkillClass;
-                NSEmployee: Record Employee;
-                NSResourceSkillClass2: Record NS_ResourceSkillClass;
-            begin
-                if ("NS_Skill Class New" <> '') AND ("NS_Employee No." <> '') then
-                    if NSEmployee.Get("NS_Employee No.") AND (NSEmployee."Resource No." <> '') then begin
-                        NSResourceSkillClass.Reset();
-                        NSResourceSkillClass.SetRange("NS_Resource No.", NSEmployee."Resource No.");
-                        NSResourceSkillClass.SetRange("NS_Skill Class Code", "NS_Skill Class New");
-                        if not NSResourceSkillClass.FindFirst() then begin
-                            NSResourceSkillClass2.Init();
-                            NSResourceSkillClass2.Validate("NS_Resource No.", NSEmployee."Resource No.");
-                            NSResourceSkillClass2.Validate("NS_Skill Class Code", "NS_Skill Class New");
-                            NSResourceSkillClass2.Insert();
-                        end;
-                    end;
-            end;
-        }
-        //PE-68.Dk.1.0 10April2023 End
         field(20; "NS_Work Type Code"; Code[10])
         {
             Caption = 'Work Type';
@@ -188,15 +135,7 @@ table 14021375 "NS_Employee Wage Rate"
         }
         key(Key2; "NS_Skill Class", "NS_Work Type Code", "NS_Effective Date")
         {
-            ObsoleteState = Pending;//PE-68.Dk.1.0 10April2023
-            ObsoleteReason = 'To increase the length for NS_Skill Class field';//PE-68.Dk.1.0 10April2023
-            ObsoleteTag = 'Will be removed in ProjectProUpcoming App 22.0.XXXX build';//PE-68.Dk.1.0 10April2023
         }
-        //PE-68.Dk.1.0 10April2023 Start
-        key(Key3; "NS_Skill Class New", "NS_Work Type Code", "NS_Effective Date")
-        {
-        }
-        //PE-68.Dk.1.0 10April2023 End
     }
 
     fieldgroups
@@ -252,15 +191,9 @@ table 14021375 "NS_Employee Wage Rate"
                 if Employee.FINDFIRST() then begin
                     //Match on Skill Class,Work Type Code,Effective Date
                     EmployeeWageRate.RESET();
-                    //PE-68.Dk.1.0 10April2023 Start
-                    //EmployeeWageRate.SETCURRENTKEY("NS_Skill Class", "NS_Work Type Code", "NS_Effective Date");
-                    EmployeeWageRate.SETCURRENTKEY("NS_Skill Class New", "NS_Work Type Code", "NS_Effective Date");
-                    //PE-68.Dk.1.0 10April2023 End
+                    EmployeeWageRate.SETCURRENTKEY("NS_Skill Class", "NS_Work Type Code", "NS_Effective Date");
                     EmployeeWageRate.SETRANGE("NS_Employee No.", Employee."No.");
-                    //PE-68.Dk.1.0 10April2023 Start
-                    // EmployeeWageRate.SETRANGE("NS_Skill Class", JobJnlLine."NS_Skill Class");
-                    EmployeeWageRate.SETRANGE("NS_Skill Class New", JobJnlLine."NS_Skill Class New");
-                    //PE-68.Dk.1.0 10April2023 End
+                    EmployeeWageRate.SETRANGE("NS_Skill Class", JobJnlLine."NS_Skill Class");
                     EmployeeWageRate.SETRANGE("NS_Work Type Code", JobJnlLine."Work Type Code");
                     EmployeeWageRate.SETFILTER("NS_Effective Date", '..%1', JobJnlLine."Posting Date");
                     if EmployeeWageRate.FINDLAST() then begin
@@ -274,10 +207,7 @@ table 14021375 "NS_Employee Wage Rate"
                         JobJnlLine."NS_Employee Fringe Total" := EmployeeWageRate."NS_Fringe Total";
                     end else begin
                         //Match on Skill Class=<blank>,Work Type Code,Effective Date
-                        //PE-68.Dk.1.0 10April2023 Start
-                        // EmployeeWageRate.SETRANGE("NS_Skill Class", '');
-                        EmployeeWageRate.SETRANGE("NS_Skill Class New", '');
-                        //PE-68.Dk.1.0 10April2023 End
+                        EmployeeWageRate.SETRANGE("NS_Skill Class", '');
                         if EmployeeWageRate.FINDFIRST() then begin
                             JobJnlLine."NS_Employee Wage Rate" := EmployeeWageRate."NS_Wage Rate";
                             JobJnlLine."NS_Employee Fringe - Insurance" := EmployeeWageRate."NS_Fringe - Insurance";
@@ -301,38 +231,26 @@ table 14021375 "NS_Employee Wage Rate"
                     JobResourcePrice.SETRANGE(Type, JobResourcePrice.Type::Resource);
                     JobResourcePrice.SETRANGE(Code, JobJnlLine."No.");
                     JobResourcePrice.SETRANGE("Work Type Code", JobJnlLine."Work Type Code");
-                    //PE-68.Dk.1.0 10April2023 Start
-                    // JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                    JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                    //PE-68.Dk.1.0 10April2023 End
+                    JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                     if JobResourcePrice.FINDFIRST() then begin
                         JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                         JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
                     end else begin
                         //Match on Job Task No.,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code=<blank>
-                        //PE-68.Dk.1.0 10April2023 Start
-                        // JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                        JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                        //PE-68.Dk.1.0 10April2023 End
+                        JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                         if JobResourcePrice.FINDFIRST() then begin
                             JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                             JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
                         end else begin
                             //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code
                             JobResourcePrice.SETRANGE("Job Task No.", '');
-                            //PE-68.Dk.1.0 10April2023 Start
-                            //JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                            JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                            //PE-68.Dk.1.0 10April2023 End
+                            JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                             if JobResourcePrice.FINDFIRST() then begin
                                 JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                                 JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
                             end else begin
                                 //Match on Job Task No.=<blank>,Type=Resource,Code=Resource No.,Work Type Code,Skill Class Code=<blank>
-                                //PE-68.Dk.1.0 10April2023 Start
-                                // JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                //PE-68.Dk.1.0 10April2023 End
+                                JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                 if JobResourcePrice.FINDFIRST() then begin
                                     JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                                     JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
@@ -343,38 +261,26 @@ table 14021375 "NS_Employee Wage Rate"
                                             JobResourcePrice.SETRANGE("Job Task No.", JobJnlLine."Job Task No.");
                                             JobResourcePrice.SETRANGE(Type, JobResourcePrice.Type::"Group(Resource)");
                                             JobResourcePrice.SETRANGE(Code, Resource."Resource Group No.");
-                                            //PE-68.Dk.1.0 10April2023 Start
-                                            //JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                                            JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                                            //PE-68.Dk.1.0 10April2023 End
+                                            JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                                             if JobResourcePrice.FINDFIRST() then begin
                                                 JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                                                 JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
                                             end else begin
                                                 //Match on Job Task No.,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code=<blank>
-                                                //PE-68.Dk.1.0 10April2023 Start
-                                                // JobResourcePrice.SETRANGE("NS_Skill Class Code", ''); 
-                                                JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                                //PE-68.Dk.1.0 10April2023 End
+                                                JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                                 if JobResourcePrice.FINDFIRST() then begin
                                                     JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                                                     JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
                                                 end else begin
                                                     //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code
                                                     JobResourcePrice.SETRANGE("Job Task No.", '');
-                                                    //PE-68.Dk.1.0 10April2023 Start
-                                                    // JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-                                                    JobResourcePrice.SETRANGE("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-                                                    //PE-68.Dk.1.010April2023 End
+                                                    JobResourcePrice.SETRANGE("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
                                                     if JobResourcePrice.FINDFIRST() then begin
                                                         JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                                                         JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";
                                                     end else begin
                                                         //Match on Job Task No.=<blank>,Type=Group(Resource),Code=Resource Group No.,Work Type Code,Skill Class Code=<blank>
-                                                        //PE-68.Dk.1.0 10April2023 Start
-                                                        // JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
-                                                        JobResourcePrice.SETRANGE("NS_Skill Class Code New", '');
-                                                        //PE-68.Dk.1.0 10April2023 End
+                                                        JobResourcePrice.SETRANGE("NS_Skill Class Code", '');
                                                         if JobResourcePrice.FINDFIRST() then begin
                                                             JobJnlLine."NS_Prevailing Wage Rate" := JobResourcePrice."NS_Skill Rate";
                                                             JobJnlLine."NS_Prevailing Fringe Rate" := JobResourcePrice."NS_Fringe Rate";

@@ -1,5 +1,6 @@
 page 14021204 "NS_Get Job Planning Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -12,9 +13,12 @@ page 14021204 "NS_Get Job Planning Line"
     // +------------------------------------------------------------
     //TM-10.AM.1.0 | Added field.
     //PRJ-866.JS.0.1 17Aug2021 | flow unit price in purchase line
-    //FOR-5.NK.1.0 02Mar2023 | Added Code
+
     Caption = 'Get Job Planning Line';
     DataCaptionFields = "Job No.";
+    // >> Upgrade
+    DataCaptionExpression = PageCaption;
+    // << Upgrade
     Editable = true;
     PageType = Card;
     SourceTable = "Job Planning Line";
@@ -151,7 +155,6 @@ page 14021204 "NS_Get Job Planning Line"
                     ApplicationArea = all;
                     Editable = false;
                     Description = 'TM-10.AM.1.0';
-                    ToolTip = 'Segment Code'; //PE-75.RM.1.0 23May2023
                 }
 
             }
@@ -201,11 +204,8 @@ page 14021204 "NS_Get Job Planning Line"
             SetFilter("Line Type", '%1|%2', "Line Type"::Budget, "Line Type"::"Both Budget and Billable")
         else
             if SalesPurch = SalesPurch::Sales then
-                SetFilter("Line Type", '%1|%2', "Line Type"::Billable, "Line Type"::"Both Budget and Billable");  //PRJ-1407.GK.1.0 18May2022|add semicolon for next code
+                SetFilter("Line Type", '%1|%2', "Line Type"::Billable, "Line Type"::"Both Budget and Billable")
         //PRJ-389 end
-        //PRJ-1407.GK.1.0 18May2022 start
-        OnOpenPageOnAfterSetfilters(Rec);
-        //PRJ-1407.GK.1.0 18May2022 end
     end;
 
     trigger OnQueryClosePage(CloseAction: Action): Boolean;
@@ -218,7 +218,19 @@ page 14021204 "NS_Get Job Planning Line"
             NS_CreateLines(Rec);
         end;
     end;
-
+    // >> Upgrade
+    trigger OnAfterGetRecord()
+    var
+        Job: Record Job;
+    begin
+        // #152 Start
+        if Job.Get("Job No.") then
+            PageCaption := Job."No." + ' · ' + Job.Description
+        else
+            PageCaption := '';
+        // #152 End
+    end;
+    // << Upgrade
     var
         Job: Record Job;
         JobPlanningLine: Record "Job Planning Line";
@@ -232,6 +244,9 @@ page 14021204 "NS_Get Job Planning Line"
         DocType: Enum "Sales Document Type";
         SalesPurch: Option " ",Sales,Purchase;
         DocNo: Code[20];
+        // >> Upgrade
+        PageCaption: Text;
+    // << Upgrade
 
     procedure NS_Set(CustNoIn: Code[20]; JobIn: Code[20]; CostCat: Code[10]; RevCat: Code[10]; JobTaskNo: Code[35]; EntType: Option);
     begin
@@ -275,16 +290,8 @@ page 14021204 "NS_Get Job Planning Line"
         PurchHeader: Record "Purchase Header";
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
-        NSBillingHeader: record "NS_Progress Billing Header";   //PRJCTPR-199.JS.1.0 02NOV2023
-        NSJobSetup: record "Jobs Setup";  //PRJCTPR-199.JS.1.0 02NOV2023
         LineNo: Integer;
-        JobPlanningLine: Record "Job Planning Line"; //FOR-5.NK.1.0 03Mar2023
-        PurchHead: Record "Purchase Header"; //FOR-5.NK.1.0 03Mar2023
-        NSJobPlanningLine: Record "Job Planning Line";   //PRJCTPR-224.JS.1.0 05MAR2024
-        NSJobs: record Job; //PRJCTPR-224.JS.1.0 05MAR2024
-        NS_Currency: record Currency; //PRJCTPR-224.JS.1.0 05MAR2024
     begin
-        if NSJobSetup.get() then; //PRJCTPR-199.JS.1.0 02NOV2023
         if PassJobPlanningLine.FINDSET() then
             repeat
                 if SalesPurch = SalesPurch::Sales then begin
@@ -311,46 +318,25 @@ page 14021204 "NS_Get Job Planning Line"
                         VALIDATE(Type);
                         VALIDATE("No.", PassJobPlanningLine."No.");
                         "Variant Code" := PassJobPlanningLine."Variant Code";
-                        //"Description 2" := PassJobPlanningLine.Description;//PRJ-1701.RP.1.0 09NOV2022 COMMENTED CODE
-                        "Description" := PassJobPlanningLine.Description;//PRJ-1701.RP.1.0 09NOV2022 ADDED CODE
-                        "Description 2" := PassJobPlanningLine."Description 2";//PRJ-1701.RP.1.0 09NOV2022 ADDED CODE
+                        Description := PassJobPlanningLine.Description;
                         "Gen. Bus. Posting Group" := PassJobPlanningLine."Gen. Bus. Posting Group";
                         "Gen. Prod. Posting Group" := PassJobPlanningLine."Gen. Prod. Posting Group";
-                        if PassJobPlanningLine."Location Code" <> '' then //FOR-5.NK.1.0 10Mar2023 
-                            SalesLine.VALIDATE("Location Code", PassJobPlanningLine."Location Code");
+                        VALIDATE("Location Code", PassJobPlanningLine."Location Code");
                         "Bin Code" := PassJobPlanningLine."Bin Code";
                         VALIDATE(Quantity, PassJobPlanningLine.Quantity);
-                        //PE-301.NC.1.0 10Jun2024 Start
-                        if ((PassJobPlanningLine."Line Type" = PassJobPlanningLine."Line Type"::"Both Budget and Billable") and (PassJobPlanningLine.Type = PassJobPlanningLine.Type::Item)) then
-                            SalesLine."Unit of Measure Code" := Rec.NS_GetUOMSaleItemBB(PassJobPlanningLine."No.", PassJobPlanningLine."Job No.", PassJobPlanningLine)
-                        else
-                            //PE-301.NC.1.0 10Jun2024 End
-                            "Unit of Measure Code" := PassJobPlanningLine."Unit of Measure Code";
+                        "Unit of Measure Code" := PassJobPlanningLine."Unit of Measure Code";
                         "Unit Price" := PassJobPlanningLine."Unit Price";
                         "Job No." := PassJobPlanningLine."Job No.";
-                        //SalesLine."Job Task No." := PassJobPlanningLine."Job Task No.";  //PRJCTPR-199.JS.1.0 11DEC2023 line commented
-                        SalesLine.validate("Job Task No.", PassJobPlanningLine."Job Task No.");  //PRJCTPR-199.JS.1.0 11DEC2023 line addec
+                        "Job Task No." := PassJobPlanningLine."Job Task No.";
                         "NS_Segment Code" := PassJobPlanningLine."NS_Segment Code";//TM-10.AM.1.0 26NOV2020 
                         "NS_Job Cost Category" := PassJobPlanningLine."NS_Cost Category";
                         //"Shortcut Dimension 1 Code" := PassJobPlanningLine."PP_Shortcut Dimension 1 Code"; //PRJ-389 comment
                         //"Shortcut Dimension 2 Code" := PassJobPlanningLine."PP_Shortcut Dimension 2 Code";  //PRJ-389 comment
                         //"Dimension Set ID" := PassJobPlanningLine."PP_Dimension Set ID"; //PRJ-389 comment
 
-                        //PRJ-389 start   
+                        //PRJ-389 start  
                         if Job.get(PassJobPlanningLine."Job No.") then;
                         "NS_job Revenue Category" := PassJobPlanningLine."NS_Revenue Category";
-
-                        //PRJCTPR-224.JS.1.0 12MAR2024 - Start
-                        if job."Invoice Currency Code" <> '' then begin
-                            if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) and (SalesHeader."NS_Job No." <> '') then begin
-                                if NS_Currency.get(SalesHeader."Currency Code") then
-                                    SalesLine.validate("Unit Price", Round(SalesLine."Unit Price" * SalesHeader."Currency Factor",
-                                                            NS_Currency."Unit-Amount Rounding Precision"));
-                            end;
-                        end;
-                        if (job."Currency Code" <> '') and (job."Invoice Currency Code" = '') then
-                            SalesLine.validate("Unit Price", PassJobPlanningLine."Unit Price");
-                        //PRJCTPR-224.JS.1.0 12MAR2024 - end
                         if PassJobPlanningLine."NS_Shortcut Dimension 1 Code" <> '' then
                             "Shortcut Dimension 1 Code" := PassJobPlanningLine."NS_Shortcut Dimension 1 Code"
                         else
@@ -365,11 +351,6 @@ page 14021204 "NS_Get Job Planning Line"
                 end else
                     if SalesPurch = SalesPurch::Purchase then begin
                         PurchHeader.GET(DocType, DocNo);
-                        //PE-260.JS.1.0 06MAR2024 - Start                        
-                        if (PurchHeader."NS_Job No." <> '') and (PurchHeader."NS_Multiple Jobs on Lines" = false) then
-                            if PurchHeader."NS_Job No." <> PassJobPlanningLine."Job No." then
-                                error('Please enable "Multiple Jobs on Lines" in %1 No. %2 on "Purchase %3 Header"', DocType, DocNo, DocType);
-                        //PE-260.JS.1.0 06MAR2024 - end
                         with PurchLine do begin
                             RESET();
                             SETRANGE("Document Type", DocType);
@@ -392,18 +373,11 @@ page 14021204 "NS_Get Job Planning Line"
                             VALIDATE(Type);
                             VALIDATE("No.", PassJobPlanningLine."No.");
                             "Variant Code" := PassJobPlanningLine."Variant Code";
-                            //"Description 2" := PassJobPlanningLine.Description;//PRJ-1701.RP.1.0 09NOV2022 COMMENTED CODE
-                            "Description" := PassJobPlanningLine.Description;//PRJ-1701.RP.1.0 09NOV2022 ADDED CODE
-                            "Description 2" := PassJobPlanningLine."Description 2";//PRJ-1701.RP.1.0 09NOV2022 ADDED CODE
+                            "Description 2" := PassJobPlanningLine.Description;
                             "Gen. Bus. Posting Group" := PassJobPlanningLine."Gen. Bus. Posting Group";
                             "Gen. Prod. Posting Group" := PassJobPlanningLine."Gen. Prod. Posting Group";
                             VALIDATE("Location Code", PassJobPlanningLine."Location Code");
                             "Bin Code" := PassJobPlanningLine."Bin Code";
-                            //PE-301.NC.1.0 10Jun2024 Start
-                            if ((PassJobPlanningLine."Line Type" = PassJobPlanningLine."Line Type"::"Both Budget and Billable") and (PassJobPlanningLine.Type = PassJobPlanningLine.Type::Item)) then
-                                PurchLine."Unit of Measure Code" := Rec.NS_GetUOMItemBB(PassJobPlanningLine."No.", PassJobPlanningLine."Job No.", PassJobPlanningLine)
-                            else
-                                //PE-301.NC.1.0 10Jun2024 End
                             "Unit of Measure Code" := PassJobPlanningLine."Unit of Measure Code";
                             "Unit Cost" := PassJobPlanningLine."Unit Cost";
                             "Unit Cost (LCY)" := PassJobPlanningLine."Unit Cost (LCY)";
@@ -419,8 +393,7 @@ page 14021204 "NS_Get Job Planning Line"
                             "NS_Job Planning Line No." := PassJobPlanningLine."Line No.";
                             //PRJ-866.JS.0.1 17Aug2021-End                                
                             "Job No." := PassJobPlanningLine."Job No.";
-                            // "Job Task No." := PassJobPlanningLine."Job Task No.";//PRJCTPR-199.JS.1.0 11DEC2023 line commented
-                            Validate("Job Task No.", PassJobPlanningLine."Job Task No.");  //PRJCTPR-199.JS.1.0 11DEC2023 line added
+                            "Job Task No." := PassJobPlanningLine."Job Task No.";
                             "NS_Segment Code" := PassJobPlanningLine."NS_Segment Code";//TM-10.AM.1.0 26NOV2020 
                             "NS_Job Cost Category" := PassJobPlanningLine."NS_Cost Category";
                             "NS_Job Revenue Category" := PassJobPlanningLine."NS_Revenue Category";
@@ -430,17 +403,14 @@ page 14021204 "NS_Get Job Planning Line"
                             //PRJ-389 start  
                             if Job.get(PassJobPlanningLine."Job No.") then;
                             "NS_job Revenue Category" := PassJobPlanningLine."NS_Revenue Category";
-
-                            //PRJCTPR-199.JS.1.0 12DEC2023 - start below code commented
-                            // if PassJobPlanningLine."NS_Shortcut Dimension 1 Code" <> '' then
-                            //     "Shortcut Dimension 1 Code" := PassJobPlanningLine."NS_Shortcut Dimension 1 Code"
-                            // else
-                            //     "Shortcut Dimension 1 Code" := Job."Global Dimension 1 Code";
-                            // if PassJobPlanningLine."NS_Shortcut Dimension 2 Code" <> '' then
-                            //     "Shortcut Dimension 2 Code" := PassJobPlanningLine."NS_Shortcut Dimension 2 Code"
-                            // else
-                            //     "Shortcut Dimension 2 Code" := Job."Global Dimension 2 Code";
-                            //PRJCTPR-199.JS.1.0 12DEC2023 - end
+                            if PassJobPlanningLine."NS_Shortcut Dimension 1 Code" <> '' then
+                                "Shortcut Dimension 1 Code" := PassJobPlanningLine."NS_Shortcut Dimension 1 Code"
+                            else
+                                "Shortcut Dimension 1 Code" := Job."Global Dimension 1 Code";
+                            if PassJobPlanningLine."NS_Shortcut Dimension 2 Code" <> '' then
+                                "Shortcut Dimension 2 Code" := PassJobPlanningLine."NS_Shortcut Dimension 2 Code"
+                            else
+                                "Shortcut Dimension 2 Code" := Job."Global Dimension 2 Code";
                             //PRJ-389 end
                             INSERT;
 
@@ -453,12 +423,5 @@ page 14021204 "NS_Get Job Planning Line"
                     end;
             until PassJobPlanningLine.NEXT() = 0;
     end;
-    //PRJ-1407.GK.1.0 18May2022 start
-    [IntegrationEvent(false, false)]
-    local procedure OnOpenPageOnAfterSetfilters(var Rec: Record "Job Planning Line")
-    begin
-
-    end;
-    //PRJ-1407.GK.1.0 18May2022 end
 }
 

@@ -1,8 +1,7 @@
 pageextension 14021250 NS_PurchInvStatsExt extends "Purchase Invoice Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Invoice Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Vend.""Balance (LCY)""")

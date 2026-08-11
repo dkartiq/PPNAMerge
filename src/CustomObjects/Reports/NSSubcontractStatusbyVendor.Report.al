@@ -92,8 +92,6 @@ report 14021300 "NS_Subcontract Status byVendor"
             {
                 DataItemLink = "NS_Buy-from Vendor No." = FIELD("No.");
                 RequestFilterFields = "NS_No.";
-                DataItemTableView = order(ascending) where("NS_Subcon Class" = filter(<> 'Change Request')); //PE-177.DK.1.0 10Nov2023
-
                 column(Vendor_No; "NS_Buy-from Vendor No.")
                 {
                 }
@@ -311,7 +309,7 @@ report 14021300 "NS_Subcontract Status byVendor"
 
                 trigger OnPreDataItem();
                 begin
-                    //CurrReport.CREATETOTALS(TotalToPrintBudgetedCost, TotalToPrintInvoicedAmount, TotalToPrintRetentionAmount, TotalToPrintPaymentMade);//PRJCTPR-101.NC.1.0 25Apr2023 Block
+                    CurrReport.CREATETOTALS(TotalToPrintBudgetedCost, TotalToPrintInvoicedAmount, TotalToPrintRetentionAmount, TotalToPrintPaymentMade);
                 end;
             }
         }

@@ -327,8 +327,8 @@ page 14021359 "NS_KPI Job List"
 
     trigger OnAfterGetRecord();
     begin
-        NS_CalculateActualCostToDate(Rec, ActualCostToDate, true);
-        CalculateInvoiceBilled(Rec, InvoiceBilled, true);
+        NS_CalculateActualCostToDate(Rec, ActualCostToDate, true, WorkDate());
+        CalculateInvoiceBilled(Rec, InvoiceBilled, true, WorkDate());
         CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
         TotalBudgetedCost := "NS_Budgeted Cost (LCY)" + NS_SLsBudgetedLaborHours(Rec);
         TotalContract := "NS_Budgeted Price (LCY)" + "SLsUsage(Price)"(Rec);

@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Master_Job_No">
+          <DataField>Master_Job_No</DataField>
+        </Field>
+        <Field Name="BilltoName_Job">
+          <DataField>BilltoName_Job</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="CompanyInformationName">
+          <DataField>CompanyInformationName</DataField>
+        </Field>
+        <Field Name="PageCaption">
+          <DataField>PageCaption</DataField>
+        </Field>
+        <Field Name="JobFiltersCaption">
+          <DataField>JobFiltersCaption</DataField>
+        </Field>
+        <Field Name="ActivityProcessOperationCaption">
+          <DataField>ActivityProcessOperationCaption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="NoCaption">
+          <DataField>NoCaption</DataField>
+        </Field>
+        <Field Name="ActualCostCaption">
+          <DataField>ActualCostCaption</DataField>
+        </Field>
+        <Field Name="BudgetedCostCaption">
+          <DataField>BudgetedCostCaption</DataField>
+        </Field>
+        <Field Name="ActualWorkUnitsCaption">
+          <DataField>ActualWorkUnitsCaption</DataField>
+        </Field>
+        <Field Name="BudgetedWorkUnitsCaption">
+          <DataField>BudgetedWorkUnitsCaption</DataField>
+        </Field>
+        <Field Name="UOMLbl">
+          <DataField>UOMLbl</DataField>
+        </Field>
+        <Field Name="WorkUnitVarianceCaption">
+          <DataField>WorkUnitVarianceCaption</DataField>
+        </Field>
+        <Field Name="PercentVarianceRemainingCaption">
+          <DataField>PercentVarianceRemainingCaption</DataField>
+        </Field>
+        <Field Name="ActualCostPerUnitCaption">
+          <DataField>ActualCostPerUnitCaption</DataField>
+        </Field>
+        <Field Name="BudgetedCostPerUnitCaption">
+          <DataField>BudgetedCostPerUnitCaption</DataField>
+        </Field>
+        <Field Name="CostPerUnitVarianceCaption">
+          <DataField>CostPerUnitVarianceCaption</DataField>
+        </Field>
+        <Field Name="PercentVarianceCaption">
+          <DataField>PercentVarianceCaption</DataField>
+        </Field>
+        <Field Name="CustomerAccountNameCaption">
+          <DataField>CustomerAccountNameCaption</DataField>
+        </Field>
+        <Field Name="JobLocationCaption">
+          <DataField>JobLocationCaption</DataField>
+        </Field>
+        <Field Name="ShowProcesses">
+          <DataField>ShowProcesses</DataField>
+        </Field>
+        <Field Name="ShowOperations">
+          <DataField>ShowOperations</DataField>
+        </Field>
+        <Field Name="Show_Sections">
+          <DataField>Show_Sections</DataField>
+        </Field>
+        <Field Name="ShowDetails">
+          <DataField>ShowDetails</DataField>
+        </Field>
+        <Field Name="SubLevelsText">
+          <DataField>SubLevelsText</DataField>
+        </Field>
+        <Field Name="JobFilters">
+          <DataField>JobFilters</DataField>
+        </Field>
+        <Field Name="JobNo">
+          <DataField>JobNo</DataField>
+        </Field>
+        <Field Name="job_TaskNOBuffer">
+          <DataField>job_TaskNOBuffer</DataField>
+        </Field>
+        <Field Name="JobDescription">
+          <DataField>JobDescription</DataField>
+        </Field>
+        <Field Name="StartingDate">
+          <DataField>StartingDate</DataField>
+        </Field>
+        <Field Name="EndingDate">
+          <DataField>EndingDate</DataField>
+        </Field>
+        <Field Name="ActivityCode">
+          <DataField>ActivityCode</DataField>
+        </Field>
+        <Field Name="ProcessCode">
+          <DataField>ProcessCode</DataField>
+        </Field>
+        <Field Name="OperationCode">
+          <DataField>OperationCode</DataField>
+        </Field>
+        <Field Name="Section_code">
+          <DataField>Section_code</DataField>
+        </Field>
+        <Field Name="Sectiondesc">
+          <DataField>Sectiondesc</DataField>
+        </Field>
+        <Field Name="ActivityDescription">
+          <DataField>ActivityDescription</DataField>
+        </Field>
+        <Field Name="ProcessDescription">
+          <DataField>ProcessDescription</DataField>
+        </Field>
+        <Field Name="OperationDescription">
+          <DataField>OperationDescription</DataField>
+        </Field>
+        <Field Name="DetailDescription">
+          <DataField>DetailDescription</DataField>
+        </Field>
+        <Field Name="DetailNo">
+          <DataField>DetailNo</DataField>
+        </Field>
+        <Field Name="DetailActualCost">
+          <DataField>DetailActualCost</DataField>
+        </Field>
+        <Field Name="DetailActualCostFormat">
+          <DataField>DetailActualCostFormat</DataField>
+        </Field>
+        <Field Name="DetailBudgetedCost">
+          <DataField>DetailBudgetedCost</DataField>
+        </Field>
+        <Field Name="DetailBudgetedCostFormat">
+          <DataField>DetailBudgetedCostFormat</DataField>
+        </Field>
+        <Field Name="DetailActualWorkUnits">
+          <DataField>DetailActualWorkUnits</DataField>
+        </Field>
+        <Field Name="DetailActualWorkUnitsFormat">
+          <DataField>DetailActualWorkUnitsFormat</DataField>
+        </Field>
+        <Field Name="DetailBudgetedWorkUnits">
+          <DataField>DetailBudgetedWorkUnits</DataField>
+        </Field>
+        <Field Name="DetailBudgetedWorkUnitsFormat">
+          <DataField>DetailBudgetedWorkUnitsFormat</DataField>
+        </Field>
+        <Field Name="UOM">
+          <DataField>UOM</DataField>
+        </Field>
+        <Field Name="DetailActualCostPerUnit">
+          <DataField>DetailActualCostPerUnit</DataField>
+        </Field>
+        <Field Name="DetailActualCostPerUnitFormat">
+          <DataField>DetailActualCostPerUnitFormat</DataField>
+        </Field>
+        <Field Name="DetailBudgetedCostPerUnit">
+          <DataField>DetailBudgetedCostPerUnit</DataField>
+        </Field>
+        <Field Name="DetailBudgetedCostPerUnitFormat">
+          <DataField>DetailBudgetedCostPerUnitFormat</DataField>
+        </Field>
+        <Field Name="ActivityTotalCaption">
+          <DataField>ActivityTotalCaption</DataField>
+        </Field>
+        <Field Name="ProcessTotalCaption">
+          <DataField>ProcessTotalCaption</DataField>
+        </Field>
+        <Field Name="OperationTotalCaption">
+          <DataField>OperationTotalCaption</DataField>
+        </Field>
+        <Field Name="Section_TotalCaption">
+          <DataField>Section_TotalCaption</DataField>
+        </Field>
+        <Field Name="TotalJobNo">
+          <DataField>TotalJobNo</DataField>
+        </Field>
+        <Field Name="CustomerAccountName">
+          <DataField>CustomerAccountName</DataField>
+        </Field>
+        <Field Name="JobName">
+          <DataField>JobName</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

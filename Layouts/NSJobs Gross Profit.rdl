@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="Sub_LevelsText_">
+          <DataField>Sub_LevelsText_</DataField>
+        </Field>
+        <Field Name="ValuesFromText">
+          <DataField>ValuesFromText</DataField>
+        </Field>
+        <Field Name="Job_TABLECAPTION_____Filters______JobFilter">
+          <DataField>Job_TABLECAPTION_____Filters______JobFilter</DataField>
+        </Field>
+        <Field Name="Variance__">
+          <DataField>Variance__</DataField>
+        </Field>
+        <Field Name="Variance__Format">
+          <DataField>Variance__Format</DataField>
+        </Field>
+        <Field Name="Variance">
+          <DataField>Variance</DataField>
+        </Field>
+        <Field Name="VarianceFormat">
+          <DataField>VarianceFormat</DataField>
+        </Field>
+        <Field Name="ActualCost">
+          <DataField>ActualCost</DataField>
+        </Field>
+        <Field Name="ActualCostFormat">
+          <DataField>ActualCostFormat</DataField>
+        </Field>
+        <Field Name="ActualPrice">
+          <DataField>ActualPrice</DataField>
+        </Field>
+        <Field Name="ActualPriceFormat">
+          <DataField>ActualPriceFormat</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="Job__Description_2_">
+          <DataField>Job__Description_2_</DataField>
+        </Field>
+        <Field Name="ActualCost_Control26">
+          <DataField>ActualCost_Control26</DataField>
+        </Field>
+        <Field Name="ActualCost_Control26Format">
+          <DataField>ActualCost_Control26Format</DataField>
+        </Field>
+        <Field Name="ActualPrice_Control30">
+          <DataField>ActualPrice_Control30</DataField>
+        </Field>
+        <Field Name="ActualPrice_Control30Format">
+          <DataField>ActualPrice_Control30Format</DataField>
+        </Field>
+        <Field Name="Variance_Control34">
+          <DataField>Variance_Control34</DataField>
+        </Field>
+        <Field Name="Variance_Control34Format">
+          <DataField>Variance_Control34Format</DataField>
+        </Field>
+        <Field Name="Variance___Control12">
+          <DataField>Variance___Control12</DataField>
+        </Field>
+        <Field Name="Variance___Control12Format">
+          <DataField>Variance___Control12Format</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Job_Gross_ProfitCaption">
+          <DataField>Job_Gross_ProfitCaption</DataField>
+        </Field>
+        <Field Name="Percent_ProfitCaption">
+          <DataField>Percent_ProfitCaption</DataField>
+        </Field>
+        <Field Name="Actual_ProfitCaption">
+          <DataField>Actual_ProfitCaption</DataField>
+        </Field>
+        <Field Name="Actual_CostCaption">
+          <DataField>Actual_CostCaption</DataField>
+        </Field>
+        <Field Name="Actual_PriceCaption">
+          <DataField>Actual_PriceCaption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Job__No__Caption">
+          <DataField>Job__No__Caption</DataField>
+        </Field>
+        <Field Name="Total_JobsCaption">
+          <DataField>Total_JobsCaption</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

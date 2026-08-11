@@ -4,12 +4,6 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
     //PRJ-168.SK.1.0 Added code
     //PRJ-372.MS.1.0 code comment due to wrong value changes
     //TM-10.AM.1.0 23NOV2020 | Added validation on Post action.
-    //PRJ-999.JS.1.0 18Nov2021 | Add code regarding dimension
-    //PRJ-1049.JS.1.0 22Nov2021 | Add code regarding dimension
-    //PRJ-1087.JS.1.0 18Dec2021 | Add condition for dimension
-    //PRJ-1099.JS.1.0 30Dec2021 | Modify code for dimension on condition basis
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Credit Memo'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Assigned User ID")
@@ -18,50 +12,7 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Job No.';
-
-                //PRJ-1099.JS.1.0 31Dec2021 -start
-
-                trigger OnValidate();
-                var
-                    NS_Job: Record Job;
-                    NS_ProgrBillHead: Record "NS_Progress Billing Header";
-                    NS_DefaultDim: Record "Default Dimension";
-                begin
-                    //PRJCTPR-199.JS.1.0 11DEC23 start Below code commented
-                    // if rec."NS_Job No." <> '' then begin
-                    //     NS_JobsSetup.Get();
-                    //     If NS_JobsSetup."NS_Flow Job Card Dimension" = true then begin
-                    //         IF Rec."NS_Job No." <> '' then
-                    //             if NS_Job.Get(Rec."NS_Job No.") then begin
-                    //                 Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                    //                 Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                    //                 Rec."Dimension Set ID" := Rec.GetDimensionNoFromJob(Rec."NS_Job No.");
-                    //             end;
-                    //     end else
-                    //         if NS_Job.get(Rec."NS_Job No.") then begin
-                    //             NS_DefaultDim.Reset();
-                    //             NS_DefaultDim.SetRange("Table ID", 23);
-                    //             NS_DefaultDim.SetRange("No.", Rec."Buy-from Vendor No.");
-                    //             if NS_DefaultDim.IsEmpty() then begin
-                    //                 Rec."Shortcut Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                    //                 Rec."Shortcut Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                    //                 Rec."Dimension Set ID" := NS_ProgrBillHead.GetDimensionNoFromJob(Rec."NS_Job No.");
-                    //             end;
-                    //         end;
-                    // end;
-                    // CurrPage.UPDATE();
-                    //PRJCTPR-199.JS.1.0 11DEC23 end Below code commented
-                end;
-                //PRJ-1099.JS.1.0 31Dec2021 -end                
             }
-            //PE-260.JS.1.0 07MAR2024 - Start
-            field("NS_Multiple Jobs on Lines"; Rec."NS_Multiple Jobs on Lines")
-            {
-                ApplicationArea = All;
-                caption = 'Multiple Jobs on Lines';
-                ToolTip = 'If enabled, you can manually select multiple jobs on the purchase order/invoice lines, even if the job number is defined on the purchase order/invoice header. It is suggested to take different jobs but with similar "Tax Area Code" to avoid inconsistency in tax calculation. Please note that, this is not applicable for the purchase orders/invoices created via JMP and Subcontracts.';
-            }
-            //PE-260.JS.1.0 07MAR2024 - end
             field("NS_Retention Document"; Rec."NS_Retention Document")
             {
                 ApplicationArea = All;
@@ -284,44 +235,27 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
     end;
 
     trigger OnAfterGetRecord();
-    var
-        NS_Jobs: Record Job;   //PRJ-999.JS.1.0 18Nov2021 //PRJ-1049.JS.1.0 22Nov2021
     begin
         //ProjectPro - start
         NS_RetentionCalcs;
         //ProjectPro - end
-        //PRJ-999.JS.1.0 18Nov2021 Start  //PRJ-1049.JS.1.0 22Nov2021
-        //PRJ-1099.JS.1.0 31Dec2021 -Start
-        // NS_JobsSetup.Get();  //PRJ-1087.JS.1.0 18Dec2021 add line
-        // If NS_JobsSetup."NS_Flow Job Card Dimension" = true then  //PRJ-1087.JS.1.0 18Dec2021 add line
-        //     IF Rec."NS_Job No." <> '' then
-        //         if NS_Jobs.Get(Rec."NS_Job No.") then begin
-        //             Rec."Shortcut Dimension 1 Code" := NS_Jobs."Global Dimension 1 Code";
-        //             Rec."Shortcut Dimension 2 Code" := NS_Jobs."Global Dimension 2 Code";
-        //             Rec."Dimension Set ID" := Rec.GetDimensionNoFromJob(Rec."NS_Job No.");
-        //         end;
-        //PRJ-1099.JS.1.0 31Dec2021 -End        
-        //PRJ-999.JS.1.0 18Nov2021 end  //PRJ-1049.JS.1.0 22Nov2021       
     end;
 
     LOCAL PROCEDURE Post(PostingCodeunitID: Integer);
     VAR
         PurchaseHeader: Record 38;
         PurchCrMemoHdr: Record 124;
-        //ApplicationAreaSetup: Record 9178;  //PE-267.JS.1.0 05MAR2024 line commented
-        NSApplicationAreaMgmtFacade: codeunit "Application Area Mgmt. Facade";  //PE-267.JS.1.0 05MAR2024
+        ApplicationAreaSetup: Record 9178;
         InstructionMgt: Codeunit 1330;
         IsScheduledPosting: Boolean;
     BEGIN
-        //PE-267.JS.1.0 05MAR2024 - Start
-        //IF ApplicationAreaSetup.IsFoundationEnabled THEN
-        if NSApplicationAreaMgmtFacade.IsFoundationEnabled() then
+        IF ApplicationAreaSetup.IsFoundationEnabled THEN
             LinesInstructionMgt.PurchaseCheckAllLinesHaveQuantityAssigned(Rec);
-        //PE-267.JS.1.0 05MAR2024 - end
-        Rec.SendToPosting(PostingCodeunitID); //PRJ-1135.NK.1.0
 
-        IsScheduledPosting := Rec."Job Queue Status" = Rec."Job Queue Status"::"Scheduled for Posting"; //PRJ-1135.NK.1.0
-        DocumentIsPosted := (NOT PurchaseHeader.GET(Rec."Document Type", Rec."No.")) OR IsScheduledPosting; //PRJ-1135.NK.1.0
+        SendToPosting(PostingCodeunitID);
+
+        IsScheduledPosting := "Job Queue Status" = "Job Queue Status"::"Scheduled for Posting";
+        DocumentIsPosted := (NOT PurchaseHeader.GET("Document Type", "No.")) OR IsScheduledPosting;
 
         IF IsScheduledPosting THEN
             CurrPage.CLOSE;
@@ -331,7 +265,7 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
             EXIT;
 
         IF IsOfficeAddin THEN BEGIN
-            PurchCrMemoHdr.SETRANGE("Pre-Assigned No.", Rec."No."); //PRJ-1135.NK.1.0
+            PurchCrMemoHdr.SETRANGE("Pre-Assigned No.", "No.");
             IF PurchCrMemoHdr.FINDFIRST THEN
                 PAGE.RUN(PAGE::"Posted Purchase Credit Memo", PurchCrMemoHdr);
         END ELSE
@@ -358,7 +292,7 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
             NS_GetPurchaseRetentionList.SETTABLEVIEW(NS_VendLedgEntry);
             NS_GetPurchaseRetentionList.NS_SetPurchHeader(NS_PurchHeader);
 
-            if NS_GetPurchaseRetentionList.RUNMODAL = ACTION::OK then; //begin PRJCTPR-354.DK.1.0
+            if NS_GetPurchaseRetentionList.RUNMODAL = ACTION::OK then begin
                 with NS_VendLedgEntry do begin
 
                     NS_PurchLine.RESET;
@@ -389,10 +323,7 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
                             NS_PurchLine."Direct Unit Cost" := "NS_Retention Applies-to Amount";
                             NS_PurchLine.Amount := NS_PurchLine."Unit Cost";
                             if NS_PurchHeader."Document Type" = NS_PurchHeader."Document Type"::"Credit Memo" then
-                                //PRJCTPR-354.DK.1.0 Start
-                        //NS_PurchLine."Direct Unit Cost" := -NS_PurchLine."Direct Unit Cost";
-                        NS_PurchLine."Direct Unit Cost" := NS_PurchLine."Direct Unit Cost";
-                    //PRJCTPR-354.DK.1.0 End
+                                NS_PurchLine."Direct Unit Cost" := -NS_PurchLine."Direct Unit Cost";
                             NS_PurchLine.VALIDATE("Direct Unit Cost");
                             NS_PurchLine.INSERT;
 
@@ -407,7 +338,7 @@ pageextension 14021121 NS_PurchaseCreditMemo extends "Purchase Credit Memo"
             CLEAR(NS_GetPurchaseRetentionList);
         end;
         //ProjectPro - end
-   //end; //PRJCTPR-354.DK.1.0
+    end;
 
     procedure NS_RetentionCalcs();
     begin

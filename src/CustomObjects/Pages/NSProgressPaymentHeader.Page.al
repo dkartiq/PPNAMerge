@@ -1,5 +1,6 @@
 page 14021340 "NS_Progress Payment Header"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -8,17 +9,16 @@ page 14021340 "NS_Progress Payment Header"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1194.NK.1.0 02Mar2022 | Add One Field & Create New Button
-    //PRJ-1257.NK.1.0 30Mar2022 | Change in Code
-    //PE-215.HS.1.0 15Jan2024 | Added tooltip
-    //PRJCTPR-292.HS.1.0 17Jan2024 | Added New action
-    // PRJCTPR-293.HS.1.0 19Jan2024 | Added Code 
+
     Caption = 'Progress Payment Header';
     PageType = Card;
     UsageCategory = Documents;
     ApplicationArea = Jobs;
     SourceTable = "NS_Progress Payment Header";
-
+    // >> Upgrade
+    InsertAllowed = false;
+    PromotedActionCategories = 'New,Process,Report,Purchasing';
+    // << Upgrade
     layout
     {
         area(content)
@@ -202,16 +202,6 @@ page 14021340 "NS_Progress Payment Header"
                             ERROR(Text010Lbl);
                     end;
                 }
-                //PRJ-1194.NK.1.0 02Mar2022 Start
-                field("Retention Reduction Invoice"; Rec."NS_Retention Reduction Invoice")
-                {
-                    ApplicationArea = all;
-                    Caption = 'Retention Reduction Invoice';
-                    ToolTip = 'Retention Reduction Invoice';
-
-                }
-                //PRJ-1194.NK.1.0 02Mar2022 End
-
                 field("Requisition Date"; Rec."NS_Requisition Date")
                 {
                     ApplicationArea = All;
@@ -232,13 +222,15 @@ page 14021340 "NS_Progress Payment Header"
                               "NS_Requisition No." = FIELD("NS_Requisition No."),
                               "NS_Version No." = FIELD("NS_Version No."),
                               "NS_Subcontract No." = FIELD("NS_Subcontract No.");
-                UpdatePropagation = Both;//PE-183.AS.1.0
                 //   SubPageView = ORDER(Ascending);
             }
             group(Retention)
             {
 
                 Caption = 'Retention';
+                // >> Upgrade
+                Editable = false;
+                // << Upgrade
                 field("Work Retention %"; Rec."NS_Work Retention Percent")
                 {
                     ApplicationArea = All;
@@ -251,9 +243,6 @@ page 14021340 "NS_Progress Payment Header"
                         if "NS_Work Retention Percent" <> 0 then
                             NS_CheckLineWorkRetention;
                         NS_WorkRetentionPercentOnAfterVal;
-
-                        CalcFields(Rec.NS_RetentionBaseAmt);//PE-183.AS.1.0
-                        Rec.NS_RetentionAmt := (Rec.NS_RetentionBaseAmt * Rec."NS_Work Retention Percent") / 100;//PE-183.AS.1.0
                     end;
                 }
                 field("Material Retention Percent"; Rec."NS_Material Retention Percent")
@@ -276,19 +265,6 @@ page 14021340 "NS_Progress Payment Header"
                     Editable = ManualRetentionAmountEditable;
                     ToolTip = 'Specifies the Manual Retention Amount';
                 }
-
-                //PE-183.AS.1.0 start
-                field(NS_RetentionBaseAmt; Rec.NS_RetentionBaseAmt)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Retention Base Amount';
-                }
-                field(NS_RetentionAmt; Rec.NS_RetentionAmt)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Retention Amount';
-                }
-                //PE-183.AS.1.0 end
             }
         }
     }
@@ -312,51 +288,7 @@ page 14021340 "NS_Progress Payment Header"
                                   "NS_Requisition No." = FIELD("NS_Requisition No."),
                                   "NS_Version No." = FIELD("NS_Version No.");
                     ShortCutKey = 'F7';
-                    //PRJCTPR-292.HS.1.0 17Jan2024 Start
-                    Visible = false;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Will be removed in next build';
-                    ObsoleteTag = 'ProjectPro upcoming release 23.0.XXX.00';
-                    //PRJCTPR-292.HS.1.0 17Jan2024  End
                 }
-
-                //PRJCTPR-292.HS.1.0 17Jan2024  Start
-                action("NS_Page Progress Payment Statistic New")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Statistics';
-                    Image = Statistics;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    RunObject = Page "NS_Progress Payment Stats. New";
-                    RunPageLink = "NS_No." = FIELD("NS_No."),
-                                  "NS_Requisition No." = FIELD("NS_Requisition No."),
-                                  "NS_Version No." = FIELD("NS_Version No.");
-                    ShortCutKey = 'F7';
-                }
-                //PRJCTPR-292.HS.1.0 17Jan2024 End
-
-                //PRJ-1194.NK.1.0 02Mar2022 Start
-                action(NS_CreateRetentionReductionInvoice)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Create Retention Document';
-                    Image = CreateDocument;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    trigger OnAction();
-                    var
-                        Lbltext0001: Label 'Do you want to Create Retention Document?';
-                    begin
-                        if not Rec."NS_Retention Reduction Invoice" then
-                            Error('Retention Reduction option must be selected in the Progress payment header.');
-                        if not Confirm(Lbltext0001, false) then
-                            exit;
-
-                        Rec.CreateRetentionReductionInv(rec, VendorNo);
-                    end;
-                }
-                //PRJ-1194.NK.1.0 02Mar2022 End
                 action("<Page Progress Payment Comment S")
                 {
                     ApplicationArea = All;
@@ -420,6 +352,12 @@ page 14021340 "NS_Progress Payment Header"
                     var
                         Result: Integer;
                     begin
+                        // >> Upgrade
+                        // #RG008 Start
+                        if NS_Status = NS_Status::Open then
+                            Error(Text50000);
+                        // #RG008 End
+                        // << Upgrade
                         Result := NewRequisition(Rec);
                         if Result <> -1 then begin
                             SETRANGE("NS_Requisition No.", Result);
@@ -442,6 +380,12 @@ page 14021340 "NS_Progress Payment Header"
                     var
                         Result: Integer;
                     begin
+                        // >> Upgrade
+                        // #RG008 Start
+                        if NS_Status <> NS_Status::Open then
+                            Error(Text50001);
+                        // #RG008 End
+                        // << Upgrade
                         Result := NewVersion(Rec);
                         if Result <> -1 then begin
                             SETRANGE("NS_Version No.", Result);
@@ -460,8 +404,8 @@ page 14021340 "NS_Progress Payment Header"
                     trigger OnAction();
                     begin
                         if CONFIRM(Text014Lbl, false) then
-                             if (Rec."NS_Period To" > 0D) AND (Rec."NS_Requisition Date" > 0D) then //PRJ-1131.NK.1.0 //PRJCTPR-286.PS.1.0 10Jan2024
-                                Rec.UpdatePurchaseOrderLines(Rec, PurchaseHeader, Subcontract) //PRJ-1131.NK.1.0
+                            if "NS_Period To" > 0D then
+                                UpdatePurchaseOrderLines(Rec, PurchaseHeader, Subcontract)
                             else
                                 ERROR(Text013Lbl);
                     end;
@@ -496,17 +440,12 @@ page 14021340 "NS_Progress Payment Header"
                     Image = Copy;
                     Promoted = true;
                     PromotedCategory = Process;
-                    // PRJCTPR-293.HS.1.0 19Jan2024 Start
-                    RunObject = page "NS_Progress PaymentCommentList";
-                    RunPageLink = "NS_No." = field("NS_No."), "NS_Requisition No." = field("NS_Requisition No."), "NS_Version No." = field("NS_Version No.");
-                    ToolTip = 'Copy the comments from one requisition to another or add a new comment for current requisition.';
-                    // PRJCTPR-293.HS.1.0 19Jan2024 End
+
                     trigger OnAction();
                     begin
-                        Rec.CopyCommentLines(Rec); //PRJ-1131.NK.1.0
+                        CopyCommentLines(Rec);
                     end;
                 }
-
             }
             group(Print)
             {
@@ -515,7 +454,6 @@ page 14021340 "NS_Progress Payment Header"
                 {
                     ApplicationArea = All;
                     Caption = 'Progress Payment';
-                    ToolTip = 'This report can also be viewed on word layout using custom report layout option.'; //PE-215.HS.1.0 15Jan2024
                     Image = "Report";
                     Promoted = true;
                     PromotedCategory = "Report";
@@ -523,7 +461,6 @@ page 14021340 "NS_Progress Payment Header"
                     trigger OnAction();
                     begin
                         if NS_Status <> NS_Status::Void then begin
-                            JobsSetup.Get(); //PRJ-1257.NK.1.0 30Mar2022
                             ProgressPaymentHeader.RESET;
                             ProgressPaymentHeader.SETRANGE("NS_No.", "NS_No.");
                             ProgressPaymentHeader.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
@@ -608,21 +545,6 @@ page 14021340 "NS_Progress Payment Header"
             VendorName := '';
             JobName := '';
         end;
-
-        //PE-183.AS.1.0 START
-        if rec."NS_No." <> '' then begin
-            if rec."NS_Manual Retention Amount" = 0 then begin
-                CalcFields(Rec.NS_RetentionBaseAmt);
-                Rec.NS_RetentionAmt := (Rec.NS_RetentionBaseAmt * Rec."NS_Work Retention Percent") / 100;
-                // rec.Modify();//PE-183.AS.2.0 COMMENT
-            end;
-
-            if rec."NS_Manual Retention Amount" <> 0 then begin
-                Rec.NS_RetentionAmt := 0;
-                // rec.Modify();//PE-183.AS.2.0 COMMENT
-            end;
-        end;
-        //PE-183.AS.1.0 END
     end;
 
     trigger OnDeleteRecord(): Boolean;
@@ -737,7 +659,7 @@ page 14021340 "NS_Progress Payment Header"
 
     trigger OnOpenPage();
     begin
-        //SETFILTER(NS_Status, Text054Lbl);//PRJ-1111.AS.1.0
+        SETFILTER(NS_Status, Text054Lbl);
         JobsSetup.GET;
     end;
 
@@ -754,7 +676,7 @@ page 14021340 "NS_Progress Payment Header"
         LineRetention: Boolean;
         GetContractForProgressPay: Report "NS_Get Contact forProgressBill";
         GetPaymentForecast: Report "NS_Get Billing Forecast";
-        SubcontractName: Text[50];
+        // SubcontractName: Text[50];
         JobName: Text[50];
         VendorName: Text[50];
         [InDataSet]
@@ -795,15 +717,21 @@ page 14021340 "NS_Progress Payment Header"
         Text009Lbl: Label 'There are already requisitions for this job.\\Use the new menu to make a new requisition or version.';
         Text010Lbl: Label 'You cannot set the status to VOID. Create a new version or set the value of this version to zero.';
         Text011Lbl: Label 'This function can only be run on Open versions.';
-        // Text013Lbl: Label 'The Period To date is not filled in.'; //PRJCTPR-286.PS.1.0 10Jan2024 Commented
-        Text013Lbl: Label 'The Period To date and  The Requisition Date is not filled in.';//PRJCTPR-286.PS.1.0 10Jan2024 
-        Text014Lbl: Label 'Are you certain you want to update the Purchase Order for this requisition?';
+        Text013Lbl: Label 'The Period To date is not filled in.';
+        // Text014Lbl: Label 'Are you certain you want to update the Purchase Order for this requisition?';
         Text019Lbl: Label 'This is a VOID requisition.';
         Text050Lbl: Label 'Subcontract No.';
         Text051Lbl: Label 'Job No.';
         Text052Lbl: Label 'Buy-from Vendor No.';
         Text053Lbl: Label 'Purchase Order';
         Text054Lbl: Label '<> Void';
+    // >> Upgrade
+    protected var
+        SubcontractName: Text[50];
+        Text014Lbl: Label 'Are you certain you want to update the Purchase Order for this requisition?';
+        Text50000: Label 'You can only create a new Requisition when the current requisition is Invoiced';
+        Text50001: Label 'You can only create a new Version when the current requisition has NOT been Invoiced.';
+    // << Upgrade
 
     procedure GetVendorName();
     begin
@@ -828,8 +756,8 @@ page 14021340 "NS_Progress Payment Header"
                     LineRetention := true;
             until ProgressPaymentLine.NEXT = 0;
 
-        //if LineRetention then //PRJ-1194.NK.1.0 15Mar2022 Block
-        // ERROR(Text008LBL); //PRJ-1194.NK.1.0 15Mar2022 Block
+        if LineRetention then
+            ERROR(Text008LBL);
 
         NS_UpdateLines;
     end;
@@ -862,8 +790,6 @@ page 14021340 "NS_Progress Payment Header"
         ProgressPaymentLine.SETRANGE("NS_Version No.", "NS_Version No.");
         if ProgressPaymentLine.FINDSET then
             repeat
-                if Rec."NS_Work Retention Percent" <> 0 then //PRJ-1194.NK.1.1 30Mar2022
-                    ProgressPaymentLine.Validate("NS_Work Retention Percent", Rec."NS_Work Retention Percent"); //PRJ-1194.NK.1.1 30Mar2022
                 ProgressPaymentLine.VALIDATE(NS_Quantity);
                 MODIFY;
             until ProgressPaymentLine.NEXT = 0;

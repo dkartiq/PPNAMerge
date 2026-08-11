@@ -1,8 +1,7 @@
 pageextension 14021177 NS_GetReturnReceiptLines extends "Get Return Receipt Lines"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Get Return Receipt Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job No.")

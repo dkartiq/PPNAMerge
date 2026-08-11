@@ -87,22 +87,18 @@ page 14021385 "NS_Time Sheet Payroll FactBox"
 
     trigger OnAfterGetRecord();
     begin
-        if not TimeSheetLine.GET(Rec."Time Sheet No.", Rec."Time Sheet Line No.") then begin //PRJ-1131.NK.1.0
-            // SkillClass := '';//PE-68 Dk.1.0 10April2023 Start
-            SkillClassNew := ''; //PE-68 Dk.1.0 10April2023 End
+        if not TimeSheetLine.GET("Time Sheet No.", "Time Sheet Line No.") then begin
+            SkillClass := '';
             WorkTypeCode := '';
         end else begin
-            //PE-68 Dk.1.0 10April2023 Start
-            // SkillClass := TimeSheetLine."NS_Skill Class";
-            SkillClassNew := TimeSheetLine."NS_Skill Class New";
-            //PE-68 Dk.1.0 10April2023 End
+            SkillClass := TimeSheetLine."NS_Skill Class";
             WorkTypeCode := TimeSheetLine."Work Type Code";
         end;
-        if not Resource.GET(Rec."Resource No.") then //PRJ-1131.NK.1.0
+        if not Resource.GET("Resource No.") then
             ResourceName := ''
         else
             ResourceName := Resource.Name;
-        if not Job.GET(Rec."Job No.") then //PRJ-1131.NK.1.0
+        if not Job.GET("Job No.") then
             JobDescription := ''
         else
             JobDescription := Job.Description;
@@ -113,7 +109,6 @@ page 14021385 "NS_Time Sheet Payroll FactBox"
         Job: Record Job;
         Resource: Record Resource;
         SkillClass: Code[10];
-        SkillClassNew: Code[20];//PE-68 Dk.1.0 10April2023
         WorkTypeCode: Code[10];
         JobDescription: Text[50];
         ResourceName: Text[50];

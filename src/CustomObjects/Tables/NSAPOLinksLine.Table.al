@@ -9,7 +9,7 @@ table 14021161 "NS_APO Links Line"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-820.JS.1.0�02Aug2021 | Add fields for get Cost and Revenue code
-    //PRJ-1348.NK.1.0 24May2022 | Add Property
+
     Caption = 'APO Links Line';
 
     fields
@@ -51,7 +51,7 @@ table 14021161 "NS_APO Links Line"
             NotBlank = true;
             TableRelation = "NS_Job Activity".NS_Code WHERE(NS_Type = FIELD("NS_Source Type"));
             DataClassification = CustomerContent;
-            CaptionClass = '50997,0,0'; //PRJ-1348.NK.1.0 24May2022
+
             trigger OnValidate();
             begin
                 if "NS_Source Activity Code" <> xRec."NS_Source Activity Code" then begin
@@ -72,7 +72,7 @@ table 14021161 "NS_APO Links Line"
             TableRelation = "NS_Job Process".NS_Code WHERE(NS_Type = FIELD("NS_Source Type"),
                                                       "NS_Activity Code" = FIELD("NS_Source Activity Code"));
             DataClassification = CustomerContent;
-            CaptionClass = '50997,1,0'; //PRJ-1348.NK.1.0 24May2022
+
             trigger OnValidate();
             begin
                 if "NS_Source Process Code" <> xRec."NS_Source Process Code" then
@@ -92,7 +92,7 @@ table 14021161 "NS_APO Links Line"
                                                         "NS_Activity Code" = FIELD("NS_Source Activity Code"),
                                                         "NS_Process Code" = FIELD("NS_Source Process Code"));
             DataClassification = CustomerContent;
-            CaptionClass = '50997,2,0'; //PRJ-1348.NK.1.0 24May2022
+
             //PRJ-820.JS.1.0�02Aug2021-Start
             trigger OnValidate()
             begin
@@ -135,7 +135,7 @@ table 14021161 "NS_APO Links Line"
             NotBlank = true;
             TableRelation = "NS_Job Activity".NS_Code WHERE(NS_Type = FIELD("NS_Destination Type"));
             DataClassification = CustomerContent;
-            CaptionClass = '50996,0,0'; //PRJ-1348.NK.1.0 24May2022
+
             trigger OnValidate();
             begin
                 if "NS_Destination Activity Code" <> xRec."NS_Destination Activity Code" then begin
@@ -156,7 +156,7 @@ table 14021161 "NS_APO Links Line"
             TableRelation = "NS_Job Process".NS_Code WHERE(NS_Type = FIELD("NS_Destination Type"),
                                                       "NS_Activity Code" = FIELD("NS_Destination Activity Code"));
             DataClassification = CustomerContent;
-            CaptionClass = '50996,1,0'; //PRJ-1348.NK.1.0 24May2022
+
             trigger OnValidate();
             begin
                 if "NS_Destination Process Code" <> xRec."NS_Destination Process Code" then
@@ -176,7 +176,6 @@ table 14021161 "NS_APO Links Line"
                                                         "NS_Activity Code" = FIELD("NS_Destination Activity Code"),
                                                         "NS_Process Code" = FIELD("NS_Destination Process Code"));
             DataClassification = CustomerContent;
-            CaptionClass = '50996,2,0'; //PRJ-1348.NK.1.0 24May2022
             trigger OnValidate()
             begin
                 //PRJ-820.JS.1.0�02Aug2021-Start                   
@@ -217,7 +216,7 @@ table 14021161 "NS_APO Links Line"
                                                         "NS_Process Code" = FIELD("NS_Source Process Code"),
                                                         "NS_Operation Code" = field("NS_Source Operation Code"));
             DataClassification = CustomerContent;
-            CaptionClass = '50997,3,0'; //PRJ-1348.NK.1.0 24May2022
+
             trigger OnValidate()
             begin
                 "NS_Cost Source Task Code" := '';
@@ -233,7 +232,6 @@ table 14021161 "NS_APO Links Line"
                                                         "NS_Process Code" = FIELD("NS_Destination Process Code"),
                                                         "NS_Operation Code" = field("NS_Destination Operation Code"));
             DataClassification = CustomerContent;
-            CaptionClass = '50996,3,0'; //PRJ-1348.NK.1.0 24May2022
             trigger OnValidate()
             begin
                 //PRJ-820.JS.1.0�02Aug2021-Start                   

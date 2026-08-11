@@ -23,22 +23,6 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
     //PRJ-659.RM.1.0 06-OCT-2021 | Update Calformula of field.
     //PRJ-979.GK.1.0 12Oct | Add Table Relation.
     //PRJ-973.GK.1.0 13Oct2021 | Add one field
-    //PRJ-1087.JS.1.0 18Dec2021 | Add one field
-    //PRJ-1098.NK.1.0 15Feb2022 | Add One Field
-    //PRJ-1262.RM.1.0 28March2022 | Added a field
-    //PRJ-1332.GK.1.0 25Apr2022 | Added a field
-    //PRJ-1351.RM.1.0 04May2022 | Modified field's caption
-    //PRJ-1299.JS.1.0 18APR2022 | Add one field
-    //PRJ-1349.JS.1.0 15MAY2022 | Add on field 
-    //PRJ-1348.NK.1.0 21Jun2022 | Add Field
-    //PRJ-1510.NK.1.0 21Jul2022 | Add Field
-    //PRJ-1617.RM.1.0 07Sep2022 | Added some code
-    //PE-132.RM.1.0 19July2023 | Added some code
-    //PE-167.VC.1.0 18Sep2023 | Job -> status -> WIP Message -> Setup -> to disable message.
-    //PE-210.HS.1.0 23Nov2023| Add Code
-    // PE-229.HS.1.0 14Dec2023 | Add field
-    //PE-247.HS.1.0 6Feb2024 | Added code
-
     fields
     {
         field(14021101; "NS_Cost Category Required"; Boolean)
@@ -199,11 +183,6 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             Caption = 'Post Labor Burden Rate To Job';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PE-132.RM.1.0 19July2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in upcoming build';
-            ObsoleteTag = 'Will be removed in upcoming build';
-            //PE-132.RM.1.0 19July2023 End
 
         }
         field(14021124; "NS_Warning on Zero Multiplier"; Boolean)
@@ -211,11 +190,6 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             Caption = 'Warning on Zero Multiplier';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PE-132.RM.1.0 19July2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in upcoming build';
-            ObsoleteTag = 'Will be removed in upcoming build';
-            //PE-132.RM.1.0 19July2023 End
         }
         field(14021125; "NS_Extended WIP"; Boolean)
         {
@@ -258,16 +232,14 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021131; "NS_Labor to JobOffset - Credit"; Code[20])
         {
-            // Caption = 'Labor to Job Offset - Credit'; //PE-247.HS.1.0 5Feb2024 Commented
-            Caption = 'Job Labor Offset G/L'; //PE-247.HS.1.0 5Feb2024 
+            Caption = 'Labor to Job Offset - Credit';
             Description = 'ProjectPro';
             TableRelation = "G/L Account";
             DataClassification = CustomerContent;
         }
         field(14021132; "NS_Post Job Labor to G/L"; Boolean)
         {
-            // Caption = 'Post Job Labor to G/L'; //PE-247.HS.1.0 5Feb2024 Commented
-            Caption = 'Auto Post Job Labor to G/L';  //PE-247.HS.1.0 5Feb2024
+            Caption = 'Post Job Labor to G/L';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
         }
@@ -303,11 +275,9 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021135; "NS_Labor to Job Batch Name"; Code[10])
         {
-            // Caption = 'Labor to Job Batch Name'; //PE-247.HS.1.0 5Feb2024 Commented
-            Caption = 'Labor G/L Journal Batch'; //PE-247.HS.1.0 5Feb2024
+            Caption = 'Labor to Job Batch Name';
             Description = 'ProjectPro';
-            // TableRelation = "Gen. Journal Batch".Name WHERE("Journal Template Name" = CONST('GENERAL')); //PE-247.HS.1.0 5Feb2024 Commneted
-            TableRelation = "Gen. Journal Batch".Name where("Journal Template Name" = field("NS_Labor G/L Journal Template"));
+            TableRelation = "Gen. Journal Batch".Name WHERE("Journal Template Name" = CONST('GENERAL'));
             DataClassification = CustomerContent;
         }
         field(14021136; "NS_Retention Receivable Ledger"; Code[20])
@@ -328,7 +298,7 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         {
             Caption = 'Calc Receivable Retention Before Tax';
             Description = 'ProjectPro';
-            //TableRelation = "NS_Retention Ledger Code".NS_Code;//PRJ-1684.AS.1.0 COMMENTED
+            TableRelation = "NS_Retention Ledger Code".NS_Code;
             DataClassification = CustomerContent;
         }
         field(14021139; "NS_Calc Payable Ret Before Tax"; Boolean)
@@ -401,24 +371,11 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
         }
-        //PRJ-1405.AS.1.0 02MAY2022 START
-        field(14021147; "NS_Force change Work UOM"; Boolean)
-        {
-            Caption = 'Force change Work UOM';
-            Description = 'Force change Work UOM';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1405.AS.1.0 02MAY2022 END
         field(14021150; "NS_KPI CalculationStartingDate"; Date)
         {
             Caption = 'KPI Calculation Starting Date';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PE-132.RM.1.0 19July2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in upcoming build';
-            ObsoleteTag = 'Will be removed in upcoming build';
-            //PE-132.RM.1.0 19July2023 End
 
             trigger OnValidate();
             begin
@@ -437,11 +394,6 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             Caption = 'KPI Calculation Ending Date';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PE-132.RM.1.0 19July2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in upcoming build';
-            ObsoleteTag = 'Will be removed in upcoming build';
-            //PE-132.RM.1.0 19July2023 End
             trigger OnValidate();
             begin
                 //ProjectPro - start
@@ -618,40 +570,21 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             Description = 'Rev. Rec. G/L Journal Template';
             TableRelation = "Gen. Journal Template".Name;
             DataClassification = CustomerContent;
-            //PRJ-1546.GK.1.0 08Aug2022 start
-            //ObsoleteState = Pending; //PRJ-1546.GK.2.0 24Aug2022
-            ObsoleteState = Removed;//PRJ-1546.GK.2.0 24Aug2022
-            ObsoleteReason = 'This field is marked for removal & replace from another field because this field make descreprency in code due to name';
-            ObsoleteTag = '20.0.5.41354';
-            //PRJ-1546.GK.1.0 08Aug2022 end
         }
-        //PRJ-1546.GK.1.0 08Aug2022 start
-        field(14021433; "NS_Burden G/L Jour. Temp Rev."; Code[10])
-        {
-            Caption = 'Rev. Rec. G/L Journal Template';
-            Description = 'Rev. Rec. G/L Journal Template';
-            TableRelation = "Gen. Journal Template".Name;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1546.GK.1.0 08Aug2022 end
         field(14021177; "NS_Burden G/L Journal Batch Rev."; Code[10])//CTSI-274.MS.1.0 25MARCH2021
         {
             Caption = 'Rev. Rec. G/L Journal Batch';
             Description = 'Rev. Rec. G/L Journal Batch';
-            TableRelation = "Gen. Journal Batch".Name WHERE("Journal Template Name" = field("NS_Burden G/L Jour. Temp Rev."));//PRJ-1546.GK.1.0 08Aug2022\replace template new field
+            TableRelation = "Gen. Journal Batch".Name WHERE("Journal Template Name" = field("NS_Burden G/L Journal Template Rev."));
             DataClassification = CustomerContent;
         }
         field(14021190; "NS_Job Calendar Code"; Code[10])
         {
             Caption = 'Job Calendar Code';
             Description = 'ProjectPro';
-            //PRJCTPR-308.DK.1.0 11June2024 Start
-            // TableRelation = IF ("NS_Job Calendar Source" = CONST("Business Central Calendar")) "Base Calendar".Code //PRJ-1070.RM.1.0 08Dec2021
-            TableRelation = IF ("NS_JobCalendarSource" = CONST("Business Central Calendar")) "Base Calendar".Code
+            TableRelation = IF ("NS_Job Calendar Source" = CONST("Base Navision Calendar")) "Base Calendar".Code
             ELSE
-            // IF ("NS_Job Calendar Source" = CONST("Job Calendar")) "NS_Job Calendar".NS_Code;
-            IF ("NS_JobCalendarSource" = CONST("Job Calendar")) "NS_Job Calendar".NS_Code;
-            //PRJCTPR-308.DK.1.0 11June2024 End
+            IF ("NS_Job Calendar Source" = CONST("Job Calendar")) "NS_Job Calendar".NS_Code;
             DataClassification = CustomerContent;
         }
         field(14021191; "NS_Job Calendars Not Used"; Boolean)
@@ -662,16 +595,12 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021192; "NS_Job Calendar Source"; Option)
         {
-            Caption = 'Job Calendar Source (Obsolete)';
+            Caption = 'Job Calendar Source';
             Description = 'ProjectPro';
             OptionCaption = 'Base Navision Calendar,Job Calendar';
             OptionMembers = "Base Navision Calendar","Job Calendar";
             DataClassification = CustomerContent;
-            //PRJCTPR-308.DK.1.0 11June2024 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in next build because the field is converted from type option to Enum';
-            ObsoleteTag = 'ProjectPro upcoming release 24.0.XXX.00';
-            //PRJCTPR-308.DK.1.0 11June2024 End
+
             trigger OnValidate();
             begin
                 //ProjectPro - start
@@ -685,41 +614,12 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         field(14021193; "NS_Job Calendar Type"; Option)
         {
             CalcFormula = Lookup("Jobs Setup"."NS_Job Calendar Source");
-            Caption = 'Job Calendar Type (Obsolete)';
+            Caption = 'Job Calendar Type';
             Description = 'ProjectPro';
             FieldClass = FlowField;
             OptionCaption = 'Base Navision Calendar,Job Calendar';
             OptionMembers = "Base Navision Calendar","Job Calendar";
-            //PRJCTPR-308.DK.1.0 08Feb2023 Start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in next build because the field is converted from type option to Enum';
-            ObsoleteTag = 'ProjectPro upcoming release 24.0.XXX.00';
-            //PRJCTPR-308.DK.1.0 11June2024 End
         }
-        //PRJCTPR-308.DK.1.0 11June2024 Start
-        field(14021196; "NS_JobCalendarSource"; Enum NS_JobCalenderType)
-        {
-            Caption = 'Job Calendar Source';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            trigger OnValidate();
-            begin
-                //ProjectPro - start
-                if "NS_JobCalendarSource" <> xRec."NS_JobCalendarSource" then begin
-                    "NS_Job Calendar Code" := '';
-                    MESSAGE(Text14021101_Msg);
-                end;
-                //ProjectPro - end
-            end;
-        }
-        field(14021195; NS_JobCalendarType; Enum NS_JobCalenderType)
-        {
-            CalcFormula = Lookup("Jobs Setup"."NS_JobCalendarSource");
-            Caption = 'Job Calendar Type';
-            Description = 'ProjectPro';
-            FieldClass = FlowField;
-        }
-        //PRJCTPR-308.DK.1.0 11June2024 End
         field(14021194; "NS_Change Order No. Separator"; Text[10])
         {
             Caption = 'Change Order No. Separator';
@@ -856,11 +756,9 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021329; "NS_Prog. Bill Gen. ProdPostGr."; Code[10])
         {
-            ObsoleteState = Pending;//PRJ-1684.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed in next build';//PRJ-1684.AS.1.0 Obselete
             Caption = 'Progress Billing Gen. Prod. Post. Gr.';
             Description = 'ProjectPro';
-            //TableRelation = "Gen. Product Posting Group".Code;//PRJ-1684.AS.1.0 Commented
+            TableRelation = "Gen. Product Posting Group".Code;
             DataClassification = CustomerContent;
         }
         field(14021330; "NS_ProgressBillStandardInvoice"; Integer)
@@ -953,22 +851,11 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021342; "NS_Prog Pay Gen. Prod. PostGr."; Code[10])
         {
-            ObsoleteState = Pending;//PE-233.AS.1.0 ADD
-            ObsoleteReason = 'Will be removed in next build';//PE-233.AS.1.0 ADD
             Caption = 'Prog Pay Gen. Prod. Post Gr.';
             Description = 'ProjectPro';
             TableRelation = "Gen. Product Posting Group".Code;
             DataClassification = CustomerContent;
         }
-        //PE-233.AS.1.0 ADD START
-        field(14021293; "NS_Prog Pay Gen.ProdPostGr.New"; Code[20])
-        {
-            Caption = 'Prog Pay Gen. Prod. Post Gr.';
-            Description = 'ProjectPro';
-            TableRelation = "Gen. Product Posting Group".Code;
-            DataClassification = CustomerContent;
-        }
-        //PE-233.AS.1.0 ADD END
         field(14021343; "NS_Prog Pay Standard Invoice"; Integer)
         {
             Caption = 'Progress Payment Std Inv Report ID';//PRJ-400.AM.1.0 Caption Changed 
@@ -1088,31 +975,6 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             TableRelation = "No. Series";
             DataClassification = CustomerContent;
         }
-
-        //PRJ-1684.AS.1.0 START
-        field(14021416; "NS_ProgBillGenProdPostGr New"; Code[20])
-        {
-            Caption = 'Progress Billing Gen. Prod. Post. Gr.';
-            Description = 'ProjectPro';
-            TableRelation = "Gen. Product Posting Group".Code;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1684.AS.1.0 END
-
-        //PRJ-1645.AS.1.0 START
-        field(14021417; "NS_EnblMrkupOnJPLCostCatg"; boolean)
-        {
-            Caption = 'Enable Markup on JPL Cost Category';
-            Description = 'Enable Markup on JPL Cost Category';
-            DataClassification = CustomerContent;
-        }
-        field(14021418; "NS_LockMultiMrkpUpdateonJPL"; boolean)
-        {
-            Caption = 'Lock Multi Markup Update on JPL';
-            Description = 'Lock Multi Markup Update on JPL';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1645.AS.1.0 END
         field(14021405; "NS_Job Attribute No. Series"; Code[10])
         {
             Caption = 'Attribute No. Series';
@@ -1365,8 +1227,7 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021499; "NS_LaborAllocated toJob -Debit"; Code[20])
         {
-            // Caption = 'Labor Allocated to Job - Debit'; //PE-247.HS.1.0 5Feb2024 Commented
-            Caption = 'Job Labor Debit G/L';  //PE-247.HS.1.0 5Feb2024
+            Caption = 'Labor Allocated to Job - Debit';
             Description = 'ProjectPro';
             TableRelation = "G/L Account";
             DataClassification = CustomerContent;
@@ -1379,8 +1240,7 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         }
         field(14021478; "NS_Job Cost Cat.for Rev.LaborEnt."; Code[10])
         {
-            // Caption = 'Job Cost Cat.for Rev.Labor Ent.'; //PE-247.HS.1.0 5Feb2024 Commented
-            Caption = 'Job Cost Category for Labor Reversal'; //PE-247.HS.1.0 5Feb2024  
+            Caption = 'Job Cost Cat.for Rev.Labor Ent.';
             Description = 'PPAL-64.MS.1.0';
             TableRelation = "NS_Job Cost Category";
             DataClassification = CustomerContent;
@@ -1404,14 +1264,6 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
             Caption = 'Job Segment Mandatory';
         }
         //TM-10.AM.1.0 end
-        //PE-81.Dk.1.0 Start
-        field(14021411; "NS_FA Job Segment Mandatory"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'FA Job Segment Code Mandatory';
-        }
-        //PE-81.Dk.1.0 End
-
         //PRJ-490.AM.1.0 start
         field(14021404; "NS_FA Job Template Name"; Text[50])
         {
@@ -1467,500 +1319,10 @@ tableextension 14021204 NS_JobSetup extends "Jobs Setup"
         field(14021492; "NS_Notify Insurance Exp"; Boolean)
         {
             DataClassification = CustomerContent;
-            //Caption = 'Insurance Expiration Notify';//PRJ-1351.RM.1.0 commented
-            Caption = 'Disable Insurance Expiration Notify';//PRJ-1351.RM.1.0
+            Caption = 'Insurance Expiration Notify';
             InitValue = false;
         }
         //PRJ-1040.AS.1.0 END
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        field(14021493; "NS_Item Quote Costs"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Item Quote Costs';
-        }
-
-        field(14021494; "NS_Labour Rate"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            caption = 'Use Labor Rate';
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-
-        //PRJ-1443.AS.1.0 START
-        field(14021483; "NS_EnblGLNResGMCalc"; Boolean)
-        {
-            Caption = 'Enable Resources in Gross Marg. Calc.';
-            Description = 'Enable Resources in Gross Marg. Calc.';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1443.AS.1.0 END
-
-        //PRJ-1361.AS.1.0 START
-        field(14021484; "NS_DelvArch Rev No."; Code[20])
-        {
-            Caption = 'Delivery Ticket Archive Revision No.';
-            Description = 'Delivery Archive Revision No.';
-            TableRelation = "No. Series".Code;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1361.AS.1.0 END
-
-        //PRJ-1079.GK.1.0 14Dec2021 start
-        field(14021487; "NS_Enable CalcPlanOnNonInvItem"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable PP Calc Plan for Non Inv Item';
-        }
-        //PRJ-1079.GK.1.0 14Dec2021 end
-
-
-        //PRJ-1061.AS.1.0 START
-        field(14021489; "NS_EnableItemNosForProgBill"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable Item Nos. For Progress Billing';
-            InitValue = false;
-        }
-        //PRJ-1061.AS.1.0 END
-
-        //PRJ-1087.JS.1.0 18Dec2021
-        field(14021488; "NS_Flow Job Card Dimension"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable to Flow Dimension From Job Card';
-            InitValue = false;
-        }
-        //PRJ-1098.NK.1.0 15Feb2022 Start
-        field(14021486; "NS_JFW Batch Document No."; Code[20])
-        {
-            Caption = 'JFW Batch Document No.';
-            Description = 'ProjectPro';
-            TableRelation = "No. Series".Code;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1098.NK.1.0 15Feb2022 End
-        //PRJ-1098.NK.1.1 24Mar2022 Start
-        field(14021485; "NS_AutoRunRevRecPOCBatch"; Boolean)
-        {
-            Caption = 'Auto Run Revenue Rec POC Batch';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1098.NK.1.1 24Mar2022 End
-        //PRJ-1189.GK.1.0 06apr2022 start
-        field(14021240; "NS_Enab. Budg.on Contract Date"; Boolean)
-        {
-            Caption = 'Enable Forecast Budget Cost on Contract Date';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1189.GK.1.0 06apr2022 end
-
-        //PRJ-1262.RM.1.0 start
-        field(14021389; "NS_Project Pro KPI"; Boolean)
-        {
-            Caption = 'ProjectPro KPI';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1262.RM.1.0 end
-        //PRJ-1332.GK.1.0 25Apr2022 start
-        field(14021390; "NS_Res Amt in Progbill Inv"; Boolean)
-        {
-            Caption = 'Restrict Amount Changes in Progress Billing Invoice';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1332.GK.1.0 25Apr2022 end
-        //PRJ-1299.JS.1.0 18APR2022 - Start
-        field(14021391; "NS_Forecast By Task Total"; Boolean)
-        {
-            Caption = 'Forecast By Totals';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PRJ-1299.JS.1.0 18APR2022 - end
-        //PRJ-1349.JS.1.0 15MAY2022 - 
-        field(14021392; "NS_Budgeted Cost on Projection"; Boolean)
-        {
-            Caption = 'Budgeted Cost on Job Projection';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PRJ-1349.JS.1.0 15MAY2022 - end
-
-        //PRJ-1348.NK.1.0 21Jun2022 Start
-        field(14021395; "NS_Activate Task Pick List"; Boolean)
-        {
-            // Caption = 'Activate Task Pick List'; //PRJ-1617.RM.1.0 commented
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-            trigger OnValidate()
-            var
-                APOSetup: Record NS_APOSetup;
-                APOCaptMast: Record NS_APOCaptionMaster;
-                APOCaptMast2: Record NS_APOCaptionMaster;
-            begin
-                if "NS_Activate Task Pick List" then begin
-                    APOCaptMast.Reset();
-                    APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Activity);
-                    if APOCaptMast.IsEmpty() then begin
-                        APOCaptMast2.Init();
-                        APOCaptMast2.NS_Type := APOCaptMast2.NS_Type::Activity;
-                        APOCaptMast2.Validate(NS_Code, 'Activity Code');
-                        APOCaptMast2.Insert();
-                    end;
-                    APOCaptMast.Reset();
-                    APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Operation);
-                    if APOCaptMast.IsEmpty() then begin
-                        APOCaptMast2.Init();
-                        APOCaptMast2.NS_Type := APOCaptMast.NS_Type::Operation;
-                        APOCaptMast2.Validate(NS_Code, 'Operation Code');
-                        APOCaptMast2.Insert();
-                    end;
-                    APOCaptMast.Reset();
-                    APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Process);
-                    if APOCaptMast.IsEmpty() then begin
-                        APOCaptMast2.Init();
-                        APOCaptMast2.NS_Type := APOCaptMast.NS_Type::Process;
-                        APOCaptMast2.Validate(NS_Code, 'Process Code');
-                        APOCaptMast2.Insert();
-                    end;
-                    APOCaptMast.Reset();
-                    APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Section);
-                    if APOCaptMast.IsEmpty() then begin
-                        APOCaptMast2.Init();
-                        APOCaptMast2.NS_Type := APOCaptMast.NS_Type::Section;
-                        APOCaptMast2.Validate(NS_Code, 'Section Code');
-                        APOCaptMast2.Insert();
-                    end;
-                    Commit();
-                    if APOSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-                    if APOSetup."Activity Code" = '' then begin
-                        APOCaptMast.Reset();
-                        APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Activity);
-                        if APOCaptMast.FindFirst() then begin
-                            APOSetup."Activity Code" := APOCaptMast.NS_Code;
-                            APOSetup.Modify();
-                        end;
-                    end;
-                    if APOSetup."Process Code" = '' then begin
-                        APOCaptMast.Reset();
-                        APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Process);
-                        if APOCaptMast.FindFirst() then begin
-                            APOSetup."Process Code" := APOCaptMast.NS_Code;
-                            APOSetup.Modify();
-                        end;
-                    end;
-                    if APOSetup."Operation Code" = '' then begin
-                        APOCaptMast.Reset();
-                        APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Operation);
-                        if APOCaptMast.FindFirst() then begin
-                            APOSetup."Operation Code" := APOCaptMast.NS_Code;
-                            APOSetup.Modify();
-                        end;
-                    end;
-                    if APOSetup."Section Code" = '' then begin
-                        APOCaptMast.Reset();
-                        APOCaptMast.SetRange(NS_Type, APOCaptMast.NS_Type::Section);
-                        if APOCaptMast.FindFirst() then begin
-                            APOSetup."Section Code" := APOCaptMast.NS_Code;
-                            APOSetup.Modify();
-                        end;
-                    end;
-                end;
-            end;
-        }
-        //PRJ-1348.NK.1.0 21Jun2022 End
-
-        //PRJ-1510.NK.1.0 21Jul2022 Start
-        field(14021432; "NS_Enable Job Address"; Boolean)
-        {
-            Caption = 'Enable Job Address';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PRJ-1510.NK.1.0 21Jul2022 End
-
-        //PRJCTPR-62.JS.1.0 16FEB2023 - Start
-        field(14021439; "NS_Forecast Force Completed"; Boolean)
-        {
-            Caption = 'Enable this field to force Completed the Job forecast';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PRJCTPR-62.JS.1.0 16FEB2023 - end��
-
-        //PE-47.PS.1.0 06March2023 Start
-
-        field(14021307; "NS_Enable Job Backlog Feature."; Boolean)
-        {
-            Caption = 'Enable Job Backlog Feature.';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        field(14021308; "NS_Inclued SubJob & Change Ord"; Boolean)
-        {
-            Caption = 'Include Sub Job & Change Order.';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PE-47.PS.1.0 06March2023 End
-        //PRJCTPR-136.NC.1.0 28June2023 Start
-        field(14021309; "NS_Transfer Qty of Units to SI"; Boolean)
-        {
-            Caption = 'Transfer Quantity of Units to Sales invoice';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PRJCTPR-136.NC.1.0 28June2023 End
-        //PE-130.NC.1.0 17July2023 Start
-        field(14021358; "NS_Default Draw Pay Terms Code"; Code[10])
-        {
-            Caption = 'Default Draw Payment Terms Code';
-            DataClassification = CustomerContent;
-            TableRelation = "Payment Terms";
-            trigger OnValidate()
-            var
-                PaymentTerms: Record "Payment Terms";
-                ZeroDateFormula: DateFormula;
-            begin
-                if PaymentTerms.Get("NS_Default Draw Pay Terms Code") then
-                    "NS_Draw Default Payment Terms" := PaymentTerms."Due Date Calculation"
-                else
-                    "NS_Draw Default Payment Terms" := ZeroDateFormula;
-            end;
-        }
-        //PE-130.NC.1.0 17July2023 End
-        //PE-118.NC.1.0 03Aug2023 Start
-        field(14021423; "NS_Enable Get Job Planning Lin"; Boolean)
-        {
-            Caption = 'Enable Get Job Planning Line';
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-        }
-        //PE-118.NC.1.0 03Aug2023 End
-
-        //PE-136.JS.1.0 03Aug2023 - Start
-        field(14021429; "NS_RevRec Batch No. Series"; Code[20])
-        {
-            Caption = 'Rev. Rec. Batch No. Series';
-            DataClassification = CustomerContent;
-            TableRelation = "No. Series";
-        }
-        //PE-136.JS.1.0 03Aug2023 - end
-
-        //PRJCTPR-147.NK.1.0 start 17Aug2023
-        field(14021479; "NS_Change Req No. Series"; Code[20])
-        {
-            Caption = 'Change Req Nos.';
-            DataClassification = CustomerContent;
-            TableRelation = "No. Series";
-        }
-        //PRJCTPR-147.NK.1.0 end 17Aug2023
-        //PE-85.DK.1.0 04Sep2023 Start
-        field(14021431; "NS_Advance Cust Lien Waiver"; Boolean)
-        {
-            Caption = 'Advance Customer Lien Waiver';
-            DataClassification = CustomerContent;
-        }
-        //PE-85.DK.1.0 04Sep2023 End
-        //PE-167.VC.1.0 18Sep2023 Start
-        field(14021201; "NS_Skip Recalculate JobWIP"; Boolean)
-        {
-            // Caption = 'Skip WIP Calc. on Completed Jobs';//PE-167.VC.1.1 20Sep2023 Commented
-            Caption = 'Skip WIP Calc. On Job Status Changing';//PE-167.VC.1.1 20Sep2023 //PE-167.VC.1.4 03Oct2023
-            DataClassification = CustomerContent;
-        }
-        //PE-167.VC.1.0 18Sep2023 End
-        //PRJCTPR-192.DK.1.0 Start
-        field(14021451; "NS_Sell-to Cust_Ship-to Code"; Boolean)
-        {
-
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-192.DK.1.0 END
-        //PE-168.PS.1.0 06Oct2023 Start
-        field(14021279; "NS_Daliy Job Doc No."; Code[20])
-        {
-            DataClassification = CustomerContent;
-            TableRelation = "No. Series".Code;
-        }
-        //PE-168.PS.1.0 06Oct2023 End 
-        //PE-177.DK.1.0 10Nov2023 Start
-        field(14021480; "NS_SubConChange Req No. Series"; Code[20])
-        {
-            Caption = 'SubContract Change Req Nos.';
-            DataClassification = CustomerContent;
-            TableRelation = "No. Series";
-        }
-        // PE-177.DK.1.0 10Nov2023 End
-
-        //PE-210.HS.1.0 23Nov2023 Start
-        field(14021278; NS_CostExceedsColor; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Use Color Indicators for Line Entries';
-
-        }
-        //PE-210.HS.1.0 23Nov2023 End
-
-        // PE-229.HS.1.0 14Dec2023 Start
-        field(14021277; "NS_Disable Qty for % Method"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Disable Qty. Validation for % Method';
-        }
-        // PE-229.HS.1.0 14Dec2023 End
-
-        //PE-249.JS.1.0 08FEB2024 - Start
-        field(14021225; "NS_Mandate Revenue Category"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Mandate Revenue Category';
-        }
-        //PE-249.JS.1.0 08FEB2024 - end        
-
-        //PE-246.HS.1.0 1Feb2024 Start
-        field(14021276; "NS_Change Ordr NumberingFormat"; Text[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Sub Levels Numbering Format';
-        }
-
-        //PE-246.HS.1.0 1Feb2024 End
-
-        //PE-247.HS.1.0 6Feb2024 Start
-        field(14021274; "NS_Enable Job Labor to G/L"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable Job Labor to G/L';
-        }
-        field(14021273; "NS_Labor Job Journal Template"; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Labor Job Journal Template';
-            TableRelation = "Job Journal Template".Name;
-        }
-        field(14021272; "NS_Labor Job Journal Batch"; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Labor Job Journal Batch';
-            TableRelation = "Job Journal Batch".Name where("Journal Template Name" = field("NS_Labor Job Journal Template"));
-        }
-        field(14021271; "NS_Labor G/L Journal Template"; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Labor G/L Journal Template';
-            TableRelation = "Gen. Journal Template" where(Type = filter(General));
-        }
-        //PE-247.HS.1.0 6Feb2024 End
-        //PE-272.JS.1.0 14MAR2024 - Start
-        field(14021280; "NS_Enable POC Method Change"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable To Change POC Method on Job';
-        }
-        //PE-272.JS.1.0 14MAR2024 - end
-        //PE-273.JS.1.0 14MAR2024 - Start 
-        field(14021281; "NS_Enable Change Dim. on JPL"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable To Change Dim. on Job Planning Line';
-        }
-        //PE-273.JS.1.0 14MAR2024 - end
-        //PRJCTPR-346.JS.1.0 31MAR2024 - Start 
-        field(14021282; "NS_Disable RevCat FactBox"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Disable Revenue Category FactBox on Job Card';
-        }
-        //PRJCTPR-346.JS.1.0 31MAR2024 - end
-
-        //PE-271.PS.2.0 4April2024 Start 
-        field(14021283; "NS_Rev Rec Reference No."; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Rev Rec Reference No.';
-            TableRelation = "No. Series";
-        }
-        //PE-271.PS.2.0 4April2024 End
-        //PE-281.JS.1.0 18APR2024 - Start
-        field(14021284; "NS_Job Default POC Method"; enum NS_POCMethod)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Job Default POC Method';
-        }
-        //PE-281.JS.1.0 18APR2024 - End
-        //PE-287.JS.1.0 18APR2024 - Start
-        field(14021285; "NS_UpdJFWForecastCompCostOnJT"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable JFW Forecasted Completed Cost on JTL';
-
-            //PE-299.JS.1.0 21MAY2024-Start
-            trigger OnValidate()
-            begin
-                if "NS_UpdJFWForecastCompCostOnJT" = false then
-                    "NS_Push-OrV2JFWForecastedonJTL" := false;
-            end;
-            //PE-299.JS.1.0 21MAY2024-end
-        }
-        //PE-287.JS.1.0 18APR2024 - end        
-        //PE-299.JS.1.0 17MAY024-Start
-        field(14021286; "NS_Push-OrV2JFWForecastedonJTL"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Push Override value to JFW Forecasted on JTL';
-
-            trigger OnValidate()
-            begin
-                if "NS_Push-OrV2JFWForecastedonJTL" = true then
-                    if "NS_UpdJFWForecastCompCostOnJT" = false then
-                        Error('Please ensure that "Enable JFW Forecasted Completed Cost on JTL" setup is enabled.');
-            end;
-        }
-        //PE-299.JS.1.0 17MAY024-end
-        //PE-301.NC.1.0 10Jun2024 Start
-        field(14021287; "NS_Pur/Sale UOM for B&B JPL"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Pur/Sale UOM for B&B JPL';
-        }
-        //PE-301.NC.1.0 10Jun2024 End
-        //PE-312.JS.1.0 11Jun2024-Start
-        field(14021288; "NS_AllowNegEst. Cost2Complete"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Allow Negative Est. Cost to Complete on JFW';
-
-            trigger OnValidate()
-            var
-                NSUserSetup: Record "User Setup";
-            begin
-                if "NS_AllowNegEst. Cost2Complete" = true then begin
-                    if NSUserSetup.get(UserId) then
-                        if NSUserSetup."NS_Allow NegEst. Cost2Complete" = false then
-                            error('Please connect your system administartor. Need admin rights.');
-                end;
-            end;
-        }
-        //PE-312.JS.1.0 11Jun2024-end
-        //PE-225.PS.1.0 05June2024 Start
-        field(14021289; "NSAuto Apply Retetion Billing"; Boolean)
-        {
-            Caption = 'Auto Apply Retention Billing';
-            DataClassification = CustomerContent;
-
-        }
-        //PE-225.PS.1.0 05June2024 End
-        //PE-323 AT.01 03July2024 Start
-        field(14021188; "NS_Explode Linked Resource"; Boolean)
-        {
-            Caption = 'Explode All Linked Resource';
-            DataClassification = CustomerContent;
-        }
-        //PE-323 AT.01 03July2024 End
     }
 
     var

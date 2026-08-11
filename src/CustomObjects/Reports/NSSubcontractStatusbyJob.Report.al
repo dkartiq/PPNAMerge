@@ -91,8 +91,7 @@ report 14021301 "NS_Subcontract Status by Job"
             dataitem(Header; NS_Subcontract)
             {
                 DataItemLink = "NS_Job No." = FIELD("No.");
-                //  DataItemTableView = SORTING("NS_No.") ORDER(Ascending); //PE-177.DK.1.0 10Nov2023
-                DataItemTableView = SORTING("NS_No.") ORDER(Ascending) where("NS_Subcon Class" = filter(<> 'Change Request'));//PE-177.DK.1.0 10Nov2023
+                DataItemTableView = SORTING("NS_No.") ORDER(Ascending);
                 RequestFilterFields = "NS_No.";
                 column(Job_No; "NS_Job No.")
                 {
@@ -295,7 +294,7 @@ report 14021301 "NS_Subcontract Status by Job"
 
                 trigger OnPreDataItem();
                 begin
-                    //  CurrReport.CREATETOTALS(TotalToPrintBudgetedCost, TotalToPrintInvoicedAmount, TotalToPrintRetentionAmount, TotalToPrintPaymentMade); //PRJCTPR-101.NC.1.0 25Apr2023 Block
+                    CurrReport.CREATETOTALS(TotalToPrintBudgetedCost, TotalToPrintInvoicedAmount, TotalToPrintRetentionAmount, TotalToPrintPaymentMade);
                 end;
             }
         }

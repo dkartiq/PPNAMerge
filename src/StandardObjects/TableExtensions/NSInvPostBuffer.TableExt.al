@@ -1,19 +1,13 @@
-/// <summary>
-/// TableExtension NS_InvPostBuffer (ID 14021112) extends Record Invoice Post. Buffer.
-/// </summary>
 tableextension 14021112 NS_InvPostBuffer extends "Invoice Post. Buffer"
 {
     // version NAVW111.00.00.23019,NAVNA11.00.00.23019,PPNA11.00
     //PRJ-490.AM.1.0 Added New Fields
-    //PE-129.AS.1.0 Obselete All fields of this table, as it will be removed by Microsoft in next build 22.0
 
     fields
     {
 
         field(14021300; "NS_Subcontract No."; Code[20])
         {
-            ObsoleteState = Pending;//PE-129.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed by Microsoft in next build 22.0';//PE-129.AS.1.0 Obselete
             Caption = 'Subcontract No.';
             DataClassification = CustomerContent;
             Description = 'ProjectPro';
@@ -21,8 +15,6 @@ tableextension 14021112 NS_InvPostBuffer extends "Invoice Post. Buffer"
         }
         field(14021301; "Ns_Retention Ledger Code"; Code[20])
         {
-            ObsoleteState = Pending;//PE-129.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed by Microsoft in next build 22.0';//PE-129.AS.1.0 Obselete
             Caption = 'Retention Ledger Code';
             Description = 'ProjectPro';
             TableRelation = "NS_Retention Ledger Code".NS_Code;
@@ -30,32 +22,24 @@ tableextension 14021112 NS_InvPostBuffer extends "Invoice Post. Buffer"
         }
         field(14021100; "NS_Job Task No."; Code[20])
         {
-            ObsoleteState = Pending;//PE-129.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed by Microsoft in next build 22.0';//PE-129.AS.1.0 Obselete
             DataClassification = CustomerContent;
             Caption = 'Job Task No.';
             Description = 'ProjectPro';
         }
         field(14021416; "NS_FA Job No."; Code[20])
         {
-            ObsoleteState = Pending;//PE-129.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed by Microsoft in next build 22.0';//PE-129.AS.1.0 Obselete
             Caption = 'FA Job No.';
             Description = 'PRJ-490.AM.1.0';
             DataClassification = CustomerContent;
         }
         field(14021417; "NS_FA Job Task No."; Code[20])
         {
-            ObsoleteState = Pending;//PE-129.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed by Microsoft in next build 22.0';//PE-129.AS.1.0 Obselete
             Caption = ' FA Job Task No.';
             Description = 'PRJ-490.AM.1.0';
             DataClassification = CustomerContent;
         }
         field(14021418; "NS_FA Segment Code"; Code[20])
         {
-            ObsoleteState = Pending;//PE-129.AS.1.0 Obselete
-            ObsoleteReason = 'Will be removed by Microsoft in next build 22.0';//PE-129.AS.1.0 Obselete
             Caption = 'FA Segment Code';
             Description = 'PRJ-490.AM.1.0';
             DataClassification = CustomerContent;

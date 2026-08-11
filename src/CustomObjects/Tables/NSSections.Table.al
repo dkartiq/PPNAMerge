@@ -1,7 +1,6 @@
 table 14021156 NS_Sections
 {
     //PRJ-688.AM.1.0 Created New table .
-    //PRJ-917.NK.1.0 09Mar2022 | Add Three fields
     Caption = 'Sections';
     DrillDownPageId = NS_SectionsList;
     LookupPageId = NS_SectionsList;
@@ -146,32 +145,6 @@ table 14021156 NS_Sections
             TableRelation = "NS_Job Type".NS_Code;
             DataClassification = CustomerContent;
         }
-        //PRJ-917.NK.1.0 09Mar2022 Start
-        field(14021411; "NS_Blocked"; Boolean)
-        {
-            Caption = 'Blocked';
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-                UserSetup: Record "User Setup";
-            begin
-                if UserSetup.Get(UserId) then;
-                UserSetup.TestField("NS_Allow To Block APO");
-            end;
-        }
-        field(14021412; "NS_Last Modified By"; Code[50])
-        {
-            Caption = 'Last Modified By';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021413; "NS_Last Modified Date"; Date)
-        {
-            Caption = 'Last Modified Date';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PRJ-917.NK.1.0 09Mar2022 End
     }
 
     keys
@@ -190,13 +163,6 @@ table 14021156 NS_Sections
     fieldgroups
     {
     }
-    //PRJ-917.NK.1.0 09Mar2022 Start
-    trigger OnModify()
-    begin
-        "NS_Last Modified By" := UserId();
-        "NS_Last Modified Date" := WorkDate();
-    end;
-    //PRJ-917.NK.1.0 09Mar2022 End 
 
     var
         Text14021400_Txt: Label '"You have exceeded the Maximum String Length of 20.\There are a Maximum of %1 Charecters left "', Comment = '%1 = Charactor length';

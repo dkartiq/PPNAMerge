@@ -1,5 +1,6 @@
 report 14021205 "NS_Calculate Plan - Req. Wksh."
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // +------------------------------------------------------------
     // +ProjectPro
     // +  - Added field(s):
@@ -18,10 +19,8 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
     // +     - Modified "Item - OnPreDataItem" to call FilterToJobItems.
     // +     - Modified SetTemplAndWorksheet to assign CurrentDocumentNo.
     // +------------------------------------------------------------
-    //PRJ-1079.GK.1.0 14Dec2021 |changes in code & property as well.
-    //PRJ-1380.NK.1.0 13May2022 | added new code for purchaser code and manager code
-    //PRJ-1492.RM.1.0 06July2022 |commented some code
-    Caption = 'Job Calculate Plan - Req. Wksh.';//PE-141.NK.1.0 03Aug2023 updated name
+
+    Caption = 'Calculate Plan - Req. Wksh.';
     ProcessingOnly = true;
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = Jobs;
@@ -30,18 +29,12 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
     {
         dataitem(Item; Item)
         {
-            // DataItemTableView = SORTING("Low-Level Code")
-            //                     WHERE(Type = CONST(Inventory)); //PRJ-1079.GK.1.0 14Dec2021 Comment
-            DataItemTableView = SORTING("Low-Level Code"); //PRJ-1079.GK.1.0 14Dec2021
-
+            DataItemTableView = SORTING("Low-Level Code")
+                                WHERE(Type = CONST(Inventory));
 
             RequestFilterFields = "No.", "Search Description", "Location Filter";
 
             trigger OnAfterGetRecord()
-            var
-                NS_UserSetup: Record "User Setup";  //PRJCTPR-93.PS.1.0 17April2023
-                NS_JMPBatchName: Code[10];  //PRJCTPR-93.PS.1.0 17April2023
-
             begin
                 IF Counter MOD 5 = 0 THEN
                     Window.UPDATE(1, "No.");
@@ -55,33 +48,20 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                 ReqLine.LOCKTABLE;
                 ActionMessageEntry.LOCKTABLE;
 
-
-                //PRJCTPR-93.NC.1.0 01May2023 Start
-                Clear(NS_JMPBatchName);
-                if NS_UserSetup.Get(UserId) then
-                    NS_JMPBatchName := NS_UserSetup."NS_JMP Batch Name";
-
-                if NS_JMPBatchName <> '' then
-                    PurchReqLine.SetRange("Journal Batch Name", NS_JMPBatchName);
-                //PRJCTPR-93.NC.1.0 01May2023 End
                 PurchReqLine.SETRANGE("No.", "No.");
                 PurchReqLine.MODIFYALL("Accept Action Message", FALSE);
-                //PurchReqLine.DELETEALL(TRUE);
-                ReqLineExtern.Reset();
-                if NS_JMPBatchName <> '' then //PRJCTPR-93.NC.1.0 01May2023
-                    ReqLineExtern.SetRange("Journal Batch Name", NS_JMPBatchName); //PRJCTPR-93.NC.1.0 01May2023
-                ReqLineExtern.SETRANGE(Type, ReqLineExtern.Type::Item);
+                PurchReqLine.DELETEALL(TRUE);
+
+                ReqLineExtern.SETRANGE(Type, ReqLine.Type::Item);
                 ReqLineExtern.SETRANGE("No.", "No.");
                 IF ReqLineExtern.FIND('-') THEN
                     REPEAT
                         ReqLineExtern.DELETE(TRUE);
                     UNTIL ReqLineExtern.NEXT = 0;
-
-                if NS_JMPBatchName <> '' then //PRJCTPR-93.NC.1.0 01May2023
-                    CurrWorksheetName := NS_JMPBatchName; //PRJCTPR-93.NC.1.0 01May2023
-                InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, '');
-                InvtProfileOffsetting.NS_SetUsePlanCostBoolean(UsePlanCostToPurCost); //PRJ-1380.NK.1.0 13May2022 
-                InvtProfileOffsetting.NS_GetPurchaserCodes(JobPurchaser, ProjectManager);//PRJ-1380.NK.1.0 13May2022 
+                // >> Upgrade
+                //InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, '');
+                InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, JobNoFilter);
+                // << Upgrade
                 InvtProfileOffsetting.NS_CalculatePlanFromWorksheet(
                   Item,
                   MfgSetup,
@@ -110,15 +90,7 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
             end;
 
             trigger OnPreDataItem()
-            var
-                NS_jobSetup: Record "Jobs Setup"; //PRJ-1079.GK.1.0 14Dec2021
             begin
-                //PRJ-1079.GK.1.0 14Dec2021 start
-                if (NS_jobSetup.Get()) AND (NS_jobSetup."NS_Enable CalcPlanOnNonInvItem") then
-                    SetFilter(Type, '<>%1', Type::Service)
-                else
-                    SetRange(Type, Type::Inventory);
-                //PRJ-1079.GK.1.0 14Dec2021 end
                 SKU.SETCURRENTKEY("Item No.");
                 COPYFILTER("Variant Filter", SKU."Variant Code");
                 COPYFILTER("Location Filter", SKU."Location Code");
@@ -131,6 +103,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                 ReqLineExtern.SETCURRENTKEY(Type, "No.", "Variant Code", "Location Code");
                 COPYFILTER("Variant Filter", ReqLineExtern."Variant Code");
                 COPYFILTER("Location Filter", ReqLineExtern."Location Code");
+                // >> Upgrade
+                ReqLineExtern.SetFilter("NS_Job No.", JobNoFilter); //FDD
+                // << Upgrade
 
                 PurchReqLine.SETCURRENTKEY(
                   Type, "No.", "Variant Code", "Location Code", "Sales Order No.", "Planning Line Origin", "Due Date");
@@ -139,8 +114,10 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                 COPYFILTER("Location Filter", PurchReqLine."Location Code");
                 PurchReqLine.SETFILTER("Worksheet Template Name", ReqWkshTemplateFilter);
                 PurchReqLine.SETFILTER("Journal Batch Name", ReqWkshFilter);
-
-                //ProjectPro  - start
+                // >> Upgrade
+                PurchReqLine.SetFilter("NS_Job No.", JobNoFilter); // FDD
+                                                                   // << Upgrade
+                                                                   //ProjectPro  - start
                 IF UseJobDemandOnly THEN
                     FilterToJobItems(Item);
                 //ProjectPro  - end
@@ -197,11 +174,18 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                         ToolTip = 'Job No. Filter';
                         TableRelation = Job;
                         ApplicationArea = all;
+                        // >> Upgrade
                         trigger OnValidate()
+                        var
+                            RequisitionLine: Record "Requisition Line";
                         begin
-                            if ((JobPurchaser <> '') or (ProjectManager <> '')) and (JobNoFilter <> '') then //PRJ-1380.NK.1.0 13May2022      
-                                Error('Remove the Job Purchaser or Job Manager filter first');  //PRJ-1380.NK.1.0 13May2022 
+                            //FDD109 Start
+                            RequisitionLine.SetFilter("NS_Job No.", JobNoFilter);
+                            if not RequisitionLine.IsEmpty then
+                                Message(Text50000);
+                            //FDD109 End
                         end;
+                        // << Upgrade
                     }
                     field(NS_UseJobDemandOnly; UseJobDemandOnly)
                     {
@@ -209,55 +193,7 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
 
                         ToolTip = 'Use Job Demand Only';
                         ApplicationArea = all;
-                        //PRJ-1380.NK.1.0 13May2022 Start
-                        trigger OnValidate()
-                        begin
-                            if not UseJobDemandOnly then begin
-                                JobPurchaser := '';
-                                ProjectManager := '';
-                            end;
-                        end;
-                        //PRJ-1380.NK.1.0 13May2022 End
                     }
-                    //PRJ-1380.NK.1.0 13May2022 Start
-                    field(UsePlanCostToPurCost; UsePlanCostToPurCost)
-                    {
-                        Caption = 'Use Planned Cost To Purchase Cost';
-                        ApplicationArea = all;
-                        ToolTip = 'Use Planned Cost To Purchase Cost';
-                    }
-                    field(JobPurchaser; JobPurchaser)
-                    {
-                        Caption = 'Job Purchaser';
-                        ApplicationArea = all;
-                        ToolTip = 'Job Purchaser';
-                        Description = 'PRJ-1380.NK.1.0';
-                        TableRelation = Resource;
-                        trigger OnValidate()
-                        begin
-                            if not UseJobDemandOnly then
-                                Error('First select the Use Job Dedmand Only');
-                            if JobNoFilter <> '' then
-                                Error('Remove the job filter first');
-                        end;
-                    }
-                    field(ProjectManager; ProjectManager)
-                    {
-                        Caption = 'Job Manager';
-                        ToolTip = 'Job Manager';
-                        ApplicationArea = all;
-                        Description = 'PRJ-1380.NK.1.0';
-                        TableRelation = Resource;
-                        trigger OnValidate()
-                        begin
-                            if not UseJobDemandOnly then
-                                Error('First select the Use Job Dedmand Only');
-                            if JobNoFilter <> '' then
-                                Error('Remove the job filter first');
-
-                        end;
-                    }
-                    //PRJ-1380.NK.1.0 13May2022
                 }
             }
         }
@@ -270,8 +206,7 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
         begin
             MfgSetup.GET;
             UseForecast := MfgSetup."Current Production Forecast";
-            // UsePlanCostToPurCost := true; //PRJ-1380.NK.1.0 13May2022 //PRJ-1492.RM.1.0 commented
-            UsePlanCostToPurCost := false; //PRJ-1492.RM.1.0
+
             OnAfterOnOpenPage;
         end;
     }
@@ -283,7 +218,6 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
     trigger OnPreReport()
     var
         ProductionForecastEntry: Record "Production Forecast Entry";
-        NS_UserSetup: Record "User Setup"; //PRJCTPR-93.PS.1.0 13Apr23
     begin
         Counter := 0;
         IF FromDate = 0D THEN
@@ -307,7 +241,6 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
 
         ReqLine.SETRANGE("Worksheet Template Name", CurrTemplateName);
         ReqLine.SETRANGE("Journal Batch Name", CurrWorksheetName);
-        NS_UserSetup.SetRange("User ID", UserId); //PRJCTPR-93.PS.1.0 13Apr23
 
         Window.OPEN(
           Text006 +
@@ -346,10 +279,10 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
         JobNoFilter: Code[20];
         UseJobDemandOnly: Boolean;
         CurrentDocumentNo: Code[20];
+        // >> Upgrade
+        Text50000: label 'There are Items in Requisition Worksheets for this Job Filter. Items cannot be duplicated and existing lines will be deleted. Ensure you apply the correct Item Filters to avoid deleting Items incorrectly.;ENA=There are Items in Requisition Worksheets for this Job Filter. Items cannot be duplicated and existing lines will be deleted. Ensure you apply the correct Item Filters to avoid deleting Items incorrectly.';
 
-        UsePlanCostToPurCost: Boolean; //PRJ-1380.NK.1.0 13May2022
-        JobPurchaser: Code[20];  //PRJ-1380.NK.1.0 13May2022 
-        ProjectManager: Code[20];  //PRJ-1380.NK.1.0 13May2022 
+    // << Upgrade
 
     [Scope('Cloud')]
     procedure SetTemplAndWorksheet(TemplateName: Code[10]; WorksheetName: Code[10]; DocumentNo: Code[20])
@@ -373,15 +306,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
         SkipPlanning: Boolean;
     begin
         WITH Item DO
-            //PRJ-1079.GK.1.0 14Dec2021 -Comment
-            // IF (CurrWorksheetType = CurrWorksheetType::Requisition) AND
-            //    ("Replenishment System" = "Replenishment System"::Purchase) AND
-            //    ("Reordering Policy" <> "Reordering Policy"::" ")
-            //PRJ-1079.GK.1.0 14Dec2021-comment
-            //PRJ-1079.GK.1.0 14Dec2021 start add new code
             IF (CurrWorksheetType = CurrWorksheetType::Requisition) AND
-               ("Replenishment System" = "Replenishment System"::Purchase)
-            //PRJ-1079.GK.1.0 14Dec2021  end
+               ("Replenishment System" = "Replenishment System"::Purchase) AND
+               ("Reordering Policy" <> "Reordering Policy"::" ")
             THEN
                 EXIT(FALSE);
 
@@ -389,18 +316,11 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
             SETRANGE("Item No.", Item."No.");
             IF FIND('-') THEN
                 REPEAT
-                    //PRJ-1079.GK.1.0 14Dec2021 start comment
-                    // IF (CurrWorksheetType = CurrWorksheetType::Requisition) AND
-                    //    ("Replenishment System" IN ["Replenishment System"::Purchase,
-                    //                                "Replenishment System"::Transfer]) AND
-                    //    ("Reordering Policy" <> "Reordering Policy"::" ")
-                    //PRJ-1079.GK.1.0 14Dec2021 end comment
-                    //PRJ-1079.GK.1.0 14Dec2021 start add new code
                     IF (CurrWorksheetType = CurrWorksheetType::Requisition) AND
-                    ("Replenishment System" IN ["Replenishment System"::Purchase,
-                                                "Replenishment System"::Transfer])
-                 //PRJ-1079.GK.1.0 14Dec2021 end
-                 THEN
+                       ("Replenishment System" IN ["Replenishment System"::Purchase,
+                                                   "Replenishment System"::Transfer]) AND
+                       ("Reordering Policy" <> "Reordering Policy"::" ")
+                    THEN
                         EXIT(FALSE);
                 UNTIL NEXT = 0;
         END;

@@ -1,8 +1,7 @@
 pageextension 14021272 NS_DetailedCustLedgEntries extends "Detailed Cust. Ledg. Entries"
 {
     // version NAVW111.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Detailed Customer Ledger Entries'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addfirst(Control1)

@@ -19,7 +19,7 @@ report 14021215 "NS_Cash Req by Due Date"
     RDLCLayout = './Layouts/NSCash Requirements by Due Date.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Cash Requirements by Due Date';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Cash Requirements by Due Date';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

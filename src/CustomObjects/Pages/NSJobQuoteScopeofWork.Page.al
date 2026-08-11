@@ -8,7 +8,6 @@ page 14021411 "NS_Job Quote Scope of Work"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-735.JS.1.0 01Dec2021 | Add procedure
 
     Caption = 'Scope of Work';
     DelayedInsert = true;
@@ -63,48 +62,8 @@ page 14021411 "NS_Job Quote Scope of Work"
         }
     }
 
-
-    //PRJ-735.JS.1.0 01Dec2021
     actions
     {
-        area(processing)
-        {
-            action(DefaultScopeofworkList)
-            {
-                Caption = 'Default SOW List';
-                Image = ViewPage;
-                ApplicationArea = All;
-                ToolTip = 'Select Default Scope of work';
-
-                trigger OnAction()
-                var
-                    DefSOWList: Page "NS_Job Quote Def SOW SelcList";
-                begin
-                    DefSOWList.NS_InitValue(NS_JobQuoteNoGlb, NS_SegmentCodeNoGlb);
-                    DefSOWList.Editable(true);
-                    if DefSOWList.RUNMODAL() = ACTION::OK then
-                        CurrPage.UPDATE();
-                end;
-            }
-        }
     }
-
-    var
-        NS_JobQuoteNoGlb: Code[20];
-        NS_SegmentCodeNoGlb: Code[20];
-
-
-    /// <summary>
-    /// NS_InitValue.
-    /// </summary>
-    /// <param name="JobQuoteNo">Code[20].</param>
-    /// <param name="SegmentCodeNo">Code[20].</param>
-    procedure NS_InitValue(JobQuoteNo: Code[20]; SegmentCodeNo: Code[20])
-    begin
-        NS_JobQuoteNoGlb := JobQuoteNo;
-        NS_SegmentCodeNoGlb := SegmentCodeNo;
-    end;
-    //PRJ-735.JS.1.0 01Dec2021 - end
-
 }
 

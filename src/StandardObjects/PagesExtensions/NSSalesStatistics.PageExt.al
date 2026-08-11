@@ -1,22 +1,11 @@
 pageextension 14021226 NS_SalesStatistics extends "Sales Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter(TotalAmount2)
         {
-            //PE-22.JS.1.0 29MAR2023 - End
-            field("NS_Retention Amount"; Rec."NS_Retention Amount")
-            {
-                ApplicationArea = All;
-                Editable = false;
-                Caption = 'Retention Amount';
-                ToolTip = 'Retention Amount';
-            }
-            //PE-22.JS.1.0 29MAR2023 - End
-
             field("NS_Retention Amount (LCY)"; Rec."NS_Retention Amount (LCY)")
             {
                 ApplicationArea = All;
@@ -67,11 +56,6 @@ pageextension 14021226 NS_SalesStatistics extends "Sales Statistics"
                 NS_RetentionBalanceLCY := Cust."Balance (LCY)";
             END;
         end;
-        //PRJCTPR-224.VC.1.0 Start        
-        If Rec."Currency Code" <> '' then
-            NS_FinalTotal := p.NS_P160GetTotalAmount2() - Rec."NS_Retention Amount"
-        else
-            //PRJCTPR-224.VC.1.0 End 
         NS_FinalTotal := p.NS_P160GetTotalAmount2() - "NS_Retention Amount (LCY)";
     end;
     //Unsupported feature: CodeModification on "OnOpenPage". Please convert manually.

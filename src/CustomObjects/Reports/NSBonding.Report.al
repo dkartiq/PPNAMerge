@@ -632,9 +632,9 @@ report 14021181 NS_Bonding
                     end;
 
                 else begin                                         // Neither the Worksheet nor the Manual percent is being used
-                    CostEstimate := Job."NS_Budgeted Cost (LCY)";
-                    Source := CalculatedCode;
-                end;
+                        CostEstimate := Job."NS_Budgeted Cost (LCY)";
+                        Source := CalculatedCode;
+                    end;
             end;
         end;
     end;

@@ -20,7 +20,7 @@ report 14021403 "NS_Quote Pipeline Report"
     {
         dataitem("Job Quote Header"; "NS_Job Quote Header")
         {
-            RequestFilterFields = "NS_Quote No.", "NS_Job No.", "NS_Quote Status", "NS_Sell-to Customer No.", "NS_Salesperson Code New", "NS_Estimated Month to Close";//PRJ-867.AS.1.0 23SEPT2021 Changed field Sales Person code to Sales person code New  //PE-300.Dk.1.0  29May2024 Change field NS_Status to "NS_Quote Status"
+            RequestFilterFields = "NS_Quote No.", "NS_Job No.", NS_Status, "NS_Sell-to Customer No.", "NS_Salesperson Code New", "NS_Estimated Month to Close";//PRJ-867.AS.1.0 23SEPT2021 Changed field Sales Person code to Sales person code New
             column(RepHdr_ReportName; RepHdrReportNameLbl)
             {
             }
@@ -120,20 +120,12 @@ report 14021403 "NS_Quote Pipeline Report"
             column(Line_GrossMarginPercent; GrossMarginPercent)
             {
             }
-            //PE-300.Dk.1.0  29May2024 Start
-            // column(Line_ProbabilityToClose; "Job Quote Header"."NS_Probability to Close")
-            // {
-            // }
-            column(Line_ProbabilityToClose; "Job Quote Header"."NS_QuotePro to Close")
+            column(Line_ProbabilityToClose; "Job Quote Header"."NS_Probability to Close")
             {
             }
-            // column(Line_Status; "Job Quote Header".NS_Status)
-            // {
-            // }
-            column(Line_Status; "Job Quote Header"."NS_Quote Status")
+            column(Line_Status; "Job Quote Header".NS_Status)
             {
             }
-            //PE-300.Dk.1.0  29May2024 End
 
             trigger OnAfterGetRecord();
             var
@@ -148,10 +140,7 @@ report 14021403 "NS_Quote Pipeline Report"
                 end;
 
                 EstimatedPercentToBill := FORMAT("NS_Estimated % to Bill") + ' ' + Percent;
-                //PE-300-DK.1.0 29May2024 Start
-                // ProbabilityValue := "NS_Probability to Close";
-                ProbabilityValue := "NS_QuotePro to Close".AsInteger();
-                //PE-300-DK.1.0 29May2024 End
+                ProbabilityValue := "NS_Probability to Close";
                 if NS_Amount <> 0 then
                     GrossMarginPercent := FORMAT(ROUND(("NS_Gross Margin" / NS_Amount) * 100, GLSetup."Amount Rounding Precision")) + ' ' + Percent;
             end;

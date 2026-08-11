@@ -1,5 +1,6 @@
 table 14021341 "NS_Progress Payment Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -9,7 +10,6 @@ table 14021341 "NS_Progress Payment Line"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-889.GK.1.0 13Sep2021 | Create two new fields and fetch these field values.
-    //PRJ-1194.NK.1.0 14Mar2022 | Add Condition.
 
     Caption = 'Progress Payment Line';
 
@@ -73,11 +73,6 @@ table 14021341 "NS_Progress Payment Line"
         {
             Caption = 'Description';
             DataClassification = CustomerContent;
-            //PRJ-1652.GK.1.0 29Sept2022 start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_Task Description New" because of length mismatch with Job Task';
-            ObsoleteTag = '20.0.15.41354';
-            //PRJ-1652.GK.1.0 29Sept2022 end
         }
         field(20; "NS_Payment Method"; Option)
         {
@@ -117,7 +112,10 @@ table 14021341 "NS_Progress Payment Line"
 
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(23; "NS_Base Quantity"; Decimal)
@@ -131,7 +129,10 @@ table 14021341 "NS_Progress Payment Line"
                     "NS_Base Quantity" := 0;
                     MESSAGE(Text003);
                 end else
-                    NS_LineCalculations(Rec);
+                    // >> Upgrade
+                    //NS_LineCalculations(Rec);
+                    NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(25; NS_Quantity; Decimal)
@@ -141,7 +142,10 @@ table 14021341 "NS_Progress Payment Line"
 
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(26; NS_Total; Decimal)
@@ -164,8 +168,10 @@ table 14021341 "NS_Progress Payment Line"
                     "NS_Payment Method"::"L/S":
                         NS_Quantity := NS_Total;
                 end;
-
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(30; "NS_Work Amount"; Decimal)
@@ -180,7 +186,10 @@ table 14021341 "NS_Progress Payment Line"
 
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(33; "NS_Work Retention Amount"; Decimal)
@@ -190,7 +199,10 @@ table 14021341 "NS_Progress Payment Line"
 
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(34; "NS_Effective Work Retention"; Decimal)
@@ -202,10 +214,13 @@ table 14021341 "NS_Progress Payment Line"
         {
             Caption = 'Stored Materials Amount';
             DataClassification = CustomerContent;
-            Editable = false; //PRJCTPR-113.NC.1.0 24May2023
+
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(36; "NS_Material Retention Percent"; Decimal)
@@ -215,7 +230,10 @@ table 14021341 "NS_Progress Payment Line"
 
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(37; "NS_Material Retention Amount"; Decimal)
@@ -225,7 +243,10 @@ table 14021341 "NS_Progress Payment Line"
 
             trigger OnValidate();
             begin
-                NS_LineCalculations(Rec);
+                // >> Upgrade
+                //NS_LineCalculations(Rec);
+                NS_LineCalculations(Rec, true); // #RG008
+                // << Upgrade
             end;
         }
         field(38; "NS_EffectiveMaterialRetention"; Decimal)
@@ -256,8 +277,12 @@ table 14021341 "NS_Progress Payment Line"
         field(75; NS_Type; Option)
         {
             Caption = 'Type';
-            OptionCaption = ' ,Resource,Item,G/L Account';
-            OptionMembers = " ",Resource,Item,"G/L Account";
+            // >> Upgrade
+            // OptionCaption = ' ,Resource,Item,G/L Account';
+            // OptionMembers = " ",Resource,Item,"G/L Account";
+            OptionCaption = ' ,Resource,Item,G/L Account,Fixed Asset';
+            OptionMembers = " ",Resource,Item,"G/L Account","Fixed Asset";
+            // << Upgrade
             DataClassification = CustomerContent;
         }
         field(76; "NS_No."; Code[20])
@@ -279,8 +304,7 @@ table 14021341 "NS_Progress Payment Line"
                             SubcontractDetail.SETRANGE(NS_Type, NS_Type::Resource);
                             if PAGE.RUNMODAL(PAGE::"NS_Subcontract Detail List", SubcontractDetail) = ACTION::LookupOK then begin
                                 "NS_No." := SubcontractDetail."NS_No.";
-                                //"NS_No. Description" := SubcontractDetail.NS_Description;//PRJ-1623.GK.1.0 08Sept2022
-                                "NS_No. Description New" := SubcontractDetail.NS_Description; //PRJ-1623.GK.1.0 08Sept2022
+                                "NS_No. Description" := SubcontractDetail.NS_Description;
                             end;
                         end;
                     NS_Type::Item:
@@ -290,8 +314,7 @@ table 14021341 "NS_Progress Payment Line"
                             SubcontractDetail.SETRANGE(NS_Type, NS_Type::Item);
                             if PAGE.RUNMODAL(PAGE::"NS_Subcontract Detail List", SubcontractDetail) = ACTION::LookupOK then begin
                                 "NS_No." := SubcontractDetail."NS_No.";
-                                //"NS_No. Description" := SubcontractDetail.NS_Description;//PRJ-1623.GK.1.0 08Sept2022
-                                "NS_No. Description New" := SubcontractDetail.NS_Description; //PRJ-1623.GK.1.0 08Sept2022
+                                "NS_No. Description" := SubcontractDetail.NS_Description;
                             end;
                         end;
                     NS_Type::"G/L Account":
@@ -301,10 +324,23 @@ table 14021341 "NS_Progress Payment Line"
                             SubcontractDetail.SETRANGE(NS_Type, NS_Type::"G/L Account");
                             if PAGE.RUNMODAL(PAGE::"NS_Subcontract Detail List", SubcontractDetail) = ACTION::LookupOK then begin
                                 "NS_No." := SubcontractDetail."NS_No.";
-                                //"NS_No. Description" := SubcontractDetail.NS_Description;//PRJ-1623.GK.1.0 08Sept2022
-                                "NS_No. Description New" := SubcontractDetail.NS_Description; //PRJ-1623.GK.1.0 08Sept2022
+                                "NS_No. Description" := SubcontractDetail.NS_Description;
                             end;
                         end;
+                    // >> Upgrade
+                    // >> 001
+                    NS_Type::"Fixed Asset":
+                        begin
+                            SubcontractDetail.Reset;
+                            SubcontractDetail.SetRange("NS_Subcontract No.", "NS_Subcontract No.");
+                            SubcontractDetail.SetRange(NS_Type, NS_Type::"Fixed Asset");
+                            if PAGE.RunModal(PAGE::"NS_Subcontract Detail List", SubcontractDetail) = ACTION::LookupOK then begin
+                                "NS_No." := SubcontractDetail."NS_No.";
+                                "NS_No. Description" := SubcontractDetail.NS_Description;
+                            end;
+                        end;
+                // << 001
+                // << Upgrade
                 end;
             end;
 
@@ -340,6 +376,19 @@ table 14021341 "NS_Progress Payment Line"
                             if SubcontractDetail.COUNT() = 0 then
                                 ERROR(Text005, "NS_No.", FORMAT(NS_Type::Item));
                         end;
+                    // >> Upgrade
+                    // >> 001
+                    NS_Type::"Fixed Asset":
+                        begin
+                            SubcontractDetail.Reset;
+                            SubcontractDetail.SetRange("NS_Subcontract No.", "NS_Subcontract No.");
+                            SubcontractDetail.SetRange(NS_Type, NS_Type::"Fixed Asset");
+                            SubcontractDetail.SetRange("NS_No.", "NS_No.");
+                            if SubcontractDetail.Count = 0 then
+                                Error(Text005, "NS_No.", Format(NS_Type::"Fixed Asset"));
+                        end;
+                // << 001
+                // << Upgrade
                 end;
             end;
         }
@@ -347,11 +396,6 @@ table 14021341 "NS_Progress Payment Line"
         {
             Caption = 'No. Description';
             DataClassification = CustomerContent;
-            //PRJ-1623.GK.1.0 08Sept2022 start
-            ObsoleteState = Pending;
-            ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_No. Description New" because of length mismatch with Puchase Line';
-            ObsoleteTag = '20.0.8.41354';
-            //PRJ-1623.GK.1.0 08Sept2022 end
         }
         field(107; "NS_Activity Code"; Code[10])
         {
@@ -438,29 +482,6 @@ table 14021341 "NS_Progress Payment Line"
             Editable = false;
         }
         //PRJ-889.GK.1.0 13Sep2021 end
-        //PRJ-1106.GK.1.0 29Dec2021 start
-        field(210; "NS_PO Line No."; Integer)
-        {
-            Caption = 'PO Line No.';
-            Description = 'Sub Contract PO Line No.';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PRJ-1106.GK.1.0 29Dec2021 end
-        //PRJ-1623.GK.1.0 08Sept2022 start
-        field(211; "NS_No. Description New"; Text[100])
-        {
-            Caption = 'Description';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1623.GK.1.0 08Sept2022 end
-        //PRJ-1652.GK.1.0 29Sept2022 start
-        field(212; "NS_Task Description New"; Text[100])
-        {
-            Caption = 'Task Description';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1652.GK.1.0 29Sept2022 end
     }
 
     keys
@@ -540,8 +561,10 @@ table 14021341 "NS_Progress Payment Line"
         Text003: Label 'Base Quantity can only be used with Payment Method of Unit.';
         Text004: Label 'There must be values for Base Amount and Base Quantity before a total can be entered for a line with Payment Method of Unit.';
         Text005: Label 'There is no %1 value for %2.  Please enter an existing %2 value.';
-
-    procedure NS_LineCalculations(var Rec: Record "NS_Progress Payment Line");
+    // >> Upgrade
+    //procedure NS_LineCalculations(var Rec: Record "NS_Progress Payment Line");
+    procedure NS_LineCalculations(var Rec: Record "NS_Progress Payment Line"; IsCalcRetention: Boolean)
+    // << Upgrade
     var
         BaseCost: Decimal;
         PurchLine: Record "Purchase Line";
@@ -576,10 +599,23 @@ table 14021341 "NS_Progress Payment Line"
 
             "NS_Work Amount" := NS_Total - NS_LastTotal(Rec);
 
-            if Rec."NS_Work Retention Percent" <> 0 then  //PRJ-1194.NK.1.0 31Mar2022
-                Rec."NS_Work Retention Amount" := ROUND(Rec.NS_Total * (Rec."NS_Work Retention Percent" / 100), GLSetup."Amount Rounding Precision"); //PRJ-1194.NK.1.0 31Mar2022
-
             //Calculate the effective work retention
+            // >> Upgrade
+            // #RG008 Start
+            // >> 003
+            if IsCalcRetention then
+                // >> Upgrade
+                OnNS_LineCalculations(ProgressPaymentHeader, Rec)
+            // SubConMgmt.UpdateProgressPaymentRetention(ProgressPaymentHeader, Rec)
+            // << Upgrade
+            else
+                "NS_Work Retention Amount" := 0;
+
+            // << 003
+
+            "NS_Effective Work Retention" := 0;
+            // #RG008 End
+            // << Upgrade
             if ProgressPaymentHeader."NS_Work Retention Percent" > 0 then
                 "NS_Effective Work Retention" := ROUND(NS_Total * (ProgressPaymentHeader."NS_Work Retention Percent" / 100),
                                                     GLSetup."Amount Rounding Precision")
@@ -588,9 +624,6 @@ table 14021341 "NS_Progress Payment Line"
                     "NS_Work Retention Amount" := ROUND(NS_Total * ("NS_Work Retention Percent" / 100), GLSetup."Amount Rounding Precision");
                 "NS_Effective Work Retention" := "NS_Work Retention Amount";
             end;
-
-            if Rec."NS_Work Retention Percent" = 0 then //PRJ-1194.NK.1.0 14Mar2022
-                Rec."NS_Work Retention Amount" := 0;  //PRJ-1194.NK.1.0 14Mar2022
 
             //Calculate the effective material retention
             if ProgressPaymentHeader."NS_Material Retention Percent" > 0 then
@@ -614,17 +647,8 @@ table 14021341 "NS_Progress Payment Line"
             "NS_Posted Payments" := 0;
             if PurchLine.GET(PurchLine."Document Type"::Order, ProgressPaymentHeader."NS_Purchase Order No.", "NS_Line No.") then
                 "NS_Posted Payments" := PurchLine."Line Amount" - PurchLine."Outstanding Amount (LCY)";
-            //Rec."NS_Progress Payment Amount" := (((Rec."NS_Base Amount" * Rec."NS_Base Quantity") * Rec.NS_Quantity) / 100) - Rec."NS_Posted Payments"; //PRJ-1300.GK.1.0 28Apr2022 |Comment
-            //Rec."NS_Progress Payment Amount" := (((Rec."NS_Base Amount" * Rec."NS_Base Quantity") * Rec.NS_Quantity) / 100) - Rec."NS_Posted Payments" + "NS_Stored Materials Amount";//PRJ-1300.GK.1.0 28Apr2022|Added //PRJCTPR-113.NC.1.0 17May2023 Comment
-            Rec."NS_Progress Payment Amount" := "NS_Work Amount" + "NS_Stored Materials Amount" - NS_GetLastStoredMaterialsAmt(Rec); //PRJCTPR-113.NC.1.0 17May2023 
-                                                                                                                                     //PRJ-889.GK.1.0 13Sep2021 end
-                                                                                                                                     //PRJCTPR-318.JS.1.0 15FEB2024 - Start
-            if (ProgressPaymentHeader."NS_Retention Reduction Invoice" = true) and
-                (ProgressPaymentHeader."NS_Work Retention Percent" + ProgressPaymentHeader."NS_Material Retention Percent" = 0) then begin
-                Rec."NS_Work Retention Amount" := 0;
-                Rec."NS_Work Retention Percent" := 0;
-            end;
-            //PRJCTPR-318.JS.1.0 15FEB2024 - end        
+            "NS_Progress Payment Amount" := ((("NS_Base Amount" * "NS_Base Quantity") * NS_Quantity) / 100) - "NS_Posted Payments";
+            //PRJ-889.GK.1.0 13Sep2021 end
             MODIFY();
         end;
     end;
@@ -697,27 +721,6 @@ table 14021341 "NS_Progress Payment Line"
 
         exit(NS_LastTotalAmount);
     end;
-
-    //PRJCTPR-113.NC.1.0 17May2023 Start
-    procedure NS_GetLastStoredMaterialsAmt(var Rec: Record "NS_Progress Payment Line"): Decimal;
-    var
-        ProgressPaymentHeader_Loc: Record "NS_Progress Payment Header";
-        NS_StoredMaterialAmt: Decimal;
-    begin
-        NS_StoredMaterialAmt := 0;
-        ProgressPaymentLine.RESET();
-        ProgressPaymentLine.SETRANGE("NS_Progress Payment No.", Rec."NS_Progress Payment No.");
-        ProgressPaymentLine.SETFILTER("NS_Requisition No.", '<%1', Rec."NS_Requisition No.");
-        ProgressPaymentLine.SETRANGE("NS_Line No.", Rec."NS_Line No.");
-        if ProgressPaymentLine.FINDSET() then
-            repeat
-                if ProgressPaymentHeader_Loc.GET(ProgressPaymentLine."NS_Progress Payment No.", ProgressPaymentLine."NS_Requisition No.", ProgressPaymentLine."NS_Version No.") then
-                    if ProgressPaymentHeader_Loc.NS_Status <> ProgressPaymentHeader_Loc.NS_Status::Void then
-                        NS_StoredMaterialAmt := ProgressPaymentLine."NS_Stored Materials Amount";
-            until ProgressPaymentLine.NEXT() = 0;
-        exit(NS_StoredMaterialAmt);
-    end;
-    //PRJCTPR-113.NC.1.0 17May2023 End
 
     procedure NS_LastWorkEffectiveRetention(var Rec: Record "NS_Progress Payment Line"): Decimal;
     var
@@ -806,5 +809,10 @@ table 14021341 "NS_Progress Payment Line"
     end;
 
     //SMPL Replaced TextConst with labels
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_LineCalculations(var ProgressPaymentHeader: Record "NS_Progress Payment Header"; var ProgressPaymentLine: Record "NS_Progress Payment Line")
+    begin
+    end;
+
 }
 

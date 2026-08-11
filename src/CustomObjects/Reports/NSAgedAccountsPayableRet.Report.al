@@ -11,12 +11,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
     // SMPL DateFormula propertyussage deprecated use DateFormula type instead
     //PRJ-84.SK.1.0 Made this report searchable
     //PRJ-266.MS.1.0 added code 
-    //PRJ-1133.RM.1.0 15Jan2022 | Removed with statement
-    //PRJ-1193.RM.1.0 15Feb2022 | Double Conversion Problem on Aging
-    //PRJ-1235.RM.1.0 02March2022 | Added Job Description column
-    //PRJCTPR-35 DK.1.0 11Jan2023 |Increase External Document Character length 20 to 35
-    //PRJCTPR-35 DK.1.0 16Jan2023 |last 20 characters will be picked Also change Layout
-    //PE-291.JS.1.0 02MAY2024 Change only in RDL layout
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSAged Accounts Payable Ret.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -29,30 +23,12 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         {
             PrintOnlyIfDetail = true;
             RequestFilterFields = "No.", "Vendor Posting Group", "Payment Terms Code", "Purchaser Code";
-            column(Aged_Accounts_Payable_; 'Aged A/P with Retention')//PRJ-1193.RM.1.0
+            column(Aged_Accounts_Payable_; 'Aged Accounts Payable')
             {
             }
             column(FORMAT_TODAY_0_4_; FORMAT(TODAY, 0, 4))
             {
             }
-            //PRJ-1193.RM.1.0 start
-            column(GrandTotalBalanceDue_; GrandTotalBalanceDue)
-            {
-            }
-            column(GrandBalanceDue_1_; GrandBalanceDue[1])
-            {
-            }
-            column(GrandBalanceDue_2_; GrandBalanceDue[2])
-            {
-            }
-            column(GrandBalanceDue_3_; GrandBalanceDue[3])
-            {
-            }
-            column(GrandBalanceDue_4_; GrandBalanceDue[4])
-            {
-            }
-            //PRJ-1193.RM.1.0 end
-
             column(TIME; TIME)
             {
             }
@@ -326,17 +302,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                 column(AmountDue_4_; -AmountDue[4])
                 {
                 }
-                //PRJ-1235.RM.1.0 start
-
-                column("Job_Desc_Caption"; JobDescLbl)
-                {
-                }
-
-                column(Descr; NSJobDesc)
-                {
-                }
-
-                //PRJ-1235.RM.1.0 end
                 column(AgingDate; AgingDate)
                 {
                 }
@@ -466,12 +431,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                 column(VLE_JobNo; "Vendor Ledger Entry"."NS_Job No.")
                 {
                 }
-                //PRJ-1193.RM.1.0 start
-                column(NS_RetentionToPrintUSD; NS_RetentionToPrintUSD)
-                { }
-                column("NS_Retention_Ledger_Code"; TempVendLedgEntry."NS_Retention Ledger Code")
-                { }
-                //PRJ-1193.RM.1.0 end
 
                 trigger OnAfterGetRecord();
                 begin
@@ -504,14 +463,8 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                               TempVendLedgEntry."Remaining Amount"),
                             Currency."Amount Rounding Precision");
                         AmountDueToPrint := TempVendLedgEntry."Remaining Amount";
-                        NS_RetentionToPrintUSD2 := TempVendLedgEntry."Remaining Amt. (LCY)";//PRJ-1193.RM.1.0
-                    end else begin
+                    end else
                         AmountDueToPrint := TempVendLedgEntry."Remaining Amt. (LCY)";
-                        NS_RetentionToPrintUSD2 := TempVendLedgEntry."Remaining Amt. (LCY)";//PRJ-1193.RM.1.0
-                    end;
-                    NSJobDesc := ' ';//PRJ-1235.RM.1.0 start
-                    if NSJob.Get(TempVendLedgEntry."NS_Job No.") then
-                        NSJobDesc := NSJob.Description; //PRJ-1235.RM.1.0 end
 
                     //if (not PurchSetup."NS_Purchase Retention Inactive") and	//PRJ-266.MS.1.0 code comment
                     //   (TempVendLedgEntry."NS_Retention Ledger Code" = JobsSetup."NS_Retention Payable Ledger") and
@@ -537,11 +490,9 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                         j := 1;
 
                     RetentionToPrint := 0;
-                    NS_RetentionToPrintUSD := 0;//PRJ-1193.RM.1.0
                     if not PurchSetup."NS_Purchase Retention Inactive" then
                         if TempVendLedgEntry."NS_Retention Ledger Code" = JobsSetup."NS_Retention Payable Ledger" then begin
                             RetentionToPrint := AmountDueToPrint;
-                            NS_RetentionToPrintUSD := NS_RetentionToPrintUSD2;//PRJ-1193.RM.1.0
                             TotalRetention := TotalRetention + RetentionToPrint;
                             if AgingDate > PeriodEndingDate[1] then
                                 AmountDueToPrint := 0;
@@ -565,24 +516,10 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                     CalcPercents("TotalBalanceDue$", "BalanceDue$");
 
                     "Vendor Ledger Entry" := TempVendLedgEntry;
-                    //PRJCTPR-35 DK.1.0 16Jan2023 start
-                    // if UseExternalDocNo then
-                    //     DocNo := "Vendor Ledger Entry"."External Document No."
-                    // else
-                    //     DocNo := "Vendor Ledger Entry"."Document No.";
-                    //PRJCTPR-358.JS.1.0 24APR2024 - Start
-                    if UseExternalDocNo then begin // changed :: Enclosed If in begin end.
-                        DocNoLength := StrLen("Vendor Ledger Entry"."External Document No.");
-                        if (DocNoLength <= 20) then // Condition Merged
-                            DocNo := "Vendor Ledger Entry"."External Document No.";
-                        if DocNoLength > 20 then begin
-                            DifferencChar := DocNoLength - 20;
-                            DocNo := DelStr("Vendor Ledger Entry"."External Document No.", 1, DifferencChar)
-                        end;
-                    end   //PRJCTPR-358.JS.1.0 24APR2024 - end
+                    if UseExternalDocNo then
+                        DocNo := "Vendor Ledger Entry"."External Document No."
                     else
                         DocNo := "Vendor Ledger Entry"."Document No.";
-                    //PRJCTPR-35 DK.1.0 16Jan2023 End
 
                     // Do NOT use the following fields in the sections:
                     // "Applied-To Doc. Type"
@@ -593,19 +530,9 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                     // "Closed at Date"
                     // "Closed by Amount"
 
-                    //PRJ-1193.RM.1.0 Start
-                    TotalNumberOfEntries -= 1;
-                    if TotalNumberOfEntries = 0 then begin
-                        for j := 1 to 4 do
-                            GrandBalanceDue[j] += "BalanceDue$"[j];
-                        GrandTotalBalanceDue += "TotalBalanceDue$";
-                    end;
                     if PrintDetail and PrintToExcel then
-                        MakeExcelDataBody();
-                    NumberOfLines += 1;
+                        MakeExcelDataBody;
                 end;
-                //PRJ-1193.RM.1.0 End
-
 
                 trigger OnPostDataItem();
                 begin
@@ -614,7 +541,7 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                             AmountDue[j] := VendTotAmountDue[j];
                         AmountDueToPrint := VendTotAmountDueToPrint;
                         if not PrintDetail and PrintToExcel then
-                            MakeExcelDataBody();
+                            MakeExcelDataBody;
                     end;
                 end;
 
@@ -627,7 +554,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                     CLEAR("BalanceDue$");
                     CLEAR(VendTotAmountDue);
                     VendTotAmountDueToPrint := 0;
-                    TotalNumberOfEntries := TempVendLedgEntry.Count();//PRJ-1193.RM.1.0
                 end;
             }
 
@@ -708,7 +634,7 @@ report 14021188 "NS_Aged Accounts Payable Ret"
                   + ' ' + Text010;
 
                 if PrintToExcel then
-                    MakeExcelInfo();
+                    MakeExcelInfo;
             end;
         }
     }
@@ -852,7 +778,7 @@ report 14021188 "NS_Aged Accounts Payable Ret"
     trigger OnPostReport();
     begin
         if PrintToExcel then
-            NS_CreateExcelbook();//PRJ-1193.RM.1.0
+            CreateExcelbook;
     end;
 
     trigger OnPreReport();
@@ -894,13 +820,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         IncludeRetention: Boolean;
         PrintToExcel: Boolean;
         AmountDue: array[4] of Decimal;
-        TotalNumberOfEntries: Integer;//PRJ-1193.RM.1.0 
-        NS_RetentionToPrintUSD2: Decimal;//PRJ-1193.RM.1.0 
-        NS_RetentionToPrintUSD: Decimal;//PRJ-1193.RM.1.0
-        NumberOfLines: Integer;//PRJ-1193.RM.1.0
-        GrandTotalBalanceDue: Decimal;//PRJ-1193.RM.1.0
-        GrandBalanceDue: array[4] of Decimal;//PRJ-1193.RM.1.0
-
         "BalanceDue$": array[4] of Decimal;
         ColumnHead: array[4] of Text[20];
         ColumnHeadHead: Text[59];
@@ -919,9 +838,7 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         PeriodEndingDate: array[5] of Date;
         AgingDate: Date;
         UseExternalDocNo: Boolean;
-        DocNo: Code[35];//PRJCTPR-35 DK.1.0 11Jan2023 The previous length is 20 char.
-        DifferencChar: integer;//PRJCTPR-35 DK.1.0 16Jan2023
-        DocNoLength: Integer;//PRJCTPR-35 DK.1.0 16Jan2023
+        DocNo: Code[20];
         Text001: Label 'Amounts are in %1';
         Text003: Label '*** This vendor is blocked for %1 processing ***';
         Text004: Label '(Detail';
@@ -942,7 +859,7 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         Text021: Label 'Amounts are in the vendor''s local currency (report totals are in %1).';
         Text022: Label 'Report Total Amount Due (%1)';
         Text101: Label 'Data';
-        Text102: Label 'Aged A/P with Retention'; //PRJ-1193.RM.1.0
+        Text102: Label 'Aged Accounts Payable';
         Text103: Label 'Company Name';
         Text104: Label 'Report No.';
         Text105: Label 'Report Name';
@@ -950,12 +867,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         Text107: Label 'Date / Time';
         Text108: Label 'Vendor Filters';
         Text109: Label 'Aged by';
-        Text122: Label 'Amounts in Customer''s Currency'; //PRJ-1193.RM.1.0 
-        Text123: Label 'Print Detail'; //PRJ-1193.RM.1.0 
-        Text124: Label 'Include Retention'; //PRJ-1193.RM.1.0 
-        Text125: Label 'Use External Doc. No.';//PRJ-1193.RM.1.0 
-        JobDescLbl: Label 'Job Description'; //PRJ-1235.RM.1.0
-        NSJobDesc: Text;//PRJ-1235.RM.1.0
         Text110: Label 'Amounts are';
         Text111: Label 'In our Functional Currency';
         Text112: Label 'As indicated in Data';
@@ -993,24 +904,21 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         "RetentionDue$": array[4] of Decimal;
         AgingDateText: Text[8];
         JobNoLbl: Label 'Job No.';
-        NSJob: Record Job;//PRJ-1235.RM.1.0
 
     local procedure InsertTemp(var VendLedgEntry: Record "Vendor Ledger Entry");
     begin
-        //PRJ-1133.RM.1.0.001 start
-        //with TempVendLedgEntry do begin
-        if TempVendLedgEntry.GET(VendLedgEntry."Entry No.") then
-            exit;
-        TempVendLedgEntry := VendLedgEntry;
-        case AgingMethod of
-            AgingMethod::"Due Date":
-                TempVendLedgEntry."Posting Date" := TempVendLedgEntry."Due Date";
-            AgingMethod::"Document Date":
-                TempVendLedgEntry."Posting Date" := TempVendLedgEntry."Document Date";
+        with TempVendLedgEntry do begin
+            if GET(VendLedgEntry."Entry No.") then
+                exit;
+            TempVendLedgEntry := VendLedgEntry;
+            case AgingMethod of
+                AgingMethod::"Due Date":
+                    "Posting Date" := "Due Date";
+                AgingMethod::"Document Date":
+                    "Posting Date" := "Document Date";
+            end;
+            INSERT;
         end;
-        TempVendLedgEntry.INSERT();
-        //end;
-        //PRJ-1133.RM.1.0.001 end
     end;
 
     procedure CalcPercents(Total: Decimal; Amounts: array[4] of Decimal);
@@ -1071,7 +979,7 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         ExcelBuf.AddInfoColumn(FORMAT(Text102), false, false, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text104), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
-        ExcelBuf.AddInfoColumn(REPORT::"NS_Aged Accounts Payable Ret", false, false, false, false, '', ExcelBuf."Cell Type"::Number);//PRJ-1193.RM.1.0
+        ExcelBuf.AddInfoColumn(REPORT::"Aged Accounts Payable", false, false, false, false, '', ExcelBuf."Cell Type"::Number);
         ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text106), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddInfoColumn(USERID, false, false, false, false, '', ExcelBuf."Cell Type"::Text);
@@ -1088,18 +996,6 @@ report 14021188 "NS_Aged Accounts Payable Ret"
         ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text113), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
         ExcelBuf.AddInfoColumn(PeriodEndingDate[1], false, false, false, false, '', ExcelBuf."Cell Type"::Date);
-        ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text122), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(PrintAmountsInLocal, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text123), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(PrintDetail, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text124), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(IncludeRetention, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.NewRow;
-        ExcelBuf.AddInfoColumn(FORMAT(Text125), false, true, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
-        ExcelBuf.AddInfoColumn(UseExternalDocNo, false, false, false, false, '', ExcelBuf."Cell Type"::Text);//PRJ-1193.RM.1.0
         ExcelBuf.NewRow;
         ExcelBuf.AddInfoColumn(FORMAT(Text110), false, true, false, false, '', ExcelBuf."Cell Type"::Text);
         if PrintAmountsInLocal then
@@ -1166,24 +1062,13 @@ report 14021188 "NS_Aged Accounts Payable Ret"
             ExcelBuf.AddColumn(CurrencyCodeToPrint, false, '', false, false, false, '', ExcelBuf."Cell Type"::Text)
         end;
     end;
-    //PRJ-1193.RM.1.0 Start
-    local procedure NS_CreateExcelbook();
+
+    local procedure CreateExcelbook();
     begin
-        ExcelBuf.CreateNewBook(Text102);
-        ExcelBuf.WriteSheet(Text102, CompanyName, UserId);
-        ExcelBuf.CloseBook();
-        ExcelBuf.SetFriendlyFilename(StrSubstNo(Text102, CurrentDateTime, UserId));
-        ExcelBuf.OpenExcel();
+
+        //ExcelBuf.CreateBookAndOpenExcel('', Text101, Text102, COMPANYNAME, USERID); //PPNA16.0 Commented
+
+        ERROR('');
     end;
-
-
-    // local procedure CreateExcelbook();
-    // begin
-
-    //     //ExcelBuf.CreateBookAndOpenExcel('', Text101, Text102, COMPANYNAME, USERID); //PPNA16.0 Commented
-
-    //     ERROR('');
-    // end;
-    //PRJ-1193.RM.1.0 End
 }
 

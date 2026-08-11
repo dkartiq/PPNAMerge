@@ -10,12 +10,13 @@ report 14021192 "NS_Job Forecast Worksheet"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-301.MS.1.0 change length from 80 t0 100
-    //PRJCTPR-51 Dk.1.0.30jan 2023 | Worked on Description and Work Unit Of Measure
     DefaultLayout = RDLC;
     Caption = 'Job Forecast Worksheet';
     RDLCLayout = './Layouts/NSJob Forecast Worksheet.rdl';
-    //UsageCategory = ReportsAndAnalysis;  //PE-263.JS.1.0 23FEB2024 hide from global search
-    //ApplicationArea = all;   //PE-263.JS.1.0 23FEB2024 hide from global search
+    UsageCategory = ReportsAndAnalysis;
+    ApplicationArea = all;
+
+
     dataset
     {
         dataitem(ReportHeadings; "Integer")
@@ -143,23 +144,14 @@ report 14021192 "NS_Job Forecast Worksheet"
                 column(Job_Task_No; "NS_Job Task No.")
                 {
                 }
-                // column(Job_Task_Description; JobTask.Description)
-                // {
-
-                // }
-                column(Job_Task_Description; NS_Description)//PRJCTPR-51 Dk.1.0.30jan 2023
+                column(Job_Task_Description; JobTask.Description)
                 {
-
                 }
                 column(Work_Units; JobPlanningLineBudget."NS_Work Units")
                 {
                     DecimalPlaces = 0 : 0;
                 }
-                // column(Work_Unit_of_Measure; JobPlanningLineBudget."NS_Work Unit of Measure")
-                // {
-                // }
-
-                column(Work_Unit_of_Measure; WorkUnitOfMeasure)//PRJCTPR-51 Dk.1.0.30jan 2023
+                column(Work_Unit_of_Measure; JobPlanningLineBudget."NS_Work Unit of Measure")
                 {
                 }
                 column(Status_Date; PreviousJobForecast."NS_Status Date")
@@ -230,8 +222,6 @@ report 14021192 "NS_Job Forecast Worksheet"
                 }
 
                 trigger OnAfterGetRecord();
-                var
-                    JobTask: Record "Job Task"; //PRJ-1475.GK.1.0 22July2022
                 begin
                     NS_GetLastPostedStatus("NS_Job No.", "NS_Job Task No.", AsOfDate, PreviousJobForecast);
 
@@ -253,19 +243,13 @@ report 14021192 "NS_Job Forecast Worksheet"
 
                     Job.RESET;
                     Job.SETFILTER("No.", "NS_Job No.");
-                    //PRJ-1475.GK.1.0 22July2022 start
-                    if JobTask.Get("NS_Job No.", "NS_Job Task No.") then
-                        if (JobTask."NS_Forecast By Task Totals") and (JobTask.Totaling <> '') then
-                            Job.SetFilter("NS_Job Task No. Filter", JobTask.Totaling)
-                        else //PRJ-1475.GK.1.0 22July2022 end
-                            Job.SETFILTER("NS_Job Task No. Filter", "NS_Job Task No.");
+                    Job.SETFILTER("NS_Job Task No. Filter", "NS_Job Task No.");
                     Job.SETFILTER("NS_Date Filter", '<=%1', AsOfDate);
                     Job.CALCFIELDS("NS_Usage (Cost) (LCY)");
                     TotalCostsUsed := Job."NS_Usage (Cost) (LCY)";
                     Job.FINDSET;
                     JobName := Job."No." + ' - ' + Job.Description;
-                    NS_Description := JobTask.Description; //PRJCTPR-51 Dk.1.0.30jan 2023
-                    WorkUnitOfMeasure := JobTask."NS_Work Unit of Measure";//PRJCTPR-51 Dk.1.0.30jan 2023
+
                     if "NS_Entry Type" = "NS_Entry Type"::Cost then begin
                         BudgetRemaining := LineTotalBudget - TotalCostsUsed;
                         if BudgetRemaining > 0 then
@@ -327,7 +311,6 @@ report 14021192 "NS_Job Forecast Worksheet"
                 JobPlanLineRevenue.SETRANGE("Job No.", JobNo);
                 // JobPlanLineRevenue.SETRANGE("Line Type", JobPlanLineRevenue."Line Type"::Billable);PRJ-543 COMMENT
                 JobPlanLineRevenue.SETFILTER("Line Type", '%1|%2', JobPlanLineRevenue."Line Type"::Billable, JobPlanLineRevenue."Line Type"::"Both Budget and Billable");
-                OnBeforeReportHeadingsCalculateTotalRevenue(JobPlanLineRevenue);//FGH-163.SM.29022024  //PE-269.JS.1.0
                 JobPlanLineRevenue.CALCSUMS("Line Amount (LCY)", "Line Amount");
                 TotalRevenue := JobPlanLineRevenue."Line Amount (LCY)";
             end;
@@ -410,8 +393,6 @@ report 14021192 "NS_Job Forecast Worksheet"
 
     var
         Job: Record Job;
-        NS_Description: Text;//PRJCTPR-51 Dk.1.0.30jan 2023
-        WorkUnitOfMeasure: Code[10];//PRJCTPR-51 Dk.1.0.30jan 2023
         JobTask: Record "Job Task";
         jobsetupRec: Record "Jobs Setup";//PRJ-543.AS.1.0
         FinalRoundingDec: Integer;//PRJ-543.AS.1.0
@@ -478,12 +459,5 @@ report 14021192 "NS_Job Forecast Worksheet"
         AsOfDate := AsOfDateIn;
         "Job Forecast".SETRANGE("NS_Job No.", JobNo);
     end;
-
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeReportHeadingsCalculateTotalRevenue(JobPlanLineRevenue: Record "Job Planning Line")
-    begin
-    end;
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
 }
 

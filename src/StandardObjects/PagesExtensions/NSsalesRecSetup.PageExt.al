@@ -1,12 +1,8 @@
 pageextension 14021158 NS_SalesRecSetup extends "Sales & Receivables Setup"
 {
-    ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
     // version NAVW111.00.00.23572,PPNA11.00
     //PRJ-931.JS.1.0�23Sep2021 | Add one field
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJ-1579.RM.1.0 22Aug2022 | Added some code
-    //PRJ-1624.NK.1.0 21Sep2022 | Add one Field
-    Caption = 'Sales & Receivables Setup'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Ignore Updated Addresses")
@@ -31,8 +27,8 @@ pageextension 14021158 NS_SalesRecSetup extends "Sales & Receivables Setup"
             {
                 ApplicationArea = All;
                 Caption = 'Normal Ledger No.';
-                ToolTip = 'Customer Retention Ledger code for standard Accounts Receivable transactions. Recommend "Normal" or "Main"'; //PRJ-1579.RM.1.0 
-                // ToolTip = 'Normal Ledger No.'; //PRJ-1579.RM.1.0 commented
+
+                ToolTip = 'Normal Ledger No.';
                 Enabled = NS_NormalCustomerLedgerNoEnable;
             }
 
@@ -42,28 +38,6 @@ pageextension 14021158 NS_SalesRecSetup extends "Sales & Receivables Setup"
                 ToolTip = 'Use to disable sales price functionality on sales line';
                 ApplicationArea = All;
             }
-            //PRJ-1543.GK.1.0 28July2022 start
-            field("NS_Allow Description excl. Nos."; Rec."NS_Allow Description excl Nos.")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Allow Description excluding Nos. field.';
-            }
-            //PRJ-1543.GK.1.0 28July2022 end
-            //PRJ-1624.NK.1.0 21Sep2022 Start
-            field("NS_Allow diff Ret. On PB Line"; Rec."NS_Allow diff Ret. On PB Line")
-            {
-                ApplicationArea = all;
-                ToolTip = 'This field is use to allow for different Retention % on Progress Billings & Direct Sales Invoice';
-            }
-            //PRJ-1624.NK.1.0 21Sep2022 End
-            //PE-302.JS.1.0 30MAY2024-Start
-            field("NS_AutoApplySCM After Posting"; Rec."NS_AutoApplySCM After Posting")
-            {
-                Caption = 'Auto Apply Sales Credit Memo After Posting';
-                ApplicationArea = All;
-                ToolTip = 'Enable to Allow Auto Apply Sales Credit Memo After Posting if ProjectPro using with another (ISV)';
-            }
-            //PE-302.JS.1.0 30MAY2024-end
         }
     }
 

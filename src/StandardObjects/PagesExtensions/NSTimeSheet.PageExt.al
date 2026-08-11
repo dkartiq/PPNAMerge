@@ -16,26 +16,16 @@ pageextension 14021274 NS_TimeSheet extends "Time Sheet"
     // +     - ValidateQuantity: call Time Sheet Detail's NS_CalculateWages() after assigning Quantity
     // +     - set as Visible=TRUE: Cause of Absence Code, Job No., Job Task No., Work Type Code
     // +------------------------------------------------------------
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Time Sheet'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Cause of Absence Code")
         {
-            field("NS_Skill Class"; '')//PE-68 Dk.1.0 10April2023
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the Skill Class';
-                Visible = false;//PE-68 Dk.1.0 10April2023
-
-            }
-            //PE-68 Dk.1.0 10April2023 Start
-            field("NS_Skill Class New"; rec."NS_Skill Class New")
+            field("NS_Skill Class"; rec."NS_Skill Class")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Skill Class';
             }
-            //PE-68 Dk.1.0 10April2023 End
         }
         addafter("Assembly Order No.")
         {

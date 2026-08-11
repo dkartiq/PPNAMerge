@@ -15,13 +15,9 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
     //PRJ-200.AS.3.0 08OCT2020 Done changes in layout to correct divide by zero errors
     //TM-17.AM.1.0 | Added UOM in Report layout .
     //PRJ-812.AS.1.0 Added section code functionality
-    //PRJ-1348.NK.1.0 08Jun2022 | Add Caption    
-    //PRJ-1555.NK.1.0 03Aug2022 | Add Code
-    //PE-134.DK.1.0 26July2023| Add ToolTip
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSActual vs Budget CWU by APO.rdl';
-    //Caption = 'Actual vs Budget C/WU by APO'; //PRJ-1348.NK.1.0 08Jun2022 Block
-    Caption = 'Actual vs Budget C/WU by Task'; //PRJ-1348.NK.1.0 08Jun2022
+    Caption = 'Actual vs Budget C/WU by APO';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;
 
@@ -31,10 +27,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
         {
             DataItemTableView = SORTING("No.");
             PrintOnlyIfDetail = true;
-            //PE-308.DK.1.0 13JUNE2024 Start
-            //RequestFilterFields = "No.", "Bill-to Customer No.", "NS_Date Filter", Status, "NS_Type Filter";
-            RequestFilterFields = "No.", "Bill-to Customer No.", "NS_Date Filter", Status, "NS_TypeEnumFilter";
-            //PE-308.DK.1.0 13JUNE2024 End
+            RequestFilterFields = "No.", "Bill-to Customer No.", "NS_Date Filter", Status, "NS_Type Filter";
             column(Master_Job_No; "No.")
             {
             }
@@ -59,10 +52,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                     SETFILTER("Job No.", Job."No.");
                     SETFILTER("NS_Entry Type", '%1|%2', "NS_Entry Type"::Cost, "NS_Entry Type"::Both);
                     SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                    SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 End
+                    SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                     //SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter")); //PRJ-200.AS.2.0 15JULY2020
                 end;
             }
@@ -83,10 +73,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                     SetFilter("Job Task No.", Job.GetFilter("NS_Job Task No. Filter"));
                     SetFilter("Entry Type", Format("Entry Type"::Usage));
                     SetFilter("Posting Date", Job.GetFilter("NS_Date Filter"));
-                    //PE-308.DK.1.0 13JUNE2024 Start
-                    //SetFilter(Type, Job.GetFilter("NS_Type Filter"));
-                    SetFilter(Type, Job.GetFilter("NS_TypeEnumFilter"));
-                    //PE-308.DK.1.0 13JUNE2024 End
+                    SetFilter(Type, Job.GetFilter("NS_Type Filter"));
                 end;
 
             }
@@ -108,10 +95,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                     begin
                         //Get sub-level Job Planning Lines into the buffer
                         SETFILTER("NS_Entry Type", '%1|%2', "NS_Entry Type"::Cost, "NS_Entry Type"::Both);
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        //SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
-                        SETFILTER(Type, Job.GETFILTER("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 End
+                        SETFILTER(Type, Job.GETFILTER("NS_Type Filter"));
                         //SETFILTER("Planning Date", Job.GETFILTER("NS_Date Filter"));	//PRJ-200.AS.2.0 15JULY2020
                         SETFILTER("Job Task No.", Job.GETFILTER("NS_Job Task No. Filter"));
                     end;
@@ -132,10 +116,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                         SetFilter("Job Task No.", Job.GetFilter("NS_Job Task No. Filter"));
                         SetFilter("Entry Type", Format("Entry Type"::Usage));
                         SetFilter("Posting Date", Job.GetFilter("NS_Date Filter"));
-                        //PE-308.DK.1.0 13JUNE2024 Start
-                        //SetFilter(Type, Job.GetFilter("NS_Type Filter"));
-                        SetFilter(Type, Job.GetFilter("NS_TypeEnumFilter"));
-                        //PE-308.DK.1.0 13JUNE2024 END
+                        SetFilter(Type, Job.GetFilter("NS_Type Filter"));
                     end;
                 }
 
@@ -155,17 +136,6 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                 column(CompanyInformationName; CompanyInformation.Name)
                 {
                 }
-                //PE-141.NK.1.0 start 11Aug2023
-                column(CompanyInformationPic; CompanyInformation.Picture) { }
-                column(CompanyInformationAdd; CompanyInformation.Address) { }
-                column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-                column(CompanyInformationcity; CompanyInformation.City) { }
-                column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-                column(CompanyInformationpost; CompanyInformation."Post Code") { }
-                column(CompanyInformationCountry; CompanyInformation.County) { }
-                column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-                column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }
-                //PE-141.NK.1.0 end 11Aug2023
                 column(PageCaption; PageLbl)
                 {
                 }
@@ -285,18 +255,6 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                             column(ProcessDescription; JobProcess.NS_Description)
                             {
                             }
-                            //PRJ-1348.NK.1.0 13Jul2022 Start
-                            column(Process_Description; ProcessDesc)
-                            {
-                            }
-                            column(Operation_Description; OperationsDesc)
-                            {
-                            }
-                            column(Show_Operations; ShowOperations)
-                            {
-                            }
-
-                            //PRJ-1348.NK.1.0 08Jun2022 End
                             column(OperationDescription; JobOperation.NS_Description)
                             {
                             }
@@ -382,19 +340,16 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                                     CLEAR(OperationsDesc);
                                     Clear(Sectiondesc);//PRJ-688.AM.1.0
 
-                                    //PRJ-1555.NK.1.0 03Aug2022 Start
-                                                   // IF JobProcess.NS_Code <> '' THEN BEGIN
-                                                   //     IF JobOperation.NS_Code <> '' THEN BEGIN
-                                                   //         ProcessDesc := JobProcess.NS_Description
-                                                   //     END
-                                                   //     ELSE BEGIN
-                                                   //         ProcessDesc := JobTask.Description
-                                                   //     END;
+                                    IF JobProcess.NS_Code <> '' THEN BEGIN
+                                        IF JobOperation.NS_Code <> '' THEN BEGIN
+                                            ProcessDesc := JobProcess.NS_Description
+                                        END
+                                        ELSE BEGIN
+                                            ProcessDesc := JobTask.Description
+                                        END;
 
 
-                                // END;
-                                ProcessDesc := JobProcess.NS_Description;
-                                //PRJ-1555.NK.1.0 03Aug2022 End
+                                    END;
 
                                     IF JobOperation.NS_Description <> '' THEN
                                         OperationsDesc := JobTask.Description
@@ -555,7 +510,6 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                 {
                     Caption = 'Include Change Orders';
                     ApplicationArea = all;
-                    ToolTip = 'Enabling this will include the Sub Level Jobs with the master Job.'; //PE-134.DK.1.0 26July2023
                 }
                 field("Show Sub-Levels"; "ShowSub-Levels")
                 {
@@ -566,7 +520,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                 {
                     Caption = 'Show Processes';
                     ApplicationArea = all;
-                    CaptionClass = '50995,1,0'; //PRJ-1348.NK.1.0 08Jun2022
+
                     trigger OnValidate()
                     begin
                         IF NOT ShowProcesses THEN
@@ -577,7 +531,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                 {
                     Caption = 'Show Operations';
                     ApplicationArea = all;
-                    CaptionClass = '50995,2,0'; //PRJ-1348.NK.1.0 08Jun2022
+
                     trigger OnValidate()
                     begin
                         IF ShowOperations THEN
@@ -589,13 +543,11 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                 {
                     Caption = 'Show Sections';
                     ApplicationArea = All;
-                    CaptionClass = '50995,3,0'; //PRJ-1348.NK.1.0 08Jun2022
+
                     trigger OnValidate();
                     begin
-                        if ShowSections then begin
+                        if ShowSections then
                             ShowOperations := true;
-                            ShowProcesses := TRUE; //PRJ-1555.NK.1.0 04Aug2022
-                        end; //PRJ-1555.NK.1.0 04Aug2022
                     end;
                 }
                 //PRJ-688.AM.1.0
@@ -647,40 +599,11 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
     trigger OnInitReport()
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.NK.1.0 start 11Aug2023
         JobsSetup.GET;
         GLSetup.GET;
-        //PE-141.NK.1.0 start 11Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.NK.1.0 start 11Aug2023
-
     end;
 
     trigger OnPreReport()
-    var
-        ApoSetup: Record NS_APOSetup; //PRJ-1348.NK.1.0 12Jul2022
     begin
         IF JobNumFilter <> '' THEN
             Job.SETRANGE("No.", JobNumFilter);
@@ -694,15 +617,6 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
             NoHeadingLbl := NoLbl;
             //TypeHeadingLbl := TypeHeading;
         END;
-        //PRJ-1348.NK.1.0 12Jul2022 Start
-        ActivityProcessOperationLbl := '';
-        if JobsSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if ApoSetup.Get() then; //PRJ-1348.NK.1.0 08Sep2022
-        if JobsSetup."NS_Activate Task Pick List" then
-            ActivityProcessOperationLbl := ApoSetup."Activity Code" + ' / ' + ApoSetup."Process Code" + ' / ' + ApoSetup."Operation Code" + ' / ' + ApoSetup."Section Code"
-        else
-            ActivityProcessOperationLbl := 'Activity / Process / Operation / Sections';
-        //PRJ-1348.NK.1.0 12Jul2022 End
     end;
 
     var
@@ -724,17 +638,6 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
         SectionCodeToUse: Code[10];//PRJ-688.AM.1.0
         JobNo: Code[20];
         ActivityCode: Code[10];
-
-        //PE-141.NK.1.0 start 23Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.NK.1.0 end 23Aug2023 
-
         ProcessCode: Code[10];
         OperationCode: Code[10];
         SectionCode: Code[10];//PRJ-688.AM.1.0
@@ -772,8 +675,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
         ReportTitle: Label 'Actual vs Budget Cost Work Units by APO';
         PageLbl: Label 'Page';
         JobFiltersLbl: Label 'Job Filters:';
-        //ActivityProcessOperationLbl: Label 'Activity / Process / Operation'; //PRJ-1348.NK.1.0 12Jul2022 Block
-        ActivityProcessOperationLbl: text; //PRJ-1348.NK.1.0 12Jul2022
+        ActivityProcessOperationLbl: Label 'Activity / Process / Operation';
         DescriptionLbl: Label 'Description';
         NoLbl: Label 'No.';
         JobDescriptionLbl: Label 'Job Description:';
@@ -1075,8 +977,7 @@ report 14021157 "NS_ActualvsBudget C/WU by APO"
                 //Add to Actual and Budget Operation Quantity and Costs
                 // AccumulateAPOTotals(JobReportBuffer2, 0, "NS_Job No.", "NS_Activity Code", "NS_Process Code", "NS_Operation Code", "NS_Section Code", APOTotals);//PRJ-688.AM.1.0
 
-                //if not JobSection.GET(JobSection.NS_Type::Revenue, JobReportBuffer1."NS_Activity Code", JobReportBuffer1."NS_Process Code", JobReportBuffer1."NS_Operation Code", JobReportBuffer1."NS_Section Code") then //PRJ-1555.NK.1.0 03Aug2022 Block
-            if not JobSection.GET(JobSection.NS_Type::Cost, JobReportBuffer1."NS_Activity Code", JobReportBuffer1."NS_Process Code", JobReportBuffer1."NS_Operation Code", JobReportBuffer1."NS_Section Code") then //PRJ-1555.NK.1.0 03Aug2022
+                if not JobSection.GET(JobSection.NS_Type::Revenue, "NS_Activity Code", "NS_Process Code", "NS_Operation Code", "NS_Section Code") then
                     if "NS_Section Code" <> '' then
                         JobSection.NS_Description := JobOperation.NS_Description
                     else

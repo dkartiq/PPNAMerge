@@ -10,7 +10,6 @@ page 14021327 "NS_Progress Billing List"
     // +------------------------------------------------------------
     //PRJ-301.AS.1.0 - Increased length
     //CTSI-121.N.S.1.0 18 Aug2020 add field manager & Person responsible
-    //PRJCTPR-270.HS.1.0 31Jan2024 | Added Field on Page 
     Caption = 'Progress Billing List';
     CardPageID = "NS_Progress Billing Header";
     Editable = false;
@@ -105,13 +104,6 @@ page 14021327 "NS_Progress Billing List"
                 }
                 //CTSI-121.N.S.1.0 18 Aug2020 End
 
-                //PRJCTPR-270.HS.1.0 31Jan2024 Start
-                field("NS_Posted Sales Invoice No."; Rec."NS_Posted Sales Invoice No.")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Posted Sales Invoice No. field.';
-                }
-                //PRJCTPR-270.HS.1.0 31Jan2024 End
             }
         }
     }

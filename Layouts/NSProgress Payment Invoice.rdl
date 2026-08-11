@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Invoice_Header_Caption">
+          <DataField>Invoice_Header_Caption</DataField>
+        </Field>
+        <Field Name="CompanyInfo1Picture">
+          <DataField>CompanyInfo1Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfo2Picture">
+          <DataField>CompanyInfo2Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfo3Picture">
+          <DataField>CompanyInfo3Picture</DataField>
+        </Field>
+        <Field Name="CompanyAddress_1">
+          <DataField>CompanyAddress_1</DataField>
+        </Field>
+        <Field Name="CompanyAddress_2">
+          <DataField>CompanyAddress_2</DataField>
+        </Field>
+        <Field Name="CompanyAddress_3">
+          <DataField>CompanyAddress_3</DataField>
+        </Field>
+        <Field Name="CompanyAddress_4">
+          <DataField>CompanyAddress_4</DataField>
+        </Field>
+        <Field Name="CompanyAddress_5">
+          <DataField>CompanyAddress_5</DataField>
+        </Field>
+        <Field Name="CompanyAddress_6">
+          <DataField>CompanyAddress_6</DataField>
+        </Field>
+        <Field Name="CompanyAddress_7">
+          <DataField>CompanyAddress_7</DataField>
+        </Field>
+        <Field Name="CompanyAddress_8">
+          <DataField>CompanyAddress_8</DataField>
+        </Field>
+        <Field Name="Invoice_Number_Caption">
+          <DataField>Invoice_Number_Caption</DataField>
+        </Field>
+        <Field Name="Progress_Payment_Header_No">
+          <DataField>Progress_Payment_Header_No</DataField>
+        </Field>
+        <Field Name="Invoice_Date_Caption">
+          <DataField>Invoice_Date_Caption</DataField>
+        </Field>
+        <Field Name="Requision_Date">
+          <DataField>Requision_Date</DataField>
+        </Field>
+        <Field Name="Page_Caption">
+          <DataField>Page_Caption</DataField>
+        </Field>
+        <Field Name="Payment_Caption">
+          <DataField>Payment_Caption</DataField>
+        </Field>
+        <Field Name="To_Caption">
+          <DataField>To_Caption</DataField>
+        </Field>
+        <Field Name="VendorAddress_1">
+          <DataField>VendorAddress_1</DataField>
+        </Field>
+        <Field Name="VendorAddress_2">
+          <DataField>VendorAddress_2</DataField>
+        </Field>
+        <Field Name="VendorAddress_3">
+          <DataField>VendorAddress_3</DataField>
+        </Field>
+        <Field Name="VendorAddress_4">
+          <DataField>VendorAddress_4</DataField>
+        </Field>
+        <Field Name="VendorAddress_5">
+          <DataField>VendorAddress_5</DataField>
+        </Field>
+        <Field Name="VendorAddress_6">
+          <DataField>VendorAddress_6</DataField>
+        </Field>
+        <Field Name="VendorAddress_7">
+          <DataField>VendorAddress_7</DataField>
+        </Field>
+        <Field Name="VendorAddress_8">
+          <DataField>VendorAddress_8</DataField>
+        </Field>
+        <Field Name="Job_Caption">
+          <DataField>Job_Caption</DataField>
+        </Field>
+        <Field Name="Addr_Caption">
+          <DataField>Addr_Caption</DataField>
+        </Field>
+        <Field Name="JobAddress_1">
+          <DataField>JobAddress_1</DataField>
+        </Field>
+        <Field Name="JobAddress_2">
+          <DataField>JobAddress_2</DataField>
+        </Field>
+        <Field Name="JobAddress_3">
+          <DataField>JobAddress_3</DataField>
+        </Field>
+        <Field Name="JobAddress_4">
+          <DataField>JobAddress_4</DataField>
+        </Field>
+        <Field Name="A_E_Caption">
+          <DataField>A_E_Caption</DataField>
+        </Field>
+        <Field Name="AEAddress_1">
+          <DataField>AEAddress_1</DataField>
+        </Field>
+        <Field Name="AEAddress_2">
+          <DataField>AEAddress_2</DataField>
+        </Field>
+        <Field Name="AEAddress_3">
+          <DataField>AEAddress_3</DataField>
+        </Field>
+        <Field Name="AEAddress_4">
+          <DataField>AEAddress_4</DataField>
+        </Field>
+        <Field Name="Description_Caption">
+          <DataField>Description_Caption</DataField>
+        </Field>
+        <Field Name="Subcontract_Description">
+          <DataField>Subcontract_Description</DataField>
+        </Field>
+        <Field Name="Period_To_Caption">
+          <DataField>Period_To_Caption</DataField>
+        </Field>
+        <Field Name="Period_To">
+          <DataField>Period_To</DataField>
+        </Field>
+        <Field Name="Vendor_ID_Caption">
+          <DataField>Vendor_ID_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_ID_No">
+          <DataField>Vendor_ID_No</DataField>
+        </Field>
+        <Field Name="Vendor_Job_No_Caption">
+          <DataField>Vendor_Job_No_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Job_No">
+          <DataField>Vendor_Job_No</DataField>
+        </Field>
+        <Field Name="Contract_Date_Caption">
+          <DataField>Contract_Date_Caption</DataField>
+        </Field>
+        <Field Name="Contract_Date">
+          <DataField>Contract_Date</DataField>
+        </Field>
+        <Field Name="Header_Line_01_No_Lbl">
+          <DataField>Header_Line_01_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_01_Name_Lbl">
+          <DataField>Header_Line_01_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Original_Contract_Sum">
+          <DataField>Original_Contract_Sum</DataField>
+        </Field>
+        <Field Name="Original_Contract_SumFormat">
+          <DataField>Original_Contract_SumFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_02_No_Lbl">
+          <DataField>Header_Line_02_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_02_Name_Lbl">
+          <DataField>Header_Line_02_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Net_Changes">
+          <DataField>Net_Changes</DataField>
+        </Field>
+        <Field Name="Net_ChangesFormat">
+          <DataField>Net_ChangesFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_03_No_Lbl">
+          <DataField>Header_Line_03_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_03_Name_Lbl">
+          <DataField>Header_Line_03_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Contract_Sum_To_Date">
+          <DataField>Contract_Sum_To_Date</DataField>
+        </Field>
+        <Field Name="Contract_Sum_To_DateFormat">
+          <DataField>Contract_Sum_To_DateFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_04_No_Lbl">
+          <DataField>Header_Line_04_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_04_Name_Lbl">
+          <DataField>Header_Line_04_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Completed_And_Stored_To_Date">
+          <DataField>Total_Completed_And_Stored_To_Date</DataField>
+        </Field>
+        <Field Name="Total_Completed_And_Stored_To_DateFormat">
+          <DataField>Total_Completed_And_Stored_To_DateFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_05_No_Lbl">
+          <DataField>Header_Line_05_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05_Name_Lbl">
+          <DataField>Header_Line_05_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05a_No_Lbl">
+          <DataField>Header_Line_05a_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05a_Name_Lbl">
+          <DataField>Header_Line_05a_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_Work">
+          <DataField>Retention_Percent_Of_Completed_Work</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_WorkFormat">
+          <DataField>Retention_Percent_Of_Completed_WorkFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_05b_No_Lbl">
+          <DataField>Header_Line_05b_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05b_Name_Lbl">
+          <DataField>Header_Line_05b_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_Material">
+          <DataField>Retention_Percent_Of_Completed_Material</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_MaterialFormat">
+          <DataField>Retention_Percent_Of_Completed_MaterialFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_05c_Name_Lbl">
+          <DataField>Header_Line_05c_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Retention">
+          <DataField>Total_Retention</DataField>
+        </Field>
+        <Field Name="Total_RetentionFormat">
+          <DataField>Total_RetentionFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_06_No_Lbl">
+          <DataField>Header_Line_06_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_06_Name_Lbl">
+          <DataField>Header_Line_06_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Earned_Less_Retention">
+          <DataField>Total_Earned_Less_Retention</DataField>
+        </Field>
+        <Field Name="Total_Earned_Less_RetentionFormat">
+          <DataField>Total_Earned_Less_RetentionFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_07_No_Lbl">
+          <DataField>Header_Line_07_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_07_Name_Lbl">
+          <DataField>Header_Line_07_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Less_Previous_Invoices">
+          <DataField>Less_Previous_Invoices</DataField>
+        </Field>
+        <Field Name="Less_Previous_InvoicesFormat">
+          <DataField>Less_Previous_InvoicesFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_08_No_Lbl">
+          <DataField>Header_Line_08_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_08_Name_Lbl">
+          <DataField>Header_Line_08_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Current_Payment_Due">
+          <DataField>Current_Payment_Due</DataField>
+        </Field>
+        <Field Name="Current_Payment_DueFormat">
+          <DataField>Current_Payment_DueFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_09_No_Lbl">
+          <DataField>Header_Line_09_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_09_Name_Lbl">
+          <DataField>Header_Line_09_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Balance_To_Finish_Including_Retention">
+          <DataField>Balance_To_Finish_Including_Retention</DataField>
+        </Field>
+        <Field Name="Balance_To_Finish_Including_RetentionFormat">
+          <DataField>Balance_To_Finish_Including_RetentionFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_10_No_Lbl">
+          <DataField>Header_Line_10_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_10a_No_Lbl">
+          <DataField>Header_Line_10a_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_10b_No_Lbl">
+          <DataField>Header_Line_10b_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_11_No_Lbl">
+          <DataField>Header_Line_11_No_Lbl</DataField>
+        </Field>
+        <Field Name="Previous_Additions">
+          <DataField>Previous_Additions</DataField>
+        </Field>
+        <Field Name="Previous_AdditionsFormat">
+          <DataField>Previous_AdditionsFormat</DataField>
+        </Field>
+        <Field Name="Previous_Deductions">
+          <DataField>Previous_Deductions</DataField>
+        </Field>
+        <Field Name="Previous_DeductionsFormat">
+          <DataField>Previous_DeductionsFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_12_No_Lbl">
+          <DataField>Header_Line_12_No_Lbl</DataField>
+        </Field>
+        <Field Name="Current_Additions">
+          <DataField>Current_Additions</DataField>
+        </Field>
+        <Field Name="Current_AdditionsFormat">
+          <DataField>Current_AdditionsFormat</DataField>
+        </Field>
+        <Field Name="Current_Deductions">
+          <DataField>Current_Deductions</DataField>
+        </Field>
+        <Field Name="Current_DeductionsFormat">
+          <DataField>Current_DeductionsFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_13_No_Lbl">
+          <DataField>Header_Line_13_No_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Changes_Additions">
+          <DataField>Total_Changes_Additions</DataField>
+        </Field>
+        <Field Name="Total_Changes_AdditionsFormat">
+          <DataField>Total_Changes_AdditionsFormat</DataField>
+        </Field>
+        <Field Name="Total_Changes_Deductions">
+          <DataField>Total_Changes_Deductions</DataField>
+        </Field>
+        <Field Name="Total_Changes_DeductionsFormat">
+          <DataField>Total_Changes_DeductionsFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_14_No_Lbl">
+          <DataField>Header_Line_14_No_Lbl</DataField>
+        </Field>
+        <Field Name="Net_Change_Orders">
+          <DataField>Net_Change_Orders</DataField>
+        </Field>
+        <Field Name="Net_Change_OrdersFormat">
+          <DataField>Net_Change_OrdersFormat</DataField>
+        </Field>
+        <Field Name="Detail_Item_Lbl">
+          <DataField>Detail_Item_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Description_Lbl">
+          <DataField>Detail_Description_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Scheduled_Value_Lbl">
+          <DataField>Detail_Scheduled_Value_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Previous_Period_Lbl">
+          <DataField>Detail_Previous_Period_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_This_Period_Lbl">
+          <DataField>Detail_This_Period_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Materials_Presently_Stored_Lbl">
+          <DataField>Detail_Materials_Presently_Stored_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Total_Completed_And_Stored_Lbl">
+          <DataField>Detail_Total_Completed_And_Stored_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Percent_This_Period_Lbl">
+          <DataField>Detail_Percent_This_Period_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Balance_To_Finish_Lbl">
+          <DataField>Detail_Balance_To_Finish_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Retention_Lbl">
+          <DataField>Detail_Retention_Lbl</DataField>
+        </Field>
+        <Field Name="DLine_No">
+          <DataField>DLine_No</DataField>
+        </Field>
+        <Field Name="DDescription">
+          <DataField>DDescription</DataField>
+        </Field>
+        <Field Name="DScheduled_Value">
+          <DataField>DScheduled_Value</DataField>
+        </Field>
+        <Field Name="DScheduled_ValueFormat">
+          <DataField>DScheduled_ValueFormat</DataField>
+        </Field>
+        <Field Name="DPrevious_Period">
+          <DataField>DPrevious_Period</DataField>
+        </Field>
+        <Field Name="DPrevious_PeriodFormat">
+          <DataField>DPrevious_PeriodFormat</DataField>
+        </Field>
+        <Field Name="DThis_Period">
+          <DataField>DThis_Period</DataField>
+        </Field>
+        <Field Name="DThis_PeriodFormat">
+          <DataField>DThis_PeriodFormat</DataField>
+        </Field>
+        <Field Name="DStored_Materials_Amount">
+          <DataField>DStored_Materials_Amount</DataField>
+        </Field>
+        <Field Name="DStored_Materials_AmountFormat">
+          <DataField>DStored_Materials_AmountFormat</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_Stored">
+          <DataField>DTotal_Completed_And_Stored</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_StoredFormat">
+          <DataField>DTotal_Completed_And_StoredFormat</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_Stored_Pct">
+          <DataField>DTotal_Completed_And_Stored_Pct</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_Stored_PctFormat">
+          <DataField>DTotal_Completed_And_Stored_PctFormat</DataField>
+        </Field>
+        <Field Name="DBalance_To_Finish">
+          <DataField>DBalance_To_Finish</DataField>
+        </Field>
+        <Field Name="DBalance_To_FinishFormat">
+          <DataField>DBalance_To_FinishFormat</DataField>
+        </Field>
+        <Field Name="DRetention">
+          <DataField>DRetention</DataField>
+        </Field>
+        <Field Name="DRetentionFormat">
+          <DataField>DRetentionFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

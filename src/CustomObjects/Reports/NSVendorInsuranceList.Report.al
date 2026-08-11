@@ -11,7 +11,6 @@ report 14021186 "NS_Vendor Insurance List"
     //SMPL - Caption can't be used on area
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-319.AS.1.0 Added layout in outer AL Code box to visible report output
-    //PE-77.RM.1.0 14Apr2023 | Changes in Layout only
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSVendor Insurance List.rdl';
     UsageCategory = ReportsAndAnalysis;

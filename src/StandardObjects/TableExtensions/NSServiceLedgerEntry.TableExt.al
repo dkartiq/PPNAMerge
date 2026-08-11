@@ -20,15 +20,6 @@ tableextension 14021231 NS_ServiceLedgerEntry extends "Service Ledger Entry"
             TableRelation = "NS_Retention Ledger Code".NS_Code;
             DataClassification = CustomerContent;
         }
-         //PRJCTPR-222.JS.1.0 09NOV2023 Start
-        field(14021302; "NS_Job Cost Category"; Code[10])
-        {
-            Caption = 'Job Cost Category';
-            Description = 'ProjectPro';
-            TableRelation = "NS_Job Cost Category";
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-222.JS.1.0 09NOV2023 end 
     }
 }
 

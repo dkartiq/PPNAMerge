@@ -8,13 +8,6 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
     //PRJ-492.RS.1.0 10May2021 | Hide/Unhide Fields 
     //PRJ-817.JS.1.0�26July2021 | Add fields
     //PRJ-856.GK.1.0 20Aug2021 |Added new condition for Subcontract PO Qty. to Invoice validation.
-    //PRJ-1165.JS.1.0 24JAN2022 | correction for retention ledger
-    //PRJ-1579.RM.1.0 22Aug2022 | Added some code
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJCTPR-37.JS.1.0 13JAN2023 | line commented to update Amount including VAT, command place in wrong event
-    //PE-210.HS.1.0 23Nov2023| Add Code
-
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         modify("No.")
@@ -23,34 +16,11 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
             //Visible = false; 
             //Enabled = false;
             trigger OnBeforeValidate()
-            var
-                NSJobCostCategory: record "NS_Job Cost Category"; //PRJCTPR-185.JS.1.0 01Sep2023s
             begin
-                //PRJ-1165.JS.1.0 24JAN2022-Start
-                IF Rec.Type = Rec.Type::NS_Ledger THEN BEGIN
-                    //NS_Resource.GET("No.");
-                    //"NS_Job Cost Category" := NS_Resource."NS_Job Cost Category";
-                    if NS_Resource.GET(Rec."No.") then
-                        Rec."NS_Job Cost Category" := NS_Resource."NS_Job Cost Category";
-                    //PRJ-1165.JS.1.0 24JAN2022-end
+                IF Type = Type::NS_Ledger THEN BEGIN
+                    NS_Resource.GET("No.");
+                    "NS_Job Cost Category" := NS_Resource."NS_Job Cost Category";
                 END;
-                //PRJCTPR-60 NK.1.0 13feb2022 start
-                if Rec.Type = Rec.Type::"G/L Account" then begin
-                    if GLAccount.Get(Rec."No.") then
-                        Rec."NS_Job Cost Category" := GLAccount."NS_Cost Category";
-                    //PRJCTPR-185.JS.1.0 01Sep2023 - Start
-                    if Rec."NS_Job Cost Category" = '' then begin
-                        NSJobCostCategory.Reset();
-                        NSJobCostCategory.SetCurrentKey("NS_G/L Account No.");
-                        NSJobCostCategory.SetRange("NS_G/L Account No.", rec."No.");
-                        if NSJobCostCategory.FindFirst() then
-                            rec."NS_Job Cost Category" := NSJobCostCategory.NS_Code;
-                    end;
-                    if Rec."Line No." <> 0 then //PRJCTPR-185.AT.1.0  31OCT2023
-                        Rec.Modify();
-                    //PRJCTPR-185.JS.1.0 01Sep2023 - end                        
-                end;
-                //PRJCTPR-60.NK.1.0 13feb2022 end
             end;
             //PRJ-82.SK.1.0 End
 
@@ -94,9 +64,8 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
                     "NS_Subcontract Payment Percent" := ((("Qty. to Receive" + "Quantity Received") * "Direct Unit Cost") / "Line Amount") * 100
                 ELSE
                     ERROR(Text14021100);
-                //Rec.VALIDATE("Amount Including VAT");     //PRJCTPR-37.JS.1.0 13JAN2023 line commented
-                Rec.NS_SetRetentionBase();
-                //PRJ-1135.NK.1.0 end
+                VALIDATE("Amount Including VAT");
+                NS_SetRetentionBase;
                 //END;  //PRJ-277.MS.1.0 comment
 
                 //ProjectPro - end
@@ -136,30 +105,6 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
         //     Visible = true;
         // }
         //PPDA.1.0.TBA End
-        //PE-210.HS.1.0 23Nov2023 Start
-        modify("Direct Unit Cost")
-        {
-            StyleExpr = NS_color;
-            trigger OnAfterValidate()
-            begin
-                Clear(NS_color);
-                if NS_JobSetup.Get() then;
-                if NS_JobSetup.NS_CostExceedsColor then begin
-                    NS_JPL.Reset();
-                    NS_JPL.SetRange("Job No.", rec."Job No.");
-                    NS_JPL.SetRange("Job Task No.", rec."Job Task No.");
-                    NS_JPL.SetRange("Line No.", rec."NS_Job Planning Line No.");
-                    if NS_JPL.FindSet() then begin
-                        if rec."Direct Unit Cost" > NS_JPL."Unit Cost" then
-                            NS_color := 'Unfavorable'
-                        else
-                            NS_color := 'standard';
-                    end;
-                end
-            end;
-
-        }
-        //PE-210.HS.1.0 23Nov2023 End
         addafter("Job No.")
         {
             field("NS_Retention Base Amount"; Rec."NS_Retention Base Amount")
@@ -406,14 +351,12 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
             {
                 ApplicationArea = all;
                 Visible = false;//PRJ-492.N.S.1.0 
-                ToolTip = 'Select the Segment '; //PRJ-1579.RM.1.0 
 
             }
             field("NS_Segment Code"; Rec."NS_Segment Code")
             {
                 ApplicationArea = All;
                 Caption = 'Segment Code';
-                ToolTip = 'Select the Segment '; //PRJ-1579.RM.2.0 
                 Description = 'TM-10.AM.1.0';
                 //Visible = false; //PRJ-492.AS.1.0//PRJ-492.RS.1.0 25May2021 comment
                 Visible = true;//PRJ-492.RS.1.0 25May2021
@@ -472,29 +415,14 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
             field("NS_JMP Details"; Rec."NS_JMP Details")
             {
                 ApplicationArea = All;
-                caption = 'JMP Details (Obsolete)';   //PRJCTPR-256.JS.1.0 14DEC2023
                 ToolTip = 'Specifies the Job Material Planning Details';
                 //Visible = false; //PRJ-492.AS.1.0//PRJ-492.RS.1.0 10May2021 Comment
                 Visible = true;//PRJ-492.RS.1.0 10May2021
-                //PRJCTPR-256.JS.1.0 14DEC2023 - Start
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Replaced by new field “JMP Details” with increased length 100 characters';
-                ObsoleteTag = 'Repleace in ProjectPro Upcomming release 23.0.XX.XXXX';
-                //PRJCTPR-256.JS.1.0 14DEC2023 - end
             }
-            //PRJCTPR-256.JS.1.0 14DEC2023 - Start
-            field("NS_PPJMP Details"; Rec."NS_PPJMP Details")
-            {
-                caption = 'JMP Details';
-                ApplicationArea = All;
-                ToolTip = 'Specifies the value of the Job Material Planning line Details';
-            }
-            //PRJCTPR-256.JS.1.0 14DEC2023 - end
         }
         modify("Over-Receipt Quantity")
         {
             Visible = false;
-
         }
         modify("Over-Receipt Code")
         {
@@ -597,9 +525,6 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
         TypeAsText: Text[30];
         TempOptionLookupBuffer: Record 1670;
         EditBool: Boolean;
-        GLAccount: Record "G/L Account"; //PRJCTPR-60.NK.1.0 13feb2022
-        NS_color: Text; //PE-210.HS.1.0 23Nov2023
-        NS_JPL: Record "Job Planning Line";  //PE-210.HS.1.0 23Nov2023
 
     trigger OnAfterGetRecord();
     begin
@@ -623,23 +548,6 @@ pageextension 14021123 NS_PurchaseOrderSubForm extends "Purchase Order Subform"
             //PRJ-277.MS.1.0 code comment
         END;
         //ProjectPro - end
-
-        //PE-210.HS.1.0 23Nov2023 Start
-        Clear(NS_color);
-        if NS_JobSetup.Get() then;
-        if NS_JobSetup.NS_CostExceedsColor then begin
-            NS_JPL.Reset();
-            NS_JPL.SetRange("Job No.", rec."Job No.");
-            NS_JPL.SetRange("Job Task No.", rec."Job Task No.");
-            NS_JPL.SetRange("Line No.", rec."NS_Job Planning Line No.");
-            if NS_JPL.FindSet() then begin
-                if rec."Direct Unit Cost" > NS_JPL."Unit Cost" then
-                    NS_color := 'Unfavorable'
-                else
-                    NS_color := 'standard';
-            end;
-        end
-        //PE-210.HS.1.0 23Nov2023 End
     end;
 
     trigger OnOpenPage();

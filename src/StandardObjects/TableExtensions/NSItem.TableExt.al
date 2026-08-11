@@ -1,8 +1,7 @@
 tableextension 14021107 NS_Item extends Item
 {
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
-    //PRJ-1058.GK.1.0 26Nov2021 Twinoaks  Custmization for Twinoaks
-    //PRJ-1335.NK.1.0 02May2022 Add One Field.
+
     fields
     {
         field(14021101; "NS_Job Cost Category"; Code[10])
@@ -114,7 +113,6 @@ tableextension 14021107 NS_Item extends Item
             Caption = 'Labor Hours per Qty.';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            DecimalPlaces = 2 : 4; //PRJ-1075.GK.1.0 13Dec2021
         }
         field(14021411; NS_Manufacturer; Text[50])
         {
@@ -131,32 +129,6 @@ tableextension 14021107 NS_Item extends Item
             Description = 'ProjectPro';
             FieldClass = FlowField;
         }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        field(14021413; "NS_Quote Costs"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Quote Costs';
-            trigger OnValidate()
-            begin
-                Rec."NS_Quote Costs Modified Date" := Today;
-            end;
-        }
-        field(14021414; "NS_Quote Costs Modified Date"; Date)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Quote Costs Modified Date';
-            Editable = false;
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-        //PRJ-1335.NK.1.0 02May2022 Start
-        field(14021415; "NS_Revenue Category"; Code[10])
-        {
-            Caption = 'Revenue Category';
-            Description = 'ProjectPro';
-            TableRelation = "NS_Job Revenue Category";
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1335.NK.1.0 02May2022 End
     }
 
     trigger OnBeforeInsert()

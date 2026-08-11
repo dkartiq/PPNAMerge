@@ -3,8 +3,7 @@ pageextension 14021153 NS_PostedSalesInvoices extends "Posted Sales Invoices"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
     //PRJ-659.RS.1.0 17June21 | NS_ should be removed from every page rest mention the page ID and Name.
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Sales Invoices'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Sell-to Customer Name")
@@ -20,15 +19,6 @@ pageextension 14021153 NS_PostedSalesInvoices extends "Posted Sales Invoices"
                 ApplicationArea = All;
                 ToolTip = 'Specifies the Job Description.';
             }
-            //PRJ-1648.PS.1.0 10OCT2022 - Start
-
-            field("NS_Retention Document"; Rec."NS_Retention Document")
-            {
-                ApplicationArea = All;
-
-            }
-
-            //PRJ-1648.PS.1.0 10OCT2022 - End
         }
     }
     var

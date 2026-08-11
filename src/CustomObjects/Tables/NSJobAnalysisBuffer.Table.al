@@ -9,8 +9,6 @@ table 14021182 "NS_Job Analysis Buffer"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-301.N.S.1.0 24Sep2020 change length description,Job name
-    //PRJ-1065.JS.1.0 | 08Dec2021 Add two fields
-
     Caption = 'Job Analysis Buffer';
 
 
@@ -288,18 +286,6 @@ table 14021182 "NS_Job Analysis Buffer"
         field(101; "NS_Is Locked"; Boolean)
         {
             Caption = 'Is Locked';
-            DataClassification = CustomerContent;
-        }
-
-        //PRJ-1065.JS.1.0  08Dec2021
-        field(102; "NS_Global Dimension 1 Code"; Code[20])
-        {
-            Caption = 'Global Dimension 1 Code';
-            DataClassification = CustomerContent;
-        }
-        field(103; "NS_Global Dimension 2 Code"; Code[20])
-        {
-            Caption = 'Global Dimension 1 Code';
             DataClassification = CustomerContent;
         }
     }

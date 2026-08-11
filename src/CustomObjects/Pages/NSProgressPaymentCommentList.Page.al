@@ -11,8 +11,7 @@ page 14021345 "NS_Progress PaymentCommentList"
 
     Caption = 'Comment List';
     DataCaptionFields = "NS_No.";
-    // Editable = false;
-    Editable = true;  // PRJCTPR-293.HS.1.0 19Jan2024 
+    Editable = false;
     PageType = Card;
     SourceTable = "NS_Progress PaymentCommentLine";
 

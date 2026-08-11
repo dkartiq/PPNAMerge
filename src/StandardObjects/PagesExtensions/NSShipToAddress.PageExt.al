@@ -1,9 +1,7 @@
 pageextension 14021242 NS_ShipToAddress extends "Ship-to Address"
 {
     // version NAVW111.00.00.19846,NAVNA11.00.00.19846,PPNA11.00
-    //PRJ-1169.GK.1.0 | change caption
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Ship-to Address'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter(General)
@@ -15,7 +13,6 @@ pageextension 14021242 NS_ShipToAddress extends "Ship-to Address"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the "Table ID';
-                    Caption = 'Reference ID'; //PRJ-1169.GK.1.0
                 }
                 field("NS_Address Type"; Rec."NS_Address Type")
                 {

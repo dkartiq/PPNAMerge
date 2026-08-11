@@ -3,7 +3,6 @@ report 14021315 "NS_Subcontract-Vendor"
     // PRJ-482.MS.1.0 create new report
     // PRJ-482.AS.1.0 12Jan2021  Added many new fields to the following dataitems
     // PRJ-676.RS.1.0 29May2021 | Custom Report Creation for V17
-    //PRJCTPR-197 Dk.1.0 31March2023 | Job No. Rewrite Issue.
 
     DefaultLayout = Word;
     //RDLCLayout = './Layouts/NSCustomized subcontract Status by Vendor_New.rdl';//PRJ-218:AS:14April2020
@@ -492,14 +491,9 @@ report 14021315 "NS_Subcontract-Vendor"
                     column(NS_VAT_Bus__Posting_Group; "NS_VAT Bus. Posting Group")
                     {
                     }
-                    //PRJCTPR-197 Dk.1.0 Start
-                    // column(NS_Job_Type; "NS_Job Type")
-                    // {
-                    // }
-                    column(NS_Job_Type; "NS_Job Type New")
+                    column(NS_Job_Type; "NS_Job Type")
                     {
                     }
-                    //PRJCTPR-197 Dk.1.0 End
                     column(NS_Job_Status_Date; "NS_Job Status Date")
                     {
                     }
@@ -512,14 +506,9 @@ report 14021315 "NS_Subcontract-Vendor"
                     column(NS_Estimated_Completion_Date; "NS_Estimated Completion Date")
                     {
                     }
-                    //PRJCTPR-308.DK.1.0 Start
-                    // column(NS_Job_Calendar_Type; "NS_Job Calendar Type")
-                    // {
-                    // }
-                    column(NS_Job_Calendar_Type; "NS_JobCalendarType")
+                    column(NS_Job_Calendar_Type; "NS_Job Calendar Type")
                     {
                     }
-                    //PRJCTPR-308.DK.1.0 End
                     // PRJ-482.AS.1.0 START
                     column(Bill_to_Address; "Bill-to Address")
                     {
@@ -627,12 +616,9 @@ report 14021315 "NS_Subcontract-Vendor"
                     column(NS_Actual_Percent_Complete; "NS_Actual Percent Complete")
                     {
                     }
-                    column(NS_Tax_Group_Code; "NS_Tax Group Code New") //PRJCTPR-298.JS.1.0
+                    column(NS_Tax_Group_Code; "NS_Tax Group Code")
                     {
                     }
-                    // column(NS_Tax_Group_Code; "NS_Tax Group Code") //PRJCTPR-298.JS.1.0
-                    // {
-                    // }
                     column(NS_Actual_PercentCompleteDate; "NS_Actual PercentCompleteDate")
                     {
                     }

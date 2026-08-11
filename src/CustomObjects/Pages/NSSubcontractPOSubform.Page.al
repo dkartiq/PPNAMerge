@@ -16,9 +16,6 @@ page 14021312 "NS_Subcontract PO Subform"
     //PRJ-383.N.S.1.0 16Sep2020 Add field
     //PRJ-492.RS.1.0 11May2021 | Hide/Unhide Fields
     //PRJ-817.JS.1.0-11Aug2021 | Add fields work unit , work unit of measur , work unit completed
-    //PRJ-1221.JS.1.0 24FEB2022 | Correct code for item cross reference
-    //PRJ-1354.RM.1.0 16May2022 | Commented some code
-    //PRJ-1563.JS.1.0 10Aug2022 | Correct Code
     AutoSplitKey = true;
     Caption = 'Lines';
     DelayedInsert = true;
@@ -26,7 +23,7 @@ page 14021312 "NS_Subcontract PO Subform"
     MultipleNewLines = true;
     PageType = ListPart;
     SourceTable = "Purchase Line";
-    SourceTableView = WHERE("Document Type" = FILTER(Order));//PRJ-274 VT1.0 22-05-20  //PRJ-1563.JS.1.0 Uncomment line
+    //SourceTableView = WHERE("Document Type" = FILTER(Order));//PRJ-274 VT1.0 22-05-20
     UsageCategory = Lists;
     ApplicationArea = Jobs;
 
@@ -164,60 +161,28 @@ page 14021312 "NS_Subcontract PO Subform"
                     ToolTip = 'Specifies the Committed Quantity';
                     Visible = false;//PRJ-492.RS.1.0 11May2021
                 }
-
-                //PRJ-1221.JS.1.0 24FEB2022 - start
-
-                field("Cross-Reference No."; '')//PE-59.GK.1.0 14Mar2023
-                {
-                    ApplicationArea = Suite;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'Because the field is removed by Base System Application';
-                    Editable = false;
-                    Enabled = false;
-                    // HideValue = true;
-                    ToolTip = 'Specifies the cross-referenced item number. If you enter a cross reference between yours and your vendor''s or customer''s item number, then this number will override the standard item number when you enter the cross-reference number on a sales or purchase document.';
-                    Visible = false;
-
-                    // trigger OnLookup(VAR Text: Text): Boolean;
-                    // begin
-                    //     Rec.CrossReferenceNoLookUp(); //PRJ-1131.NK.1.0
-                    //     NS_InsertExtendedText(false);
-                    //     NS_NoOnAfterValidate;
-                    // end;
-
-                    // trigger OnValidate();
-                    // begin
-                    //     NS_CrossReferenceNoOnAfterValidat;
-                    //     NS_NoOnAfterValidate;
-                    // end;
-                }
-                field("Item Reference No."; Rec."Item Reference No.")
+                field("Cross-Reference No."; Rec."Cross-Reference No.")
                 {
                     ApplicationArea = Suite;
                     Editable = false;
                     Enabled = false;
                     HideValue = true;
-                    ToolTip = 'Specifies the referenced item number. If you enter a referenced item number between yours and your vendor''s or customer''s item number, then this number will override the standard item number when you enter the referenced item number on a sales or purchase document.';
+                    ToolTip = 'Specifies the cross-referenced item number. If you enter a cross reference between yours and your vendor''s or customer''s item number, then this number will override the standard item number when you enter the cross-reference number on a sales or purchase document.';
                     Visible = false;
 
                     trigger OnLookup(VAR Text: Text): Boolean;
-                    var
-                        ItemRefMagCodeunit: codeunit "Item Reference Management";
                     begin
-                        //ItemRefMagCodeunit.CrossReferenceNoLookUp(); //PRJ-1131.NK.1.0
-                        ItemRefMagCodeunit.PurchaseReferenceNoLookup(Rec);
+                        CrossReferenceNoLookUp;
                         NS_InsertExtendedText(false);
-                        NS_NoOnAfterValidate();
+                        NS_NoOnAfterValidate;
                     end;
 
                     trigger OnValidate();
                     begin
-                        NS_CrossReferenceNoOnAfterValidat();
-                        NS_NoOnAfterValidate();
+                        NS_CrossReferenceNoOnAfterValidat;
+                        NS_NoOnAfterValidate;
                     end;
-
                 }
-                //PRJ-1221.JS.1.0 24FEB2022 - end
                 field("IC Partner Code"; Rec."IC Partner Code")
                 {
                     ApplicationArea = All;
@@ -337,11 +302,11 @@ page 14021312 "NS_Subcontract PO Subform"
                 field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = All;
-                    // Editable = false; //PRJ-1354.RM.1.0 commented start
-                    // Enabled = false;  
-                    //HideValue = true;  
+                    Editable = false;
+                    Enabled = false;
+                    HideValue = true;
                     ToolTip = 'Specifies the Location Code';
-                    // Visible = false; //PRJ-1354.RM.1.0 commented end
+                    Visible = false;
                 }
                 field(Staged; Rec.NS_Staged)
                 {
@@ -1603,16 +1568,14 @@ page 14021312 "NS_Subcontract PO Subform"
 
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean;
     begin
-        //if ApplicationAreaSetup.IsFoundationEnabled then   //PE-267.JS.1.0 05MAR2024 line commented
-        if NSApplicationAreaMgmtFacade.IsFoundationEnabled() then  //PE-267.JS.1.0 05MAR2024 line added
-            Rec.Type := Rec.Type::Item; //PRJ-1131.NK.1.0 11Jan2022
+        if ApplicationAreaSetup.IsFoundationEnabled then
+            Type := Type::Item;
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean);
     begin
-        //if ApplicationAreaSetup.IsFoundationEnabled then   //PE-267.JS.1.0 05MAR2024 line commented
-        if NSApplicationAreaMgmtFacade.IsFoundationEnabled() then  //PE-267.JS.1.0 05MAR2024 line added
-            Rec.Type := Rec.Type::Item //PRJ-1131.NK.1.0 11Jan2022
+        if ApplicationAreaSetup.IsFoundationEnabled then
+            Type := Type::Item
         else
             InitType;
         CLEAR(ShortcutDimCode);
@@ -1628,8 +1591,7 @@ page 14021312 "NS_Subcontract PO Subform"
         TotalPurchaseHeader: Record "Purchase Header";
         TotalPurchaseLine: Record "Purchase Line";
         PurchHeader: Record "Purchase Header";
-        //ApplicationAreaSetup: Record "Application Area Setup";  //PE-267.JS.1.0 05MAR2024
-        NSApplicationAreaMgmtFacade: codeunit "Application Area Mgmt. Facade"; //PE-267.JS.1.0 05MAR2024 
+        ApplicationAreaSetup: Record "Application Area Setup";
         TransferExtendedText: Codeunit "Transfer Extended Text";
         ItemAvailFormsMgt: Codeunit "Item Availability Forms Mgt";
         Text001: Label 'You cannot use the Explode BOM function because a prepayment of the purchase order has been invoiced.';
@@ -1733,13 +1695,9 @@ page 14021312 "NS_Subcontract PO Subform"
 
     local procedure NS_NoOnAfterValidate();
     begin
-        //PRJ-1563.JS.1.0 - Start
-        //NS_UpdateEditableOnRow;        
-        if Rec."Line No." <> 0 then
-            NS_UpdateEditableOnRow;
-        //PRJ-1563.JS.1.0 - end         
+        NS_UpdateEditableOnRow;
         NS_InsertExtendedText(false);
-        if (Rec.Type = Rec.Type::"Charge (Item)") and (Rec."No." <> xRec."No.") and //PRJ-1131.NK.1.0 11Jan2022
+        if (Type = Type::"Charge (Item)") and ("No." <> xRec."No.") and
            (xRec."No." <> '')
         then
             CurrPage.SAVERECORD;

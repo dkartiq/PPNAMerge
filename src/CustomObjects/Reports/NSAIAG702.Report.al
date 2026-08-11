@@ -10,11 +10,6 @@ report 14021325 "NS_AIA G702"
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
     //PRJ-175.AS.1.0 - 2APRIL2020 - Layout change Added underline under By,Date,me this, date of,Architect,By,Date
-    //PRJ-1216.JS.1.0 04MAR2022 | Correct Code
-    //PRJ-1232.JS.1.0 06MAR2022 | correct code for rounding
-    //PRJ-1216.JS.3.0 28MAR2022 
-    //PRJ-1624.NK.1.0 21Sep2022 | Change Code
-    //PRJ-1634.RP.1.0 02Dec2022 | Made changes in Layout
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSAIA G702.rdl';
     UsageCategory = ReportsAndAnalysis;
@@ -95,20 +90,12 @@ report 14021325 "NS_AIA G702"
             column(Line_Heading_5_Lbl; Line_Heading_5_Lbl)
             {
             }
-            //PRJ-1624.NK.1.0 21Sep2022 Start
-            // column(Line_Heading_5a_Lbl; STRSUBSTNO(Line_Heading_5a_Lbl, Line_05a1_Value))
-            // {
-            // }
-            // column(Line_Heading_5b_Lbl; STRSUBSTNO(Line_Heading_5b_Lbl, Line_05b1_Value))
-            // {
-            // }
-            column(Line_Heading_5a_Lbl; STRSUBSTNO(Line_Heading_5a_Lbl))
+            column(Line_Heading_5a_Lbl; STRSUBSTNO(Line_Heading_5a_Lbl, Line_05a1_Value))
             {
             }
-            column(Line_Heading_5b_Lbl; STRSUBSTNO(Line_Heading_5b_Lbl))
+            column(Line_Heading_5b_Lbl; STRSUBSTNO(Line_Heading_5b_Lbl, Line_05b1_Value))
             {
             }
-            //PRJ-1624.NK.1.0 21Sep2022 End
             column(Line_Heading_5c_Lbl; Line_Heading_5c_Lbl)
             {
             }
@@ -395,32 +382,6 @@ report 14021325 "NS_AIA G702"
                                          Job."NS_Job Country/Region Code");
 
                 WorkPreviousBilling := ProgressBillingLine.NS_TotalWorkPreviousBilling("Progress Billing Header");
-                //PRJ-1624.NK.1.0 28Oct2022 Start
-                if "NS_Multiple Retention on Lines" then begin
-                    WorkPreviousBilling2 := 0;
-                    WorkRetTotal := 0;
-                    NSLineStoreRetnAmt := 0;
-                    NSLineWorkRetnAmt := 0;
-                    PrevProgressBillingHeader.RESET();
-                    PrevProgressBillingHeader.SETRANGE("NS_No.", "Progress Billing Header"."NS_No.");
-                    PrevProgressBillingHeader.SETFILTER("NS_Requisition No.", '<%1', "Progress Billing Header"."NS_Requisition No.");
-                    PrevProgressBillingHeader.SETFILTER(NS_Status, '<>%1', PrevProgressBillingHeader.NS_Status::Void);
-                    if PrevProgressBillingHeader.FindLast() then Begin
-                        WorkPreviousBilling2 := ProgressBillingLine.NS_TotalWorkPreviousBilling(PrevProgressBillingHeader);
-                        PrevProgressBillingHeader.CALCFIELDS("NS_Requisition Total");
-                        WorkRetTotal += PrevProgressBillingHeader."NS_Requisition Total";
-                        ProgressBillingLine.RESET();
-                        ProgressBillingLine.SETRANGE("NS_Progress Billing No.", PrevProgressBillingHeader."NS_No.");
-                        ProgressBillingLine.SETRANGE("NS_Requisition No.", PrevProgressBillingHeader."NS_Requisition No.");
-                        ProgressBillingLine.SETRANGE("NS_Version No.", PrevProgressBillingHeader."NS_Version No.");
-                        if ProgressBillingLine.FINDSET() then
-                            repeat
-                                NSLineWorkRetnAmt := NSLineWorkRetnAmt + ProgressBillingLine."NS_Work Retention Amount";
-                                NSLineStoreRetnAmt += (ProgressBillingLine."NS_Stored Materials Amount" * ProgressBillingLine."NS_Stored Material Retention %" / 100);
-                            until ProgressBillingLine.NEXT() = 0;
-                    End;
-                End;
-                //PRJ-1624.NK.1.0 28Oct2022 End
                 PreviousStoredMaterial := NS_LastProgressBillStoredMat("Progress Billing Header");
                 PreviousEarning := NS_ProgressBillPreviousTotalEarn("Progress Billing Header");
                 PreviousRetention := NS_PreviousProgressBillRetention("Progress Billing Header", '', '', '', '', '', '');//PRJ-688.AM.1.0
@@ -432,13 +393,11 @@ report 14021325 "NS_AIA G702"
                 CurrentDeductions := 0;
 
                 PreviousReqPeriodToDate := NS_GetPeriodFromDate("NS_No.", "NS_Period To");
-                //PRJCTPR-208.NC.1.0 30Oct2023 Block Start
-                // NS_GetChangeOrderValues(Job."No.",
-                //                      PreviousReqPeriodToDate, "NS_Period To",
-                //                      PreviousAdditions, PreviousDeductions,
-                //                      CurrentAdditions, CurrentDeductions);
-                //PRJCTPR-208.NC.1.0 30Oct2023 Block End 
-                NS_GetChangeOrderValuesPL(Job."No.", PreviousReqPeriodToDate, "NS_Period To", PreviousAdditions, PreviousDeductions, CurrentAdditions, CurrentDeductions); //PRJCTPR-208.NC.1.0 30Oct2023
+                NS_GetChangeOrderValues(Job."No.",
+                                     PreviousReqPeriodToDate, "NS_Period To",
+                                     PreviousAdditions, PreviousDeductions,
+                                     CurrentAdditions, CurrentDeductions);
+
                 if "NS_Period To" > 0D then
                     Job.SETFILTER("NS_Date Filter", '<=%1', "NS_Period To")
                 else
@@ -453,98 +412,19 @@ report 14021325 "NS_AIA G702"
                 Line_01_Value := NS_ProgressBillBaseAmount("Progress Billing Header");
                 Line_02_Value := PreviousAdditions - PreviousDeductions + CurrentAdditions - CurrentDeductions;
                 Line_03_Value := Line_01_Value + Line_02_Value;
-                //Line_04_Value := WorkPreviousBilling + "NS_Requisition Total"; //PRJCTPR-208.NC.1.0 27Oct2023 Block
-                Line_04_Value := WorkPreviousBilling + NS_RequisitionTotal("Progress Billing Header"); //PRJCTPR-208.NC.1.0 27Oct2023
+                Line_04_Value := WorkPreviousBilling + "NS_Requisition Total";
 
                 Line_05a1_Value := "NS_Work Retention Percent";
-
-                //PRJ-1232.JS.1.0 05MAR2022 - Start
-                if "NS_Work Retention Percent" <> 0 then begin
-                    NSLineWorkRetnAmount := 0;
-                    NSDiffrenceAmount := 0;
-                    Line_05a2_Value := ROUND((WorkPreviousBilling + "NS_Line Work Amount") * ("NS_Work Retention Percent" / 100), 0.01);
-                    ProgressBillingLine.RESET();
-                    ProgressBillingLine.SETRANGE("NS_Progress Billing No.", "NS_No.");
-                    ProgressBillingLine.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
-                    ProgressBillingLine.SETRANGE("NS_Version No.", "NS_Version No.");
-                    if ProgressBillingLine.FINDSET() then
-                        repeat
-                            //PRJCTPR-334.AS.2.0 START
-                            JobRec_G.Reset();
-                            JobRec_G.SetRange("No.", ProgressBillingLine."NS_Job No.");
-                            JobRec_G.SetFilter("NS_Job Class", '<>%1', JobRec_G."NS_Job Class"::"Change Order");
-                            if JobRec_G.FindFirst() then begin
-                                if ProgressBillingLine."NS_Change Order" = TRUE then
-                                    NSLineWorkRetnAmount := NSLineWorkRetnAmount + 0
-                                else
-                                    NSLineWorkRetnAmount := NSLineWorkRetnAmount + ProgressBillingLine."NS_Work Retention Amount";
-                            end
-                            else
-                                //PRJCTPR-334.AS.2.0 END
-                                NSLineWorkRetnAmount := NSLineWorkRetnAmount + ProgressBillingLine."NS_Work Retention Amount";
-                        until ProgressBillingLine.NEXT() = 0;
-
-                    NSDiffrenceAmount := NSLineWorkRetnAmount - Line_05a2_Value;
-                    if NSDiffrenceAmount <> 0 then
-                        Line_05a2_Value := Line_05a2_Value + NSDiffrenceAmount;
-                end else
-                    //PRJ-1232.JS.1.0 05MAR2022 - end
+                if "NS_Work Retention Percent" <> 0 then
+                    Line_05a2_Value := ROUND((WorkPreviousBilling + "NS_Line Work Amount") * ("NS_Work Retention Percent" / 100), 0.01)
+                else
                     Line_05a2_Value := 0;
-                //PRJ-1624.NK.1.0 28Sep2022 Start
-                if "NS_Multiple Retention on Lines" then begin
-                    //Line_05a2_Value := ROUND((WorkPreviousBilling + "NS_Line Work Amount") * ("NS_Work Retention Percent" / 100), 0.01);
-                    NSLineWorkRetnAmount := 0;
-                    NSDiffrenceAmount := 0;
-                    ProgressBillingLine.RESET();
-                    ProgressBillingLine.SETRANGE("NS_Progress Billing No.", "NS_No.");
-                    ProgressBillingLine.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
-                    ProgressBillingLine.SETRANGE("NS_Version No.", "NS_Version No.");
-                    if ProgressBillingLine.FINDSET() then
-                        repeat
-                            //PRJCTPR-334.AS.2.0 START
-                            JobRec_G.Reset();
-                            JobRec_G.SetRange("No.", ProgressBillingLine."NS_Job No.");
-                            JobRec_G.SetFilter("NS_Job Class", '<>%1', JobRec_G."NS_Job Class"::"Change Order");
-                            if JobRec_G.FindFirst() then begin
-                                if ProgressBillingLine."NS_Change Order" = TRUE then
-                                    NSLineWorkRetnAmount := NSLineWorkRetnAmount + 0
-                                else
-                                    NSLineWorkRetnAmount += ProgressBillingLine."NS_Work Retention Amount";
-                            end
-                            else
-                                //PRJCTPR-334.AS.2.0 END
-                                NSLineWorkRetnAmount += ProgressBillingLine."NS_Work Retention Amount";
-                        until ProgressBillingLine.NEXT() = 0;
-                    Line_05a2_Value := Line_05a2_Value + NSLineWorkRetnAmount;
-                end;
-                //PRJ-1624.NK.1.0 28Sep2022 End
-
-                //PRJ-1648.PS.1.0 21Dec2022 Start
-                if ("NS_Multiple Retention on Lines") and ("NS_R_Reduction & Invoicing") then begin
-                    ExludeRetTotal := "Progress Billing Header".NS_LastRetentionTotalInvoice("Progress Billing Header") - "Progress Billing Header".NS_CurrentRetentionTotalInvoice("Progress Billing Header");
-                end;
-                //PRJ-1648.PS.1.0 21Dec2022 End
 
                 Line_05b1_Value := "NS_Material Retention Percent";
                 if "NS_Material Retention Percent" <> 0 then
                     Line_05b2_Value := ROUND("NS_Line Material Amount" * ("NS_Material Retention Percent" / 100), 0.01)
                 else
                     Line_05b2_Value := 0;
-                //PRJ-1624.NK.1.0 28Sep2022 Start
-                if "NS_Multiple Retention on Lines" then begin
-                    TotStoreAmt := 0;
-                    ProgressBillingLine.RESET();
-                    ProgressBillingLine.SETRANGE("NS_Progress Billing No.", "NS_No.");
-                    ProgressBillingLine.SETRANGE("NS_Requisition No.", "NS_Requisition No.");
-                    ProgressBillingLine.SETRANGE("NS_Version No.", "NS_Version No.");
-                    if ProgressBillingLine.FINDSET() then
-                        repeat
-                            if ProgressBillingLine."NS_Stored Materials Amount" <> 0 then
-                                TotStoreAmt += (ProgressBillingLine."NS_Stored Materials Amount" * ProgressBillingLine."NS_Stored Material Retention %" / 100);
-                        until ProgressBillingLine.Next() = 0;
-                    Line_05b2_Value := ROUND(TotStoreAmt, 0.01);
-                end;
-                //PRJ-1624.NK.1.0 28Sep2022 End
 
                 if Line_05a2_Value + Line_05b2_Value <> 0 then
                     Line_05c_Value := Line_05a2_Value + Line_05b2_Value
@@ -558,28 +438,11 @@ report 14021325 "NS_AIA G702"
                             Line_05c_Value := Line_05c_Value + ProgressBillingLine."NS_Work Retention Amount" + ProgressBillingLine."NS_Material Retention Amount";
                         until ProgressBillingLine.NEXT() = 0;
                 end;
-                Clear(ExludeRetTotal); //PE-15.PS.1.0 10Jan2023
-                Line_06_Value := Line_04_Value - Line_05c_Value;
-                //PRJ-1216.JS.1.0 04MAR2022 - Start
-                //PRJ-1216.JS.3.0 28MAR2022-Start
-                //Line_07_Value := NS_ProgressBillPreviousInvoice("Progress Billing Header");
-                Line_07_Value := NS_ProgressBillPreviousInvoiceNew("Progress Billing Header");   //Line Open
-                if "NS_Multiple Retention on Lines" then
-                    Line_07_Value := WorkPreviousBilling2 + WorkRetTotal - NSLineStoreRetnAmt - NSLineWorkRetnAmt;
-                //Line_07_Value := NS_ProgressBillPreviousInvoiceNewOne("Progress Billing Header");  //Line commented
-                //PRJ-1216.JS.1.0 04MAR2022 - end
-                //PRJ-1216.JS.3.0 28MAR2022-end
-                Line_08_Value := Line_06_Value - Line_07_Value;
-                if ("NS_Multiple Retention on Lines") and ("NS_R_Reduction & Invoicing") then  //PRJ-1648.PS.1.0 21Dec2022
-                    Line_08_Value := Line_06_Value + ExludeRetTotal - Line_07_Value;  //PRJ-1648.PS.1.0 21Dec2022
-                Line_09_Value := Line_03_Value - Line_06_Value;
-                //PRJ-1648.PS.1.0 27Dec2022 Start 
-                if ("NS_Multiple Retention on Lines") and ("NS_R_Reduction & Invoicing") then begin
-                    Line_08_Value := Line_06_Value + ExludeRetTotal - Line_07_Value;
-                    Line_09_Value -= ExludeRetTotal;
-                End;
-                //PRJ-1648.PS.1.0 27Dec2022 End;
 
+                Line_06_Value := Line_04_Value - Line_05c_Value;
+                Line_07_Value := NS_ProgressBillPreviousInvoice("Progress Billing Header");
+                Line_08_Value := Line_06_Value - Line_07_Value;
+                Line_09_Value := Line_03_Value - Line_06_Value;
                 Line_11a_Value := PreviousAdditions;
                 Line_11b_Value := PreviousDeductions;
                 Line_12a_Value := CurrentAdditions;
@@ -627,12 +490,10 @@ report 14021325 "NS_AIA G702"
     end;
 
     var
-        JobRec_G: Record Job;//PRJCTPR-334.AS.2.0
         CompanyInformation: Record "Company Information";
         Job: Record Job;
         JobContact: Record "NS_Job Contact";
         ChangeJob: Record Job;
-        TotStoreAmt: Decimal; //PRJ-1624.NK.1.0 28Sep2022
         Customer: Record Customer;
         ProgressBillingLine: Record "NS_Progress Billing Line";
         PrevProgressBillingHeader: Record "NS_Progress Billing Header";
@@ -640,10 +501,6 @@ report 14021325 "NS_AIA G702"
         FormatAddress: Codeunit "Format Address";
         NS_FormatAddress: Codeunit "NS_Format Address";
         WorkPreviousBilling: Decimal;
-        WorkPreviousBilling2: Decimal; //PRJ-1624
-        WorkRetTotal: Decimal; //PRJ-1624
-        NSLineWorkRetnAmt: Decimal; //PRJ-1624
-        NSLineStoreRetnAmt: Decimal; //PRJ-1624
         PreviousEarning: Decimal;
         PreviousRetention: Decimal;
         PreviousStoredMaterial: Decimal;
@@ -678,8 +535,6 @@ report 14021325 "NS_AIA G702"
         Line_13a_Value: Decimal;
         Line_13b_Value: Decimal;
         Line_14a_Value: Decimal;
-        NSLineWorkRetnAmount: Decimal;   //PRJ-1232.JS.1.0  05MAR2022        
-        NSDiffrenceAmount: Decimal; //PRJ-1232.JS.1.0  05MAR2022
         ContractorName: Text[50];
         JobAddress: array[8] of Text[50];
         CustomerAddress: array[8] of Text[50];
@@ -712,10 +567,8 @@ report 14021325 "NS_AIA G702"
         Line_Heading_3_Lbl: Label '3. CONTRACT SUM TO DATE';
         Line_Heading_4_Lbl: Label '4. TOTAL COMPLETED & STORED TO DATE';
         Line_Heading_5_Lbl: Label '5. RETAINAGE:';
-        //Line_Heading_5a_Lbl: Label 'a.   %1% of Completed Work'; //PRJ-1624.NK.1.0 28Sep2022 Block
-        //Line_Heading_5b_Lbl: Label 'b.   %1% of Stored Material'; //PRJ-1624.NK.1.0 28Sep2022 Block
-        Line_Heading_5a_Lbl: Label 'a.   Amount of Completed Work'; //PRJ-1624.NK.1.0 28Sep2022 
-        Line_Heading_5b_Lbl: Label 'b.   Amount of Stored Material'; //PRJ-1624.NK.1.0 21Sep2022 
+        Line_Heading_5a_Lbl: Label 'a.   %1% of Completed Work';
+        Line_Heading_5b_Lbl: Label 'b.   %1% of Stored Material';
         Line_Heading_5c_Lbl: Label 'Total Retainage';
         Line_Heading_6_Lbl: Label '6. TOTAL EARNED LESS RETAINAGE';
         Line_Heading_7_Lbl: Label '7. LESS PREVIOUS CERTIFICATES FOR PAYMENT';
@@ -759,8 +612,6 @@ report 14021325 "NS_AIA G702"
         Certificate_3_Lbl: Label 'prejudice to any rights of the Owner of Contractor under this Contract.';
         Test: Label 'TEST!!!';
 
-        ExludeRetTotal: Decimal;  //PRJ-1648.PS.1.0 21Dec2022
-
     procedure NS_ClearFormData();
     begin
         CLEAR(CustomerAddress);
@@ -790,27 +641,5 @@ report 14021325 "NS_AIA G702"
         Line_14a_Value := 0;
         ContractorName := '';
     end;
-    //PRJ-1624.NK.1.0 21Oct2022 Start
-    procedure NS_LastStotrBilling(var ProgBilingLine: Record "NS_Progress Billing Line"): Decimal;
-    var
-        ProgressBillingHeader_Loc: Record "NS_Progress Billing Header";
-        ProgressBillingLine: record "NS_Progress Billing Line";
-        NS_LastStoreAmount: Decimal;
-    begin
-        NS_LastStoreAmount := 0;
-        ProgressBillingLine.RESET();
-        ProgressBillingLine.SETRANGE("NS_Progress Billing No.", ProgBilingLine."NS_Progress Billing No.");
-        ProgressBillingLine.SETFILTER("NS_Requisition No.", '<%1', ProgBilingLine."NS_Requisition No.");
-        ProgressBillingLine.SETRANGE("NS_Line No.", ProgBilingLine."NS_Line No.");
-        if ProgressBillingLine.FINDSET() then
-            repeat
-                if ProgressBillingHeader_Loc.GET(ProgressBillingLine."NS_Progress Billing No.", ProgressBillingLine."NS_Requisition No.", ProgressBillingLine."NS_Version No.") then
-                    if ProgressBillingHeader_Loc.NS_Status <> ProgressBillingHeader_Loc.NS_Status::Void then
-                        NS_LastStoreAmount := ProgressBillingLine."NS_Stored Materials Amount";
-            until ProgressBillingLine.NEXT() = 0;
-        exit(NS_LastStoreAmount);
-    end;
-    //PRJ-1624.NK.1.0 21Oct2022 End  
-
 }
 

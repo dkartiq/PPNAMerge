@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="PR_Journal_Batch_Name">
+          <DataField>PR_Journal_Batch_Name</DataField>
+        </Field>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="PR_Journal_Batch___Journal_Template_Name_">
+          <DataField>PR_Journal_Batch___Journal_Template_Name_</DataField>
+        </Field>
+        <Field Name="PR_Journal_Batch__Name">
+          <DataField>PR_Journal_Batch__Name</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__TABLECAPTION__________PRJnlLineFilter">
+          <DataField>PR_Journal_Line__TABLECAPTION__________PRJnlLineFilter</DataField>
+        </Field>
+        <Field Name="PRJnlLineFilter">
+          <DataField>PRJnlLineFilter</DataField>
+        </Field>
+        <Field Name="PR_Journal_Batch___Journal_Template_Name_Caption">
+          <DataField>PR_Journal_Batch___Journal_Template_Name_Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Batch__NameCaption">
+          <DataField>PR_Journal_Batch__NameCaption</DataField>
+        </Field>
+        <Field Name="PR_Journal___TestCaption">
+          <DataField>PR_Journal___TestCaption</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Line_Amount_Caption">
+          <DataField>PR_Journal_Line__Line_Amount_Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Unit_Price_Caption">
+          <DataField>PR_Journal_Line__Unit_Price_Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Total_Cost__LCY__Caption">
+          <DataField>PR_Journal_Line__Total_Cost__LCY__Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Unit_Cost__LCY__Caption">
+          <DataField>PR_Journal_Line__Unit_Cost__LCY__Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Work_Type_Code_Caption">
+          <DataField>PR_Journal_Line__Work_Type_Code_Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Unit_of_Measure_Code_Caption">
+          <DataField>PR_Journal_Line__Unit_of_Measure_Code_Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line_QuantityCaption">
+          <DataField>PR_Journal_Line_QuantityCaption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__No__Caption">
+          <DataField>PR_Journal_Line__No__Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Document_No__Caption">
+          <DataField>PR_Journal_Line__Document_No__Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line_TypeCaption">
+          <DataField>PR_Journal_Line_TypeCaption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Job_No__Caption">
+          <DataField>PR_Journal_Line__Job_No__Caption</DataField>
+        </Field>
+        <Field Name="PR_Journal_Line__Posting_Date_Caption">
+          <DataField>PR_Journal_Line__Posting_Date_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_ExportStatus_Caption">
+          <DataField>PIJ_ExportStatus_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_ExportStatusDateTime_Caption">
+          <DataField>PIJ_ExportStatusDateTime_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_WorkDate_Caption">
+          <DataField>PIJ_WorkDate_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_Shift_Caption">
+          <DataField>PIJ_Shift_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_SequenceNo_Caption">
+          <DataField>PIJ_SequenceNo_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_OverrideDivision_Caption">
+          <DataField>PIJ_OverrideDivision_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_OverrideBranch_Caption">
+          <DataField>PIJ_OverrideBranch_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_OverrideState_Caption">
+          <DataField>PIJ_OverrideState_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_STLOC_Misc_Field_Caption">
+          <DataField>PIJ_STLOC_Misc_Field_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_RateNo_Caption">
+          <DataField>PIJ_RateNo_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_SSN_Caption">
+          <DataField>PIJ_SSN_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_JLENo_Caption">
+          <DataField>PIJ_JLENo_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_Manual_Caption">
+          <DataField>PIJ_Manual_Caption</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Line_Amount_">
+          <DataField>PIJ_Journal_Line__Line_Amount_</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Line_Amount_Format">
+          <DataField>PIJ_Journal_Line__Line_Amount_Format</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Unit_Price_">
+          <DataField>PIJ_Journal_Line__Unit_Price_</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Unit_Price_Format">
+          <DataField>PIJ_Journal_Line__Unit_Price_Format</DataField>
+        </Field>
+        <Field Name="PIJ_EmployeeName">
+          <DataField>PIJ_EmployeeName</DataField>
+        </Field>
+        <Field Name="PIJ_DELETE">
+          <DataField>PIJ_DELETE</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Work_Type_Code_">
+          <DataField>PIJ_Journal_Line__Work_Type_Code_</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Unit_of_Measure_Code_">
+          <DataField>PIJ_Journal_Line__Unit_of_Measure_Code_</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line_Quantity">
+          <DataField>PIJ_Journal_Line_Quantity</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line_QuantityFormat">
+          <DataField>PIJ_Journal_Line_QuantityFormat</DataField>
+        </Field>
+        <Field Name="PIJ_Employee_No">
+          <DataField>PIJ_Employee_No</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line_Type">
+          <DataField>PIJ_Journal_Line_Type</DataField>
+        </Field>
+        <Field Name="PIJ_Document_No">
+          <DataField>PIJ_Document_No</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line__Job_No__">
+          <DataField>PIJ_Journal_Line__Job_No__</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line_Journal_Template_Name">
+          <DataField>PIJ_Journal_Line_Journal_Template_Name</DataField>
+        </Field>
+        <Field Name="PIJ_Journal_Line_Line_No_">
+          <DataField>PIJ_Journal_Line_Line_No_</DataField>
+        </Field>
+        <Field Name="PIJ_ExportStatus">
+          <DataField>PIJ_ExportStatus</DataField>
+        </Field>
+        <Field Name="PIJ_ExportStatusDatetime">
+          <DataField>PIJ_ExportStatusDatetime</DataField>
+        </Field>
+        <Field Name="PIJ_WorkDate">
+          <DataField>PIJ_WorkDate</DataField>
+        </Field>
+        <Field Name="PIJ_Shift">
+          <DataField>PIJ_Shift</DataField>
+        </Field>
+        <Field Name="PIJ_SequenceNo">
+          <DataField>PIJ_SequenceNo</DataField>
+        </Field>
+        <Field Name="PIJ_OverrideDivision">
+          <DataField>PIJ_OverrideDivision</DataField>
+        </Field>
+        <Field Name="PIJ_OverrideBranch">
+          <DataField>PIJ_OverrideBranch</DataField>
+        </Field>
+        <Field Name="PIJ_OverrideState">
+          <DataField>PIJ_OverrideState</DataField>
+        </Field>
+        <Field Name="PIJ_STLOC_Misc_Field">
+          <DataField>PIJ_STLOC_Misc_Field</DataField>
+        </Field>
+        <Field Name="PIJ_RateNo">
+          <DataField>PIJ_RateNo</DataField>
+        </Field>
+        <Field Name="PIJ_SSN">
+          <DataField>PIJ_SSN</DataField>
+        </Field>
+        <Field Name="PIJ_JLENo">
+          <DataField>PIJ_JLENo</DataField>
+        </Field>
+        <Field Name="PIJ_Manual">
+          <DataField>PIJ_Manual</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

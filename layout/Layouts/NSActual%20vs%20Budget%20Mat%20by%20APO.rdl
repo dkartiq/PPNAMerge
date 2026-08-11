@@ -8,7 +8,6 @@
         <ConnectString />
       </ConnectionProperties>
       <rd:SecurityType>None</rd:SecurityType>
-      <rd:DataSourceID>f06dcdbe-e258-4380-936d-b7bfa4b9bd0f</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <ReportSections>
@@ -19,45 +18,45 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.92157in</Width>
+                  <Width>0.80699in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.45252in</Width>
+                  <Width>1.86919in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.36826in</Width>
+                  <Width>1.75796in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.72042in</Width>
+                  <Width>1.1811in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.61741in</Width>
+                  <Width>0.51672in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.65044in</Width>
+                  <Width>0.54627in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.61661in</Width>
+                  <Width>0.51672in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.74436in</Width>
+                  <Width>0.5315in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.63889in</Width>
+                  <Width>0.5315in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.74275in</Width>
+                  <Width>0.5315in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.80636in</Width>
+                  <Width>0.5315in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.719in</Width>
+                  <Width>0.5315in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.21862in</Height>
+                  <Height>0.16654in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -85,6 +84,8 @@
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -115,6 +116,8 @@
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -130,7 +133,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -165,7 +167,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -200,7 +201,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -235,7 +235,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -288,6 +287,8 @@
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -305,7 +306,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -340,7 +340,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -374,7 +373,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>7pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -4174,10 +4172,10 @@
             </TablixRowHierarchy>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>0.29308in</Top>
+            <Top>0.04308in</Top>
             <Left>0.00975in</Left>
-            <Height>1.77027in</Height>
-            <Width>9.9986in</Width>
+            <Height>1.71819in</Height>
+            <Width>9.85245in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -4188,10 +4186,10 @@
         <Height>7.77288cm</Height>
         <Style />
       </Body>
-      <Width>25.4645cm</Width>
+      <Width>29.25004cm</Width>
       <Page>
         <PageHeader>
-          <Height>3.11662cm</Height>
+          <Height>2.37992cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -4232,7 +4230,7 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.49356cm</Top>
+              <Top>0.423cm</Top>
               <Height>0.423cm</Height>
               <Width>10.65cm</Width>
               <ZIndex>1</ZIndex>
@@ -4257,10 +4255,10 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.45828cm</Top>
-              <Left>22.70035cm</Left>
-              <Height>0.52883cm</Height>
-              <Width>2.06473cm</Width>
+              <Top>0.423cm</Top>
+              <Left>23.85cm</Left>
+              <Height>0.423cm</Height>
+              <Width>0.75cm</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -4283,10 +4281,10 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.49356cm</Top>
-              <Left>24.48286cm</Left>
-              <Height>0.49356cm</Height>
-              <Width>0.88464cm</Width>
+              <Top>0.423cm</Top>
+              <Left>24.6cm</Left>
+              <Height>0.423cm</Height>
+              <Width>0.45cm</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -4309,10 +4307,10 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.02239cm</Top>
-              <Left>20.77678cm</Left>
+              <Top>0.846cm</Top>
+              <Left>20.75083cm</Left>
               <Height>0.423cm</Height>
-              <Width>4.55317cm</Width>
+              <Width>4.29917cm</Width>
               <ZIndex>4</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -4336,7 +4334,7 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Left>21.7675cm</Left>
+              <Left>21.45cm</Left>
               <Height>0.423cm</Height>
               <Width>3.59999cm</Width>
               <ZIndex>5</ZIndex>
@@ -4352,9 +4350,7 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Activity___Process___OperationCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style />
@@ -4362,8 +4358,8 @@
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Height>1.3367cm</Height>
-              <Width>2.33028cm</Width>
+              <Height>0.6cm</Height>
+              <Width>2.07452cm</Width>
               <ZIndex>6</ZIndex>
               <Style>
                 <Border>
@@ -4371,6 +4367,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox46">
@@ -4381,9 +4379,7 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!DescriptionCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style />
@@ -4391,9 +4387,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>2.36556cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>3.68941cm</Width>
+              <Left>2.07452cm</Left>
+              <Height>0.6cm</Height>
+              <Width>4.74774cm</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <Border>
@@ -4401,6 +4397,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox47">
@@ -4411,9 +4409,7 @@
                   <TextRuns>
                     <TextRun>
                       <Value />
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style />
@@ -4421,9 +4417,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>6.05497cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>3.47539cm</Width>
+              <Left>6.82226cm</Left>
+              <Height>0.6cm</Height>
+              <Width>4.46522cm</Width>
               <ZIndex>8</ZIndex>
               <Style>
                 <Border>
@@ -4443,9 +4439,7 @@
                   <TextRuns>
                     <TextRun>
                       <Value />
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
                   <Style />
@@ -4453,9 +4447,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>9.53036cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.82987cm</Width>
+              <Left>11.28748cm</Left>
+              <Height>0.6cm</Height>
+              <Width>2.99999cm</Width>
               <ZIndex>9</ZIndex>
               <Style>
                 <Border>
@@ -4475,21 +4469,17 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Actual_Material_QtyCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>11.36023cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.61152cm</Width>
+              <Left>14.28748cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>10</ZIndex>
               <Style>
                 <Border>
@@ -4497,6 +4487,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox50">
@@ -4507,21 +4499,17 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Budgeted_Material_QtyCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>12.97175cm</Left>
-              <Height>1.30142cm</Height>
-              <Width>1.60882cm</Width>
+              <Left>15.59994cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>11</ZIndex>
               <Style>
                 <Border>
@@ -4529,6 +4517,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox51">
@@ -4538,28 +4528,18 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
                       <Value>=First(Fields!Qty_VarianceCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>14.58057cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.60947cm</Width>
+              <Left>16.98747cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>12</ZIndex>
               <Style>
                 <Border>
@@ -4567,6 +4547,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox52">
@@ -4577,21 +4559,17 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Qty_Percent_VarianceCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>16.19004cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.84739cm</Width>
+              <Left>18.29994cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.35001cm</Width>
               <ZIndex>13</ZIndex>
               <Style>
                 <Border>
@@ -4599,6 +4577,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox53">
@@ -4609,21 +4589,17 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Actual__Material_CostCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>18.03743cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.66607cm</Width>
+              <Left>19.64995cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>14</ZIndex>
               <Style>
                 <Border>
@@ -4631,6 +4607,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox54">
@@ -4640,28 +4618,18 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
                       <Value>=First(Fields!Budgeted_Material_CostCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>19.7035cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.88658cm</Width>
+              <Left>20.96242cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>15</ZIndex>
               <Style>
                 <Border>
@@ -4669,6 +4637,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox55">
@@ -4678,28 +4648,18 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value xml:space="preserve"> </Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
                       <Value>=First(Fields!Cost_VarianceCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>21.59008cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>2.00487cm</Width>
+              <Left>22.34997cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>16</ZIndex>
               <Style>
                 <Border>
@@ -4707,6 +4667,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox56">
@@ -4716,28 +4678,18 @@
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value xml:space="preserve">  </Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
                       <Value>=First(Fields!Cost_Percent_VarianceCaption.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Style />
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox44</rd:DefaultName>
               <Top>1.77992cm</Top>
-              <Left>23.59495cm</Left>
-              <Height>1.3367cm</Height>
-              <Width>1.86955cm</Width>
+              <Left>23.69998cm</Left>
+              <Height>0.6cm</Height>
+              <Width>1.31247cm</Width>
               <ZIndex>17</ZIndex>
               <Style>
                 <Border>
@@ -4745,6 +4697,8 @@
                 </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
           </ReportItems>
@@ -4798,7 +4752,6 @@ End Function
   <Language>=User!Language</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
-  <rd:ReportID>9c5de9e8-ce0c-415e-91b7-c1d246bc99f7</rd:ReportID>
   <DataSets>
     <DataSet Name="DataSet_Result">
       <Fields>

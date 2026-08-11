@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="QuoteHeader_Title">
+          <DataField>QuoteHeader_Title</DataField>
+        </Field>
+        <Field Name="QuoteHeader_Draft">
+          <DataField>QuoteHeader_Draft</DataField>
+        </Field>
+        <Field Name="QuoteHeader_QuoteNo_">
+          <DataField>QuoteHeader_QuoteNo_</DataField>
+        </Field>
+        <Field Name="QuoteHeader_RevisionNo_">
+          <DataField>QuoteHeader_RevisionNo_</DataField>
+        </Field>
+        <Field Name="QuoteHeader_Proposal">
+          <DataField>QuoteHeader_Proposal</DataField>
+        </Field>
+        <Field Name="QuoteHeader_LinkToQuoteNo_">
+          <DataField>QuoteHeader_LinkToQuoteNo_</DataField>
+        </Field>
+        <Field Name="QuoteHeader_ProposalDate">
+          <DataField>QuoteHeader_ProposalDate</DataField>
+        </Field>
+        <Field Name="QuoteHeader_SellToCustomerNo_">
+          <DataField>QuoteHeader_SellToCustomerNo_</DataField>
+        </Field>
+        <Field Name="QuoteHeader_BillToCustomerNo_">
+          <DataField>QuoteHeader_BillToCustomerNo_</DataField>
+        </Field>
+        <Field Name="QuoteHeader_LocationCode">
+          <DataField>QuoteHeader_LocationCode</DataField>
+        </Field>
+        <Field Name="QuoteHeader_PaymentTermsCode">
+          <DataField>QuoteHeader_PaymentTermsCode</DataField>
+        </Field>
+        <Field Name="QuoteHeader_SalespersonCode">
+          <DataField>QuoteHeader_SalespersonCode</DataField>
+        </Field>
+        <Field Name="QuoteHeader_ContactNo_">
+          <DataField>QuoteHeader_ContactNo_</DataField>
+        </Field>
+        <Field Name="QuoteHeader_ContactName">
+          <DataField>QuoteHeader_ContactName</DataField>
+        </Field>
+        <Field Name="QuoteHeader_OwnerName">
+          <DataField>QuoteHeader_OwnerName</DataField>
+        </Field>
+        <Field Name="QuoteHeader_GeneralContractorName">
+          <DataField>QuoteHeader_GeneralContractorName</DataField>
+        </Field>
+        <Field Name="QuoteHeader_ArchitectEngineerName">
+          <DataField>QuoteHeader_ArchitectEngineerName</DataField>
+        </Field>
+        <Field Name="QuoteHeader_ProjectManagerName">
+          <DataField>QuoteHeader_ProjectManagerName</DataField>
+        </Field>
+        <Field Name="QuoteHeader_EstimatorName">
+          <DataField>QuoteHeader_EstimatorName</DataField>
+        </Field>
+        <Field Name="QuoteHeader_ExtDocNo">
+          <DataField>QuoteHeader_ExtDocNo</DataField>
+        </Field>
+        <Field Name="QuoteHeader_DepositRequired">
+          <DataField>QuoteHeader_DepositRequired</DataField>
+        </Field>
+        <Field Name="QuoteHeader_DepositRequiredFormat">
+          <DataField>QuoteHeader_DepositRequiredFormat</DataField>
+        </Field>
+        <Field Name="QuoteHeader_PrintSalesTax">
+          <DataField>QuoteHeader_PrintSalesTax</DataField>
+        </Field>
+        <Field Name="HeaderComments">
+          <DataField>HeaderComments</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Address">
+          <DataField>CompanyInfo_Address</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Address2">
+          <DataField>CompanyInfo_Address2</DataField>
+        </Field>
+        <Field Name="CompanyInfo_City">
+          <DataField>CompanyInfo_City</DataField>
+        </Field>
+        <Field Name="CompanyInfo_County">
+          <DataField>CompanyInfo_County</DataField>
+        </Field>
+        <Field Name="CompanyInfo_PostCode">
+          <DataField>CompanyInfo_PostCode</DataField>
+        </Field>
+        <Field Name="CompanyInfo_PhoneNo">
+          <DataField>CompanyInfo_PhoneNo</DataField>
+        </Field>
+        <Field Name="CompanyInfo_FaxNo">
+          <DataField>CompanyInfo_FaxNo</DataField>
+        </Field>
+        <Field Name="Customer_Name">
+          <DataField>Customer_Name</DataField>
+        </Field>
+        <Field Name="SellToAddress_1">
+          <DataField>SellToAddress_1</DataField>
+        </Field>
+        <Field Name="SellToAddress_2">
+          <DataField>SellToAddress_2</DataField>
+        </Field>
+        <Field Name="SellToAddress_3">
+          <DataField>SellToAddress_3</DataField>
+        </Field>
+        <Field Name="SellToAddress_4">
+          <DataField>SellToAddress_4</DataField>
+        </Field>
+        <Field Name="SellToAddress_5">
+          <DataField>SellToAddress_5</DataField>
+        </Field>
+        <Field Name="ShipToAddress_1">
+          <DataField>ShipToAddress_1</DataField>
+        </Field>
+        <Field Name="ShipToAddress_2">
+          <DataField>ShipToAddress_2</DataField>
+        </Field>
+        <Field Name="ShipToAddress_3">
+          <DataField>ShipToAddress_3</DataField>
+        </Field>
+        <Field Name="ShipToAddress_4">
+          <DataField>ShipToAddress_4</DataField>
+        </Field>
+        <Field Name="ShipToAddress_5">
+          <DataField>ShipToAddress_5</DataField>
+        </Field>
+        <Field Name="BillToAddress_1">
+          <DataField>BillToAddress_1</DataField>
+        </Field>
+        <Field Name="BillToAddress_2">
+          <DataField>BillToAddress_2</DataField>
+        </Field>
+        <Field Name="BillToAddress_3">
+          <DataField>BillToAddress_3</DataField>
+        </Field>
+        <Field Name="BillToAddress_4">
+          <DataField>BillToAddress_4</DataField>
+        </Field>
+        <Field Name="BillToAddress_5">
+          <DataField>BillToAddress_5</DataField>
+        </Field>
+        <Field Name="PaymentTerms_Description">
+          <DataField>PaymentTerms_Description</DataField>
+        </Field>
+        <Field Name="Salesperson_Name">
+          <DataField>Salesperson_Name</DataField>
+        </Field>
+        <Field Name="Salesperson_EMail">
+          <DataField>Salesperson_EMail</DataField>
+        </Field>
+        <Field Name="Salesperson_PhoneNo">
+          <DataField>Salesperson_PhoneNo</DataField>
+        </Field>
+        <Field Name="ShipmentMethod_Description">
+          <DataField>ShipmentMethod_Description</DataField>
+        </Field>
+        <Field Name="SalesTaxDisclaimer">
+          <DataField>SalesTaxDisclaimer</DataField>
+        </Field>
+        <Field Name="QuoteLine_Indentation">
+          <DataField>QuoteLine_Indentation</DataField>
+        </Field>
+        <Field Name="QuoteLine_Type">
+          <DataField>QuoteLine_Type</DataField>
+        </Field>
+        <Field Name="QuoteLine_No_">
+          <DataField>QuoteLine_No_</DataField>
+        </Field>
+        <Field Name="QuoteLine_No2_">
+          <DataField>QuoteLine_No2_</DataField>
+        </Field>
+        <Field Name="QuoteLine_Description">
+          <DataField>QuoteLine_Description</DataField>
+        </Field>
+        <Field Name="QuoteLine_Quantity">
+          <DataField>QuoteLine_Quantity</DataField>
+        </Field>
+        <Field Name="QuoteLine_QuantityFormat">
+          <DataField>QuoteLine_QuantityFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_UnitOfMeasure">
+          <DataField>QuoteLine_UnitOfMeasure</DataField>
+        </Field>
+        <Field Name="QuoteLine_UnitPrice">
+          <DataField>QuoteLine_UnitPrice</DataField>
+        </Field>
+        <Field Name="QuoteLine_UnitPriceFormat">
+          <DataField>QuoteLine_UnitPriceFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_Amount">
+          <DataField>QuoteLine_Amount</DataField>
+        </Field>
+        <Field Name="QuoteLine_AmountFormat">
+          <DataField>QuoteLine_AmountFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_AmountInclVAT">
+          <DataField>QuoteLine_AmountInclVAT</DataField>
+        </Field>
+        <Field Name="QuoteLine_AmountInclVATFormat">
+          <DataField>QuoteLine_AmountInclVATFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_LineDiscAmount">
+          <DataField>QuoteLine_LineDiscAmount</DataField>
+        </Field>
+        <Field Name="QuoteLine_LineDiscAmountFormat">
+          <DataField>QuoteLine_LineDiscAmountFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_LineDiscPct">
+          <DataField>QuoteLine_LineDiscPct</DataField>
+        </Field>
+        <Field Name="QuoteLine_LineDiscPctFormat">
+          <DataField>QuoteLine_LineDiscPctFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_FreightAmt">
+          <DataField>QuoteLine_FreightAmt</DataField>
+        </Field>
+        <Field Name="QuoteLine_FreightAmtFormat">
+          <DataField>QuoteLine_FreightAmtFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_EquipAmt">
+          <DataField>QuoteLine_EquipAmt</DataField>
+        </Field>
+        <Field Name="QuoteLine_EquipAmtFormat">
+          <DataField>QuoteLine_EquipAmtFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_InstallAmt">
+          <DataField>QuoteLine_InstallAmt</DataField>
+        </Field>
+        <Field Name="QuoteLine_InstallAmtFormat">
+          <DataField>QuoteLine_InstallAmtFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_BondsAmt">
+          <DataField>QuoteLine_BondsAmt</DataField>
+        </Field>
+        <Field Name="QuoteLine_BondsAmtFormat">
+          <DataField>QuoteLine_BondsAmtFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_ServiceAmt">
+          <DataField>QuoteLine_ServiceAmt</DataField>
+        </Field>
+        <Field Name="QuoteLine_ServiceAmtFormat">
+          <DataField>QuoteLine_ServiceAmtFormat</DataField>
+        </Field>
+        <Field Name="QuoteLine_Name">
+          <DataField>QuoteLine_Name</DataField>
+        </Field>
+        <Field Name="QuoteBySegment">
+          <DataField>QuoteBySegment</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

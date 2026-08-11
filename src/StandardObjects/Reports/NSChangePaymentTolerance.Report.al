@@ -17,7 +17,7 @@ report 14021200 "NS_Change Payment Tolerance"
     // +     - ChangeVendLedgEntries: get Purchases & Payables Setup record, add filter on Retention Ledger Code if needed
     // +------------------------------------------------------------
 
-    Caption = 'Job Change Payment Tolerance';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Change Payment Tolerance';
     Permissions = TableData 4 = rm,
                   TableData 21 = rm,
                   TableData 25 = rm,

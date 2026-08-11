@@ -24,12 +24,8 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
     //TM-10.AM.1.0 | Added code to flow Segment Code.
     //PRJ-711.AS.1.0 07MAY2021 - Commented code
     //PRJ-563.AS.4.0 23JUN2021 Addde code to flow actual JMP unit cost to Req. worksheet direct unit cost field
-    //PRJ-1117.JS.1.0 07Dec2022 | Add code to flow variant code
     // +------------------------------------------------------------
-    //PRJ-773.SK.1.0 | 24JUNE2021 | Added events
-    //PRJ-1380.NK.1.0 13May2022  | Add Code to flow Purchaser Code
-    //PRJ-1411.RM.1.0 08June2022 | Added some code 
-    //PRJCTPR-93.NC.1.0 01May2023 | Added Code
+
     Permissions = TableData "Reservation Entry" = id,
                   TableData "Prod. Order Capacity Need" = rmd;
 
@@ -94,9 +90,6 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
         JobTaskNo: Code[20];
         JobNoFilter: Code[20];
         JobOnly: Boolean;
-        UsePlanToPurchaseCost: Boolean; //PRJ-1380.NK.1.0 13May2022
-        JobPurchaser: Code[20];  //PRJ-1380.NK.1.0 13May2022 
-        ProjectManager: Code[20];  //PRJ-1380.NK.1.0 13May2022 
 
     [Scope('Personalization')]
     procedure NS_CalculatePlanFromWorksheet(var Item: Record Item; ManufacturingSetup2: Record "Manufacturing Setup"; TemplateName: Code[10]; WorksheetName: Code[10]; OrderDate: Date; ToDate: Date; MRPPlanning: Boolean; RespectPlanningParm: Boolean; JobDemandOnly: Boolean; var JobNoFilter: Code[20]; DocumentNo: Code[20])
@@ -381,8 +374,7 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
         AsmLine: Record "Assembly Line";
         RemRatio: Decimal;
     begin
-        //if AsmLine.FindLinesWithItemToPlan(Item, AsmLine."Document Type"::Order) then  //PRJ-1221.JS.1.0 24FEB2022 line commented
-        if AsmLine.FindItemToPlanLines(Item, AsmLine."Document Type"::Order) then  //PRJ-1221.JS.1.0 24FEB2022 line added
+        if AsmLine.FindLinesWithItemToPlan(Item, AsmLine."Document Type"::Order) then
             repeat
                 if AsmLine."Due Date" <> 0D then begin
                     ReqLine.SetRefFilter(
@@ -393,8 +385,7 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                 end;
             until AsmLine.Next = 0;
 
-        //if AsmLine.FindLinesWithItemToPlan(Item, AsmLine."Document Type"::"Blanket Order") then   //PRJ-1221.JS.1.0 24FEB2022 line commented
-        if AsmLine.FindItemToPlanLines(Item, AsmLine."Document Type"::"Blanket Order") then  //PRJ-1221.JS.1.0 24FEB2022 line added
+        if AsmLine.FindLinesWithItemToPlan(Item, AsmLine."Document Type"::"Blanket Order") then
             repeat
                 if AsmLine."Due Date" <> 0D then begin
                     ReqLine.SetRefFilter(ReqLine."Ref. Order Type"::Assembly, AsmLine."Document Type", AsmLine."Document No.", 0);
@@ -549,8 +540,7 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
     var
         AsmHeader: Record "Assembly Header";
     begin
-        //if AsmHeader.FindLinesWithItemToPlan(Item, AsmHeader."Document Type"::Order) then  //PRJ-1221.JS.1.0 24FEB2022 line commented
-        if AsmHeader.FindItemToPlanLines(Item, AsmHeader."Document Type"::Order) then //PRJ-1221.JS.1.0 24FEB2022 line added
+        if AsmHeader.FindLinesWithItemToPlan(Item, AsmHeader."Document Type"::Order) then
             repeat
                 if AsmHeader."Due Date" <> 0D then begin
                     InventoryProfile.Init;
@@ -1835,10 +1825,10 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                     end;
                 end;
             else begin
-                NextState := NextState::CloseSupply;
-                if TempSKU."Maximum Order Quantity" > 0 then
-                    LotAccumulationPeriodStartDate := SupplyInventoryProfile."Due Date";
-            end;
+                    NextState := NextState::CloseSupply;
+                    if TempSKU."Maximum Order Quantity" > 0 then
+                        LotAccumulationPeriodStartDate := SupplyInventoryProfile."Due Date";
+                end;
         end;
     end;
 
@@ -3555,7 +3545,7 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                     SupplyInvtProfile."Source Type" := DATABASE::"Purchase Line";
                     SupplyInvtProfile."Unit of Measure Code" := Item."Purch. Unit of Measure";
                     if SupplyInvtProfile."Unit of Measure Code" <> Item."Base Unit of Measure" then begin
-                        if ItemUnitOfMeasure.Get(TempSKU."Item No.", Item."Purch. Unit of Measure") then;
+                        ItemUnitOfMeasure.Get(TempSKU."Item No.", Item."Purch. Unit of Measure");
                         SupplyInvtProfile."Qty. per Unit of Measure" := ItemUnitOfMeasure."Qty. per Unit of Measure";
                     end;
                 end;
@@ -4756,8 +4746,6 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
         DimMgt: Codeunit DimensionManagement;
         x: Integer;
         GLSetup: Record "General Ledger Setup";
-        JobRec2: Record Job; //PRJ-1380.NK.1.0 13May2022 
-        NS_UserSetup: Record "User Setup"; //PRJCTPR-93.NC.1.0 01May2023
     begin
         //ProjectPro - start
         JobSU.Get;
@@ -4775,25 +4763,17 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
             CalcJMPQty.CalcQtys(JobNoFilter);
             if JobNoFilter <> '' then
                 JobRec.Get(JobNoFilter);
-            if NS_UserSetup.Get(UserId) then; //PRJCTPR-93.NC.1.0 01May2023
+
             JobMatPlanRec.Reset;
             JobMatPlanRec.SetCurrentKey("NS_Worksheet Job No.", NS_Type, "NS_Part No.", "NS_Bal. Req", "NS_Date Ordered By");
             if JobNoFilter <> '' then
                 JobMatPlanRec.SetRange("NS_Worksheet Job No.", JobNoFilter);
             if DocumentNo <> '' then
                 JobMatPlanRec.SetRange("NS_Document No.", DocumentNo);
-            if NS_UserSetup."NS_JMP Batch Name" <> '' then //PRJCTPR-93.NC.1.0 01May2023
-                JobMatPlanRec.SetRange("NS_JMP Batch Name", NS_UserSetup."NS_JMP Batch Name"); //PRJCTPR-93.NC.1.0 01May2023
             JobMatPlanRec.SetRange(NS_Type, JobMatPlanRec.NS_Type::Item);
             JobMatPlanRec.SetRange("NS_Part No.", Item."No.");
             JobMatPlanRec.SetFilter("NS_Bal. Req", '>%1', 0);
             JobMatPlanRec.SetRange("NS_Date Ordered By", FromDate, ToDate);
-            //PRJ-1380.NK.1.0 13May2022 Start
-            if JobPurchaser <> '' then
-                JobMatPlanRec.SetRange("NS_Job Purchaser", JobPurchaser);
-            if ProjectManager <> '' then
-                JobMatPlanRec.SetRange("NS_Job Manager", ProjectManager);
-            //PRJ-1380.NK.1.0 13May2022 End
             if JobMatPlanRec.FindFirst then begin
                 repeat
                     ReqLine.Init;
@@ -4807,19 +4787,11 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                     ReqLine."Action Message" := ReqLine."Action Message"::New;
                     ReqLine."NS_Job No." := JobMatPlanRec."NS_Worksheet Job No.";
                     ReqLine."NS_Job Task No." := JobMatPlanRec."NS_Order Code";
-                    ReqLine."NS_JMP Line No." := JobMatPlanRec."NS_Line No."; //PRJ-1411.RM.1.0 
                     ReqLine."NS_Job Planning Line No." := JobMatPlanRec."NS_Job Plannine Line No.";
-                    ReqLine."NS_JMP Details" := JobMatPlanRec."NS_Details";  //PRJCTPR-256.JS.1.0 18DEC2023
-                    //ReqLine."Unit of Measure Code" := Item."Base Unit of Measure";//PRJ-1365.AS.1.0 Commented
+                    ReqLine."Unit of Measure Code" := Item."Base Unit of Measure";
                     ReqLine.Quantity := JobMatPlanRec."NS_Bal. Req";
                     //ReqLine."Direct Unit Cost" := Item."Unit Cost";//PRJ-563.AS.4.0 23JUN2021 Comment
                     ReqLine."Direct Unit Cost" := JobMatPlanRec."NS_Unit Cost";//PRJ-563.AS.4.0 23JUN2021 Add
-                    //PRJ-1380.NK.1.0 13May2022 Start
-                    ReqLine.validate("Unit of Measure Code", JobMatPlanRec."NS_Unit of Measure Code");//PRJ-1365.AS.1.0 Add
-                    if JobRec2.get(JobMatPlanRec."NS_Worksheet Job No.") then;
-                    ReqLine."NS_Job Purchaser" := JobRec2."NS_Job Purchaser";
-                    ReqLine."NS_Job Manager" := JobRec2.NS_Manager;
-                    //PRJ-1380.NK.1.0 13May2022 End
                     //PRJ-130.MS.1.0 start
                     if JobMatPlanRec.NS_Vendor <> '' then
                         ReqLine.Validate("Vendor No.", JobMatPlanRec.NS_Vendor)
@@ -4828,18 +4800,10 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                     //ReqLine.Validate("Vendor No.",Item."NS_Vendor No."); comment
                     //PRJ-130.MS.1.0 end
                     ReqLine."Vendor Item No." := Item."Vendor Item No.";
-                    ReqLine."NS_JMP Details" := JobMatPlanRec."NS_Details";  //PRJCTPR-256.JS.1.0 15DEC2023
                     ReqLine."NS_JMP Document No." := JobMatPlanRec."NS_Document No.";
                     ReqLine."Gen. Prod. Posting Group" := Item."Gen. Prod. Posting Group";
                     ReqLine."Gen. Business Posting Group" := JobSU."NS_Gen. Bus. Posting Group";
                     ReqLine."NS_Segment Code" := JobMatPlanRec."NS_Segment Code";//TM-10.AM.1.0
-                    ReqLine."Variant Code" := JobMatPlanRec."NS_Variant Code";   //PRJ-1117.JS.1.0 07Dec2022
-
-                    //PRJ-773.SK.1.0 Start
-                    OnBeforeInsertReqLineFromJobMatPlanningLine(ReqLine, JobMatPlanRec);
-                    //PRJ-773.SK.1.0 End
-
-
                     if ReqLine.Insert then begin
                         //PRJ-711.AS.1.0 07MAY2021 - START Commented code
                         // with ReqLine do begin
@@ -4880,12 +4844,6 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                         ReqLine."Unit Cost" := JobMatPlanRec."NS_Unit Cost";
                         ReqLine."Direct Unit Cost" := JobMatPlanRec."NS_Unit Cost";//PRJ-563.AS.4.0 23JUN2021 Add
                         ReqLine."Cost Amount" := ReqLine."Unit Cost" * ReqLine.Quantity;
-                        //PRJ-773.SK.1.0 Start
-                        OnBeforeModifyReqLineFromJobMatPlanningLine(ReqLine, JobMatPlanRec);
-                        //PRJ-773.SK.1.0 End
-
-                        if UsePlanToPurchaseCost then    //PRJ-1380.NK.1.0 13May2022 
-                            ReqLine."Direct Unit Cost" := JobMatPlanRec."NS_Unit Cost"; //PRJ-1380.NK.1.0 13May2022 
                         ReqLine.Modify;
                         //ProjectPro - end
                     end;
@@ -4915,8 +4873,7 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                         ReqLine."Accept Action Message" := true;
                         ReqLine."NS_Job No." := JobPlanLine."Job No.";
                         ReqLine."NS_Job Task No." := JobPlanLine."Job Task No.";
-                        //ReqLine."Unit of Measure Code" := JobPlanLine."Unit of Measure Code";//PRJ-1365.AS.1.0 Commented code
-                        ReqLine.Validate("Unit of Measure Code", JobMatPlanRec."NS_Unit of Measure Code");//PRJ-1365.AS.1.0 Added code
+                        ReqLine."Unit of Measure Code" := JobPlanLine."Unit of Measure Code";
                         ReqLine.Quantity := JobPlanLine.Quantity;
                         ReqLine."Direct Unit Cost" := Item."Unit Cost";
                         ReqLine."Location Code" := JobSU."NS_Job Mat'l Planning Location";
@@ -4929,7 +4886,7 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
                         //PRJ-130.MS.1.0 end
                         ReqLine."Vendor Item No." := Item."Vendor Item No.";
                         ReqLine."NS_Segment Code" := JobMatPlanRec."NS_Segment Code";//TM-10.AM.1.0
-                        ReqLine."NS_JMP Details" := JobMatPlanRec."NS_Details";  //PRJCTPR-256.JS.1.0 15DEC2023
+
                         ReqLine.Insert;
 
                     until JobPlanLine.Next = 0;
@@ -4938,29 +4895,5 @@ codeunit 14021117 "NS_Invent. Profile Offsetting"
         end;
         //ProjectPro - end
     end;
-
-
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeInsertReqLineFromJobMatPlanningLine(var RequisitionLine: Record "Requisition Line"; var JobMatPlanLine: Record "NS_Job Material Planning")
-    begin
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeModifyReqLineFromJobMatPlanningLine(var RequisitionLine: Record "Requisition Line"; var JobMatPlanLine: Record "NS_Job Material Planning")
-    begin
-    end;
-
-    //PRJ-1380.NK.1.0 13May2022 Start
-    procedure NS_SetUsePlanCostBoolean(UsePuchaseCostPara: Boolean)
-    begin
-        UsePlanToPurchaseCost := UsePuchaseCostPara;
-    end;
-
-    procedure NS_GetPurchaserCodes(JobPurPara: Code[20]; ProjManaPara: code[20])
-    begin
-        JobPurchaser := JobPurPara;
-        ProjectManager := ProjManaPara;
-    end;
-    //PRJ-1380.NK.1.0 13May2022 End
 }
 

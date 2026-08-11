@@ -113,10 +113,7 @@ page 14021192 "NS_Job CalendarEntriesSubform"
 
     var
         JobCalendarChange: Record "NS_Job Calendar Change";
-        //PE-59.GK.1.0 14Mar2023 start
-        //PeriodFormMgt: Codeunit PeriodFormManagement;
-        PeriodFormMgt: Codeunit PeriodPageManagement;
-        //PE-59.GK.1.0 14Mar2023 end
+        PeriodFormMgt: Codeunit PeriodFormManagement;
         JobCalendarMgmt: Codeunit "NS_Job Calendar Management";
 
         ItemPeriodLength: Option Day,Week,Month,Quarter,Year,Period;

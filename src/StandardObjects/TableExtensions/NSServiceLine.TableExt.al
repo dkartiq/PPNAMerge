@@ -4,34 +4,6 @@ tableextension 14021230 NS_ServiceLine extends "Service Line"
 
     fields
     {
-        //PRJCTPR-222.JS.1.0 09NOV2023 - Start
-        modify("No.")
-        {
-            trigger OnAfterValidate()
-            var
-                NSItem: Record item;
-                NSResource: Record Resource;
-                NSGLAccount: Record "G/L Account";
-            begin
-                case Type of
-                    Type::Item:
-                        begin
-                            if "No." <> '' then
-                                if NSItem.Get("No.") then
-                                    rec."NS_Job Cost Category" := NSItem."NS_Job Cost Category";
-                        end;
-                    Type::Resource:
-                        if "No." <> '' then
-                            if NSResource.Get("No.") then
-                                rec."NS_Job Cost Category" := NSResource."NS_Job Cost Category";
-                    Type::"G/L Account":
-                        if "No." <> '' then
-                            if NSGLAccount.Get("No.") then
-                                rec."NS_Job Cost Category" := NSGLAccount."NS_Cost Category";
-                end;
-            end;
-        }
-        //PRJCTPR-222.JS.1.0 09NOV2023 - end
         field(14021101; "NS_Job Cost Category"; Code[10])
         {
             Caption = 'Job Cost Category';

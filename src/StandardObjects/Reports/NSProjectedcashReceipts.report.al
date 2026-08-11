@@ -20,7 +20,7 @@ report 14021209 "NS_Projected Cash Receipts"
     RDLCLayout = './Layouts/NSProjected Cash Receipts.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Projected Cash Receipts';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Projected Cash Receipts';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

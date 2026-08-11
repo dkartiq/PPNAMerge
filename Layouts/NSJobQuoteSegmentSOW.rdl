@@ -1,0 +1,227 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="SalesPersonCap">
+          <DataField>SalesPersonCap</DataField>
+        </Field>
+        <Field Name="SoldToCap">
+          <DataField>SoldToCap</DataField>
+        </Field>
+        <Field Name="ShipToCap">
+          <DataField>ShipToCap</DataField>
+        </Field>
+        <Field Name="TermsCap">
+          <DataField>TermsCap</DataField>
+        </Field>
+        <Field Name="ShipByCap">
+          <DataField>ShipByCap</DataField>
+        </Field>
+        <Field Name="POCap">
+          <DataField>POCap</DataField>
+        </Field>
+        <Field Name="AcceptanceCap">
+          <DataField>AcceptanceCap</DataField>
+        </Field>
+        <Field Name="Acceptance1Cap">
+          <DataField>Acceptance1Cap</DataField>
+        </Field>
+        <Field Name="Acceptance2Cap">
+          <DataField>Acceptance2Cap</DataField>
+        </Field>
+        <Field Name="CompNameCap">
+          <DataField>CompNameCap</DataField>
+        </Field>
+        <Field Name="SignDateCap">
+          <DataField>SignDateCap</DataField>
+        </Field>
+        <Field Name="PrintNameCap">
+          <DataField>PrintNameCap</DataField>
+        </Field>
+        <Field Name="PrintTitleCap">
+          <DataField>PrintTitleCap</DataField>
+        </Field>
+        <Field Name="CustInitCap">
+          <DataField>CustInitCap</DataField>
+        </Field>
+        <Field Name="CronusConFiCap">
+          <DataField>CronusConFiCap</DataField>
+        </Field>
+        <Field Name="QuoteValidCap">
+          <DataField>QuoteValidCap</DataField>
+        </Field>
+        <Field Name="ThisDocApplCap">
+          <DataField>ThisDocApplCap</DataField>
+        </Field>
+        <Field Name="GrandTotalCap">
+          <DataField>GrandTotalCap</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Address">
+          <DataField>CompanyInfo_Address</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Address2">
+          <DataField>CompanyInfo_Address2</DataField>
+        </Field>
+        <Field Name="CompanyInfo_City">
+          <DataField>CompanyInfo_City</DataField>
+        </Field>
+        <Field Name="CompanyInfo_County">
+          <DataField>CompanyInfo_County</DataField>
+        </Field>
+        <Field Name="CompanyInfo_PostCode">
+          <DataField>CompanyInfo_PostCode</DataField>
+        </Field>
+        <Field Name="CompanyInfo_PhoneNo">
+          <DataField>CompanyInfo_PhoneNo</DataField>
+        </Field>
+        <Field Name="CompanyInfo_FaxNo">
+          <DataField>CompanyInfo_FaxNo</DataField>
+        </Field>
+        <Field Name="Company_Pic">
+          <DataField>Company_Pic</DataField>
+        </Field>
+        <Field Name="QuoteNo_JobQuoteHeader">
+          <DataField>QuoteNo_JobQuoteHeader</DataField>
+        </Field>
+        <Field Name="ProposalDate_JobQuoteHeader">
+          <DataField>ProposalDate_JobQuoteHeader</DataField>
+        </Field>
+        <Field Name="JobQuoteExtDoc">
+          <DataField>JobQuoteExtDoc</DataField>
+        </Field>
+        <Field Name="ShipToName">
+          <DataField>ShipToName</DataField>
+        </Field>
+        <Field Name="ShipToCont">
+          <DataField>ShipToCont</DataField>
+        </Field>
+        <Field Name="ShipToAddr">
+          <DataField>ShipToAddr</DataField>
+        </Field>
+        <Field Name="ShipTocity">
+          <DataField>ShipTocity</DataField>
+        </Field>
+        <Field Name="BillToName">
+          <DataField>BillToName</DataField>
+        </Field>
+        <Field Name="BillToCont">
+          <DataField>BillToCont</DataField>
+        </Field>
+        <Field Name="BillToAddr">
+          <DataField>BillToAddr</DataField>
+        </Field>
+        <Field Name="BillTocity">
+          <DataField>BillTocity</DataField>
+        </Field>
+        <Field Name="PaymentTermsDesc">
+          <DataField>PaymentTermsDesc</DataField>
+        </Field>
+        <Field Name="SalespersonName">
+          <DataField>SalespersonName</DataField>
+        </Field>
+        <Field Name="ShipmentMethodDesc">
+          <DataField>ShipmentMethodDesc</DataField>
+        </Field>
+        <Field Name="SegmentCode_JobTakeoffSegments">
+          <DataField>SegmentCode_JobTakeoffSegments</DataField>
+        </Field>
+        <Field Name="SegmentName_JobTakeoffSegments">
+          <DataField>SegmentName_JobTakeoffSegments</DataField>
+        </Field>
+        <Field Name="Qty_JobTakeoffSegments">
+          <DataField>Qty_JobTakeoffSegments</DataField>
+        </Field>
+        <Field Name="Qty_JobTakeoffSegmentsFormat">
+          <DataField>Qty_JobTakeoffSegmentsFormat</DataField>
+        </Field>
+        <Field Name="WorkUnitofMeasure_JobTakeoffSegments">
+          <DataField>WorkUnitofMeasure_JobTakeoffSegments</DataField>
+        </Field>
+        <Field Name="TotalPrice">
+          <DataField>TotalPrice</DataField>
+        </Field>
+        <Field Name="TotalPriceFormat">
+          <DataField>TotalPriceFormat</DataField>
+        </Field>
+        <Field Name="TotalBySegment">
+          <DataField>TotalBySegment</DataField>
+        </Field>
+        <Field Name="TotalBySegmentFormat">
+          <DataField>TotalBySegmentFormat</DataField>
+        </Field>
+        <Field Name="Description_JobQuoteScopeofWork">
+          <DataField>Description_JobQuoteScopeofWork</DataField>
+        </Field>
+        <Field Name="Description2_JobQuoteScopeofWork">
+          <DataField>Description2_JobQuoteScopeofWork</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

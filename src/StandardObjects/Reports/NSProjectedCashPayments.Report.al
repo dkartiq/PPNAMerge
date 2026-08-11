@@ -19,7 +19,7 @@ report 14021218 "NS_Projected Cash Payments"
     RDLCLayout = './Layouts/NSProjected Cash Payments.rdl';
 
     ApplicationArea = Basic, Suite;
-    Caption = 'Job Projected Cash Payments';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Projected Cash Payments';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

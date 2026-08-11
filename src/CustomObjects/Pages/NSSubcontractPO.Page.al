@@ -1,5 +1,6 @@
 page 14021311 "NS_Subcontract PO"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -677,10 +678,13 @@ page 14021311 "NS_Subcontract PO"
                 field("PP Retention Percent"; Rec."NS_Retention Percent")
                 {
                     ApplicationArea = All;
-                    Editable = PP_RetentionPercentEditable;
+                    // >> Upgrade
+                    //Editable = PP_RetentionPercentEditable;
+                    Editable = false;
+                    // << Upgrade
                     Importance = Promoted;
                     ToolTip = 'Specifies the Retention Percent';
-
+                    //
                     trigger OnValidate();
                     begin
                         //ProjectPro - start
@@ -716,7 +720,10 @@ page 14021311 "NS_Subcontract PO"
                 field("PP Retention Date"; Rec."NS_Retention Date")
                 {
                     ApplicationArea = All;
-                    Editable = PP_RetentionDateEditable;
+                    // >> Upgrade
+                    //Editable = PP_RetentionDateEditable;
+                    Editable = false;
+                    // << Upgrade
                     ToolTip = 'Specifies the Retention Date';
 
                     trigger OnValidate();
@@ -876,10 +883,7 @@ page 14021311 "NS_Subcontract PO"
                     var
                         ApprovalEntries: Page "Approval Entries";
                     begin
-                        //PE-59.GK.1.0 14Mar2023 start
-                        //ApprovalEntries.Setfilters(DATABASE::"Purchase Header", Rec."Document Type".AsInteger(), Rec."No."); //PRJ-1131.NK.1.0 11Jan2022
-                        ApprovalEntries.SetRecordFilters(DATABASE::"Purchase Header", Rec."Document Type", Rec."No.");
-                        //PE-59.GK.1.0 14Mar2023 end
+                        ApprovalEntries.Setfilters(DATABASE::"Purchase Header", "Document Type".AsInteger(), "No.");
                         ApprovalEntries.RUN();
                     end;
                 }
@@ -894,21 +898,6 @@ page 14021311 "NS_Subcontract PO"
                                   "Document Line No." = CONST(0);
                     ToolTip = 'View or add notes about the purchase order.';
                 }
-                //PE-178.JS.1.0 16NOV2023 - Start
-                action(NSProjectProAI)
-                {
-                    ApplicationArea = All;
-                    Caption = 'ProjectPro AI';
-                    Image = Info;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    //InFooterBar = true;
-                    trigger OnAction()
-                    begin
-                        Hyperlink('https://webchat.botframework.com/embed/ChatBotAIUS-bot?s=AsNjejE0XXs.6dxHmclWNW1hYkEGoPRwb_tzwWFLSo4r2tDOwbZRxmc');
-                    end;
-                }
-                //PE-178.JS.1.0 16NOV2023 - end                    
             }
             group(NS_Documents)
             {
@@ -1219,7 +1208,12 @@ page 14021311 "NS_Subcontract PO"
                     begin
                         ProgressPaymentHeader.RESET;
                         ProgressPaymentHeader.SETRANGE("NS_No.", "NS_Subcontract No.");
-                        PAGE.RUNMODAL(PAGE::"NS_Progress Payment List", ProgressPaymentHeader);
+                        // >> Upgrade
+                        //FDD101
+                        //PAGE.RUNMODAL(PAGE::"NS_Progress Payment List", ProgressPaymentHeader);
+                        PAGE.RUN(PAGE::"NS_Progress Payment List", ProgressPaymentHeader);
+                        //FDD101
+                        // << Upgrade
                     end;
                 }
                 separator(Separator1100773001)
@@ -1807,19 +1801,7 @@ page 14021311 "NS_Subcontract PO"
             //     Message('Your free trial is going to expire in %1 days.Please contact your administrator.', NoOfDays);
             // if WorkDate > Licdate then
             //     Error('Your free trial has expired.Please contact your administrator.');
-            //PRJ-1686.GK.1.0 26Oct2022 start
-            //PRJ-1641.JS.1.0 23SEP2022 - Start		
-            // Licdate := DMY2Date(30, 11, 2022);
-            // Licdate := DMY2Date(31, 12, 2022);
-            // Licdate := DMY2Date(31, 1, 2023);
-            // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-            // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-            //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-            // if WorkDate > Licdate then
-            //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-            OnCheckPPLicenseExpire();   //PRJ-1641.JS.1.0 23SEP2022 line commented
-            //PRJ-1641.JS.1.0 23SEP2022 - end   
-            //PRJ-1686.GK.1.0 26Oct2022 end         
+            OnCheckPPLicenseExpire();
         end;
         //PRJ-516.ms.1.0 end
         NS_SetDocNoVisible;

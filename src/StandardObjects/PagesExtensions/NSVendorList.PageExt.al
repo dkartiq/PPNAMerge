@@ -1,9 +1,6 @@
 pageextension 14021106 NS_VendorList extends "Vendor List"
 {
     // version NAVW111.00.00.24742,NAVNA11.00.00.24742,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Vendors'; //PRJ-1330.NK.1.0 25Apr2022
-    //PRJ-1537.JS.1.0 25JULY2022 | Reverce Balance Due ($) Sinage condition
     layout
     {
 
@@ -68,19 +65,6 @@ pageextension 14021106 NS_VendorList extends "Vendor List"
                 end;
             }
         }
-        //PE-23.NC.1.0 16May2023 Start
-        addafter("Purchase Statistics")
-        {
-            action("NS_Commitment Report")
-            {
-                ApplicationArea = All;
-                Caption = 'Commitment Report';
-                ToolTip = 'Run Commitment Report.';
-                Image = "Report";
-                RunObject = report NS_CommitmentReport;
-            }
-        }
-        //PE-23.NC.1.0 16May2023 End
     }
 
     var
@@ -122,11 +106,6 @@ pageextension 14021106 NS_VendorList extends "Vendor List"
             until VendLegEnt_G.Next = 0;
 
         BalanceDueLcy_NToshow := Abs(BalanceDueLcy_N);
-        //PRJ-1537.JS.1.0 25JULY2022 - Start
-        Rec.calcfields("Balance (LCY)");
-        If rec."Balance (LCY)" < 0 then
-            BalanceDueLcy_NToshow := BalanceDueLcy_NToshow * -1;
-        //PRJ-1537.JS.1.0 25JULY2022 - Start            
         //PRJ-713.AS.1.0 - END
     end;
     /*

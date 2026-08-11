@@ -745,13 +745,12 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>= Fields!OrderedQuantity.Value</Value>
+                                  <Value>="1"</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <Format>=Fields!TempSalesInvoiceLineQtyFormat.Value</Format>
-                                    <Color>Red</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -810,7 +809,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!AmountExclInvDisc.Value</Value>
+                                  <Value>=Sum(Fields!AmountExclInvDisc.Value)</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
                                     <FontFamily>Segoe UI</FontFamily>
@@ -859,205 +858,6 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                           </Paragraphs>
                           <Style>
                             <Border />
-                            <VerticalAlign>Top</VerticalAlign>
-                            <PaddingLeft>5pt</PaddingLeft>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                  </TablixCells>
-                </TablixRow>
-                <TablixRow>
-                  <Height>0.36187cm</Height>
-                  <TablixCells>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox52">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!RevenueDescription.Value</Value>
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <ZIndex>17</ZIndex>
-                          <Style>
-                            <VerticalAlign>Top</VerticalAlign>
-                            <PaddingRight>5pt</PaddingRight>
-                          </Style>
-                        </Textbox>
-                        <ColSpan>2</ColSpan>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell />
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox63">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!TempSalesInvoiceLineUOM.Value</Value>
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <ZIndex>16</ZIndex>
-                          <Style>
-                            <VerticalAlign>Top</VerticalAlign>
-                            <PaddingLeft>5pt</PaddingLeft>
-                            <PaddingRight>5pt</PaddingRight>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox80">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>= Fields!OrderedQuantity.Value</Value>
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox80</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <VerticalAlign>Top</VerticalAlign>
-                            <PaddingLeft>5pt</PaddingLeft>
-                            <PaddingRight>5pt</PaddingRight>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox81">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox81</rd:DefaultName>
-                          <Style>
-                            <VerticalAlign>Top</VerticalAlign>
-                            <PaddingLeft>5pt</PaddingLeft>
-                            <PaddingRight>5pt</PaddingRight>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox82">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!AmountExclInvDisc.Value</Value>
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <Format>#,0.00</Format>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox82</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <VerticalAlign>Top</VerticalAlign>
-                            <PaddingLeft>5pt</PaddingLeft>
-                          </Style>
-                        </Textbox>
-                        <ColSpan>2</ColSpan>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell />
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox84">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox84</rd:DefaultName>
-                          <Style>
                             <VerticalAlign>Top</VerticalAlign>
                             <PaddingLeft>5pt</PaddingLeft>
                           </Style>
@@ -1170,7 +970,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value xml:space="preserve"> </Value>
+                                  <Value />
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
                                     <FontFamily>Segoe UI</FontFamily>
@@ -1360,30 +1160,37 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                       <TablixMembers>
                         <TablixMember>
                           <Visibility>
-                            <Hidden>true</Hidden>
+                            <Hidden>=IIF(Fields!TempSalesInvoiceLineQty.Value = 0, TRUE, FALSE)</Hidden>
                           </Visibility>
                           <KeepWithGroup>After</KeepWithGroup>
                           <KeepTogether>true</KeepTogether>
                         </TablixMember>
                         <TablixMember>
-                          <Group Name="Table1_Details_Group">
-                            <DataElementName>Detail</DataElementName>
+                          <Group Name="Table1_Group2">
+                            <GroupExpressions>
+                              <GroupExpression>=Fields!RevenueCat.Value</GroupExpression>
+                            </GroupExpressions>
                           </Group>
                           <TablixMembers>
                             <TablixMember>
-                              <Visibility>
-                                <Hidden>=IIF(Fields!TempSalesInvoiceLineQty.Value = 0, TRUE, FALSE)</Hidden>
-                              </Visibility>
-                            </TablixMember>
-                            <TablixMember>
-                              <Visibility>
-                                <Hidden>=iif((Fields!TempPostedAsmLineDesc.Value &lt;&gt; "") OR (Fields!TempPostedAsmLineNo.Value &lt;&gt; ""),false,true)</Hidden>
-                              </Visibility>
+                              <Group Name="Table1_Details_Group">
+                                <DataElementName>Detail</DataElementName>
+                              </Group>
+                              <TablixMembers>
+                                <TablixMember>
+                                  <Visibility>
+                                    <Hidden>=iif((Fields!TempPostedAsmLineDesc.Value &lt;&gt; "") OR (Fields!TempPostedAsmLineNo.Value &lt;&gt; ""),false,true)</Hidden>
+                                  </Visibility>
+                                </TablixMember>
+                              </TablixMembers>
+                              <DataElementName>Detail_Collection</DataElementName>
+                              <DataElementOutput>Output</DataElementOutput>
+                              <KeepTogether>true</KeepTogether>
                             </TablixMember>
                           </TablixMembers>
-                          <DataElementName>Detail_Collection</DataElementName>
-                          <DataElementOutput>Output</DataElementOutput>
-                          <KeepTogether>true</KeepTogether>
+                          <Visibility>
+                            <Hidden>=NOT(Code.EndDocument())</Hidden>
+                          </Visibility>
                         </TablixMember>
                       </TablixMembers>
                     </TablixMember>
@@ -1393,7 +1200,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
             <Left>0.00058in</Left>
-            <Height>1.85235cm</Height>
+            <Height>1.49048cm</Height>
             <Width>17.94091cm</Width>
             <Style />
           </Tablix>
@@ -1498,7 +1305,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                 </FilterValues>
               </Filter>
             </Filters>
-            <Top>1.80269cm</Top>
+            <Top>1.48519cm</Top>
             <Left>0.16448cm</Left>
             <Height>0.42333cm</Height>
             <Width>17.78311cm</Width>
@@ -1510,7 +1317,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>2.22602cm</Height>
+        <Height>1.90853cm</Height>
         <Style />
       </Body>
       <Width>17.94759cm</Width>
@@ -2222,7 +2029,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.25529in</Top>
+              <Top>1.24279in</Top>
               <Left>0.00058in</Left>
               <Height>11pt</Height>
               <Width>4.59674in</Width>
@@ -2248,7 +2055,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.08876in</Top>
+              <Top>1.06376in</Top>
               <Left>0.00058in</Left>
               <Height>11pt</Height>
               <Width>4.59674in</Width>
@@ -2483,7 +2290,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.42854in</Top>
+              <Top>1.41604in</Top>
               <Height>11pt</Height>
               <Width>4.59674in</Width>
               <ZIndex>36</ZIndex>
@@ -3405,6 +3212,56 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Textbox Name="Textbox13">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>For ACH or Credit Card Payment,please contact our A/R Dept. at(703)631-3377 or </Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>7pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>ar@ctsi-usa.com</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>7pt</FontSize>
+                        <Color>Blue</Color>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>. 3% credit card transaction fee will apply.</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>7pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox13</rd:DefaultName>
+              <Top>1.33751in</Top>
+              <Height>0.16667in</Height>
+              <Width>7.06167in</Width>
+              <ZIndex>25</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Top</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
             <Textbox Name="TempSalesInvoiceLineAmtAmtExclInvDisc">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -3427,7 +3284,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
               <Left>2.25149in</Left>
               <Height>11pt</Height>
               <Width>1.24016in</Width>
-              <ZIndex>25</ZIndex>
+              <ZIndex>26</ZIndex>
               <Visibility>
                 <Hidden>true</Hidden>
               </Visibility>
@@ -3464,7 +3321,7 @@ Cstr(Fields!Work_Description.Value), Fields!No_SalesInvHeader.Value)</Hidden>
               <Left>1.09401in</Left>
               <Height>11pt</Height>
               <Width>1.15748in</Width>
-              <ZIndex>26</ZIndex>
+              <ZIndex>27</ZIndex>
               <Visibility>
                 <Hidden>true</Hidden>
               </Visibility>

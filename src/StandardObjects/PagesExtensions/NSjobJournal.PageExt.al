@@ -8,10 +8,7 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
     //PRJ-492.RS.1.0 11May2021 | Hide/Unhide Fields
     //PRJ-841.JS.1.0 16Aug2021 | Add field
     //PRJ-842.JS.1.0 16Aug2021 | Add field
-    //PRJ-1643.RM.1.0 09Dec2022 | Made some fields visible    
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    //PRJCTPR-2.RM.1.0 13Dec2022 | Added a new field
-    //PE-144.RM.1.0 08Aug2023 | Obsolete action button
+
     layout
     {
         //Unsupported feature: Change Visible on ""Line Discount Amount"(Control 18)". Please convert manually.
@@ -83,22 +80,19 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the External Relationship Type';
-                // Visible = false; //PRJ-492.AS.1.0 //PRJ-1643.RM.1.0 09Dec2022 commented
-                Visible = true; //PRJ-1643.RM.1.0 09Dec2022  
+                Visible = false; //PRJ-492.AS.1.0
             }
             field("NS_External Relationship No."; Rec."NS_External Relationship No.")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the External Relationship No.';
-                // Visible = false; //PRJ-492.AS.1.0 //PRJ-1643.RM.1.0 09Dec2022 commented
-                Visible = true; //PRJ-1643.RM.1.0 09Dec2022  
+                Visible = false; //PRJ-492.AS.1.0
             }
             field("NS_External Relationship Name"; Rec."NS_External Relationship Name")
             {
                 ApplicationArea = All;
                 ToolTip = 'Specifies the External Relationship Name';
-                // Visible = false; //PRJ-492.AS.1.0 //PRJ-1643.RM.1.0 09Dec2022 commented
-                Visible = true; //PRJ-1643.RM.1.0 09Dec2022  
+                Visible = false; //PRJ-492.AS.1.0
             }
         }
         addafter(Description)
@@ -136,14 +130,15 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
         }
         addafter("Work Type Code")
         {
-            field("NS_Skill Class"; '')//PE-68 Dk.1.0 10April2023
+            field("NS_Skill Class"; Rec."NS_Skill Class")
             {
                 ApplicationArea = All;
                 Caption = 'Skill Class';
+
                 ToolTip = 'Skill Class';
-                // Visible = NS_AdvancedJobLaborActive;//PRJ-116.SK.1.0 Blocked this
-                //PRJ-492.AS.1.0
-                Visible = false;//PE-68 Dk.1.0 10April2023
+                //Visible = NS_AdvancedJobLaborActive;//PRJ-116.SK.1.0 Blocked this
+                Visible = false; //PRJ-492.AS.1.0
+
                 trigger OnValidate();
                 begin
                     //ProjectPro - start
@@ -151,19 +146,6 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
                     //ProjectPro - end
                 end;
             }
-            //PE-68 Dk.1.0 10April2023 Start
-            field("NS_Skill Class New"; Rec."NS_Skill Class New")
-            {
-                ApplicationArea = All;
-                Editable = false;
-                Caption = 'Skill Class';
-                ToolTip = 'Skill Class';
-                trigger OnValidate();
-                begin
-                    CurrPage.UPDATE;
-                end;
-            }
-            //PE-68 Dk.1.0 10April2023 End
         }
         addafter("Unit Cost (LCY)")
         {
@@ -250,34 +232,17 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
                 ApplicationArea = All;
             }
             //PRJ-841.JS.1.0 16Aug2021-Start
-            field("NS_Skill Code"; '')//PE-68 Dk.1.0 10April2023
+            field("NS_Skill Code"; Rec."NS_Skill Code")
             {
-                Visible = false;//PE-68 Dk.1.0 10April2023
                 ToolTip = 'Specifies the value of the resource Skill';
                 ApplicationArea = All;
                 Editable = false;
             }
             //PRJ-841.JS.1.0 16Aug2021-end
-            //PRJCTPR-2.RM.1.0 13Dec2022 start
-            field("NS_Union Code"; Rec."NS_Union Code")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies Union Code';
-            }
-            //PRJCTPR-2.RM.1.0 13Dec2022 end
+
 
         }
         //PRJ-772.JS.1.0 21JULY2021-End
-        //PE-146.NK.1.0 09Aug2023 Start
-        addafter("NS_Crew Time Sheet Line")
-        {
-            field(NS_Staged; Rec.NS_Staged)
-            {
-                ApplicationArea = all;
-                Caption = 'Staged';
-            }
-        }
-        //PE-146.NK.1.0 09Aug2023 end
 
         addfirst(FactBoxes)
         {
@@ -290,57 +255,6 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
                 Visible = NS_AdvancedJobLaborActive;
             }
         }
-        modify("No.")
-        {
-            trigger OnBeforeValidate()
-            begin
-                //PRJCTPR-60 NK.1.0 13march2022 start
-                if (Rec.Type = Rec.Type::"G/L Account") then
-                    if GLAccount.Get(Rec."No.") then begin
-                        Rec."NS_Job Cost Category" := GLAccount."NS_Cost Category";
-                        //    Rec.Modify();
-                    end else begin
-
-                        if (Rec.Type = Rec.Type::"G/L Account") and (Rec."Job No." <> '') then
-                            PP_JobPlanningLine1.Reset();
-                        PP_JobPlanningLine1.SetRange(Type, PP_JobPlanningLine1.Type::"G/L Account");
-                        PP_JobPlanningLine1.SetRange("Job No.", Rec."Job No.");
-                        PP_JobPlanningLine1.SetRange("No.", Rec."No.");
-                        PP_JobPlanningLine1.SetRange("Job Task No.", Rec."Job Task No.");
-
-                        if PP_JobPlanningLine1.FindSet() then
-                            Rec."NS_Job Cost Category" := PP_JobPlanningLine1."NS_Cost Category";
-                        //    Rec.Modify();
-
-                    end;
-                //PRJCTPR-60.NK.1.0 13march2022 end
-
-            end;
-        }
-        modify("Job No.")
-        {
-            trigger OnBeforeValidate()
-            begin
-                //PRJCTPR-60 NK.1.0 13march2022 start
-                if (Rec.Type = Rec.Type::"G/L Account") then
-                    if GLAccount.Get(Rec."No.") then begin
-                        Rec."NS_Job Cost Category" := GLAccount."NS_Cost Category";
-                    end else begin
-                        if (Rec.Type = Rec.Type::"G/L Account") and (Rec."Job No." <> '') then
-                            PP_JobPlanningLine1.Reset();
-                        PP_JobPlanningLine1.SetRange("Job No.", Rec."Job No.");
-                        PP_JobPlanningLine1.SetRange(Type, PP_JobPlanningLine1.Type::"G/L Account");
-                        PP_JobPlanningLine1.SetRange("No.", Rec."No.");
-                        PP_JobPlanningLine1.SetRange("Job Task No.", Rec."Job Task No.");
-                        if PP_JobPlanningLine1.FindFirst() then begin
-                            Rec."NS_Job Cost Category" := PP_JobPlanningLine1."NS_Cost Category";
-                        end;
-
-                    end;
-                //PRJCTPR-60.NK.1.0 13march2022 end
-            end;
-        }
-
     }
     actions
     {
@@ -414,15 +328,9 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
             action(NS_GetStagedItems)
             {
                 ApplicationArea = All;
-                 Caption = 'Get Staged Items (Obsolete)';
+                Caption = 'Get Staged Items';
 
-                ToolTip = 'This function has been Obsoleted and will get removed from front end soon.';//PE-146.NK.1.0 09Aug2023 Start
-               // Caption = 'Get Staged Items'; //PE-146.NK.1.0 09Aug2023
-                Visible = false; //PE-144.RM.1.0 08Aug2023 start
-                ObsoleteState = Pending;
-                ObsoleteReason = 'Will be removed in the upcoming version';
-                ObsoleteTag = 'Will be removed in the upcoming version'; //PE-144.RM.1.0 08Aug2023 End
-              //  ToolTip = 'Get Staged Items';//PE-146.NK.1.0 09Aug2023
+                ToolTip = 'Get Staged Items';
                 Ellipsis = true;
                 Image = CalculateRemainingUsage;
                 Promoted = true;
@@ -440,30 +348,6 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
                     GetReceiptLines.RUNMODAL;
                 end;
             }
-            //PE-146.NK.1.0 Start 09Aug2023
-            action(NS_StageAllItems)
-            {
-                ApplicationArea = All;
-                Caption = 'Stage All Items';
-                ToolTip = 'This process will mark all Inventory Items for Staging and will also enable the Items to use on the Delivery Ticket.';
-                Ellipsis = true;
-                Image = CalculateRemainingUsage;
-                Promoted = true;
-                PromotedCategory = Process;
-
-                trigger OnAction();
-                var
-                    NS_jobJournalLine: Record "Job Journal Line";
-                begin
-                    NS_jobJournalLine.Reset();
-                    if NS_jobJournalLine.FindSet() then
-                        repeat
-                            NS_jobJournalLine.NS_Staged := true;
-                            NS_jobJournalLine.Modify();
-                        until NS_jobJournalLine.Next() = 0;
-                end;
-            }
-            //PE-146.NK.1.0 end 09Aug2023
             action(NS_ReverseJLE)
             {
                 ApplicationArea = All;
@@ -500,9 +384,6 @@ pageextension 14021228 NS_JobJournal extends "Job Journal"
         lJobJnlLine: Record "Job Journal Line";//TM-10.AM.1.0
         JobSetup: Record "Jobs Setup";
         JobJnlManagement: Codeunit JobJnlManagement;
-        GLAccount: Record "G/L Account";//PRJCTPR-60.NK.1.0 start13march2023
-
-        PP_JobPlanningLine1: Record "Job Planning Line"; //PRJCTPR-60.NK.1.0 start13march2023
 
 
         NS_AdvancedJobLaborActive: Boolean;

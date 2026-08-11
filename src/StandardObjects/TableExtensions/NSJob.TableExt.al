@@ -1,8 +1,6 @@
-/// <summary>
-/// TableExtension NS_Job (ID 14021131) extends Record Job.
-/// </summary>
 tableextension 14021131 NS_Job extends Job
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
     //PRJ-78.SK.1.0 Modified the OptionCaption for "Contract Type" field
     //PRJ-83.SK.1.0 Modified the field lenght
@@ -39,35 +37,7 @@ tableextension 14021131 NS_Job extends Job
     // PRJ-949.GK.1.0 01Oct2021 | Added new field No. of Active Crews
     //PRJ-973.GK.1.0 13Oct2021 | Add one field.
     //PRJ-991.GK.1.0 14Oct2021 | Add one field
-    //PRJ-1015.JS.1.0 05Oct2021 | Add on New field
     //PRJ-1002.GK.1.0 21Oct2021 | Add AND Condition
-    //PRJ-1042.JS.1.0 15Dec2021 | Add code to set detault job tasks
-    //FGH-16.SK.1.0 | 13JAN2022 | Added code and field to support Rev Rec customisation
-    //PRJ-1285.RM.1.0 04April2022 | commented
-    //PRJ-1286.NK.1.0 05Apr2022 | Add Code to Create Change Order
-    //PRJ-1299.JS.1.0 18APR2022 | Add option
-    //PRJ-371.NK.1.0 12May2022 | Add Code For Delete Job Forcast
-    //PRJ-1380.NK.1.0 12May2022 | Add Field
-    //PRJ-1368.RM.1.0 23May2022 | Corrected grammatical error
-    //PRJ-1355.JS.1.0 23MAY2022 | Add Code
-    //PRJ-1420.NK.1.0 30May2022 | Add Code
-    //PRJ-1437.NK.1.0 09Jun2022 | Add Code
-    //PRJ-1458.RM.1.0 16June2022 | Added a new field.
-    //PRJ-1574.RM.1.0 12Aug2022 | Added a caption
-    //PRJ-1571.NK.1.0 17Aug2022 | Add Code
-    //PRJ-1585.NK.1.0 25Aug2022 | Add Code
-    //PRJ-1608.RM.1.0 20Sep2022 | Added some code
-    //PRJCTPR-39.JS.1.0 23JAN2023 | allow negatinve value
-    //PRJCTPR-39.JS.1.0 23JAN2023 | allow negatinve value
-    //PRJCTPR-50.JS.1.0 30JAN2023 | GUIALLOWED then for NS_Use Default Tasks                                                    
-    //PRJCTPR-48.Dk.1.0  27Jan 2023    | Added some Code  
-    //PRJCTPR-58.RM.1.0 22Feb2023 | Added some code 
-    //PE-6.NK.1.0 28Mar2022 | Add one field.   
-    //PE-149.RM.1.0 21Aug2023 | Added a field.       
-    //PRJCTPR-197 Dk.1.0 31March2023 | Job No. Rewrite Issue.
-    //PRJCTPR-289.HS.1.0 16Jan2024 | Added code
-    //PE-246.HS.1.0 1Feb2024 | Added Code
-    //PRJCTPR-338.DK.1.0 19March | Add some Code
     fields
     {
         //PRJ-464.AM.1.0 Start
@@ -98,7 +68,10 @@ tableextension 14021131 NS_Job extends Job
             begin
                 //ProjectPro - start
                 IF (Description <> xRec.Description) OR ("NS_Contract For" = '') THEN
-                    "NS_Contract For" := Description;
+                    // >> 035
+                    //"NS_Contract For" := Description;
+                     "NS_Contract For" := CopyStr(Description, 1, MaxStrLen("NS_Contract For"));
+                // << 035
                 //ProjectPro - end
             end;
         }
@@ -108,17 +81,12 @@ tableextension 14021131 NS_Job extends Job
             trigger OnBeforeValidate()
             var
                 Cust: Record Customer;
-                IsHandleProjecPro: Boolean;//PRJ-1526.AS.1.0
             begin
-                NS_OnBeforeBillToCustomerNoValidate(IsHandleProjecPro, Rec);//PRJ-1526.AS.1.0
-
-                IF not IsHandleProjecPro then begin//PRJ-1526.AS.1.0 START ----- Added in IshandleProjectpro condition
-                    IF ("Bill-to Customer No." = '') OR ("Bill-to Customer No." <> xRec."Bill-to Customer No.") THEN
-                        //ProjectPro - start
-                        IF (JobLedgEntryExist OR JobPlanningLineExist) AND (Status.AsInteger() >= Status::Open.AsInteger()) THEN
-                            //ProjectPro - end
-                            ERROR(AssociatedEntriesExistErr, FIELDCAPTION("Bill-to Customer No."), TABLECAPTION);
-                END;//PRJ-1526.AS.1.0 END Added in IshandleProjectpro condition
+                IF ("Bill-to Customer No." = '') OR ("Bill-to Customer No." <> xRec."Bill-to Customer No.") THEN
+                    //ProjectPro - start
+                    IF (JobLedgEntryExist OR JobPlanningLineExist) AND (Status.AsInteger() >= Status::Open.AsInteger()) THEN
+                        //ProjectPro - end
+                        ERROR(AssociatedEntriesExistErr, FIELDCAPTION("Bill-to Customer No."), TABLECAPTION);
 
                 IF "Bill-to Customer No." <> '' THEN BEGIN
                     Cust.GET("Bill-to Customer No.");
@@ -159,250 +127,42 @@ tableextension 14021131 NS_Job extends Job
             trigger OnBeforeValidate()
             var
                 JobPlanningLine: Record "Job Planning Line";
-                NS_Job: Record Job;
-                FiletrSublevel: Code[20];
-                Subleveljobs: Record Job;
-                JObCount: Integer;
-                InvoiceBilled: array[3] of Decimal;//PE-47.PS.1.0 28Feb2023
-                JobTask: Record "Job Task";//PE-47.PS.1.0 28Feb2023
-                InvoiceAmount: Decimal;//PE-47.PS.1.0 28Feb2023
-                BilledAmount: Decimal;//PE-47.PS.1.0 28Feb2023
-                JobRec: Record Job;//PE-47.PS.1.0 28Feb2023
-                JobCounts: Integer;//PE-47.PS.1.0 05April2023
-                JobNo: Code[20];//PE-47.PS.1.0 05April2023
-                JobCountsCode: Text[10];//PE-47.PS.1.0 06April2023
-                Jobsetup: Record "Jobs Setup";
-                ConfirmationBool: Boolean;
-
             begin
                 IF xRec.Status <> Status THEN BEGIN
                     //ProjectPro - start                  
                     IF Status = Status::Completed THEN BEGIN
                         IF xRec.Status = Status::Planning THEN BEGIN
                             JobsSetup.GET;
-                            //  IF ("NS_Indirect Burden Type" = 0) AND JobsSetup."NS_Burden Required" THEN //PE-193.PS.1.0 17Oct2023 Commented 
-                            IF ("NS_Indirect Burden Type" = 0) AND (JobsSetup."NS_Burden Required") And (Rec."NS_Job Class" <> Rec."NS_Job Class"::"Change Request") then //PE-193.PS.1.0 17Oct2023 
+                            IF ("NS_Indirect Burden Type" = 0) AND JobsSetup."NS_Burden Required" THEN
                                 ERROR(Text14021105);
                         END;
-                        //VALIDATE(Complete, TRUE);//PRJ-270.AS.1.0.21MAY2020 Commented Code //PE-167.VC.1.1 20Sep2023
+                        VALIDATE(Complete, TRUE);//PRJ-270.AS.1.0.21MAY2020 Commented Code
                         Complete := TRUE;//PRJ-270.AS.1.0.21MAY2020 Added Code
                         GET("No.");
                         Status := Status::Completed;
                         Complete := TRUE;
-                        //PRJCTPR-58.RM.1.0 start
-                        //PE-287.JS.1.0 02MAY2024-Start
-                        //Rec."NS_Completion Date" := WorkDate();
-                        //MODIFY;
-                        //END else
-                        //Rec."NS_Completion Date" := 0D;                        
-                        if (Status = Status::Completed) and (rec."NS_UpdJFWForecastCompCostOnJT" = true) then begin
-                            if (rec."NS_POC Method" = rec."NS_POC Method"::" ") or (rec."NS_POC Method" = rec."NS_POC Method"::"NS_Job forecast") then begin
-                                if confirm(NS_Text14021410Lbl, true) then begin
-                                    Complete := TRUE;
-                                    GET("No.");
-                                    Status := Status::Completed;
-                                    Rec."NS_Completion Date" := WorkDate();
-                                    "NS_Revenue Recognized" := true;
-                                end else begin
-                                    Complete := false;
-                                    Status := xrec.Status;
-                                end;
-                            end;
-                        end;
                         MODIFY;
-                    END else begin
-                        if rec.status <> rec.status::completed then begin
-                            //if rec.status = rec.status::Open then begin //PRJCTPR-389.NC.1.0 26Jan2024 Block
-                            if ((xRec.Status = xRec.Status::Completed) and (Rec.Status = Rec.Status::Open)) then begin //PRJCTPR-389.NC.1.0 26Jan2024
-                                if confirm(NS_Text14021411Lbl, true) then
-                                    rec."Last Date Modified" := today
-                                else begin
-                                    rec."Last Date Modified" := xrec."Last Date Modified";
-                                    rec.Status := xrec.Status;
-                                    rec.Complete := xRec.Complete;
-                                end;
-                            end;
-                        end;
-                    end;
-                    //PE-287.JS.1.0 02MAY2024-end                       
-                    //PRJCTPR-58.RM.1.0 End
+                    END;
                     //ProjectPro - end
-                    //PE-167.VC.1.2 22Sep2023 Start
-                    // IF xRec.Status = xRec.Status::Completed THEN
-                    //     IF DIALOG.CONFIRM(StatusChangeQst) THEN
-                    //         VALIDATE(Complete, FALSE)
-                    //     ELSE
-                    //         Status := xRec.Status;
-                    // MODIFY;
-                    //PE-167.VC.1.2 22Sep2023 End
+                    IF xRec.Status = xRec.Status::Completed THEN
+                        IF DIALOG.CONFIRM(StatusChangeQst) THEN
+                            VALIDATE(Complete, FALSE)
+                        ELSE
+                            Status := xRec.Status;
+                    MODIFY;
                     JobPlanningLine.SETCURRENTKEY("Job No.");
                     JobPlanningLine.SETRANGE("Job No.", "No.");
                     JobPlanningLine.MODIFYALL(Status, Status);
                 END;
-                //PE-47.PS.1.0 28Feb2023 start
-                JobsSetup.get();
-                if (JobsSetup."NS_Enable Job Backlog Feature.") and (Rec."NS_Job Class" <> Rec."NS_Job Class"::"Change Request") then begin //PE-193.PS.1.0 17Oct2023 
-                    if Rec.Status = Rec.Status::Completed then begin
-                        FiletrSublevel := '@*' + Rec."No." + '*';
-                        NS_Job.SetFilter("No.", FiletrSublevel);
-                        if NS_Job.FindSet() then begin
-                            Clear(JobCounts);
-                            // JobCounts := NS_Job.Count;
-                            // JobCountsCode := Format(JobCounts);
-                            Subleveljobs.SetRange("NS_Sub-Level to Job No.", NS_Job."No.");
-                            Subleveljobs.SetFilter(Status, '<>%1', NS_Job.status::Completed);
-                            if Subleveljobs.findset then begin
-                                JobCounts := Subleveljobs.Count;
-                                JobCountsCode := Format(JobCounts);
-                                // if not CONFIRM('This master Job No. ' + Rec."No." + ' have additional ' + JobCountsCode + '  Changes Order / Sub Level Jobs open, do you want to first update Sub Level Job status to completed. Do you want to continue..', false) then //PE-173.PS.1.0 03Oct2023 Commented 
-                                if not CONFIRM('The Master Job ' + Rec."No." + ' has one or more open Sub-Level Jobs. Do you want to close the Sub-Level Jobs first by setting their Status to "Completed"?', false) then //PE-173.PS.1.0 03Oct2023
-                                    Error('');
-
-                            end;
-                        End;
-                    End;
-
-                    if JobsSetup."NS_Inclued SubJob & Change Ord" = true then begin
-                        if rec.Status = Rec.Status::Completed then begin
-                            JobRec.Reset();
-                            JobRec.SetRange("NS_Sub-Level to Job No.", Rec."No.");
-                            if JobRec.FindSet() then
-                                repeat
-                                    Clear(InvoiceAmount);
-                                    Clear(BilledAmount);
-                                    JobTask.Reset();
-                                    JobTask.SetRange("Job No.", JobRec."No.");
-                                    JobTask.SetRange("Job Task Type", JobTask."Job Task Type"::Posting);
-                                    if JobTask.FindSet() then
-                                        repeat
-                                            JobTask.CalcFields("Contract (Total Price)");
-                                            JobTask.CalcFields("Contract (Invoiced Price)");
-                                            BilledAmount += JobTask."Contract (Total Price)";
-                                            InvoiceAmount += JobTask."Contract (Invoiced Price)";
-                                        until JobTask.Next() = 0;
-                                    if InvoiceAmount <> BilledAmount then
-                                        //Error('Job No. %1 Billable Amount of %2 is still pending to Invoiced, this will not allow you to backlog clearing', JobRec."No.", InvoiceAmount - BilledAmount); //PE-173.PS.1.0 04Oct2023  Commented
-                                        Error('The backlog cannot be cleared because the billable amount of %2 is still pending to be invoiced for sub-level job %1.', JobRec."No.", InvoiceAmount - BilledAmount); //PE-173.PS.1.0 04Oct2023
-                                until JobRec.Next() = 0;
-                            Clear(InvoiceAmount);
-                            Clear(BilledAmount);
-                            JobTask.Reset();
-                            JobTask.SetRange("Job No.", Rec."No.");
-                            JobTask.SetRange("Job Task Type", JobTask."Job Task Type"::Posting);
-                            if JobTask.FindSet() then
-                                repeat
-                                    JobTask.CalcFields("Contract (Total Price)");
-                                    JobTask.CalcFields("Contract (Invoiced Price)");
-                                    BilledAmount += JobTask."Contract (Total Price)";
-                                    InvoiceAmount += JobTask."Contract (Invoiced Price)";
-                                until JobTask.Next() = 0;
-                            if InvoiceAmount - BilledAmount < 0 then
-                                Error('Please run the open batch job backlog batch');
-                        end;
-                    end;
-
-                    if (rec.Status = rec.Status::Completed) AND (rec."NS_New Run B_OpenJob B Log" = false) then  //PRJCTPR-122.PS.1.0 14Jun2023
-                        Error('Please run the open batch job backlog batch');
-                    if (rec.Status = rec.Status::Completed) AND (rec."NS_New Run B_OpenJob B Log") AND (rec."NS_Open Job Backlog" <> 0) then begin  //PRJCTPR-122.PS.1.0 14Jun2023
-                        if (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Closed) OR (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Running) OR (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Completed) then begin
-                            if not Confirm('Do you want to set this job to completed and clear the backlog values?', false) then begin
-                                rec."NS_New Run B_OpenJob B Log" := false; //PRJCTPR-122.PS.1.0 14Jun2023
-                                Rec.Validate(Status, xRec.Status);
-                                exit;
-                            end
-                            else begin
-                                Clear(InvoiceAmount);
-                                Clear(BilledAmount);
-                                JobTask.Reset();
-                                JobTask.SetRange("Job No.", Rec."No.");
-                                JobTask.SetRange("Job Task Type", JobTask."Job Task Type"::Posting);
-                                if JobTask.FindSet() then
-                                    repeat
-                                        JobTask.CalcFields("Contract (Total Price)");
-                                        JobTask.CalcFields("Contract (Invoiced Price)");
-                                        BilledAmount += JobTask."Contract (Total Price)";
-                                        InvoiceAmount += JobTask."Contract (Invoiced Price)";
-                                    until JobTask.Next() = 0;
-                                if (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Running) AND (InvoiceAmount - BilledAmount = 0) then begin
-                                    Rec."NS_Open Job Backlog" := 0;
-                                    Rec."NS_New Run B_OpenJob B Log" := true;  //PRJCTPR-122.PS.1.0 14Jun2023
-                                    Rec."NS_New Billable/Inv Dif" := InvoiceAmount - BilledAmount;  //PRJCTPR-122.PS.1.0 14Jun2023
-                                end
-                                else
-                                    if (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Closed) OR ((Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Completed)) AND (InvoiceAmount - BilledAmount >= 0) then begin
-                                        Rec."NS_Open Job Backlog" := 0;
-                                        Rec."NS_New Run B_OpenJob B Log" := true;  //PRJCTPR-122.PS.1.0 14Jun2023
-                                        Rec."NS_New Billable/Inv Dif" := InvoiceAmount - BilledAmount; //PRJCTPR-122.PS.1.0 14Jun2023
-                                    end;
-                                If (InvoiceAmount - BilledAmount < 0) then begin
-                                    Message('Backlog is pending please check the Invoiced vs billable');
-                                    Rec."NS_New Run B_OpenJob B Log" := false;  //PRJCTPR-122.PS.1.0 14Jun2023
-                                    Rec."NS_New Billable/Inv Dif" := InvoiceAmount - BilledAmount; //PRJCTPR-122.PS.1.0 14Jun2023
-                                end;
-                            end;
-                        end;
-                    end;
-
-                    //PE-47.PS.1.0 28Feb2023 End
-                end;
             end;
         }
-        //PRJ-1437.NK.1.0 09Jun2022 Start
-        modify("Job Posting Group")
+        // >> Upgrade This field has been moved to base app because of calcfields
+        field(50071; "Document Date Filter"; Date)
         {
-            trigger OnAfterValidate()
-            var
-                JobTast: Record "Job Task";
-                RecJob: Record Job;
-            begin
-                JobTast.Reset();
-                JobTast.SetRange("Job No.", Rec."No.");
-                if JobTast.FindFirst() then
-                    JobTast.ModifyAll("Job Posting Group", Rec."Job Posting Group");
-            end;
+            Caption = 'Document Date Filter';
+            Description = '#152';
+            FieldClass = FlowFilter;
         }
-        //PRJ-1437.NK.1.0 09Jun2022 End
-
-        //PE-47.PS.1.0 28Feb2023  Start 
-
-        field(14021494; "NS_Run Batch Open Job Backlog New"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-            Caption = 'Run Batch Open Job Backlog';
-            //PRJCTPR-122.PS.1.0 19Jun2023 Start
-            ObsoleteState = Removed; //PRJCTPR.164.JS.1.0 24JULY2023
-            ObsoleteReason = 'Because of length  the table field name NS_Run Batch Open Job Backlog New  must not exceed 30 characters.';
-            ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-            //PRJCTPR-122.PS.1.0 19Jun2023 End
-
-        }
-        field(14021495; "NS_Billable/Invoiced Difference"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-            Caption = 'Run Batch Open Job Backlog';
-            //PRJCTPR-122.PS.1.0 19Jun2023 Start
-            ObsoleteState = Removed; //PRJCTPR.164.JS.1.0 24JULY2023
-            ObsoleteReason = 'Because of length  the table field name NS_Billable/Invoiced Difference  must not exceed 30 characters.';
-            ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-
-            //PRJCTPR-122.PS.1.0 19Jun2023 End
-        }
-        field(14021498; "NS_New Run B_OpenJob B Log"; Boolean)  //PRJCTPR-122.PS.1.0 14Jun2023
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021499; "NS_New Billable/Inv Dif"; Decimal) //PRJCTPR-122.PS.1.0 14Jun2023
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-
-        }
-        //PE-47.PS.1.0 28Feb2023  End
-
-
         field(14021100; "NS_Job Address 1"; Text[100])//PRJ-301.MS.1.0
         {
             Caption = 'Job Address 1';
@@ -449,7 +209,7 @@ tableextension 14021131 NS_Job extends Job
             DataClassification = CustomerContent;
             Description = 'ProjectPro';
             TableRelation = "Post Code";
-            ValidateTableRelation = false; //PRJ-1585.NK.1.0 25Aug2022
+
             trigger OnValidate();
             var
                 PostCode: Record 225;
@@ -459,15 +219,6 @@ tableextension 14021131 NS_Job extends Job
                   "NS_Job City", "NS_Job Post Code", "NS_Job County", "NS_Job Country/Region Code", (CurrFieldNo <> 0) and GUIALLOWED);
                 //ProjectPro - end
             end;
-            //PRJ-1585.NK.1.0 25Aug2022 Start
-            trigger OnLookup()
-            var
-                PostCode: Record 225;
-            begin
-                PostCode.LookupPostCode(
-                  "NS_Job City", "NS_Job Post Code", "NS_Job County", "NS_Job Country/Region Code");
-            end;
-            //PRJ-1585.NK.1.0 25Aug2022 End
         }
         field(14021105; "NS_Job Country/Region Code"; Code[10])
         {
@@ -493,22 +244,9 @@ tableextension 14021131 NS_Job extends Job
         {
             Caption = 'Job Ship-to Code';
             Description = 'ProjectPro';
-            //PRJCTPR-192.DK.1.0 15SEP2023 Start
-            //TableRelation = "Ship-to Address".code WhERE("Customer No." = FIELD("Bill-to Customer No."));
-            //TableRelation = "Ship-to Address".code WhERE("Customer No." = FIELD("Sell-to Customer No.")); //Please Removed this Line
+            TableRelation = "Ship-to Address".Code WHERE("Customer No." = FIELD("Bill-to Customer No."));
             DataClassification = CustomerContent;
-            //PRJCTPR-192.DK.1.0 15SEP2023 End
         }
-        //PRJ-1458.RM.1.0 Start
-        field(14021451; "NS_Delievery Instruction"; Text[100])
-        {
-            DataClassification = CustomerContent;
-            //Caption = 'Delievery Instruction'; //PRJ-1574.RM.1.0 commented
-            Caption = 'Delivery Instructions'; //PRJ-1574.RM.1.0
-            Description = 'ProjectPro';
-
-        }
-        //PRJ-1458.RM.1.0 end
         field(14021110; "NS_Sub-Level to Job No."; Code[20])
         {
             Caption = 'Sub-Level to Job No.';
@@ -578,10 +316,7 @@ tableextension 14021131 NS_Job extends Job
                             "NS_Job Ship-to Code" := NS_JobNew."NS_Job Ship-to Code";
                             "NS_Temp Linked Parent Job No." := NS_JobNew."NS_Temp Linked Parent Job No.";
                             "NS_Last Job For Job List" := NS_JobNew."NS_Last Job For Job List";
-                            //PRJCTPR-197 Dk.1.0  Start
-                            //"NS_Job Type" := NS_JobNew."NS_Job Type";
-                            "NS_Job Type New" := NS_JobNew."NS_Job Type New";
-                            //PRJCTPR-197 Dk.1.0 End
+                            "NS_Job Type" := NS_JobNew."NS_Job Type";
                             NS_Estimator := NS_JobNew.NS_Estimator;
                             NS_Manager := NS_JobNew.NS_Manager;
                             "NS_Manager Job Status" := NS_JobNew."NS_Manager Job Status";
@@ -598,7 +333,7 @@ tableextension 14021131 NS_Job extends Job
                             "NS_Default Job Retention" := NS_JobNew."NS_Default Job Retention";
                             "NS_Tax Area Code" := NS_JobNew."NS_Tax Area Code";
                             "NS_Tax Liable" := NS_JobNew."NS_Tax Liable";
-                            "NS_Tax Group Code New" := NS_JobNew."NS_Tax Group Code New";
+                            "NS_Tax Group Code" := NS_JobNew."NS_Tax Group Code";
                             "NS_VAT Bus. Posting Group" := NS_JobNew."NS_VAT Bus. Posting Group";
                             "NS_VAT Prod. Posting Group" := NS_JobNew."NS_VAT Prod. Posting Group";
                             "NS_Actual Percent Complete" := 0;
@@ -613,7 +348,6 @@ tableextension 14021131 NS_Job extends Job
                             "NS_Contract No." := NS_JobNew."NS_Contract No.";
                             "NS_Contract Date" := NS_JobNew."NS_Contract Date";
                             "NS_Contract For" := NS_JobNew."NS_Contract For";
-                            "NS_Job Purchaser" := NS_JobNew."NS_Job Purchaser";//PRJ-1380.NK.1.0 12May2022
                         end;
                 end;
 
@@ -626,6 +360,7 @@ tableextension 14021131 NS_Job extends Job
                 if "NS_Sub-Level to Job No." <> '' then
                     "No. Series" := '';
                 //ProjectPro - end
+
             end;
         }
         field(14021111; "NS_Temp Linked Parent Job No."; Code[20])
@@ -640,44 +375,20 @@ tableextension 14021131 NS_Job extends Job
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
         }
-
-        //PRJ-1616.AS.1.0 START
-        field(14021113; "NS_CopyJob"; Boolean)
-        {
-            Caption = 'Copy Job';
-            Description = 'Copy Job';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1616.AS.1.0 END
         field(14021115; "NS_Job Type"; Code[10])
-        {
-            Caption = 'Job Type (Obsolete)';  //PRJCTPR-298.JS.1.0 16JAN2024
-            Description = 'ProjectPro';
-            TableRelation = "NS_Job Type".NS_Code;
-            DataClassification = CustomerContent;
-            //PRJCTPR-197 DK.1.0 Start
-            // ObsoleteState = Pending;//PRJCTPR-298.JS Comment
-            ObsoleteState = Removed;//PRJCTPR-298.JS Add
-            ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_Job Type New" because of length mismatch with';
-            ObsoleteTag = 'This field will remove in ProjectPro Upcoming App build no 21.0.xx.49984';
-            //PRJCTPR-197 DK.1.0 End
-        }
-        // PRJCTPR-197 DK.1.0 Start
-        field(14021157; "NS_Job Type New"; Code[20])
         {
             Caption = 'Job Type';
             Description = 'ProjectPro';
             TableRelation = "NS_Job Type".NS_Code;
             DataClassification = CustomerContent;
         }
-        //PRJCTPR-197 DK.1.0 End
-        field(14021116; "NS_Job Class"; Enum NSJobClassTypeEnum)//PRJ-1677.AS.1.0 change from option to enum
+        field(14021116; "NS_Job Class"; Option)
         {
             Caption = 'Job Class';
             DataClassification = CustomerContent;
             Description = 'ProjectPro';
-            // OptionCaption = ' ,Master Job,SubJob,Change Order,Extra Work,Proposed,Template,Work Order';//PRJ-1677.AS.1.0 Commented
-            // OptionMembers = " ","Master Job",SubJob,"Change Order","Extra Work",Proposed,Template,"Work Order";//PRJ-1677.AS.1.0 Commented
+            OptionCaption = ' ,Master Job,SubJob,Change Order,Extra Work,Proposed,Template,Work Order';
+            OptionMembers = " ","Master Job",SubJob,"Change Order","Extra Work",Proposed,Template,"Work Order";
 
             trigger OnValidate();
             begin
@@ -767,20 +478,6 @@ tableextension 14021131 NS_Job extends Job
             trigger OnValidate()
             begin
                 "NS_Job Status Date" := Today;
-                //PRJCTPR-147.PS.2.0 20Sep2023 Start
-
-                if NSUserSetup.get(UserId) then;
-                //PRJCTPR-395.DK.1.0 27June2024 Start
-                // if not NSUserSetup."NS_Allow to Acc Manager Status" then begin
-                //     Error('You can not Modify Manager Status because of you dont have perrmission');
-                // end;
-                // //PRJCTPR-147.PS.2.0 20Sep2023 End
-                if (Rec."NS_Job Class" = Rec."NS_Job Class"::"Change Request") then
-                    if (not NSUserSetup."NS_Allow to Acc Manager Status") then
-                        Error('You do not have access to modify the Manager Status.');
-                //PRJCTPR-395.DK.1.0 27June2024 End
-                //PRJCTPR-147.PS.2.0 20Sep2023 End
-
             end;
             //PRJ-677.N.S.1.0 END
         }
@@ -790,14 +487,6 @@ tableextension 14021131 NS_Job extends Job
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
         }
-        //PRJ-1443.AS.1.0 START
-        field(14021429; "NS_EnblGLNResGMCalc"; Boolean)
-        {
-            Caption = 'Enable Resources in Gross Marg. Calc.';
-            Description = 'Enable Resources in Gross Marg. Calc.';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1443.AS.1.0 END
         field(14021125; "NS_Estimated Start Date"; Date)
         {
             Caption = 'Estimated Start Date';
@@ -944,28 +633,12 @@ tableextension 14021131 NS_Job extends Job
         }
         field(14021142; "NS_Tax Group Code"; Code[10])
         {
-            Caption = 'Tax Group Code (Obsolete)'; //PRJCTPR-298.JS.1.0 16JAN2024
-            //ZEL-7.GK.1.0 30Mar2023 start
-            // ObsoleteState = Pending;//PRJCTPR-298.JS Comment
-            ObsoleteState = Removed;//PRJCTPR-298.JS Add
-            ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_Tax Group Code New" because microsoft has increase field length of standard "Tax Group Code" field';
-            ObsoleteTag = '21.0.10.49984';
-            //ZEL-7.GK.1.0 30Mar2023 end
-            DataClassification = CustomerContent;
-            Description = 'ProjectPro';
-            TableRelation = "Tax Group";
-        }
-
-        //PRJCTPR-298.JS START
-
-        field(14021438; "NS_Tax Group Code New"; Code[20])
-        {
             Caption = 'Tax Group Code';
+
             DataClassification = CustomerContent;
             Description = 'ProjectPro';
             TableRelation = "Tax Group";
         }
-        //PRJCTPR-298.JS END
         field(14021145; "NS_VAT Bus. Posting Group"; Code[10])
         {
             Caption = 'Tax Bus. Posting Group';
@@ -985,14 +658,6 @@ tableextension 14021131 NS_Job extends Job
             Caption = 'Actual Percent Complete';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //FGH-16.SK.1.0 Start
-            trigger OnValidate()
-
-            begin
-                if Rec."NS_Actual Percent Complete" <> xRec."NS_Actual Percent Complete" then
-                    Rec."NS_Actual PercentCompleteDate" := Today;
-            end;
-            //FGH-16.SK.1.0 End
         }
         field(14021151; "NS_Actual PercentCompleteDate"; Date)
         {
@@ -1005,15 +670,6 @@ tableextension 14021131 NS_Job extends Job
             Caption = 'Actual Units Complete';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-
-            //FGH-16.SK.1.0 Start
-            trigger OnValidate()
-
-            begin
-                if Rec."NS_Actual Units Complete" <> xRec."NS_Actual Units Complete" then
-                    Rec."NS_Actual Units Complete Date" := today;
-            end;
-            //FGH-16.SK.1.0 End
         }
         field(14021153; "NS_Actual Units Complete Date"; Date)
         {
@@ -1065,23 +721,6 @@ tableextension 14021131 NS_Job extends Job
             Caption = 'Contract Date';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            //PRJ-1468.GK.1.0 06July2022 start
-            trigger OnValidate()
-            var
-                JobPlanningLines: Record "Job Planning Line";
-            begin
-                if Rec."NS_Contract Date" <> xRec."NS_Contract Date" then begin
-                    JobPlanningLines.Reset();
-                    JobPlanningLines.SetRange("Job No.", Rec."No.");
-                    if JobPlanningLines.FindSet() then
-                        repeat
-                            JobPlanningLines."NS_Contract Forecast Date" := Rec."NS_Contract Date";
-                            JobPlanningLines.Modify();
-                        until JobPlanningLines.Next() = 0;
-                end;
-
-            end;
-            //PRJ-1468.GK.1.0 06July2022 end
         }
         field(14021164; "NS_Contract For"; Text[100]) //PRJ-301.AS.1.0 Increased Length from 80 to 100 characters
         {
@@ -1114,8 +753,8 @@ tableextension 14021131 NS_Job extends Job
         {
             Caption = 'Gen. Prod. Posting Group';
             Description = 'ProjectPro';
-            //TableRelation = "Gen. Product Posting Group".Code;//PRJ-1684.AS.1.0 BLOCKED TABLE RELATION
-            ObsoleteState = Removed; //PRJ-120.SK.1.0 //PRJ-1489.GK.1.0 
+            TableRelation = "Gen. Product Posting Group".Code;
+            ObsoleteState = Pending; //PRJ-120.SK.1.0
             ObsoleteReason = 'Unused'; //PRJ-120.SK.1.0
             DataClassification = CustomerContent;
         }
@@ -1125,9 +764,9 @@ tableextension 14021131 NS_Job extends Job
             Caption = 'Gen. Bus. Posting Group';
             DataClassification = CustomerContent;
             Description = 'ProjectPro';
-            ObsoleteState = Removed; //PRJ-831.AS.1.0 12OCT2021 //PRJ-1489.GK.1.0 
+            ObsoleteState = Pending; //PRJ-831.AS.1.0 12OCT2021
             ObsoleteReason = 'Will be removed in Next build'; //PRJ-831.AS.1.0 12OCT2021
-            //TableRelation = "Gen. Business Posting Group".Code;//PRJ-1684.AS.1.0 BLOCKED TABLE RELATION
+            TableRelation = "Gen. Business Posting Group".Code;
         }
         //PRJ-120.SK.1.0 Start
 
@@ -1145,38 +784,6 @@ tableextension 14021131 NS_Job extends Job
             Description = '//PRJ-831.AS.1.0 12OCT2021';
             TableRelation = "Gen. Product Posting Group".Code;
             DataClassification = CustomerContent;
-            //PRJ-1608.RM.1.0 start                                                        
-            trigger OnValidate()
-            var
-                NSPlngLine: Record "Job Planning line";
-                NSRes: Record Resource;
-                NSItemvar: Record Item;
-                NSGLAccount: Record "G/L Account";
-            begin
-                NSPlngLine.Reset();
-                NSPlngLine.SetRange("Job No.", Rec."No.");
-                if NSPlngLine.FindSet() then
-                    repeat
-                        if Rec."NS_Gen. Prod. Posting Group New" <> '' then begin
-                            NSPlngLine."Gen. Prod. Posting Group" := Rec."NS_Gen. Prod. Posting Group New";
-                        end else begin
-                            if NSPlngLine.Type = NSPlngLine.type::Resource then begin
-                                IF NSRes.GET(NSPlngLine."No.") Then
-                                    NSPlngLine."Gen. Prod. Posting Group" := NSRes."Gen. Prod. Posting Group";
-                            end;
-                            if NSPlngLine.Type = NSPlngLine.type::Item then begin
-                                if NSItemvar.get(NSPlngLine."No.") then
-                                    NSPlngLine."Gen. Prod. Posting Group" := NSItemvar."Gen. Prod. Posting Group";
-                            end;
-                            if NSPlngLine.Type = NSPlngLine.Type::"G/L Account" then begin
-                                if NSGLAccount.Get(NSPlngLine."No.") then
-                                    NSPlngLine."Gen. Prod. Posting Group" := NSGLAccount."Gen. Prod. Posting Group";
-                            end;
-                        end;
-                        NSPlngLine.Modify();
-                    until NSPlngLine.Next() = 0
-            end;
-            //PRJ-1608.RM.1.0 end
         }
         field(14021190; "NS_OS File Name"; Text[150])
         {
@@ -1189,9 +796,7 @@ tableextension 14021131 NS_Job extends Job
             Caption = 'Job Calendar Code';
             DataClassification = CustomerContent;
             Description = 'ProjectPro Override value to code in job setup table';
-            //PRJCTPR-308.Dk.1.0 08Feb2024 Start
             TableRelation = IF ("NS_Job Calendar Type" = CONST("Base Navision Calendar")) "Base Calendar".Code
-            //PRJCTPR-308.Dk.1.0 08Feb2024 End
             ELSE
             IF ("NS_Job Calendar Type" = CONST("Job Calendar")) "NS_Job Calendar".NS_Code;
         }
@@ -1395,24 +1000,14 @@ tableextension 14021131 NS_Job extends Job
         }
         field(14021261; "NS_Type Filter"; Option)
         {
-            Caption = 'Type Filter (Obsolete)'; //PE-306.JS.1.0 06MAY2024
-            ObsoleteState = Pending;    //PE-306.JS.1.0 06MAY2024
-            ObsoleteReason = 'Change from type option to type enum, as per changes in BC standard.'; //PE-306.JS.1.0 06MAY2024
-            ObsoleteTag = 'Will change in ProjectPro upcoming app version 24.0.XX.XXXX'; //PE-306.JS.1.0 06MAY2024
+            Caption = 'Type Filter';
+
             Description = 'ProjectPro';
             FieldClass = FlowFilter;
             OptionCaption = 'Resource,Item,G/L Account,Ledger';
 
             OptionMembers = Resource,Item,"G/L Account",Ledger;
         }
-        //PE-306.JS.1.0 06MAY2024-Start
-        field(14021263; "NS_TypeEnumFilter"; enum "Job Planning Line Type")
-        {
-            Caption = 'Type Filter';
-            Description = 'ProjectPro';
-            FieldClass = FlowFilter;
-        }
-        //PE-306.JS.1.0 06MAY2024-end
         field(14021262; "NS_Date Filter"; Date)
         {
             Caption = 'Date Filter';
@@ -1423,7 +1018,6 @@ tableextension 14021131 NS_Job extends Job
         {
             Caption = 'Activity Filter';
             Description = 'ProjectPro';
-            CaptionClass = '50994,0,0'; //PRJ-1571.NK.1.0 17Aug2022
             FieldClass = FlowFilter;
             TableRelation = "NS_Job Activity";
         }
@@ -1431,7 +1025,6 @@ tableextension 14021131 NS_Job extends Job
         {
             Caption = 'Process Filter';
             Description = 'ProjectPro';
-            CaptionClass = '50994,1,0'; //PRJ-1571.NK.1.0 17Aug2022
             FieldClass = FlowFilter;
             TableRelation = "NS_Job Process";
         }
@@ -1439,7 +1032,6 @@ tableextension 14021131 NS_Job extends Job
         {
             Caption = 'Operation Filter';
             Description = 'ProjectPro';
-            CaptionClass = '50994,2,0'; //PRJ-1571.NK.1.0 17Aug2022
             FieldClass = FlowFilter;
             TableRelation = "NS_Job Operation";
         }
@@ -1449,29 +1041,31 @@ tableextension 14021131 NS_Job extends Job
                                                                             "Line Type" = FILTER(Budget | "Both Budget and Billable"),
                                                                             "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                             "NS_Cost Category" = FIELD("NS_Cost Category Filter"),
-                                                                            Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                            Type = FIELD("NS_Type Filter"),
                                                                             "Planning Date" = FIELD("Posting Date Filter"),
                                                                             NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                             "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                             "NS_Shortcut Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
                                                                             "NS_Retention Ledger Code" = FIELD("NS_Retention Ledger Filter")));
+
             Caption = 'Budgeted Cost ($)';
             Description = 'ProjectPro Flow Fields';
             FieldClass = FlowField;
         }
         field(14021301; "NS_Budgeted Price (LCY)"; Decimal)
         {
-            //CalcFormula = Sum("Job Planning Line"."Total Price (LCY)" WHERE("Job No." = FIELD("No."),    //PE-287.JS.1.0 08MAY2024 line commented
-            CalcFormula = Sum("Job Planning Line"."Line Amount (LCY)" WHERE("Job No." = FIELD("No."),       //PE-287.JS.1.0 08MAY2024 line added
+            CalcFormula = Sum("Job Planning Line"."Total Price (LCY)" WHERE("Job No." = FIELD("No."),
                                                                              "Line Type" = FILTER(Billable | "Both Budget and Billable"),
                                                                              "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                              "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                             Type = FIELD("NS_TypeEnumFilter"), //PE-306.JS.1.0
+                                                                             Type = FIELD("NS_Type Filter"),
                                                                              "Planning Date" = FIELD("Posting Date Filter"),
                                                                              NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                              "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                              "NS_Shortcut Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
-                                                                             "NS_Retention Ledger Code" = FIELD("NS_Retention Ledger Filter")));
+                                                                             "NS_Retention Ledger Code" = FIELD("NS_Retention Ledger Filter"),
+                                                                             Approved = const(true),
+                                                                             "Document Date" = field("Document Date Filter")));
             Caption = 'Budgeted Price ($)';
             Description = 'ProjectPro';
             FieldClass = FlowField;
@@ -1483,7 +1077,7 @@ tableextension 14021131 NS_Job extends Job
                                                                            "Line Type" = FILTER(Budget | "Both Budget and Billable"),
                                                                            "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                            "NS_Cost Category" = FIELD("NS_Cost Category Filter"),
-                                                                           Type = FIELD("NS_TypeEnumFilter"), //PE-306.JS.1.0
+                                                                           Type = FIELD("NS_Type Filter"),
                                                                            "Planning Date" = FIELD("Posting Date Filter"),
                                                                            NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                            "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1501,7 +1095,7 @@ tableextension 14021131 NS_Job extends Job
                                                                            "Line Type" = FILTER(Budget | "Both Budget and Billable"),
                                                                            "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                            "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                           Type = FIELD("NS_TypeEnumFilter"), //PE-306.JS.1.0
+                                                                           Type = FIELD("NS_Type Filter"),
                                                                            "Planning Date" = FIELD("Planning Date Filter"),
                                                                            NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                            "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1544,7 +1138,7 @@ tableextension 14021131 NS_Job extends Job
                                                                            "NS_Job Cost Category" = FIELD("NS_Cost Category Filter"),
                                                                            "Entry Type" = CONST(Usage),
                                                                            "NS_Segment Code" = field("NS_Segment Code Filter"),//JD-48.AS.2.0
-                                                                           Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                           Type = FIELD("NS_Type Filter"),
                                                                            "Posting Date" = FIELD("NS_Date Filter"),
                                                                            "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                            "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1563,7 +1157,7 @@ tableextension 14021131 NS_Job extends Job
                                                                             "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                             "NS_Job Revenue Category" = FIELD("NS_Revenue Category Filter"),
                                                                             "Entry Type" = CONST(Usage),
-                                                                            Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                            Type = FIELD("NS_Type Filter"),
                                                                             "Posting Date" = FIELD("NS_Date Filter"),
                                                                             "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                             "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1582,7 +1176,7 @@ tableextension 14021131 NS_Job extends Job
                                                                  "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                  "NS_Job Cost Category" = FIELD("NS_Cost Category Filter"),
                                                                  "Entry Type" = CONST(Usage),
-                                                                 Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                 Type = FIELD("NS_Type Filter"),
                                                                  "Posting Date" = FIELD("Posting Date Filter"),
                                                                  "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                  "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1600,7 +1194,7 @@ tableextension 14021131 NS_Job extends Job
                                                                  "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                  "NS_Job Revenue Category" = FIELD("NS_Revenue Category Filter"),
                                                                  "Entry Type" = CONST(Usage),
-                                                                 Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                 Type = FIELD("NS_Type Filter"),
                                                                  "Posting Date" = FIELD("Posting Date Filter"),
                                                                  "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                  "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1618,7 +1212,7 @@ tableextension 14021131 NS_Job extends Job
                                                                   "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                   "NS_Job Cost Category" = FIELD("NS_Cost Category Filter"),
                                                                   "Entry Type" = CONST(Sale),
-                                                                  Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                  Type = FIELD("NS_Type Filter"),
                                                                   "Posting Date" = FIELD("Posting Date Filter"),
                                                                   "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                   "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1636,7 +1230,7 @@ tableextension 14021131 NS_Job extends Job
                                                                   "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                   "NS_Job Revenue Category" = FIELD("NS_Revenue Category Filter"),
                                                                   "Entry Type" = CONST(Sale),
-                                                                  Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                  Type = FIELD("NS_Type Filter"),
                                                                   "Posting Date" = FIELD("Posting Date Filter"),
                                                                   "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                   "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1654,7 +1248,7 @@ tableextension 14021131 NS_Job extends Job
                                                                              "Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                              "NS_Job Revenue Category" = FIELD("NS_Revenue Category Filter"),
                                                                              "Entry Type" = CONST(Sale),
-                                                                             Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                             Type = FIELD("NS_Type Filter"),
                                                                              "Posting Date" = FIELD("NS_Date Filter"),
                                                                              "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                              "Global Dimension 2 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1683,7 +1277,7 @@ tableextension 14021131 NS_Job extends Job
                                                                              "NS_Job Cost Category" = FIELD("NS_Cost Category Filter"),
                                                                              "NS_Job Revenue Category" = FIELD("NS_Revenue Category Filter"),
                                                                              "Entry Type" = FIELD("NS_Entry Type Filter"),
-                                                                             Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                             Type = FIELD("NS_Type Filter"),
                                                                              "Posting Date" = FIELD("Posting Date Filter"),
                                                                              "Global Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
                                                                              "Global Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
@@ -1712,7 +1306,7 @@ tableextension 14021131 NS_Job extends Job
                                                                                    "NS_Line Type" = FILTER(Budget | "Both Budget and Billable"),
                                                                                    "NS_Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                                    "NS_Cost Category" = FIELD("NS_Cost Category Filter"),
-                                                                                   NS_Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                                   NS_Type = FIELD("NS_Type Filter"),
                                                                                    "NS_Planning Date" = FIELD("Posting Date Filter"),
                                                                                    NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                                    "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1728,7 +1322,7 @@ tableextension 14021131 NS_Job extends Job
                                                                                     "NS_Line Type" = FILTER(Billable | "Both Budget and Billable"),
                                                                                     "NS_Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                                     "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                                    NS_Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                                    NS_Type = FIELD("NS_Type Filter"),
                                                                                     "NS_Planning Date" = FIELD("Posting Date Filter"),
                                                                                     NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                                     "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1745,7 +1339,7 @@ tableextension 14021131 NS_Job extends Job
                                                                                   "NS_Line Type" = FILTER(Budget | "Both Budget and Billable"),
                                                                                   "NS_Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                                   "NS_Cost Category" = FIELD("NS_Cost Category Filter"),
-                                                                                  NS_Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                                  NS_Type = FIELD("NS_Type Filter"),
                                                                                   "NS_Planning Date" = FIELD("Posting Date Filter"),
                                                                                   NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                                   "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1763,7 +1357,7 @@ tableextension 14021131 NS_Job extends Job
                                                                                   "NS_Line Type" = FILTER(Billable | "Both Budget and Billable"),
                                                                                   "NS_Job Task No." = FIELD("NS_Job Task No. Filter"),
                                                                                   "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                                  NS_Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
+                                                                                  NS_Type = FIELD("NS_Type Filter"),
                                                                                   "NS_Planning Date" = FIELD("Planning Date Filter"),
                                                                                   NS_Adjustment = FIELD("NS_Adjustment Filter"),
                                                                                   "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
@@ -1802,22 +1396,9 @@ tableextension 14021131 NS_Job extends Job
             Caption = 'Job Calendar Type';
             Description = 'ProjectPro';
             FieldClass = FlowField;
-            //PRJCTPR-308.DK.1.0 08Feb2023 Start
-            // OptionCaption = 'Base Navision Calendar,Job Calendar';
+            OptionCaption = 'Base Navision Calendar,Job Calendar';
             OptionMembers = "Base Navision Calendar","Job Calendar";
-            OptionCaption = 'Business Central Calendar,Job Calendar';//Added
-            //PRJCTPR-308.DK.1.0 08Feb2023 End
         }
-        //PRJCTPR-308.DK.1.0 08Feb2023 Start
-        field(14021355; NS_JobCalendarType; Enum NS_JobCalenderType)
-        {
-            CalcFormula = Lookup("Jobs Setup"."NS_JobCalendarSource");
-            Caption = 'Job Calendar Type';
-            Description = 'ProjectPro';
-            FieldClass = FlowField;
-
-        }
-        //PRJCTPR-308.DK.1.0 08Feb2023 End
         field(14021351; "NS_Retention Ledger Filter"; Code[20])
         {
             Caption = 'Retention Ledger Filter';
@@ -1827,34 +1408,15 @@ tableextension 14021131 NS_Job extends Job
         }
         field(14021352; "NS_Forecast Method"; Option)//JD-48.AS.1.0 31OCT2020
         {
-
-            //PRJ-1299.JS.1.0 02MAY2022 Start    
+            CaptionML = ENU = 'Forecast Method',
+                        ESM = 'Forecast Method',
+                        FRC = 'Forecast Method',
+                        ENC = 'Forecast Method';
             Description = 'Forecast Method';
             DataClassification = CustomerContent;
-            Caption = 'Forecast Method';
-            OptionMembers = "Job Forecast by Task Code","Job Forecast by Segment Code","Job Forecast by Task Totals";
-
-            trigger OnValidate()
-            var
-                NSJobSetup: Record "Jobs Setup";
-                NSJobForecast: Record "NS_Job Forecast";   //PRJ-1355.JS.1.0 23MAY2022
-            begin
-                //PRJ-1355.JS.1.0 23MAY2022 - Start
-                if Rec."NS_Forecast Method" <> xRec."NS_Forecast Method" then begin
-                    NSJobForecast.Reset();
-                    NSJobForecast.setrange("NS_Job No.", rec."No.");
-                    if NSJobForecast.FindFirst() then
-                        Error('Job forecast is already exist with forecast method %1', Rec."NS_Forecast Method");
-                end;
-                //PRJ-1355.JS.1.0 23MAY2022 - end
-                //PRJ-1299.JS.2.0 23MAY2022 - start
-                NSJobSetup.get();
-                if NSJobSetup."NS_Forecast By Task Total" then
-                    if rec."NS_Forecast Method" <> Rec."NS_Forecast Method"::"Job Forecast by Task Totals" then
-                        error('As per job setup Forecast Method should be Job Forecast by Tasks Total')
-            end;
-            //PRJ-1299.JS.2.0 02MAY2022 end
-
+            OptionCaptionML = ENU = 'Job Forecast by Task Code,Job Forecast by Segment Code',
+                              ENC = 'Job Forecast by Task Code,Job Forecast by Segment Code';
+            OptionMembers = "Job Forecast by Task Code","Job Forecast by Segment Code";
         }
         field(14021354; "NS_Last Forecast Posted Date"; date)
         {
@@ -2051,12 +1613,11 @@ tableextension 14021131 NS_Job extends Job
             begin
                 //ProjectPro - start
                 if ("NS_Sell-to Customer No." <> xRec."NS_Sell-to Customer No.") then
-                    if Cust.GET("NS_Sell-to Customer No.") then begin
+                    if Cust.GET("NS_Sell-to Customer No.") then
                         "NS_Sell-to Customer Name" := Cust.Name;
-                        Validate("Sell-to Customer No.", "NS_Sell-to Customer No."); //PRJCTPR-148 AT.1.0
-                    end;
-                if ("Bill-to Customer No." = '') and ("Sell-to Customer No." <> '') then
-                    VALIDATE("Bill-to Customer No.", "Sell-to Customer No.");
+
+                if ("Bill-to Customer No." = '') and ("NS_Sell-to Customer No." <> '') then
+                    VALIDATE("Bill-to Customer No.", "NS_Sell-to Customer No.");
                 //ProjectPro - end
             end;
         }
@@ -2073,18 +1634,6 @@ tableextension 14021131 NS_Job extends Job
             OptionCaption = ' ,Budget,Billable,Both Budget and Billable';
             OptionMembers = " ",Budget,Billable,"Both Budget and Billable";
             DataClassification = CustomerContent;
-
-            trigger OnValidate()
-            begin
-                //PRJ-1359.AS.1.0 02JUNE2022 START
-                if Rec."NS_Time And Material" then begin
-                    if Rec."NS_Line Type" = Rec."NS_Line Type"::Billable then begin
-                        Rec."Apply Usage Link" := false;
-                        Message('Apply usage link will be set to false');
-                    end;
-                end;
-                //PRJ-1359.AS.1.0 02JUNE2022 END
-            end;
         }
         //PRJ-162.SK.1.0 End
         field(14021430; "NS_DFR Nos."; Code[10])
@@ -2136,26 +1685,6 @@ tableextension 14021131 NS_Job extends Job
         }
         //PRJ-929.GK.1.0 22Sep2021 end
 
-        field(14021441; "NS_Include Sub Levels"; Boolean)   //PRJ-1015.JS.1.0 05Oct2021 Added new field
-        {
-            Caption = 'Forecast to Include Sub Levels';
-            Description = 'Include Sub Levels Boolean use for True or false value';
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-                NSForeCastWorkSheet: Record "NS_Job Forecast";
-            begin
-                If Rec."NS_Include Sub Levels" = true then
-                    Rec.TestField("NS_Sub-Level to Job No.", '');
-                if rec."NS_Include Sub Levels" = false then begin
-                    NSForeCastWorkSheet.Reset();
-                    NSForeCastWorkSheet.SetRange("NS_Job No.", rec."No.");
-                    if NSForeCastWorkSheet.FindFirst() then
-                        error('You cannot make forecaset to include sub levels fales because Job forecast lines exist for job no. %1', Rec."No.");
-                end
-            end;
-        }
-
         /// PRJ-949.GK.1.0 01Oct2021 start
         field(14021442; "NS_No. Of Active Crews"; Integer)
         {
@@ -2200,396 +1729,6 @@ tableextension 14021131 NS_Job extends Job
             end;
         }
         //PRJ-973.GK.1.0 13Oct2021 end
-
-        field(14021445; "NS_Root Job No."; Code[20])   //PRJ-1015.JS.1.0 18Oct2021 Added new field
-        {
-            Caption = 'Root Job No.';
-            Description = 'Root Job No. use for True or false value';
-            DataClassification = CustomerContent;
-            Editable = false;
-
-        }
-        //FGH-16.SK.1.0 Start
-        field(14021446; "NS_POC Method"; enum NS_POCMethod)
-        {
-            DataClassification = CustomerContent;
-
-            //FGH-16.AS.1.0 18JAN2022 START
-            trigger OnValidate()
-            var
-                RevRecSummDetails: Record NS_RevenueRecSummaryTab;
-                NSJobsSetup: record "Jobs Setup";  //PE-272.JS.1.0 14MAR2024
-                NSRevRecSummDetails: Record NS_RevenueRecSummaryTab;   //PRJCTPR-371.JS.1.0 16MAY2024
-                NSCheckRecordCountPosted: Integer; //PRJCTPR-371.JS.1.0 16MAY2024
-                NSCheckRecordCountUnPosted: Integer; //PRJCTPR-371.JS.1.0 16MAY2024
-            begin
-                if NSJobsSetup.get() then;  //PE-272.JS.1.0 14MAR2024 line added
-                //PE-174.JS.1.0 31JAN2024 - Start                
-                if NSJobsSetup."NS_Enable POC Method Change" = false then begin  //PE-272.JS.1.0 14MAR2024 line added
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.setrange("NS_POC Method", xrec."NS_POC Method");
-                    if RevRecSummDetails.findfirst() then
-                        error('You cannot change the "POC Method" because related open entries already exist in "Revenue Recognition Summary Details". You must delete the related open entires from "Revenue Recognition Summary Details" before changing the current POC method.');
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.SetRange(NS_Voided, false);
-                    IF RevRecSummDetails.FindSet() then
-                        repeat
-                            if (RevRecSummDetails.NS_Posted = false) and (RevRecSummDetails."NS_Over/Under Billings Posted" = false) then begin
-                                RevRecSummDetails."NS_Mark POC Method Update" := true;
-                                RevRecSummDetails.Modify();
-                            end;
-                        until RevRecSummDetails.next() = 0;
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.SetRange(RevRecSummDetails.NS_Posted, false);
-                    IF RevRecSummDetails.FindSet() then
-                        repeat
-                            if (RevRecSummDetails.NS_Voided = false) and (RevRecSummDetails."NS_Over/Under Billings Posted" = false) then begin
-                                RevRecSummDetails."NS_Mark POC Method Update" := true;
-                                RevRecSummDetails.Modify();
-                            end;
-                        until RevRecSummDetails.next() = 0;
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.SetRange(RevRecSummDetails."NS_Over/Under Billings Posted", false);
-                    IF RevRecSummDetails.FindSet() then
-                        repeat
-                            if (RevRecSummDetails.NS_Voided = false) and (RevRecSummDetails.NS_Posted = false) then begin
-                                RevRecSummDetails."NS_Mark POC Method Update" := true;
-                                RevRecSummDetails.Modify();
-                            end;
-                        until RevRecSummDetails.next() = 0;
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.setrange("NS_Mark POC Method Update", true);
-                    IF RevRecSummDetails.FindSet() then
-                        RevRecSummDetails.ModifyAll(RevRecSummDetails."NS_POC Method", Rec."NS_POC Method");
-                end else begin  //PE-272.JS.1.0 14MAR2024  line added  //PE-281.JS.1.0 10APR2024 -Start
-                                //PRJCTPR-371.JS.1.0 16MAY2024-Start
-                    Clear(NSCheckRecordCountPosted);
-                    Clear(NSCheckRecordCountUnPosted);
-                    if xRec."NS_POC Method" <> xRec."NS_POC Method"::" " then begin
-                        NSRevRecSummDetails.Reset();
-                        NSRevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                        if NSRevRecSummDetails.findset() then begin
-                            repeat
-                                if ((NSRevRecSummDetails.NS_Posted = false) and (NSRevRecSummDetails.NS_Voided = false) and
-                                (NSRevRecSummDetails."NS_Over/Under Billings Posted" = false)) then
-                                    NSCheckRecordCountUnPosted := NSCheckRecordCountUnPosted + 1
-                                else
-                                    NSCheckRecordCountPosted := NSCheckRecordCountPosted + 1;
-                            until NSRevRecSummDetails.Next() = 0;
-                        end;
-
-                        if NSCheckRecordCountUnPosted = 0 then begin
-                            if NSCheckRecordCountPosted > 0 then begin
-                                NSRevRecSummDetails.Reset();
-                                NSRevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                                if NSRevRecSummDetails.findfirst() then begin
-                                    if xRec."NS_POC Method" <> xRec."NS_POC Method"::"NS_Manual Job%" then
-                                        if rec."NS_POC Method" <> rec."NS_POC Method"::"NS_Manual Job%" then
-                                            error('You can change the POC Method only to "Manual Job %", because all entries in "Revenue Recognition Summary Details" are posted.');
-                                end;
-                            end;
-                        end;
-                    end;
-                    //PRJCTPR-371.JS.1.0 15MAY2024-end
-                    //PE-281.JS.1.0 10APR2024 -Start    
-                    //PE-174.JS.1.0 31JAN2024 - Start
-                    //PE-281.JS.1.0 11APR2024 -Start
-                    // RevRecSummDetails.Reset();
-                    // RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");                 
-                    // IF RevRecSummDetails.FindSet() then
-                    //     RevRecSummDetails.ModifyAll(RevRecSummDetails."NS_POC Method", Rec."NS_POC Method");
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.SetRange(NS_Voided, false);
-                    IF RevRecSummDetails.FindSet() then
-                        repeat
-                            if (RevRecSummDetails.NS_Posted = false) and (RevRecSummDetails."NS_Over/Under Billings Posted" = false) then begin
-                                RevRecSummDetails."NS_Mark POC Method Update" := true;
-                                RevRecSummDetails.Modify();
-                            end;
-                        until RevRecSummDetails.next() = 0;
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.SetRange(RevRecSummDetails.NS_Posted, false);
-                    IF RevRecSummDetails.FindSet() then
-                        repeat
-                            if (RevRecSummDetails.NS_Voided = false) and (RevRecSummDetails."NS_Over/Under Billings Posted" = false) then begin
-                                RevRecSummDetails."NS_Mark POC Method Update" := true;
-                                RevRecSummDetails.Modify();
-                            end;
-                        until RevRecSummDetails.next() = 0;
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.SetRange(RevRecSummDetails."NS_Over/Under Billings Posted", false);
-                    IF RevRecSummDetails.FindSet() then
-                        repeat
-                            if (RevRecSummDetails.NS_Voided = false) and (RevRecSummDetails.NS_Posted = false) then begin
-                                RevRecSummDetails."NS_Mark POC Method Update" := true;
-                                RevRecSummDetails.Modify();
-                            end;
-                        until RevRecSummDetails.next() = 0;
-                    RevRecSummDetails.Reset();
-                    RevRecSummDetails.SetRange("NS_Job No.", Rec."No.");
-                    RevRecSummDetails.setrange("NS_Mark POC Method Update", true);
-                    IF RevRecSummDetails.FindSet() then
-                        RevRecSummDetails.ModifyAll(RevRecSummDetails."NS_POC Method", Rec."NS_POC Method");
-                end;
-                //PE-281.JS.1.0 11APR2024 -end
-                //PE-287.JS.1.0 29APR2024 - Start
-                if (rec."NS_POC Method" = rec."NS_POC Method"::"NS_Job forecast") or
-                (rec."NS_POC Method" = rec."NS_POC Method"::"NS_Markup%") then begin
-                    if NSJobsSetup."NS_UpdJFWForecastCompCostOnJT" = true then
-                        rec."NS_UpdJFWForecastCompCostOnJT" := true
-                    else
-                        rec."NS_UpdJFWForecastCompCostOnJT" := false;
-                end else
-                    rec."NS_UpdJFWForecastCompCostOnJT" := false;
-                //PE-287.JS.1.0 29APR2024 - end    
-            end;
-            //FGH-16.AS.1.0 18JAN2022 END
-        }
-        field(14021447; "NS_POC Method Value"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            MaxValue = 100;
-            MinValue = -100;        //PRJCTPR-39.JS.1.0 23JAN2023
-            InitValue = 1;
-
-            trigger OnValidate()
-            begin
-                IF Rec."NS_POC Method Value" <> xRec."NS_POC Method Value" then
-                    "NS_POC Method Value Date" := today;
-            end;
-        }
-        field(14021448; "NS_POC Method Value Date"; date)
-        {
-            DataClassification = CustomerContent;
-        }
-        //FGH-16.SK.1.0 End
-        //PRJ-1380.NK.1.0 12May2022 Start
-        field(14021449; "NS_Job Purchaser"; Code[20])
-        {
-            Caption = 'Job Purchaser';
-            Description = 'PRJ-1380.NK.1.0';
-            TableRelation = Resource;
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1380.NK.1.0 12May2022 End
-        //PRJ-1262.GK.1.0 03June2022 start
-        field(14021450; "NS_Open Job Backlog"; Decimal)
-        {
-            Caption = 'Open Job Backlog';
-            Description = 'PRJ-1262.GK.1.0 03June2022';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1262.GK.1.0 03June2022 end
-        //PRJ-1454.NK.1.0 05Sep2022 Start
-        field(14021486; "NS_Budgeted Price (LCY) Cont."; Decimal)
-        {
-            CalcFormula = Sum("Job Planning Line"."Total Price (LCY)" WHERE("Job No." = FIELD("No."),
-                                                                             "Line Type" = FILTER(Billable | "Both Budget and Billable"),
-                                                                             "Job Task No." = FIELD("NS_Job Task No. Filter"),
-                                                                             "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                             Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
-                                                                             "NS_Contract Forecast Date" = FIELD("Posting Date Filter"),
-                                                                             NS_Adjustment = FIELD("NS_Adjustment Filter"),
-                                                                             "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
-                                                                             "NS_Shortcut Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
-                                                                             "NS_Retention Ledger Code" = FIELD("NS_Retention Ledger Filter")));
-            Caption = 'Budgeted Price ($) Cont. Date';
-            Description = 'ProjectPro';
-            FieldClass = FlowField;
-        }
-        //PRJ-1454.NK.1.0 05Sep2022 End
-
-        //PE-200.AS.6.0 START
-        field(14021487; "NS_PaywhenpaidTermsCode"; Code[10])
-        {
-            Caption = 'Pay When Paid Term';
-            DataClassification = CustomerContent;
-            TableRelation = "Payment Terms";//PE-200.AS.8.0
-
-            trigger OnValidate();
-            var
-                PaymentTermsRec: Record "Payment Terms";//PE-200.AS.8.0
-            begin
-                //PE-200.AS.8.0 start add
-                if ("NS_PaywhenpaidTermsCode" <> '') then begin
-                    if PaymentTermsRec.GET("NS_PaywhenpaidTermsCode") then;
-                    "NS_PaywhenpaidTermsCode" := FORMAT(PaymentTermsRec."Due Date Calculation");
-                end;
-                //PE-200.AS.8.0 end add
-            end;
-        }
-        //PE-200.AS.6.0 END
-
-        //PE-211.AS.2.0 start
-        field(14021488; "NS_Field Manager"; Code[50])
-        {
-            Caption = 'Field Manager';
-            TableRelation = "User Setup";
-            DataClassification = CustomerContent;
-        }
-        //PE-211.AS.2.0 end
-        // PE-47.PS.1.0 01March2023 Start 
-        field(14021491; "NS_Run Batch Open Job Backlog"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            // Caption = 'Run Batch Open Job Backlog'; //PE-173.PS.1.0 09Oct2023 Commented
-            Caption = 'Open Job Backlog Updated';//PE-173.PS.1.0 09Oct2023 
-        }
-
-        // PE-47.PS.1.0 01March2023 End
-        //MHNA-6.NK.1.0 start 03March2023
-        field(14021492; "NS_ Locked Budgeted Rev "; Decimal)
-        {
-            CalcFormula = Sum("NS_Locked Job Planning Line"."NS_Total Price (LCY)" WHERE("NS_Job No." = FIELD("No."),
-                                                                             "NS_Line Type" = FILTER(Billable | "Both Budget and Billable"),
-                                                                             "NS_Job Task No." = FIELD("NS_Job Task No. Filter"),
-                                                                             "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                             NS_Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
-                                                                             "NS_Planning Date" = FIELD("Posting Date Filter"),
-                                                                             NS_Adjustment = FIELD("NS_Adjustment Filter"),
-                                                                             "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
-                                                                             "NS_Shortcut Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
-                                                                             "NS_Retention Ledger Code" = FIELD("NS_Retention Ledger Filter")));
-            Caption = 'Budgeted Price Rev ($)';
-            Description = 'ProjectPro';
-            FieldClass = FlowField;
-        }
-        field(14021493; "NS_Locked Bill Rev Cost (LCY)"; Decimal)
-        {
-            CalcFormula = Sum("NS_Locked Job Planning Line"."NS_Total Price (LCY)" WHERE("NS_Job No." = FIELD("No."),
-                                                                                   "NS_Line Type" = FILTER(Billable | "Both Budget and Billable"),
-                                                                                   "NS_Job Task No." = FIELD("NS_Job Task No. Filter"),
-                                                                                   "NS_Revenue Category" = FIELD("NS_Revenue Category Filter"),
-                                                                                   NS_Type = FIELD("NS_TypeEnumFilter"),  //PE-306.JS.1.0
-                                                                                   "NS_Planning Date" = FIELD("Posting Date Filter"),
-                                                                                   NS_Adjustment = FIELD("NS_Adjustment Filter"),
-                                                                                   "NS_Shortcut Dimension 1 Code" = FIELD("NS_Global Dimension 1 Filter"),
-                                                                                   "NS_Shortcut Dimension 2 Code" = FIELD("NS_Global Dimension 2 Filter"),
-                                                                                   "NS_Retention Ledger Code" = FIELD("NS_Retention Ledger Filter")));
-            Caption = 'Original Budget Cost  Rev($)';
-            Description = 'ProjectPro';
-            FieldClass = FlowField;
-        }
-        //MHNA-6.NK.1.0 end 03March2023
-        //PE-6.NK.1.0 28Mar2022 Start
-        field(14021496; "NS_Opportunity"; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Opportunity';
-            Editable = false;
-        }
-        //PE-6.NK.1.0 24Mar2022 End
-        //PRJCTPR-11.GK.1.0 20Apr2023 start
-        field(14021497; "NS_County"; Text[250])
-        {
-            Caption = 'County';
-            DataClassification = CustomerContent;
-        }
-        //PRJCTPR-11.GK.1.0 20Apr2023 end
-        //PE-149.RM.1.0 28Aug2023 start
-        field(14021211; "NS_ActInvdLessActCost"; Decimal)
-        {
-            DataClassification = CustomerContent;
-        }
-        //PE-149.RM.1.0 28Aug2023 end
-        //PE-173.PS.1.0 09Oct2023 Start 
-        field(14021212; "NS_Last Run Open Job Backlog"; Date)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Last Run Open Job Backlog';
-        }
-        //PE-173.PS.1.0 09Oct2023 End
-        //PE-193.PS.1.0 16Oct2023 Start
-        field(14021213; "NS_Margin %"; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Margin %';
-
-        }
-        field(14021214; "NS_Change Request to Job No."; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Change Request to Job No.';
-            Editable = false; //PE-193.PS.3.0 21Dec2023
-            TableRelation = Job;
-        }
-        //PE-193.PS.1.0 16Oct2023 End 
-        //PE-193.PS.3.0 21Dec2023 Start
-        field(14021216; "NS_Change Order No."; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Merged to Change Order No.';
-            Editable = false;
-            TableRelation = Job;
-        }
-        //PE-193.PS.3.0 21Dec2023 End
-        //PE-249.JS.1.0 08FEB2024 - Start
-        field(14021225; "NS_Mandate Revenue Category"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Mandate Revenue Category';
-        }
-        //PE-249.JS.1.0 08FEB2024 - end
-
-        //PE-270.AS.1.0 START
-        field(14021226; "NS_EnableOverrideForecastonJFW"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable Override Forecast on JFW';
-        }
-        //PE-270.AS.1.0 END
-        //PE-287.JS.1.0 18APR2024 - Start
-        field(14021287; "NS_UpdJFWForecastCompCostOnJT"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Enable JFW Forecasted Completed Cost on JTL';
-
-            trigger OnValidate()
-            begin
-                //PE-299.JS.1.0 21MAY2024-Start
-                if NS_UpdJFWForecastCompCostOnJT = false then
-                    "NS_Push-OrV2JFWForecastedonJTL" := false;
-                //PE-299.JS.1.0 21MAY2024-end
-
-                if rec.NS_UpdJFWForecastCompCostOnJT = true then
-                    if (rec."NS_POC Method" <> rec."NS_POC Method"::" ") and
-                        (rec."NS_POC Method" <> rec."NS_POC Method"::"NS_Job forecast") then
-                        error('The POC Method of the job should be Blank or Job Forecast to modify the setup.');
-            end;
-        }
-        //PE-287.JS.1.0 18APR2024 - end
-        //PE-299.JS.1.0 17MAY024-Start
-        field(14021286; "NS_Push-OrV2JFWForecastedonJTL"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Push Override Values to JFW Forecasted on JTL';
-
-            trigger OnValidate()
-            begin
-                if "NS_Push-OrV2JFWForecastedonJTL" = true then begin
-                    if NS_UpdJFWForecastCompCostOnJT = false then
-                        error('Please ensure that "Enable JFW Forecasted Completed Cost on JTL" setup is enabled.');
-                end;
-            end;
-        }
-        //PE-299.JS.1.0 17MAY024-end 
-
-        //PE-301.NC.1.0 10Jun2024 Start
-        field(14021387; "NS_Pur/Sale UOM for B&B JPL"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Pur/Sale UOM for B&B JPL';
-        }
-        //PE-301.NC.1.0 10Jun2024 End        
-
     }
     keys
     {
@@ -2602,14 +1741,9 @@ tableextension 14021131 NS_Job extends Job
         key(Key3; "NS_Manager Job Status")
         {
         }
-        // PRJCTPR-197 DK.1.0 Start
-        // key(Key4; "NS_Job Class", "NS_Job Type")
-        // {
-        // }
-        key(Key5; "NS_Job Class", "NS_Job Type New")
+        key(Key4; "NS_Job Class", "NS_Job Type")
         {
         }
-        // PRJCTPR-197 DK.1.0 End
     }
 
     //Unsupported feature: CodeModification on "OnDelete". Please convert manually.
@@ -2648,8 +1782,6 @@ tableextension 14021131 NS_Job extends Job
         JobPlanningLine: Record 1003;
         JobSegments: Record "NS_Job Takeoff Segments";
         JobCostCat: Record "NS_Job Cost Category Price";
-        TcostbyCode: Record "NS_Cost Cat by Code";//PRJ-1052.AS.1.0
-        JobForct: Record "NS_Job Forecast";
     begin
         //ProjectPro - start
         JobPlanningLine.SETRANGE("Job No.", "No.");
@@ -2678,17 +1810,6 @@ tableextension 14021131 NS_Job extends Job
         JobCostCat.SetRange("NS_Job No.", "No.");
         JobCostCat.DeleteAll();
         //CTSI-131.MS.1.0 end
-        //PRJ-371.NK.1.0 12May2022 Start
-        JobForct.Reset();
-        JobForct.SetRange("NS_Job No.", "No.");
-        JobForct.DeleteAll();
-        //PRJ-371.NK.1.0 12May2022 End
-
-        //PRJ-1052.AS.1.0 START
-        TcostbyCode.Reset();
-        TcostbyCode.SetRange("NS_Job No", "No.");
-        TcostbyCode.DeleteAll();
-        //PRJ-1052.AS.1.0 END
     end;
 
     trigger OnBeforeInsert();
@@ -2701,96 +1822,32 @@ tableextension 14021131 NS_Job extends Job
         q: Integer;
         JobsSetup2: Record "Jobs Setup";
     begin
-        //PE-151.JS.1.0 28July2023 - Start below code commented
-        // JobsSetup2.GET;
-        // ProjectPro - start
-        // PRJ-1368.GK.1.0 13June2022 start-Changes in code
-        // if JobsSetup2."NS_Show Default task in Copy Job" = false then begin //PRJ-361.AS.2.0 11SEPT2020 - start
-        //     if (not FromQuote) and (JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::Default) then
-        //         if GUIALLOWED then   //PRJCTPR-50.JS.1.0 30JAN2023
-        //             if CONFIRM(Text14021402, true) then begin
-        //                 SkipTasks := false;
-        //                 q := q;
-        //             end else
-        //                 SkipTasks := true;
-        //     if (not FromQuote) and (JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::JobType) then
-        //         if GUIALLOWED then   //PRJCTPR-50.JS.1.0 30JAN2023
-        //             if CONFIRM(Text14021403Lbl, true) then begin
-        //                 SkipTasks := false;
-        //                 q := q;
-        //                 if JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::JobType then begin
-        //                     if NS_JobTypes.RUNMODAL = ACTION::OK then begin
-        //                         NS_JobTypes.GETRECORD(NS_JobType);
-        //                         PRJCTPR-197 Dk.1.0 Start
-        //                         "NS_Job Type" := NS_JobType.NS_Code;
-        //                         "NS_Job Type New" := NS_JobType.NS_Code;
-        //                         PRJCTPR-197 Dk.1.0 End
-        //                     end;
-        //                 end;
-        //             end else
-        //                 SkipTasks := true;
-        // end;//PRJ-361.AS.2.0 11SEPT2020 - end
-        //PRJ-1368.GK.1.0 13June2022 end
-        //PE-151.JS.1.0 28July2023 - end below code commented
+        JobsSetup2.GET;
+        //ProjectPro - start
+        if JobsSetup2."NS_Show Default task in Copy Job" = false then begin //PRJ-361.AS.2.0 11SEPT2020 - start
+            if (not FromQuote) and (JobsSetup2."NS_Use Default Tasks" > 0) then
+                if CONFIRM(Text14021402, true, FORMAT(JobsSetup2."NS_Use Default Tasks")) then begin
+                    SkipTasks := false;
+                    q := q;
+                    if JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::JobType then begin
+                        if NS_JobTypes.RUNMODAL = ACTION::OK then begin
+                            NS_JobTypes.GETRECORD(NS_JobType);
+                            "NS_Job Type" := NS_JobType.NS_Code;
+                        end;
+                    end;
+                end else
+                    SkipTasks := true;
+        end;//PRJ-361.AS.2.0 11SEPT2020 - end
         //ProjectPro - end
     end;
 
     trigger OnAfterInsert();
     var
         JobsSetup2: Record "Jobs Setup";
-        //PE-151.JS.1.0 28July2023 - Start
-        NS_NoSeriesLine: Record 309;
-        NS_NoSeriesRelationship: Record 310;
-        SeriesMatchFound: Boolean;
-        NS_JobTypes: Page "NS_Job Types List";
-        NS_JobType: Record "NS_Job Type";
-        q: Integer;
-    //PE-151.JS.1.0 28July2023 - end         
     begin
-        Commit(); //PE-151.JS.1.0 28July2023 line added
-        if JobsSetup2.Get() then;  //PE-151.JS.1.0 28July2023 line corrected old statement JobsSetup2.Get()    
-        //PE-151.JS.1.0 28July2023 - Start
-        if JobsSetup2."NS_Show Default task in Copy Job" = false then begin
-            if (not FromQuote) and (JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::Default) then
-                if GUIALLOWED then   //PRJCTPR-50.JS.1.0 30JAN2023
-                    if CONFIRM(Text14021402, true) then begin
-                        SkipTasks := false;
-                        q := q;
-                    end else
-                        SkipTasks := true;
-            if (not FromQuote) and (JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::JobType) then
-                if GUIALLOWED then   //PRJCTPR-50.JS.1.0 30JAN2023
-                    if CONFIRM(Text14021403Lbl, true) then begin
-                        SkipTasks := false;
-                        q := q;
-                        if JobsSetup2."NS_Use Default Tasks" = JobsSetup2."NS_Use Default Tasks"::JobType then begin
-                            if NS_JobTypes.RUNMODAL = ACTION::OK then begin
-                                NS_JobTypes.GETRECORD(NS_JobType);
-                                "NS_Job Type New" := NS_JobType.NS_Code; //PRJCTPR-225.NC.1.0 
-                            end;
-                        end;
-                    end else
-                        SkipTasks := true;
-        end;
-        //PE-151.JS.1.0 28July2023 - End
+        JobsSetup2.Get();
         //ProjectPro - start
         "NS_Forecast Type" := JobsSetup2."NS_Default Forecast Type";
-        //PE-275.JS.1.0 20MAR2024 - start
-        //PE-281.JS.1.0 18APR2024 - Start
-        if JobsSetup2."NS_Job default POC Method" = JobsSetup2."NS_Job default POC Method"::" " then
-            rec."NS_POC Method" := rec."NS_POC Method"::"NS_Job forecast"
-        else
-            rec."NS_POC Method" := JobsSetup2."NS_Job default POC Method";
-        //PE-281.JS.1.0 18APR2024 - end
-        rec."NS_Push-OrV2JFWForecastedonJTL" := JobsSetup2."NS_Push-OrV2JFWForecastedonJTL";   //PE-299.JS.1.0 17MAY2024
-        if "NS_Contract Date" = 0D then
-            "NS_Contract Date" := Workdate;
-        //PE-275.JS.1.0 20MAR2024 - end            
-        //PRJ-1299.JS.1.0 18APR2022 - Start        
-        "NS_Mandate Revenue Category" := JobsSetup2."NS_Mandate Revenue Category";  //PE-249.JS.1.0 11FEB2024
-        if JobsSetup2."NS_Forecast By Task Total" = true then
-            Rec."NS_Forecast Method" := Rec."NS_Forecast Method"::"Job Forecast by Task Totals";
-        //PRJ-1299.JS.1.0 18APR2022 - end    
         if JobsSetup2."NS_Show Default task in Copy Job" = false then begin //PRJ-361.AS.2.0 11SEPT2020 - start <<Added old code under condition
             NS_JobLinks.CreateJobLinks("No.", "NS_Sub-Level to Job No.");
             LoadTasks;
@@ -2844,14 +1901,8 @@ tableextension 14021131 NS_Job extends Job
         Text14021113: Label 'The original budget for this job already exists and can not be changed from here.';
         Text14021400: Label 'Job No. %1 is a %2 Job.\Are you SURE you want to delete Job No. %3';
         Text14021401: Label 'Action Cancelled by Request';
-        //Text14021402: Label 'Do You want to Use Default Tasks of Type %1'; //PRJ-1368.RM.1.0 commented
-        Text14021402: Label 'Do you want to use Default Tasks?'; //PRJ-1368.RM.1.0
-        Text14021403Lbl: Label 'Do you want to use Default Tasks by Job Type ?', Comment = '%1=JobsSetup."Use Default Tasks"';  //PRJ-1368.GK.1.0 13June2022 
-
+        Text14021402: Label 'Do You want to Use Default Tasks of Type %1';
         NS_ConfirmMesssage: Label 'This will update all "Billable" & "Both Budget and Billable" Job Planning Lines with Type "G/L Account". Do you want to continue?';  //PRJ-973.GK.1.0 13Oct2021
-
-        NS_Text14021410Lbl: Label 'Once the job is marked as Completed, it will be set to Revenue Recognized. Do you want to continue?';  //PE-287.JS.1.0 02MAY2024
-        NS_Text14021411Lbl: Label 'The job is set to Revenue Recognized and changing the status will not remove this. Do you want to continue?';  //PE-287.JS.1.0 02MAY2024
         CopiedJob: Boolean;
         DisableLoadTasks: Boolean;
         SupressDefaultTasksDialog: Boolean;
@@ -2860,7 +1911,6 @@ tableextension 14021131 NS_Job extends Job
         JobsSetup: Record "Jobs Setup";
         StatusChangeQst: Label 'This will delete any unposted WIP entries for this job and allow you to reverse the completion postings for this job.\\Do you wish to continue?';
         AssociatedEntriesExistErr: Label 'You cannot change %1 because one or more entries are associated with this %2.';
-        NSUserSetup: Record "User Setup"; //PRJCTPR-147.PS.2.20Sep2023
 
     PROCEDURE "MarkJobSub-Levels"(VAR ListOfJobs: Record 167; JobNo: Code[20]);
     VAR
@@ -3156,31 +2206,7 @@ tableextension 14021131 NS_Job extends Job
         END;
         //ProjectPro - end
     END;
-    //PE-133.NC.1.0 21July2023 Start
-    PROCEDURE NS_LockedSubLevelRevCost(VAR ParentJob: Record 167) Result: Decimal;
-    VAR
-        NS_JobSearch: Record 167;
-        JobNoFilter: code[30];
-    BEGIN
-        if StrLen(format(ParentJob."No.")) < 18 then
-            JobNoFilter := '@*' + format(ParentJob."No.") + '*'
-        else
-            JobNoFilter := format(ParentJob."No.");
-        Result := 0;
-        NS_JobSearch.RESET();
-        NS_JobSearch.SETCURRENTKEY("NS_Sub-Level to Job No.");
-        NS_JobSearch.SetFilter("NS_Sub-Level to Job No.", '%1', JobNoFilter);
-        NS_JobSearch.SETFILTER("NS_Date Filter", ParentJob.GETFILTER("NS_Date Filter"));
-        NS_JobSearch.SETFILTER("NS_Cost Category Filter", ParentJob.GETFILTER("NS_Cost Category Filter"));
-        NS_JobSearch.SETFILTER("NS_Adjustment Filter", ParentJob.GETFILTER("NS_Adjustment Filter"));
-        NS_JobSearch.SetFilter(Status, '>=%1', NS_JobSearch.Status::Open);
-        IF NS_JobSearch.FINDSET() THEN
-            REPEAT
-                NS_JobSearch.CALCFIELDS("NS_Locked Budget Price (LCY)");
-                Result += NS_JobSearch."NS_Locked Budget Price (LCY)";
-            UNTIL NS_JobSearch.NEXT() = 0;
-    END;
-    //PE-133.NC.1.0 21July2023 End
+
     PROCEDURE SLsBudgetedCostQty(VAR ParentJob: Record 167) Answer: Decimal;
     VAR
         NS_JobSearch: Record 167;
@@ -3204,49 +2230,6 @@ tableextension 14021131 NS_Job extends Job
         END;
         //ProjectPro - end
     END;
-    //PE-193.PS.3.0 28Dec2023 Start
-    /// <summary>
-    /// NS_ChangeRequestBillingprice.
-    /// </summary>
-    /// <param name="Var NS_JobChangeReq">Record Job.</param>
-    /// <returns>Return variable ChangeRequesvaluePrice of type Decimal.</returns>
-    procedure NS_ChangeRequestBillingprice(Var NS_JobChangeReq: Record Job) ChangeRequesvaluePrice: Decimal;
-    var
-        NS_JobChangeRequestvalue: Record Job;
-    BEGIN
-        ChangeRequesvaluePrice := 0;
-        NS_JobChangeRequestvalue.Reset();
-        NS_JobChangeRequestvalue.SetRange("NS_Change Request to Job No.", NS_JobChangeReq."No.");
-        NS_JobChangeRequestvalue.SetRange("NS_Job Class", NS_JobChangeReq."NS_Job Class"::"Change Request");
-        NS_JobChangeRequestvalue.SetFilter(Status, '%1|%2', NS_JobChangeRequestvalue.Status::Open, NS_JobChangeRequestvalue.Status::Planning);
-        NS_JobChangeRequestvalue.SetFilter("NS_Manager Job Status", '<>%1', NS_JobChangeRequestvalue."NS_Manager Job Status"::Completed);
-        if NS_JobChangeRequestvalue.FindSet() then begin
-            repeat
-                NS_JobChangeRequestvalue.CALCFIELDS("NS_Budgeted Price (LCY)");
-                ChangeRequesvaluePrice += NS_JobChangeRequestvalue."NS_Budgeted Price (LCY)";
-            UNTIL NS_JobChangeRequestvalue.Next = 0;
-        end;
-    end;
-
-
-    procedure NS_ChangeRequestBillingCost(Var NS_ParentJobCost: Record Job) CHangeRequesvalueCost: Decimal;
-    var
-        NS_JobChangeReq: Record Job;
-    BEGIN
-        CHangeRequesvalueCost := 0;
-        NS_JobChangeReq.Reset();
-        NS_JobChangeReq.SetRange("NS_Change Request to Job No.", NS_ParentJobCost."No.");
-        NS_JobChangeReq.SetRange("NS_Job Class", NS_JobChangeReq."NS_Job Class"::"Change Request");
-        NS_JobChangeReq.SetFilter(Status, '%1|%2', NS_JobChangeReq.Status::Open, NS_JobChangeReq.Status::Planning);
-        NS_JobChangeReq.SetFilter("NS_Manager Job Status", '<>%1', NS_JobChangeReq."NS_Manager Job Status"::Completed);
-        if NS_JobChangeReq.FindSet() then begin
-            repeat
-                NS_JobChangeReq.CALCFIELDS("NS_Budgeted Cost (LCY)");
-                CHangeRequesvalueCost += NS_JobChangeReq."NS_Budgeted Cost (LCY)";
-            UNTIL NS_JobChangeReq.Next = 0;
-        end;
-    End;
-    //PE-193.PS.3.0 28Dec2023 End
 
     PROCEDURE NS_SLsBudgetedPrice(VAR ParentJob: Record 167) Answer: Decimal;
     VAR
@@ -3414,10 +2397,7 @@ tableextension 14021131 NS_Job extends Job
             RESET;
             SETCURRENTKEY("NS_Sub-Level to Job No.");
             SETRANGE("NS_Sub-Level to Job No.", ParentJob."No.");
-            //PE-306.JS.1.0 06JUN2024-Start
-            //NS_JobSearch.SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            NS_JobSearch.SETFILTER("NS_TypeEnumFilter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            //PE-306.JS.1.0 06JUN2024-end
+            SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
             SETFILTER("NS_Date Filter", ParentJob.GETFILTER("NS_Date Filter"));
             SETFILTER("NS_Cost Category Filter", ParentJob.GETFILTER("NS_Cost Category Filter"));
             IF FINDSET THEN
@@ -3439,10 +2419,7 @@ tableextension 14021131 NS_Job extends Job
             RESET;
             SETCURRENTKEY("NS_Sub-Level to Job No.");
             SETRANGE("NS_Sub-Level to Job No.", ParentJob."No.");
-            //PE-306.JS.1.0 06JUN2024-Start
-            //NS_JobSearch.SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            NS_JobSearch.SETFILTER("NS_TypeEnumFilter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            //PE-306.JS.1.0 06JUN2024-end
+            SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
             SETFILTER("NS_Date Filter", ParentJob.GETFILTER("NS_Date Filter"));
             SETFILTER("NS_Cost Category Filter", ParentJob.GETFILTER("NS_Cost Category Filter"));
             IF FINDSET THEN
@@ -3500,10 +2477,7 @@ tableextension 14021131 NS_Job extends Job
             RESET;
             SETCURRENTKEY("NS_Sub-Level to Job No.");
             SETRANGE("NS_Sub-Level to Job No.", ParentJob."No.");
-            //PE-306.JS.1.0 06JUN2024-Start
-            //NS_JobSearch.SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            NS_JobSearch.SETFILTER("NS_TypeEnumFilter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            //PE-306.JS.1.0 06JUN2024-end
+            SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
             SETFILTER("NS_Date Filter", ParentJob.GETFILTER("NS_Date Filter"));
             SETFILTER("NS_Revenue Category Filter", ParentJob.GETFILTER("NS_Revenue Category Filter"));
             IF FINDSET THEN
@@ -4626,7 +3600,6 @@ tableextension 14021131 NS_Job extends Job
         NS_JobCalc: Record 167;
         CommittedCostLocal: Decimal;
         CommittedCostLocal2: Decimal;
-        IsHandle: Boolean;//FGH-163.SM.29022024 //PE-269.JS.1.0 05MAR2024
     BEGIN
         //ProjectPro - start
         //This function calculates Actual Cost, Invoices Billed, Payments Received, and Committed Cost for a job
@@ -4639,17 +3612,13 @@ tableextension 14021131 NS_Job extends Job
         CommittedCost := 0;
         CommittedCostLocal := 0;//PRJ-321.MS.1.0
         CommittedCostLocal2 := 0;//PRJ-321.MS.1.0
-        //FGH-163.SM.29022024  PE-269.JS.1.0 05MAR2024 START
-        OnBeforeCalculateJobFinancials(IsHandle, PassedJob, ActualCostToDate, InvoiceBilled, PaymentReceived, CommittedCost, PassedSubLevels);
-        If IsHandle then
-            exit;
-        //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 END
+
         //Set Period Dates
         NS_MTD := FORMAT(DMY2DATE(1, DATE2DMY(WORKDATE, 2), DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
         NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
 
         //Find Actual-Cost-To-Date
-        NS_CalculateActualCostToDate(NS_JobCalc, ActualCostToDate, PassedSubLevels);
+        NS_CalculateActualCostToDate(NS_JobCalc, ActualCostToDate, PassedSubLevels, WorkDate());
 
         //Find Committed Cost
         WITH NS_PurchaseLine DO BEGIN
@@ -4672,7 +3641,7 @@ tableextension 14021131 NS_Job extends Job
         END;
 
         //Find Invoice Billed
-        CalculateInvoiceBilled(NS_JobCalc, InvoiceBilled, PassedSubLevels);
+        CalculateInvoiceBilled(NS_JobCalc, InvoiceBilled, PassedSubLevels, WorkDate());
 
         //Find Payments Received
         WITH NS_DtldCustLedgEntry DO BEGIN
@@ -4963,23 +3932,8 @@ tableextension 14021131 NS_Job extends Job
         NS_CustLedgEntryRetention.SETRANGE("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
         IF NS_CustLedgEntryRetention.FINDSET THEN
             REPEAT
-                //PRJCTPR-220.DK.1.0 06NOV2023 Start
-                //     NS_CustLedgEntryRetention.CALCFIELDS(Amount);
-                //     //PRJCTPR-48.Dk.0.1 Start
-                //     //  CalcValues[3, 1] += ABS(NS_CustLedgEntryRetention.Amount);
-                //     if (NS_CustLedgEntryRetention.Amount) > 0 then
-                //         CalcValues[3, 1] += ABS(NS_CustLedgEntryRetention.Amount);
-                //     if (NS_CustLedgEntryRetention.Amount) < 0 then
-                //         CalcValues[3, 1] -= ABS(NS_CustLedgEntryRetention.Amount);
-                // //PRJCTPR-48.Dk.0.1 end
-                NS_CustLedgEntryRetention.CALCFIELDS(Amount, "Remaining Amt. (LCY)");
-
-                //  CalcValues[3, 1] += ABS(NS_CustLedgEntryRetention.Amount);
-                if (NS_CustLedgEntryRetention.Amount) > 0 then
-                    CalcValues[3, 1] += ABS(NS_CustLedgEntryRetention."Remaining Amt. (LCY)");
-                if (NS_CustLedgEntryRetention.Amount) < 0 then
-                    CalcValues[3, 1] -= ABS(NS_CustLedgEntryRetention."Remaining Amt. (LCY)");
-            //PRJCTPR-220.DK.1.0 06NOV2023 End
+                NS_CustLedgEntryRetention.CALCFIELDS(Amount);
+                CalcValues[3, 1] += ABS(NS_CustLedgEntryRetention.Amount);
             UNTIL NS_CustLedgEntryRetention.NEXT = 0;
 
 
@@ -5469,16 +4423,23 @@ tableextension 14021131 NS_Job extends Job
         //ProjectPro - end
     END;
 
-    PROCEDURE NS_CalculateActualCostToDate(PassedJob: Record 167; VAR ActualCostToDate: ARRAY[3] OF Decimal; PassedSubLevels: Boolean);
+    PROCEDURE NS_CalculateActualCostToDate(PassedJob: Record 167; VAR ActualCostToDate: ARRAY[3] OF Decimal; PassedSubLevels: Boolean; EndDate: Date);
     VAR
         NS_JobLedgerEntry: Record 169;
         NS_YTD: Text[30];
         NS_MTD: Text[30];
+        AccPeriod: Record "Accounting Period";
     BEGIN
         //ProjectPro - start
         NS_MTD := FORMAT(DMY2DATE(1, DATE2DMY(WORKDATE, 2), DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
-        NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
-
+        //FDD101 start
+        //NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
+        AccPeriod.SETRANGE(Closed, FALSE);
+        IF AccPeriod.FINDFIRST THEN BEGIN
+            NS_YTD := FORMAT(AccPeriod."Starting Date") + '..' + FORMAT(EndDate);
+        END ELSE
+            NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(EndDate, 3))) + '..' + FORMAT(EndDate);
+        //FDD101 end
         CLEAR(ActualCostToDate);
         WITH NS_JobLedgerEntry DO BEGIN
             RESET;
@@ -5515,15 +4476,15 @@ tableextension 14021131 NS_Job extends Job
         //ProjectPro - end
     END;
 
-    PROCEDURE CalculateInvoiceBilled(PassedJob: Record 167; VAR InvoiceBilled: ARRAY[3] OF Decimal; PassedSubLevels: Boolean);
+    PROCEDURE CalculateInvoiceBilled(PassedJob: Record 167; VAR InvoiceBilled: ARRAY[3] OF Decimal; PassedSubLevels: Boolean; EndDate: Date);
     VAR
         NS_JobLedgerEntry: Record 169;
         NS_MTD: Text[30];
         NS_YTD: Text[30];
     BEGIN
         //ProjectPro - start
-        NS_MTD := FORMAT(DMY2DATE(1, DATE2DMY(WORKDATE, 2), DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
-        NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
+        NS_MTD := FORMAT(DMY2DATE(1, DATE2DMY(EndDate, 2), DATE2DMY(EndDate, 3))) + '..' + FORMAT(EndDate);
+        NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(EndDate, 3))) + '..' + FORMAT(EndDate);
 
         CLEAR(InvoiceBilled);
         WITH NS_JobLedgerEntry DO BEGIN
@@ -5558,53 +4519,6 @@ tableextension 14021131 NS_Job extends Job
         END;
         //ProjectPro - end
     END;
-    //PRJCTPR-187.PS.1.0 11Sep2023 Start
-    PROCEDURE CalculateInvBilledExcluedSubandChagesOrder(PassedJob: Record 167; VAR InvoiceBilled: ARRAY[3] OF Decimal; PassedSubLevels: Boolean);
-    VAR
-        NS_JobLedgerEntry: Record 169;
-        NS_MTD: Text[30];
-        NS_YTD: Text[30];
-    BEGIN
-        //ProjectPro - start
-        NS_MTD := FORMAT(DMY2DATE(1, DATE2DMY(WORKDATE, 2), DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
-        NS_YTD := FORMAT(DMY2DATE(1, 1, DATE2DMY(WORKDATE, 3))) + '..' + FORMAT(WORKDATE());
-
-        CLEAR(InvoiceBilled);
-        //PRJ-1136.NK.1.0 Start
-        //WITH NS_JobLedgerEntry DO BEGIN
-        NS_JobLedgerEntry.RESET();
-        NS_JobLedgerEntry.SETCURRENTKEY("Job No.", "Entry Type", "Posting Date", Type);
-        NS_JobLedgerEntry.SETRANGE("Job No.", PassedJob."No.");
-        NS_JobLedgerEntry.SETRANGE("Entry Type", NS_JobLedgerEntry."Entry Type"::Sale);
-        NS_JobLedgerEntry.SETRANGE("Posting Date", 0D, WORKDATE);
-        NS_JobLedgerEntry.SETFILTER(Type, '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-        NS_JobLedgerEntry.CALCSUMS("Total Price (LCY)");
-        InvoiceBilled[3] := -NS_JobLedgerEntry."Total Price (LCY)";
-        IF PassedSubLevels THEN
-            InvoiceBilled[3] := InvoiceBilled[3];
-
-        NS_JobLedgerEntry.SETFILTER("Posting Date", NS_YTD);
-        NS_JobLedgerEntry.CALCSUMS("Total Price (LCY)");
-        InvoiceBilled[2] := -NS_JobLedgerEntry."Total Price (LCY)";
-        IF PassedSubLevels THEN BEGIN
-            PassedJob.SETFILTER("NS_Date Filter", NS_YTD);
-            InvoiceBilled[2] := InvoiceBilled[2];
-            PassedJob.SETRANGE("NS_Date Filter");
-        END;
-
-        NS_JobLedgerEntry.SETFILTER("Posting Date", NS_MTD);
-        NS_JobLedgerEntry.CALCSUMS("Total Price (LCY)");
-        InvoiceBilled[1] := -NS_JobLedgerEntry."Total Price (LCY)";
-        IF PassedSubLevels THEN BEGIN
-            PassedJob.SETFILTER("NS_Date Filter", NS_MTD);
-            InvoiceBilled[1] := InvoiceBilled[1];
-            PassedJob.SETRANGE("NS_Date Filter");
-        END;
-
-        //ProjectPro - end
-    END;
-
-    //PRJCTPR-187.PS.1.0 11Sep2023 End 
 
     PROCEDURE GetBillDate(BillDateIn: Date; JobNoIn: Code[20]) BillDate: Date;
     VAR
@@ -5673,7 +4587,10 @@ tableextension 14021131 NS_Job extends Job
         FromQuote := lFromQuote;
     END;
 
-    LOCAL PROCEDURE LoadTasks();
+    // >> Upgrade
+    //LOCAL PROCEDURE LoadTasks();
+    PROCEDURE LoadTasks()
+    // << Upgrade
     BEGIN
         IF NOT DisableLoadTasks THEN BEGIN
             LoadTasksOperation;
@@ -5685,15 +4602,14 @@ tableextension 14021131 NS_Job extends Job
     LOCAL PROCEDURE LoadTasksActivity();
     var//PRJ-199:16APRIL2020
         JobsSetup: Record "Jobs Setup";//PRJ-199:16APRIL2020
-        NS_JobTask: Record "Job Task";    //PRJ-1042.JS.1.0
-        //PRJCTPR-338.DK.1.0 19March Start
-        NS_Job: Record Job;
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Job Task Dimension";
-        SubleveJobNo: Code[20];//  //PRJCTPR-362.PS.1.0 01May2024 
-    //PRJCTPR-338.DK.1.0 19March End
+                                       // >> Upgrade1
+        SeqNo: Integer;
+    // << Upgrade1
     BEGIN
         JobsSetup.Get;//PRJ-199:16APRIL2020
+                      // >> Upgrade1
+        SeqNo := 100; // >> 019 <<
+                      // << Upgrade1
         IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::Default) AND (NOT SkipTasks) THEN BEGIN
             NS_JobActivity.RESET;
             NS_JobActivity.SETCURRENTKEY("NS_Default onto each Job");
@@ -5707,7 +4623,6 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask.Description := NS_JobActivity.NS_Description;
                         NS_JobTask."Job Task Type" := NS_JobActivity."NS_Job Task Type";
                         NS_JobTask.Totaling := NS_JobActivity.NS_Totaling;
-                        NS_JobTask."Job Posting Group" := JobsSetup."Default Job Posting Group"; //PRJ-1437.NK.1.0 09Jun2022
                         NS_JobTask."New Page" := NS_JobActivity."NS_New Page";
                         NS_JobTask."No. of Blank Lines" := NS_JobActivity."NS_No. of Blank Lines";
                         NS_JobTask.Indentation := NS_JobActivity.NS_Indentation;
@@ -5719,33 +4634,16 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask."NS_Gross Profit" := NS_JobActivity."NS_Total Price" - NS_JobActivity."NS_Total Cost";
                         IF FromQuote THEN
                             NS_JobTask."NS_Quote No." := "No.";
-                        //PRJ-1406.GK.1.0 18May2022 start
-                        OnLoadTaskActivityOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobActivity);
-                        //PRJ-1406.GK.1.0 18May2022 end
-                        // //PRJCTPR-362.PS.1.0 01May2024 Start
-                        if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
-                            SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
-                            NS_InsertDimension(SubleveJobNo, NS_JobTask);
-                            if NS_Job.Get(SubleveJobNo) then;
-                            NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                            NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                        end;
+                        OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade <<
 
-
-                        // //PRJCTPR-362.PS.1.0 01May2024 End 
                         NS_JobTask.INSERT;
-
                     END;
                 UNTIL NS_JobActivity.NEXT = 0;
-            NS_JobTask.NS_IndentJobTask(Rec."No.");   //PRJ-1042.JS.1.0  add line
         END ELSE BEGIN
             IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::JobType) AND (NOT SkipTasks) THEN BEGIN
                 NS_JobActivity.RESET;
                 NS_JobActivity.SETCURRENTKEY("NS_DefaultTaskforJobType");
-                //PRJCTPR-197 Dk.1.0 Start
-                //  NS_JobActivity.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type");
-                NS_JobActivity.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type New");
-                //PRJCTPR-197 Dk.1.0 End
+                NS_JobActivity.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type");
                 IF NS_JobActivity.FINDSET THEN
                     REPEAT
                         IF NOT NS_JobTaskCheck.GET("No.", NS_JobActivity.NS_Code) THEN BEGIN
@@ -5755,7 +4653,6 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask.Description := NS_JobActivity.NS_Description;
                             NS_JobTask."Job Task Type" := NS_JobActivity."NS_Job Task Type";
                             NS_JobTask.Totaling := NS_JobActivity.NS_Totaling;
-                            NS_JobTask."Job Posting Group" := JobsSetup."Default Job Posting Group"; //PRJ-1437.NK.1.0 09Jun2022
                             NS_JobTask."New Page" := NS_JobActivity."NS_New Page";
                             NS_JobTask."No. of Blank Lines" := NS_JobActivity."NS_No. of Blank Lines";
                             NS_JobTask.Indentation := NS_JobActivity.NS_Indentation;
@@ -5766,31 +4663,11 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask."NS_Gross Profit" := NS_JobActivity."NS_Total Price" - NS_JobActivity."NS_Total Cost";
                             IF FromQuote THEN
                                 NS_JobTask."NS_Quote No." := "No.";
-                            //PRJ-1406.GK.1.0 18May2022 start
-                            OnLoadTaskActivityOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobActivity);
-                            //PRJ-1406.GK.1.0 18May2022 end
-                            // //PRJCTPR-362.PS.1.0 01May2024 Start
+                            OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade <<
 
-
-                            if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
-                                SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
-                                NS_InsertDimension(SubleveJobNo, NS_JobTask);
-                                if NS_Job.Get(SubleveJobNo) then;
-                                NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                            end;
-
-
-
-
-
-
-                            // //PRJCTPR-362.PS.1.0 01May2024 End 
                             NS_JobTask.INSERT;
-
                         END;
                     UNTIL NS_JobActivity.NEXT = 0;
-                NS_JobTask.NS_IndentJobTask(Rec."No.");   //PRJ-1042.JS.1.0  add line
             END;
         END;
     END;
@@ -5798,12 +4675,6 @@ tableextension 14021131 NS_Job extends Job
     LOCAL PROCEDURE LoadTasksProcess();
     var//PRJ-199:16APRIL2020
         JobsSetup: Record "Jobs Setup";//PRJ-199:16APRIL2020
-                                       //PRJCTPR-338.DK.1.0 19March Start
-        NS_Job: Record Job;
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Job Task Dimension";
-        SubleveJobNo: Code[20];//  //PRJCTPR-362.PS.1.0 01May2024
-    //PRJCTPR-338.DK.1.0 19March End
     BEGIN
         JobsSetup.Get;//PRJ-199:16APRIL2020
         IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::Default) AND (NOT SkipTasks) THEN BEGIN
@@ -5818,10 +4689,6 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask."Job No." := "No.";
                         NS_JobTask."Job Task No." := NS_JobTaskNo;
                         NS_JobTask.Description := NS_JobProcess.NS_Description;
-                        //PRJ-1042.JS.1.0 15Dec21 Start
-                        NS_JobTask."Job Task Type" := NS_JobProcess."NS_Job Task Type";
-                        NS_JobTask.Totaling := NS_JobProcess.NS_Totaling;
-                        //PRJ-1042.JS.1.0 15Dec21 end   
                         IF NS_JobProcess."NS_Total Price" <> 0 THEN BEGIN
                             NS_JobTask."NS_Mark-up" := ROUND(1 - ((NS_JobProcess."NS_Total Price" - NS_JobProcess."NS_Total Cost") / NS_JobProcess."NS_Total Price"), NS_GLSetup."Amount Rounding Precision");
                             NS_JobTask."NS_Gross Profit Percentage" := (1 - (NS_JobProcess."NS_Total Cost" / NS_JobProcess."NS_Total Price")) * 100;
@@ -5829,35 +4696,14 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask."NS_Gross Profit" := NS_JobProcess."NS_Total Price" - NS_JobProcess."NS_Total Cost";
                         IF FromQuote THEN
                             NS_JobTask."NS_Quote No." := "No.";
-                        //PRJ-1406.GK.1.0 18May2022 start
-                        OnLoadTaskProcessOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobProcess);
-                        //PRJ-1406.GK.1.0 18May2022 end
-
-                        // //PRJCTPR-362.PS.1.0 01May2024 Start
-
-                        if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
-                            SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
-                            NS_InsertDimension(SubleveJobNo, NS_JobTask);
-                            if NS_Job.Get(SubleveJobNo) then;
-                            NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                            NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                        end;
-
-                        // //PRJCTPR-362.PS.1.0 01May2024 End 
-
                         NS_JobTask.INSERT;
-
                     END;
                 UNTIL NS_JobProcess.NEXT = 0;
-            NS_JobTask.NS_IndentJobTask(Rec."No.");   //PRJ-1042.JS.1.0  add line
         END ELSE BEGIN
             IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::JobType) AND (NOT SkipTasks) THEN BEGIN
                 NS_JobProcess.RESET;
                 NS_JobProcess.SETCURRENTKEY("NS_DefaultTaskforJobType");
-                //PRJCTPR-197 Dk.1.0 Start
-                // NS_JobProcess.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type");
-                NS_JobProcess.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type New");
-                //PRJCTPR-197 Dk.1.0 End
+                NS_JobProcess.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type");
                 IF NS_JobProcess.FINDSET THEN
                     REPEAT
                         NS_JobTaskNo := APOToJobTaskNo(NS_JobProcess."NS_Activity Code", NS_JobProcess.NS_Code, '', '');//PRJ-688.AM.1.0
@@ -5866,10 +4712,6 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask."Job No." := "No.";
                             NS_JobTask."Job Task No." := NS_JobTaskNo;
                             NS_JobTask.Description := NS_JobProcess.NS_Description;
-                            //PRJ-1042.JS.1.0 15Dec21 Start
-                            NS_JobTask."Job Task Type" := NS_JobProcess."NS_Job Task Type";
-                            NS_JobTask.Totaling := NS_JobProcess.NS_Totaling;
-                            //PRJ-1042.JS.1.0 15Dec21 end   
                             IF NS_JobProcess."NS_Total Price" <> 0 THEN BEGIN
                                 NS_JobTask."NS_Mark-up" := ROUND(1 - ((NS_JobProcess."NS_Total Price" - NS_JobProcess."NS_Total Cost") / NS_JobProcess."NS_Total Price"), NS_GLSetup."Amount Rounding Precision");
                                 NS_JobTask."NS_Gross Profit Percentage" := (1 - (NS_JobProcess."NS_Total Cost" / NS_JobProcess."NS_Total Price")) * 100;
@@ -5877,35 +4719,9 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask."NS_Gross Profit" := NS_JobProcess."NS_Total Price" - NS_JobProcess."NS_Total Cost";
                             IF FromQuote THEN
                                 NS_JobTask."NS_Quote No." := "No.";
-                            //PRJ-1406.GK.1.0 18May2022 start
-                            OnLoadTaskProcessOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobProcess);
-                            //PRJ-1406.GK.1.0 18May2022 end
-                            //PRJCTPR-362.PS.1.0 01May2024 Start
-
-
-                            // //PRJCTPR-362.PS.1.0 01May2024 Start
-                            if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
-                                SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
-                                NS_InsertDimension(SubleveJobNo, NS_JobTask);
-                                if NS_Job.Get(SubleveJobNo) then;
-                                NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                            end;
-                            //Code for Job Quote Dimention Update on Job Task line  Start
-
-                            // if NS_jobQuoteHeader.Get("No.") then;
-                            // //if NS_jobQuoteHeader."NS_Created by Job" <> '' then begin
-                            // NS_InsertDimensionQuotetaskLine(Rec."NS_Sub-Level to Job No.", NS_JobTask);
-                            //end;
-
-
-                            //Code for Job Quote Dimention Update on Job Task line E
-                            // //PRJCTPR-362.PS.1.0 01May2024 End
                             NS_JobTask.INSERT;
-
                         END;
                     UNTIL NS_JobProcess.NEXT = 0;
-                NS_JobTask.NS_IndentJobTask(Rec."No.");   //PRJ-1042.JS.1.0  add line
             END;
         END;
     END;
@@ -5913,12 +4729,6 @@ tableextension 14021131 NS_Job extends Job
     LOCAL PROCEDURE LoadTasksOperation();
     var//PRJ-199:16APRIL2020
         JobsSetup: Record "Jobs Setup";//PRJ-199:16APRIL2020
-                                       //PRJCTPR-338.DK.1.0 19March Start
-        NS_Job: Record Job;
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Job Task Dimension";
-        SubleveJobNo: Code[20];//  //PRJCTPR-362.PS.1.0 01May2024
-    //PRJCTPR-338.DK.1.0 19March End
     BEGIN
         JobsSetup.Get;//PRJ-199:16APRIL2020
         IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::Default) AND (NOT SkipTasks) THEN BEGIN
@@ -5940,31 +4750,14 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask."NS_Gross Profit" := NS_JobOperation."NS_Total Price" - NS_JobOperation."NS_Total Cost";
                         IF FromQuote THEN
                             NS_JobTask."NS_Quote No." := "No.";
-                        //PRJ-1406.GK.1.0 18May2022 start
-                        OnLoadTaskOperationOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobOperation);
-                        //PRJ-1406.GK.1.0 18May2022 end
-                        // //PRJCTPR-362.PS.1.0 01May2024 Start
-                        if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
-                            SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
-                            NS_InsertDimension(SubleveJobNo, NS_JobTask);
-                            if NS_Job.Get(SubleveJobNo) then;
-                            NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                            NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                        end;
-
-                        // //PRJCTPR-362.PS.1.0 01May2024 End 
                         NS_JobTask.INSERT;
-
                     END;
                 UNTIL NS_JobOperation.NEXT = 0;
         END ELSE BEGIN
             IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::JobType) AND (NOT SkipTasks) THEN BEGIN
                 NS_JobOperation.RESET;
                 NS_JobOperation.SETCURRENTKEY("NS_DefaultTaskforJobType");
-                //PRJCTPR-197 DK.1.0 Start
-                // NS_JobOperation.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type");
-                NS_JobOperation.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type New");
-                //PRJCTPR-197 DK.1.0 End
+                NS_JobOperation.SETRANGE("NS_DefaultTaskforJobType", "NS_Job Type");
                 IF NS_JobOperation.FINDSET THEN
                     REPEAT
                         NS_JobTaskNo := APOToJobTaskNo(NS_JobOperation."NS_Activity Code", NS_JobOperation."NS_Process Code", NS_JobOperation.NS_Code, '');//PRJ-688.AM.1.0
@@ -5980,23 +4773,7 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask."NS_Gross Profit" := NS_JobOperation."NS_Total Price" - NS_JobOperation."NS_Total Cost";
                             IF FromQuote THEN
                                 NS_JobTask."NS_Quote No." := "No.";
-                            //PRJ-1406.GK.1.0 18May2022 start
-                            OnLoadTaskOperationOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobOperation);
-                            //PRJ-1406.GK.1.0 18May2022 end
-                            // //PRJCTPR-362.PS.1.0 01May2024 Start
-
-                            if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
-                                SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
-                                NS_InsertDimension(SubleveJobNo, NS_JobTask);
-                                if NS_Job.Get(SubleveJobNo) then;
-                                NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
-                                NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
-                            end;
-
-
-                            // //PRJCTPR-362.PS.1.0 01May2024 End 
                             NS_JobTask.INSERT;
-
                         END;
                     UNTIL NS_JobOperation.NEXT = 0;
             END;
@@ -6012,9 +4789,6 @@ tableextension 14021131 NS_Job extends Job
         TargetSegmentRec: Record "NS_Job Takeoff Segments";//PPAL-171.AM.1.0
         DefaultDimRec: Record "Default Dimension";//ppal-174.AS.1.0 28DEC2020
         DefaultDimRec2: Record "Default Dimension";//ppal-174.AS.1.0 28DEC2020
-        PassJobTask: Record "Job Task";   //PRJ-1015.JS.1.0   12Oct2021
-        NewJobTask: Record "Job Task";   //PRJ-1015.JS.1.0   12Oct2021
-        NewJobs2: Record Job; //PRJ-1015.JS.1.0   12Oct2021
     BEGIN
         JobsSetup.GET;
         WITH NewJob DO BEGIN
@@ -6024,9 +4798,7 @@ tableextension 14021131 NS_Job extends Job
             // "Global Dimension 1 Code" := PassJob."Global Dimension 1 Code";//ppal-174.AS.1.0 28DEC2020 Commented
             // // "Global Dimension 2 Code" := "Global Dimension 2 Code";//ppal-174.AS.1.0 28DEC2020 Commented
             "No. Series" := '';
-            NewJob."NS_Sub-Level to Job No." := PassJob."No."; //PE-120.NC.1.0 26Jun2023
             INSERT(TRUE);
-            NS_CreateMainJobTask(PassJob."No.", NewJob."No."); //PRJ-1286.NK.1.0 05Apr2022
             "Search Description" := PassJob."Search Description";
             Description := PassJob.Description;
             "Description 2" := PassJob."Description 2";
@@ -6061,13 +4833,6 @@ tableextension 14021131 NS_Job extends Job
             "NS_Sell-to Customer No." := PassJob."NS_Sell-to Customer No.";
             "NS_Sell-to Customer Name" := PassJob."NS_Sell-to Customer Name";
             //PRJ-214:AS:09APRIL2020 - END
-            //PRJCTPR-200.NC.1.0 29SEP2023 Start
-            NewJob."Sell-to Customer No." := PassJob."Sell-to Customer No.";
-            NewJob."Sell-to Customer Name" := PassJob."Sell-to Customer Name";
-            //PRJCTPR-200.NC.1.0 29SEP2023 End
-            //NewJob.Validate("Sell-to Customer No.", PassJob."Sell-to Customer No."); //PRJCTPR-338.PS.2.0 17April2024 Commented
-            NewJob."Sell-to Customer No." := PassJob."Sell-to Customer No."; //PRJCTPR-338.PS.2.0 17April2024 Removed validation 
-            NewJob."Sell-to Customer Name" := PassJob."Sell-to Customer Name";
             //PRJ-464.AM.1.0 start
             "NS_Salesperson Code" := PassJob."NS_Salesperson Code";
             //"NS_Gen. Bus. Posting Group" := PassJob."NS_Gen. Bus. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
@@ -6092,11 +4857,7 @@ tableextension 14021131 NS_Job extends Job
             "NS_Job Ship-to Code" := PassJob."NS_Job Ship-to Code";
             "NS_Temp Linked Parent Job No." := PassJob."NS_Temp Linked Parent Job No.";
             "NS_Last Job For Job List" := PassJob."NS_Last Job For Job List";
-
-            // PRJCTPR-197 Dk.1.0 Start
-            // "NS_Job Type" := PassJob."NS_Job Type";
-            "NS_Job Type New" := PassJob."NS_Job Type New";
-            // PRJCTPR-197 Dk.1.0 End
+            "NS_Job Type" := PassJob."NS_Job Type";
             NS_Estimator := PassJob.NS_Estimator;
             NS_Manager := PassJob.NS_Manager;
             "NS_Manager Job Status" := PassJob."NS_Manager Job Status";
@@ -6113,7 +4874,7 @@ tableextension 14021131 NS_Job extends Job
             "NS_Default Job Retention" := PassJob."NS_Default Job Retention";
             "NS_Tax Area Code" := PassJob."NS_Tax Area Code";
             "NS_Tax Liable" := PassJob."NS_Tax Liable";
-            "NS_Tax Group Code New" := PassJob."NS_Tax Group Code New";
+            "NS_Tax Group Code" := PassJob."NS_Tax Group Code";
             "NS_VAT Bus. Posting Group" := PassJob."NS_VAT Bus. Posting Group";
             "NS_VAT Prod. Posting Group" := PassJob."NS_VAT Prod. Posting Group";
             "NS_Actual Percent Complete" := 0;
@@ -6121,23 +4882,15 @@ tableextension 14021131 NS_Job extends Job
             "NS_Actual Units Complete" := 0;
             "NS_Actual Units Complete Date" := 0D;
             "NS_Job Revenue Posting" := PassJob."NS_Job Revenue Posting";
-            // NewJob."NS_Progress Billing No." := PassJob."NS_Progress Billing No.";//PRJ-1285.RM.1.0 commented
+            "NS_Progress Billing No." := PassJob."NS_Progress Billing No.";
             "NS_Progress Billing Sub-Level" := PassJob."NS_Progress Billing Sub-Level";
             "NS_Customer Job No." := PassJob."NS_Customer Job No.";
             "NS_Customer PO Number" := '';
             "NS_Contract No." := PassJob."NS_Contract No.";
             "NS_Contract Date" := PassJob."NS_Contract Date";
             "NS_Contract For" := PassJob."NS_Contract For";
-            //NewJob."NS_Sub-Level to Job No." := PassJob."No."; //PE-120.NC.1.0 26Jun2023 Block
+            "NS_Sub-Level to Job No." := PassJob."No.";
             "NS_Job Class" := "NS_Job Class"::"Change Order";
-            NewJob."NS_Job Purchaser" := PassJob."NS_Job Purchaser"; //PRJ-1380.NK.1.0 12May2022
-
-            //PRJ-1015.JS.1.0  12Oct2021 - Start
-            if PassJob."NS_Job Class" = PassJob."NS_Job Class"::"Master Job" then
-                NewJob."NS_Root Job No." := PassJob."No."
-            else
-                NewJob."NS_Root Job No." := PassJob."NS_Root Job No.";
-            //PRJ-1015.JS.1.0  12Oct2021 - Start    
 
             //ppal-174.AS.1.0 28DEC2020 start
             DefaultDimRec.Reset;
@@ -6180,125 +4933,22 @@ tableextension 14021131 NS_Job extends Job
         //Segment List Flow End
         //PPAL-171.AM.1.0  End
 
-        //PRJ-1015.JS.1.0  12Oct2021 - Start
-        if NewJobs2.get(NewJob."NS_Root Job No.") then begin
-            if NewJobs2."NS_Include Sub Levels" = true then begin
-                PassJobTask.Reset();
-                PassJobTask.SetRange("Job No.", NewJobs2."No.");
-                if PassJobTask.FindFirst() then
-                    repeat
-                        //PRJCTPR-289.HS.1.0 16Jan2024 Start
-                        NewJobTask.Reset();
-                        NewJobTask.SetRange("Job No.", NewJob."No.");
-                        NewJobTask.SetRange("Job Task No.", PassJobTask."Job Task No.");
-                        if not NewJobTask.FindFirst() then begin
-                            //PRJCTPR-289.HS.1.0 16Jan2024 End
-                            NewJobTask.Init();
-                            //NewJobTask.TransferFields(PassJobTask);
-                            NewJobTask."Job No." := NewJob."No.";
-                            NewJobTask.Validate("Job Task No.", PassJobTask."Job Task No.");
-                            NewJobTask."Job Task Type" := PassJobTask."Job Task Type"; //PRJCTPR-289.HS.1.0 14FEB2024
-                            NewJobTask.Insert();
-                        end;
-                    until PassJobTask.Next() = 0;
-            end;
-        end;
-        //PRJ-1015.JS.1.0  12Oct2021 - end      
-
         IF CONFIRM('Job No. ' + NewJob."No." + ' has been created. Go to new Job?') THEN BEGIN
             JobPage.SETRECORD(NewJob);
             JobPage.RUN;
         END;
     END;
-    //PRJ-1286.NK.1.0 05Apr2022 Start
-    local procedure NS_CreateMainJobTask(OldJobNo: Code[20]; NewJobNo: Code[20])
-    var
-        jobTast: Record "Job Task";
-        OldJobTast: Record "Job Task";
-        //PRJCTPR-338.DK.2.0 19March Start
-        NS_Job: Record Job;
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Job Task Dimension";
-    //PRJCTPR-338.DK.2.0 19March End
-    begin
-        if not Rec."NS_Include Sub Levels" then begin
-            jobTast.Reset();
-            jobTast.SetRange("Job No.", NewJobNo);
-            if jobTast.IsEmpty() then begin
-                if Confirm('Do you wish to use Master Job Tasks?', false) then begin
-                    OldJobTast.Reset();
-                    OldJobTast.SetRange("Job No.", OldJobNo);
-                    if OldJobTast.FindFirst() then
-                        repeat
-                            jobTast.Init();
-                            jobTast.TransferFields(OldJobTast);
-                            jobTast."Job No." := NewJobNo;
-                            //PRJCTPR-338.DK.2.0 19March Start
-                            DefaultDimRec.Reset();
-                            DefaultDimRec.SetRange("Table ID", 167);
-                            DefaultDimRec.SetRange("No.", OldJobNo);
-                            if DefaultDimRec.FindSet() then
-                                repeat
-                                    DefaultDimRec2.Init();
-                                    DefaultDimRec2."Job No." := jobTast."Job No.";
-                                    DefaultDimRec2."Job Task No." := jobTast."Job Task No.";
-                                    DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                                    DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
-                                    DefaultDimRec2.Insert();
-                                until DefaultDimRec.Next() = 0;
-                            //PRJCTPR-338.DK.2.0 19March End
-                            jobTast.Insert();
-                        until OldJobTast.Next() = 0;
-                end;
-            end;
-        end;
-        //PRJCTPR-289.HS.1.0 14FEB2024 - start
-        if Rec."NS_Include Sub Levels" = true then begin
-            jobTast.Reset();
-            jobTast.SetRange("Job No.", NewJobNo);
-            if jobTast.IsEmpty() then begin
-                if Confirm('Do you wish to use Master Job Tasks?', false) then begin
-                    OldJobTast.Reset();
-                    OldJobTast.SetRange("Job No.", OldJobNo);
-                    if OldJobTast.FindFirst() then
-                        repeat
-                            jobTast.Init();
-                            jobTast.TransferFields(OldJobTast);
-                            jobTast."Job No." := NewJobNo;
-                            jobTast.Insert();
-                        until OldJobTast.Next() = 0;
-                end;
-            end;
-        end;
-        //PRJCTPR-289.HS.1.0 14FEB2024 - end
-    end;
-    //PRJ-1286.NK.1.0 05Apr2022 End
 
     LOCAL PROCEDURE GetNextChangeOrderNo(PassJobNo: Code[20]; PassJobSeparator: Text[10]): Code[20];
     VAR
         JobRec: Record 167;
-        NS_JobSetup: Record "Jobs Setup";     //PE-246.HS.1.0 1Feb2024 
     BEGIN
-        if NS_JobSetup.Get() then;    //PE-246.HS.1.0 1Feb2024 
-        if (NS_JobSetup."NS_Change Ordr NumberingFormat" = '') then begin   //PE-246.HS.1.0 1Feb2024 
-            JobRec.RESET;
-            Job.SETFILTER("No.", '%1', PassJobNo + PassJobSeparator + '*');
-            IF Job.FINDLAST THEN BEGIN
-                EXIT(INCSTR(Job."No."));
-            END ELSE
-                EXIT(PassJobNo + PassJobSeparator + '001');
-        end    //PE-246.HS.1.0 1Feb2024 
-        else
-            //PE-246.HS.1.0 1Feb2024 Start
-            begin
-            Job.Reset();
-            Job.SETFILTER("No.", '%1', PassJobNo + PassJobSeparator + '*');
-            IF Job.FindLast() THEN Begin
-                EXIT(INCSTR(Job."No."));
-            end ELSE
-                EXIT(PassJobNo + PassJobSeparator + NS_JobSetup."NS_Change Ordr NumberingFormat");
-        end;
-        //PE-246.HS.1.0 1Feb2024 End
+        JobRec.RESET;
+        Job.SETFILTER("No.", '%1', PassJobNo + PassJobSeparator + '*');
+        IF Job.FINDLAST THEN BEGIN
+            EXIT(INCSTR(Job."No."));
+        END ELSE
+            EXIT(PassJobNo + PassJobSeparator + '001');
     END;
 
     PROCEDURE CreateWorkOrder(PassJob: Record 167);
@@ -6306,14 +4956,9 @@ tableextension 14021131 NS_Job extends Job
         JobsSetup: Record 315;
         NewJob: Record 167;
         JobPage: Page 88;
-        NoSeriesMgt: Codeunit NoSeriesManagement;
+        NoSeriesMgt: Codeunit NoSeriesManagementGlo;
         SegmentsRec: Record "NS_Job Takeoff Segments"; //PPAL-171.AM.1.0 
         TargetSegmentRec: Record "NS_Job Takeoff Segments";//PPAL-171.AM.1.0 
-        PassJobTask: Record "Job Task";   //PRJ-1015.JS.1.0   12Oct2021
-        NewJobTask: Record "Job Task";   //PRJ-1015.JS.1.0   12Oct2021
-        NewJobs2: Record Job; //PRJ-1015.JS.1.0   12Oct2021 
-        DefaultDimRec: Record "Default Dimension";//PRJCTPR-362.PS.1.0 2024
-        DefaultDimRec2: Record "Default Dimension";//PRJCTPR-362.PS.1.0 2024
 
     BEGIN
 
@@ -6325,8 +4970,8 @@ tableextension 14021131 NS_Job extends Job
             NoSeriesMgt.InitSeries(JobsSetup."NS_Work Order No. Series", xRec."No. Series", 0D, "No.", "No. Series");
             //"No." := GetNextChangeOrderNo(PassJob."No.",JobsSetup."Change Order No. Separator");
             "No. Series" := '';
-
-            NewJob."NS_Sub-Level to Job No." := PassJob."No."; //PRJCTPR-362.PS.1.0 15May2024
+            "Global Dimension 1 Code" := PassJob."Global Dimension 1 Code";
+            "Global Dimension 2 Code" := "Global Dimension 2 Code";
             INSERT(TRUE);
             "Search Description" := PassJob."Search Description";
             Description := PassJob.Description;
@@ -6337,8 +4982,8 @@ tableextension 14021131 NS_Job extends Job
             "Ending Date" := 0D;
             Status := Status::Planning;
             "Person Responsible" := PassJob."Person Responsible";
-            // VALIDATE("Global Dimension 1 Code"); //PRJCTPR-362.PS.1.0 Commented
-            // VALIDATE("Global Dimension 2 Code"); //PRJCTPR-362.PS.1.0 Commented
+            VALIDATE("Global Dimension 1 Code");
+            VALIDATE("Global Dimension 2 Code");
             "Job Posting Group" := PassJob."Job Posting Group";
             Blocked := Blocked::" ";
             "Customer Disc. Group" := PassJob."Customer Disc. Group";
@@ -6373,16 +5018,11 @@ tableextension 14021131 NS_Job extends Job
             "NS_Job Ship-to Code" := PassJob."NS_Job Ship-to Code";
             "NS_Temp Linked Parent Job No." := PassJob."NS_Temp Linked Parent Job No.";
             "NS_Last Job For Job List" := PassJob."NS_Last Job For Job List";
-            NewJob."Global Dimension 1 Code" := PassJob."Global Dimension 1 Code"; //PRJCTPR-362.PS.1.0 31May2024
-            NewJob."Global Dimension 2 Code" := PassJob."Global Dimension 2 Code"; //PRJCTPR-362.PS.1.0 31May2024
-            //PRJCTPR-197 Dk.1.0 Start
-            // NewJob."NS_Job Type" := PassJob."NS_Job Type";
-            NewJob."NS_Job Type New" := PassJob."NS_Job Type New";
-            //PRJCTPR-197 Dk.1.0 End
+            "NS_Job Type" := PassJob."NS_Job Type";
             NS_Estimator := PassJob.NS_Estimator;
             NS_Manager := PassJob.NS_Manager;
             //"Manager Job Status" := PassJob."Manager Job Status";
-            "NS_Manager Job Status" := "NS_Manager Job Status"::Running;
+            "NS_Manager Job Status" := "NS_Manager Job Status"::Handover;
             //PRJ-464.AM.1.0 start
             "NS_Salesperson Code" := PassJob."NS_Salesperson Code";
             //"NS_Gen. Bus. Posting Group" := PassJob."NS_Gen. Bus. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
@@ -6403,7 +5043,7 @@ tableextension 14021131 NS_Job extends Job
             "NS_Default Job Retention" := PassJob."NS_Default Job Retention";
             "NS_Tax Area Code" := PassJob."NS_Tax Area Code";
             "NS_Tax Liable" := PassJob."NS_Tax Liable";
-            "NS_Tax Group Code New" := PassJob."NS_Tax Group Code New";
+            "NS_Tax Group Code" := PassJob."NS_Tax Group Code";
             "NS_VAT Bus. Posting Group" := PassJob."NS_VAT Bus. Posting Group";
             "NS_VAT Prod. Posting Group" := PassJob."NS_VAT Prod. Posting Group";
             "NS_Actual Percent Complete" := 0;
@@ -6420,19 +5060,6 @@ tableextension 14021131 NS_Job extends Job
             "NS_Contract For" := PassJob."NS_Contract For";
             "NS_Sub-Level to Job No." := PassJob."No.";
             "NS_Job Class" := "NS_Job Class"::"Work Order";
-            //PRJCTPR-200.NC.1.0 04Oct2023 Start
-            NewJob."NS_Sell-to Customer No." := PassJob."NS_Sell-to Customer No.";
-            NewJob."NS_Sell-to Customer Name" := PassJob."NS_Sell-to Customer Name";
-            NewJob.Validate("Sell-to Customer No.", PassJob."Sell-to Customer No.");
-            NewJob."Sell-to Customer Name" := PassJob."Sell-to Customer Name";
-            //PRJCTPR-200.NC.1.0 04Oct2023 End
-            NewJob."NS_Job Purchaser" := PassJob."NS_Job Purchaser"; //PRJ-1380.NK.1.0 12May2022
-            //PRJ-1015.JS.1.0  12Oct2021 - Start
-            if PassJob."NS_Job Class" = PassJob."NS_Job Class"::"Master Job" then
-                NewJob."NS_Root Job No." := PassJob."No."
-            else
-                NewJob."NS_Root Job No." := PassJob."NS_Root Job No.";
-            //PRJ-1015.JS.1.0  12Oct2021 - Start
             MODIFY;
             CopyCostPricing(NewJob, PassJob);
         END;
@@ -6459,240 +5086,11 @@ tableextension 14021131 NS_Job extends Job
 
         //Segment List Flow End
         // PPAL-171.AM.1.0  End
-        //PRJCTPR-362.PS.1.0 2024 Start
-
-        DefaultDimRec.Reset();
-        DefaultDimRec.SetRange("Table ID", 167);
-        DefaultDimRec.SetRange("No.", PassJob."No.");
-        if DefaultDimRec.FindSet() then
-            repeat
-                DefaultDimRec2.Init();
-                DefaultDimRec2."Table ID" := 167;
-                DefaultDimRec2."No." := NewJob."No.";
-                DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
-                DefaultDimRec2.Insert();
-            until DefaultDimRec.Next() = 0;
-
-        //PRJCTPR-362.PS.1.0 2024 End 
-
-        //PRJ-1015.JS.1.0  12Oct2021 - Start
-        if NewJobs2.get(NewJob."NS_Root Job No.") then begin
-            if NewJobs2."NS_Include Sub Levels" = true then begin
-                PassJobTask.Reset();
-                PassJobTask.SetRange("Job No.", NewJobs2."No.");
-                if PassJobTask.FindFirst() then
-                    repeat
-                        NewJobTask.Init();
-                        //NewJobTask.TransferFields(PassJobTask);
-                        NewJobTask."Job No." := NewJob."No.";
-                        NewJobTask."Job Task No." := PassJobTask."Job Task No.";//PRJCTPR-362.PS.1.0 15May2024
-                        NewJobTask."Job Task Type" := PassJobTask."Job Task Type"; //PRJCTPR-289.HS.1.0 14FEB2024
-                        NewJobTask.Insert()
-                    until PassJobTask.Next() = 0;
-            end;
-        end;
-        //PRJ-1015.JS.1.0  12Oct2021 - end   
-
         IF CONFIRM('Job No. ' + NewJob."No." + ' has been created. Go to new Job?') THEN BEGIN
             JobPage.SETRECORD(NewJob);
             JobPage.RUN;
         END;
     END;
-
-    //PRJ-914.AS.1.0 20OCT2021 START
-    PROCEDURE NS_CreateChangeOrderQuoatation(PassJob: Record 167);
-    VAR
-        JobsSetup: Record 315;
-        NewJob: Record "NS_Job Quote Header";
-        JobPage: Page "NS_Job Quote";
-        SegmentsRec: Record "NS_Job Takeoff Segments";
-        TargetSegmentRec: Record "NS_Job Takeoff Segments";
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Default Dimension";
-        NSMgmtCU: Codeunit NoSeriesManagement;
-        JobForecasttable: Record "NS_Job Forecast";
-    BEGIN
-        JobsSetup.GET;
-
-        NewJob.INIT;
-        NewJob."NS_Quote No." := NSMgmtCU.GetNextNo(JobsSetup."NS_Job Quote No. Series", WORKDATE, true);
-        NewJob.Validate("NS_Quote No.");
-        NewJob.INSERT(TRUE);
-        NewJob."NS_Created by Job" := PassJob."No.";
-        NewJob.Validate("NS_Sell-to Customer No.", PassJob."NS_Sell-to Customer No.");
-        NewJob."NS_Sell-to Customer Name" := PassJob."NS_Sell-to Customer Name";
-        NewJob."NS_Shortcut Dimension 1 Code" := PassJob."Global Dimension 1 Code";
-        NewJob."NS_Shortcut Dimension 2 Code" := PassJob."Global Dimension 2 Code";
-        //NewJob.Validate("NS_Job No.", NewJob."NS_Quote No.");//temp
-        NewJob."NS_Job Description" := PassJob.Description;
-        NewJob."NS_Description/Nickname" := PassJob.Description;
-
-        NewJob."NS_Created at Date" := TODAY;
-        NewJob."NS_Estimated Start Date" := 0D;
-
-        //PE-300.Dk.1.0  29May2024 Start
-        //NewJob.NS_Status := NewJob.NS_Status::Open;
-        NewJob."NS_Quote Status" := NewJob."NS_Quote Status"::Open;
-        //PE-300.Dk.1.0  29May2024 End
-
-        NewJob."NS_Job Posting Group New" := PassJob."Job Posting Group";
-        NewJob."NS_Job Post Code" := PassJob."NS_Job Post Code";
-        NewJob."NS_VAT Bus. Posting Group" := PassJob."NS_VAT Bus. Posting Group";
-        NewJob."NS_VAT Prod. Posting Group" := PassJob."NS_VAT Prod. Posting Group";
-
-        NewJob."NS_Use Tax %" := PassJob."NS_Use Tax Percentage";
-
-        NewJob.Validate("NS_Bill-to Customer No.", PassJob."Bill-to Customer No.");
-        NewJob."NS_Bill-to Customer Name" := PassJob."Bill-to Name";
-        NewJob."NS_Bill-to Customer Name" := PassJob."Bill-to Address";
-        NewJob."NS_Bill-to Address 2" := PassJob."Bill-to Address 2";
-        NewJob."NS_Bill-to City" := PassJob."Bill-to City";
-        NewJob."NS_Bill-to County" := PassJob."Bill-to County";
-        NewJob."NS_Bill-to Post Code" := PassJob."Bill-to Post Code";
-
-        NewJob."NS_Bill-to Country/Region Code" := PassJob."Bill-to Country/Region Code";
-        NewJob."NS_Bill-to Name 2" := PassJob."Bill-to Name 2";
-
-        NewJob."NS_Bill-to Contact No." := PassJob."Bill-to Contact No.";
-        NewJob.validate("NS_Salesperson Code New", PassJob."NS_Salesperson Code");
-
-
-        NewJob."NS_Job Address 1" := PassJob."NS_Job Address 1";
-        NewJob."NS_Job Address 2" := PassJob."NS_Job Address 2";
-        NewJob."NS_Job City" := PassJob."NS_Job City";
-        NewJob."NS_Job County" := PassJob."NS_Job County";
-        NewJob."NS_Job Post Code" := PassJob."NS_Job Post Code";
-        NewJob."NS_Job Country/Region Code" := PassJob."NS_Job Country/Region Code";
-
-        NewJob."NS_Job Ship-to Code" := PassJob."NS_Job Ship-to Code";
-        NewJob."NS_Estimator No." := PassJob.NS_Estimator;
-        NewJob."NS_Estimated Start Date" := PassJob."NS_Estimated Start Date";
-        NewJob."NS_Estimated Completion Date" := PassJob."NS_Estimated Completion Date";
-
-        NewJob."NS_Project Manager No." := PassJob."NS_Project Manager No.";
-        NewJob."NS_Project Manager Name" := PassJob."NS_Project Manager Name";
-
-        NewJob."NS_Estimated Start Date" := 0D;
-        NewJob."NS_Estimated Completion Date" := 0D;
-        NewJob."NS_Proposal Date" := PassJob."NS_Job Posting Date";
-
-
-        NewJob."NS_Total Contract Price" := 0;
-
-        NewJob."NS_Tax Group Code" := PassJob."NS_Tax Group Code New";
-        NewJob."NS_Tax Area Code" := PassJob."NS_Tax Area Code";
-        NewJob."NS_Tax Liable" := PassJob."NS_Tax Liable";
-        NewJob."NS_Tax Group Code" := PassJob."NS_Tax Group Code New";
-        NewJob."NS_VAT Bus. Posting Group" := PassJob."NS_VAT Bus. Posting Group";
-        NewJob."NS_VAT Prod. Posting Group" := PassJob."NS_VAT Prod. Posting Group";
-
-        NewJob."NS_General Contractor No." := PassJob."NS_Contract No.";
-        NewJob."NS_General Contractor Name" := PassJob."NS_General Contractor Name";
-        NewJob."NS_Use Tax- Contract Type" := PassJob."NS_Contract Type";
-        NewJob."NS_Use Tax- Contractor Status" := PassJob."NS_Contract Type";
-        NewJob."NS_Owner No." := PassJob."NS_Owner No.";
-        NewJob."NS_Owner Name" := PassJob."NS_Owner Name";
-        NewJob."NS_Architect/Engineer No." := PassJob."NS_Architect/Engineer No.";
-        NewJob."NS_Architect/Engineer Name" := PassJob."NS_Architect/Engineer Name";
-
-        NewJob."NS_Sub-Level to Job No." := PassJob."No.";
-        "NewJob"."NS_Job Class" := "NewJob"."NS_Job Class"::"Change Order";
-        NewJob."NS_Payment Terms Code" := PassJob."NS_Prepmt. Payment Terms Code";
-
-
-        //NS_CopyMasterJobTasksToJobChangeOrderQuote(PassJob, NewJob);//PRJ-914.AS.1.0 Commented for Now
-        //NS_CopyMasterJPLToJobChangeOrderQuote(PassJob, NewJob);//PRJ-914.AS.1.0 commented for Now
-        NewJob.Modify(TRUE);
-
-        // JobForecasttable.reset;
-        // JobForecasttable.SetRange("NS_Job No.", NewJob."NS_Quote No.");
-        // JobForecasttable.DeleteAll();
-
-        //PRJ-1191.AS.1.0 start
-        DefaultDimRec.Reset;
-        DefaultDimRec.SetRange("Table ID", 167);
-        DefaultDimRec.SetRange("No.", PassJob."No.");
-        if DefaultDimRec.FindSet then
-            repeat
-                DefaultDimRec2.Init;
-                //DefaultDimRec2."Table ID" := 14021405;//PRJ-1191.AS.1.0 Commented
-                DefaultDimRec2."Table ID" := 14021402;//PRJ-1191.AS.1.0 Added
-                DefaultDimRec2."No." := NewJob."NS_Quote No.";
-                DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";//PRJ-1191.AS.2.0 Added 02MAR2022
-                DefaultDimRec2."Value Posting" := DefaultDimRec."Value Posting";
-                DefaultDimRec2.Insert;
-            until DefaultDimRec.Next = 0;
-        //PRJ-1191.AS.1.0 end
-
-        // SegmentsRec.Reset();
-        // SegmentsRec.SetRange("NS_Job No.", PassJob."No.");
-        // if SegmentsRec.FindSet() then
-        //     repeat
-        //         TargetSegmentRec.Init();
-        //         TargetSegmentRec.validate("NS_Job No.", NewJob."NS_Quote No.");
-        //         TargetSegmentRec."NS_Segment Code" := SegmentsRec."NS_Segment Code";
-        //         TargetSegmentRec.NS_Type := SegmentsRec.NS_Type;
-        //         TargetSegmentRec."NS_Size of Weld" := SegmentsRec."NS_Size of Weld";
-        //         TargetSegmentRec."NS_Segment Name" := SegmentsRec."NS_Segment Name";
-        //         TargetSegmentRec."NS_Segment Description" := SegmentsRec."NS_Segment Description";
-        //         TargetSegmentRec."NS_Billing Type" := SegmentsRec."NS_Billing Type";
-        //         TargetSegmentRec."NS_Unit of Measure Code" := SegmentsRec."NS_Unit of Measure Code";
-        //         TargetSegmentRec.validate("NS_Estimated Quantity", SegmentsRec."NS_Estimated Quantity");
-        //         TargetSegmentRec.Validate("NS_Unit Rate", SegmentsRec."NS_Unit Rate");
-        //         TargetSegmentRec.Validate("NS_Total Cost", SegmentsRec."NS_Total Cost");
-        //         TargetSegmentRec.Insert();
-        //     until SegmentsRec.Next() = 0;
-
-
-
-        IF CONFIRM('Job Quote No. ' + NewJob."NS_Quote No." + ' has been created. Go to new Job Quote?') THEN BEGIN
-            JobPage.SETRECORD(NewJob);
-            JobPage.RUN;
-        END;
-    END;
-    //PRJ-914.AS.1.0 20OCT2021 END
-
-
-    //PRJ-914.AS.1.0 - START
-    local procedure NS_CopyMasterJobTasksToJobChangeOrderQuote(Masterjob: Record Job; NewQuote: Record "NS_Job Quote Header");
-    var
-        QuoteJobTask: Record "Job Task";
-        JobTask: Record "Job Task";
-    begin
-        //*Code to copy Master Job Task lines to Change order Quote tasks*//
-        QuoteJobTask.SETRANGE("Job No.", Masterjob."No.");
-        if QuoteJobTask.FINDSET(true, true) then
-            repeat
-                JobTask.INIT;
-                //JobTask := QuoteJobTask;
-                JobTask."Job No." := NewQuote."NS_Quote No.";
-                JobTask."NS_Quote No." := NewQuote."NS_Quote No.";
-                if not JobTask.INSERT then
-                    JobTask.MODIFY;
-            until QuoteJobTask.NEXT = 0;
-    end;
-    //PRJ-914.AS.1.0 - END
-
-
-    //PRJ-914.AS.1.0 - START
-    local procedure NS_CopyMasterJPLToJobChangeOrderQuote(Masterjob: Record Job; NewQuote: Record "NS_Job Quote Header");
-    var
-        //*Code to copy Master Job Planning lines to Change order Quote Job planning lines*//
-        QuoteJPL: Record "Job Planning Line";
-        JPL: Record "Job Planning Line";
-    begin
-        QuoteJPL.SETRANGE("Job No.", Masterjob."No.");
-        if QuoteJPL.FINDSET(true, true) then
-            repeat
-                JPL.INIT;
-                JPL := QuoteJPL;
-                JPL."Job No." := NewQuote."NS_Quote No.";
-                JPL.INSERT();
-            until QuoteJPL.NEXT = 0;
-    end;
-    //PRJ-914.AS.1.0 - END
 
     LOCAL PROCEDURE CopyCostPricing(NewJob: Record 167; OldJob: Record 167);
     VAR
@@ -6790,153 +5188,8 @@ tableextension 14021131 NS_Job extends Job
             SETRANGE("Job No.", JobNoToCopy);
             IF FINDFIRST THEN BEGIN
                 REPEAT
-                    //NS_LockedJobPlanningLine.TRANSFERFIELDS(NS_JobPlanningLine);//PRJ-1053.AS.1.0 Commented transferfield code
-
-                    //PRJ-1053.AS.1.0 - started
-                    NS_LockedJobPlanningLine.Init();
-                    NS_LockedJobPlanningLine."NS_Line No." := NS_JobPlanningLine."Line No.";
-                    NS_LockedJobPlanningLine."NS_Job No." := NS_JobPlanningLine."Job No.";
-                    NS_LockedJobPlanningLine."NS_Planning Date" := NS_JobPlanningLine."Planning Date";
-                    NS_LockedJobPlanningLine."NS_Document No." := NS_JobPlanningLine."Document No.";
-                    NS_LockedJobPlanningLine.NS_Type := NS_JobPlanningLine.Type;
-                    NS_LockedJobPlanningLine."NS_No." := NS_JobPlanningLine."No.";
-                    //NS_LockedJobPlanningLine.NS_Description := NS_JobPlanningLine.Description; //PRJ-1420.NK.1.0 30May2022 Block
-                    NS_LockedJobPlanningLine.NS_DescriptionNew := NS_JobPlanningLine.Description; //PRJ-1420.NK.1.0 30May2022
-                    NS_LockedJobPlanningLine.NS_Quantity := NS_JobPlanningLine.Quantity;
-                    NS_LockedJobPlanningLine."NS_Direct Unit Cost (LCY)" := NS_JobPlanningLine."Direct Unit Cost (LCY)";
-                    NS_LockedJobPlanningLine."NS_Unit Cost (LCY)" := NS_JobPlanningLine."Unit Cost (LCY)";
-                    NS_LockedJobPlanningLine."NS_Total Cost (LCY)" := NS_JobPlanningLine."Total Cost (LCY)";
-                    NS_LockedJobPlanningLine."NS_Unit Price (LCY)" := NS_JobPlanningLine."Unit Price (LCY)";
-                    NS_LockedJobPlanningLine."NS_Total Price (LCY)" := NS_JobPlanningLine."Total Price (LCY)";
-                    NS_LockedJobPlanningLine."NS_Resource Group No." := NS_JobPlanningLine."Resource Group No.";
-                    NS_LockedJobPlanningLine."NS_Unit of Measure Code" := NS_JobPlanningLine."Unit of Measure Code";
-                    NS_LockedJobPlanningLine."NS_Location Code" := NS_JobPlanningLine."Location Code";
-                    NS_LockedJobPlanningLine."NS_Last Date Modified" := NS_JobPlanningLine."Last Date Modified";
-                    NS_LockedJobPlanningLine."NS_User ID" := NS_JobPlanningLine."User ID";
-                    NS_LockedJobPlanningLine."NS_Work Type Code" := NS_JobPlanningLine."Work Type Code";
-                    NS_LockedJobPlanningLine."NS_Customer Price Group" := NS_JobPlanningLine."Customer Price Group";
-                    NS_LockedJobPlanningLine."NS_Country/Region Code" := NS_JobPlanningLine."Country/Region Code";
-                    NS_LockedJobPlanningLine."NS_Gen. Bus. Posting Group New" := NS_JobPlanningLine."Gen. Bus. Posting Group";
-                    NS_LockedJobPlanningLine."NS_Gen. Prod. Posting Group New" := NS_JobPlanningLine."Gen. Prod. Posting Group";
-                    NS_LockedJobPlanningLine."NS_Document Date" := NS_JobPlanningLine."Document Date";
-                    NS_LockedJobPlanningLine."NS_Job Task No." := NS_JobPlanningLine."Job Task No.";
-                    NS_LockedJobPlanningLine."NS_Line Amount (LCY)" := NS_JobPlanningLine."Line Amount (LCY)";
-                    NS_LockedJobPlanningLine."NS_Unit Cost" := NS_JobPlanningLine."Unit Cost";
-                    NS_LockedJobPlanningLine."NS_Total Cost" := NS_JobPlanningLine."Total Cost";
-                    NS_LockedJobPlanningLine."NS_Unit Price" := NS_JobPlanningLine."Unit Price";
-                    NS_LockedJobPlanningLine."NS_Total Price" := NS_JobPlanningLine."Total Price";
-                    NS_LockedJobPlanningLine."NS_Line Amount" := NS_JobPlanningLine."Line Amount";
-                    NS_LockedJobPlanningLine."NS_Line Discount Amount" := NS_JobPlanningLine."Line Discount Amount";
-                    NS_LockedJobPlanningLine."NS_Line Discount Amount (LCY)" := NS_JobPlanningLine."Line Discount Amount (LCY)";
-                    NS_LockedJobPlanningLine."NS_Cost Factor" := NS_JobPlanningLine."Cost Factor";
-                    NS_LockedJobPlanningLine."NS_Serial No." := NS_JobPlanningLine."Serial No.";
-                    NS_LockedJobPlanningLine."NS_Lot No." := NS_JobPlanningLine."Lot No.";
-                    NS_LockedJobPlanningLine."NS_Line Discount %" := NS_JobPlanningLine."Line Discount %";
-                    NS_LockedJobPlanningLine."NS_Line Type" := NS_JobPlanningLine."Line Type";
-                    NS_LockedJobPlanningLine."NS_Currency Code" := NS_JobPlanningLine."Currency Code";
-                    NS_LockedJobPlanningLine."NS_Currency Date" := NS_JobPlanningLine."Currency Date";
-                    NS_LockedJobPlanningLine."NS_Currency Factor" := NS_JobPlanningLine."Currency Factor";
-                    NS_LockedJobPlanningLine."NS_Schedule Line" := NS_JobPlanningLine."Schedule Line";
-                    NS_LockedJobPlanningLine."NS_Contract Line" := NS_JobPlanningLine."Contract Line";
-                    NS_LockedJobPlanningLine."NS_Job Contract Entry No." := NS_JobPlanningLine."Job Contract Entry No.";
-                    NS_LockedJobPlanningLine."NS_Invoiced Amount (LCY)" := NS_JobPlanningLine."Invoiced Amount (LCY)";
-                    NS_LockedJobPlanningLine."NS_Invoiced Cost Amount (LCY)" := NS_JobPlanningLine."Invoiced Cost Amount (LCY)";
-                    NS_LockedJobPlanningLine."NS_VAT Unit Price" := NS_JobPlanningLine."VAT Unit Price";
-                    NS_LockedJobPlanningLine."NS_VAT Line Discount Amount" := NS_JobPlanningLine."VAT Line Discount Amount";
-                    NS_LockedJobPlanningLine."NS_VAT Line Amount" := NS_JobPlanningLine."VAT Line Amount";
-                    NS_LockedJobPlanningLine."NS_VAT %" := NS_JobPlanningLine."VAT %";
-                    NS_LockedJobPlanningLine."NS_Description 2" := NS_JobPlanningLine."Description 2";
-                    NS_LockedJobPlanningLine."NS_Job Ledger Entry No." := NS_JobPlanningLine."Job Ledger Entry No.";
-                    NS_LockedJobPlanningLine.NS_Status := NS_JobPlanningLine.Status;
-                    NS_LockedJobPlanningLine."NS_Ledger Entry Type" := NS_JobPlanningLine."Ledger Entry Type";
-                    NS_LockedJobPlanningLine."NS_Ledger Entry No." := NS_JobPlanningLine."Ledger Entry No.";
-                    NS_LockedJobPlanningLine."NS_System-Created Entry" := NS_JobPlanningLine."System-Created Entry";
-                    NS_LockedJobPlanningLine."NS_Usage Link" := NS_JobPlanningLine."Usage Link";
-                    NS_LockedJobPlanningLine."NS_Remaining Qty." := NS_JobPlanningLine."Remaining Qty.";
-                    NS_LockedJobPlanningLine."NS_Remaining Qty. (Base)" := NS_JobPlanningLine."Remaining Qty. (Base)";
-                    NS_LockedJobPlanningLine."NS_Remaining Total Cost (LCY)" := NS_JobPlanningLine."Remaining Total Cost (LCY)";
-                    NS_LockedJobPlanningLine."NS_Remaining Line Amount" := NS_JobPlanningLine."Remaining Line Amount";
-                    NS_LockedJobPlanningLine."NS_Remaining Line Amount (LCY)" := NS_JobPlanningLine."Remaining Line Amount (LCY)";
-                    NS_LockedJobPlanningLine."NS_Qty. Posted" := NS_JobPlanningLine."Qty. Posted";
-                    NS_LockedJobPlanningLine."NS_Qty. to Transfer to Journal" := NS_JobPlanningLine."Qty. to Transfer to Journal";
-                    NS_LockedJobPlanningLine."NS_Posted Total Cost" := NS_JobPlanningLine."Posted Total Cost";
-                    NS_LockedJobPlanningLine."NS_Posted Total Cost (LCY)" := NS_JobPlanningLine."Posted Total Cost (LCY)";
-                    NS_LockedJobPlanningLine."NS_Posted Line Amount" := NS_JobPlanningLine."Posted Line Amount";
-                    NS_LockedJobPlanningLine."NS_Posted Line Amount (LCY)" := NS_JobPlanningLine."Posted Line Amount (LCY)";
-                    NS_LockedJobPlanningLine."NS_Qty. Transferred to Invoice" := NS_JobPlanningLine."Qty. Transferred to Invoice";
-                    NS_LockedJobPlanningLine."NS_Qty. to Transfer to Invoice" := NS_JobPlanningLine."Qty. to Transfer to Invoice";
-                    NS_LockedJobPlanningLine."NS_Qty. Invoiced" := NS_JobPlanningLine."Qty. Invoiced";
-                    NS_LockedJobPlanningLine."NS_Qty. to Invoice" := NS_JobPlanningLine."Qty. to Invoice";
-                    NS_LockedJobPlanningLine."NS_Reserved Quantity" := NS_JobPlanningLine."Reserved Quantity";
-                    NS_LockedJobPlanningLine."NS_Reserved Qty. (Base)" := NS_JobPlanningLine."Reserved Qty. (Base)";
-                    NS_LockedJobPlanningLine.NS_Reserve := NS_JobPlanningLine.Reserve;
-                    NS_LockedJobPlanningLine.NS_Planned := NS_JobPlanningLine.Planned;
-                    NS_LockedJobPlanningLine."NS_Variant Code" := NS_JobPlanningLine."Variant Code";
-                    NS_LockedJobPlanningLine."NS_Bin Code" := NS_JobPlanningLine."Bin Code";
-                    NS_LockedJobPlanningLine."NS_Qty. per Unit of Measure" := NS_JobPlanningLine."Qty. per Unit of Measure";
-                    NS_LockedJobPlanningLine."NS_Quantity (Base)" := NS_JobPlanningLine."Quantity (Base)";
-                    NS_LockedJobPlanningLine."NS_Requested Delivery Date" := NS_JobPlanningLine."Requested Delivery Date";
-                    NS_LockedJobPlanningLine."NS_Promised Delivery Date" := NS_JobPlanningLine."Promised Delivery Date";
-                    NS_LockedJobPlanningLine."NS_Planned Delivery Date" := NS_JobPlanningLine."Planned Delivery Date";
-                    NS_LockedJobPlanningLine."NS_Service Order No." := NS_JobPlanningLine."Service Order No.";
-                    NS_LockedJobPlanningLine."NS_Cost Category" := NS_JobPlanningLine."NS_Cost Category";
-                    NS_LockedJobPlanningLine."NS_Revenue Category" := NS_JobPlanningLine."NS_Revenue Category";
-                    NS_LockedJobPlanningLine."NS_Cost Factor Set By Category" := NS_JobPlanningLine."NS_Cost Factor Set By Category";
-                    NS_LockedJobPlanningLine."NS_Shortcut Dimension 1 Code" := NS_JobPlanningLine."NS_Shortcut Dimension 1 Code";
-                    NS_LockedJobPlanningLine."NS_Shortcut Dimension 2 Code" := NS_JobPlanningLine."NS_Shortcut Dimension 2 Code";
-                    NS_LockedJobPlanningLine."NS_Activity Code" := NS_JobPlanningLine."NS_Activity Code";
-                    NS_LockedJobPlanningLine."NS_Process Code" := NS_JobPlanningLine."NS_Process Code";
-                    NS_LockedJobPlanningLine."NS_Operation Code" := NS_JobPlanningLine."NS_Operation Code";
-                    NS_LockedJobPlanningLine."NS_Section Code" := NS_JobPlanningLine."NS_Section Code";
-                    NS_LockedJobPlanningLine."NS_Work Units" := NS_JobPlanningLine."NS_Work Units";
-                    NS_LockedJobPlanningLine."NS_Work Unit of Measure" := NS_JobPlanningLine."NS_Work Unit of Measure";
-                    NS_LockedJobPlanningLine."NS_Skill Class" := NS_JobPlanningLine."NS_Skill Class";
-                    NS_LockedJobPlanningLine."NS_Entry Type" := NS_JobPlanningLine."NS_Entry Type";
-                    NS_LockedJobPlanningLine.NS_Adjustment := NS_JobPlanningLine.NS_Adjustment;
-                    NS_LockedJobPlanningLine."NS_Rate Type" := NS_JobPlanningLine."NS_Rate Type";
-                    NS_LockedJobPlanningLine."NS_Rate Type Value" := NS_JobPlanningLine."NS_Rate Type Value";
-                    NS_LockedJobPlanningLine."NS_Not To Exceed" := NS_JobPlanningLine."NS_Not To Exceed";
-                    NS_LockedJobPlanningLine."NS_Subcontract No." := NS_JobPlanningLine."NS_Subcontract No.";
-                    NS_LockedJobPlanningLine."NS_Subcontract Line No." := NS_JobPlanningLine."NS_Subcontract Line No.";
-                    NS_LockedJobPlanningLine."NS_Progress Billing Method" := NS_JobPlanningLine."NS_Progress Billing Method";
-                    NS_LockedJobPlanningLine."NS_Progress Payment Method" := NS_JobPlanningLine."NS_Progress Payment Method";
-                    NS_LockedJobPlanningLine.NS_TempNo := NS_JobPlanningLine.NS_TempNo;
-                    NS_LockedJobPlanningLine.NS_TempLocation := NS_JobPlanningLine.NS_TempLocation;
-                    NS_LockedJobPlanningLine.NS_TempVariant := NS_JobPlanningLine.NS_TempVariant;
-                    NS_LockedJobPlanningLine.NS_TempUM := NS_JobPlanningLine.NS_TempUM;
-                    NS_LockedJobPlanningLine.NS_TempWorkType := NS_JobPlanningLine.NS_TempWorkType;
-                    NS_LockedJobPlanningLine.NS_TempSkillClass := NS_JobPlanningLine.NS_TempSkillClass;
-                    NS_LockedJobPlanningLine.NS_Welding := NS_JobPlanningLine.NS_Welding;
-                    NS_LockedJobPlanningLine."NS_Size of Weld" := NS_JobPlanningLine."NS_Size of Weld";
-                    NS_LockedJobPlanningLine."NS_Weld Time (Hours)" := NS_JobPlanningLine."NS_Weld Time (Hours)";
-                    NS_LockedJobPlanningLine."NS_No. 2" := NS_JobPlanningLine."NS_No. 2";
-                    NS_LockedJobPlanningLine."NS_Quote No." := NS_JobPlanningLine."NS_Quote No.";
-                    NS_LockedJobPlanningLine."NS_Quote Line No." := NS_JobPlanningLine."NS_Quote Line No.";
-                    NS_LockedJobPlanningLine."NS_Purchase Order No." := NS_JobPlanningLine."NS_Purchase Order No.";
-                    NS_LockedJobPlanningLine."NS_Use Tax SKU" := NS_JobPlanningLine."NS_Use Tax SKU";
-                    NS_LockedJobPlanningLine."NS_Use Tax Amount" := NS_JobPlanningLine."NS_Use Tax Amount";
-                    NS_LockedJobPlanningLine."NS_Vendor No." := NS_JobPlanningLine."NS_Vendor No.";
-                    NS_LockedJobPlanningLine."NS_Vendor Quote No." := NS_JobPlanningLine."NS_Vendor Quote No.";
-                    NS_LockedJobPlanningLine."NS_Manufacturer Code" := NS_JobPlanningLine."NS_Manufacturer Code";
-                    NS_LockedJobPlanningLine."NS_Defaulted Entry" := NS_JobPlanningLine."NS_Defaulted Entry";
-                    NS_LockedJobPlanningLine."NS_Total Number of Welds" := NS_JobPlanningLine."NS_Total Number of Welds";
-                    NS_LockedJobPlanningLine."NS_Gross Profit" := NS_JobPlanningLine."NS_Gross Profit";
-                    NS_LockedJobPlanningLine."NS_Gross Profit Percentage" := NS_JobPlanningLine."NS_Gross Profit Percentage";
-                    NS_LockedJobPlanningLine."NS_Original Total Price" := NS_JobPlanningLine."NS_Original Total Price";
-                    NS_LockedJobPlanningLine."NS_Original Total Price (LCY)" := NS_JobPlanningLine."NS_Original Total Price (LCY)";
-                    NS_LockedJobPlanningLine."NS_Original Quantity" := NS_JobPlanningLine."NS_Original Quantity";
-                    NS_LockedJobPlanningLine."NS_Item Not Found" := NS_JobPlanningLine."NS_Item Not Found";
-                    NS_LockedJobPlanningLine."NS_Segment Type" := NS_JobPlanningLine."NS_Segment Type";
-                    NS_LockedJobPlanningLine."NS_Segment Code" := NS_JobPlanningLine."NS_Segment Code";
-                    NS_LockedJobPlanningLine."NS_Segment Name" := NS_JobPlanningLine."NS_Segment Name";
-                    NS_LockedJobPlanningLine."NS_Matrix Updated" := NS_JobPlanningLine."NS_Matrix Updated";
-                    NS_LockedJobPlanningLine."NS_Progress Billing Line" := NS_JobPlanningLine."NS_Progress Billing Line";
-                    NS_LockedJobPlanningLine."NS_Dimension Set ID" := NS_JobPlanningLine."NS_Dimension Set ID";
-                    NS_LockedJobPlanningLine."NS_Retention Ledger Code" := NS_JobPlanningLine."NS_Retention Ledger Code";
-                    NS_LockedJobPlanningLine."NS_Line Amount Incl. Tax" := NS_JobPlanningLine."NS_Line Amount Incl. Tax";
-                    NS_LockedJobPlanningLine."NS_Template No." := NS_JobPlanningLine."NS_Template No.";
-                    NS_LockedJobPlanningLine.INSERT();
-                //PRJ-1053.AS.1.0 - ended
+                    NS_LockedJobPlanningLine.TRANSFERFIELDS(NS_JobPlanningLine);
+                    NS_LockedJobPlanningLine.INSERT;
                 UNTIL NEXT = 0;
                 Success := TRUE;
             END;
@@ -6981,877 +5234,12 @@ tableextension 14021131 NS_Job extends Job
         JobPlanningLine.SETRANGE("Job No.", "No.");
         EXIT(JobPlanningLine.FINDFIRST);
     end;
-
-
-    ////////////////////////////////////////////////////PPPPPPPPPPP///////////////////
-
-    PROCEDURE CreateSubJob(PassJob: Record 167);
-    VAR
-        JobsSetup: Record 315;
-        NewJob: Record 167;
-        JobPage: Page 88;
-        SegmentsRec: Record "NS_Job Takeoff Segments";
-        TargetSegmentRec: Record "NS_Job Takeoff Segments";
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Default Dimension";
-        PassJobTask: Record "Job Task";   //PRJ-1015.JS.1.0   12Oct2021
-        NewJobTask: Record "Job Task";   //PRJ-1015.JS.1.0   12Oct2021
-        NewJobs2: Record Job; //PRJ-1015.JS.1.0   12Oct2021         
-
-    BEGIN
-        JobsSetup.GET;
-        //WITH NewJob DO BEGIN
-        NewJob.INIT;
-        NewJob.SetCopyJob(TRUE);
-        NewJob."No." := GetNextChangeOrderNo(PassJob."No.", JobsSetup."NS_Change Order No. Separator");
-
-        NewJob."No. Series" := '';
-        NewJob."NS_Sub-Level to Job No." := PassJob."No.";//PE-120.NC.1.0 26Jun2023
-        NewJob.INSERT(TRUE);
-        NewJob."Search Description" := PassJob."Search Description";
-        NewJob.Description := PassJob.Description;
-        NewJob."Description 2" := PassJob."Description 2";
-        NewJob."Bill-to Customer No." := PassJob."Bill-to Customer No.";
-        NewJob."Creation Date" := TODAY;
-        NewJob."Starting Date" := 0D;
-        NewJob."Ending Date" := 0D;
-        NewJob.Status := Status::Planning;
-        NewJob."Person Responsible" := PassJob."Person Responsible";
-        NewJob."Global Dimension 1 Code" := PassJob."Global Dimension 1 Code";
-        NewJob."Global Dimension 2 Code" := PassJob."Global Dimension 2 Code";
-        NewJob."Job Posting Group" := PassJob."Job Posting Group";
-        NewJob.Blocked := Blocked::" ";
-        NewJob."Customer Disc. Group" := PassJob."Customer Disc. Group";
-        NewJob."Customer Price Group" := PassJob."Customer Price Group";
-        NewJob."Language Code" := PassJob."Language Code";
-        NewJob."Bill-to Name" := PassJob."Bill-to Name";
-        NewJob."Bill-to Address" := PassJob."Bill-to Address";
-        NewJob."Bill-to Address 2" := PassJob."Bill-to Address 2";
-        NewJob."Bill-to City" := PassJob."Bill-to City";
-        NewJob."Bill-to County" := PassJob."Bill-to County";
-        NewJob."Bill-to Post Code" := PassJob."Bill-to Post Code";
-        NewJob."No. Series" := PassJob."No. Series";
-        NewJob."Bill-to Country/Region Code" := PassJob."Bill-to Country/Region Code";
-        NewJob."WIP Method" := PassJob."WIP Method";
-        NewJob."Currency Code" := PassJob."Currency Code";
-        NewJob."Bill-to Contact No." := PassJob."Bill-to Contact No.";
-        NewJob."Bill-to Contact" := PassJob."Bill-to Contact";
-        NewJob."NS_Sell-to Customer No." := PassJob."NS_Sell-to Customer No.";
-        NewJob."NS_Sell-to Customer Name" := PassJob."NS_Sell-to Customer Name";
-        //PRJCTPR-200.NC.1.0 29SEP2023 Start
-        NewJob."Sell-to Customer No." := PassJob."Sell-to Customer No.";
-        NewJob."Sell-to Customer Name" := PassJob."Sell-to Customer Name";
-        //PRJCTPR-200.NC.1.0 29SEP2023 End
-        NewJob."NS_Salesperson Code" := PassJob."NS_Salesperson Code";
-        //PRJ-1489.GK.1.0 start 
-        NewJob."NS_Gen. Bus. Posting Group New" := PassJob."NS_Gen. Bus. Posting Group New";
-        NewJob."NS_Gen. Prod. Posting Group New" := PassJob."NS_Gen. Prod. Posting Group New";
-        // NewJob."NS_Gen. Bus. Posting Group" := PassJob."NS_Gen. Bus. Posting Group";
-        // NewJob."NS_Gen. Prod. Posting Group" := PassJob."NS_Gen. Prod. Posting Group";
-        //PRJ-1489.GK.1.0 end
-        NewJob."WIP Posting Date" := PassJob."WIP Posting Date";
-        NewJob."WIP Posting Method" := PassJob."WIP Posting Method";
-        NewJob."Invoice Currency Code" := PassJob."Invoice Currency Code";
-        NewJob."Exch. Calculation (Cost)" := PassJob."Exch. Calculation (Cost)";
-        NewJob."Exch. Calculation (Price)" := PassJob."Exch. Calculation (Price)";
-        NewJob."Allow Schedule/Contract Lines" := PassJob."Allow Schedule/Contract Lines";
-        NewJob."NS_Job Address 1" := PassJob."NS_Job Address 1";
-        NewJob."NS_Job Address 2" := PassJob."NS_Job Address 2";
-        NewJob."NS_Job City" := PassJob."NS_Job City";
-        NewJob."NS_Job County" := PassJob."NS_Job County";
-        NewJob."NS_Job Post Code" := PassJob."NS_Job Post Code";
-        NewJob."NS_Job Country/Region Code" := PassJob."NS_Job Country/Region Code";
-        NewJob."NS_Job Contact" := PassJob."NS_Job Contact";
-        NewJob."NS_Job Phone" := PassJob."NS_Job Phone";
-        NewJob."NS_Job Ship-to Code" := PassJob."NS_Job Ship-to Code";
-        NewJob."NS_Temp Linked Parent Job No." := PassJob."NS_Temp Linked Parent Job No.";
-        NewJob."NS_Last Job For Job List" := PassJob."NS_Last Job For Job List";
-        //PRJCTPR-197 Dk.1.0 Start
-        // NewJob."NS_Job Type" := PassJob."NS_Job Type";
-        NewJob."NS_Job Type New" := PassJob."NS_Job Type New";
-        //PRJCTPR-197 Dk.1.0 ENd
-        NewJob.NS_Estimator := PassJob.NS_Estimator;
-        NewJob.NS_Manager := PassJob.NS_Manager;
-        NewJob."NS_Manager Job Status" := PassJob."NS_Manager Job Status";
-        NewJob."NS_Job Status Date" := 0D;
-        NewJob."NS_Estimated Start Date" := 0D;
-        NewJob."NS_Estimated Completion Date" := 0D;
-        NewJob."NS_Completion Date" := 0D;
-        NewJob."NS_Job Posting Date" := PassJob."NS_Job Posting Date";
-        NewJob."NS_Recognition Date" := PassJob."NS_Recognition Date";
-        NewJob."NS_Unit of Measure" := '';
-        NewJob."NS_Total Units" := 0;
-        NewJob."NS_Billing method" := PassJob."NS_Billing method";
-        NewJob."NS_Recognition Method" := PassJob."NS_Recognition Method";
-        NewJob."NS_Default Job Retention" := PassJob."NS_Default Job Retention";
-        NewJob."NS_Tax Area Code" := PassJob."NS_Tax Area Code";
-        NewJob."NS_Tax Liable" := PassJob."NS_Tax Liable";
-        NewJob."NS_Tax Group Code New" := PassJob."NS_Tax Group Code New";
-        NewJob."NS_VAT Bus. Posting Group" := PassJob."NS_VAT Bus. Posting Group";
-        NewJob."NS_VAT Prod. Posting Group" := PassJob."NS_VAT Prod. Posting Group";
-        NewJob."NS_Actual Percent Complete" := 0;
-        NewJob."NS_Actual PercentCompleteDate" := 0D;
-        NewJob."NS_Actual Units Complete" := 0;
-        NewJob."NS_Actual Units Complete Date" := 0D;
-        NewJob."NS_Job Revenue Posting" := PassJob."NS_Job Revenue Posting";
-        NewJob."NS_Progress Billing No." := PassJob."NS_Progress Billing No.";
-        NewJob."NS_Progress Billing Sub-Level" := PassJob."NS_Progress Billing Sub-Level";
-        NewJob."NS_Customer Job No." := PassJob."NS_Customer Job No.";
-        NewJob."NS_Customer PO Number" := '';
-        NewJob."NS_Contract No." := PassJob."NS_Contract No.";
-        NewJob."NS_Contract Date" := PassJob."NS_Contract Date";
-        NewJob."NS_Contract For" := PassJob."NS_Contract For";
-        //NewJob."NS_Sub-Level to Job No." := PassJob."No.";//PE-120.NC.1.0 26Jun2023 Block
-        NewJob."NS_Job Class" := "NS_Job Class"::SubJob;
-
-        //PRJ-1015.JS.1.0  12Oct2021 - Start
-        if PassJob."NS_Job Class" = PassJob."NS_Job Class"::"Master Job" then
-            NewJob."NS_Root Job No." := PassJob."No."
-        else
-            NewJob."NS_Root Job No." := PassJob."NS_Root Job No.";
-        //PRJ-1015.JS.1.0  12Oct2021 - Start
-
-        DefaultDimRec.Reset;
-        DefaultDimRec.SetRange("Table ID", 167);
-        DefaultDimRec.SetRange("No.", PassJob."No.");
-        if DefaultDimRec.FindSet then
-            repeat
-                DefaultDimRec2.Init;
-                DefaultDimRec2."Table ID" := 167;
-                DefaultDimRec2."No." := NewJob."No.";
-                DefaultDimRec2."Dimension Code" := DefaultDimRec."Dimension Code";
-                DefaultDimRec2."Dimension Value Code" := DefaultDimRec."Dimension Value Code";
-                DefaultDimRec2.Insert;
-            until DefaultDimRec.Next = 0;
-
-        NewJob.MODIFY;
-        //end;
-
-        //Segment List flow start
-        SegmentsRec.Reset();
-        SegmentsRec.SetRange("NS_Job No.", PassJob."No.");
-        if SegmentsRec.FindSet() then
-            repeat
-                TargetSegmentRec.Init();
-                TargetSegmentRec.validate("NS_Job No.", NewJob."No.");
-                TargetSegmentRec."NS_Segment Code" := SegmentsRec."NS_Segment Code";
-                TargetSegmentRec.NS_Type := SegmentsRec.NS_Type;
-                TargetSegmentRec."NS_Size of Weld" := SegmentsRec."NS_Size of Weld";
-                TargetSegmentRec."NS_Segment Name" := SegmentsRec."NS_Segment Name";
-                TargetSegmentRec."NS_Segment Description" := SegmentsRec."NS_Segment Description";
-                TargetSegmentRec."NS_Billing Type" := SegmentsRec."NS_Billing Type";
-                TargetSegmentRec."NS_Unit of Measure Code" := SegmentsRec."NS_Unit of Measure Code";
-                TargetSegmentRec.validate("NS_Estimated Quantity", SegmentsRec."NS_Estimated Quantity");
-                TargetSegmentRec.Validate("NS_Unit Rate", SegmentsRec."NS_Unit Rate");
-                TargetSegmentRec.Validate("NS_Total Cost", SegmentsRec."NS_Total Cost");
-                TargetSegmentRec.Insert();
-            until SegmentsRec.Next() = 0;
-
-        //Segment List Flow End
-
-        //PRJ-1015.JS.1.0  12Oct2021 - Start
-        if NewJobs2.get(NewJob."NS_Root Job No.") then begin
-            if NewJobs2."NS_Include Sub Levels" = true then begin
-                PassJobTask.Reset();
-                PassJobTask.SetRange("Job No.", NewJobs2."No.");
-                if PassJobTask.FindFirst() then
-                    repeat
-                        //PRJCTPR-289.HS.1.0 16Jan2024 Start
-                        NewJobTask.Reset();
-                        NewJobTask.SetRange("Job No.", NewJob."No.");
-                        NewJobTask.SetRange("Job Task No.", PassJobTask."Job Task No.");
-                        if not NewJobTask.FindFirst() then begin
-                            //PRJCTPR-289.HS.1.0 16Jan2024 End
-                            NewJobTask.Init();
-                            //NewJobTask.TransferFields(PassJobTask);
-                            NewJobTask."Job No." := NewJob."No.";
-                            NewJobTask.Validate("Job Task No.", PassJobTask."Job Task No.");
-                            NewJobTask."Job Task Type" := PassJobTask."Job Task Type"; //PRJCTPR-289.HS.1.0 14FEB2024
-                            NewJobTask.Insert()
-                        end;
-                    until PassJobTask.Next() = 0;
-            end;
-        end;
-        //PRJ-1015.JS.1.0  12Oct2021 - end   
-
-
-        IF CONFIRM('Sub Job No. ' + NewJob."No." + ' has been created. Go to Sub Job?') THEN BEGIN
-            JobPage.SETRECORD(NewJob);
-            JobPage.RUN;
-        END;
-    END;
-    //PRJ-1406.GK.1.0 18May2022 start
+    // >> Upgrade
     [IntegrationEvent(false, false)]
-    local procedure OnLoadTaskActivityOnBeforeInsertJobTaskLine(var Rec: Record "Job Task")
-    begin
-
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnLoadTaskProcessOnBeforeInsertJobTaskLine(var Rec: Record "Job Task")
-    begin
-
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnLoadTaskOperationOnBeforeInsertJobTaskLine(var Rec: Record "Job Task")
-    begin
-
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnLoadTaskActivityOnBeforeInsertJobTaskLines(var Rec: Record "Job Task"; NSJobActivity: Record "NS_Job Activity")
-    begin
-
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnLoadTaskProcessOnBeforeInsertJobTaskLines(var Rec: Record "Job Task"; NSJobProcess: Record "NS_Job Process")
-    begin
-
-    end;
-
-    [IntegrationEvent(false, false)]
-    local procedure OnLoadTaskOperationOnBeforeInsertJobTaskLines(var Rec: Record "Job Task"; NSJobOperation: Record "NS_Job Operation")
-    begin
-
-    end;
-    //PRJ-1406.GK.1.0 18May2022 end
-
-    //PRJ-1526.AS.1.0 20JULY2022 START
-    [IntegrationEvent(false, false)]
-    local procedure NS_OnBeforeBillToCustomerNoValidate(var IsHandlePP: Boolean; var Rec: Record Job)
+    local procedure OnBeforeInsertJobTask(var JobTask: Record "Job Task"; var SeqNo: Integer)
     begin
     end;
-    //PRJ-1526.AS.1.0 20JULY2022 END 
-    //PRJCTPR-147.NK.1.0 start1 7Aug2023
-
-    //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 START
-    [IntegrationEvent(false, false)]
-    local procedure OnBeforeCalculateJobFinancials(var IsHandled: Boolean; PassedJob: Record 167; VAR ActualCostToDate: ARRAY[3] OF Decimal; VAR InvoiceBilled: ARRAY[3] OF Decimal; VAR PaymentReceived: ARRAY[3] OF Decimal; VAR CommittedCost: Decimal; PassedSubLevels: Boolean)
-    begin
-    end;
-    //FGH-163.SM.29022024 PE-269.JS.1.0 05MAR2024 END
-    PROCEDURE NS_CreateChangeRequest(NS_PassJob: Record 167);
-    VAR
-        NS_JobsSetup: Record 315;
-        NS_NewJob: Record 167;
-        NS_JobPage: Page 88;
-        NS_SegmentsRec: Record "NS_Job Takeoff Segments";
-        NS_TargetSegmentRec: Record "NS_Job Takeoff Segments";
-        NS_DefaultDimRec: Record "Default Dimension";
-        NS_DefaultDimRec2: Record "Default Dimension";
-        NS_PassJobTask: Record "Job Task";
-        NS_NewJobTask: Record "Job Task";
-        NS_NewJobs2: Record Job;
-    BEGIN
-        NS_JobsSetup.GET;
-        //WITH NewJob DO BEGIN
-        NS_NewJob.INIT();
-        NS_NewJob.SetCopyJob(TRUE);
-        NS_NewJob."No." := NS_GetNextRequestOrderNo();
-        NS_NewJob."No. Series" := '';
-        NS_NewJob."NS_Change Request to Job No." := NS_PassJob."No.";//PRJCTPR-362.PS.2.0 10May2024
-        NS_NewJob.INSERT(TRUE);
-        NS_CreateMainJobTask(NS_PassJob."No.", NS_NewJob."No.");
-        NS_NewJob."Search Description" := NS_PassJob."Search Description";
-        NS_NewJob.Description := NS_PassJob.Description;
-        NS_NewJob."Description 2" := NS_PassJob."Description 2";
-        NS_NewJob."Bill-to Customer No." := NS_PassJob."Bill-to Customer No.";
-        NS_NewJob."Creation Date" := TODAY();
-        NS_NewJob."Starting Date" := 0D;
-        NS_NewJob."Ending Date" := 0D;
-        NS_NewJob.Status := NS_NewJob.Status::Planning;
-        NS_NewJob."Person Responsible" := NS_PassJob."Person Responsible";
-        NS_NewJob."Global Dimension 1 Code" := NS_PassJob."Global Dimension 1 Code";
-        NS_NewJob."Global Dimension 2 Code" := NS_PassJob."Global Dimension 2 Code";
-        NS_NewJob."Job Posting Group" := NS_PassJob."Job Posting Group";
-        NS_NewJob.Blocked := NS_NewJob.Blocked::" ";
-        NS_NewJob."Customer Disc. Group" := NS_PassJob."Customer Disc. Group";
-        NS_NewJob."Customer Price Group" := NS_PassJob."Customer Price Group";
-        NS_NewJob."Language Code" := NS_PassJob."Language Code";
-        NS_NewJob."Bill-to Name" := NS_PassJob."Bill-to Name";
-        NS_NewJob."Bill-to Address" := NS_PassJob."Bill-to Address";
-        NS_NewJob."Bill-to Address 2" := NS_PassJob."Bill-to Address 2";
-        NS_NewJob."Bill-to City" := NS_PassJob."Bill-to City";
-        NS_NewJob."Bill-to County" := NS_PassJob."Bill-to County";
-        NS_NewJob."Bill-to Post Code" := NS_PassJob."Bill-to Post Code";
-        NS_NewJob."No. Series" := NS_PassJob."No. Series";
-        NS_NewJob."Bill-to Country/Region Code" := NS_PassJob."Bill-to Country/Region Code";
-        NS_NewJob."WIP Method" := NS_PassJob."WIP Method";
-        NS_NewJob."Currency Code" := NS_PassJob."Currency Code";
-        NS_NewJob."Bill-to Contact No." := NS_PassJob."Bill-to Contact No.";
-        NS_NewJob."Bill-to Contact" := NS_PassJob."Bill-to Contact";
-        //PE-193.PS.3.0  10April2024 Start
-        NS_NewJob."NS_Sell-to Customer No." := NS_PassJob."NS_Sell-to Customer No.";
-        NS_NewJob."NS_Sell-to Customer Name" := NS_PassJob."NS_Sell-to Customer Name";
-        NS_NewJob."Sell-to Customer No." := NS_PassJob."NS_Sell-to Customer No.";
-        NS_NewJob."Sell-to Customer Name" := NS_PassJob."NS_Sell-to Customer Name";
-        //PE-193.PS.3.0  10April2024
-        NS_NewJob."NS_Salesperson Code" := NS_PassJob."NS_Salesperson Code";
-        //"NS_Gen. Bus. Posting Group" := PassJob."NS_Gen. Bus. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
-        NS_NewJob."NS_Gen. Bus. Posting Group New" := NS_PassJob."NS_Gen. Bus. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
-                                                                                                  //"NS_Gen. Prod. Posting Group" := PassJob."NS_Gen. Prod. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
-        NS_NewJob."NS_Gen. Prod. Posting Group New" := NS_PassJob."NS_Gen. Prod. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
-                                                                                                    //PRJ-464.AM.1.0 end
-        NS_NewJob."WIP Posting Date" := NS_PassJob."WIP Posting Date";
-        NS_NewJob."WIP Posting Method" := NS_PassJob."WIP Posting Method";
-        NS_NewJob."Invoice Currency Code" := NS_PassJob."Invoice Currency Code";
-        NS_NewJob."Exch. Calculation (Cost)" := NS_PassJob."Exch. Calculation (Cost)";
-        NS_NewJob."Exch. Calculation (Price)" := NS_PassJob."Exch. Calculation (Price)";
-        NS_NewJob."Allow Schedule/Contract Lines" := NS_PassJob."Allow Schedule/Contract Lines";
-        NS_NewJob."NS_Job Address 1" := NS_PassJob."NS_Job Address 1";
-        NS_NewJob."NS_Job Address 2" := NS_PassJob."NS_Job Address 2";
-        NS_NewJob."NS_Job City" := NS_PassJob."NS_Job City";
-        NS_NewJob."NS_Job County" := NS_PassJob."NS_Job County";
-        NS_NewJob."NS_Job Post Code" := NS_PassJob."NS_Job Post Code";
-        NS_NewJob."NS_Job Country/Region Code" := NS_PassJob."NS_Job Country/Region Code";
-        NS_NewJob."NS_Job Contact" := NS_PassJob."NS_Job Contact";
-        NS_NewJob."NS_Job Phone" := NS_PassJob."NS_Job Phone";
-        NS_NewJob."NS_Job Ship-to Code" := NS_PassJob."NS_Job Ship-to Code";
-        NS_NewJob."NS_Temp Linked Parent Job No." := NS_PassJob."NS_Temp Linked Parent Job No.";
-        NS_NewJob."NS_Last Job For Job List" := NS_PassJob."NS_Last Job For Job List";
-        //NS_NewJob."NS_Job Type" := NS_PassJob."NS_Job Type";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob."NS_Job Type New" := NS_PassJob."NS_Job Type New";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob.NS_Estimator := NS_PassJob.NS_Estimator;
-        NS_NewJob.NS_Manager := NS_PassJob.NS_Manager;
-        NS_NewJob."NS_Manager Job Status" := NS_PassJob."NS_Manager Job Status";
-        NS_NewJob."NS_Job Status Date" := 0D;
-        NS_NewJob."NS_Estimated Start Date" := 0D;
-        NS_NewJob."NS_Estimated Completion Date" := 0D;
-        NS_NewJob."NS_Completion Date" := 0D;
-        NS_NewJob."NS_Job Posting Date" := NS_PassJob."NS_Job Posting Date";
-        NS_NewJob."NS_Recognition Date" := NS_PassJob."NS_Recognition Date";
-        NS_NewJob."NS_Unit of Measure" := '';
-        NS_NewJob."NS_Total Units" := 0;
-        NS_NewJob."NS_Billing method" := NS_PassJob."NS_Billing method";
-        NS_NewJob."NS_Recognition Method" := NS_PassJob."NS_Recognition Method";
-        NS_NewJob."NS_Default Job Retention" := NS_PassJob."NS_Default Job Retention";
-        NS_NewJob."NS_Tax Area Code" := NS_PassJob."NS_Tax Area Code";
-        NS_NewJob."NS_Tax Liable" := NS_PassJob."NS_Tax Liable";
-        //NS_NewJob."NS_Tax Group Code" := NS_PassJob."NS_Tax Group Code";   //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob."NS_Tax Group Code New" := NS_PassJob."NS_Tax Group Code New";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob."NS_VAT Bus. Posting Group" := NS_PassJob."NS_VAT Bus. Posting Group";
-        NS_NewJob."NS_VAT Prod. Posting Group" := NS_PassJob."NS_VAT Prod. Posting Group";
-        NS_NewJob."NS_Actual Percent Complete" := 0;
-        NS_NewJob."NS_Actual PercentCompleteDate" := 0D;
-        NS_NewJob."NS_Actual Units Complete" := 0;
-        NS_NewJob."NS_Actual Units Complete Date" := 0D;
-        NS_NewJob."NS_Job Revenue Posting" := NS_PassJob."NS_Job Revenue Posting";
-        NS_NewJob."NS_Progress Billing Sub-Level" := NS_PassJob."NS_Progress Billing Sub-Level";
-        NS_NewJob."NS_Customer Job No." := NS_PassJob."NS_Customer Job No.";
-        NS_NewJob."NS_Customer PO Number" := '';
-        NS_NewJob."NS_Contract No." := NS_PassJob."NS_Contract No.";
-        NS_NewJob."NS_Contract Date" := NS_PassJob."NS_Contract Date";
-        NS_NewJob."NS_Contract For" := NS_PassJob."NS_Contract For";
-        //NS_NewJob."NS_Sub-Level to Job No." := NS_PassJob."No.";//PE-193.PS.1.0 03Nov2023
-        NS_NewJob."NS_Change Request to Job No." := NS_PassJob."No.";
-        NS_NewJob."NS_Job Class" := "NS_Job Class"::"Change Request";
-        NS_NewJob."NS_Job Purchaser" := NS_PassJob."NS_Job Purchaser";
-
-        if NS_PassJob."NS_Job Class" = NS_PassJob."NS_Job Class"::"Master Job" then
-            NS_NewJob."NS_Root Job No." := NS_PassJob."No."
-        else
-            NS_NewJob."NS_Root Job No." := NS_PassJob."NS_Root Job No.";
-
-        NS_DefaultDimRec.Reset();
-        NS_DefaultDimRec.SetRange("Table ID", 167);
-        NS_DefaultDimRec.SetRange("No.", NS_PassJob."No.");
-        if NS_DefaultDimRec.FindSet() then
-            repeat
-                NS_DefaultDimRec2.Init();
-                NS_DefaultDimRec2."Table ID" := 167;
-                NS_DefaultDimRec2."No." := NS_NewJob."No.";
-                NS_DefaultDimRec2."Dimension Code" := NS_DefaultDimRec."Dimension Code";
-                NS_DefaultDimRec2."Dimension Value Code" := NS_DefaultDimRec."Dimension Value Code";
-                NS_DefaultDimRec2.Insert();
-            until NS_DefaultDimRec.Next() = 0;
-        NS_NewJob.MODIFY;
-        //end;
-
-        //Segment List flow start
-        NS_SegmentsRec.Reset();
-        NS_SegmentsRec.SetRange("NS_Job No.", NS_PassJob."No.");
-        if NS_SegmentsRec.FindSet() then
-            repeat
-                NS_TargetSegmentRec.Init();
-                NS_TargetSegmentRec.validate("NS_Job No.", NS_NewJob."No.");
-                NS_TargetSegmentRec."NS_Segment Code" := NS_SegmentsRec."NS_Segment Code";
-                NS_TargetSegmentRec.NS_Type := NS_SegmentsRec.NS_Type;
-                NS_TargetSegmentRec."NS_Size of Weld" := NS_SegmentsRec."NS_Size of Weld";
-                NS_TargetSegmentRec."NS_Segment Name" := NS_SegmentsRec."NS_Segment Name";
-                NS_TargetSegmentRec."NS_Segment Description" := NS_SegmentsRec."NS_Segment Description";
-                NS_TargetSegmentRec."NS_Billing Type" := NS_SegmentsRec."NS_Billing Type";
-                NS_TargetSegmentRec."NS_Unit of Measure Code" := NS_SegmentsRec."NS_Unit of Measure Code";
-                NS_TargetSegmentRec.validate("NS_Estimated Quantity", NS_SegmentsRec."NS_Estimated Quantity");
-                NS_TargetSegmentRec.Validate("NS_Unit Rate", NS_SegmentsRec."NS_Unit Rate");
-                NS_TargetSegmentRec.Validate("NS_Total Cost", NS_SegmentsRec."NS_Total Cost");
-                NS_TargetSegmentRec.Insert();
-            until NS_SegmentsRec.Next() = 0;
-
-        //Segment List Flow End
-        //PRJCTPR-326.PS.1.0 28Feb2024 Start
-        // if NS_NewJobs2.get(NS_NewJob."NS_Root Job No.") then begin
-        //     if NS_NewJobs2."NS_Include Sub Levels" = true then begin
-        //         NS_PassJobTask.Reset();
-        //         NS_PassJobTask.SetRange("Job No.", NS_NewJobs2."No.");
-        //         if NS_PassJobTask.FindFirst() then
-        //             repeat
-        //                 NS_NewJobTask.Init();
-
-        //                 NS_NewJobTask."Job No." := NS_NewJob."No.";
-        //                 NS_NewJobTask.Validate("Job Task No.", NS_PassJobTask."Job Task No.");
-        //                 NS_NewJobTask.Insert()
-        //             until NS_PassJobTask.Next() = 0;
-        //     end;
-        // end;
-        //PRJCTPR-326.PS.1.0 28Feb2024 End
-        //PE-193.PS.1.0 07Nov2023 Start
-
-        IF CONFIRM('Change Request No. ' + NS_NewJob."No." + ' has been created. Go to Change Request?') THEN BEGIN
-            NS_JobPage.SETRECORD(NS_NewJob);
-            NS_JobPage.RUN;
-        END;
-    END;
-    //PE-193.PS.1.0 07Nov2023 End
-    LOCAL PROCEDURE NS_GetNextRequestOrderNo(): Code[20];
-    VAR
-        NS_JobRec: Record 167;
-        NS_lcuNoSeries: Codeunit NoSeriesManagement;
-        NS_lcNoSeries: Code[20];
-        NS_lrJobSetup: Record "Jobs Setup";
-    BEGIN
-        NS_lrJobSetup.Get();
-        NS_lcNoSeries := NS_lcuNoSeries.GetNextNo(NS_lrJobSetup."NS_Change Req No. Series", Today, true);
-        exit(NS_lcNoSeries);
-    END;
-
-    procedure NS_CreateCOHeader(prMasterJob: Record Job): Code[20]
-    var
-        NS_lbChangeOrderHeaderCreated: Boolean;
-        NS_jobcr: Record Job;
-        NS_JobSetup: Record "Jobs Setup";
-        NS_NewJob: Record Job;
-        NS_JobNoNewRecord: Code[20];
-    begin
-        NS_jobcr := prMasterJob;
-        //Message(jobcr."No.");
-        NS_JobSetup.GET;
-        NS_JobNoNewRecord := NS_GetNextChangeOrderNoNew(prMasterJob, NS_JobSetup."NS_Change Order No. Separator");
-        NS_NewJob.INIT();
-        NS_NewJob."No." := NS_JobNoNewRecord;
-        NS_NewJob."No. Series" := '';
-        NS_NewJob."Search Description" := NS_jobcr."Search Description";
-        NS_NewJob.Description := NS_jobcr.Description;
-        NS_NewJob."Description 2" := NS_jobcr."Description 2";
-        NS_NewJob."Bill-to Customer No." := NS_jobcr."Bill-to Customer No.";
-        NS_NewJob."Creation Date" := TODAY();
-        NS_NewJob."Starting Date" := 0D;
-        NS_NewJob."Ending Date" := 0D;
-        NS_NewJob.Status := NS_NewJob.Status::Planning;
-        NS_NewJob."Person Responsible" := NS_jobcr."Person Responsible";
-        // VALIDATE("Global Dimension 1 Code");//ppal-174.AS.1.0 28DEC2020 Commented
-        // VALIDATE("Global Dimension 2 Code");//ppal-174.AS.1.0 28DEC2020 Commented
-        NS_NewJob."Global Dimension 1 Code" := NS_jobcr."Global Dimension 1 Code";//ppal-174.AS.1.0 28DEC2020 Added
-        NS_NewJob."Global Dimension 2 Code" := NS_jobcr."Global Dimension 2 Code";//ppal-174.AS.1.0 28DEC2020 Added
-        NS_NewJob."Job Posting Group" := NS_jobcr."Job Posting Group";
-        NS_NewJob.Blocked := NS_NewJob.Blocked::" ";
-        NS_NewJob."Customer Disc. Group" := NS_jobcr."Customer Disc. Group";
-        NS_NewJob."Customer Price Group" := NS_jobcr."Customer Price Group";
-        NS_NewJob."Language Code" := NS_jobcr."Language Code";
-        NS_NewJob."Bill-to Name" := NS_jobcr."Bill-to Name";
-        NS_NewJob."Bill-to Address" := NS_jobcr."Bill-to Address";
-        NS_NewJob."Bill-to Address 2" := NS_jobcr."Bill-to Address 2";
-        NS_NewJob."Bill-to City" := NS_jobcr."Bill-to City";
-        NS_NewJob."Bill-to County" := NS_jobcr."Bill-to County";
-        NS_NewJob."Bill-to Post Code" := NS_jobcr."Bill-to Post Code";
-        NS_NewJob."No. Series" := NS_jobcr."No. Series";
-        NS_NewJob."Bill-to Country/Region Code" := NS_jobcr."Bill-to Country/Region Code";
-        NS_NewJob."WIP Method" := NS_jobcr."WIP Method";
-        NS_NewJob."Currency Code" := NS_jobcr."Currency Code";
-        NS_NewJob."Bill-to Contact No." := NS_jobcr."Bill-to Contact No.";
-        NS_NewJob."Bill-to Contact" := NS_jobcr."Bill-to Contact";
-
-        // NS_NewJob."NS_Sell-to Customer No." := NS_jobcr."NS_Sell-to Customer No."; //PE-193.PS.2.0 04Dec2023 Commented
-        // NS_NewJob."NS_Sell-to Customer Name" := NS_jobcr."NS_Sell-to Customer Name"; //PE-193.PS.2.0 04Dec2023 Commented
-
-        NS_NewJob."NS_Sell-to Customer No." := NS_jobcr."Sell-to Customer No."; //PE-193.PS.2.0 04Dec2023 
-        NS_NewJob."NS_Sell-to Customer Name" := NS_jobcr."Sell-to Customer Name"; //PE-193.PS.2.0 04Dec2023
-        NS_NewJob."Sell-to Customer No." := NS_jobcr."Sell-to Customer No.";//PE-193.PS.2.0 04Dec2023
-        NS_NewJob."Sell-to Customer Name" := NS_jobcr."Sell-to Customer Name";//PE-193.PS.2.0 04Dec2023
-
-        NS_NewJob."NS_Salesperson Code" := NS_jobcr."NS_Salesperson Code";
-
-        NS_NewJob."NS_Gen. Bus. Posting Group New" := NS_jobcr."NS_Gen. Bus. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
-                                                                                                //"NS_Gen. Prod. Posting Group" := PassJob."NS_Gen. Prod. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
-        NS_NewJob."NS_Gen. Prod. Posting Group New" := NS_jobcr."NS_Gen. Prod. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
-                                                                                                  //PRJ-464.AM.1.0 end
-        NS_NewJob."WIP Posting Date" := NS_jobcr."WIP Posting Date";
-        NS_NewJob."WIP Posting Method" := NS_jobcr."WIP Posting Method";
-        NS_NewJob."Invoice Currency Code" := NS_jobcr."Invoice Currency Code";
-        NS_NewJob."Exch. Calculation (Cost)" := NS_jobcr."Exch. Calculation (Cost)";
-        NS_NewJob."Exch. Calculation (Price)" := NS_jobcr."Exch. Calculation (Price)";
-        NS_NewJob."Allow Schedule/Contract Lines" := NS_jobcr."Allow Schedule/Contract Lines";
-        NS_NewJob."NS_Job Address 1" := NS_jobcr."NS_Job Address 1";
-        NS_NewJob."NS_Job Address 2" := NS_jobcr."NS_Job Address 2";
-        NS_NewJob."NS_Job City" := NS_jobcr."NS_Job City";
-        NS_NewJob."NS_Job County" := NS_jobcr."NS_Job County";
-        NS_NewJob."NS_Job Post Code" := NS_jobcr."NS_Job Post Code";
-        NS_NewJob."NS_Job Country/Region Code" := NS_jobcr."NS_Job Country/Region Code";
-        NS_NewJob."NS_Job Contact" := NS_jobcr."NS_Job Contact";
-        NS_NewJob."NS_Job Phone" := NS_jobcr."NS_Job Phone";
-        NS_NewJob."NS_Job Ship-to Code" := NS_jobcr."NS_Job Ship-to Code";
-        NS_NewJob."NS_Temp Linked Parent Job No." := NS_jobcr."NS_Temp Linked Parent Job No.";
-        NS_NewJob."NS_Last Job For Job List" := NS_jobcr."NS_Last Job For Job List";
-        //NS_NewJob."NS_Job Type" := NS_jobcr."NS_Job Type";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob."NS_Job Type New" := NS_jobcr."NS_Job Type New";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob.NS_Estimator := NS_jobcr.NS_Estimator;
-        NS_NewJob.NS_Manager := NS_jobcr.NS_Manager;
-        // NS_NewJob."NS_Manager Job Status" := NS_jobcr."NS_Manager Job Status";//PE-193.PS.2.0 12Dec2023 Commneted
-        NS_NewJob."NS_Manager Job Status" := NS_jobcr."NS_Manager Job Status"::" "; //PE-193.PS.2.0 12Dec2023
-        NS_NewJob."NS_Job Status Date" := 0D;
-        NS_NewJob."NS_Estimated Start Date" := 0D;
-        NS_NewJob."NS_Estimated Completion Date" := 0D;
-        NS_NewJob."NS_Completion Date" := 0D;
-        NS_NewJob."NS_Job Posting Date" := NS_jobcr."NS_Job Posting Date";
-        NS_NewJob."NS_Recognition Date" := NS_jobcr."NS_Recognition Date";
-        NS_NewJob."NS_Unit of Measure" := '';
-        NS_NewJob."NS_Total Units" := 0;
-        NS_NewJob."NS_Billing method" := NS_jobcr."NS_Billing method";
-        NS_NewJob."NS_Recognition Method" := NS_jobcr."NS_Recognition Method";
-        NS_NewJob."NS_Default Job Retention" := NS_jobcr."NS_Default Job Retention";
-        NS_NewJob."NS_Tax Area Code" := NS_jobcr."NS_Tax Area Code";
-        NS_NewJob."NS_Tax Liable" := NS_jobcr."NS_Tax Liable";
-        //NS_NewJob."NS_Tax Group Code" := NS_jobcr."NS_Tax Group Code";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob."NS_Tax Group Code New" := NS_jobcr."NS_Tax Group Code New";  //PRJCTPR-298.JS.1.0 16JAN2024
-        NS_NewJob."NS_VAT Bus. Posting Group" := NS_jobcr."NS_VAT Bus. Posting Group";
-        NS_NewJob."NS_VAT Prod. Posting Group" := NS_jobcr."NS_VAT Prod. Posting Group";
-        NS_NewJob."NS_Actual Percent Complete" := 0;
-        NS_NewJob."NS_Actual PercentCompleteDate" := 0D;
-        NS_NewJob."NS_Actual Units Complete" := 0;
-        NS_NewJob."NS_Actual Units Complete Date" := 0D;
-        NS_NewJob."NS_Job Revenue Posting" := NS_jobcr."NS_Job Revenue Posting";
-        // NewJob."NS_Progress Billing No." := PassJob."NS_Progress Billing No.";//PRJ-1285.RM.1.0 commented
-        NS_NewJob."NS_Progress Billing Sub-Level" := NS_jobcr."NS_Progress Billing Sub-Level";
-        NS_NewJob."NS_Customer Job No." := NS_jobcr."NS_Customer Job No.";
-        NS_NewJob."NS_Customer PO Number" := '';
-        NS_NewJob."NS_Contract No." := NS_jobcr."NS_Contract No.";
-        NS_NewJob."NS_Contract Date" := NS_jobcr."NS_Contract Date";
-        NS_NewJob."NS_Contract For" := NS_jobcr."NS_Contract For";
-        // NS_NewJob."NS_Sub-Level to Job No." := NS_jobcr."NS_Sub-Level to Job No."; //PE-193.PS.1.0 15Nov2023 Commneted
-        NS_NewJob."NS_Sub-Level to Job No." := NS_jobcr."NS_Change Request to Job No."; //PE-193.PS.1.0 15Nov2023
-        if NS_jobcr."NS_Change Request to Job No." = '' then
-            NS_NewJob."NS_Sub-Level to Job No." := NS_jobcr."NS_Sub-Level to Job No.";
-        NS_NewJob."NS_Job Class" := NS_NewJob."NS_Job Class"::"Change Order";
-        NS_NewJob."NS_Job Purchaser" := NS_jobcr."NS_Job Purchaser";
-        // NS_NewJob.INSERT(true);//PE-193.PS.2.0 8Dec2023 Commented 
-        NS_NewJob.INSERT();//PE-193.PS.2.0 8Dec2023
-        exit(NS_NewJob."No.");
-    end;
-
-    procedure NS_CreateCOTasklines(pcOldJobNo: Code[20]; pcNewJobNo: Code[20])
-    var
-    begin
-        NS_CreateMainJobTaskNew(pcOldJobNo, pcNewJobNo);
-    end;
-
-    procedure NS_CreateCOPlanningLines(pcOldJobNo: Code[20]; pcNewJobNo: Code[20])
-    var
-        myInt: Integer;
-    begin
-        NS_MyProcedure(pcOldJobNo, pcNewJobNo);
-    end;
-
-    PROCEDURE NS_CreateChangeOrderNew(PassJob: Record 167);
-    VAR
-        NS_JobsSetup: Record 315;
-        NS_NewJob: Record 167;
-        NS_JobPage: Page 88;
-        NS_SegmentsRec: Record "NS_Job Takeoff Segments";
-        NS_TargetSegmentRec: Record "NS_Job Takeoff Segments";
-        NS_DefaultDimRec: Record "Default Dimension";
-        NS_DefaultDimRec2: Record "Default Dimension";
-        NS_PassJobTask: Record "Job Task";
-        NS_NewJobTask: Record "Job Task";
-        NS_NewJobs2: Record Job;
-        NS_NumSeriesMngt: Codeunit NoSeriesManagement;
-        NS_JobNoNewRecord: code[50];
-        NS_JobSetup: Record "Jobs Setup";
-        NS_JObNumber: code[50];
-        NS_jobcr: Record Job;
-        NS_lbChangeOrderHeaderCreated: Boolean;
-        NS_liNoOfRequest: Integer;
-    BEGIN
-        Clear(NS_lbChangeOrderHeaderCreated);
-        Clear(NS_JobNoNewRecord);
-        NS_jobcr.reset;
-        NS_jobcr.setrange("NS_Sub-Level to Job No.", PassJob."NS_Sub-Level to Job No.");
-        NS_jobcr.SetRange("NS_Manager Job Status", NS_jobcr."NS_Manager Job Status"::Approval);
-        NS_jobcr.SetRange("NS_Job Class", NS_jobcr."NS_Job Class"::"Change Request");
-        NS_liNoOfRequest := NS_jobcr.Count;
-        if NS_jobcr.findset then
-            repeat
-                if not NS_lbChangeOrderHeaderCreated then begin
-                    Message(NS_jobcr."No.");
-                    NS_JobSetup.GET;
-                    NS_JobNoNewRecord := NS_GetNextChangeOrderNoNew(PassJob, NS_JobSetup."NS_Change Order No. Separator");
-                    NS_NewJob.INIT();
-                    NS_NewJob."No." := NS_JobNoNewRecord;
-                    NS_NewJob."No. Series" := '';
-                    NS_NewJob.INSERT(true);
-
-                    NS_NewJob."Search Description" := NS_jobcr."Search Description";
-                    NS_NewJob.Description := NS_jobcr.Description;
-                    NS_NewJob."Description 2" := NS_jobcr."Description 2";
-                    NS_NewJob."Bill-to Customer No." := NS_jobcr."Bill-to Customer No.";
-                    NS_NewJob."Creation Date" := TODAY();
-                    NS_NewJob."Starting Date" := 0D;
-                    NS_NewJob."Ending Date" := 0D;
-                    NS_NewJob.Status := NS_NewJob.Status::Planning;
-                    NS_NewJob."Person Responsible" := NS_jobcr."Person Responsible";
-                    // VALIDATE("Global Dimension 1 Code");//ppal-174.AS.1.0 28DEC2020 Commented
-                    // VALIDATE("Global Dimension 2 Code");//ppal-174.AS.1.0 28DEC2020 Commented
-                    NS_NewJob."Global Dimension 1 Code" := NS_jobcr."Global Dimension 1 Code";//ppal-174.AS.1.0 28DEC2020 Added
-                    NS_NewJob."Global Dimension 2 Code" := NS_jobcr."Global Dimension 2 Code";//ppal-174.AS.1.0 28DEC2020 Added
-                    NS_NewJob."Job Posting Group" := NS_jobcr."Job Posting Group";
-                    NS_NewJob.Blocked := NS_NewJob.Blocked::" ";
-                    NS_NewJob."Customer Disc. Group" := NS_jobcr."Customer Disc. Group";
-                    NS_NewJob."Customer Price Group" := NS_jobcr."Customer Price Group";
-                    NS_NewJob."Language Code" := NS_jobcr."Language Code";
-                    NS_NewJob."Bill-to Name" := NS_jobcr."Bill-to Name";
-                    NS_NewJob."Bill-to Address" := NS_jobcr."Bill-to Address";
-                    NS_NewJob."Bill-to Address 2" := NS_jobcr."Bill-to Address 2";
-                    NS_NewJob."Bill-to City" := NS_jobcr."Bill-to City";
-                    NS_NewJob."Bill-to County" := NS_jobcr."Bill-to County";
-                    NS_NewJob."Bill-to Post Code" := NS_jobcr."Bill-to Post Code";
-                    NS_NewJob."No. Series" := NS_jobcr."No. Series";
-                    NS_NewJob."Bill-to Country/Region Code" := NS_jobcr."Bill-to Country/Region Code";
-                    NS_NewJob."WIP Method" := NS_jobcr."WIP Method";
-                    NS_NewJob."Currency Code" := NS_jobcr."Currency Code";
-                    NS_NewJob."Bill-to Contact No." := NS_jobcr."Bill-to Contact No.";
-                    NS_NewJob."Bill-to Contact" := NS_jobcr."Bill-to Contact";
-                    NS_NewJob."NS_Sell-to Customer No." := NS_jobcr."NS_Sell-to Customer No.";
-                    NS_NewJob."NS_Sell-to Customer Name" := NS_jobcr."NS_Sell-to Customer Name";
-                    NS_NewJob."NS_Salesperson Code" := NS_jobcr."NS_Salesperson Code";
-                    //"NS_Gen. Bus. Posting Group" := PassJob."NS_Gen. Bus. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
-                    NS_NewJob."NS_Gen. Bus. Posting Group New" := NS_jobcr."NS_Gen. Bus. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
-                                                                                                            //"NS_Gen. Prod. Posting Group" := PassJob."NS_Gen. Prod. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
-                    NS_NewJob."NS_Gen. Prod. Posting Group New" := NS_jobcr."NS_Gen. Prod. Posting Group New";//PRJ-831.AS.1.0 12OCT2021 Add New
-                                                                                                              //PRJ-464.AM.1.0 end
-                    NS_NewJob."WIP Posting Date" := NS_jobcr."WIP Posting Date";
-                    NS_NewJob."WIP Posting Method" := NS_jobcr."WIP Posting Method";
-                    NS_NewJob."Invoice Currency Code" := NS_jobcr."Invoice Currency Code";
-                    NS_NewJob."Exch. Calculation (Cost)" := NS_jobcr."Exch. Calculation (Cost)";
-                    NS_NewJob."Exch. Calculation (Price)" := NS_jobcr."Exch. Calculation (Price)";
-                    NS_NewJob."Allow Schedule/Contract Lines" := NS_jobcr."Allow Schedule/Contract Lines";
-                    NS_NewJob."NS_Job Address 1" := NS_jobcr."NS_Job Address 1";
-                    NS_NewJob."NS_Job Address 2" := NS_jobcr."NS_Job Address 2";
-                    NS_NewJob."NS_Job City" := NS_jobcr."NS_Job City";
-                    NS_NewJob."NS_Job County" := NS_jobcr."NS_Job County";
-                    NS_NewJob."NS_Job Post Code" := NS_jobcr."NS_Job Post Code";
-                    NS_NewJob."NS_Job Country/Region Code" := NS_jobcr."NS_Job Country/Region Code";
-                    NS_NewJob."NS_Job Contact" := NS_jobcr."NS_Job Contact";
-                    NS_NewJob."NS_Job Phone" := NS_jobcr."NS_Job Phone";
-                    NS_NewJob."NS_Job Ship-to Code" := NS_jobcr."NS_Job Ship-to Code";
-                    NS_NewJob."NS_Temp Linked Parent Job No." := NS_jobcr."NS_Temp Linked Parent Job No.";
-                    NS_NewJob."NS_Last Job For Job List" := NS_jobcr."NS_Last Job For Job List";
-                    //NS_NewJob."NS_Job Type" := NS_jobcr."NS_Job Type"; //PRJCTPR-298.JS.1.0 16JAN2024
-                    NS_NewJob."NS_Job Type New" := NS_jobcr."NS_Job Type New"; //PRJCTPR-298.JS.1.0 16JAN2024
-                    NS_NewJob.NS_Estimator := NS_jobcr.NS_Estimator;
-                    NS_NewJob.NS_Manager := NS_jobcr.NS_Manager;
-                    NS_NewJob."NS_Manager Job Status" := NS_jobcr."NS_Manager Job Status";
-                    NS_NewJob."NS_Job Status Date" := 0D;
-                    NS_NewJob."NS_Estimated Start Date" := 0D;
-                    NS_NewJob."NS_Estimated Completion Date" := 0D;
-                    NS_NewJob."NS_Completion Date" := 0D;
-                    NS_NewJob."NS_Job Posting Date" := NS_jobcr."NS_Job Posting Date";
-                    NS_NewJob."NS_Recognition Date" := NS_jobcr."NS_Recognition Date";
-                    NS_NewJob."NS_Unit of Measure" := '';
-                    NS_NewJob."NS_Total Units" := 0;
-                    NS_NewJob."NS_Billing method" := NS_jobcr."NS_Billing method";
-                    NS_NewJob."NS_Recognition Method" := NS_jobcr."NS_Recognition Method";
-                    NS_NewJob."NS_Default Job Retention" := NS_jobcr."NS_Default Job Retention";
-                    NS_NewJob."NS_Tax Area Code" := NS_jobcr."NS_Tax Area Code";
-                    NS_NewJob."NS_Tax Liable" := NS_jobcr."NS_Tax Liable";
-                    //NS_NewJob."NS_Tax Group Code" := NS_jobcr."NS_Tax Group Code";   //PRJCTPR-298.JS.1.0 16JAN2024
-                    NS_NewJob."NS_Tax Group Code New" := NS_jobcr."NS_Tax Group Code New";   //PRJCTPR-298.JS.1.0 16JAN2024
-                    NS_NewJob."NS_VAT Bus. Posting Group" := NS_jobcr."NS_VAT Bus. Posting Group";
-                    NS_NewJob."NS_VAT Prod. Posting Group" := NS_jobcr."NS_VAT Prod. Posting Group";
-                    NS_NewJob."NS_Actual Percent Complete" := 0;
-                    NS_NewJob."NS_Actual PercentCompleteDate" := 0D;
-                    NS_NewJob."NS_Actual Units Complete" := 0;
-                    NS_NewJob."NS_Actual Units Complete Date" := 0D;
-                    NS_NewJob."NS_Job Revenue Posting" := NS_jobcr."NS_Job Revenue Posting";
-                    // NewJob."NS_Progress Billing No." := PassJob."NS_Progress Billing No.";//PRJ-1285.RM.1.0 commented
-                    NS_NewJob."NS_Progress Billing Sub-Level" := NS_jobcr."NS_Progress Billing Sub-Level";
-                    NS_NewJob."NS_Customer Job No." := NS_jobcr."NS_Customer Job No.";
-                    NS_NewJob."NS_Customer PO Number" := '';
-                    NS_NewJob."NS_Contract No." := NS_jobcr."NS_Contract No.";
-                    NS_NewJob."NS_Contract Date" := NS_jobcr."NS_Contract Date";
-                    NS_NewJob."NS_Contract For" := NS_jobcr."NS_Contract For";
-                    NS_NewJob."NS_Sub-Level to Job No." := NS_jobcr."NS_Sub-Level to Job No.";
-                    NS_NewJob."NS_Job Class" := NS_NewJob."NS_Job Class"::"Change Order";
-                    NS_NewJob."NS_Job Purchaser" := NS_jobcr."NS_Job Purchaser";
-
-                    if NS_NewJob.MODIFY then
-                        NS_lbChangeOrderHeaderCreated := true;
-
-                end;
-
-                NS_jobcr."NS_Manager Job Status" := NS_jobcr."NS_Manager Job Status"::" ";
-                NS_jobcr.Modify(false);
-                NS_CreateMainJobTaskNew(NS_jobcr."No.", NS_JobNoNewRecord);
-                NS_MyProcedure(NS_jobcr."No.", NS_JobNoNewRecord);
-            until NS_jobcr.Next() = 0;
-        NS_jobcr.Reset();
-        NS_jobcr.SetRange("No.", NS_JobNoNewRecord);
-        if NS_jobcr.FindFirst() then begin
-            if confirm('Do you want to open new change order %1', false, NS_JobNoNewRecord) then
-                Page.Run(page::"Job Card", NS_jobcr);
-        end;
-    END;
-
-    local procedure NS_CreateMainJobTaskNew(OldJobNo: Code[20]; NewJobNo: Code[20])
-    var
-        NS_jobTast: Record "Job Task";
-        NS_OldJobTast: Record "Job Task";
-    begin
-        //if not Rec."NS_Include Sub Levels" then begin
-        NS_OldJobTast.Reset();
-        NS_OldJobTast.SetRange("Job No.", OldJobNo);
-        if NS_OldJobTast.FindSet() then
-            repeat
-                if not NS_jobTast.Get(NewJobNo, NS_OldJobTast."Job Task No.") then begin
-                    NS_jobTast.Init();
-                    NS_jobTast.TransferFields(NS_OldJobTast);
-                    NS_jobTast."Job No." := NewJobNo;
-                    NS_jobTast.Insert();
-                end;
-            until NS_OldJobTast.Next() = 0;
-    end;
-
-    local procedure NS_MyProcedure(OldJobNo: Code[20]; NewJobNo: Code[20])
-    var
-        NS_JPL: Record "Job Planning Line";
-        NS_NewJPL: Record "Job Planning Line";
-        NS_JPL2: Record "Job Planning Line";
-        NS_LiLineNo: Integer;
-    begin
-        NS_JPL.Reset();
-        NS_JPL.SetRange("Job No.", OldJobNo);
-        if NS_JPL.FindSet() then
-            repeat
-                NS_JPL2.Reset();
-                NS_JPL2.SetRange("Job No.", NewJobNo);
-                if NS_JPL2.FindLast() then
-                    NS_LiLineNo := NS_JPL2."Line No." + 10000
-                else
-                    NS_LiLineNo := 10000;
-                NS_NewJPL.Init();
-                NS_NewJPL.TransferFields(NS_JPL);
-                NS_NewJPL."Job No." := NewJobNo;
-                NS_NewJPL."Line No." := NS_LiLineNo;
-                NS_NewJPL.Insert();
-                Commit();
-            until NS_JPL.Next() = 0;
-    end;
-
-    procedure NS_MyProcedure1(pOldJob: Record Job; NewJobNo: Code[20])
-    var
-        NS_JPL: Record "Job Planning Line";
-        NS_NewJPL: Record "Job Planning Line";
-        NS_JPL2: Record "Job Planning Line";
-        NS_LiLineNo: Integer;
-        NS_OldJob: Record Job;
-        NS_licount: Integer;
-    begin
-        NS_licount := pOldJob.Count;
-        NS_LiLineNo := 10000;
-        NS_OldJob := pOldJob;
-        if NS_OldJob.FindSet() then
-            repeat
-                NS_JPL.Reset();
-                NS_JPL.SetRange("Job No.", NS_OldJob."No.");
-                if NS_JPL.FindSet() then
-                    repeat
-                        NS_NewJPL.Init();
-                        NS_NewJPL.TransferFields(NS_JPL);
-                        NS_NewJPL."Job No." := NewJobNo;
-                        NS_NewJPL."Line No." := NS_LiLineNo;
-                        if NS_NewJPL.Insert() then
-                            NS_LiLineNo += 10000;
-                    until NS_JPL.Next() = 0;
-            until NS_OldJob.next() = 0;
-    end;
-
-    PROCEDURE NS_GetNextChangeOrderNoNew(PassJobNo: Record Job; PassJobSeparator: Text[10]): Code[20];
-    VAR
-        NS_JobRec: Record 167;
-        NS_NewChangeOdrNo: Code[20];
-        NS_JobSetup: Record "Jobs Setup";  //PE-246.HS.1.0 1Feb2024 
-    BEGIN
-        if NS_JobSetup.Get() then;    //PE-246.HS.1.0 1Feb2024 
-        if (NS_JobSetup."NS_Change Ordr NumberingFormat" = '') then begin   //PE-246.HS.1.0 1Feb2024 
-            NS_JobRec.Reset();
-
-            NS_JobRec.SetRange("NS_Sub-Level to Job No.", PassJobNo."NS_Sub-Level to Job No.");//PE-193.PS.1.0 06Nov2023 Commented
-                                                                                               //  NS_JobRec.SetRange("NS_Job Class", PassJobNo."NS_Job Class"::"Change Order");//PE-193.PS.2.0 04Dec2023
-                                                                                               //NS_JobRec.SetRange("NS_Change Request to Job No.", PassJobNo."NS_Change Request to Job No.");//PE-193.PS.1.0 06Nov2023
-                                                                                               // NS_JobRec.SetRange("NS_Job Class", NS_JobRec."NS_Job Class"::"Change Order");
-            if NS_JobRec.FindLast() then begin
-                if NS_JobRec."NS_Job Class" = NS_JobRec."NS_Job Class"::"Change Order" then
-                    NS_NewChangeOdrNo := (INCSTR(NS_JobRec."No."))
-                else
-                    NS_NewChangeOdrNo := (PassJobNo."NS_Change Request to Job No." + PassJobSeparator + '001'); //PE-193.PS.1.0 06Nov2023 Commented
-                                                                                                                //NS_NewChangeOdrNo := (PassJobNo."NS_Change Request to Job No." + PassJobSeparator + '001'); //PE-193.PS.1.0 06Nov2023
-                exit(NS_NewChangeOdrNo);
-
-            end;
-        end  //PE-246.HS.1.0 1Feb2024 
-
-        //PE-246.HS.1.0 1Feb2024 Start
-        else begin
-            NS_JobRec.SetRange("NS_Sub-Level to Job No.", PassJobNo."NS_Sub-Level to Job No.");
-            if NS_JobRec.FindLast() then begin
-                if NS_JobRec."NS_Job Class" = NS_JobRec."NS_Job Class"::"Change Order" then
-                    NS_NewChangeOdrNo := (INCSTR(NS_JobRec."No."))
-                else
-                    NS_NewChangeOdrNo := (PassJobNo."NS_Change Request to Job No." + PassJobSeparator + NS_JobSetup."NS_Change Ordr NumberingFormat");
-                exit(NS_NewChangeOdrNo);
-
-            end;
-        end
-        //PE-246.HS.1.0 1Feb2024 End
-    END;
-
-
-    //PRJCTPR-147.NK.1.0 end 17Aug2023
-    //PRJCTPR-362.PS.1.0 01May2024 Start
-    procedure NS_InsertDimension(SublevelNo: Code[20]; NS_JobTask: Record "Job Task")
-    var
-        NS_Jobocal: Record Job;
-        NS_DefaultDimRec: Record "Default Dimension";
-        NS_DefaultDimRec2: Record "Job Task Dimension";
-        DefaultDimRec: Record "Default Dimension";
-        DefaultDimRec2: Record "Job Task Dimension";
-    begin
-        if NS_Jobocal.Get(SublevelNo) then begin
-            DefaultDimRec.Reset();
-            DefaultDimRec.SetRange("Table ID", 167);
-            DefaultDimRec.SetRange("No.", SublevelNo);
-            if DefaultDimRec.FindSet() then
-                repeat
-                    DefaultDimRec2.Init();
-                    DefaultDimRec2."Job No." := NS_JobTask."Job No.";
-                    DefaultDimRec2."Job Task No." := NS_JobTask."Job Task No.";
-                    DefaultDimRec2.Validate("Dimension Code", DefaultDimRec."Dimension Code");
-                    DefaultDimRec2.Validate("Dimension Value Code", DefaultDimRec."Dimension Value Code");
-                    DefaultDimRec2.Insert();
-                until DefaultDimRec.Next() = 0;
-        end;
-    end;
-    //PRJCTPR-362.PS.1.0 01May2024 End
-    //PRJ-1015.JS.1.0 10Oct2021 - Start
+    // << Upgrade
 
     /*+---------------------------------------------------------------------------------------------
       +ProjectPro

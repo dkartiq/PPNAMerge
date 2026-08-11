@@ -1,8 +1,7 @@
 pageextension 14021232 NS_JobPostingGrps extends "Job Posting Groups"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Job Posting Groups'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Recognized Sales Account")

@@ -32,10 +32,8 @@ report 14021202 "NS_Suggest Vendor Payments"
     //PRJ-254.MS.1.0 new code added for vendor payment suggustion
     // +------------------------------------------------------------
     //PRJ-785.RS.1.0 12July2021 | Draw No Field Character Length
-    //SPS-18.RM.1.0 27July2023 | Added some code
-    //PRJCTPR-248.HS.1.0 27Dec2023 | Added code
 
-    Caption = 'Job Suggest Vendor Payments';//PE-141.NK.1.0 Start 09Aug2023
+    Caption = 'Suggest Vendor Payments';
     ProcessingOnly = true;
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = Jobs;
@@ -126,16 +124,13 @@ report 14021202 "NS_Suggest Vendor Payments"
                 Window2.OPEN(Text008);
 
                 //ProjectPro - start
-
-                if JobsSetup.Get() then; //SPS-18.RM.1.0 27July2023
                 PayableVendLedgEntry.RESET;
                 IF PayableVendLedgEntry.FINDSET THEN BEGIN
                     NS_VendorInsuranceMessage := '';
                     REPEAT
                         IF (Vendor.InsuranceExpired(PayableVendLedgEntry."Vendor No.", TODAY)) THEN
                             IF NS_VendorInsuranceMessage <> PayableVendLedgEntry."Vendor No." THEN BEGIN
-                                if not JobsSetup."NS_Notify Insurance Exp" then //SPS-18.RM.1.0 27July2023  
-                                    MESSAGE(Text14021100, PayableVendLedgEntry."Vendor No.");
+                                MESSAGE(Text14021100, PayableVendLedgEntry."Vendor No.");
                                 NS_VendorInsuranceMessage := PayableVendLedgEntry."Vendor No.";
                             END;
                     UNTIL PayableVendLedgEntry.NEXT = 0;
@@ -629,7 +624,6 @@ report 14021202 "NS_Suggest Vendor Payments"
         NS_SubcontractNo: Code[20];
         NS_DrawNo: Code[25];//PRJ-785.RS.1.0 12July2021 Size Increased
         Text14021100: Label 'Warning! Insurance has expired for Vendor %1';
-        JobsSetup: Record "Jobs Setup";//SPS-18.RM.1.0 27July2023
 
     procedure SetGenJnlLine(NewGenJnlLine: Record "Gen. Journal Line")
     begin
@@ -940,22 +934,14 @@ report 14021202 "NS_Suggest Vendor Payments"
                     VALIDATE("Currency Code", TempPaymentBuffer."Currency Code");
                     "Message to Recipient" := GetMessageToRecipient(SummarizePerVend);
                     "Bank Payment Type" := BankPmtType;
-                    //PRJCTPR-248.HS.1.0 27Dec2023 Start
-                    // IF SummarizePerVend THEN   //Commented 
-                    //     GenJnlLine."Applies-to ID" := GenJnlLine."Document No."; //Commented
-                    IF SummarizePerVend THEN begin
-                        GenJnlLine."Applies-to ID" := GenJnlLine."Document No.";
-                        GenJnlLine."NS_Retention Ledger Code" := VendLedgEntry."NS_Retention Ledger Code";
-                    end
-                    else
-                        GenJnlLine."NS_Retention Ledger Code" := TempPaymentBuffer."NS_Retention Ledger Code";
-                    //PRJCTPR-248.HS.1.0 27Dec2023 End
+                    IF SummarizePerVend THEN
+                        "Applies-to ID" := "Document No.";
                     Description := Vendor.Name;
                     "Source Line No." := TempPaymentBuffer."Vendor Ledg. Entry No.";
                     "Shortcut Dimension 1 Code" := TempPaymentBuffer."Global Dimension 1 Code";
                     "Shortcut Dimension 2 Code" := TempPaymentBuffer."Global Dimension 2 Code";
                     //ProjectPro - start
-                    //"NS_Retention Ledger Code" := TempPaymentBuffer."NS_Retention Ledger Code"; //PRJCTPR-248.HS.1.0 27Dec2023 Commented
+                    "NS_Retention Ledger Code" := TempPaymentBuffer."NS_Retention Ledger Code";
                     //ProjectPro - end
                     "Dimension Set ID" := TempPaymentBuffer."Dimension Set ID";
                     "Source Code" := GenJnlTemplate."Source Code";
@@ -989,61 +975,45 @@ report 14021202 "NS_Suggest Vendor Payments"
         DimVal: Record "Dimension Value";
         NewDimensionID: Integer;
         DimSetIDArr: array[10] of Integer;
-        NSDimCreate: List of [Dictionary of [Integer, Code[20]]];  //PRJCTPR-155.JS.1.0 11Sep2023
-        NSDataPosition: Dictionary of [Integer, Code[20]];      //PRJCTPR-155.JS.1.0 11Sep2023        
     begin
-        //PRJ-1137.RM.1.0.003 start
-        // WITH GenJnlLine DO BEGIN
-        NewDimensionID := GenJnlLine."Dimension Set ID";
-        IF SummarizePerVend THEN BEGIN
-            DimBuf.RESET();
-            DimBuf.DELETEALL();
-            DimBufMgt.GetDimensions(TempPaymentBuffer."Dimension Entry No.", DimBuf);
-            IF DimBuf.FINDSET() THEN
-                REPEAT
-                    DimVal.GET(DimBuf."Dimension Code", DimBuf."Dimension Value Code");
-                    TempDimSetEntry."Dimension Code" := DimBuf."Dimension Code";
-                    TempDimSetEntry."Dimension Value Code" := DimBuf."Dimension Value Code";
-                    TempDimSetEntry."Dimension Value ID" := DimVal."Dimension Value ID";
-                    TempDimSetEntry.INSERT;
-                UNTIL DimBuf.NEXT() = 0;
-            NewDimensionID := DimMgt.GetDimensionSetID(TempDimSetEntry);
-            GenJnlLine."Dimension Set ID" := NewDimensionID;
+        WITH GenJnlLine DO BEGIN
+            NewDimensionID := "Dimension Set ID";
+            IF SummarizePerVend THEN BEGIN
+                DimBuf.RESET;
+                DimBuf.DELETEALL;
+                DimBufMgt.GetDimensions(TempPaymentBuffer."Dimension Entry No.", DimBuf);
+                IF DimBuf.FINDSET THEN
+                    REPEAT
+                        DimVal.GET(DimBuf."Dimension Code", DimBuf."Dimension Value Code");
+                        TempDimSetEntry."Dimension Code" := DimBuf."Dimension Code";
+                        TempDimSetEntry."Dimension Value Code" := DimBuf."Dimension Value Code";
+                        TempDimSetEntry."Dimension Value ID" := DimVal."Dimension Value ID";
+                        TempDimSetEntry.INSERT;
+                    UNTIL DimBuf.NEXT = 0;
+                NewDimensionID := DimMgt.GetDimensionSetID(TempDimSetEntry);
+                "Dimension Set ID" := NewDimensionID;
+            END;
+            CreateDim(
+              DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.",
+              DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.",
+              DATABASE::Job, "Job No.",
+              DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code",
+              DATABASE::Campaign, "Campaign No.");
+            IF NewDimensionID <> "Dimension Set ID" THEN BEGIN
+                DimSetIDArr[1] := "Dimension Set ID";
+                DimSetIDArr[2] := NewDimensionID;
+                "Dimension Set ID" :=
+                  DimMgt.GetCombinedDimensionSetID(DimSetIDArr, "Shortcut Dimension 1 Code", "Shortcut Dimension 2 Code");
+            END;
+
+            IF SummarizePerVend THEN BEGIN
+                DimMgt.GetDimensionSet(TempDimSetEntry, "Dimension Set ID");
+                IF AdjustAgainstSelectedDim(TempDimSetEntry, TempDimSetEntry2) THEN
+                    "Dimension Set ID" := DimMgt.GetDimensionSetID(TempDimSetEntry2);
+                DimMgt.UpdateGlobalDimFromDimSetID("Dimension Set ID", "Shortcut Dimension 1 Code",
+                  "Shortcut Dimension 2 Code");
+            END;
         END;
-        //PRJCTPR-155.JS.1.0 11Sep2023 - Start
-        // GenJnlLine.CreateDim(
-        //   DimMgt.TypeToTableID1(GenJnlLine."Account Type".AsInteger()), GenJnlLine."Account No.",
-        //   DimMgt.TypeToTableID1(GenJnlLine."Bal. Account Type".AsInteger()), GenJnlLine."Bal. Account No.",
-        //   DATABASE::Job, GenJnlLine."Job No.",
-        //   DATABASE::"Salesperson/Purchaser", GenJnlLine."Salespers./Purch. Code",
-        //   DATABASE::Campaign, GenJnlLine."Campaign No.");
-
-        NSDataPosition.Add(DimMgt.TypeToTableID1(GenJnlLine."Account Type".AsInteger()), GenJnlLine."Account No.");
-        NSDataPosition.Add(DimMgt.TypeToTableID1(GenJnlLine."Bal. Account Type".AsInteger()), GenJnlLine."Bal. Account No.");
-        NSDataPosition.Add(DATABASE::Job, GenJnlLine."Job No.");
-        NSDataPosition.Add(DATABASE::"Salesperson/Purchaser", GenJnlLine."Salespers./Purch. Code");
-        NSDataPosition.Add(DATABASE::Campaign, GenJnlLine."Campaign No.");
-
-        NSDimCreate.Add(NSDataPosition);
-        GenJnlLine.CreateDim(NSDimCreate);
-        //PRJCTPR-155.JS.1.0 11Sep2023 - end
-
-        IF NewDimensionID <> GenJnlLine."Dimension Set ID" THEN BEGIN
-            DimSetIDArr[1] := GenJnlLine."Dimension Set ID";
-            DimSetIDArr[2] := NewDimensionID;
-            GenJnlLine."Dimension Set ID" :=
-              DimMgt.GetCombinedDimensionSetID(DimSetIDArr, GenJnlLine."Shortcut Dimension 1 Code", GenJnlLine."Shortcut Dimension 2 Code");
-        END;
-
-        IF SummarizePerVend THEN BEGIN
-            DimMgt.GetDimensionSet(TempDimSetEntry, GenJnlLine."Dimension Set ID");
-            IF AdjustAgainstSelectedDim(TempDimSetEntry, TempDimSetEntry2) THEN
-                GenJnlLine."Dimension Set ID" := DimMgt.GetDimensionSetID(TempDimSetEntry2);
-            DimMgt.UpdateGlobalDimFromDimSetID(GenJnlLine."Dimension Set ID", GenJnlLine."Shortcut Dimension 1 Code",
-              GenJnlLine."Shortcut Dimension 2 Code");
-        END;
-        //END;
-        //PRJ-1137.RM.1.0.003 end
     end;
 
     local procedure SetBankAccCurrencyFilter(BalAccType: Enum "Gen. Journal Account Type"; BalAccNo: Code[20]; var TmpPayableVendLedgEntry: Record "Payable Vendor Ledger Entry")

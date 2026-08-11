@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="Filters1">
+          <DataField>Filters1</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Job_WIP_ReportCaption">
+          <DataField>Job_WIP_ReportCaption</DataField>
+        </Field>
+        <Field Name="Filters1Caption">
+          <DataField>Filters1Caption</DataField>
+        </Field>
+        <Field Name="Job_No_Caption">
+          <DataField>Job_No_Caption</DataField>
+        </Field>
+        <Field Name="Job_NameCaption">
+          <DataField>Job_NameCaption</DataField>
+        </Field>
+        <Field Name="WIP_CostCaption">
+          <DataField>WIP_CostCaption</DataField>
+        </Field>
+        <Field Name="WIP_Cost_Posted_to_G_LCaption">
+          <DataField>WIP_Cost_Posted_to_G_LCaption</DataField>
+        </Field>
+        <Field Name="WIP_SalesCaption">
+          <DataField>WIP_SalesCaption</DataField>
+        </Field>
+        <Field Name="WIP_Sales_Posted_to_G_LCaption">
+          <DataField>WIP_Sales_Posted_to_G_LCaption</DataField>
+        </Field>
+        <Field Name="Recog__SalesCaption">
+          <DataField>Recog__SalesCaption</DataField>
+        </Field>
+        <Field Name="Recog__Sales_Posted_to_G_LCaption">
+          <DataField>Recog__Sales_Posted_to_G_LCaption</DataField>
+        </Field>
+        <Field Name="Recog__CostsCaption">
+          <DataField>Recog__CostsCaption</DataField>
+        </Field>
+        <Field Name="Recog__Costs_Posted_to_G_LCaption">
+          <DataField>Recog__Costs_Posted_to_G_LCaption</DataField>
+        </Field>
+        <Field Name="Job__WIP_Method_Caption">
+          <DataField>Job__WIP_Method_Caption</DataField>
+        </Field>
+        <Field Name="FINAL_TOTAL_Caption">
+          <DataField>FINAL_TOTAL_Caption</DataField>
+        </Field>
+        <Field Name="Job_No_">
+          <DataField>Job_No_</DataField>
+        </Field>
+        <Field Name="Job__WIP_Method_">
+          <DataField>Job__WIP_Method_</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="WIP_Cost">
+          <DataField>WIP_Cost</DataField>
+        </Field>
+        <Field Name="WIP_CostFormat">
+          <DataField>WIP_CostFormat</DataField>
+        </Field>
+        <Field Name="WIP_Cost_Posted_to_G_L">
+          <DataField>WIP_Cost_Posted_to_G_L</DataField>
+        </Field>
+        <Field Name="WIP_Cost_Posted_to_G_LFormat">
+          <DataField>WIP_Cost_Posted_to_G_LFormat</DataField>
+        </Field>
+        <Field Name="WIP_Sales">
+          <DataField>WIP_Sales</DataField>
+        </Field>
+        <Field Name="WIP_SalesFormat">
+          <DataField>WIP_SalesFormat</DataField>
+        </Field>
+        <Field Name="WIP_Sales_Posted_to_G_L">
+          <DataField>WIP_Sales_Posted_to_G_L</DataField>
+        </Field>
+        <Field Name="WIP_Sales_Posted_to_G_LFormat">
+          <DataField>WIP_Sales_Posted_to_G_LFormat</DataField>
+        </Field>
+        <Field Name="Recog__Sales">
+          <DataField>Recog__Sales</DataField>
+        </Field>
+        <Field Name="Recog__SalesFormat">
+          <DataField>Recog__SalesFormat</DataField>
+        </Field>
+        <Field Name="Recog__Sales_Posted_to_G_L">
+          <DataField>Recog__Sales_Posted_to_G_L</DataField>
+        </Field>
+        <Field Name="Recog__Sales_Posted_to_G_LFormat">
+          <DataField>Recog__Sales_Posted_to_G_LFormat</DataField>
+        </Field>
+        <Field Name="Recog__Costs">
+          <DataField>Recog__Costs</DataField>
+        </Field>
+        <Field Name="Recog__CostsFormat">
+          <DataField>Recog__CostsFormat</DataField>
+        </Field>
+        <Field Name="Recog__Costs_Posted_to_G_L">
+          <DataField>Recog__Costs_Posted_to_G_L</DataField>
+        </Field>
+        <Field Name="Recog__Costs_Posted_to_G_LFormat">
+          <DataField>Recog__Costs_Posted_to_G_LFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

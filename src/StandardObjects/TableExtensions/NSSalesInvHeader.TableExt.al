@@ -2,11 +2,6 @@ tableextension 14021120 NS_SalesInvHeader extends "Sales Invoice Header"
 {
     // version NAVW111.00.00.20783,NAVNA11.00.00.20783,PPNA11.00
     //CTSI-150.AS.1.0 28Sept2020 Added new field
-    //PRJ-1304.RM.1 22April2022 | Added a Field
-    //PRJ-1418.RM.1.0 27May2022 | Made field editable
-    //PRJ-1519.NK.1.0 16Jul2022 | Added Code
-    //PRJ-1624.NK.1.0 22Sep2022 | Added Field
-    //PRJCTPR-252.HS.1.0 21Dec2023 | Added code
     fields
     {
 
@@ -53,7 +48,6 @@ tableextension 14021120 NS_SalesInvHeader extends "Sales Invoice Header"
             Caption = 'Retention Percent';
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
-            DecimalPlaces = 2 : 15; //PRJ-1519.NK.1.0 16Jul2022
         }
         field(14021139; "NS_Retention Amount (LCY)"; Decimal)
         {
@@ -124,44 +118,6 @@ tableextension 14021120 NS_SalesInvHeader extends "Sales Invoice Header"
             DataClassification = CustomerContent;
         }
         //CTSI-150.AS.1.0 28Sept2020 - end
-        //PRJ-1304.RM.1.0 Start
-        field(14021408; "NS_Draw No."; Code[25])
-        {
-            Caption = 'Draw No.';
-            Description = 'Draw No.';
-            // Editable = false; //PRJ-1418.RM.1.0  commented
-            Editable = true; //PRJ-1418.RM.1.0
-                             // TableRelation = NS_Draw."NS_No."; //PRJ-1418.RM.1.0 //PRJCTPR-252.HS.1.0 21Dec2023 Commented
-            TableRelation = NS_Draw."NS_No." WHERE("NS_Job No." = FIELD("NS_Job No."),  //PRJCTPR-252.HS.1.0 21Dec2023
-                                              NS_Closed = CONST(false));
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1304.RM.1.0 End
-        //PRJ-1624.NK.1.0 22Sep2022 Start
-        field(14021486; "NS_Multiple Retention on Lines"; Boolean)
-        {
-            Caption = 'Multiple Retention on Lines';
-            DataClassification = CustomerContent;
-            Description = 'Multiple Retention on Lines';
-        }
-        //PRJ-1624.NK.1.0 22Sep2022 End
-
-        //PE-302.JS.1.0 29MAY24-Start
-        field(14021311; "NS_AppliesToDocument Type"; Enum "Gen. Journal Document Type")
-        {
-            Caption = 'AppliesToDocument Type';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document Type" is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        field(14021312; "NS_AppliesToDocument No."; code[20])
-        {
-            Caption = 'AppliesToDocument No.';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document No." is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        //PE-302.JS.1.0 29MAY24-end 
     }
 
     PROCEDURE GetRetentionBase(No: Code[20]): Decimal;

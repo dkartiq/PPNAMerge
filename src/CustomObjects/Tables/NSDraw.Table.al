@@ -38,14 +38,6 @@ table 14021185 NS_Draw
         {
             Caption = 'Closed';
             DataClassification = CustomerContent;
-
-            trigger OnValidate()
-            begin
-                //PE-200.AS.7.0 START
-                if Rec.NS_Closed = true then
-                    Rec.NS_ClosedDate := WORKDATE;
-                //PE-200.AS.7.0 END
-            end;
         }
         field(30; "NS_No. Series"; Code[10])
         {
@@ -93,14 +85,6 @@ table 14021185 NS_Draw
                                                                            "NS_Requisition No." = FIELD("NS_ProgressBillRequisitionNo."));
             DataClassification = CustomerContent;
         }
-        //PE-200.AS.7.0 START
-        field(63; "NS_ClosedDate"; date)
-        {
-            Caption = 'Closed Date';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-200.AS.7.0 END
     }
 
     keys

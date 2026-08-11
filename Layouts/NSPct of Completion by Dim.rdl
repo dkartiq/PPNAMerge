@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="PageCaption">
+          <DataField>PageCaption</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="CompletePercentText">
+          <DataField>CompletePercentText</DataField>
+        </Field>
+        <Field Name="Sub_LevelsText_">
+          <DataField>Sub_LevelsText_</DataField>
+        </Field>
+        <Field Name="WorksheetText">
+          <DataField>WorksheetText</DataField>
+        </Field>
+        <Field Name="Job_TABLECAPTION_____Filters______JobFilter">
+          <DataField>Job_TABLECAPTION_____Filters______JobFilter</DataField>
+        </Field>
+        <Field Name="Global_Dimension_Code_Header">
+          <DataField>Global_Dimension_Code_Header</DataField>
+        </Field>
+        <Field Name="ReportHeadings_Number">
+          <DataField>ReportHeadings_Number</DataField>
+        </Field>
+        <Field Name="Job_No_Caption">
+          <DataField>Job_No_Caption</DataField>
+        </Field>
+        <Field Name="Job_DescriptionCaption">
+          <DataField>Job_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Contract_PriceCaption">
+          <DataField>Contract_PriceCaption</DataField>
+        </Field>
+        <Field Name="To_Date_BillingsCaption">
+          <DataField>To_Date_BillingsCaption</DataField>
+        </Field>
+        <Field Name="To_Date_CostCaption">
+          <DataField>To_Date_CostCaption</DataField>
+        </Field>
+        <Field Name="Total_Cost_EstimateCaption">
+          <DataField>Total_Cost_EstimateCaption</DataField>
+        </Field>
+        <Field Name="Percent_CompletionCaption">
+          <DataField>Percent_CompletionCaption</DataField>
+        </Field>
+        <Field Name="Recognized_RevenueCaption">
+          <DataField>Recognized_RevenueCaption</DataField>
+        </Field>
+        <Field Name="Recognized_Profit_LossCaption">
+          <DataField>Recognized_Profit_LossCaption</DataField>
+        </Field>
+        <Field Name="Over_BillingsCaption">
+          <DataField>Over_BillingsCaption</DataField>
+        </Field>
+        <Field Name="Under_BillingsCaption">
+          <DataField>Under_BillingsCaption</DataField>
+        </Field>
+        <Field Name="TotalsCaption">
+          <DataField>TotalsCaption</DataField>
+        </Field>
+        <Field Name="Global_Dimension_Code">
+          <DataField>Global_Dimension_Code</DataField>
+        </Field>
+        <Field Name="Global_Dimension_Selected">
+          <DataField>Global_Dimension_Selected</DataField>
+        </Field>
+        <Field Name="Job__No__">
+          <DataField>Job__No__</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="A">
+          <DataField>A</DataField>
+        </Field>
+        <Field Name="AFormat">
+          <DataField>AFormat</DataField>
+        </Field>
+        <Field Name="B">
+          <DataField>B</DataField>
+        </Field>
+        <Field Name="BFormat">
+          <DataField>BFormat</DataField>
+        </Field>
+        <Field Name="C">
+          <DataField>C</DataField>
+        </Field>
+        <Field Name="CFormat">
+          <DataField>CFormat</DataField>
+        </Field>
+        <Field Name="D">
+          <DataField>D</DataField>
+        </Field>
+        <Field Name="DFormat">
+          <DataField>DFormat</DataField>
+        </Field>
+        <Field Name="E">
+          <DataField>E</DataField>
+        </Field>
+        <Field Name="EFormat">
+          <DataField>EFormat</DataField>
+        </Field>
+        <Field Name="F">
+          <DataField>F</DataField>
+        </Field>
+        <Field Name="FFormat">
+          <DataField>FFormat</DataField>
+        </Field>
+        <Field Name="G">
+          <DataField>G</DataField>
+        </Field>
+        <Field Name="GFormat">
+          <DataField>GFormat</DataField>
+        </Field>
+        <Field Name="H">
+          <DataField>H</DataField>
+        </Field>
+        <Field Name="HFormat">
+          <DataField>HFormat</DataField>
+        </Field>
+        <Field Name="I">
+          <DataField>I</DataField>
+        </Field>
+        <Field Name="IFormat">
+          <DataField>IFormat</DataField>
+        </Field>
+        <Field Name="SubLevel_Budgeted_Price">
+          <DataField>SubLevel_Budgeted_Price</DataField>
+        </Field>
+        <Field Name="SubLevel_Budgeted_PriceFormat">
+          <DataField>SubLevel_Budgeted_PriceFormat</DataField>
+        </Field>
+        <Field Name="SubLevel_Actual_Price">
+          <DataField>SubLevel_Actual_Price</DataField>
+        </Field>
+        <Field Name="SubLevel_Actual_PriceFormat">
+          <DataField>SubLevel_Actual_PriceFormat</DataField>
+        </Field>
+        <Field Name="SubLevel_Actual_Cost">
+          <DataField>SubLevel_Actual_Cost</DataField>
+        </Field>
+        <Field Name="SubLevel_Actual_CostFormat">
+          <DataField>SubLevel_Actual_CostFormat</DataField>
+        </Field>
+        <Field Name="SubLevel_Budgeted_Cost">
+          <DataField>SubLevel_Budgeted_Cost</DataField>
+        </Field>
+        <Field Name="SubLevel_Budgeted_CostFormat">
+          <DataField>SubLevel_Budgeted_CostFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

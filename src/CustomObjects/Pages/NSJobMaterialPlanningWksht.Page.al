@@ -20,29 +20,17 @@ page 14021427 "NS_Job Material Planning Wksht"
     //PRJ-492.RS.1.0 10May2021 | Hide/Unhide Fields 
     //PRJ-659.RS.1.0�22June21�|�NS_�should�be�removed�from�every�page�rest�mention�the�page�ID�and�Name.
     //PRJ-895.GK.1.0 27Aug2021 | Add two fields Use Tax Sku & Use Tax Amount
-    //PRJ-999.JS.1.0 09Nov2021 | Add fields and Action
-    //PRJ-1085.RM.1.0 16Dec2021 | Added Page Help link
-    //PRJ-1117.JS.1.0 06Dec2022 | Add fields
-    //PRJ-1131.RM.1.0 10Jan2022 | Removed with statement
-    //PRJ-1171.JS.1.0 08FEB2022 | Make item Variant editable
-    //PRJ-1380.NK.1.0 16May2022 | Added new fields
-    //PRJ-1479.NK.1.0 29Jun2022 | Added Code
-    //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
-    //PE-25.NK.1.0  06jan2023   | added two digit decimal places at unit cost field.
-    //PRJCTPR-30.RM.1.0 20Jan2023 | Made action button invisible
     PageType = Worksheet;
     Caption = 'Job Material Planning Wksht';
     Permissions = TableData "NS_Export/Import Excel Header" = rimd,
                   TableData "NS_Export / Import Excel Line" = rimd,
-                  tabledata "Purch. Rcpt. Line" = rimd, //PRJ-256.MS.1.0
-                  tabledata "User Setup" = rimd; //PRJCTPR-290.AT.1.0
+                  tabledata "Purch. Rcpt. Line" = rimd; //PRJ-256.MS.1.0
     RefreshOnActivate = true;
     SourceTable = "NS_Job Material Planning";
     UsageCategory = Lists;
     ApplicationArea = Jobs;
     SourceTableView = sorting("NS_Worksheet Job No.", "NS_Order Code", "NS_Job Plannine Line No.", NS_Level)
     ORDER(Ascending);//PRJ-563.AS.1.0 24MAY2020
-    ContextSensitiveHelpPage = 'user-guide/jmp-process/job-material-planning/'; //PRJ-1085.RM.1.0 16Dec2021
 
     layout
     {
@@ -61,8 +49,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                 field("Job No."; Rec."NS_Worksheet Job No.")
                 {
                     ApplicationArea = All;
-                    // ToolTip = 'Job No.'; //PRJ-1579.RM.1.0 commented
-                    ToolTip = 'Specifies the Job No.'; //PRJ-1579.RM.1.0
+                    ToolTip = 'Job No.';
                     Caption = 'Job No.';
                 }
                 //PRJ-492.N.S.1.0 Start
@@ -73,12 +60,10 @@ page 14021427 "NS_Job Material Planning Wksht"
                     Caption = 'Job Task Code';//PPAL-43.AS.1.0 13AUG20 
                 }
                 //PRJ-492.N.S.1.0 End
-                field("Segment Code"; Rec."NS_Segment Code")    //PRJ-1131.RM.1.0
+                field("Segment Code"; "NS_Segment Code")
                 {
                     ApplicationArea = all;
                     Description = 'TM-10.AM.1.0';
-                    // ToolTip = 'select the Segment'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                    ToolTip = 'Select the Segment'; //PRJ-1579.RM.2.0
                     //Visible = false; //PRJ-492.AS.1.0  //Doubt //PRJ-492.RS.1.0 25May2021  Comment
                     Visible = true;//PRJ-492.RS.1.0 25May2021  
                 }
@@ -102,7 +87,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Date Required';
                 }
-                field("NS_Assembly Item on Job."; Rec."NS_Assembly Item on Job.")//PRJ-563     //PRJ-1131.RM.1.0
+                field("NS_Assembly Item on Job."; "NS_Assembly Item on Job.")//PRJ-563
                 {
                     ApplicationArea = All;
                     ToolTip = 'Assembly Item on Job.';
@@ -120,7 +105,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                     ToolTip = 'Assembly Item on Job.';
                     Visible = false;//PRJ-492.RS.1.0 10May2021
                 }
-                field("NS_Quantity Per"; Rec."NS_Quantity Per")//PRJ-563     //PRJ-1131.RM.1.0
+                field("NS_Quantity Per"; "NS_Quantity Per")//PRJ-563
                 {
                     ApplicationArea = All;
                     ToolTip = 'Assembly Item on Job.';
@@ -152,7 +137,7 @@ page 14021427 "NS_Job Material Planning Wksht"
 
                     trigger OnValidate();
                     begin
-                        Rec.NS_ItemAvail;    //PRJ-1131.RM.1.0
+                        NS_ItemAvail;
                     end;
                 }
                 field(Description; Rec.NS_Description)
@@ -160,26 +145,6 @@ page 14021427 "NS_Job Material Planning Wksht"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Description';
                 }
-                //PRJ-1365.AS.1.0 START
-                field("NS_Unit of Measure Code"; Rec."NS_Unit of Measure Code")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies Unit of Measure Code';
-                }
-                //PRJ-1365.AS.1.0 END
-
-                //PRJ-1365.AS.2.0 START
-                field("NS_Base UOM"; Rec."NS_Base UOM")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies Base UOM';
-                }
-                field("NS_Base UOM (Qty)"; Rec."NS_Base UOM (Qty)")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies Base UOM (Qty)';
-                }
-                //PRJ-1365.AS.2.0 END
                 field(Details; Rec.NS_Details)
                 {
                     ApplicationArea = All;
@@ -216,7 +181,6 @@ page 14021427 "NS_Job Material Planning Wksht"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Unit Cost';
-                    DecimalPlaces = 2 : 2;  //PE-25.NK.1.0  06jan2023
                 }
                 field("Total Cost"; Rec."NS_Total Cost")
                 {
@@ -227,9 +191,8 @@ page 14021427 "NS_Job Material Planning Wksht"
                 {
                     ApplicationArea = All;
                     Caption = 'Inv. Qty (Job Jrnl)';
-                    // ToolTip = 'Specifies the Quantity of inventory in Job Journal'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                    // ToolTip = 'Inv. Qty (Job Jrnl)'; //PRJ-1579.RM.1.0
-                    ToolTip = 'Specifies the Quantity of Inventory in Job Journal'; //PRJ-1579.RM.2.0
+
+                    ToolTip = 'Inv. Qty (Job Jrnl)';
 
                     trigger OnAssistEdit();
                     var
@@ -240,7 +203,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                     begin
                         lJobJnlBatch.RESET;
                         //if lJobJnlBatch.GET(JOB, "Worksheet Job No.") then //PRJ-134 VIKAS
-                        if lJobJnlBatch.GET(JOBLbl, CopyStr(Rec."NS_Worksheet Job No.", 1, 10)) then//PRJ-134 VIKAS     //PRJ-1131.RM.1.0
+                        if lJobJnlBatch.GET(JOBLbl, CopyStr("NS_Worksheet Job No.", 1, 10)) then//PRJ-134 VIKAS
                             JobJnlMgt.TemplateSelectionFromBatch(lJobJnlBatch);
                     end;
                 }
@@ -277,8 +240,6 @@ page 14021427 "NS_Job Material Planning Wksht"
                     Caption = 'PO Return Qty.';
                     Description = 'PRJ-372.MS.1.0';
                     Editable = false;
-                    // ToolTip = 'Specifies the returned qty of PO'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                    ToolTip = 'Specifies the returned Qty. of PO'; //PRJ-1579.RM.2.0
                 }
                 field("PO Return Qty. Shipped"; Rec."NS_PO Return Qty. Shipped")
                 {
@@ -286,8 +247,6 @@ page 14021427 "NS_Job Material Planning Wksht"
                     Caption = 'PO Return Qty. Shipped';
                     Description = 'PRJ-372.MS.1.0';
                     Editable = false;
-                    // ToolTip = 'Specifies the returned qty Shipped'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                    ToolTip = 'Specifies the returned Qty. Shipped'; //PRJ-1579.RM.2.0
                 }
                 field("PO Return Qty. Invoiced"; Rec."NS_PO Return Qty. Invoiced")
                 {
@@ -295,8 +254,6 @@ page 14021427 "NS_Job Material Planning Wksht"
                     Caption = 'PO Return Qty. Invoiced';
                     Description = 'PRJ-372.MS.1.0';
                     Editable = false;
-                    // ToolTip = 'Specifies the returned qty Invoiced'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                    ToolTip = 'Specifies the returned Qty. Invoiced'; //PRJ-1579.RM.2.0
                 }
 
                 field("Job Site Vndr Qty"; Rec."NS_Job Site Vndr Qty")
@@ -328,7 +285,6 @@ page 14021427 "NS_Job Material Planning Wksht"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Main Item';
-                    Visible = false;//PRJ-1224.AS.2.0 Added Visiblity
                 }
                 field(NS_Level; Rec.NS_Level)//PRJ-563.AS.1.0 24MAY2020
                 {
@@ -346,79 +302,12 @@ page 14021427 "NS_Job Material Planning Wksht"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Use Tax Sku';
                 }
-                //PRJ-929.GK.5.0 22Dec2021 start - Uncomment & Set visible false
-                //PRJ-929.GK.3.0 23NOV2021 start-comment
                 field("NS_Use Tax Amount"; Rec."NS_Use Tax Amount")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Usee Tax Amount';
-                    Visible = false;
-                    Editable = false;
                 }
-                //PRJ-929.GK.3.0 23NOV2021 end
                 //PRJ-895.GK.1.0 27Aug2021 end
-                //PRJ-929.GK.5.0 22Dec2021 end
-                //PRJ-999.JS.1.0 09Nov2021 Start
-                field("NS_Global Dimension 1 Code"; Rec."NS_Global Dimension 1 Code")
-                {
-                    ToolTip = 'Specifies the value of the Global Dimension 1 Code field.';
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("NS_Global Dimension 2 Code"; Rec."NS_Global Dimension 2 Code")
-                {
-                    ToolTip = 'Specifies the value of the Global Dimension 2 Code field.';
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-
-                //PRJ-999.JS.1.0 09Nov2021 End
-                //PRJ-1117.JS.1.0 06Dec2022-Start
-                field("Variant Code"; Rec."NS_Variant Code")
-                {
-                    ToolTip = 'Specifies the value of the Item Variant Code';
-                    ApplicationArea = All;
-                    //Editable = false;   //PRJ-1171.JS.1.0 08FEB2022
-                }
-                //PRJ-1117.JS.1.0 06Dec2022-end 
-                //PRJ-1380.NK.1.0 16May2022 Start
-                field("NS_Job Purchaser"; Rec."NS_Job Purchaser")
-                {
-                    ApplicationArea = all;
-                    // ToolTip = 'Job Purchaser'; //PRJ-1579.RM.1.0  commented
-                    ToolTip = 'Shows the Job Purchase from the Job card'; //PRJ-1579.RM.1.0 
-                    Caption = 'Job Purchaser';
-                    Editable = false;
-                    Description = 'PRJ-1380.NK.1.0';
-                }
-                field("NS_Job Manager"; Rec."NS_Job Manager")
-                {
-                    ApplicationArea = all;
-                    // ToolTip = 'Job Manager'; //PRJ-1579.RM.1.0  commented
-                    // ToolTip = 'Specifies the Job manager'; //PRJ-1579.RM.1.0  //PRJ-1579.RM.2.0  commented
-                    ToolTip = 'Specifies the Job Manager'; //PRJ-1579.RM.2.0  
-                    Caption = 'Job Manager';
-                    Description = 'PRJ-1380.NK.1.0';
-                    Editable = false;
-                }
-                //PRJ-1380.NK.1.0 16May2022 End 
-
-                //PRJCTPR-93.PS.1.0 10April2023 Start
-                field("NS_JMP Batch Name"; Rec."NS_JMP Batch Name")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'JMB batch Name';
-                    Caption = 'Batch Name';
-                    trigger OnValidate()
-                    var
-                        NS_UserSetup: Record "User Setup";
-                    begin
-                        if NS_UserSetup.Get(UserId) then;
-                        Rec."NS_JMP Batch Name" := NS_UserSetup."NS_JMP Batch Name";
-                        Rec.Modify();
-                    end;
-                }
-                //PRJCTPR-93.PS.1.0 10April2023 End            
             }
         }
     }
@@ -443,7 +332,7 @@ page 14021427 "NS_Job Material Planning Wksht"
 
                     trigger OnAction();
                     begin
-                        Rec.NS_GetandLoadActuals(Rec."NS_Worksheet Job No.", '');    //PRJ-1131.RM.1.0
+                        NS_GetandLoadActuals("NS_Worksheet Job No.", '');
                     end;
                 }
                 action(NS_PrintJobMaterialWorksheet)
@@ -466,7 +355,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                         Resource: Record Resource;
                     begin
                         Resource.RESET;
-                        Resource.SETRANGE(Name, Rec."NS_Job Manager");//PRJ-1131.RM.1.0
+                        Resource.SETRANGE(Name, "NS_Job Manager");
                         if Resource.FINDFIRST then
                             JobMngr := Resource."No.";
                         // JobMatlPlanWkshtRpt.InitVar("Worksheet Job No.", "Job Manager");//PRJ-316.AS.1.0 30JUNE2020 Commented code
@@ -489,29 +378,10 @@ page 14021427 "NS_Job Material Planning Wksht"
                     PromotedCategory = Process;
 
                     trigger OnAction();
-                    var
-                        NS_UserSetup: Record "User Setup";  //PRJCTPR-93.NK.1.0 17April2023
                     begin
-                    //PRJCTPR-93.NC.1.0 03May2023 start  
-                        if NS_UserSetup.Get(UserId) then;
-                        if NS_UserSetup."NS_JMP Batch Name" <> '' then begin
-                            if Rec."NS_JMP Batch Name" <> NS_UserSetup."NS_JMP Batch Name" then
-                                Error('JMP batch Name should be same as per user setup JMP batch Name');
-                        end;
-                        NS_UserSetup."NS_Req JMP Doc. No." := Rec."NS_Document No.";
-                        NS_UserSetup.MODIFY;
-                        //PRJCTPR-93.NC.1.0 17April2023 end
-                        //PRJ-1479.NK.1.0 29Jun2022 Start
-                        //JobsSetup.GET; //PRJCTPR-93.NC.1.0 03May2023 block
-                        //JobsSetup."NS_Req JMP Doc. No." := Rec."NS_Document No.";//PRJ-1131.RM.1.0 //PRJCTPR-93.NC.1.0 03May2023 Block
-                        //JobsSetup.MODIFY; //PRJCTPR-93.NC.1.0 03May2023 Block
-                        // JobMaterialPlan.Reset();
-                        // JobMaterialPlan.SetFilter("NS_Req JMP Doc. No.", '<>%1', '');
-                        // if JobMaterialPlan.FindFirst() then
-                        //     JobMaterialPlan.ModifyAll("NS_Req JMP Doc. No.", '');
-                        // Rec."NS_Req JMP Doc. No." := Rec."NS_Document No.";
-                        // Rec.Modify();
-                        //PRJ-1479.NK.1.0 29Jun2022 End
+                        JobsSetup.GET;
+                        JobsSetup."NS_Req JMP Doc. No." := "NS_Document No.";
+                        JobsSetup.MODIFY;
                         ReqWksht.RUN;
                     end;
                 }
@@ -527,24 +397,10 @@ page 14021427 "NS_Job Material Planning Wksht"
                     PromotedIsBig = true;
 
                     trigger OnAction();
-                    var
-                        NSUserSetup: Record "User Setup";  //PRJCTPR-219.PS.1.0 02Nov2023
                     begin
-                        //PRJ-1479.NK.1.0 29Jun2022 Start
-                        // JobsSetup.GET;
-                        // JobsSetup."NS_Req JMP Doc. No." := '';
-                        // JobsSetup.MODIFY();
-                        JobMaterialPlan.Reset();
-                        JobMaterialPlan.SetFilter("NS_Req JMP Doc. No.", '<>%1', '');
-                        if JobMaterialPlan.FindFirst() then
-                            JobMaterialPlan.ModifyAll("NS_Req JMP Doc. No.", '');
-                        //PRJ-1479.NK.1.0 29Jun2022 End
-                        //PRJCTPR-219.PS.1.0 02Nov2023 Start
-                        if NSUserSetup.Get(UserId) then;
-                        NSUserSetup."NS_Req JMP Doc. No." := '';
-                        NSUserSetup.MODIFY;
-                        //PRJCTPR-219.PS.1.0 02Nov2023 End
-
+                        JobsSetup.GET;
+                        JobsSetup."NS_Req JMP Doc. No." := '';
+                        JobsSetup.MODIFY();
                         ReqWksht.RUN();
                     end;
                 }
@@ -562,7 +418,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                     var
                         PurchaseResourceList: Page "NS_JMP Purch. Res. G/L";
                     begin
-                        PurchaseResourceList.NS_InitVar(Rec."NS_Worksheet Job No.", LineType::Resource);//PRJ-1131.RM.1.0
+                        PurchaseResourceList.NS_InitVar("NS_Worksheet Job No.", LineType::Resource);
                         PurchaseResourceList.RUN;
                     end;
                 }
@@ -588,19 +444,19 @@ page 14021427 "NS_Job Material Planning Wksht"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Purchase G/L';
-                    Caption = 'Purchase G/L'; //PRJ-659.RS.1.0�22June21 New Added
-                    // Enabled = false; //PRJCTPR-309.HS.1.0 26Feb2024 Commented 
+                    Caption = 'Purchase G/L';//PRJ-659.RS.1.0�22June21 New Added
+                    Enabled = false;
                     Image = GL;
                     Promoted = true;
                     PromotedCategory = Process;
                     PromotedIsBig = true;
-                    // Visible = false; //PRJCTPR-309.HS.1.0 26Feb2024 Commented 
+                    Visible = false;
 
                     trigger OnAction();
                     var
                         PurchaseResourceList: Page "NS_JMP Purch. Res. G/L";
                     begin
-                        PurchaseResourceList.NS_InitVar(Rec."NS_Worksheet Job No.", LineType::"G/L Account");//PRJ-1131.RM.1.0
+                        PurchaseResourceList.NS_InitVar("NS_Worksheet Job No.", LineType::"G/L Account");
                         PurchaseResourceList.RUN;
                     end;
                 }
@@ -616,7 +472,7 @@ page 14021427 "NS_Job Material Planning Wksht"
 
                     trigger OnAction();
                     begin
-                        Rec.NS_CopyPlanningLines(Rec."NS_Worksheet Job No.", '', false);//PRJ-1131.RM.1.0
+                        NS_CopyPlanningLines("NS_Worksheet Job No.", '', false);
                     end;
                 }
                 action(NS_UpdatePlanningLines)
@@ -631,11 +487,7 @@ page 14021427 "NS_Job Material Planning Wksht"
 
                     trigger OnAction();
                     begin
-                        Message('You have changed the Product ID for Item/s having associated Purchase Document/s. Changes for such item will not be pulled on this window to avoid mismatch in Purchase document details.');//PRJCTPR-142.PS.1.0 26Jun2023
-                        //Rec.NS_CopyPlanningLines(Rec."NS_Worksheet Job No.", '', true);//PRJ-1224.AS.1.0 Commented old code
-                        Rec.NS_NewCopyPlanningLines(Rec."NS_Worksheet Job No.", '', true);    //PRJ-1224.AS.1.0 Added code
-                        Rec.NS_OnAfterUpdateItemsPlanningLineinJMPs(Rec."NS_Worksheet Job No.", '');//PRJ-1224.AS.1.0 Added code
-                        Rec.NS_OnAfterUpdateResourcePlanningLineinJMPs(Rec."NS_Worksheet Job No.", '');//PRJ-1224.AS.1.0 Added code
+                        NS_CopyPlanningLines("NS_Worksheet Job No.", '', true);
                     end;
                 }
                 action(NS_JobJournal)
@@ -658,43 +510,28 @@ page 14021427 "NS_Job Material Planning Wksht"
                     begin
                         COMMIT();
                         lJMP.RESET();
-                        lJMP.SETRANGE("NS_Worksheet Job No.", Rec."NS_Worksheet Job No.");//PRJ-1131.RM.1.0
-                        lJMP.SETRANGE("NS_Document No.", Rec."NS_Document No.");//PRJ-1131.RM.1.0
+                        lJMP.SETRANGE("NS_Worksheet Job No.", "NS_Worksheet Job No.");
+                        lJMP.SETRANGE("NS_Document No.", "NS_Document No.");
                         lJMP.SETFILTER("NS_Date Ordered By", '<=%1', WORKDATE);
                         if lJMP.FINDFIRST then;
 
                         //if lJobJnlBatch.GET(JOB, "Worksheet Job No.") then begin //PRJ-134 VIKAS
-                        if lJobJnlBatch.GET(JOBLbl, CopyStr(Rec."NS_Worksheet Job No.", 1, 10)) then begin //PRJ-134 VIKAS   //PRJ-1131.RM.1.0
-                            if not CONFIRM(Text0001Lbl, false, Rec."NS_Worksheet Job No.") then//PRJ-1131.RM.1.0
+                        if lJobJnlBatch.GET(JOBLbl, CopyStr("NS_Worksheet Job No.", 1, 10)) then begin //PRJ-134 VIKAS
+                            if not CONFIRM(Text0001Lbl, false, "NS_Worksheet Job No.") then
                                 JobJnlMgt.TemplateSelectionFromBatch(lJobJnlBatch)
                             else
-                                AddJnlLines(Rec."NS_Worksheet Job No.", Rec."NS_Document No.", lJMP."NS_Date Ordered By");//PRJ-1131.RM.1.0
+                                AddJnlLines("NS_Worksheet Job No.", "NS_Document No.", lJMP."NS_Date Ordered By");
                         end else begin
-                            LoadJobJnl.InitVar(Rec."NS_Worksheet Job No.", Rec."NS_Document No.", lJMP."NS_Date Ordered By", false);//PRJ-1131.RM.1.0
+                            LoadJobJnl.InitVar("NS_Worksheet Job No.", "NS_Document No.", lJMP."NS_Date Ordered By", false);
                             LoadJobJnl.RUNMODAL();
                             COMMIT;
                             lJobJnlBatch.RESET();
                             //if lJobJnlBatch.GET(JOB, "Worksheet Job No.") then //PRJ-134 VIKAS
-                            if lJobJnlBatch.GET(JOBLbl, CopyStr(Rec."NS_Worksheet Job No.", 1, 10)) then //PRJ-134 VIKAS //PRJ-1131.RM.1.0
+                            if lJobJnlBatch.GET(JOBLbl, CopyStr("NS_Worksheet Job No.", 1, 10)) then //PRJ-134 VIKAS
                                 JobJnlMgt.TemplateSelectionFromBatch(lJobJnlBatch);
                         end;
                     end;
                 }
-                //PE-178.JS.1.0 16NOV2023 - Start
-                action(NSProjectProAI)
-                {
-                    ApplicationArea = All;
-                    Caption = 'ProjectPro AI';
-                    Image = Info;
-                    Promoted = true;
-                    PromotedCategory = Process;
-                    //InFooterBar = true;
-                    trigger OnAction()
-                    begin
-                        Hyperlink('https://webchat.botframework.com/embed/ChatBotAIUS-bot?s=AsNjejE0XXs.6dxHmclWNW1hYkEGoPRwb_tzwWFLSo4r2tDOwbZRxmc');
-                    end;
-                }
-                //PE-178.JS.1.0 16NOV2023 - end                                    
                 action("NS_Delivery Ticket")
                 {
                     ApplicationArea = All;
@@ -710,51 +547,16 @@ page 14021427 "NS_Job Material Planning Wksht"
                         lJMP: Record "NS_Job Material Planning";
                         DeliveryTicketPg: Page "NS_JMP Delivery Ticket Wksht";
                     begin
-                        NS_UpdateDelivery(Rec."NS_Worksheet Job No.");//PRJ-1131.RM.1.0
+                        NS_UpdateDelivery("NS_Worksheet Job No.");
                         lJMP.RESET();
-                        lJMP.SETRANGE("NS_Worksheet Job No.", Rec."NS_Worksheet Job No.");//PRJ-1131.RM.1.0
+                        lJMP.SETRANGE("NS_Worksheet Job No.", "NS_Worksheet Job No.");
                         lJMP.SETFILTER("NS_Total Quantity Staged", '>%1', 0);
                         DeliveryTicketPg.SETTABLEVIEW(lJMP);
                         DeliveryTicketPg.RUNMODAL();
                         CurrPage.UPDATE();
                     end;
                 }
-
-                //PRJ-1538.DK.1.0 27July2022 - start - Only for CTSI JMP Performace
-                action(NS_CopyPlanningLinesJMPPerformace)
-                {
-                    ApplicationArea = All;
-                    Caption = 'Copy Job Planning Lines JMP';
-                    Visible = false; //PRJCTPR-30.RM.1.0 20Jan2023
-                    ToolTip = 'Copy Job Planning Lines JMP';
-                    Image = GetLines;
-
-
-                    trigger OnAction();
-                    var
-                        NSAllSubSctibe: Codeunit NS_AllSubscriber;
-                    begin
-                        NSAllSubSctibe.NS_CopyPlanningLines(Rec, false);
-                    end;
-                }
-                //PRJ-1538.DK.1.0 27July2022 - Only for CTSI JMP Performace
             }
-            //PRJ-999.JS.1.0  09Nov2021 Start
-            action(Dimensions)
-            {
-                ApplicationArea = All;
-                Caption = 'Dimensions';
-                Image = Dimensions;
-                ShortCutKey = 'Shift+Ctrl+D';
-                ToolTip = 'View Dimensions';
-
-                trigger OnAction();
-                begin
-                    Rec.NS_ShowDocDim();
-                    CurrPage.SAVERECORD();
-                end;
-            }
-            //PRJ-999.JS.1.0  09Nov2021 end
             group(Utilities)
             {
                 Caption = 'Utilities';
@@ -774,7 +576,7 @@ page 14021427 "NS_Job Material Planning Wksht"
                     var
                         ImportHdrPg: Page "NS_Export / Import Header";
                     begin
-                        ImportHdrPg.NS_SetJobNo(Rec."NS_Worksheet Job No.");//PRJ-1131.RM.1.0
+                        ImportHdrPg.NS_SetJobNo("NS_Worksheet Job No.");
                         ImportHdrPg.RUNMODAL;
                     end;
                 }
@@ -784,28 +586,21 @@ page 14021427 "NS_Job Material Planning Wksht"
 
     trigger OnAfterGetCurrRecord();
     begin
-        Rec.VALIDATE(NS_Quantity);//PRJ-1131.RM.1.0
-        Rec.NS_ItemAvail();//PRJ-1131.RM.1.0
+        VALIDATE(NS_Quantity);
+        NS_ItemAvail();
     end;
 
     trigger OnAfterGetRecord();
     begin
-        //PRJCTPR-368.PS.1.0 Start
-        Rec.CALCFIELDS("NS_Inv. Qty", "NS_PO Qty", "NS_Job Site", "NS_PO Qty Rcd", "NS_Quantity Invoiced", "NS_Posted Quantity", "NS_PO Return Qty. Shipped", "NS_PO Return Qty");
-        Rec."NS_Bal. Req" := Rec.NS_Quantity - (Rec."NS_Inv. Qty" + Rec."NS_Job Site From Inv.") - Rec."NS_PO Qty" - Rec."NS_PO Qty Rcd" - Rec."NS_Inventory Qty. Staged" - Rec."NS_Job Site Vndr Qty" + Rec."NS_PO Return Qty. Shipped" + Rec."NS_PO Return Qty";
-        if Rec."NS_Bal. Req" < 0 then
-            Rec."NS_Bal. Req" := 0;
-        Rec.Modify();
-        //PRJCTPR-368.PS.1.0 End
-        Rec.VALIDATE(NS_Quantity);//PRJ-1131.RM.1.0
-        Rec.NS_ItemAvail();//PRJ-1131.RM.1.0
+        VALIDATE(NS_Quantity);
+        NS_ItemAvail();
     end;
 
     var
         //"`": Integer;
         JobsSetup: Record "Jobs Setup";
         ReqWksht: Page "Req. Worksheet";
-        JobMaterialPlan: Record "NS_Job Material Planning"; //PRJ-1479.NK.1.0 29Jun2022
+
 
         Text0001Lbl: Label 'Job %1 Journal Lines Already Exist.\ Do you want to add to them?', Comment = '%1=PP_Worksheet Job No.';
         //ReqLine: Record "Requisition Line";
@@ -820,17 +615,17 @@ page 14021427 "NS_Job Material Planning Wksht"
         JobJnlMgt: Codeunit JobJnlManagement;
     begin
         lJMP.RESET();
-        lJMP.SETRANGE("NS_Worksheet Job No.", Rec."NS_Worksheet Job No.");//PRJ-1131.RM.1.0
-        lJMP.SETRANGE("NS_Document No.", Rec."NS_Document No.");//PRJ-1131.RM.1.0
+        lJMP.SETRANGE("NS_Worksheet Job No.", "NS_Worksheet Job No.");
+        lJMP.SETRANGE("NS_Document No.", "NS_Document No.");
         lJMP.SETFILTER("NS_Date Ordered By", '<=%1', WORKDATE);
         if lJMP.FINDLAST() then;
 
-        LoadJobJnl.InitVar(Rec."NS_Worksheet Job No.", Rec."NS_Document No.", lJMP."NS_Date Ordered By", true);//PRJ-1131.RM.1.0
+        LoadJobJnl.InitVar("NS_Worksheet Job No.", "NS_Document No.", lJMP."NS_Date Ordered By", true);
         LoadJobJnl.RUNMODAL();
         COMMIT();
         lJobJnlBatch.RESET();
         //if lJobJnlBatch.GET(JOB, "Worksheet Job No.") then //PRJ-134 VIKAS
-        if lJobJnlBatch.GET(JOBLbl, CopyStr(Rec."NS_Worksheet Job No.", 1, 10)) then //PRJ-134 VIKAS//PRJ-1131.RM.1.0
+        if lJobJnlBatch.GET(JOBLbl, CopyStr("NS_Worksheet Job No.", 1, 10)) then //PRJ-134 VIKAS
             JobJnlMgt.TemplateSelectionFromBatch(lJobJnlBatch);
     end;
 

@@ -1,8 +1,6 @@
 pageextension 14021243 NS_CustomerEntryStats extends "Customer Entry Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Customer Entry Statistics'; //PRJ-1330.NK.1.0 25Apr2022
 
     var
     //PP_SalesSetup: Record "Sales & Receivables Setup";

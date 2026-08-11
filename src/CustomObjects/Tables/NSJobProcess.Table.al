@@ -9,8 +9,7 @@ table 14021154 "NS_Job Process"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-449.AS.1.0 19NOV2020 Increased decription length from 30 to 100 chars
-    //PRJ-1042.JS.1.0 15Dec2021 | add fields
-    //PRJ-917.NK.1.0 09Mar2022 | Add Three fields
+
     Caption = 'Job Process';
     DrillDownPageID = "NS_Processes List";
     LookupPageID = "NS_Processes List";
@@ -141,87 +140,6 @@ table 14021154 "NS_Job Process"
             TableRelation = "NS_Job Type".NS_code;
             DataClassification = CustomerContent;
         }
-
-        //PRJ-1042.JS.1.0 15Dec2021-Start
-        field(14021401; "NS_Job Task Type"; Option)
-        {
-            Caption = 'Job Task Type';
-            OptionCaption = 'Posting,Heading,Total,Begin-Total,End-Total';
-            OptionMembers = Posting,Heading,Total,"Begin-Total","End-Total";
-            DataClassification = CustomerContent;
-        }
-        field(14021402; NS_Totaling; Text[250])
-        {
-            Caption = 'Totaling';
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1042.JS.1.0 15Dec2021-end
-        //PRJ-917.NK.1.0 09Mar2022 Start
-        field(14021411; "NS_Blocked"; Boolean)
-        {
-            Caption = 'Blocked';
-            DataClassification = CustomerContent;
-            trigger OnValidate()
-            var
-                UserSetup: Record "User Setup";
-                JobOperation: Record "NS_Job Operation";
-                NS_Sections: Record NS_Sections;
-            begin
-                if UserSetup.Get(UserId) then;
-                UserSetup.TestField("NS_Allow To Block APO");
-                if NS_Blocked then begin
-                    JobOperation.Reset();
-                    JobOperation.SetRange("NS_Activity Code", "NS_Activity Code");
-                    JobOperation.SetRange("NS_Process Code", NS_Code);
-                    if JobOperation.FindFirst() then
-                        repeat
-                            JobOperation.NS_Blocked := true;
-                            JobOperation.Modify();
-                            NS_Sections.Reset();
-                            NS_Sections.SetRange("NS_Activity Code", Rec."NS_Activity Code");
-                            NS_Sections.SetRange("NS_Process Code", Rec.NS_Code);
-                            NS_Sections.SetRange("NS_Operation Code", JobOperation.NS_Code);
-                            if NS_Sections.FindFirst() then
-                                repeat
-                                    NS_Sections.NS_Blocked := true;
-                                    NS_Sections.Modify();
-                                until NS_Sections.Next() = 0;
-                        until JobOperation.Next() = 0;
-                end else begin
-                    JobOperation.Reset();
-                    JobOperation.SetRange("NS_Activity Code", "NS_Activity Code");
-                    JobOperation.SetRange("NS_Process Code", NS_Code);
-                    if JobOperation.FindFirst() then
-                        repeat
-                            JobOperation.NS_Blocked := false;
-                            JobOperation.Modify();
-                            NS_Sections.Reset();
-                            NS_Sections.SetRange("NS_Activity Code", Rec."NS_Activity Code");
-                            NS_Sections.SetRange("NS_Process Code", Rec.NS_Code);
-                            NS_Sections.SetRange("NS_Operation Code", JobOperation.NS_Code);
-                            if NS_Sections.FindFirst() then
-                                repeat
-                                    NS_Sections.NS_Blocked := false;
-                                    NS_Sections.Modify();
-                                until NS_Sections.Next() = 0;
-                        until JobOperation.Next() = 0;
-                end;
-            end;
-        }
-        field(14021412; "NS_Last Modified By"; Code[50])
-        {
-            Caption = 'Last Modified By';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021413; "NS_Last Modified Date"; Date)
-        {
-            Caption = 'Last Modified Date';
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PRJ-917.NK.1.0 09Mar2022 End
-
     }
 
     keys
@@ -262,13 +180,7 @@ table 14021154 "NS_Job Process"
                 JobOperation.MODIFY();
             until JobOperation.NEXT() = 0;
     end;
-    //PRJ-917.NK.1.0 09Mar2022 Start
-    trigger OnModify()
-    begin
-        "NS_Last Modified By" := UserId();
-        "NS_Last Modified Date" := WorkDate();
-    end;
-    //PRJ-917.NK.1.0 09Mar2022 End    
+
     var
         JobOperation: Record "NS_Job Operation";
         Text14021400_Txt: Label '"You have exceeded the Maximum String Length of 20.\There are a Maximum of %1 Charecters left "', Comment = '%1 = Charactor left';

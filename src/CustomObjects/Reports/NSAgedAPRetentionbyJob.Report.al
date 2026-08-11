@@ -8,19 +8,15 @@ report 14021171 "NS_Aged AP Retention by Job"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
+
     //SMPL - Dateformula property ussage is deprecated. 
     //PRJ-84.SK.1.0 Added report to search
     //CTSI-158.AS.1.0 21SEPT2020 Increased lengths of Text
-    //PRJ-1133.RM.1.0 15Jan2022 | Removed with statement
-    //PRJCTPR-35 DK.1.0 11Jan2023 | Increase External Document Cherecter length 20 to 35
-    //PRJCTPR-35 DK.1.0 11Jan2023 | Caption Change "Aged Accounts Payable" to "Aged A/P with Retention by Job"
-    //PRJCTPR-35 DK.1.0 16Jan2023 |last 20 characters will be picked  
-    //PRJCTPR-313.DK.1.0 12Feb2023| Replace Code onPredataitem to OnPreReport
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSAged AP Retention by Job.rdl';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;
-    Caption = 'Aged A/P with Retention by Job';//PRJCTPR-35 DK.1.0 11Jan2023
+    Caption = 'Aged Accounts Payable';
 
     dataset
     {
@@ -527,25 +523,10 @@ report 14021171 "NS_Aged AP Retention by Job"
                         CalcPercents("TotalBalanceDue$", "BalanceDue$");
 
                         "Vendor Ledger Entry" := TempVendLedgEntry;
-                        //PRJCTPR-35 Dk.1.0 start
-                        // if UseExternalDocNo then
-                        //     DocNo := "Vendor Ledger Entry"."External Document No."
-                        // else
-                        //     DocNo := "Vendor Ledger Entry"."Document No.";
-                        //PRJCTPR-358.JS.1.0 24APR2024 - Start
-                        if UseExternalDocNo then begin  // changed :: Enclosed If in begin end.
-                            DocNoLength := StrLen("Vendor Ledger Entry"."External Document No.");
-                            if (DocNoLength <= 20) then // Condition Merged
-                                DocNo := "Vendor Ledger Entry"."External Document No.";
-                            if DocNoLength > 20 then begin
-                                DifferencChar := DocNoLength - 20;
-                                DocNo := DelStr("Vendor Ledger Entry"."External Document No.", 1, DifferencChar)
-                            end;
-                            //PRJCTPR-358.JS.1.0 24APR2024 - end
-                        end
+                        if UseExternalDocNo then
+                            DocNo := "Vendor Ledger Entry"."External Document No."
                         else
                             DocNo := "Vendor Ledger Entry"."Document No.";
-                        //PRJCTPR-35 Dk.1.0 End
 
                         // Do NOT use the following fields in the sections:
                         // "Applied-To Doc. Type"
@@ -574,7 +555,7 @@ report 14021171 "NS_Aged AP Retention by Job"
                     trigger OnPreDataItem();
                     begin
                         //CurrReport.CREATETOTALS(AmountDueToPrint, AmountDue);
-                        // CurrReport.CREATETOTALS(RetentionToPrint); //PRJCTPR-101.NC.1.0 25Apr2023 Block
+                        CurrReport.CREATETOTALS(RetentionToPrint);
                         SETRANGE(Number, 1, TempVendLedgEntry.COUNT);
                         TempVendLedgEntry.SETCURRENTKEY("Vendor No.", "Posting Date");
                         CLEAR("BalanceDue$");
@@ -657,10 +638,9 @@ report 14021171 "NS_Aged AP Retention by Job"
                     ColumnHead[4] := 'Over '
                       + FORMAT(PeriodEndingDate[1] - PeriodEndingDate[4])
                       + ' ' + Text010;
-                    //PRJCTPR-313.DK.1.0 Start
-                    // if PrintToExcel then
-                    //     NS_MakeExcelInfo;
-                    //PRJCTPR-313.DK.1.0 End
+
+                    if PrintToExcel then
+                        NS_MakeExcelInfo;
                 end;
             }
 
@@ -847,10 +827,6 @@ report 14021171 "NS_Aged AP Retention by Job"
         JobsSetup.GET;
         PurchSetup.GET;
         FilterString := Vendor.GETFILTERS;
-        //PRJCTPR-313.DK.1.0 Start
-        if PrintToExcel then
-            NS_MakeExcelInfo;
-        //PRJCTPR-313.DK.1.0 End
     end;
 
     var
@@ -889,9 +865,7 @@ report 14021171 "NS_Aged AP Retention by Job"
         PeriodEndingDate: array[5] of Date;
         AgingDate: Date;
         UseExternalDocNo: Boolean;
-        DocNo: Code[35];//PRJCTPR-35 DK.1.0 11Jan2023 
-        DifferencChar: integer;//PRJCTPR-35 DK.1.0 16Jan2023
-        DocNoLength: Integer;//PRJCTPR-35 DK.1.0 16Jan2023
+        DocNo: Code[20];
         Text001: Label 'Amounts are in %1';
         Text012: Label 'ENU=transaction date.;ESM=fecha movimiento.';
         Text003: Label '*** This vendor is blocked for %1 processing ***';
@@ -964,20 +938,18 @@ report 14021171 "NS_Aged AP Retention by Job"
 
     local procedure InsertTemp(var VendLedgEntry: Record "Vendor Ledger Entry");
     begin
-        //PRJ-1133.RM.1.0.001 start
-        //with TempVendLedgEntry do begin
-        if TempVendLedgEntry.GET("Vendor Ledger Entry"."Entry No.") then
-            exit;
-        TempVendLedgEntry := "Vendor Ledger Entry";
-        case AgingMethod of
-            AgingMethod::"Due Date":
-                TempVendLedgEntry."Posting Date" := TempVendLedgEntry."Due Date";
-            AgingMethod::"Document Date":
-                TempVendLedgEntry."Posting Date" := TempVendLedgEntry."Document Date";
+        with TempVendLedgEntry do begin
+            if GET("Vendor Ledger Entry"."Entry No.") then
+                exit;
+            TempVendLedgEntry := "Vendor Ledger Entry";
+            case AgingMethod of
+                AgingMethod::"Due Date":
+                    "Posting Date" := "Due Date";
+                AgingMethod::"Document Date":
+                    "Posting Date" := "Document Date";
+            end;
+            INSERT;
         end;
-        TempVendLedgEntry.INSERT();
-        //end;
-        //PRJ-1133.RM.1.0.001 end
     end;
 
     procedure CalcPercents(Total: Decimal; Amounts: array[4] of Decimal);

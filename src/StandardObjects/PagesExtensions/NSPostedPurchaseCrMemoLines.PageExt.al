@@ -1,8 +1,7 @@
 pageextension 14021270 NS_PostedPurchaseCrMemoLines extends "Posted Purchase Cr. Memo Lines"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Purchase Cr. Memo Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job No.")

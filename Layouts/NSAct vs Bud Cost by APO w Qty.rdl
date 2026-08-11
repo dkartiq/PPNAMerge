@@ -1,0 +1,263 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Master_Job_No">
+          <DataField>Master_Job_No</DataField>
+        </Field>
+        <Field Name="Report_Title">
+          <DataField>Report_Title</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="PageCaption">
+          <DataField>PageCaption</DataField>
+        </Field>
+        <Field Name="JobFiltersCaption">
+          <DataField>JobFiltersCaption</DataField>
+        </Field>
+        <Field Name="Activity_Process_OperationCaption">
+          <DataField>Activity_Process_OperationCaption</DataField>
+        </Field>
+        <Field Name="DescriptionCaption">
+          <DataField>DescriptionCaption</DataField>
+        </Field>
+        <Field Name="NoCaption">
+          <DataField>NoCaption</DataField>
+        </Field>
+        <Field Name="UOMCaption">
+          <DataField>UOMCaption</DataField>
+        </Field>
+        <Field Name="Actual_QtyCaption">
+          <DataField>Actual_QtyCaption</DataField>
+        </Field>
+        <Field Name="Budgeted_QtyCaption">
+          <DataField>Budgeted_QtyCaption</DataField>
+        </Field>
+        <Field Name="Qty_VarianceCaption">
+          <DataField>Qty_VarianceCaption</DataField>
+        </Field>
+        <Field Name="TypeCaption">
+          <DataField>TypeCaption</DataField>
+        </Field>
+        <Field Name="Actual_CostCaption">
+          <DataField>Actual_CostCaption</DataField>
+        </Field>
+        <Field Name="Budgeted_CostCaption">
+          <DataField>Budgeted_CostCaption</DataField>
+        </Field>
+        <Field Name="Budget_RemainingCaption">
+          <DataField>Budget_RemainingCaption</DataField>
+        </Field>
+        <Field Name="Pct_of_Bud_UsedCaption">
+          <DataField>Pct_of_Bud_UsedCaption</DataField>
+        </Field>
+        <Field Name="CommittedQuantityCaption">
+          <DataField>CommittedQuantityCaption</DataField>
+        </Field>
+        <Field Name="CommittedCostCaption">
+          <DataField>CommittedCostCaption</DataField>
+        </Field>
+        <Field Name="CustomerAccountNameCaption">
+          <DataField>CustomerAccountNameCaption</DataField>
+        </Field>
+        <Field Name="JobLocationCaption">
+          <DataField>JobLocationCaption</DataField>
+        </Field>
+        <Field Name="Show_Processes">
+          <DataField>Show_Processes</DataField>
+        </Field>
+        <Field Name="Show_Operations">
+          <DataField>Show_Operations</DataField>
+        </Field>
+        <Field Name="Show_Sections">
+          <DataField>Show_Sections</DataField>
+        </Field>
+        <Field Name="Show_Details">
+          <DataField>Show_Details</DataField>
+        </Field>
+        <Field Name="Sub_LevelsText">
+          <DataField>Sub_LevelsText</DataField>
+        </Field>
+        <Field Name="JobFilters">
+          <DataField>JobFilters</DataField>
+        </Field>
+        <Field Name="Job_No">
+          <DataField>Job_No</DataField>
+        </Field>
+        <Field Name="Job_Description">
+          <DataField>Job_Description</DataField>
+        </Field>
+        <Field Name="job_TaskNOBuffer">
+          <DataField>job_TaskNOBuffer</DataField>
+        </Field>
+        <Field Name="Starting_Date">
+          <DataField>Starting_Date</DataField>
+        </Field>
+        <Field Name="Ending_Date">
+          <DataField>Ending_Date</DataField>
+        </Field>
+        <Field Name="Activity_Code">
+          <DataField>Activity_Code</DataField>
+        </Field>
+        <Field Name="Process_Code">
+          <DataField>Process_Code</DataField>
+        </Field>
+        <Field Name="Operation_Code">
+          <DataField>Operation_Code</DataField>
+        </Field>
+        <Field Name="Section_code">
+          <DataField>Section_code</DataField>
+        </Field>
+        <Field Name="Activity_Description">
+          <DataField>Activity_Description</DataField>
+        </Field>
+        <Field Name="Process_Description">
+          <DataField>Process_Description</DataField>
+        </Field>
+        <Field Name="Operation_Description">
+          <DataField>Operation_Description</DataField>
+        </Field>
+        <Field Name="Sectiondesc">
+          <DataField>Sectiondesc</DataField>
+        </Field>
+        <Field Name="Detail_Description">
+          <DataField>Detail_Description</DataField>
+        </Field>
+        <Field Name="Detail_No">
+          <DataField>Detail_No</DataField>
+        </Field>
+        <Field Name="Detail_Unit_Of_Measure">
+          <DataField>Detail_Unit_Of_Measure</DataField>
+        </Field>
+        <Field Name="Detail_Actual_Cost_Qty">
+          <DataField>Detail_Actual_Cost_Qty</DataField>
+        </Field>
+        <Field Name="Detail_Actual_Cost_QtyFormat">
+          <DataField>Detail_Actual_Cost_QtyFormat</DataField>
+        </Field>
+        <Field Name="Detail_Budgeted_Cost_Qty">
+          <DataField>Detail_Budgeted_Cost_Qty</DataField>
+        </Field>
+        <Field Name="Detail_Budgeted_Cost_QtyFormat">
+          <DataField>Detail_Budgeted_Cost_QtyFormat</DataField>
+        </Field>
+        <Field Name="Detail_Type">
+          <DataField>Detail_Type</DataField>
+        </Field>
+        <Field Name="Detail_Actual_Cost">
+          <DataField>Detail_Actual_Cost</DataField>
+        </Field>
+        <Field Name="Detail_Actual_CostFormat">
+          <DataField>Detail_Actual_CostFormat</DataField>
+        </Field>
+        <Field Name="Detail_Budgeted_Cost">
+          <DataField>Detail_Budgeted_Cost</DataField>
+        </Field>
+        <Field Name="Detail_Budgeted_CostFormat">
+          <DataField>Detail_Budgeted_CostFormat</DataField>
+        </Field>
+        <Field Name="Committed_Quantity">
+          <DataField>Committed_Quantity</DataField>
+        </Field>
+        <Field Name="Committed_QuantityFormat">
+          <DataField>Committed_QuantityFormat</DataField>
+        </Field>
+        <Field Name="Committed_Amount">
+          <DataField>Committed_Amount</DataField>
+        </Field>
+        <Field Name="Committed_AmountFormat">
+          <DataField>Committed_AmountFormat</DataField>
+        </Field>
+        <Field Name="Activity_TotalCaption">
+          <DataField>Activity_TotalCaption</DataField>
+        </Field>
+        <Field Name="Process_TotalCaption">
+          <DataField>Process_TotalCaption</DataField>
+        </Field>
+        <Field Name="Operation_TotalCaption">
+          <DataField>Operation_TotalCaption</DataField>
+        </Field>
+        <Field Name="Section_TotalCaption">
+          <DataField>Section_TotalCaption</DataField>
+        </Field>
+        <Field Name="Total_Job_No">
+          <DataField>Total_Job_No</DataField>
+        </Field>
+        <Field Name="Customer_Account_Name">
+          <DataField>Customer_Account_Name</DataField>
+        </Field>
+        <Field Name="Job_Name">
+          <DataField>Job_Name</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

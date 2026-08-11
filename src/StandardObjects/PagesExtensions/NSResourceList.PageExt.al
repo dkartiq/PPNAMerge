@@ -2,8 +2,6 @@ pageextension 14021130 NS_ResourceList extends "Resource List"
 {
     // version NAVW111.00.00.22292,NAVNA11.00.00.22292,PPNA11.00
     //PRJ-991.GK.2.0 22Oct2021 | add field
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Resources'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Search Name")
@@ -25,24 +23,6 @@ pageextension 14021130 NS_ResourceList extends "Resource List"
 
                 end;
             }
-            //PE-152.JS.1.0 24Aug2023 - Start
-            field("NS_Skill Class Code"; Rec."NS_Skill Class Code")
-            {
-                ApplicationArea = All;
-                ToolTip = 'Specifies the resource default Skill Class Code';
-                editable = false;
-                caption = 'Default Skill Class Code';
-            }
-            //PE-152.JS.1.0 24Aug2023 - End
-            //PE-253.PS.1.0 19Feb2024 Start
-            field("NS_Production Work Units"; Rec."NS_Production Work Units")
-            {
-                ApplicationArea = All;
-                Caption = 'Production Work Units';
-                ToolTip = 'Enable it if you want to use this resource for posting work units from the Job Daily Log through Job Journal.';
-
-            }
-            //PE-253.PS.1.0 19Feb2024 End 
         }
     }
 

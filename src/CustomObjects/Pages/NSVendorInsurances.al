@@ -9,14 +9,11 @@ page 14021209 "NS_Vendor Insurances"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-320.AS.1.0 30JUNE2020 Added Vendor No. field on page
-    //ZEL-12.RM.1.0 19Apr2023 | Added 2 properties
     Caption = 'Vendor Insurances';
     DataCaptionFields = "NS_Vendor No.";
     DelayedInsert = true;
     PageType = Card;
     SourceTable = "NS_Vendor Insurance";
-    UsageCategory = Lists; //ZEL-12.RM.1.0 19Apr2023 
-    ApplicationArea = All; //ZEL-12.RM.1.0 19Apr2023 
 
     layout
     {

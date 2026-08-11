@@ -3,17 +3,12 @@ tableextension 14021113 Ns_GenJnlLine extends "Gen. Journal Line"
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
     //TM-10.AM.1.0 | Added field & Code.
     //PRJ-490.AM.1.0 Added Fields
-    //PE-209.HS.1.0 7Dec2023 | Obselete Bal. to Ledger No.
 
     fields
     {
         modify("Job No.")
         {
             trigger OnBeforeValidate()
-            var
-                NSDimCreate: List of [Dictionary of [Integer, Code[20]]];  //PRJCTPR-155.JS.1.0 11Sep2023
-                NSDataPosition: Dictionary of [Integer, Code[20]];      //PRJCTPR-155.JS.1.0 11Sep2023
-                NSDimMgt: codeunit DimensionManagement; //PRJCTPR-155.JS.1.0 11Sep2023
             begin
                 IF "Job No." = xRec."Job No." THEN
                     EXIT;
@@ -23,26 +18,15 @@ tableextension 14021113 Ns_GenJnlLine extends "Gen. Journal Line"
                 IF "Source Code" <> SourceCodeSetup."Job G/L WIP" THEN
                     VALIDATE("Job Task No.", '');
 
-                //PRJCTPR-155.JS.1.0 11Sep2023 - Start
                 IF "Job No." = '' THEN BEGIN
-                    // CreateDim(
-                    //   DATABASE::Job, "Job No.",
-                    //   DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.",
-                    //   DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.",
-                    //   DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code",
-                    //   DATABASE::Campaign, "Campaign No.");
-
-                    Clear(NSDimCreate);
-                    NSDimMgt.AddDimSource(NSDimCreate, DATABASE::Job, "Job No.");
-                    NSDimMgt.AddDimSource(NSDimCreate, DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.");
-                    NSDimMgt.AddDimSource(NSDimCreate, DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.");
-                    NSDimMgt.AddDimSource(NSDimCreate, DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code");
-                    NSDimMgt.AddDimSource(NSDimCreate, DATABASE::Campaign, "Campaign No.");
-                    CreateDim(NSDimCreate);
-
+                    CreateDim(
+                      DATABASE::Job, "Job No.",
+                      DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.",
+                      DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.",
+                      DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code",
+                      DATABASE::Campaign, "Campaign No.");
                     EXIT;
                 END;
-                //PRJCTPR-155.JS.1.0 11Sep2023 - end
 
                 //ProjectPro - start
                 //TESTFIELD("Account Type","Account Type"::"G/L Account");
@@ -57,25 +41,14 @@ tableextension 14021113 Ns_GenJnlLine extends "Gen. Journal Line"
                 Job.GET("Job No.");
                 Job.TestBlocked;
                 "Job Currency Code" := Job."Currency Code";
-                "Job Line Type" := Job."NS_Line Type";  //PRJCTPR-59.NK.1.0 13feb2022
 
 
-                //PRJCTPR-155.JS.1.0 11Sep2023 - start
-                // CreateDim(
-                //   DATABASE::Job, "Job No.",
-                //   DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.",
-                //   DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.",
-                //   DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code",
-                //   DATABASE::Campaign, "Campaign No.");
-
-                Clear(NSDimCreate);
-                NSDimMgt.AddDimSource(NSDimCreate, DATABASE::Job, "Job No.");
-                NSDimMgt.AddDimSource(NSDimCreate, DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.");
-                NSDimMgt.AddDimSource(NSDimCreate, DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.");
-                NSDimMgt.AddDimSource(NSDimCreate, DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code");
-                NSDimMgt.AddDimSource(NSDimCreate, DATABASE::Campaign, "Campaign No.");
-                CreateDim(NSDimCreate);
-                //PRJCTPR-155.JS.1.0 11Sep2023 - ends
+                CreateDim(
+                  DATABASE::Job, "Job No.",
+                  DimMgt.TypeToTableID1("Account Type".AsInteger()), "Account No.",
+                  DimMgt.TypeToTableID1("Bal. Account Type".AsInteger()), "Bal. Account No.",
+                  DATABASE::"Salesperson/Purchaser", "Salespers./Purch. Code",
+                  DATABASE::Campaign, "Campaign No.");
 
                 xRec."Job No." := "Job No."; //SPLN: to prevent executing OnValidate code
             end;
@@ -144,13 +117,7 @@ tableextension 14021113 Ns_GenJnlLine extends "Gen. Journal Line"
         }
         field(14021129; "NS_Bal. Ledger No."; Code[20])
         {
-            //PE-209.HS.1.0 7Dec2023 Start
-            // Caption = 'Bal. Ledger No.'; // commented
-            Caption = 'Bal. Ledger No. (Obsolete)';
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in next build';
-            ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-            //PE-209.HS.1.0 7Dec2023  End
+            Caption = 'Bal. Ledger No.';
             Description = 'ProjectPro';
             TableRelation = "NS_Retention Ledger Code".NS_Code;
             DataClassification = CustomerContent;
@@ -286,62 +253,8 @@ tableextension 14021113 Ns_GenJnlLine extends "Gen. Journal Line"
             DataClassification = CustomerContent;
 
         }
-        //PE-136.JS.1.0 03Aug2023 - Start
-        field(14021419; "NS_RevRec GenJnl Document No."; Code[20])
-        {
-            Caption = 'Rev. Rec. Gen. Jnl. Document No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        field(14021420; "NS_RevRec G/L Reverse EntryNo."; integer)
-        {
-            Caption = 'Rev. Rec. G/L Reverse Entry No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        //PE-136.JS.1.0 03Aug2023 - end
-        //PRJCTPR-330.PS.1.0 07April2024 Start
-        field(14021421; "NS_Rev. Rec. Summary Dtls"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-            Caption = 'Rev. Rec. Summary Details';
-        }
-        //PRJCTPR-330.PS.1.0 07April2024 End
-        //PE-302.JS.1.0 29MAY24-Start
-        field(14021311; "NS_AppliesToDocument Type"; Enum "Gen. Journal Document Type")
-        {
-            Caption = 'AppliesToDocument Type';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document Type" is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        field(14021312; "NS_AppliesToDocument No."; code[20])
-        {
-            Caption = 'AppliesToDocument No.';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document No." is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        //PE-302.JS.1.0 29MAY24-end   
     }
 
-    //PE-136.JS.1.0 10JUN2024-Start
-    trigger OnDelete()
-    begin
-        if (rec."NS_RevRec G/L Reverse EntryNo." > 0) and (rec."NS_RevRec GenJnl Document No." <> '') then begin
-            if confirm(NSTextLabel1RecRecDel, true) then begin
-                if confirm(NSTextLabel2RecRecDel, true) then
-                    exit
-                else
-                    Error('');
-            end else
-                Error('');
-        end;
-    end;
-    //PE-136.JS.1.0 10JUN2024-end
 
     trigger OnBeforeInsert()
     begin
@@ -388,8 +301,6 @@ tableextension 14021113 Ns_GenJnlLine extends "Gen. Journal Line"
         Job: Record Job;
         SourceCodeSetup: Record "Source Code Setup";
         DimMgt: Codeunit DimensionManagement;
-        NSTextLabel1RecRecDel: Label 'Deleting the Rev. Rec. Reversal entries will create the G/L inconsistencies in entries. Do you want to continue?';  //PE-136.JS.1.0 10JUN2024
-        NSTextLabel2RecRecDel: Label 'Are you sure you want to delete the Rev. Rec. Reversal Entries?';  //PE-136.JS.1.0 10JUN2024
 
     /*+---------------------------------------------------------------------------------------------
       +ProjectPro

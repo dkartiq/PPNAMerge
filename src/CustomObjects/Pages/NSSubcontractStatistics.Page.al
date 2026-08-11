@@ -317,17 +317,12 @@ page 14021306 "NS_Subcontract Statistics"
     begin
         CLEARALL;
 
-          //PE-306.JS.1.0 06JUN2024-Start
-        //Rec.SETRANGE("NS_Type Filter", Rec."NS_Type Filter"::Ledger); //PRJ-1131.NK.1.0
-        //PE-306.JS.1.0 06JUN2024-end
+        SETRANGE("NS_Type Filter", "NS_Type Filter"::Ledger);
         CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
         JobBudgetTotalCost[1] := "NS_Budgeted Cost (LCY)";
         JobBudgetTotalPrice[1] := "NS_Budgeted Price (LCY)";
 
-        //PE-306.JS.1.0 06JUN2024-Start
-        //Rec.SETRANGE("NS_Type Filter"); //PRJ-1131.NK.1.0
-        Rec.SETRANGE("NS_TypeEnumFilter");
-        //PE-306.JS.1.0 06JUN2024-end
+        SETRANGE("NS_Type Filter");
         CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
         ContractCost := "NS_Budgeted Cost (LCY)";
         ContractPrice := "NS_Budgeted Price (LCY)";
@@ -336,10 +331,7 @@ page 14021306 "NS_Subcontract Statistics"
         JobBudgetTotalPrice[3] := -ContractPrice;
 
         for i := 1 to 3 do begin // Resource,Item,Account (G/L)
-            //PE-306.JS.1.0 06JUN2024-Start
-            //Rec.SETRANGE("NS_Type Filter", i - 1); //PRJ-1131.NK.1.0
-            Rec.SETRANGE("NS_TypeEnumFilter", i - 1);
-            //PE-306.JS.1.0 06JUN2024-end
+            SETRANGE("NS_Type Filter", i - 1);
             CALCFIELDS(
               "NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)", "NS_Usage (Cost) (LCY)",
               "NS_Usage (Price) (LCY)", "NS_Invoiced Price (LCY)");
@@ -372,10 +364,7 @@ page 14021306 "NS_Subcontract Statistics"
             JobInvProfitPct[i] := NS_CalcPercentage(JobInvProfit[i], JobInvTotalPrice[i]);
         end;
 
-        //PE-306.JS.1.0 06JUN2024-Start
-        //Rec.SETRANGE("NS_Type Filter"); //PRJ-1131.NK.1.0
-        Rec.SETRANGE("NS_TypeEnumFilter"); //PRJ-1131.NK.1.0
-        //PE-306.JS.1.0 06JUN2024-end
+        SETRANGE("NS_Type Filter");
     end;
 
     var

@@ -52,6 +52,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Document_Lbl">
@@ -79,6 +83,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="To_Owner_Lbl">
@@ -134,6 +142,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="CustomerAddress2">
@@ -161,6 +173,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="CustomerAddress3">
@@ -188,6 +204,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="CustomerAddress4">
@@ -215,6 +235,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="CompanyAddress2">
@@ -242,6 +266,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="CompanyAddress3">
@@ -269,6 +297,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="CompanyAddress4">
@@ -296,6 +328,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Project_Lbl">
@@ -324,6 +360,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="JobAddress1">
@@ -351,6 +391,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="JobAddress2">
@@ -378,6 +422,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="JobAddress4">
@@ -404,6 +452,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="From_Contractor_Lbl">
@@ -432,6 +484,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="JobAddress3">
@@ -459,6 +515,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Via_Architect_Lbl">
@@ -487,6 +547,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="AEAddress1">
@@ -514,6 +578,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="AEAddress2">
@@ -541,6 +609,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="AEAddress3">
@@ -568,6 +640,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="AEAddress4">
@@ -595,6 +671,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Application_No_Lbl">
@@ -623,6 +703,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Period_To_Lbl">
@@ -651,6 +735,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Project_Nos_Lbl">
@@ -679,6 +767,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Contract_Date_Lbl">
@@ -707,6 +799,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="app_no">
@@ -734,6 +830,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Project_No_1">
@@ -760,6 +860,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Project_No_2">
@@ -786,6 +890,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Contract_Date">
@@ -815,6 +923,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Line Name="Line2">
@@ -856,6 +968,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="AIA_Form_Code">
@@ -886,6 +1002,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="AIA_Form_Expiration_Date">
@@ -917,6 +1037,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Contractor_Application_Heading_1_Lbl">
@@ -945,6 +1069,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Contractor_Application_Heading_2_Lbl">
@@ -972,6 +1100,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Contractor_Application_Heading_3_Lbl">
@@ -999,6 +1131,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_1_Lbl">
@@ -1027,6 +1163,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_2_Lbl">
@@ -1055,6 +1195,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_3_Lbl">
@@ -1077,12 +1221,16 @@
             <Top>9.26046cm</Top>
             <Left>0.10579cm</Left>
             <Height>0.4cm</Height>
-            <Width>5.31322cm</Width>
+            <Width>7.54529cm</Width>
             <ZIndex>39</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_4_Lbl">
@@ -1111,6 +1259,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_5_Lbl">
@@ -1139,6 +1291,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_5a_Lbl">
@@ -1166,6 +1322,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_5b_Lbl">
@@ -1193,6 +1353,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_5c_Lbl">
@@ -1220,6 +1384,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_6_Lbl">
@@ -1248,6 +1416,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_7_Lbl">
@@ -1276,6 +1448,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_8_Lbl">
@@ -1304,6 +1480,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_Heading_9_Lbl">
@@ -1332,6 +1512,10 @@
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Tablix Name="Tablix1">
@@ -1375,6 +1559,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1403,6 +1591,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1431,6 +1623,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1463,6 +1659,9 @@
                               <Style>Solid</Style>
                             </Border>
                             <PaddingLeft>0.2cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1493,6 +1692,10 @@
                               <Style>Solid</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1523,6 +1726,10 @@
                               <Style>Solid</Style>
                             </Border>
                             <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1555,6 +1762,9 @@
                               <Style>Solid</Style>
                             </Border>
                             <PaddingLeft>0.2cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1584,6 +1794,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1613,6 +1827,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1646,7 +1864,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
                             <PaddingRight>0.2cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1676,6 +1897,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1705,6 +1930,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1737,6 +1966,9 @@
                               <Style>Solid</Style>
                             </Border>
                             <PaddingLeft>0.2cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1766,6 +1998,10 @@
                             <Border>
                               <Style>Solid</Style>
                             </Border>
+                            <PaddingLeft>0cm</PaddingLeft>
+                            <PaddingRight>0cm</PaddingRight>
+                            <PaddingTop>0cm</PaddingTop>
+                            <PaddingBottom>0cm</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
@@ -1811,6 +2047,130 @@
               </Border>
             </Style>
           </Tablix>
+          <Textbox Name="Undersigned_1_lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>5.92314cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.94972cm</Width>
+            <ZIndex>50</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Undersigned_2_lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.32314cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.94972cm</Width>
+            <ZIndex>51</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Undersigned_3_lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.72314cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.94972cm</Width>
+            <ZIndex>52</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Undersigned_4_lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_4_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.12314cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.94972cm</Width>
+            <ZIndex>53</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
+            </Style>
+          </Textbox>
           <Textbox Name="Contractor_Lbl">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -1831,11 +2191,15 @@
             <Left>14.38505cm</Left>
             <Height>0.4cm</Height>
             <Width>2.81745cm</Width>
-            <ZIndex>50</ZIndex>
+            <ZIndex>54</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="By_Lbl1">
@@ -1858,11 +2222,15 @@
             <Left>14.3921cm</Left>
             <Height>0.4cm</Height>
             <Width>0.60029cm</Width>
-            <ZIndex>51</ZIndex>
+            <ZIndex>55</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Date_Lbl1">
@@ -1885,11 +2253,15 @@
             <Left>23.28946cm</Left>
             <Height>0.4cm</Height>
             <Width>0.76553cm</Width>
-            <ZIndex>52</ZIndex>
+            <ZIndex>56</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="State_Of_Lbl">
@@ -1912,11 +2284,15 @@
             <Left>14.38505cm</Left>
             <Height>0.4cm</Height>
             <Width>5.30458cm</Width>
-            <ZIndex>53</ZIndex>
+            <ZIndex>57</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="County_Of_Lbl">
@@ -1939,11 +2315,15 @@
             <Left>14.38505cm</Left>
             <Height>0.4cm</Height>
             <Width>5.30458cm</Width>
-            <ZIndex>54</ZIndex>
+            <ZIndex>58</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Subscribed_Lbl">
@@ -1966,11 +2346,15 @@
             <Left>14.38505cm</Left>
             <Height>0.4cm</Height>
             <Width>5.30458cm</Width>
-            <ZIndex>55</ZIndex>
+            <ZIndex>59</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Me_This_Lbl">
@@ -1993,11 +2377,15 @@
             <Left>14.38505cm</Left>
             <Height>0.4cm</Height>
             <Width>1.23001cm</Width>
-            <ZIndex>56</ZIndex>
+            <ZIndex>60</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Day_Of_Lbl">
@@ -2020,11 +2408,15 @@
             <Left>20.23207cm</Left>
             <Height>0.4cm</Height>
             <Width>0.85959cm</Width>
-            <ZIndex>57</ZIndex>
+            <ZIndex>61</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Notary_Public_Lbl">
@@ -2047,11 +2439,15 @@
             <Left>14.4309cm</Left>
             <Height>0.4cm</Height>
             <Width>5.30458cm</Width>
-            <ZIndex>58</ZIndex>
+            <ZIndex>62</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Commission_Expires_Lbl">
@@ -2074,11 +2470,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>5.30458cm</Width>
-            <ZIndex>59</ZIndex>
+            <ZIndex>63</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Line Name="Line3">
@@ -2086,7 +2486,7 @@
             <Left>14.3921cm</Left>
             <Height>0cm</Height>
             <Width>12.10843cm</Width>
-            <ZIndex>60</ZIndex>
+            <ZIndex>64</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2114,11 +2514,15 @@
             <Left>14.4309cm</Left>
             <Height>0.65292cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>61</ZIndex>
+            <ZIndex>65</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Accordance_1_Lbl">
@@ -2141,11 +2545,15 @@
             <Left>14.4309cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>62</ZIndex>
+            <ZIndex>66</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Accordance_2_Lbl">
@@ -2168,11 +2576,15 @@
             <Left>14.4309cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>63</ZIndex>
+            <ZIndex>67</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Accordance_3_Lbl">
@@ -2195,11 +2607,15 @@
             <Left>14.4309cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>64</ZIndex>
+            <ZIndex>68</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Accordance_4_Lbl">
@@ -2222,11 +2638,15 @@
             <Left>14.4309cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>65</ZIndex>
+            <ZIndex>69</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Accordance_5_Lbl">
@@ -2249,11 +2669,15 @@
             <Left>14.4309cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>66</ZIndex>
+            <ZIndex>70</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Amount_Certified_Lbl">
@@ -2277,11 +2701,46 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>7.52708cm</Width>
-            <ZIndex>67</ZIndex>
+            <ZIndex>71</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Undersigned_5_lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_5_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.55842cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.94972cm</Width>
+            <ZIndex>72</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Line Name="Line4">
@@ -2289,7 +2748,7 @@
             <Left>0.14459cm</Left>
             <Height>0cm</Height>
             <Width>26.22898cm</Width>
-            <ZIndex>68</ZIndex>
+            <ZIndex>73</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -2317,11 +2776,15 @@
             <Left>0.10579cm</Left>
             <Height>0.4cm</Height>
             <Width>2.40938cm</Width>
-            <ZIndex>69</ZIndex>
+            <ZIndex>74</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Attach_1_Lbl">
@@ -2345,11 +2808,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>70</ZIndex>
+            <ZIndex>75</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Attach_2_Lbl">
@@ -2373,11 +2840,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>71</ZIndex>
+            <ZIndex>76</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Attach_3_Lbl">
@@ -2401,11 +2872,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>11.90382cm</Width>
-            <ZIndex>72</ZIndex>
+            <ZIndex>77</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Architect_Lbl">
@@ -2428,11 +2903,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>1.6798cm</Width>
-            <ZIndex>73</ZIndex>
+            <ZIndex>78</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="By_Lbl2">
@@ -2455,11 +2934,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>0.56854cm</Width>
-            <ZIndex>74</ZIndex>
+            <ZIndex>79</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Date_Lbl2">
@@ -2483,11 +2966,15 @@
             <Left>23.13979cm</Left>
             <Height>0.4cm</Height>
             <Width>3.18788cm</Width>
-            <ZIndex>75</ZIndex>
+            <ZIndex>80</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Certificate_1_Lbl">
@@ -2510,11 +2997,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>11.89677cm</Width>
-            <ZIndex>76</ZIndex>
+            <ZIndex>81</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Certificate_2_Lbl">
@@ -2537,11 +3028,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>11.89677cm</Width>
-            <ZIndex>77</ZIndex>
+            <ZIndex>82</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Certificate_3_Lbl">
@@ -2564,11 +3059,15 @@
             <Left>14.42385cm</Left>
             <Height>0.4cm</Height>
             <Width>11.89677cm</Width>
-            <ZIndex>78</ZIndex>
+            <ZIndex>83</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_01_Value">
@@ -2594,11 +3093,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>79</ZIndex>
+            <ZIndex>84</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_02_Value">
@@ -2624,11 +3127,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>80</ZIndex>
+            <ZIndex>85</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_03_Value">
@@ -2651,14 +3158,18 @@
               </Paragraph>
             </Paragraphs>
             <Top>9.26046cm</Top>
-            <Left>8.22177cm</Left>
+            <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
-            <Width>4.38402cm</Width>
-            <ZIndex>81</ZIndex>
+            <Width>4.77832cm</Width>
+            <ZIndex>86</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_04_Value">
@@ -2684,11 +3195,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>82</ZIndex>
+            <ZIndex>87</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_05a2_Value">
@@ -2714,11 +3229,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>2.75821cm</Width>
-            <ZIndex>83</ZIndex>
+            <ZIndex>88</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_05b2_Value">
@@ -2744,11 +3263,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>2.75821cm</Width>
-            <ZIndex>84</ZIndex>
+            <ZIndex>89</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_05c_Value">
@@ -2774,11 +3297,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>85</ZIndex>
+            <ZIndex>90</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_06_Value">
@@ -2804,11 +3331,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>86</ZIndex>
+            <ZIndex>91</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_07_Value">
@@ -2834,11 +3365,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>87</ZIndex>
+            <ZIndex>92</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_08_Value">
@@ -2864,11 +3399,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>88</ZIndex>
+            <ZIndex>93</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Line_09_Value">
@@ -2894,11 +3433,15 @@
             <Left>7.82747cm</Left>
             <Height>0.4cm</Height>
             <Width>4.77832cm</Width>
-            <ZIndex>89</ZIndex>
+            <ZIndex>94</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Contract_For">
@@ -2920,11 +3463,15 @@
             <Left>2.69156cm</Left>
             <Height>0.4cm</Height>
             <Width>14.90418cm</Width>
-            <ZIndex>90</ZIndex>
+            <ZIndex>95</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="contractor">
@@ -2947,11 +3494,15 @@
             <Left>17.37889cm</Left>
             <Height>0.4cm</Height>
             <Width>8.95583cm</Width>
-            <ZIndex>91</ZIndex>
+            <ZIndex>96</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Date_Lbl3">
@@ -2974,11 +3525,15 @@
             <Left>23.06919cm</Left>
             <Height>0.4cm</Height>
             <Width>0.89783cm</Width>
-            <ZIndex>92</ZIndex>
+            <ZIndex>97</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Distribution_To_Lbl">
@@ -3000,11 +3555,15 @@
             <Left>23.52545cm</Left>
             <Height>0.4cm</Height>
             <Width>2.40538cm</Width>
-            <ZIndex>93</ZIndex>
+            <ZIndex>98</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Distribution_To_Owner_Lbl">
@@ -3026,11 +3585,15 @@
             <Left>23.97524cm</Left>
             <Height>0.4cm</Height>
             <Width>1.95559cm</Width>
-            <ZIndex>94</ZIndex>
+            <ZIndex>99</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Distribution_To_Architect_Lbl">
@@ -3052,11 +3615,15 @@
             <Left>23.97524cm</Left>
             <Height>0.4cm</Height>
             <Width>1.95559cm</Width>
-            <ZIndex>95</ZIndex>
+            <ZIndex>100</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Distribution_To_Contractor_Lbl">
@@ -3077,12 +3644,16 @@
             <Top>2.65055cm</Top>
             <Left>23.97524cm</Left>
             <Height>0.4cm</Height>
-            <Width>2.34538cm</Width>
-            <ZIndex>96</ZIndex>
+            <Width>1.95559cm</Width>
+            <ZIndex>101</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Rectangle Name="Rectangle1">
@@ -3091,7 +3662,7 @@
             <Left>23.51946cm</Left>
             <Height>0.30677cm</Height>
             <Width>0.2794cm</Width>
-            <ZIndex>97</ZIndex>
+            <ZIndex>102</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3104,7 +3675,7 @@
             <Left>23.51946cm</Left>
             <Height>0.30677cm</Height>
             <Width>0.2794cm</Width>
-            <ZIndex>98</ZIndex>
+            <ZIndex>103</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3117,7 +3688,7 @@
             <Left>23.51946cm</Left>
             <Height>0.30677cm</Height>
             <Width>0.2794cm</Width>
-            <ZIndex>99</ZIndex>
+            <ZIndex>104</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3130,7 +3701,7 @@
             <Left>23.51946cm</Left>
             <Height>0.30677cm</Height>
             <Width>0.2794cm</Width>
-            <ZIndex>100</ZIndex>
+            <ZIndex>105</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3143,7 +3714,7 @@
             <Left>23.51946cm</Left>
             <Height>0.30677cm</Height>
             <Width>0.2794cm</Width>
-            <ZIndex>101</ZIndex>
+            <ZIndex>106</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3155,7 +3726,7 @@
             <Left>7.74382cm</Left>
             <Height>0cm</Height>
             <Width>5.02708cm</Width>
-            <ZIndex>102</ZIndex>
+            <ZIndex>107</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3167,7 +3738,7 @@
             <Left>7.74382cm</Left>
             <Height>0cm</Height>
             <Width>5.02708cm</Width>
-            <ZIndex>103</ZIndex>
+            <ZIndex>108</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3179,7 +3750,7 @@
             <Left>12.76033cm</Left>
             <Height>0.68741cm</Height>
             <Width>0cm</Width>
-            <ZIndex>104</ZIndex>
+            <ZIndex>109</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3191,7 +3762,7 @@
             <Left>7.72869cm</Left>
             <Height>0.68741cm</Height>
             <Width>0cm</Width>
-            <ZIndex>105</ZIndex>
+            <ZIndex>110</ZIndex>
             <Style>
               <Border>
                 <Style>Solid</Style>
@@ -3218,11 +3789,15 @@
             <Left>3.99606cm</Left>
             <Height>0.4cm</Height>
             <Width>4.8629cm</Width>
-            <ZIndex>106</ZIndex>
+            <ZIndex>111</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
               </Border>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Architect_Lbl2">
@@ -3245,7 +3820,7 @@
             <Left>16.1742cm</Left>
             <Height>0.4cm</Height>
             <Width>10.14643cm</Width>
-            <ZIndex>107</ZIndex>
+            <ZIndex>112</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3255,6 +3830,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="By_Lbl3">
@@ -3277,7 +3856,7 @@
             <Left>15.05412cm</Left>
             <Height>0.4cm</Height>
             <Width>7.97272cm</Width>
-            <ZIndex>108</ZIndex>
+            <ZIndex>113</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3287,6 +3866,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Date_Lbl4">
@@ -3309,7 +3892,7 @@
             <Left>24.01641cm</Left>
             <Height>0.4cm</Height>
             <Width>2.30421cm</Width>
-            <ZIndex>109</ZIndex>
+            <ZIndex>114</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3319,6 +3902,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Day_Of_Lbl2">
@@ -3341,7 +3928,7 @@
             <Left>21.14986cm</Left>
             <Height>0.4cm</Height>
             <Width>5.22371cm</Width>
-            <ZIndex>110</ZIndex>
+            <ZIndex>115</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3351,6 +3938,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Me_This_Lbl2">
@@ -3373,7 +3964,7 @@
             <Left>15.62387cm</Left>
             <Height>0.4cm</Height>
             <Width>4.57292cm</Width>
-            <ZIndex>111</ZIndex>
+            <ZIndex>116</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3383,6 +3974,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="By_Lbl4">
@@ -3405,7 +4000,7 @@
             <Left>15.05942cm</Left>
             <Height>0.4cm</Height>
             <Width>8.23004cm</Width>
-            <ZIndex>112</ZIndex>
+            <ZIndex>117</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3415,6 +4010,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
           <Textbox Name="Date_Lbl5">
@@ -3437,7 +4036,7 @@
             <Left>24.05499cm</Left>
             <Height>0.4cm</Height>
             <Width>2.27268cm</Width>
-            <ZIndex>113</ZIndex>
+            <ZIndex>118</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -3447,502 +4046,10 @@
                 <Style>Solid</Style>
                 <Width>1pt</Width>
               </BottomBorder>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value2">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Line 1 </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>+</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                      <TextDecoration>Underline</TextDecoration>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>  Line2</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>) </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>9.26046cm</Top>
-            <Left>4.31356cm</Left>
-            <Height>0.4cm</Height>
-            <Width>2.1854cm</Width>
-            <ZIndex>114</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value3">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Column G on G703</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>10.37796cm</Top>
-            <Left>1.56983cm</Left>
-            <Height>0.4cm</Height>
-            <Width>2.78512cm</Width>
-            <ZIndex>115</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value4">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Column D + E on G703</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>11.9963cm</Top>
-            <Left>1.56983cm</Left>
-            <Height>0.28222cm</Height>
-            <Width>3.40248cm</Width>
-            <ZIndex>116</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value5">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Column F on G703</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>12.68723cm</Top>
-            <Left>1.56983cm</Left>
-            <Height>0.28222cm</Height>
-            <Width>3.08498cm</Width>
-            <ZIndex>117</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value6">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Line 5A + 5B or                </Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>Total in Column I of G703</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>13.04cm</Top>
-            <Left>2.54967cm</Left>
-            <Height>0.54981cm</Height>
-            <Width>3.31429cm</Width>
-            <ZIndex>118</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value7">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Line 4 less Line 5 Total</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>14.1488cm</Top>
-            <Left>1.56983cm</Left>
-            <Height>0.28222cm</Height>
-            <Width>3.40248cm</Width>
-            <ZIndex>119</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value8">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Line 6 from prior Certificate</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>14.71056cm</Top>
-            <Left>1.56983cm</Left>
-            <Height>0.28222cm</Height>
-            <Width>3.84918cm</Width>
-            <ZIndex>120</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Line_03_Value9">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>(Line 3 less Line 6</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <FontWeight>Normal</FontWeight>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                  <TextRun>
-                    <Value>)</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <Top>15.9013cm</Top>
-            <Left>6.49498cm</Left>
-            <Height>0.4cm</Height>
-            <Width>2.78512cm</Width>
-            <ZIndex>121</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox1">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Undersigned_1_Lbl.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>5.8914cm</Top>
-            <Left>14.38134cm</Left>
-            <Height>0.27897cm</Height>
-            <Width>12.01178cm</Width>
-            <ZIndex>122</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox2">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Undersigned_2_Lbl.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>6.18801cm</Top>
-            <Left>14.38134cm</Left>
-            <Height>0.21876cm</Height>
-            <Width>12.01178cm</Width>
-            <ZIndex>123</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox3">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Undersigned_3_Lbl.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>6.45616cm</Top>
-            <Left>14.38134cm</Left>
-            <Height>0.20461cm</Height>
-            <Width>12.01178cm</Width>
-            <ZIndex>124</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox4">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Undersigned_4_Lbl.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>6.71016cm</Top>
-            <Left>14.38505cm</Left>
-            <Height>0.23636cm</Height>
-            <Width>12.00807cm</Width>
-            <ZIndex>125</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox5">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Undersigned_5_Lbl.Value, "DataSet_Result")</Value>
-                    <Style>
-                      <FontSize>8pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox1</rd:DefaultName>
-            <Top>6.99591cm</Top>
-            <Left>14.38134cm</Left>
-            <Height>0.30014cm</Height>
-            <Width>12.01178cm</Width>
-            <ZIndex>126</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>2pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
+              <PaddingLeft>0cm</PaddingLeft>
+              <PaddingRight>0cm</PaddingRight>
+              <PaddingTop>0cm</PaddingTop>
+              <PaddingBottom>0cm</PaddingBottom>
             </Style>
           </Textbox>
         </ReportItems>
@@ -3954,7 +4061,9 @@
         <PageHeight>8.5in</PageHeight>
         <PageWidth>11in</PageWidth>
         <LeftMargin>0.25in</LeftMargin>
+        <RightMargin>0cm</RightMargin>
         <TopMargin>0.25in</TopMargin>
+        <BottomMargin>0cm</BottomMargin>
         <Style />
       </Page>
     </ReportSection>

@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="COMPANYNAME">
+          <DataField>COMPANYNAME</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="Job_No">
+          <DataField>Job_No</DataField>
+        </Field>
+        <Field Name="Job_Name">
+          <DataField>Job_Name</DataField>
+        </Field>
+        <Field Name="Job_AddressLine1">
+          <DataField>Job_AddressLine1</DataField>
+        </Field>
+        <Field Name="Job_AddressLine2">
+          <DataField>Job_AddressLine2</DataField>
+        </Field>
+        <Field Name="Job_AddressLine3">
+          <DataField>Job_AddressLine3</DataField>
+        </Field>
+        <Field Name="Job_AddressLine4">
+          <DataField>Job_AddressLine4</DataField>
+        </Field>
+        <Field Name="Job_AddressLine5">
+          <DataField>Job_AddressLine5</DataField>
+        </Field>
+        <Field Name="Job_AddressLine6">
+          <DataField>Job_AddressLine6</DataField>
+        </Field>
+        <Field Name="Job_JobName">
+          <DataField>Job_JobName</DataField>
+        </Field>
+        <Field Name="Job_CustomerAccount">
+          <DataField>Job_CustomerAccount</DataField>
+        </Field>
+        <Field Name="Job_CustomerAccountName">
+          <DataField>Job_CustomerAccountName</DataField>
+        </Field>
+        <Field Name="Job_Project_Emgineer">
+          <DataField>Job_Project_Emgineer</DataField>
+        </Field>
+        <Field Name="CompanyInfo1Picture">
+          <DataField>CompanyInfo1Picture</DataField>
+        </Field>
+        <Field Name="Quantity_Shipped">
+          <DataField>Quantity_Shipped</DataField>
+        </Field>
+        <Field Name="Quantity_ShippedFormat">
+          <DataField>Quantity_ShippedFormat</DataField>
+        </Field>
+        <Field Name="Box_Ref">
+          <DataField>Box_Ref</DataField>
+        </Field>
+        <Field Name="Part_No">
+          <DataField>Part_No</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Quantity_Shipped_Calc">
+          <DataField>Quantity_Shipped_Calc</DataField>
+        </Field>
+        <Field Name="Quantity_Shipped_CalcFormat">
+          <DataField>Quantity_Shipped_CalcFormat</DataField>
+        </Field>
+        <Field Name="Box_Ref_Calc">
+          <DataField>Box_Ref_Calc</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

@@ -1,8 +1,7 @@
 pageextension 14021454 NS_SalesRelationshipMgrAct extends "Sales & Relationship Mgr. Act."
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Activities'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Active Campaigns")

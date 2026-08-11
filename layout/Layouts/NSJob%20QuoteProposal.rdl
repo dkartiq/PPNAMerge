@@ -39,6 +39,392 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
+                  <Height>0.86458in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Image Name="Image3">
+                          <Source>Embedded</Source>
+                          <Value>project_pro_dyn_nav_cons_sol</Value>
+                          <Sizing>FitProportional</Sizing>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Image>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox18">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Iif(First(Fields!QuoteHeader_Draft.Value) = 1,"INTERNAL USE ONLY","")</Value>
+                                  <Style>
+                                    <FontSize>26pt</FontSize>
+                                    <Color>Silver</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox18</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox46">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!QuoteHeader_Title.Value)</Value>
+                                  <Style>
+                                    <FontSize>24pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox46</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox13">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!CompanyInfo_Address.Value) +
+ Iif(First(Fields!CompanyInfo_Address2.Value) = "","",
+   ", " + Fields!CompanyInfo_Address2.Value) + ", " +
+ First(Fields!CompanyInfo_City.Value) + ", " +
+ First(Fields!CompanyInfo_County.Value) + "  " + 
+ First(Fields!CompanyInfo_PostCode.Value) + Chr(13) + Chr(10) +
+ "Phone: " + First(Fields!CompanyInfo_PhoneNo.Value) + 
+ Iif(First(Fields!CompanyInfo_FaxNo.Value) = "","",
+   "  Fax: " + First(Fields!CompanyInfo_FaxNo.Value))</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox13</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox20">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>9pt</FontSize>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox78">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>="No. " + First(Fields!QuoteHeader_LinkToQuoteNo_.Value)</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox78</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.2in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox11</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox95">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox17">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox19">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>9pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox19</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox47">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Iif(First(Fields!QuoteHeader_RevisionNo_.Value) &lt;= 1,"",
+   "Revision: " + Str(First(Fields!QuoteHeader_RevisionNo_.Value)))</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>9pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox47</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
                   <Height>0.2in</Height>
                   <TablixCells>
                     <TablixCell>
@@ -50,14 +436,13 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>="Salesperson :" +
+                                  <Value>="Sales Person :" +
  Iif(Fields!Salesperson_PhoneNo.Value = "","",
    Chr(13) + Chr(10) + " " + "") +
  Iif(Fields!Salesperson_EMail.Value = "","",
    Chr(13) + Chr(10) + " " + "")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -92,8 +477,7 @@
                                 <TextRun>
                                   <Value>=Fields!Salesperson_Name.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -127,8 +511,7 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -157,13 +540,9 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>="No. " + First(Fields!QuoteHeader_LinkToQuoteNo_.Value)</Value>
+                                  <Value>="Date: " + First(Fields!QuoteHeader_ProposalDate.Value)</Value>
                                   <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <TextDecoration>None</TextDecoration>
-                                    <Color>#000000</Color>
+                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -203,8 +582,7 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -238,8 +616,7 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -270,8 +647,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -303,19 +678,14 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=IIF(First(Fields!QuoteHeader_RevisionNo_.Value) &lt;= 1,"",
-   "Revision: " + Str(First(Fields!QuoteHeader_RevisionNo_.Value)))</Value>
+                                  <Value />
                                   <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
-                                    <TextDecoration>None</TextDecoration>
-                                    <Color>#000000</Color>
+                                    <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -349,8 +719,7 @@
                                   <Value>Sold to:</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                     <Color>#000000</Color>
@@ -369,6 +738,8 @@
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -388,8 +759,7 @@ Fields!BillToAddress_3.Value + Chr(13) + Chr(10) +
 Fields!BillToAddress_4.Value + Chr(13) + Chr(10) +
 Fields!BillToAddress_5.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -403,6 +773,8 @@ Fields!BillToAddress_5.Value</Value>
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
@@ -421,8 +793,7 @@ Fields!BillToAddress_5.Value</Value>
                                   <Value>Ship to:</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                     <Color>#000000</Color>
@@ -441,6 +812,7 @@ Fields!BillToAddress_5.Value</Value>
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
@@ -457,12 +829,11 @@ Fields!BillToAddress_5.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!ShipToAddress_1.Value + Chr(13) + Chr(10) +
 Fields!ShipToAddress_2.Value + Chr(13) + Chr(10) +
-Fields!ShipToAddress_3.Value + Chr(13) + Chr(10) +" " +
+Fields!ShipToAddress_3.Value + Chr(13) + Chr(10) +
 Fields!ShipToAddress_4.Value</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <TextDecoration>None</TextDecoration>
                                     <Color>#000000</Color>
                                   </Style>
@@ -480,6 +851,8 @@ Fields!ShipToAddress_4.Value</Value>
                             </Border>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
@@ -502,8 +875,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -532,8 +904,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -562,8 +933,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -592,8 +962,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -622,8 +991,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -652,8 +1020,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -688,8 +1055,7 @@ Fields!ShipToAddress_4.Value</Value>
                                   <Value>Terms:</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <TextDecoration>None</TextDecoration>
                                     <Color>#000000</Color>
@@ -706,6 +1072,7 @@ Fields!ShipToAddress_4.Value</Value>
                             <Border />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
@@ -722,14 +1089,11 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!PaymentTerms_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style>
-                                <TextAlign>Left</TextAlign>
-                              </Style>
+                              <Style />
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox8</rd:DefaultName>
@@ -737,6 +1101,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <Border />
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
@@ -745,17 +1111,16 @@ Fields!ShipToAddress_4.Value</Value>
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox47">
+                        <Textbox Name="Textbox15">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>PO:</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -763,7 +1128,7 @@ Fields!ShipToAddress_4.Value</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox47</rd:DefaultName>
+                          <rd:DefaultName>Textbox15</rd:DefaultName>
                           <Style>
                             <Border />
                             <PaddingLeft>2pt</PaddingLeft>
@@ -783,10 +1148,9 @@ Fields!ShipToAddress_4.Value</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!QuoteHeader_ExtDocNo.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -813,17 +1177,16 @@ Fields!ShipToAddress_4.Value</Value>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox52">
+                        <Textbox Name="Textbox51">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>Ship by:</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -833,7 +1196,7 @@ Fields!ShipToAddress_4.Value</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox52</rd:DefaultName>
+                          <rd:DefaultName>Textbox51</rd:DefaultName>
                           <Style>
                             <Border />
                             <PaddingLeft>2pt</PaddingLeft>
@@ -846,24 +1209,23 @@ Fields!ShipToAddress_4.Value</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox50">
+                        <Textbox Name="Textbox52">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!ShipmentMethod_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox50</rd:DefaultName>
+                          <rd:DefaultName>Textbox52</rd:DefaultName>
                           <Style>
                             <Border />
                             <PaddingLeft>2pt</PaddingLeft>
@@ -887,8 +1249,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -917,8 +1278,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -947,8 +1307,7 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -1161,7 +1520,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>No.</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1196,7 +1554,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1231,7 +1588,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>Description</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1264,7 +1620,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1299,7 +1654,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>Unit Price</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1334,7 +1688,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>Amount</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1374,7 +1727,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_No2_.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -1412,7 +1764,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0","Black",
         Fields!QuoteLine_Indentation.Value = "1","Black",
@@ -1451,7 +1802,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -1486,7 +1836,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Code.BlankZero(Fields!QuoteLine_UnitPrice.Value)</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <Format>C</Format>
                                   </Style>
@@ -1508,6 +1857,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1523,7 +1874,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Code.BlankZero(Fields!QuoteLine_Amount.Value)</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <Format>C</Format>
                                   </Style>
@@ -1545,6 +1895,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1565,7 +1917,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_No_.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -1615,7 +1966,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -1672,7 +2022,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>No.</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1707,7 +2056,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1742,7 +2090,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>Description</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1775,7 +2122,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1808,17 +2154,14 @@ Fields!ShipToAddress_4.Value</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value xml:space="preserve"> </Value>
+                                  <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
+                              <Style />
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox124</rd:DefaultName>
@@ -1847,7 +2190,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>Amount</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1887,7 +2229,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_No_.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -1922,7 +2263,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_Name.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -1954,7 +2294,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -1987,7 +2326,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                   </Style>
                                 </TextRun>
@@ -2020,7 +2358,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_UnitPrice.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <Format>'$'#,0.00</Format>
                                   </Style>
@@ -2062,7 +2399,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -2121,7 +2457,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -2168,7 +2503,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -2216,7 +2550,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -2264,7 +2597,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -2312,7 +2644,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Default",
         Fields!QuoteLine_Indentation.Value = "5", "Default",
@@ -2443,7 +2774,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>="EQUIPMENT:"</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -2467,6 +2797,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -2485,7 +2817,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Format(Fields!QuoteLine_EquipAmt.Value,"#,###.00;-#,###.00")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>'$'#,0.00;('$'#,0.00)</Format>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -2510,6 +2841,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                             <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
@@ -2613,7 +2946,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>="SALES TAX:"</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -2637,6 +2969,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -2655,7 +2989,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Format(Fields!QuoteLine_AmountInclVAT.Value - Fields!QuoteLine_Amount.Value,"#,###.00;-#,###.00")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -2679,6 +3012,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -2781,7 +3116,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>="FREIGHT:"</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -2805,6 +3139,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -2823,7 +3159,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Format(Fields!QuoteLine_FreightAmt.Value,"#,###.00;-#,###.00")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>'$'#,0.00;('$'#,0.00)</Format>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -2848,6 +3183,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                             <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
@@ -2951,7 +3288,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>="SERVICE:"</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -2975,6 +3311,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -2993,7 +3331,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Format(Fields!QuoteLine_ServiceAmt.Value,"#,###.00;-#,###.00")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>'$'#,0.00;('$'#,0.00)</Format>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -3018,6 +3355,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                             <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
@@ -3121,7 +3460,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>="INSTALLATION:"</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -3145,6 +3483,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -3163,7 +3503,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Format(Fields!QuoteLine_InstallAmt.Value,"#,###.00;-#,###.00")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>'$'#,0.00;('$'#,0.00)</Format>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -3188,6 +3527,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                             <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
@@ -3291,7 +3632,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>="BONDS:"</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -3315,6 +3655,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>3</ColSpan>
@@ -3333,7 +3675,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Format(Fields!QuoteLine_BondsAmt.Value,"#,###.00;-#,###.00")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>'$'#,0.00;('$'#,0.00)</Format>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -3358,6 +3699,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                             <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
@@ -3460,7 +3803,6 @@ Fields!ShipToAddress_4.Value</Value>
                                   <Value>=Iif(First(Fields!QuoteHeader_DepositRequired.Value) = 0,"",
  Format(First(Fields!QuoteHeader_DepositRequired.Value),"###.##") + "% Deposit Required: " + Format(Code.GetDeposit(Fields!QuoteLine_AmountInclVAT.Value,Fields!QuoteHeader_DepositRequired.Value),"$#,###.00"))</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -3482,6 +3824,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -3498,7 +3842,6 @@ Fields!ShipToAddress_4.Value</Value>
                                   <Value>=Iif(Fields!QuoteHeader_PrintSalesTax.Value = False,"TOTAL PRICE:",
     "TOTAL AMOUNT:")</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
         Fields!QuoteLine_Indentation.Value = "5", "Black",
@@ -3522,6 +3865,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
@@ -3541,7 +3886,6 @@ Fields!ShipToAddress_4.Value</Value>
    Format(Fields!QuoteLine_Amount.Value,"#,###.00;-#,###.00"),
       Format(Fields!QuoteLine_AmountInclVAT.Value,"#,###.00;-#,###.00"))</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
                                     <Format>'$'#,0.00;('$'#,0.00)</Format>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -3566,6 +3910,8 @@ Fields!ShipToAddress_4.Value</Value>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                             <rd:FormatSymbolCulture>en-US</rd:FormatSymbolCulture>
                           </Style>
                         </Textbox>
@@ -3668,7 +4014,6 @@ Fields!ShipToAddress_4.Value</Value>
                                 <TextRun>
                                   <Value>=Fields!QuoteLine_Description.Value</Value>
                                   <Style>
-                                    <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                     <Color>=Switch(Fields!QuoteLine_Indentation.Value = "0", "Black",
@@ -3761,6 +4106,9 @@ Fields!ShipToAddress_4.Value</Value>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
               <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -3865,8 +4213,7 @@ Fields!ShipToAddress_4.Value</Value>
             <RepeatColumnHeaders>true</RepeatColumnHeaders>
             <RepeatRowHeaders>true</RepeatRowHeaders>
             <DataSetName>DataSet_Result</DataSetName>
-            <Left>0.00658in</Left>
-            <Height>4.8in</Height>
+            <Height>6.11458in</Height>
             <Width>7.60417in</Width>
             <Style>
               <Border>
@@ -3875,329 +4222,15 @@ Fields!ShipToAddress_4.Value</Value>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>4.8in</Height>
+        <Height>6.41458in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>7.61075in</Width>
+      <Width>7.60417in</Width>
       <Page>
-        <PageHeader>
-          <Height>1.87764in</Height>
-          <PrintOnFirstPage>true</PrintOnFirstPage>
-          <PrintOnLastPage>true</PrintOnLastPage>
-          <ReportItems>
-            <Image Name="Image1">
-              <Source>Database</Source>
-              <Value>=First(Fields!CompanyInfo_Pic.Value, "DataSet_Result")</Value>
-              <MIMEType>image/bmp</MIMEType>
-              <Sizing>FitProportional</Sizing>
-              <Left>0.02505cm</Left>
-              <Height>1.52576cm</Height>
-              <Width>4.28673cm</Width>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-            <Textbox Name="Textbox15">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!CompanyInfo_Address.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>2.15543cm</Top>
-              <Left>0cm</Left>
-              <Height>0.40597cm</Height>
-              <Width>9.8787cm</Width>
-              <ZIndex>1</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox51">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!CompanyInfo_Address2.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>2.59668cm</Top>
-              <Left>0.00835cm</Left>
-              <Height>0.40597cm</Height>
-              <Width>9.8787cm</Width>
-              <ZIndex>2</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(Fields!CompanyInfo_Address2.Value &lt;&gt; " ", False, True)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox88">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!CompanyInfo_City.Value &amp; Fields!NS_TextCommaAdd.Value &amp; " " &amp; Fields!CompanyInfo_County.Value &amp; " " &amp; Fields!CompanyInfo_PostCode.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>3.03793cm</Top>
-              <Left>0.00835cm</Left>
-              <Height>0.40597cm</Height>
-              <Width>9.8787cm</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox93">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>="Phone: " &amp; Fields!CompanyInfo_PhoneNo.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>3.47918cm</Top>
-              <Left>0.00835cm</Left>
-              <Height>0.40597cm</Height>
-              <Width>9.8787cm</Width>
-              <ZIndex>4</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox96">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!CompanyInfo_Name.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>1.66687cm</Top>
-              <Left>0.00418cm</Left>
-              <Height>0.40597cm</Height>
-              <Width>9.8787cm</Width>
-              <ZIndex>5</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox149">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!QuoteHeader_Title.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>18pt</FontSize>
-                        <FontWeight>Bold</FontWeight>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox149</rd:DefaultName>
-              <Left>5.26005in</Left>
-              <Height>0.59055in</Height>
-              <Width>2.3507in</Width>
-              <ZIndex>6</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Top</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox102">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Fields!NS_SalesPerson_ID.Value</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox1</rd:DefaultName>
-              <Top>1.60302cm</Top>
-              <Left>14.70719cm</Left>
-              <Height>0.48185cm</Height>
-              <Width>4.61575cm</Width>
-              <ZIndex>7</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox108">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!NS_Today.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox11</rd:DefaultName>
-              <Top>2.15543cm</Top>
-              <Left>14.70719cm</Left>
-              <Height>0.48185cm</Height>
-              <Width>4.61575cm</Width>
-              <ZIndex>8</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox111">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>="Page " + Str(Globals!PageNumber)</Value>
-                      <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox13</rd:DefaultName>
-              <Top>2.70784cm</Top>
-              <Left>14.70719cm</Left>
-              <Height>0.49388cm</Height>
-              <Width>4.61575cm</Width>
-              <ZIndex>9</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-              </Style>
-            </Textbox>
-          </ReportItems>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-          </Style>
-        </PageHeader>
         <PageFooter>
           <Height>0.83in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
@@ -4212,8 +4245,7 @@ Fields!ShipToAddress_4.Value</Value>
                     <TextRun>
                       <Value>Cronus Construction - Confidential</Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -4223,7 +4255,6 @@ Fields!ShipToAddress_4.Value</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox79</rd:DefaultName>
               <Top>0.63in</Top>
-              <Left>0.00658in</Left>
               <Height>0.2in</Height>
               <Width>2.79166in</Width>
               <Style>
@@ -4243,10 +4274,9 @@ Fields!ShipToAddress_4.Value</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value />
+                      <Value>="Page " + Str(Globals!PageNumber) + " of " + Str(Globals!TotalPages)</Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
-                        <FontSize>8pt</FontSize>
+                        <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
@@ -4258,7 +4288,7 @@ Fields!ShipToAddress_4.Value</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
               <Top>0.63in</Top>
-              <Left>5.65242in</Left>
+              <Left>5.64584in</Left>
               <Height>0.2in</Height>
               <Width>1.95833in</Width>
               <ZIndex>1</ZIndex>
@@ -4281,7 +4311,6 @@ Fields!ShipToAddress_4.Value</Value>
                     <TextRun>
                       <Value>Quotation valid for 30 days</Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
                         <FontSize>9pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                       </Style>
@@ -4294,7 +4323,7 @@ Fields!ShipToAddress_4.Value</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox79</rd:DefaultName>
               <Top>0.63in</Top>
-              <Left>2.86768in</Left>
+              <Left>2.8611in</Left>
               <Height>0.2in</Height>
               <Width>2.71529in</Width>
               <ZIndex>2</ZIndex>
@@ -4315,9 +4344,8 @@ Fields!ShipToAddress_4.Value</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Customer Initials ___________________________________     Cronus Construction Initials ______________________________</Value>
+                      <Value>Customer Initials __________          Cronus Construction Initials __________</Value>
                       <Style>
-                        <FontFamily>Segoe UI</FontFamily>
                         <FontSize>9pt</FontSize>
                       </Style>
                     </TextRun>
@@ -4329,9 +4357,8 @@ Fields!ShipToAddress_4.Value</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox79</rd:DefaultName>
               <Top>0.20042in</Top>
-              <Left>0.00658in</Left>
               <Height>0.2in</Height>
-              <Width>7.60417in</Width>
+              <Width>5.57639in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -4613,18 +4640,6 @@ BoYf2pTnHvSUm+/TRwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         <Field Name="QuoteHeader_Title">
           <DataField>QuoteHeader_Title</DataField>
         </Field>
-        <Field Name="CompanyInfo_Pic">
-          <DataField>CompanyInfo_Pic</DataField>
-        </Field>
-        <Field Name="NS_TextCommaAdd">
-          <DataField>NS_TextCommaAdd</DataField>
-        </Field>
-        <Field Name="CompanyInfo_Name">
-          <DataField>CompanyInfo_Name</DataField>
-        </Field>
-        <Field Name="NS_SalesPerson_ID">
-          <DataField>NS_SalesPerson_ID</DataField>
-        </Field>
         <Field Name="QuoteHeader_Draft">
           <DataField>QuoteHeader_Draft</DataField>
         </Field>
@@ -4634,24 +4649,6 @@ BoYf2pTnHvSUm+/TRwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         <Field Name="QuoteHeader_RevisionNo_">
           <DataField>QuoteHeader_RevisionNo_</DataField>
         </Field>
-        <Field Name="NS_PrintSalesTax">
-          <DataField>NS_PrintSalesTax</DataField>
-        </Field>
-        <Field Name="NS_QuoteLineAmtIncVat">
-          <DataField>NS_QuoteLineAmtIncVat</DataField>
-        </Field>
-        <Field Name="NS_QuoteLineAmtIncVatFormat">
-          <DataField>NS_QuoteLineAmtIncVatFormat</DataField>
-        </Field>
-        <Field Name="NS_SalesTax">
-          <DataField>NS_SalesTax</DataField>
-        </Field>
-        <Field Name="NS_SalesTaxFormat">
-          <DataField>NS_SalesTaxFormat</DataField>
-        </Field>
-        <Field Name="NS_QHeaderRevNo">
-          <DataField>NS_QHeaderRevNo</DataField>
-        </Field>
         <Field Name="QuoteHeader_Proposal">
           <DataField>QuoteHeader_Proposal</DataField>
         </Field>
@@ -4660,15 +4657,6 @@ BoYf2pTnHvSUm+/TRwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         </Field>
         <Field Name="QuoteHeader_ProposalDate">
           <DataField>QuoteHeader_ProposalDate</DataField>
-        </Field>
-        <Field Name="NS_Today">
-          <DataField>NS_Today</DataField>
-        </Field>
-        <Field Name="NS_DepositReqd">
-          <DataField>NS_DepositReqd</DataField>
-        </Field>
-        <Field Name="NS_DepositReqdFormat">
-          <DataField>NS_DepositReqdFormat</DataField>
         </Field>
         <Field Name="QuoteHeader_SellToCustomerNo_">
           <DataField>QuoteHeader_SellToCustomerNo_</DataField>

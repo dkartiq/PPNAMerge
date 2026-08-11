@@ -1,8 +1,7 @@
 pageextension 14021225 NS_VendorStatistics extends "Vendor Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Vendor Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Balance (LCY)")

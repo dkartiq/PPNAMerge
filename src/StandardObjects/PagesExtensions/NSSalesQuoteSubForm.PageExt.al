@@ -1,8 +1,7 @@
 pageextension 14021134 NS_SalesQuoteSubForm extends "Sales Quote Subform"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("No.")

@@ -13,7 +13,7 @@ report 14021381 "NS_Job Journal Labor - Test"
     RDLCLayout = './Layouts/NSJob Journal Labor - Test.rdl';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = all;
-    Caption = ' Job Job Journal - Test';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Job Journal - Test';
 
     dataset
     {
@@ -113,14 +113,9 @@ report 14021381 "NS_Job Journal Labor - Test"
                 column(Job_Journal_Line_JobCostCategory_Caption; "Job Journal Line".FIELDCAPTION("NS_Job Cost Category"))
                 {
                 }
-                //PE-68 Dk.1.0 10April2023 Start
-                // column(Job_Journal_Line_SkillClass_Caption; "Job Journal Line".FIELDCAPTION("NS_Skill Class"))
-                // {
-                // }
-                column(Job_Journal_Line_SkillClass_Caption; "Job Journal Line".FIELDCAPTION("NS_Skill Class New"))
+                column(Job_Journal_Line_SkillClass_Caption; "Job Journal Line".FIELDCAPTION("NS_Skill Class"))
                 {
                 }
-                //PE-68 Dk.1.0 10April2023 End
                 column(Job_Journal_Line_PayrollBurdenAmount_Caption; "Job Journal Line".FIELDCAPTION("NS_Payroll Burden Amount"))
                 {
                 }
@@ -196,14 +191,9 @@ report 14021381 "NS_Job Journal Labor - Test"
                     column(Job_Journal_Line_JobCostCategory; "NS_Job Cost Category")
                     {
                     }
-                    //PE-68.Dk.1.0 10April2023 Start
-                    // column(Job_Journal_Line_SkillClass; "NS_Skill Class")
-                    // {
-                    // }
-                    column(Job_Journal_Line_SkillClass; "NS_Skill Class New")
+                    column(Job_Journal_Line_SkillClass; "NS_Skill Class")
                     {
                     }
-                    //PE-68.Dk.1.0 10April2023 End
                     column(Job_Journal_Line_PayrollBurdenAmount; "NS_Payroll Burden Amount")
                     {
                     }

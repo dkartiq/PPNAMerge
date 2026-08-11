@@ -4,9 +4,6 @@ pageextension 14021103 NS_CustomerList extends "Customer List"
     //PRJ-250:AS:10JUNE2020 Added Code
 
     //PRJ-250:AS:10JUNE2020 - start
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Customers'; //PRJ-1330.NK.1.0 25Apr2022
-    //PRJ-1537.JS.1.0 25JULY2022 | Reverce Balance Due ($) Sinage condition
     layout
     {
         modify("Balance Due (LCY)")
@@ -136,11 +133,6 @@ pageextension 14021103 NS_CustomerList extends "Customer List"
                 BalanceDueLcy_N += CustLegEnt_G."Remaining Amt. (LCY)";//PRJ-713
             until CustLegEnt_G.Next = 0;
         BalanceDueLcy_NToshow := Abs(BalanceDueLcy_N);
-        //PRJ-1537.JS.1.0 25JULY2022 - Start
-        Rec.CalcFields("Balance (LCY)");
-        If Rec."Balance (LCY)" < 0 then
-            BalanceDueLcy_NToshow := BalanceDueLcy_NToshow * -1;
-        //PRJ-1537.JS.1.0 25JULY2022 - end    
     end;
     //PRJ-250:AS:10JUNE2020 - end
     /*

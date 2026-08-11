@@ -1,8 +1,7 @@
 pageextension 14021128 NS_ResourceGroups extends "Resource Groups"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Resource Groups'; //PRJ-1330.NK.1.0 25Apr2022
+
     actions
     {
         modify("&Prices")

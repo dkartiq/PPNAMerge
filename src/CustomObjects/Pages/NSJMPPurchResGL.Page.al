@@ -8,8 +8,7 @@ page 14021435 "NS_JMP Purch. Res. G/L"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1306.NK.1.0 19APR2022 | Correct Code
-    //PRJ-1579.RM.1.0 22Aug2022 | Added some code
+
     PageType = List;
     Caption = 'JMP Purch. Res. G/L';
     SourceTable = "NS_Job Material Planning";
@@ -17,7 +16,6 @@ page 14021435 "NS_JMP Purch. Res. G/L"
     ApplicationArea = Jobs;
     SourceTableView = SORTING("NS_Worksheet Job No.", NS_Type, "NS_Part No.", "NS_Bal. Req", "NS_Date Ordered By")
                       WHERE("NS_Bal. Req" = FILTER(> 0));
-    InsertAllowed = false;//PRJ-1426.GK.1.0 02June2022
 
     layout
     {
@@ -49,9 +47,7 @@ page 14021435 "NS_JMP Purch. Res. G/L"
                 {
                     ApplicationArea = All;
                     Caption = 'Vendor No.';
-                    // ToolTip = 'Vendor No.'; //PRJ-1579.RM.1.0 commented
-                    // ToolTip = 'Specifies the vendor no.'; //PRJ-1579.RM.1.0 //PRJ-1579.RM.2.0 commented
-                    ToolTip = 'Specifies the Vendor No.'; //PRJ-1579.RM.2.0
+                    ToolTip = 'Vendor No.';
                 }
                 field(Quantity; Rec.NS_Quantity)
                 {
@@ -117,23 +113,18 @@ page 14021435 "NS_JMP Purch. Res. G/L"
                     lVendor.SETCURRENTKEY("NS_Resource Provider");
                     if lVendor.FINDSET(false, false) then
                         repeat
-                            //PRJ-1131.RM.1.0.001 10Jan2022 start
-                            Rec.SETRANGE(NS_Vendor, lVendor."No.");
-                            //PRJ-1367.GK.1.0 11May2022 start
-                            Rec.SetFilter("NS_Document No.", '<>%1', '');
-                            Rec.SetFilter("NS_Date Ordered By", '<>%1', 0D);
-                            //PRJ-1367.GK.1.0 11May2022 end
-                            if Rec.FINDFIRST() then begin
+                            SETRANGE(NS_Vendor, lVendor."No.");
+                            if FINDFIRST() then begin
                                 x += 1;
                                 if lVendor."No." <> LastVendor then
-                                    Rec.NS_MakeResourcePurchDoc(lVendor."No.", TrueFalse, LineType);
-                                LastVendor := lVendor."No.";//PRJ-1131.RM.1.0.001 10Jan2022 end
+                                    NS_MakeResourcePurchDoc(lVendor."No.", TrueFalse, LineType);
+                                LastVendor := lVendor."No.";
                             end;
                         until lVendor.NEXT() = 0;
 
                     if not TrueFalse then
                         MESSAGE(STRSUBSTNO(Text00001Lbl, x, FORMAT(LineType)));
-                    //CurrPage.UPDATE(); //PRJ-1306.NK.1.0 19APR2022 Block
+                    CurrPage.UPDATE();
                 end;
             }
         }
@@ -141,18 +132,10 @@ page 14021435 "NS_JMP Purch. Res. G/L"
 
     trigger OnOpenPage();
     begin
-        //PRJ-1131.RM.1.0.001 10Jan2022 start
-        Rec.SETRANGE("NS_Worksheet Job No.", JobNo);
-        Rec.SETRANGE(NS_Type, LineType);
-        if LineType = LineType::Resource then begin
-            Rec.SETRANGE("NS_Purchase Res. G/L", true);//PRJ-1131.RM.1.0.001 10Jan2022 end
-            //PRJ-1367.GK.1.0 11May2022 start
-            Rec.SetFilter(NS_Vendor, '<>%1', '');
-            Rec.SetFilter("NS_Document No.", '<>%1', '');
-            Rec.SetFilter("NS_Date Ordered By", '<>%1', 0D);
-            //PRJ-1367.GK.1.0 11May2022 end
-        end;
-
+        SETRANGE("NS_Worksheet Job No.", JobNo);
+        SETRANGE(NS_Type, LineType);
+        if LineType = LineType::Resource then
+            SETRANGE("NS_Purchase Res. G/L", true);
     end;
 
     var

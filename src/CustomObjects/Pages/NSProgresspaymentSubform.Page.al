@@ -60,20 +60,7 @@ page 14021341 "NS_Progress Payment Subform"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the No. Description';
-                    //PRJ-1623.GK.1.0 08Sept2022 start
-                    Visible = false;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_No. Description New" because of length mismatch with Puchase Line';
-                    ObsoleteTag = '20.0.8.41354';
-                    //PRJ-1623.GK.1.0 08Sept2022 end
                 }
-                //PRJ-1623.GK.1.0 08Sept2022 start
-                field("NS_No. Description New"; Rec."NS_No. Description New")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the No. Description field.';
-                }
-                //PRJ-1623.GK.1.0 08Sept2022 end
                 field("Job Task No."; Rec."NS_Job Task No.")
                 {
                     ApplicationArea = All;
@@ -84,32 +71,16 @@ page 14021341 "NS_Progress Payment Subform"
                     begin
                         if not JobTask.GET("NS_Job No.", "NS_Job Task No.") then
                             ERROR(Text005Lbl, "NS_Job Task No.", Job."No.");
-                        //PRJ-1652.GK.1.0 29Sept2022 start
-                        //Rec."NS_Task Description" := JobTask.Description; //PRJ-1131.NK.1.0
-                        Rec."NS_Task Description New" := JobTask.Description;
-                        //PRJ-1652.GK.1.0 29Sept2022 end
+                        "NS_Task Description" := JobTask.Description;
                     end;
                 }
                 field("Task Description"; Rec."NS_Task Description")
                 {
                     ApplicationArea = All;
                     Caption = 'Task Description';
-                    ToolTip = 'Task Description';
-                    //PRJ-1652.GK.1.0 29Sept2022 start
-                    Visible = false;
-                    ObsoleteState = Pending;
-                    ObsoleteReason = 'This field is marked for removal and replaced by new field "NS_Task Description New" because of length mismatch with Job Task';
-                    ObsoleteTag = '20.0.15.41354';
-                    //PRJ-1652.GK.1.0 29Sept2022 end
-                }
-                //PRJ-1652.GK.1.0 29Sept2022 start
-                field("NS_Task Description"; Rec."NS_Task Description New")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Task Description';
+
                     ToolTip = 'Task Description';
                 }
-                //PRJ-1652.GK.1.0 29Sept2022 end
                 field("Cost Category"; Rec."NS_Cost Category")
                 {
                     ApplicationArea = All;
@@ -341,7 +312,7 @@ page 14021341 "NS_Progress Payment Subform"
         Job: Record Job;
         JobTask: Record "Job Task";
         WorkPreviousPayments: Decimal;
-        TaskName: Text[100];//PRJ-1652.GK.1.0 03Oct2022 |Increase length by 100
+        TaskName: Text[50];
         RecordExists: Boolean;
         [InDataSet]
         PaymentMethodEditable: Boolean;
@@ -365,20 +336,16 @@ page 14021341 "NS_Progress Payment Subform"
                 "NS_Payment Method" := JobPlanningLine."NS_Progress Payment Method";
 
         JobPlanningLine.RESET;
-        if JobPlanningLine.GET(Rec."NS_Subcontract No.", Rec."NS_Job No.", Rec."NS_Line No.") then begin
-            //PRJ-1652.GK.1.0 29Sept2022 start
-            // if Rec."NS_Task Description" = '' then
-            //     Rec."NS_Task Description" := JobPlanningLine.Description;
-            if Rec."NS_Task Description New" = '' then
-                Rec."NS_Task Description New" := JobPlanningLine.Description;
-            //PRJ-1652.GK.1.0 29Sept2022 end
-            Rec."NS_Payment Method" := JobPlanningLine."NS_Progress Payment Method";
-            if Rec."NS_Payment Method" = Rec."NS_Payment Method"::Unit then begin
-                Rec."NS_Base Amount" := JobPlanningLine."Unit Price"; 
+        if JobPlanningLine.GET("NS_Subcontract No.", "NS_Job No.", "NS_Line No.") then begin
+            if "NS_Task Description" = '' then
+                "NS_Task Description" := JobPlanningLine.Description;
+            "NS_Payment Method" := JobPlanningLine."NS_Progress Payment Method";
+            if "NS_Payment Method" = "NS_Payment Method"::Unit then begin
+                "NS_Base Amount" := JobPlanningLine."Unit Price";
                 if JobPlanningLine.Quantity < 0 then
-                    Rec."NS_Base Amount" := Rec."NS_Base Amount" * -1;
+                    "NS_Base Amount" := "NS_Base Amount" * -1;
             end else begin
-                Rec."NS_Base Amount" := JobPlanningLine."Total Price";
+                "NS_Base Amount" := JobPlanningLine."Total Price";
             end;
         end else
             if Final then

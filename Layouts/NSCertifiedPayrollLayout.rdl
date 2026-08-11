@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="PayrollCap">
+          <DataField>PayrollCap</DataField>
+        </Field>
+        <Field Name="PersonNotReqCap">
+          <DataField>PersonNotReqCap</DataField>
+        </Field>
+        <Field Name="ForContractOptCap">
+          <DataField>ForContractOptCap</DataField>
+        </Field>
+        <Field Name="NameContractCap">
+          <DataField>NameContractCap</DataField>
+        </Field>
+        <Field Name="AddrCap">
+          <DataField>AddrCap</DataField>
+        </Field>
+        <Field Name="OMBCap">
+          <DataField>OMBCap</DataField>
+        </Field>
+        <Field Name="ExpCap">
+          <DataField>ExpCap</DataField>
+        </Field>
+        <Field Name="PAYROLLNOCap">
+          <DataField>PAYROLLNOCap</DataField>
+        </Field>
+        <Field Name="ForWkBegCap">
+          <DataField>ForWkBegCap</DataField>
+        </Field>
+        <Field Name="ForWkEndCap">
+          <DataField>ForWkEndCap</DataField>
+        </Field>
+        <Field Name="ProjLocCap">
+          <DataField>ProjLocCap</DataField>
+        </Field>
+        <Field Name="ProjContCap">
+          <DataField>ProjContCap</DataField>
+        </Field>
+        <Field Name="NamAddAndCap">
+          <DataField>NamAddAndCap</DataField>
+        </Field>
+        <Field Name="SocSecNOCap">
+          <DataField>SocSecNOCap</DataField>
+        </Field>
+        <Field Name="OfEmpCap">
+          <DataField>OfEmpCap</DataField>
+        </Field>
+        <Field Name="NofWHTDCap">
+          <DataField>NofWHTDCap</DataField>
+        </Field>
+        <Field Name="WorkCap">
+          <DataField>WorkCap</DataField>
+        </Field>
+        <Field Name="ClassfCap">
+          <DataField>ClassfCap</DataField>
+        </Field>
+        <Field Name="OTOrSTCap">
+          <DataField>OTOrSTCap</DataField>
+        </Field>
+        <Field Name="DayDateCap">
+          <DataField>DayDateCap</DataField>
+        </Field>
+        <Field Name="HrWrkEchDayCap">
+          <DataField>HrWrkEchDayCap</DataField>
+        </Field>
+        <Field Name="TotalCap">
+          <DataField>TotalCap</DataField>
+        </Field>
+        <Field Name="RATECap">
+          <DataField>RATECap</DataField>
+        </Field>
+        <Field Name="GROSSCap">
+          <DataField>GROSSCap</DataField>
+        </Field>
+        <Field Name="HOURSCap">
+          <DataField>HOURSCap</DataField>
+        </Field>
+        <Field Name="OFPAYCap">
+          <DataField>OFPAYCap</DataField>
+        </Field>
+        <Field Name="AMOUNTCap">
+          <DataField>AMOUNTCap</DataField>
+        </Field>
+        <Field Name="EARNEDCap">
+          <DataField>EARNEDCap</DataField>
+        </Field>
+        <Field Name="DEDUCTIONSCap">
+          <DataField>DEDUCTIONSCap</DataField>
+        </Field>
+        <Field Name="FICACap">
+          <DataField>FICACap</DataField>
+        </Field>
+        <Field Name="WHTDCap">
+          <DataField>WHTDCap</DataField>
+        </Field>
+        <Field Name="StateTxCap">
+          <DataField>StateTxCap</DataField>
+        </Field>
+        <Field Name="CityLocTaxCap">
+          <DataField>CityLocTaxCap</DataField>
+        </Field>
+        <Field Name="VolDedCap">
+          <DataField>VolDedCap</DataField>
+        </Field>
+        <Field Name="NETWAGESPAIDCap">
+          <DataField>NETWAGESPAIDCap</DataField>
+        </Field>
+        <Field Name="USDepttCap">
+          <DataField>USDepttCap</DataField>
+        </Field>
+        <Field Name="WagHrDivisionCap">
+          <DataField>WagHrDivisionCap</DataField>
+        </Field>
+        <Field Name="StatmComplnceCap">
+          <DataField>StatmComplnceCap</DataField>
+        </Field>
+        <Field Name="PayRLNoCap">
+          <DataField>PayRLNoCap</DataField>
+        </Field>
+        <Field Name="PPDateCap">
+          <DataField>PPDateCap</DataField>
+        </Field>
+        <Field Name="ContrNoCap">
+          <DataField>ContrNoCap</DataField>
+        </Field>
+        <Field Name="DATECap">
+          <DataField>DATECap</DataField>
+        </Field>
+        <Field Name="Day1">
+          <DataField>Day1</DataField>
+        </Field>
+        <Field Name="Day2">
+          <DataField>Day2</DataField>
+        </Field>
+        <Field Name="Day3">
+          <DataField>Day3</DataField>
+        </Field>
+        <Field Name="Day4">
+          <DataField>Day4</DataField>
+        </Field>
+        <Field Name="Day5">
+          <DataField>Day5</DataField>
+        </Field>
+        <Field Name="Day6">
+          <DataField>Day6</DataField>
+        </Field>
+        <Field Name="Day7">
+          <DataField>Day7</DataField>
+        </Field>
+        <Field Name="ComPInfoFedIDNo">
+          <DataField>ComPInfoFedIDNo</DataField>
+        </Field>
+        <Field Name="PeriodEndDate_WH347TempTable">
+          <DataField>PeriodEndDate_WH347TempTable</DataField>
+        </Field>
+        <Field Name="JobNo_WH347TempTable">
+          <DataField>JobNo_WH347TempTable</DataField>
+        </Field>
+        <Field Name="EmployeeNo_WH347TempTable">
+          <DataField>EmployeeNo_WH347TempTable</DataField>
+        </Field>
+        <Field Name="EmployeeClass_WH347TempTable">
+          <DataField>EmployeeClass_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day1RegularHours_WH347TempTable">
+          <DataField>Day1RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day1RegularHours_WH347TempTableFormat">
+          <DataField>Day1RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day2RegularHours_WH347TempTable">
+          <DataField>Day2RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day2RegularHours_WH347TempTableFormat">
+          <DataField>Day2RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day3RegularHours_WH347TempTable">
+          <DataField>Day3RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day3RegularHours_WH347TempTableFormat">
+          <DataField>Day3RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day4RegularHours_WH347TempTable">
+          <DataField>Day4RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day4RegularHours_WH347TempTableFormat">
+          <DataField>Day4RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day5RegularHours_WH347TempTable">
+          <DataField>Day5RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day5RegularHours_WH347TempTableFormat">
+          <DataField>Day5RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day6RegularHours_WH347TempTable">
+          <DataField>Day6RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day6RegularHours_WH347TempTableFormat">
+          <DataField>Day6RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day7RegularHours_WH347TempTable">
+          <DataField>Day7RegularHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day7RegularHours_WH347TempTableFormat">
+          <DataField>Day7RegularHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day1OvertimeHours_WH347TempTable">
+          <DataField>Day1OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day1OvertimeHours_WH347TempTableFormat">
+          <DataField>Day1OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day2OvertimeHours_WH347TempTable">
+          <DataField>Day2OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day2OvertimeHours_WH347TempTableFormat">
+          <DataField>Day2OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day3OvertimeHours_WH347TempTable">
+          <DataField>Day3OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day3OvertimeHours_WH347TempTableFormat">
+          <DataField>Day3OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day4OvertimeHours_WH347TempTable">
+          <DataField>Day4OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day4OvertimeHours_WH347TempTableFormat">
+          <DataField>Day4OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day5OvertimeHours_WH347TempTable">
+          <DataField>Day5OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day5OvertimeHours_WH347TempTableFormat">
+          <DataField>Day5OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day6OvertimeHours_WH347TempTable">
+          <DataField>Day6OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day6OvertimeHours_WH347TempTableFormat">
+          <DataField>Day6OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="Day7OvertimeHours_WH347TempTable">
+          <DataField>Day7OvertimeHours_WH347TempTable</DataField>
+        </Field>
+        <Field Name="Day7OvertimeHours_WH347TempTableFormat">
+          <DataField>Day7OvertimeHours_WH347TempTableFormat</DataField>
+        </Field>
+        <Field Name="PayrollCode">
+          <DataField>PayrollCode</DataField>
+        </Field>
+        <Field Name="RegEarningsTotal">
+          <DataField>RegEarningsTotal</DataField>
+        </Field>
+        <Field Name="RegEarningsTotalFormat">
+          <DataField>RegEarningsTotalFormat</DataField>
+        </Field>
+        <Field Name="OTearningsTotal">
+          <DataField>OTearningsTotal</DataField>
+        </Field>
+        <Field Name="OTearningsTotalFormat">
+          <DataField>OTearningsTotalFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgBasicRate">
+          <DataField>PayrollRegisterLedgBasicRate</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgBasicRateFormat">
+          <DataField>PayrollRegisterLedgBasicRateFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedRegularEarnings">
+          <DataField>PayrollRegisterLedRegularEarnings</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedRegularEarningsFormat">
+          <DataField>PayrollRegisterLedRegularEarningsFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgSocialSecurityNo">
+          <DataField>PayrollRegisterLedgSocialSecurityNo</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedGrossPay">
+          <DataField>PayrollRegisterLedGrossPay</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedGrossPayFormat">
+          <DataField>PayrollRegisterLedGrossPayFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerFederalTax">
+          <DataField>PayrollRegisterLedgerFederalTax</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerFederalTaxFormat">
+          <DataField>PayrollRegisterLedgerFederalTaxFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerFICA">
+          <DataField>PayrollRegisterLedgerFICA</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerFICAFormat">
+          <DataField>PayrollRegisterLedgerFICAFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgCityLocalTax">
+          <DataField>PayrollRegisterLedgCityLocalTax</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgCityLocalTaxFormat">
+          <DataField>PayrollRegisterLedgCityLocalTaxFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerStateTax">
+          <DataField>PayrollRegisterLedgerStateTax</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerStateTaxFormat">
+          <DataField>PayrollRegisterLedgerStateTaxFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerVoulentaryDedc">
+          <DataField>PayrollRegisterLedgerVoulentaryDedc</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerVoulentaryDedcFormat">
+          <DataField>PayrollRegisterLedgerVoulentaryDedcFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerNetPay">
+          <DataField>PayrollRegisterLedgerNetPay</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerNetPayFormat">
+          <DataField>PayrollRegisterLedgerNetPayFormat</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerPeriodEndDate">
+          <DataField>PayrollRegisterLedgerPeriodEndDate</DataField>
+        </Field>
+        <Field Name="WeekBeginDate">
+          <DataField>WeekBeginDate</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerJobNo">
+          <DataField>PayrollRegisterLedgerJobNo</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerFedExemp">
+          <DataField>PayrollRegisterLedgerFedExemp</DataField>
+        </Field>
+        <Field Name="PayrollRegisterLedgerEmpName">
+          <DataField>PayrollRegisterLedgerEmpName</DataField>
+        </Field>
+        <Field Name="EEAdd1">
+          <DataField>EEAdd1</DataField>
+        </Field>
+        <Field Name="EEAdd2">
+          <DataField>EEAdd2</DataField>
+        </Field>
+        <Field Name="EECity">
+          <DataField>EECity</DataField>
+        </Field>
+        <Field Name="EEState">
+          <DataField>EEState</DataField>
+        </Field>
+        <Field Name="EEZip">
+          <DataField>EEZip</DataField>
+        </Field>
+        <Field Name="EEPhone">
+          <DataField>EEPhone</DataField>
+        </Field>
+        <Field Name="PayrollRegSkillClass">
+          <DataField>PayrollRegSkillClass</DataField>
+        </Field>
+        <Field Name="MaskedSSNToShow">
+          <DataField>MaskedSSNToShow</DataField>
+        </Field>
+        <Field Name="HRWH347ContName">
+          <DataField>HRWH347ContName</DataField>
+        </Field>
+        <Field Name="HRWH347Addr1">
+          <DataField>HRWH347Addr1</DataField>
+        </Field>
+        <Field Name="HRWH347Addr2">
+          <DataField>HRWH347Addr2</DataField>
+        </Field>
+        <Field Name="HRWH347SignatoryP">
+          <DataField>HRWH347SignatoryP</DataField>
+        </Field>
+        <Field Name="HRWH347Title">
+          <DataField>HRWH347Title</DataField>
+        </Field>
+        <Field Name="reg1">
+          <DataField>reg1</DataField>
+        </Field>
+        <Field Name="reg1Format">
+          <DataField>reg1Format</DataField>
+        </Field>
+        <Field Name="reg2">
+          <DataField>reg2</DataField>
+        </Field>
+        <Field Name="reg2Format">
+          <DataField>reg2Format</DataField>
+        </Field>
+        <Field Name="reg3">
+          <DataField>reg3</DataField>
+        </Field>
+        <Field Name="reg3Format">
+          <DataField>reg3Format</DataField>
+        </Field>
+        <Field Name="reg4">
+          <DataField>reg4</DataField>
+        </Field>
+        <Field Name="reg4Format">
+          <DataField>reg4Format</DataField>
+        </Field>
+        <Field Name="reg5">
+          <DataField>reg5</DataField>
+        </Field>
+        <Field Name="reg5Format">
+          <DataField>reg5Format</DataField>
+        </Field>
+        <Field Name="reg6">
+          <DataField>reg6</DataField>
+        </Field>
+        <Field Name="reg6Format">
+          <DataField>reg6Format</DataField>
+        </Field>
+        <Field Name="reg7">
+          <DataField>reg7</DataField>
+        </Field>
+        <Field Name="reg7Format">
+          <DataField>reg7Format</DataField>
+        </Field>
+        <Field Name="ot1">
+          <DataField>ot1</DataField>
+        </Field>
+        <Field Name="ot1Format">
+          <DataField>ot1Format</DataField>
+        </Field>
+        <Field Name="ot2">
+          <DataField>ot2</DataField>
+        </Field>
+        <Field Name="ot2Format">
+          <DataField>ot2Format</DataField>
+        </Field>
+        <Field Name="ot3">
+          <DataField>ot3</DataField>
+        </Field>
+        <Field Name="ot3Format">
+          <DataField>ot3Format</DataField>
+        </Field>
+        <Field Name="ot4">
+          <DataField>ot4</DataField>
+        </Field>
+        <Field Name="ot4Format">
+          <DataField>ot4Format</DataField>
+        </Field>
+        <Field Name="ot5">
+          <DataField>ot5</DataField>
+        </Field>
+        <Field Name="ot5Format">
+          <DataField>ot5Format</DataField>
+        </Field>
+        <Field Name="ot6">
+          <DataField>ot6</DataField>
+        </Field>
+        <Field Name="ot6Format">
+          <DataField>ot6Format</DataField>
+        </Field>
+        <Field Name="ot7">
+          <DataField>ot7</DataField>
+        </Field>
+        <Field Name="ot7Format">
+          <DataField>ot7Format</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

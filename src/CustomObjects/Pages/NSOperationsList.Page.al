@@ -8,7 +8,7 @@ page 14021161 "NS_Operations List"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-917.NK.1.0 09Mar2022 | Add One Field
+
     Caption = 'Operations List';
     PageType = List;
     SourceTable = "NS_Job Operation";
@@ -31,13 +31,6 @@ page 14021161 "NS_Operations List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Description';
                 }
-                //PRJ-917.NK.1.0 09Mar2022 Start
-                field(NS_Blocked; Rec.NS_Blocked)
-                {
-                    ApplicationArea = all;
-                    ToolTip = 'Specifies the Blocked';
-                }
-                //PRJ-917.NK.1.0 09Mar2022 End
             }
         }
     }

@@ -1,8 +1,7 @@
 pageextension 14021455 NS_CustomerStatsFactBoxExt extends "Customer Statistics FactBox"
 {
     // version NAVW111.00.00.22292,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Customer Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Balance (LCY)")

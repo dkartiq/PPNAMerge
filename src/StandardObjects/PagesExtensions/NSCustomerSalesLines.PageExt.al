@@ -1,8 +1,6 @@
 pageextension 14021246 NS_CustomerSalesLines extends "Customer Sales Lines"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         modify(BalanceDueLCY)

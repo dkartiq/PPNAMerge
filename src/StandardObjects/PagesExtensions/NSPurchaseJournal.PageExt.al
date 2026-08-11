@@ -1,8 +1,7 @@
 pageextension 14021235 NS_PurchaseJournal extends "Purchase Journal"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Journals'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Bal. Account No.")

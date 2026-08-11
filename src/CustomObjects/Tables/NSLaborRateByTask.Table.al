@@ -7,7 +7,6 @@ table 14021451 "NS_Labor rate by task list"
     //CTSI-95.MS.1.0 create new table
 
     // +------------------------------------------------------------
-    //PRJ-1058.GK.1.0 26Nov2021  Twinoaks  Custmization 
 
     Caption = 'Labor Rate by task list';
     DrillDownPageId = "NS_Labor rate by task list";
@@ -63,14 +62,7 @@ table 14021451 "NS_Labor rate by task list"
             Caption = 'Labor Rate';
             DataClassification = CustomerContent;
         }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        field(6; "NS_Job Type Code"; Code[10])
-        {
-            Caption = 'Job Type Code';
-            TableRelation = "NS_Job Type";
-            DataClassification = CustomerContent;
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
+
     }
 
     keys

@@ -1027,8 +1027,7 @@ codeunit 14021105 "NS_Job-Post Prepayments"
                   Text009,
                   SalesHeader."Document Type", SalesHeader."No.", DimMgt.GetDimValuePostingErr);
         end else begin
-            //TableIDArr[1] := DimMgt.TypeToTableID3(SalesLine.Type.AsInteger());  //PRJCTPR-155.JS.1.0 10Sep2023 line commented
-            TableIDArr[1] := DimMgt.SalesLineTypeToTableID(SalesLine.Type.AsInteger());  //PRJCTPR-155.JS.1.0 10Sep2023 line added
+            TableIDArr[1] := DimMgt.TypeToTableID3(SalesLine.Type.AsInteger());
             NumberArr[1] := SalesLine."No.";
             TableIDArr[2] := DATABASE::Job;
             NumberArr[2] := SalesLine."Job No.";
@@ -1048,7 +1047,6 @@ codeunit 14021105 "NS_Job-Post Prepayments"
     var
         SourceCodeSetup: Record "Source Code Setup";
         DimMgt: Codeunit DimensionManagement;
-        _NSDefaultDimSource: List of [Dictionary of [Integer, Code[20]]];   //PRJCTPR-155.JS.1.0 08Sep2023
         TableID: array[10] of Integer;
         No: array[10] of Code[20];
     begin
@@ -1061,39 +1059,16 @@ codeunit 14021105 "NS_Job-Post Prepayments"
         No[3] := SalesLine."Responsibility Center";
         SalesLine."Shortcut Dimension 1 Code" := '';
         SalesLine."Shortcut Dimension 2 Code" := '';
-        //PRJCTPR-155.JS.1.0 08Sep2023 - Start
-        if (TableID[1] <> 0) and (No[1] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[1], No[1]);
-            SalesLine."Dimension Set ID" :=
-              //   DimMgt.GetDefaultDimID(
-              //    TableID, No, SourceCodeSetup.Sales,
-              //    SalesLine."Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 2 Code", SalesLine."Dimension Set ID", DATABASE::Customer);
-              DimMgt.GetDefaultDimID(
-                _NSDefaultDimSource, SourceCodeSetup.Sales,
-                SalesLine."Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 2 Code", SalesLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        if (TableID[2] <> 0) and (No[2] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[2], No[2]);
-            SalesLine."Dimension Set ID" :=
-            DimMgt.GetDefaultDimID(
-              _NSDefaultDimSource, SourceCodeSetup.Sales,
-              SalesLine."Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 2 Code", SalesLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        if (TableID[3] <> 0) and (No[3] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[3], No[3]);
-            SalesLine."Dimension Set ID" :=
-            DimMgt.GetDefaultDimID(
-              _NSDefaultDimSource, SourceCodeSetup.Sales,
-              SalesLine."Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 2 Code", SalesLine."Dimension Set ID", DATABASE::Customer);
-        end
-        //PRJCTPR-155.JS.1.0 08Sep2023 - End               
+        SalesLine."Dimension Set ID" :=
+          DimMgt.GetDefaultDimID(
+            TableID, No, SourceCodeSetup.Sales,
+            SalesLine."Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 2 Code", SalesLine."Dimension Set ID", DATABASE::Customer);
     end;
 
     procedure NS_CreateInvoiceDimensions(var SalesInvoiceLine: Record "Sales Invoice Line");
     var
         SourceCodeSetup: Record "Source Code Setup";
         DimMgt: Codeunit DimensionManagement;
-        _NSDefaultDimSource: List of [Dictionary of [Integer, Code[20]]];   //PRJCTPR-155.JS.1.0 08Sep2023
         TableID: array[10] of Integer;
         No: array[10] of Code[20];
     begin
@@ -1106,39 +1081,16 @@ codeunit 14021105 "NS_Job-Post Prepayments"
         No[3] := SalesInvoiceLine."Responsibility Center";
         SalesInvoiceLine."Shortcut Dimension 1 Code" := '';
         SalesInvoiceLine."Shortcut Dimension 2 Code" := '';
-        //PRJCTPR-155.JS.1.0 09Sep2023 - Start
-        if (TableID[1] <> 0) and (No[1] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[1], No[1]);
-            SalesInvoiceLine."Dimension Set ID" :=
-            //DimMgt.GetDefaultDimID(
-            //  TableID, No, SourceCodeSetup.Sales,
-            //  SalesInvoiceLine."Shortcut Dimension 1 Code", SalesInvoiceLine."Shortcut Dimension 2 Code", SalesInvoiceLine."Dimension Set ID", DATABASE::Customer);
-            DimMgt.GetDefaultDimID(
-              _NSDefaultDimSource, SourceCodeSetup.Sales,
-              SalesInvoiceLine."Shortcut Dimension 1 Code", SalesInvoiceLine."Shortcut Dimension 2 Code", SalesInvoiceLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        if (TableID[2] <> 0) and (No[2] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[2], No[2]);
-            SalesInvoiceLine."Dimension Set ID" :=
-              DimMgt.GetDefaultDimID(
-                _NSDefaultDimSource, SourceCodeSetup.Sales,
-                SalesInvoiceLine."Shortcut Dimension 1 Code", SalesInvoiceLine."Shortcut Dimension 2 Code", SalesInvoiceLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        if (TableID[3] <> 0) and (No[3] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[3], No[3]);
-            SalesInvoiceLine."Dimension Set ID" :=
-              DimMgt.GetDefaultDimID(
-                _NSDefaultDimSource, SourceCodeSetup.Sales,
-                SalesInvoiceLine."Shortcut Dimension 1 Code", SalesInvoiceLine."Shortcut Dimension 2 Code", SalesInvoiceLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        //PRJCTPR-155.JS.1.0 09Sep2023 - end             
+        SalesInvoiceLine."Dimension Set ID" :=
+          DimMgt.GetDefaultDimID(
+            TableID, No, SourceCodeSetup.Sales,
+            SalesInvoiceLine."Shortcut Dimension 1 Code", SalesInvoiceLine."Shortcut Dimension 2 Code", SalesInvoiceLine."Dimension Set ID", DATABASE::Customer);
     end;
 
     procedure NS_CreateCrMemoDimensions(var SalesCrMemoLine: Record "Sales Cr.Memo Line");
     var
         SourceCodeSetup: Record "Source Code Setup";
         DimMgt: Codeunit DimensionManagement;
-        _NSDefaultDimSource: List of [Dictionary of [Integer, Code[20]]];   //PRJCTPR-155.JS.1.0 08Sep2023
         TableID: array[10] of Integer;
         No: array[10] of Code[20];
     begin
@@ -1151,33 +1103,10 @@ codeunit 14021105 "NS_Job-Post Prepayments"
         No[3] := SalesCrMemoLine."Responsibility Center";
         SalesCrMemoLine."Shortcut Dimension 1 Code" := '';
         SalesCrMemoLine."Shortcut Dimension 2 Code" := '';
-        //PRJCTPR-155.JS.1.0 08Sep2023 - Start
-        if (TableID[1] <> 0) and (No[1] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[1], No[1]);
-            SalesCrMemoLine."Dimension Set ID" :=
-              //PRJCTPR-155.JS.1.0 09Sep2023 - Start
-              //DimMgt.GetDefaultDimID(
-              //  TableID, No, SourceCodeSetup.Sales,
-              //  SalesCrMemoLine."Shortcut Dimension 1 Code", SalesCrMemoLine."Shortcut Dimension 2 Code", SalesCrMemoLine."Dimension Set ID", DATABASE::Customer);
-              DimMgt.GetDefaultDimID(
-                _NSDefaultDimSource, SourceCodeSetup.Sales,
-                SalesCrMemoLine."Shortcut Dimension 1 Code", SalesCrMemoLine."Shortcut Dimension 2 Code", SalesCrMemoLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        if (TableID[2] <> 0) and (No[2] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[2], No[2]);
-            SalesCrMemoLine."Dimension Set ID" :=
-              DimMgt.GetDefaultDimID(
-                _NSDefaultDimSource, SourceCodeSetup.Sales,
-                SalesCrMemoLine."Shortcut Dimension 1 Code", SalesCrMemoLine."Shortcut Dimension 2 Code", SalesCrMemoLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        if (TableID[3] <> 0) and (No[3] <> '') then begin
-            DimMgt.AddDimSource(_NSDefaultDimSource, TableID[3], No[3]);
-            SalesCrMemoLine."Dimension Set ID" :=
-              DimMgt.GetDefaultDimID(
-                _NSDefaultDimSource, SourceCodeSetup.Sales,
-                SalesCrMemoLine."Shortcut Dimension 1 Code", SalesCrMemoLine."Shortcut Dimension 2 Code", SalesCrMemoLine."Dimension Set ID", DATABASE::Customer);
-        end;
-        //PRJCTPR-155.JS.1.0 09Sep2023 - end             
+        SalesCrMemoLine."Dimension Set ID" :=
+          DimMgt.GetDefaultDimID(
+            TableID, No, SourceCodeSetup.Sales,
+            SalesCrMemoLine."Shortcut Dimension 1 Code", SalesCrMemoLine."Shortcut Dimension 2 Code", SalesCrMemoLine."Dimension Set ID", DATABASE::Customer);
     end;
 
     local procedure NS_PrepmtDocTypeToDocType(DocumentType: Option Invoice,"Credit Memo"): Integer;

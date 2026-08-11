@@ -3,8 +3,6 @@ pageextension 14021126 NS_AppliedCustomerEntries extends "Applied Customer Entri
     // version NAVW111.00.00.24232,PPNA11.00
     //PRJ-252 AS1.0 04-05-20 Added some code & created FindApplnEntriesDtldtLedgEntry_Customized()
     //       + code commented on OnOpen page
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Applied Customer Entries'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Global Dimension 2 Code")

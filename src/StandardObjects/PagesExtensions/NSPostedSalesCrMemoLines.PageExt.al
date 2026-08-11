@@ -1,8 +1,7 @@
 pageextension 14021267 NS_PostedSalesCrMemoLines extends "Posted Sales Credit Memo Lines"
 {
     // version NAVW111.00.00.19846,NAVNA11.00.00.19846,NSNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Sales Credit Memo Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Variant Code")

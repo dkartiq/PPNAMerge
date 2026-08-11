@@ -3,18 +3,9 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
     //TM-10.AM.1.0 30OCT2020 | Added 1 field on page layout.
     //PPAL-171.AM.1.0 | Added code to flow Segment Code.
-    //PRJ-1261.NK.1.0 23Mar2022 | Editable Fields
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
-        //PRJCTPR-333.PS.1.0 14May2024 Start
-        modify(Type)
-        {
-            Editable = NS_TypeEditeable;
-        }
-        //PRJCTPR-333.PS.1.0 14May2024 End 
-
         modify("No.")
         {
             Visible = false;
@@ -28,7 +19,6 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
                 ToolTip = 'Specifies the number of a general ledger account, item, resource, additional cost, or fixed asset, depending on the contents of the Type field.';
                 ApplicationArea = Basic, Suite;
                 ShowMandatory = NOT IsCommentLine;
-                Editable = NS_TypeEditeable; //PRJCTPR-333.PS.1.0 14May2024
                 trigger OnValidate();
                 begin
                     ShowShortcutDimCode(ShortcutDimCode);
@@ -49,7 +39,6 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
 
         modify("Job No.")
         {
-            Editable = true; //PRJ-1261.NK.1.0 23Mar2022
             trigger OnAfterValidate();
             begin
                 //ProjectPro - start
@@ -60,7 +49,6 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
 
         modify("Job Task No.")
         {
-            Editable = true; //PRJ-1261.NK.1.0 23Mar2022
             trigger OnBeforeValidate();
             begin
                 //ProjectPro - start
@@ -117,25 +105,6 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
             //TM-10.AM.1.0 end
         }
     }
-    trigger OnAfterGetCurrRecord()
-    begin
-        //PRJCTPR-333.PS.1.0 20March2024 Start 
-
-        NS_TypeEditeable := true;
-        NS_TypeEditeable := NSTypeNonEditeable;
-        //PRJCTPR-333.PS.1.0 20March2024 End 
-    end;
-
-    //PRJCTPR-333.PS.1.0 06May2024 Start
-    trigger OnAfterGetRecord()
-    var
-        myInt: Integer;
-    begin
-        NS_TypeEditeable := NSTypeNonEditeable;
-
-    end;
-
-    //PRJCTPR-333.PS.1.0 06May2024 End
 
     var
         NS_SalesHeader: Record "Sales Header";
@@ -150,8 +119,6 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
         SalesCalcDiscountByType: Codeunit 56;
         TypeAsText: Text[30];
         TempOptionLookupBuffer: Record 1670;
-        NS_NoNonediteable: Boolean; //PRJCTPR-333.PS.1.0 14may2024   
-        NS_TypeEditeable: Boolean; //PRJCTPR-333.PS.1.0 14may2024   
 
     procedure GetJobBudget(CustNo: Code[10]);
     var
@@ -275,25 +242,6 @@ pageextension 14021135 NS_SalesCrMemoSubForm extends "Sales Cr. Memo Subform"
         RecRef.GETTABLE(Rec);
         TypeAsText := TempOptionLookupBuffer.FormatOption(RecRef.FIELD(FIELDNO(Type)));
     END;
-
-
-    //PRJCTPR-333.PS.1.0 14May2024 Start
-    Local procedure NSTypeNonEditeable(): Boolean
-    var
-        NS_SalesHeader: Record "Sales Header";
-    begin
-        NS_NoNonediteable := true;
-        NS_SalesHeader.Reset();
-        NS_SalesHeader.SetRange("Document Type", Rec."Document Type");
-        NS_SalesHeader.SetRange("No.", Rec."Document No.");
-        NS_SalesHeader.SetRange("NS_Retention Document", true);
-        if NS_SalesHeader.FindFirst() then
-            NS_NoNonediteable := false;
-        exit(NS_NoNonediteable);
-
-    end;
-
-    //PRJCTPR-333.PS.1.0 14May2024  End
 
     /* Documentaion
       +---------------------------------------------------------------------------------------------

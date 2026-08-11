@@ -8,7 +8,7 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     //PRJ-72 VT 06-03-20 Called InitRoundingPrecisionsPP in place of InitRoundingPrecisions
     //PRJ-158/159 VT 27-03-20 Subscriber Added
     //PRJ-1003-PRJ-1004-JS.1.0  25Oct2021 | Add condition in code
-    //PRJ-1559.JS.1.0 05Aug2022 | Correct code for rounding precession
+
     trigger OnRun()
     begin
     end;
@@ -354,10 +354,7 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     local procedure NS_JobJnlLineFindJobResPrice(var JobJnlLine: Record "Job Journal Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All): Boolean
     begin
         //ProjectPro - start
-        //PE-68.Dk.1.0 10April2023 Start
-        // JobResPrice.SetRange("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-        JobResPrice.SetRange("NS_Skill Class Code New", JobJnlLine."NS_Skill Class new");
-        //PE-68.Dk.1.0 10April2023 End
+        JobResPrice.SetRange("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
         //ProjectPro - end
         case PriceType of
             PriceType::Resource:
@@ -385,14 +382,9 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     procedure NS_JobJnlLineFindJobResPriceWORKTYPE(var JobJnlLine: Record "Job Journal Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All): Boolean
     begin
         //ProjectPro - start
-        //PE-68.Dk.1.0 10April2023 Start
-        // if JobJnlLine."NS_Skill Class" <> '' then
-        //     exit(false);
-        if JobJnlLine."NS_Skill Class New" <> '' then
+        if JobJnlLine."NS_Skill Class" <> '' then
             exit(false);
-        // JobResPrice.SetRange("NS_Skill Class Code");
-        JobResPrice.SetRange("NS_Skill Class Code New");
-        //PE-68.Dk.1.0 10April2023 End
+        JobResPrice.SetRange("NS_Skill Class Code");
         JobResPrice.SetRange("Work Type Code", JobJnlLine."Work Type Code");
         case PriceType of
             PriceType::Resource:
@@ -651,11 +643,8 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     local procedure NS_JobPlanningLineFindJobResPrice(var JobPlanningLine: Record "Job Planning Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All): Boolean
     begin
         //ProjectPro - start
-        //PE-68.DK.1.0  10April2023 Start
-        // JobResPrice.SetRange("NS_Skill Class Code", JobPlanningLine."NS_Skill Class");
+        JobResPrice.SetRange("NS_Skill Class Code", JobPlanningLine."NS_Skill Class");
         //ProjectPro - end
-        JobResPrice.SetRange("NS_Skill Class Code New", JobPlanningLine."NS_Skill Class New");
-        //PE-68.Dk.1.0 10April2023 End
         case PriceType of
             PriceType::Resource:
                 begin
@@ -712,15 +701,11 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     local procedure NS_CopyJobItemPriceToJobPlanLine(var JobPlanningLine: Record "Job Planning Line"; JobItemPrice: Record "Job Item Price")
     begin
         with JobPlanningLine do begin
-           //PRJ-1559.JS.1.0 05Aug2022 - Start
-            JobPlanningLine.InitRoundingPrecisionsPP(AmountRoundingPrecision, AmountRoundingPrecisionFCY,
-            UnitAmountRoundingPrecision, UnitAmountRoundingPrecisionFCY);
-            //PRJ-1559.JS.1.0 05Aug2022 - end 
             if JobItemPrice."Apply Job Price" then begin
                 "Unit Price" := JobItemPrice."Unit Price";
                 "Cost Factor" := JobItemPrice."Unit Cost Factor";
                 //ProjectPro - start
-                //JobPlanningLine.InitRoundingPrecisions;  //PRJ-1559.JS.1.0 05Aug2022
+                InitRoundingPrecisions;
                 "Unit Cost (LCY)" := JobItemPrice."NS_Unit Cost";
                 "Unit Cost" := Round(
                   CurrExchRate.ExchangeAmtLCYToFCY(
@@ -1405,10 +1390,7 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     procedure NS_JobJnlLineFindJobResPriceALL(var JobJnlLine: Record "Job Journal Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All): Boolean
     begin
         //ProjectPro - start
-        //PE-68.Dk.1.0 10April2023 Start
-        //JobResPrice.SetRange("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
-        JobResPrice.SetRange("NS_Skill Class Code New", JobJnlLine."NS_Skill Class New");
-        //PE-68.Dk.1.0 10April2023 End
+        JobResPrice.SetRange("NS_Skill Class Code", JobJnlLine."NS_Skill Class");
         JobResPrice.SetRange("Work Type Code", JobJnlLine."Work Type Code");
         case PriceType of
             PriceType::Resource:
@@ -1436,14 +1418,9 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     procedure NS_70(var JobJnlLine: Record "Job Journal Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All; Res: Record Resource): Boolean
     begin
         //ProjectPro - start
-        //PE-68.Dk.1.0 10April2023 Start
-        // if JobJnlLine."NS_Skill Class" <> '' then
-        //     exit(false);
-        if JobJnlLine."NS_Skill Class New" <> '' then
+        if JobJnlLine."NS_Skill Class" <> '' then
             exit(false);
-        // JobResPrice.SetRange("NS_Skill Class Code");
-        JobResPrice.SetRange("NS_Skill Class Code New");
-        //PE-68.Dk.1.0 10April2023 End
+        JobResPrice.SetRange("NS_Skill Class Code");
         JobResPrice.SetRange("Work Type Code", JobJnlLine."Work Type Code");
         case PriceType of
             PriceType::Resource:
@@ -1471,10 +1448,7 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     procedure NS_JobPlanningLineFindJobResPriceALL(var JobPlanningLine: Record "Job Planning Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All): Boolean
     begin
         //ProjectPro - start
-        //PE-68.Dk.1.0 10April2023 Start
-        //JobResPrice.SetRange("NS_Skill Class Code", JobPlanningLine."NS_Skill Class");
-        JobResPrice.SetRange("NS_Skill Class Code New", JobPlanningLine."NS_Skill Class New");
-        //PE-68.Dk.1.0 10April2023 End
+        JobResPrice.SetRange("NS_Skill Class Code", JobPlanningLine."NS_Skill Class");
         JobResPrice.SetRange("Work Type Code", JobPlanningLine."Work Type Code");
         case PriceType of
             PriceType::Resource:
@@ -1502,14 +1476,9 @@ codeunit 14021118 "NS_Sales Price Calc. Mgt."
     procedure NS_JobPlanningLineFindJobResPriceWORKTYPE(var JobPlanningLine: Record "Job Planning Line"; var JobResPrice: Record "Job Resource Price"; PriceType: Option Resource,"Group(Resource)",All): Boolean
     begin
         //ProjectPro - start
-        //PE-68.Dk.1.0 10April2023 Start
-        // if JobPlanningLine."NS_Skill Class" <> '' then
-        //     exit(false);
-        if JobPlanningLine."NS_Skill Class New" <> '' then
+        if JobPlanningLine."NS_Skill Class" <> '' then
             exit(false);
-        //JobResPrice.SetRange("NS_Skill Class Code"); 
-        JobResPrice.SetRange("NS_Skill Class Code New");
-        //PE-68.Dk.1.0 10April2023 End
+        JobResPrice.SetRange("NS_Skill Class Code");
         JobResPrice.SetRange("Work Type Code", JobPlanningLine."Work Type Code");
         case PriceType of
             PriceType::Resource:

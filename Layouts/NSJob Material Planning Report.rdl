@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="JMP_JobNo">
+          <DataField>JMP_JobNo</DataField>
+        </Field>
+        <Field Name="JMP_LineNo">
+          <DataField>JMP_LineNo</DataField>
+        </Field>
+        <Field Name="JMP_DocumentNo">
+          <DataField>JMP_DocumentNo</DataField>
+        </Field>
+        <Field Name="JMP_DateOrdered">
+          <DataField>JMP_DateOrdered</DataField>
+        </Field>
+        <Field Name="JMP_DateRequired">
+          <DataField>JMP_DateRequired</DataField>
+        </Field>
+        <Field Name="JMP_OrderCode">
+          <DataField>JMP_OrderCode</DataField>
+        </Field>
+        <Field Name="JMP_Type">
+          <DataField>JMP_Type</DataField>
+        </Field>
+        <Field Name="JMP_PartNo">
+          <DataField>JMP_PartNo</DataField>
+        </Field>
+        <Field Name="JMP_Descrp">
+          <DataField>JMP_Descrp</DataField>
+        </Field>
+        <Field Name="JMP_Details">
+          <DataField>JMP_Details</DataField>
+        </Field>
+        <Field Name="JMP_Manufacturer">
+          <DataField>JMP_Manufacturer</DataField>
+        </Field>
+        <Field Name="JMP_Vendor">
+          <DataField>JMP_Vendor</DataField>
+        </Field>
+        <Field Name="JMP_Quantity">
+          <DataField>JMP_Quantity</DataField>
+        </Field>
+        <Field Name="JMP_QuantityFormat">
+          <DataField>JMP_QuantityFormat</DataField>
+        </Field>
+        <Field Name="JMP_InvQty">
+          <DataField>JMP_InvQty</DataField>
+        </Field>
+        <Field Name="JMP_InvQtyFormat">
+          <DataField>JMP_InvQtyFormat</DataField>
+        </Field>
+        <Field Name="JMP_POQty">
+          <DataField>JMP_POQty</DataField>
+        </Field>
+        <Field Name="JMP_POQtyFormat">
+          <DataField>JMP_POQtyFormat</DataField>
+        </Field>
+        <Field Name="JMP_POQtyRcd">
+          <DataField>JMP_POQtyRcd</DataField>
+        </Field>
+        <Field Name="JMP_POQtyRcdFormat">
+          <DataField>JMP_POQtyRcdFormat</DataField>
+        </Field>
+        <Field Name="JMP_JobSite">
+          <DataField>JMP_JobSite</DataField>
+        </Field>
+        <Field Name="JMP_JobSiteFormat">
+          <DataField>JMP_JobSiteFormat</DataField>
+        </Field>
+        <Field Name="JMP_BalReq">
+          <DataField>JMP_BalReq</DataField>
+        </Field>
+        <Field Name="JMP_BalReqFormat">
+          <DataField>JMP_BalReqFormat</DataField>
+        </Field>
+        <Field Name="JMP_InvAvail">
+          <DataField>JMP_InvAvail</DataField>
+        </Field>
+        <Field Name="JMP_InvAvailFormat">
+          <DataField>JMP_InvAvailFormat</DataField>
+        </Field>
+        <Field Name="JMP_JobName">
+          <DataField>JMP_JobName</DataField>
+        </Field>
+        <Field Name="JMP_SubmittedBy">
+          <DataField>JMP_SubmittedBy</DataField>
+        </Field>
+        <Field Name="JMP_POQtyStagged">
+          <DataField>JMP_POQtyStagged</DataField>
+        </Field>
+        <Field Name="JMP_POQtyStaggedFormat">
+          <DataField>JMP_POQtyStaggedFormat</DataField>
+        </Field>
+        <Field Name="JMP_QuantityInvoiced">
+          <DataField>JMP_QuantityInvoiced</DataField>
+        </Field>
+        <Field Name="JMP_QuantityInvoicedFormat">
+          <DataField>JMP_QuantityInvoicedFormat</DataField>
+        </Field>
+        <Field Name="JMP_JobDescr">
+          <DataField>JMP_JobDescr</DataField>
+        </Field>
+        <Field Name="JMP_CustomerAccountName">
+          <DataField>JMP_CustomerAccountName</DataField>
+        </Field>
+        <Field Name="JMP_JobSiteFromInv">
+          <DataField>JMP_JobSiteFromInv</DataField>
+        </Field>
+        <Field Name="JMP_JobSiteFromInvFormat">
+          <DataField>JMP_JobSiteFromInvFormat</DataField>
+        </Field>
+        <Field Name="JMP_JobSiteVndrQty">
+          <DataField>JMP_JobSiteVndrQty</DataField>
+        </Field>
+        <Field Name="JMP_JobSiteVndrQtyFormat">
+          <DataField>JMP_JobSiteVndrQtyFormat</DataField>
+        </Field>
+        <Field Name="JMP_JobManager">
+          <DataField>JMP_JobManager</DataField>
+        </Field>
+        <Field Name="JMP_POQtyStaged">
+          <DataField>JMP_POQtyStaged</DataField>
+        </Field>
+        <Field Name="JMP_POQtyStagedFormat">
+          <DataField>JMP_POQtyStagedFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

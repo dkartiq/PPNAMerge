@@ -1,5 +1,6 @@
 page 14021357 "NS_Actual CostBillingsFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -10,7 +11,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
     // +------------------------------------------------------------
     //PPAL-12.AM.1.0 - 2JUNE2020 - Changed the property of page
     //PRJ-340.SK.1.0 - 12AUG2020 - Addedd condition for skipping calculation of fields on new record.
-    //PRJ-1293.RM.1.0 08April2022 | Added a variable
+    //PRJ-659.RM.1.0 21Oct2021  | Alligned rows from center to right
+
     Caption = 'Job Actual Cost/Billings';
     //PageType=CardPart;//PPAL-12.AM commented
     PageType = ListPart;//ppAL-12.AM Added
@@ -59,9 +61,11 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                 }
                 group("Period to Date")
                 {
-                    Caption = 'Period to Date';
+                    Caption = '                          Period to Date'; //PRJ-659.RM.1.0 21Oct2021
 
-                    field("FORMAT(ActualCostToDate[1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(ActualCostToDate[1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(ActualCostToDate[1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(ActualCostToDate[1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0  21Oct2021
+                    field(ActualCostToDate1; Round(ActualCostToDate[1], 0.01)) //PRJ-659.RM.1.0 21Oct2021
+
                     {
                         ApplicationArea = All;
                         Caption = 'Actual Cost';
@@ -80,7 +84,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(JobLedgerEntries);
                         end;
                     }
-                    field("FORMAT(InvoiceBilled[1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(InvoiceBilled[1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(InvoiceBilled[1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(InvoiceBilled[1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(InvoiceBilled; Round(InvoiceBilled[1], 0.01))//PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Invoices Billed';
@@ -92,8 +97,7 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                         begin
                             ShowJobRec.RESET;
                             ShowJobRec := Rec;
-                            //ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', ShowJobRec."NS_Type Filter"::Ledger); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line commented
-                            ShowJobRec.SETFILTER("NS_TypeEnumFilter", '<>%1', ShowJobRec."NS_TypeEnumFilter"::Text); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line added                        
+                            ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', "NS_Type Filter"::Ledger);
                             ShowJobRec.SETRANGE("NS_Date Filter", DMY2DATE(1, DATE2DMY(WORKDATE, 2), DATE2DMY(WORKDATE, 3)), WORKDATE);
                             ShowJobRec.SETRANGE("NS_Entry Type Filter", JobLedgerEntry."Entry Type"::Sale);
                             JobLedgerEntries.NS_SetFilters(ShowJobRec, true);
@@ -101,7 +105,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(JobLedgerEntries);
                         end;
                     }
-                    field("FORMAT(PaymentReceived[1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(PaymentReceived[1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(PaymentReceived[1],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(PaymentReceived[1], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(PaymentReceived; Round(PaymentReceived[1], 0.01)) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'Payments Rec''d';
@@ -130,8 +135,9 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                 }
                 group("Year to Date")
                 {
-                    Caption = 'Year to Date';
-                    field("FORMAT(ActualCostToDate[2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(ActualCostToDate[2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    Caption = '                             Year to Date'; //PRJ-659.RM.1.0 21Oct2021
+                    // field("FORMAT(ActualCostToDate[2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(ActualCostToDate[2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(ActualCostToDate2; Round(ActualCostToDate[2], 0.01)) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'ActualCostToDateYTD';
@@ -150,7 +156,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(JobLedgerEntries);
                         end;
                     }
-                    field("FORMAT(InvoiceBilled[2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(InvoiceBilled[2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(InvoiceBilled[2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(InvoiceBilled[2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(InvoiceBilled1; Round(InvoiceBilled[2], 0.01)) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'InvoicedBilledYTD';
@@ -162,8 +169,7 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                         begin
                             ShowJobRec.RESET;
                             ShowJobRec := Rec;
-                            //ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', ShowJobRec."NS_Type Filter"::Ledger); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line commented
-                            ShowJobRec.SETFILTER("NS_TypeEnumFilter", '<>%1', ShowJobRec."NS_TypeEnumFilter"::Text); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line added                        
+                            ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', "NS_Type Filter"::Ledger);
                             ShowJobRec.SETRANGE("NS_Date Filter", DMY2DATE(1, 1, DATE2DMY(WORKDATE, 3)), WORKDATE);
                             ShowJobRec.SETRANGE("NS_Entry Type Filter", JobLedgerEntry."Entry Type"::Sale);
                             JobLedgerEntries.NS_SetFilters(ShowJobRec, true);
@@ -171,7 +177,9 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(JobLedgerEntries);
                         end;
                     }
-                    field("FORMAT(PaymentReceived[2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(PaymentReceived[2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(PaymentReceived[2],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(PaymentReceived[2], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(PaymentReceived1; Round(PaymentReceived[2], 0.01)) //PRJ-659.RM.1.0 21Oct2021
+
                     {
                         ApplicationArea = All;
                         Caption = 'PaymentReceivedYTD';
@@ -200,8 +208,9 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                 }
                 group("Job to Date")
                 {
-                    Caption = 'Job to Date';
-                    field("FORMAT(ActualCostToDate[3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(ActualCostToDate[3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    Caption = '                             Job to Date'; //PRJ-659.RM.1.0 21Oct2021
+                    // field("FORMAT(ActualCostToDate[3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(ActualCostToDate[3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(ActualCostToDate; ActualCostToDate[3]) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'ActualCostToDateJTD';
@@ -220,7 +229,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(JobLedgerEntries);
                         end;
                     }
-                    field("FORMAT(InvoiceBilled[3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(InvoiceBilled[3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(InvoiceBilled[3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(InvoiceBilled[3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))  //PRJ-659.RM.1.0 21Oct2021
+                    field(InvoiceBilled3; Round(InvoiceBilled[3], 0.01)) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'InvoicedBilledJTD';
@@ -232,8 +242,7 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                         begin
                             ShowJobRec.RESET;
                             ShowJobRec := Rec;
-                            //ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', ShowJobRec."NS_Type Filter"::Ledger); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line commented
-                            ShowJobRec.SETFILTER("NS_TypeEnumFilter", '<>%1', ShowJobRec."NS_TypeEnumFilter"::Text); //PRJ-1131.RM.1.0 10Jan2022 //PE-306.JS.1.0 06JUN2024 line added                        
+                            ShowJobRec.SETFILTER("NS_Type Filter", '<>%1', "NS_Type Filter"::Ledger);
                             ShowJobRec.SETRANGE("NS_Date Filter", 0D, WORKDATE);
                             ShowJobRec.SETRANGE("NS_Entry Type Filter", JobLedgerEntry."Entry Type"::Sale);
                             JobLedgerEntries.NS_SetFilters(ShowJobRec, true);
@@ -241,7 +250,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(JobLedgerEntries);
                         end;
                     }
-                    field("FORMAT(PaymentReceived[3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(PaymentReceived[3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(PaymentReceived[3],14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(PaymentReceived[3], 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(PaymentReceived3; Round(PaymentReceived[3], 0.01)) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'PaymentReceivedJTD';
@@ -259,7 +269,8 @@ page 14021357 "NS_Actual CostBillingsFactBox"
                             CLEAR(DtldCustLedgEntries);
                         end;
                     }
-                    field("FORMAT(CommittedCost,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CommittedCost, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>'))
+                    // field("FORMAT(CommittedCost,14,'<Precision,2:2><Sign><Integer Thousand><Decimals>')"; FORMAT(CommittedCost, 14, '<Precision,2:2><Sign><Integer Thousand><Decimals>')) //PRJ-659.RM.1.0 21Oct2021
+                    field(CommittedCost; Round(CommittedCost, 0.01)) //PRJ-659.RM.1.0 21Oct2021
                     {
                         ApplicationArea = All;
                         Caption = 'CommittedCostJTD';
@@ -304,8 +315,7 @@ page 14021357 "NS_Actual CostBillingsFactBox"
         PaymentReceived: array[3] of Decimal;
         CommittedCost: Decimal;
         DtldCustLedgEntries: Page "Detailed Cust. Ledg. Entries";
-        //CommittedLineList: Page "NS_Committed Line List"; //PRJ-1293.RM.1.0 commented
-        CommittedLineList: Page "NS_Committed Line List Page"; //PRJ-1293.RM.1.0 
+        CommittedLineList: Page "NS_Committed Line List";
 
     procedure NS_ShowDetails();
     begin
@@ -314,6 +324,12 @@ page 14021357 "NS_Actual CostBillingsFactBox"
 
     procedure NS_CalcStatistics();
     begin
+        // >> Upgrade
+        //FDD108 Start
+        IF "NS_Sub-Level to Job No." = "No." THEN
+            EXIT;
+        //FDD108 End
+        // << Upgrade
         //PRJ-340.SK.1.0 Start
         IF "No." = '' then
             Exit;

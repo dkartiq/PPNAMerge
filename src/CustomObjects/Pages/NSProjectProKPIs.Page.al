@@ -1,5 +1,7 @@
 page 14021355 "NS_ProjectPro KPIs"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
+    // Upgrade Additional paramet has been passed as WorkDate to compile this object
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -8,8 +10,6 @@ page 14021355 "NS_ProjectPro KPIs"
     // +  - www.dynamicsnavconstruction.com
     // +  - www.gemko.com
     // +------------------------------------------------------------
-    //PRJ-1262.RM.2.0 04April2022 | Changed Status
-    //PRJCTPR-36.SD.1.0 17Jan2023 | '<>' Added in date formula so its not gets translated.
 
     Caption = 'ProjectPro KPIs';
     PageType = CardPart;
@@ -37,7 +37,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 //If job is 100% complete, compare "Actual Percent Complete Date" to "Estimated Completion Date" to determine if it was on-time
                                 if (Job2."NS_Estimated Completion Date" >= StartingDate) and
                                    (Job2."NS_Estimated Completion Date" <= EndingDate) then
-                                    if (Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running) or
+                                    if (Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover) or
                                        (Job2."NS_Manager Job Status" >= Job2."NS_Manager Job Status"::Completed) then
                                         Job2.MARK(true);
                                 //Add in jobs which are estimated to be completed after the time horizon and were completed within the time horizon.
@@ -68,7 +68,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 if Job2."Starting Date" <> 0D then
                                     if Job2."Starting Date" <= EndingDate then
                                         if Job2."NS_Sub-Level to Job No." = '' then
-                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running then
+                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover then
                                                 Job2.MARK(true);
                             until Job2.NEXT() = 0;
                         Job2.MARKEDONLY(true);
@@ -99,7 +99,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 if Job2."Starting Date" <> 0D then
                                     if Job2."Starting Date" <= EndingDate then
                                         if Job2."NS_Sub-Level to Job No." = '' then
-                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running then begin
+                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover then begin
                                                 Job2.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                                 TotalBudgetedCost := Job2."NS_Budgeted Cost (LCY)" + Job2.NS_SLsBudgetedLaborHours(Job);
                                                 TotalContract := Job2."NS_Budgeted Price (LCY)" + Job2."SLsUsage(Price)"(Job);
@@ -107,7 +107,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                                     ActualProfitPct := 0
                                                 else
                                                     ActualProfitPct := ((TotalContract - TotalBudgetedCost) / TotalContract) * 100;
-                                                Job2.NS_CalculateActualCostToDate(Job2, ActualCostToDate, true);
+                                                Job2.NS_CalculateActualCostToDate(Job2, ActualCostToDate, true, WorkDate());
                                                 if Job2."NS_Actual Percent Complete" > 0 then
                                                     ActualPctComplete := Job2."NS_Actual Percent Complete"
                                                 else begin
@@ -149,7 +149,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 if Job2."Starting Date" <> 0D then
                                     if Job2."Starting Date" <= EndingDate then
                                         if Job2."NS_Sub-Level to Job No." = '' then
-                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running then begin
+                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover then begin
                                                 Job2.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                                 TotalBudgetedCost := Job2."NS_Budgeted Cost (LCY)" + Job2.NS_SLsBudgetedLaborHours(Job);
                                                 TotalContract := Job2."NS_Budgeted Price (LCY)" + Job2."SLsUsage(Price)"(Job);
@@ -157,7 +157,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                                     ActualProfitPct := 0
                                                 else
                                                     ActualProfitPct := ((TotalContract - TotalBudgetedCost) / TotalContract) * 100;
-                                                Job2.NS_CalculateActualCostToDate(Job2, ActualCostToDate, true);
+                                                Job2.NS_CalculateActualCostToDate(Job2, ActualCostToDate, true, WorkDate());
                                                 if Job2."NS_Actual Percent Complete" > 0 then
                                                     ActualPctComplete := Job2."NS_Actual Percent Complete"
                                                 else begin
@@ -209,8 +209,7 @@ page 14021355 "NS_ProjectPro KPIs"
         JobsSetup.GET();
         if (JobsSetup."NS_KPI CalculationStartingDate" = 0D) or (JobsSetup."NS_KPI Calculation Ending Date" = 0D) then begin
             EndingDate := WORKDATE;
-            //StartingDate := CALCDATE('+1D-1Y', EndingDate);//PRJCTPR-36.SD.1.0 17Jan2023 - Commented
-            StartingDate := CALCDATE('<+1D-1Y>', EndingDate);//PRJCTPR-36.SD.1.0 17Jan2023 - Added
+            StartingDate := CALCDATE('+1D-1Y', EndingDate);
         end else begin
             StartingDate := JobsSetup."NS_KPI CalculationStartingDate";
             EndingDate := JobsSetup."NS_KPI Calculation Ending Date";
@@ -226,7 +225,7 @@ page 14021355 "NS_ProjectPro KPIs"
                 //If job is 100% complete, compare "Actual Percent Complete Date" to "Estimated Completion Date" to determine if it was on-time
                 if (Job."NS_Estimated Completion Date" >= StartingDate) and
                    (Job."NS_Estimated Completion Date" <= EndingDate) then
-                    if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running) or
+                    if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover) or
                        (Job."NS_Manager Job Status" >= Job."NS_Manager Job Status"::Completed) then begin
                         W1 += 1;
                         if Job."NS_Actual Percent Complete" >= 100 then
@@ -259,10 +258,10 @@ page 14021355 "NS_ProjectPro KPIs"
                 if Job."Starting Date" <> 0D then
                     if Job."Starting Date" <= EndingDate then
                         if Job."NS_Sub-Level to Job No." = '' then
-                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                                 W1 += 1;
-                                Job.NS_CalculateActualCostToDate(Job, ActualCostToDate, true);
-                                Job.CalculateInvoiceBilled(Job, InvoiceBilled, true);
+                                Job.NS_CalculateActualCostToDate(Job, ActualCostToDate, true, WorkDate());
+                                Job.CalculateInvoiceBilled(Job, InvoiceBilled, true, WorkDate());
                                 if InvoiceBilled[3] > ActualCostToDate[3] then
                                     W2 += 1;
                             end;
@@ -274,33 +273,17 @@ page 14021355 "NS_ProjectPro KPIs"
 
         //Calculate Job Backlog from Planning to Running
         Job.RESET();
-        //JobsSetup.Reset();//PRJ-1262.RM.2.0 commented
         if Job.FINDSET() then
             repeat
                 //Find "Running" top-level jobs, calculate Backlog as Contract Total Value less Total Invoice Billed
                 if Job."NS_Sub-Level to Job No." = '' then
-                    //  if JobsSetup."NS_Project Pro KPI" = true then begin ;//PRJ-1262.RM.2.0 commented
-                    //   |  if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin //PRJ-1262.RM.1.0 
-
-                    if (Job.Status = Job.Status::Open) or (Job.Status = Job.Status::Planning) then begin//PRJ-1262.RM.2.0 start.
+                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                         Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                         KPI[3] += Job."NS_Budgeted Price (LCY)";
                         KPI[3] += Job."SLsUsage(Price)"(Job);
-                        Job.CalculateInvoiceBilled(Job, InvoiceBilled, true);
+                        Job.CalculateInvoiceBilled(Job, InvoiceBilled, true, WorkDate());
                         KPI[3] -= InvoiceBilled[3];
                     end;
-            //PRJ-1262.RM.2.0 start commented
-            //         end else begin
-            // if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin //PRJ-1262.RM.1.0 
-            //     Job.CALCFIELDS("NS_Budgeted Price (LCY)");
-            //     KPI[3] += Job."NS_Budgeted Price (LCY)";
-            //     KPI[3] += Job."SLsUsage(Price)"(Job);
-            //     Job.CalculateInvoiceBilled(Job, InvoiceBilled, true);
-            //     KPI[3] -= InvoiceBilled[3];
-            // end;
-            //PRJ-1262.RM.2.0 end commented
-            //PRJ-1262.RM.1.0 end
-            // end;
             until Job.NEXT() = 0;
 
         //Calculate Average % Margin Variance to Business Plan and Average % of Gross Profit
@@ -317,7 +300,7 @@ page 14021355 "NS_ProjectPro KPIs"
                 if Job."Starting Date" <> 0D then
                     if Job."Starting Date" <= EndingDate then
                         if Job."NS_Sub-Level to Job No." = '' then
-                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                                 Job.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                 TotalBudgetedCost := Job."NS_Budgeted Cost (LCY)" + Job.NS_SLsBudgetedLaborHours(Job);
                                 TotalContract := Job."NS_Budgeted Price (LCY)" + Job."SLsUsage(Price)"(Job);
@@ -325,7 +308,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                     ActualProfitPct := 0
                                 else
                                     ActualProfitPct := ((TotalContract - TotalBudgetedCost) / TotalContract) * 100;
-                                Job.NS_CalculateActualCostToDate(Job, ActualCostToDate, true);
+                                Job.NS_CalculateActualCostToDate(Job, ActualCostToDate, true, WorkDate());
                                 if Job."NS_Actual Percent Complete" > 0 then
                                     ActualPctComplete := Job."NS_Actual Percent Complete"
                                 else begin
@@ -376,7 +359,5 @@ page 14021355 "NS_ProjectPro KPIs"
         CalcPctComplete: Decimal;
         ProjectedProfitPct: Decimal;
         ActualProfitPct: Decimal;
-
-
 }
 

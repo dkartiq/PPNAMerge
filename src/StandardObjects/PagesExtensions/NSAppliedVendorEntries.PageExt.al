@@ -3,8 +3,7 @@ pageextension 14021127 NS_AppliedVendorEntries extends "Applied Vendor Entries"
     // version NAVW111.00.00.24232,PPNA11.00
     //PRJ-252 AS1.0 04-05-20 Added some code & created FindApplnEntriesDtldtLedgEntry_Customized()
     //       + code commented on OnOpen page
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Applied Vendor Entries'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Global Dimension 2 Code")

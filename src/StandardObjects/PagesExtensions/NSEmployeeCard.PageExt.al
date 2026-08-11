@@ -2,8 +2,6 @@ pageextension 14021292 NS_EmployeeCard extends "Employee Card"
 {
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
     //PRJ-119.SK.1.0  Added actions
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Employee Card'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {
         addafter("Mobile Phone No.")

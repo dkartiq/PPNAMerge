@@ -14,9 +14,6 @@ codeunit 14021110 "NS_Parameters for Events"
     end;
 
     var
-        P10038TaxAmount: Decimal;   //PRJCTPR-224.JS.1.0 01APR2024
-        P10038AmountInclTax: Decimal; //PRJCTPR-224.JS.1.0 01APR2024
-        P10038NS_FinalTotal: Decimal;  //PRJCTPR-224.JS.1.0 01APR2024
         P10038NS_RetentionBalanceLCY: Decimal;
         P10038PPFinalTotal: Decimal;
         P352Vend: Record Vendor;
@@ -592,48 +589,5 @@ codeunit 14021110 "NS_Parameters for Events"
         GetJobPurchLine.Type := LineTypePurchLine.Type;
     end;
     //PRJ-179.SK.1.0 End
-    //PRJCTPR-224.JS.1.0 01APR2024 - start
-    /// <summary>
-    /// NS_P10038GetTaxAmt.
-    /// </summary>
-    /// <param name="NS_AmountInclTax">VAR Decimal.</param>
-    /// <param name="NS_TaxAmount">VAR Decimal.</param>
-    procedure NS_P10038GetTaxAmt(var NS_AmountInclTax: Decimal; var NS_TaxAmount: Decimal);
-    begin
-        NS_AmountInclTax := P10038AmountInclTax;
-        NS_TaxAmount := P10038TaxAmount;
-    end;
-
-    /// <summary>
-    /// NS_P10038SetTaxAmount.
-    /// </summary>
-    /// <param name="inTaxAmount">Decimal.</param>
-    procedure NS_P10038SetTaxAmount(inTaxAmount: Decimal)
-    begin
-        P10038TaxAmount := inTaxAmount;
-    end;
-
-    /// <summary>
-    /// NS_P10038SetAmountInclTax.
-    /// </summary>
-    /// <param name="inAmountInclTax">Decimal.</param>
-    procedure NS_P10038SetAmountInclTax(inAmountInclTax: Decimal)
-    begin
-        P10038AmountInclTax := inAmountInclTax;
-    end;
-
-    /// <summary>
-    /// NS_P10038SetNS_FinalTotal.
-    /// </summary>
-    /// <param name="inNS_FinalTotal">Decimal.</param>
-    // procedure NS_P10038SetNS_FinalTotal(inNS_FinalTotal: Decimal)
-    // begin
-    //     P10038NS_FinalTotal := inNS_FinalTotal;
-    // end;
-
-    //PRJCTPR-224.JS.1.0 01APR2024 - end  
 }
-
-//PRJ-179.SK.1.0 End
-
 

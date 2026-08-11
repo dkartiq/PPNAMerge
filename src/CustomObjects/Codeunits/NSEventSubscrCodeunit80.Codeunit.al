@@ -7,9 +7,7 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
     //PRJ-57.SK.1.0 Added code for removing GL Inconsistency error
     //TM-10.AM.1.0 | Added segment code flow functionality.
     //PRJ-884.JS.1.0 24Aug2021 | code added to test document status released if retention percent is not zero
-    //PRJ-1750.NK.1.0 26Dec2022 | Code added    
-    //PRJCTPR-10.SD.1.0 10Jan2023 | Code Added.
-    //PE-22.JS.1.0 02FEB2022
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     trigger OnRun()
     begin
     end;
@@ -26,7 +24,6 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         NS_Text14021105: Label 'Please modify the prepayment value';
         p: Codeunit "NS_Parameters for Events";
 
-    [Obsolete('Replaced by Microsoft with OnPostLinesOnBeforeGenJnlLinePost() in CU825Sales Post Invoice Events.', '22.0')]//PE-129.AS.1.0
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostInvPostBuffer', '', false, false)]
     local procedure NS_C80OnBeforePostInvPostBuffer(var GenJnlLine: Record "Gen. Journal Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer"; SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; PreviewMode: Boolean)
     var
@@ -46,25 +43,6 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
                 Clear(GenJnlLine);
         end;
     end;
-    //PE-129.AS.1.0 START ADD
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", 'OnPostLinesOnBeforeGenJnlLinePost', '', false, false)]
-    local procedure NS_C825OnPostLinesOnBeforeGenJnlLinePost(var GenJnlLine: Record "Gen. Journal Line"; TempInvoicePostingBuffer: Record "Invoice Posting Buffer" temporary; SalesHeader: Record "Sales Header"; SuppressCommit: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; PreviewMode: Boolean)
-    var
-        NS_GenPostingSetup: Record "General Posting Setup";
-    begin
-        GenJnlLine."NS_Retention Ledger Code" := TempInvoicePostingBuffer."NS_Retention Ledger Code";
-        if GenJnlLine."Account Type" = GenJnlLine."Account Type"::"G/L Account" then begin
-            if (NS_GenPostingSetup.Get(GenJnlLine."Gen. Bus. Posting Group", GenJnlLine."Gen. Prod. Posting Group")) and
-                (NS_GenPostingSetup."Sales Prepayments Account" > '') and
-                (GenJnlLine."Account No." = NS_GenPostingSetup."Sales Prepayments Account") then
-                GenJnlLine."NS_Prepayment for Job No." := SalesHeader."NS_Job No.";
-        end;
-
-        GenJnlLine."NS_Retention Document" := SalesHeader."NS_Retention Document";
-        if GenJnlLine."NS_Retention Document" then
-            Clear(GenJnlLine);
-    end;
-    //PE-129.AS.1.0 END ADD
 
     //PPDA.1.0 Start Moved to dependent app
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostSalesTaxToGL', '', false, false)]
@@ -75,7 +53,6 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
     // end;
     //PPDA.1.0 End
 
-    [Obsolete('Replaced by Microsoft with OnPostBalancingEntryOnBeforeGenJnlPostLine() in CU825Sales Post Invoice Events.', '22.0')]//PE-129.AS.1.0
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostBalancingEntry', '', false, false)]
     local procedure NS_C80OnBeforePostBalancingEntry(var GenJnlLine: Record "Gen. Journal Line"; SalesHeader: Record "Sales Header"; var TotalSalesLine: Record "Sales Line"; var TotalSalesLineLCY: Record "Sales Line"; CommitIsSuppressed: Boolean; PreviewMode: Boolean)
     begin
@@ -88,125 +65,44 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         end;
     end;
 
-    //PE-129.AS.1.0 start
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", 'OnPostBalancingEntryOnBeforeGenJnlPostLine', '', false, false)]
-    local procedure NS_C825OnPostBalancingEntryOnBeforeGenJnlPostLine(var GenJnlLine: Record "Gen. Journal Line"; SalesHeader: Record "Sales Header"; var TotalSalesLine: Record "Sales Line"; var TotalSalesLineLCY: Record "Sales Line"; SuppressCommit: Boolean; PreviewMode: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")
-    begin
-        SalesSetup.Get();
-        if not SalesSetup."NS_Sales Retention Inactive" then
-            GenJnlLine.Validate("NS_Retention Ledger Code", p.NS_C80GetNS_GenJnlLineLedgerNo());
-        GenJnlLine."NS_Retention Document" := SalesHeader."NS_Retention Document";
-        GenJnlLine."Job No." := SalesHeader."NS_Job No.";
-    end;
-    //PE-129.AS.1.0 end
-
-    [Obsolete('Replaced by Microsoft with OnPostLedgerEntryOnBeforeGenJnlPostLine() in CU825Sales Post Invoice Events.', '22.0')]//PE-129.AS.1.0
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnBeforePostCustomerEntry', '', false, false)]
     local procedure NS_C80OnBeforePostCustomerEntry(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header"; var TotalSalesLine: Record "Sales Line"; var TotalSalesLineLCY: Record "Sales Line"; CommitIsSuppressed: Boolean; PreviewMode: Boolean)
-    var
-        IsHandle: Boolean;//FGH-163.AS.29052024  //PE-307.JS.1.0
     begin
-        //FGH-163.AS.29052024 START //PE-307.JS.1.0
-        NS_OnBefore_NS_C80OnBeforePostCustomerEntry(GenJnlLine, SalesHeader, TotalSalesLine, TotalSalesLineLCY, CommitIsSuppressed, PreviewMode, IsHandle);
-        if IsHandle then
-            exit;
-        //FGH-163.AS.29052024 END //PE-307.JS.1.0
+        with GenJnlLine do begin
+            SalesSetup.Get;
+            if not SalesSetup."NS_Sales Retention Inactive" then
+                Validate("NS_Retention Ledger Code", p.NS_C80GetNS_GenJnlLineLedgerNo);
 
-        //PRJ-1170.NK.1.0 Start
-        //with GenJnlLine do begin
-        SalesSetup.Get();
-        if not SalesSetup."NS_Sales Retention Inactive" then
-            GenJnlLine.Validate("NS_Retention Ledger Code", p.NS_C80GetNS_GenJnlLineLedgerNo());
-
-        //ProjectPro - start
-        if not SalesSetup."NS_Sales Retention Inactive" then begin
-            GenJnlLine."NS_Retention Percent" := SalesHeader."NS_Retention Percent";
-            if SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then begin
-                GenJnlLine."NS_Retention Amount" := -SalesHeader."NS_Retention Amount";
-                GenJnlLine."NS_Retention Amount (LCY)" := -SalesHeader."NS_Retention Amount (LCY)";
-            end else begin
-                GenJnlLine."NS_Retention Amount" := SalesHeader."NS_Retention Amount";
-                GenJnlLine."NS_Retention Amount (LCY)" := SalesHeader."NS_Retention Amount (LCY)";
+            //ProjectPro - start
+            if not SalesSetup."NS_Sales Retention Inactive" then begin
+                "NS_Retention Percent" := SalesHeader."NS_Retention Percent";
+                if SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then begin
+                    "NS_Retention Amount" := -SalesHeader."NS_Retention Amount";
+                    "NS_Retention Amount (LCY)" := -SalesHeader."NS_Retention Amount (LCY)";
+                end else begin
+                    "NS_Retention Amount" := SalesHeader."NS_Retention Amount";
+                    "NS_Retention Amount (LCY)" := SalesHeader."NS_Retention Amount (LCY)";
+                end;
+                "NS_Retention Date" := SalesHeader."NS_Retention Date";
+                NS_JobsSetup.Get;
+                if (NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" =
+                    NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"2 - Calc tax on sale then apply retention determined by progress billing") or
+                   (NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" =
+                    NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"3 - Calc tax on sale less the retention determined by progress billing") then
+                    "NS_Retention Base Amount" := SalesHeader."NS_Retention Base Before Tax"
+                else
+                    "NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
+                "NS_Retention Document" := SalesHeader."NS_Retention Document";
             end;
-            GenJnlLine."NS_Retention Date" := SalesHeader."NS_Retention Date";
-            //NS_JobsSetup.Get();               //MHNA-7.JS.1.0 22JUN2023 line commented
-            if NS_JobsSetup.get() then;     //MHNA-7.JS.1.0 22JUN2023 line added
-            if (NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" =
-                NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"2 - Calc tax on sale then apply retention determined by progress billing") or
-               (NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" =
-                NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"3 - Calc tax on sale less the retention determined by progress billing") then begin
-
-                SalesHeader.CalcFields("NS_Retention Base Before Tax", SalesHeader."NS_Retention Base Amount");  //MHNA-7.JS.1.0 22JUN2023
-                GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Before Tax";
-            end else begin
-                SalesHeader.CalcFields("NS_Retention Base Amount");  //MHNA-7.JS.1.0 22JUN2023
-                GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
-            end;
-            GenJnlLine."NS_Retention Document" := SalesHeader."NS_Retention Document";
-            //MHNA-7.JS.1.0 22JUN2023 - Start
-        end else begin
+            "Job No." := SalesHeader."NS_Job No.";
             SalesHeader.CalcFields("NS_Retention Base Amount");
-            GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
+            "NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
+            // >> Upgrade
+            OnAfterNS_C80OnBeforePostCustomerEntry(GenJnlLine, SalesHeader);
+            // << Upgrade
         end;
-        GenJnlLine."Job No." := SalesHeader."NS_Job No.";
-        //MHNA-7.JS.1.0 22JUN2023 - end
-        //end;
-        //PRJ-1170.NK.1.0 End
     end;
-    //PE-129.AS.1.0 start
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", 'OnPostLedgerEntryOnBeforeGenJnlPostLine', '', false, false)]
-    local procedure NS_C825OnPostLedgerEntryOnBeforeGenJnlPostLine(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header"; var TotalSalesLine: Record "Sales Line"; var TotalSalesLineLCY: Record "Sales Line"; SuppressCommit: Boolean; PreviewMode: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")
-    var
-        IsHandle: Boolean;//FGH-163.AS.29052024 //PE-307.JS.1.0
-    begin
-        //FGH-163.AS.29052024 start  //PE-307.JS.1.0
-        NS_OnBefore_NS_C825OnPostLedgerEntryOnBeforeGenJnlPostLine(GenJnlLine, SalesHeader, TotalSalesLine, TotalSalesLineLCY, SuppressCommit, PreviewMode, GenJnlPostLine, IsHandle);
-        if IsHandle then
-            exit;
-        //FGH-163.AS.29052024 end  //PE-307.JS.1.0
 
-        //PRJ-1170.NK.1.0 Start
-        //with GenJnlLine do begin
-        SalesSetup.Get();
-        if not SalesSetup."NS_Sales Retention Inactive" then
-            GenJnlLine.Validate("NS_Retention Ledger Code", p.NS_C80GetNS_GenJnlLineLedgerNo());
-
-        //ProjectPro - start
-        if not SalesSetup."NS_Sales Retention Inactive" then begin
-            GenJnlLine."NS_Retention Percent" := SalesHeader."NS_Retention Percent";
-            if SalesHeader."Document Type" = SalesHeader."Document Type"::"Credit Memo" then begin
-                GenJnlLine."NS_Retention Amount" := -SalesHeader."NS_Retention Amount";
-                GenJnlLine."NS_Retention Amount (LCY)" := -SalesHeader."NS_Retention Amount (LCY)";
-            end else begin
-                GenJnlLine."NS_Retention Amount" := SalesHeader."NS_Retention Amount";
-                GenJnlLine."NS_Retention Amount (LCY)" := SalesHeader."NS_Retention Amount (LCY)";
-            end;
-            GenJnlLine."NS_Retention Date" := SalesHeader."NS_Retention Date";
-            //NS_JobsSetup.Get();               //MHNA-7.JS.1.0 22JUN2023 line commented
-            if NS_JobsSetup.get() then;     //MHNA-7.JS.1.0 22JUN2023 line added
-            if (NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" =
-                NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"2 - Calc tax on sale then apply retention determined by progress billing") or
-               (NS_JobsSetup."NS_A/R RetentionTaxCalcMethod" =
-                NS_JobsSetup."NS_A/R RetentionTaxCalcMethod"::"3 - Calc tax on sale less the retention determined by progress billing") then begin
-
-                SalesHeader.CalcFields("NS_Retention Base Before Tax", SalesHeader."NS_Retention Base Amount");  //MHNA-7.JS.1.0 22JUN2023
-                GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Before Tax";
-            end else begin
-                SalesHeader.CalcFields("NS_Retention Base Amount");  //MHNA-7.JS.1.0 22JUN2023
-                GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
-            end;
-            GenJnlLine."NS_Retention Document" := SalesHeader."NS_Retention Document";
-            //MHNA-7.JS.1.0 22JUN2023 - Start
-        end else begin
-            SalesHeader.CalcFields("NS_Retention Base Amount");
-            GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
-        end;
-        GenJnlLine."Job No." := SalesHeader."NS_Job No.";
-        //MHNA-7.JS.1.0 22JUN2023 - end
-        //end;
-        //PRJ-1170.NK.1.0 End
-    end;
-    //PE-129.AS.1.0 end
     //PPDA.1.0 Start
     //PPNA17.0 Opened Start OnDivideAmountVATBaseAmount 
     // [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnDivideAmountOnAfterCalcSalesTaxGeneral', '', false, false)]
@@ -219,7 +115,6 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
 
 
 
-    [Obsolete('Replaced by Microsoft with OnPrepareLineOnAfterFillInvoicePostingBuffer() in CU825Sales Post Invoice Events.', '22.0')]//PE-129.AS.1.0
     //PPNA16.0 Modified Event Start
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnAfterFillInvoicePostBuffer', '', false, false)]
     local procedure NS_C80OnFillInvoicePostingBufferBeforeSetAccount(SalesLine: Record "Sales Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
@@ -236,28 +131,10 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
                     InvoicePostBuffer."G/L Account" := NS_CustPostingGr.NS_RetentionReceivablesAccount;
                 end;
         end;
-
+        // >> Upgrade
+        OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(SalesHeader, SalesLine, InvoicePostBuffer);
+        // << Upgrade
     end;
-
-    //PE-129.AS.1.0 start Add
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Post Invoice Events", 'OnPrepareLineOnAfterFillInvoicePostingBuffer', '', false, false)]
-    local procedure NS_C825OnPrepareLineOnAfterFillInvoicePostingBuffer(SalesLine: Record "Sales Line"; var InvoicePostingBuffer: Record "Invoice Posting Buffer" temporary)
-    var
-        NS_CustPostingGr: Record "Customer Posting Group";
-        SalesHeader: Record "Sales Header";
-    begin
-        IF SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.") then begin
-            if (SalesLine.Type <> SalesLine.Type::"G/L Account") and (SalesLine.Type <> SalesLine.Type::"Fixed Asset") then
-                if SalesHeader."NS_Retention Document" and (SalesLine.Type = SalesLine.Type::NS_Ledger) then begin
-                    NS_CustPostingGr.Get(SalesHeader."Customer Posting Group");
-                    NS_CustPostingGr.TestField(NS_RetentionReceivablesAccount);
-                    InvoicePostingBuffer."G/L Account" := NS_CustPostingGr.NS_RetentionReceivablesAccount;
-                end;
-        end;
-    end;
-    //PE-129.AS.1.0 end Add
-
-
     //PPNA16.0 Modified Event End
 
     //PPNA17.0 Opened Start OnPostItemJnlLineItemJnlRollRndgBefore 
@@ -365,11 +242,7 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         NS_JobJnlPostLine: Codeunit "Job Jnl.-Post Line";
         NS_JobJnlLine: Record "Job Journal Line";
         SourceCodeSetup: Record "Source Code Setup";
-        NS_Jobs: Record Job;  //PE-22.JS.1.0 02FEB2022
-        NSJobs2: Record Job;  //PE-175.JS.1.0 09OCT2023
         Currency: Record Currency;
-        CurrExchRate: Record "Currency Exchange Rate"; //PRJ-1750.NK.1.0 26Dec2022
-        CurrFactor: Decimal; //PRJ-1750.NK.1.0 26Dec2022
     begin
         // Post Job entry
         with SalesHeader do begin
@@ -416,74 +289,17 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
             NS_JobJnlLine."Quantity (Base)" := -SalesLine."Qty. to Invoice (Base)";
             NS_JobJnlLine."Reserved Qty. (Base)" := -SalesLine."Reserved Qty. (Base)";
             NS_JobJnlLine."Currency Code" := SalesLine."Currency Code";
-            //PRJ-1750.NK.1.0 26Dec2022 Start
-            NS_JobJnlLine."Currency Factor" := CurrExchRate.ExchangeRate(SalesLine."Posting Date", SalesLine."Currency Code");
-            if CurrExchRate.ExchangeRate(SalesLine."Posting Date", SalesLine."Currency Code") <> 0 then
-                CurrFactor := CurrExchRate.ExchangeRate(SalesLine."Posting Date", SalesLine."Currency Code")
-            else
-                CurrFactor := 1;
-            //PRJ-1750.NK.1.0 26Dec2022 End
-            //PE-22.JS.1.0 02FEB2022 - Start  
-            if (SalesLine."Job No." <> '') and (Salesline."Currency Code" <> '') and ((SalesHeader."NS_From ProgressBillingReq.No." <> 0) or (Salesline."Job Contract Entry No." = 0)) then  //PRJCTPR-224.JS.1.0
-                if NS_Jobs.get(SalesLine."Job No.") then
-                    if (NS_Jobs."Currency Code" = '') and (NS_Jobs."Invoice Currency Code" <> '') then
-                        NS_JobJnlLine."Currency Code" := NS_Jobs."Currency Code";
-            //PRJCTPR-355.JS.1.0 - 17APR2024 - Start
-            if ((SalesLine."Job No." <> '') and (SalesHeader."NS_From ProgressBillingReq.No." <> 0) and (Salesline."Job Contract Entry No." = 0)) then
-                if NS_Jobs.get(SalesLine."Job No.") then
-                    if (NS_Jobs."Currency Code" <> '') and (NS_Jobs."Invoice Currency Code" = '') then
-                        NS_JobJnlLine."Currency Code" := NS_Jobs."Currency Code";
-            //PRJCTPR-355.JS.1.0 - 17APR2024 - end
-            //PE-22.JS.1.0 02FEB2022 - end    
-            //PE-175.JS.1.0 09OCT2023 - Start
-            if NSJobs2.get(SalesLine."Job No.") then
-                if NSJobs2."NS_Job Class" <> NSJobs2."NS_Job Class"::"Master Job" then
-                    NS_JobJnlLine."NS_Sub-Level to Job No." := SalesLine."NS_Sub-Level to Job No.";
-            //PE-175.JS.1.0 09OCT2023 - end      
             NS_JobJnlLine."Unit Cost" := SalesLine."Unit Cost";
             NS_JobJnlLine."Unit Cost (LCY)" := SalesLine."Unit Cost (LCY)";
             NS_JobJnlLine."Direct Unit Cost (LCY)" := SalesLine."Unit Cost (LCY)";
             NS_JobJnlLine."Total Cost" := Round(SalesLine."Unit Cost" * NS_JobJnlLine.Quantity, GLSetup."Unit-Amount Rounding Precision");
             NS_JobJnlLine."Total Cost (LCY)" := Round(SalesLine."Unit Cost (LCY)" * NS_JobJnlLine.Quantity, GLSetup."Unit-Amount Rounding Precision");
             NS_JobJnlLine."Total Price" := Round(SalesLine."Unit Price" * NS_JobJnlLine.Quantity, GLSetup."Unit-Amount Rounding Precision");//-SalesLine.Amount;//PRJ-849.MS.1.0 code comment and add code
-                                                                                                                                            //PE-22.JS.1.0 07FEB2023 - Start
-            if SalesLine."Currency Code" <> '' then
-                if Currency.get(SalesLine."Currency Code") then;
-            if (SalesLine."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) and (SalesHeader."NS_From ProgressBillingReq.No." <> 0) then
-                NS_JobJnlLine."Total Price" := Round((SalesLine."Unit Price" / SalesHeader."Currency Factor") * NS_JobJnlLine.Quantity, Currency."Amount Rounding Precision");
-            //PE-22.JS.1.0 07FEB2023 - end        
-            //NS_JobJnlLine."Total Price (LCY)" := Round(SalesLine."Unit Price" * NS_JobJnlLine.Quantity, GLSetup."Unit-Amount Rounding Precision");//-SalesLine.Amount;//PRJ-849.MS.1.0 code comment and add code //PRJ-1750.NK.1.0 26Dec2022 Block
-            NS_JobJnlLine."Total Price (LCY)" := Round((SalesLine."Unit Price" / CurrFactor) * NS_JobJnlLine.Quantity, GLSetup."Unit-Amount Rounding Precision"); //PRJ-1750.NK.1.0 26Dec2022
+            NS_JobJnlLine."Total Price (LCY)" := Round(SalesLine."Unit Price" * NS_JobJnlLine.Quantity, GLSetup."Unit-Amount Rounding Precision");//-SalesLine.Amount;//PRJ-849.MS.1.0 code comment and add code
             NS_JobJnlLine."Unit Price" := SalesLine."Unit Price";//-Round(SalesLine.Amount / SalesLine.Quantity, GLSetup."Unit-Amount Rounding Precision");//PRJ-849.MS.1.0 code comment and add code
-                                                                 //PE-22.JS.2.0 07FEB2023 - Start
-            if (SalesLine."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) and (SalesHeader."NS_From ProgressBillingReq.No." <> 0) then begin
-                NS_JobJnlLine."Total Price (LCY)" := Round((SalesLine."Unit Price" / SalesHeader."Currency Factor") * NS_JobJnlLine.Quantity, Currency."Amount Rounding Precision");
-                NS_JobJnlLine."Unit Price" := Round((SalesLine."Unit Price" / SalesHeader."Currency Factor"), Currency."Amount Rounding Precision");
-            end;
-            //PE-22.JS.2.0 07FEB2023 - end    
-            //NS_JobJnlLine."Unit Price (LCY)" := SalesLine."Unit Price"; //PRJ-1750.NK.1.0 26Dec2022 Block
-            NS_JobJnlLine."Unit Price (LCY)" := SalesLine."Unit Price" / CurrFactor; //PRJ-1750.NK.1.0 26Dec2022
-                                                                                     //PE-22.JS.1.0 07FEB2023- Start
-            if (SalesLine."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then
-                NS_JobJnlLine."Unit Price (LCY)" := Round((SalesLine."Unit Price" / SalesHeader."Currency Factor"), Currency."Amount Rounding Precision");
-            //PE-22.JS.1.0 07FEB2023- end
-            //NS_JobJnlLine."Line Amount" := -SalesLine."Line Amount"; //PRJCTPR-10.SD.1.0 10Jan2023 - Comment
-            //NS_JobJnlLine."Line Amount (LCY)" := -SalesLine."Line Amount";//PRJ-1750.NK.1.0 26Dec2022 Block
-            if Currency.Get(SalesLine."Currency Code") then//PRJCTPR-10.SD.1.0 10Jan2023 - Start
-                NS_JobJnlLine."Line Amount" := -ROUND(CurrExchRate.ExchangeAmtLCYToFCY(SalesLine."Posting Date",
-                                                            SalesLine."Currency Code", SalesLine."Line Amount",
-                                                          CurrExchRate.ExchangeRate(SalesLine."Posting Date", SalesLine."Currency Code")),
-                                                          Currency."Amount Rounding Precision", '>')
-            else
-                NS_JobJnlLine."Line Amount" := -SalesLine."Line Amount";
-            NS_JobJnlLine."Line Amount (LCY)" := -SalesLine."Line Amount";//PRJCTPR-10.SD.1.0 10Jan2023 - End 
-                                                                          //PE-22.JS.1.0 07FEB2023 - Start
-            if (SalesLine."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) and (SalesHeader."NS_From ProgressBillingReq.No." <> 0) then begin
-                NS_JobJnlLine."Line Amount" := -SalesLine."Line Amount";
-                NS_JobJnlLine."Line Amount (LCY)" := -SalesLine."Line Amount";
-            end;
-            //PE-22.JS.1.0 07FEB2023 - end        
-            //NS_JobJnlLine."Line Amount (LCY)" := -SalesLine."Line Amount" / CurrFactor; //PRJ-1750.NK.1.0 26Dec2022 //PRJCTPR-10.SD.1.0 10Jan2023 - Comment
+            NS_JobJnlLine."Unit Price (LCY)" := SalesLine."Unit Price";
+            NS_JobJnlLine."Line Amount" := -SalesLine."Line Amount";
+            NS_JobJnlLine."Line Amount (LCY)" := -SalesLine."Line Amount";
             NS_JobJnlLine."Line Discount %" := SalesLine."Line Discount %";
             NS_JobJnlLine."Line Discount Amount" := -SalesLine."Line Discount Amount";//PRJ-849.MS.1.0 Added Minus
             NS_JobJnlLine."Line Discount Amount (LCY)" := -SalesLine."Line Discount Amount";//PRJ-849.MS.1.0 Added Minus
@@ -506,7 +322,6 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
             NS_JobJnlLine."NS_External Relationship Name" := SalesHeader."Bill-to Name";
             NS_JobJnlLine."Customer Price Group" := SalesLine."Customer Price Group";
             NS_JobJnlLine."NS_Segment Code" := SalesLine."NS_Segment Code";//TM-10.AM.1.0
-            NS_BeforeJobJnlLinePost(SalesLine, NS_JobJnlLine);//PRJ-1583.AS.1.0 Added Integration event
             NS_JobJnlPostLine.RunWithCheck(NS_JobJnlLine);
         end;
     end;
@@ -746,20 +561,13 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
 
     //PPNA17.0 Opened Start OnPostSalesLineOnAfterCase 
     //PRJ-57.SK.1.0 Start
-    //[EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnPostSalesLineOnAfterCaseType', '', false, false)]   //PE-267.JS.1.0 05MAR2024 line commented event removed in Base BC24 by MS
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnPostSalesLineOnBeforePostSalesLine', '', false, false)]  //PE-267.JS.1.0 05MAR2024 line added
-    //local procedure NS_C80PostLedgerType(SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; GenJnlLineDocType: Integer; SrcCode: Code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")//PRJ-57.VT.1.0 04-03-20  //PE-267.JS.1.0 05MAR2024 line commented
-    local procedure NS_C80PostLedgerType(SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; GenJnlLineDocType: Enum "Gen. Journal Document Type"; SrcCode: Code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line") //PE-267.JS.1.0 05MAR2024 line added
-    var
-        Ishandle: Boolean;    //FGH-163.SM.29022024  //PE-269.JS.1.0
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", 'OnPostSalesLineOnAfterCaseType', '', false, false)]
+    local procedure NS_C80PostLedgerType(SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; GenJnlLineDocType: Integer; SrcCode: Code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")//PRJ-57.VT.1.0 04-03-20
+
     begin
-        //FGH-163.SM.29022024 //PE-269.JS.1.0 START
-        OnbeforeNS_C80PostLedgerType(SalesHeader, SalesLine, GenJnlLineDocNo, GenJnlLineExtDocNo, GenJnlLineDocType, SrcCode, GenJnlPostLine, Ishandle);
-        IF ishandle then
-            exit;
-        //FGH-163.SM.29022024 //PE-269.JS.1.0 END;
         IF SalesLine.Type = SalesLine.Type::NS_Ledger then
-            NS_PostLedger(SalesHeader, SalesLine, GenJnlLineDocNo, GenJnlLineExtDocNo, GenJnlLineDocType.AsInteger(), SrcCode, GenJnlPostLine); //PRJ-57.VT.1.0 04-03-20  //PE-267.JS.1.0 05MAR2024
+            NS_PostLedger(SalesHeader, SalesLine, GenJnlLineDocNo, GenJnlLineExtDocNo, GenJnlLineDocType, SrcCode, GenJnlPostLine);//PRJ-57.VT.1.0 04-03-20
+
     end;
     //PRJ-57.SK.1.0 End
     //PPNA17.0 Opened End
@@ -768,16 +576,10 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
     local procedure NS_PostLedger(SalesHeader: Record "Sales Header"; SalesLine: Record "Sales Line"; GenJnlLineDocNo: code[20]; GenJnlLineExtDocNo: code[35]; GenJnlLineDocType: Integer; SrcCode: code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line")//PRJ-57.VT.1.0 04-03-20
     var
         GenJnlLine: Record "Gen. Journal Line";
-        IsHandle: Boolean;//FGH-163.AS.29052024 //PE-307.JS.1.0
     //GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; // Code Commented PRJ-57.VT.1.0 04-03-20
     begin
         //ProjectPro - start
         WITH SalesHeader DO BEGIN
-            //FGH-163.AS.29052024 START  //PE-307.JS.1.0
-            NS_OnBeforeNS_PostLedger(SalesHeader, SalesLine, GenJnlLineDocNo, GenJnlLineExtDocNo, GenJnlLineDocType, SrcCode, GenJnlPostLine, IsHandle);//FGH-163.SMAdded Parameter  //PE-269.JS.1.0
-            if IsHandle then
-                exit;
-            //FGH-163.AS.29052024 END  //PE-307.JS.1.0
             IF SalesLine.Amount <> 0 THEN BEGIN
                 IF "Document Type" = "Document Type"::"Credit Memo" THEN
                     SalesLine.Amount := -SalesLine.Amount;
@@ -848,106 +650,23 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
     //PRJ-884.JS.1.0  24Aug2021-Start
     [EventSubscriber(ObjectType::Codeunit, 80, 'OnBeforePostSalesDoc', '', false, false)]
     local procedure NS_C80OnBeforePostSalesDoc(VAR SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var HideProgressWindow: Boolean)
-    var
-        ProgressBillingHeader: record "NS_Progress Billing Header";//PRJ-1332.GK.1.0 25Apr2022
-        L_SalesHeader: Record "Sales Header";  //PRJ-1648.PS.1.0 05OCT2022
     begin
-
-        // PE-15.PS.1.0 08Feb2023  Strat
-        If (SalesHeader."NS_Retention Document" = true) and (SalesHeader.Status = SalesHeader.Status::Open) then
-            Error('To calculate Retention, Status must be equal to Released on Sales Header: Document Type = %1, Document No.= %2. Current value is %3.', SalesHeader."Document Type",
-                SalesHeader."No.", SalesHeader.Status);
-        // PE-15.PS.1.0 08Feb2023  End
         IF ((SalesHeader."NS_Retention Percent" <> 0) and (SalesHeader.Status = SalesHeader.Status::Open)) then
             Error('To calculate Retention, Status must be equal to Released on Sales Header: Document Type = %1, Document No.= %2. Current value is %3.', SalesHeader."Document Type",
             SalesHeader."No.", SalesHeader.Status);
-        //PRJ-1332.GK.1.0 25Apr2022 start
-        // if (SalesHeader."NS_From Progress Billing No." <> '') and (SalesHeader."NS_Progress Billing Document" = true) then begin
-        //     ProgressBillingHeader.reset;
-        //     ProgressBillingHeader.SetRange("NS_No.", SalesHeader."NS_From Progress Billing No.");
-        //     ProgressBillingHeader.SetRange("NS_Requisition No.", SalesHeader."NS_From ProgressBillingReq.No.");
-        //     ProgressBillingHeader.SetRange("NS_Version No.", SalesHeader."NS_From ProgressBillingVer.No.");
-        //     ProgressBillingHeader.SetRange("NS_Sales Document No.", SalesHeader."No.");
-        //     if ProgressBillingHeader.FindFirst() then begin
-        //         ProgressBillingHeader.TestField(NS_Final);
-        //     end;
-        // end;
-        //PRJ-1332.GK.1.0 25Apr2022 end
-
-        //PRJ-1648.PS.1.0  05OCT2022 - Start
-
-        if (SalesHeader."NS_Retention Document" = false) and (SalesHeader."NS_From Progress Billing No." <> '') then begin
-            L_SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Invoice);
-            L_SalesHeader.SetRange("NS_From Progress Billing No.", SalesHeader."NS_From Progress Billing No.");
-            L_SalesHeader.SetRange("NS_From ProgressBillingReq.No.", SalesHeader."NS_From ProgressBillingReq.No.");
-            L_SalesHeader.SetRange("NS_Retention Document", true);
-            if L_SalesHeader.FindFirst() then begin
-                Error('Please post the Retention Document first and then the Progress Billing Sales Invoice can be posted');
-            end;
-        end;
-
-        //PRJ-1648.PS.1.0  05OCT2022 - End
     end;
     //PRJ-884.JS.1.0 24Aug2021-end
-
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
+    // >> Upgrade
     [IntegrationEvent(false, false)]
-    local procedure OnbeforeNS_C80PostLedgerType(SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; GenJnlLineDocType: Integer; SrcCode: Code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var Ishandled: Boolean)
-    begin
-    end;
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
-
-    //PRJ-1583.AS.1.0 START Added integration event
-    [IntegrationEvent(false, false)]
-    local procedure NS_BeforeJobJnlLinePost(var SalLineRec: Record "Sales Line"; var JobJnlLineRec: Record "Job Journal Line")
-    begin
-    end;
-    //PRJ-1583.AS.1.0 END
-
-    //FGH-163.AS.29052024 START //PE-307.JS.1.0
-    [IntegrationEvent(false, false)]
-    local procedure NS_OnBeforeNS_PostLedger(var SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; var GenJnlLineDocNo: code[20]; var GenJnlLineExtDocNo: code[35]; var GenJnlLineDocType: Integer; var SrcCode: code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var IsHandle: Boolean)
+    local procedure OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(var SaleHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
     begin
     end;
 
     [IntegrationEvent(false, false)]
-    local procedure NS_OnBefore_NS_C825OnPostLedgerEntryOnBeforeGenJnlPostLine(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header"; var TotalSalesLine: Record "Sales Line"; var TotalSalesLineLCY: Record "Sales Line"; var SuppressCommit: Boolean; var PreviewMode: Boolean; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var IsHandle: Boolean)
+    local procedure OnAfterNS_C80OnBeforePostCustomerEntry(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header")
     begin
-
     end;
 
-    [IntegrationEvent(false, false)]
-    local procedure NS_OnBefore_NS_C80OnBeforePostCustomerEntry(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header"; var TotalSalesLine: Record "Sales Line"; var TotalSalesLineLCY: Record "Sales Line"; var CommitIsSuppressed: Boolean; var PreviewMode: Boolean; var IsHandle: Boolean)
-    begin
-
-    end;
-    //FGH-163.AS.29052024 END //PE-307.JS.1.0
-
-    // PE-225.PS.1.0 10June2024 Start
-
-    [EventSubscriber(ObjectType::Codeunit, 80, 'OnAfterPostSalesDoc', '', false, false)]
-    local procedure NS_C80OnBafterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
-    var
-        NSJobSetup: Record "Jobs Setup";
-        NSPostedSalesHeader: Record "Sales Invoice Header";
-        NSCorrectPostedSalInv: Codeunit "Correct Posted Sales Invoice";
-        NSSalesHeaderApplyCud: Codeunit "NS_Sales Header Apply";
-    begin
-        if NSPostedSalesHeader.Get(SalesInvHdrNo) then;
-        if NSJobSetup.Get() then;
-        if ((NSPostedSalesHeader."NS_From Progress Billing No." <> '') and (NSPostedSalesHeader."NS_Retention Document" = true)) then begin
-            if NSJobSetup."NSAuto Apply Retetion Billing" = true then begin
-                if not Confirm('Do you want to apply the Retention Released', true, true) then
-                    Error('');
-                NSPostedSalesHeader.CalcFields("Remaining Amount");
-                if NSPostedSalesHeader."Remaining Amount" <> 0 then begin
-                    NSSalesHeaderApplyCud.NSApplyRetentionSalesInvPromRetentionInvoice(NSPostedSalesHeader);
-                    NSSalesHeaderApplyCud.NSApplyRetentionSalesInvFromRetentionInvoice(NSPostedSalesHeader);
-                end;
-            End;
-        end;
-    end;
-
-    // PE-225.PS.1.0 10June2024 End
+    // << Upgrade
 }
 

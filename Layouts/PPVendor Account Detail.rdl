@@ -1,0 +1,443 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <Height>2in</Height>
+        <Style />
+      </Body>
+      <Width>6.5in</Width>
+      <Page>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Vendor_Account_DetailCaption">
+          <DataField>Vendor_Account_DetailCaption</DataField>
+        </Field>
+        <Field Name="FORMAT_TODAY_0_4_">
+          <DataField>FORMAT_TODAY_0_4_</DataField>
+        </Field>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+        </Field>
+        <Field Name="CompanyInformation_Name">
+          <DataField>CompanyInformation_Name</DataField>
+        </Field>
+        <Field Name="USERID">
+          <DataField>USERID</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENOCaption">
+          <DataField>CurrReport_PAGENOCaption</DataField>
+        </Field>
+        <Field Name="Vendors_without_balances_are_not_included_Caption">
+          <DataField>Vendors_without_balances_are_not_included_Caption</DataField>
+        </Field>
+        <Field Name="Vendor__No__Caption">
+          <DataField>Vendor__No__Caption</DataField>
+        </Field>
+        <Field Name="DocumentCaption">
+          <DataField>DocumentCaption</DataField>
+        </Field>
+        <Field Name="Net_ChangeCaption">
+          <DataField>Net_ChangeCaption</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control64Caption">
+          <DataField>BalanceToPrint_Control64Caption</DataField>
+        </Field>
+        <Field Name="DebitsCaption">
+          <DataField>DebitsCaption</DataField>
+        </Field>
+        <Field Name="CreditsCaption">
+          <DataField>CreditsCaption</DataField>
+        </Field>
+        <Field Name="DocNoCaption">
+          <DataField>DocNoCaption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_AmountCaption">
+          <DataField>Vendor_Ledger_Entry_AmountCaption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Currency_Code_Caption">
+          <DataField>Vendor_Ledger_Entry__Currency_Code_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_OpenCaption">
+          <DataField>Vendor_Ledger_Entry_OpenCaption</DataField>
+        </Field>
+        <Field Name="Phone_Caption">
+          <DataField>Phone_Caption</DataField>
+        </Field>
+        <Field Name="Contact_Caption">
+          <DataField>Contact_Caption</DataField>
+        </Field>
+        <Field Name="Ending_Balance__no_activity_Caption">
+          <DataField>Ending_Balance__no_activity_Caption</DataField>
+        </Field>
+        <Field Name="Beginning_BalanceCaption">
+          <DataField>Beginning_BalanceCaption</DataField>
+        </Field>
+        <Field Name="VendorsCaption">
+          <DataField>VendorsCaption</DataField>
+        </Field>
+        <Field Name="EntriesCaption">
+          <DataField>EntriesCaption</DataField>
+        </Field>
+        <Field Name="Control8Caption">
+          <DataField>Control8Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Posting_Date_Caption">
+          <DataField>Vendor_Ledger_Entry__Posting_Date_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Document_Type_Caption">
+          <DataField>Vendor_Ledger_Entry__Document_Type_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_DescriptionCaption">
+          <DataField>Vendor_Ledger_Entry_DescriptionCaption</DataField>
+        </Field>
+        <Field Name="Document_Number_is______Vendor_Ledger_Entry__FIELDCAPTION__External_Document_No___">
+          <DataField>Document_Number_is______Vendor_Ledger_Entry__FIELDCAPTION__External_Document_No___</DataField>
+        </Field>
+        <Field Name="GetCurrencyCaptionCode__Currency_Code__">
+          <DataField>GetCurrencyCaptionCode__Currency_Code__</DataField>
+        </Field>
+        <Field Name="Control104Caption">
+          <DataField>Control104Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Remaining_Amount_Caption">
+          <DataField>Vendor_Ledger_Entry___Remaining_Amount_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Original_Pmt__Disc__Possible_Caption">
+          <DataField>Vendor_Ledger_Entry___Original_Pmt__Disc__Possible_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Pmt__Discount_Date_Caption">
+          <DataField>Vendor_Ledger_Entry___Pmt__Discount_Date_Caption</DataField>
+        </Field>
+        <Field Name="Due_DateCaption">
+          <DataField>Due_DateCaption</DataField>
+        </Field>
+        <Field Name="TempAppliedVendLedgEntry__Entry_No___Control75Caption">
+          <DataField>TempAppliedVendLedgEntry__Entry_No___Control75Caption</DataField>
+        </Field>
+        <Field Name="FORMAT_TempAppliedVendLedgEntry__Document_Type__Caption">
+          <DataField>FORMAT_TempAppliedVendLedgEntry__Document_Type__Caption</DataField>
+        </Field>
+        <Field Name="DocNo_Control55Caption">
+          <DataField>DocNo_Control55Caption</DataField>
+        </Field>
+        <Field Name="PrintAmountsInLocal">
+          <DataField>PrintAmountsInLocal</DataField>
+        </Field>
+        <Field Name="AllHavingBalance">
+          <DataField>AllHavingBalance</DataField>
+        </Field>
+        <Field Name="UseExternalDocNo">
+          <DataField>UseExternalDocNo</DataField>
+        </Field>
+        <Field Name="AdditionalInformation">
+          <DataField>AdditionalInformation</DataField>
+        </Field>
+        <Field Name="OnlyOnePerPage">
+          <DataField>OnlyOnePerPage</DataField>
+        </Field>
+        <Field Name="Vendor_TABLECAPTION__________FilterString">
+          <DataField>Vendor_TABLECAPTION__________FilterString</DataField>
+        </Field>
+        <Field Name="FilterString">
+          <DataField>FilterString</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__TABLECAPTION__________FilterString2">
+          <DataField>Vendor_Ledger_Entry__TABLECAPTION__________FilterString2</DataField>
+        </Field>
+        <Field Name="FilterString2">
+          <DataField>FilterString2</DataField>
+        </Field>
+        <Field Name="NewPagePerGroupNo">
+          <DataField>NewPagePerGroupNo</DataField>
+        </Field>
+        <Field Name="Vendor__No__">
+          <DataField>Vendor__No__</DataField>
+        </Field>
+        <Field Name="Vendor_Name">
+          <DataField>Vendor_Name</DataField>
+        </Field>
+        <Field Name="Vendor__Phone_No__">
+          <DataField>Vendor__Phone_No__</DataField>
+        </Field>
+        <Field Name="Vendor_Contact">
+          <DataField>Vendor_Contact</DataField>
+        </Field>
+        <Field Name="ToDate">
+          <DataField>ToDate</DataField>
+        </Field>
+        <Field Name="EndingBalanceToPrint">
+          <DataField>EndingBalanceToPrint</DataField>
+        </Field>
+        <Field Name="EndingBalanceToPrintFormat">
+          <DataField>EndingBalanceToPrintFormat</DataField>
+        </Field>
+        <Field Name="VendLedgerEntry2_FiND_">
+          <DataField>VendLedgerEntry2_FiND_</DataField>
+        </Field>
+        <Field Name="FromDateToPrint">
+          <DataField>FromDateToPrint</DataField>
+        </Field>
+        <Field Name="BalanceToPrint">
+          <DataField>BalanceToPrint</DataField>
+        </Field>
+        <Field Name="BalanceToPrintFormat">
+          <DataField>BalanceToPrintFormat</DataField>
+        </Field>
+        <Field Name="TotalVendors">
+          <DataField>TotalVendors</DataField>
+        </Field>
+        <Field Name="TotalEntries">
+          <DataField>TotalEntries</DataField>
+        </Field>
+        <Field Name="DebitTotal">
+          <DataField>DebitTotal</DataField>
+        </Field>
+        <Field Name="DebitTotalFormat">
+          <DataField>DebitTotalFormat</DataField>
+        </Field>
+        <Field Name="CreditTotal">
+          <DataField>CreditTotal</DataField>
+        </Field>
+        <Field Name="CreditTotalFormat">
+          <DataField>CreditTotalFormat</DataField>
+        </Field>
+        <Field Name="BalanceTotal">
+          <DataField>BalanceTotal</DataField>
+        </Field>
+        <Field Name="BalanceTotalFormat">
+          <DataField>BalanceTotalFormat</DataField>
+        </Field>
+        <Field Name="Vendor_Global_Dimension_1_Filter">
+          <DataField>Vendor_Global_Dimension_1_Filter</DataField>
+        </Field>
+        <Field Name="Vendor_Global_Dimension_2_Filter">
+          <DataField>Vendor_Global_Dimension_2_Filter</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Posting_Date_">
+          <DataField>Vendor_Ledger_Entry__Posting_Date_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Document_Type_">
+          <DataField>Vendor_Ledger_Entry__Document_Type_</DataField>
+        </Field>
+        <Field Name="DocNo">
+          <DataField>DocNo</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Description">
+          <DataField>Vendor_Ledger_Entry_Description</DataField>
+        </Field>
+        <Field Name="AmountToPrint">
+          <DataField>AmountToPrint</DataField>
+        </Field>
+        <Field Name="AmountToPrintFormat">
+          <DataField>AmountToPrintFormat</DataField>
+        </Field>
+        <Field Name="AmountToPrint_Control63">
+          <DataField>AmountToPrint_Control63</DataField>
+        </Field>
+        <Field Name="AmountToPrint_Control63Format">
+          <DataField>AmountToPrint_Control63Format</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control64">
+          <DataField>BalanceToPrint_Control64</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control64Format">
+          <DataField>BalanceToPrint_Control64Format</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Open">
+          <DataField>Vendor_Ledger_Entry_Open</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Currency_Code_">
+          <DataField>Vendor_Ledger_Entry__Currency_Code_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Amount">
+          <DataField>Vendor_Ledger_Entry_Amount</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_AmountFormat">
+          <DataField>Vendor_Ledger_Entry_AmountFormat</DataField>
+        </Field>
+        <Field Name="ToDate_Control91">
+          <DataField>ToDate_Control91</DataField>
+        </Field>
+        <Field Name="Ending_Balance_for_____Vendor__No__">
+          <DataField>Ending_Balance_for_____Vendor__No__</DataField>
+        </Field>
+        <Field Name="TotalDebits">
+          <DataField>TotalDebits</DataField>
+        </Field>
+        <Field Name="TotalDebitsFormat">
+          <DataField>TotalDebitsFormat</DataField>
+        </Field>
+        <Field Name="TotalCredits">
+          <DataField>TotalCredits</DataField>
+        </Field>
+        <Field Name="TotalCreditsFormat">
+          <DataField>TotalCreditsFormat</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control95">
+          <DataField>BalanceToPrint_Control95</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control95Format">
+          <DataField>BalanceToPrint_Control95Format</DataField>
+        </Field>
+        <Field Name="Vendor_TABLECAPTION_____Total_for_____Vendor__No__">
+          <DataField>Vendor_TABLECAPTION_____Total_for_____Vendor__No__</DataField>
+        </Field>
+        <Field Name="TotalDebits_Control97">
+          <DataField>TotalDebits_Control97</DataField>
+        </Field>
+        <Field Name="TotalDebits_Control97Format">
+          <DataField>TotalDebits_Control97Format</DataField>
+        </Field>
+        <Field Name="TotalCredits_Control98">
+          <DataField>TotalCredits_Control98</DataField>
+        </Field>
+        <Field Name="TotalCredits_Control98Format">
+          <DataField>TotalCredits_Control98Format</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control99">
+          <DataField>BalanceToPrint_Control99</DataField>
+        </Field>
+        <Field Name="BalanceToPrint_Control99Format">
+          <DataField>BalanceToPrint_Control99Format</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Entry_No_">
+          <DataField>Vendor_Ledger_Entry_Entry_No_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Vendor_No_">
+          <DataField>Vendor_Ledger_Entry_Vendor_No_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Global_Dimension_1_Code">
+          <DataField>Vendor_Ledger_Entry_Global_Dimension_1_Code</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry_Global_Dimension_2_Code">
+          <DataField>Vendor_Ledger_Entry_Global_Dimension_2_Code</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Entry_No__">
+          <DataField>Vendor_Ledger_Entry___Entry_No__</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Remaining_Amount_">
+          <DataField>Vendor_Ledger_Entry___Remaining_Amount_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Remaining_Amount_Format">
+          <DataField>Vendor_Ledger_Entry___Remaining_Amount_Format</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Original_Pmt__Disc__Possible_">
+          <DataField>Vendor_Ledger_Entry___Original_Pmt__Disc__Possible_</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Original_Pmt__Disc__Possible_Format">
+          <DataField>Vendor_Ledger_Entry___Original_Pmt__Disc__Possible_Format</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry___Pmt__Discount_Date_">
+          <DataField>Vendor_Ledger_Entry___Pmt__Discount_Date_</DataField>
+        </Field>
+        <Field Name="DueDateToPrint">
+          <DataField>DueDateToPrint</DataField>
+        </Field>
+        <Field Name="DocNo_Control55">
+          <DataField>DocNo_Control55</DataField>
+        </Field>
+        <Field Name="FORMAT_TempAppliedVendLedgEntry__Document_Type__">
+          <DataField>FORMAT_TempAppliedVendLedgEntry__Document_Type__</DataField>
+        </Field>
+        <Field Name="TempAppliedVendLedgEntry__Entry_No__">
+          <DataField>TempAppliedVendLedgEntry__Entry_No__</DataField>
+        </Field>
+        <Field Name="Vendor_Ledger_Entry__Open">
+          <DataField>Vendor_Ledger_Entry__Open</DataField>
+        </Field>
+        <Field Name="Closed_by_Entry_No">
+          <DataField>Closed_by_Entry_No</DataField>
+        </Field>
+        <Field Name="VendorClosedbyEntryNo">
+          <DataField>VendorClosedbyEntryNo</DataField>
+        </Field>
+        <Field Name="BalanceToPrintTemp">
+          <DataField>BalanceToPrintTemp</DataField>
+        </Field>
+        <Field Name="BalanceToPrintTempFormat">
+          <DataField>BalanceToPrintTempFormat</DataField>
+        </Field>
+        <Field Name="DocNoTemp">
+          <DataField>DocNoTemp</DataField>
+        </Field>
+        <Field Name="OtherInfo_Number">
+          <DataField>OtherInfo_Number</DataField>
+        </Field>
+        <Field Name="Apply_ToCaption">
+          <DataField>Apply_ToCaption</DataField>
+        </Field>
+        <Field Name="DocNo_Control81">
+          <DataField>DocNo_Control81</DataField>
+        </Field>
+        <Field Name="FORMAT_TempAppliedVendLedgEntry__Document_Type___Control84">
+          <DataField>FORMAT_TempAppliedVendLedgEntry__Document_Type___Control84</DataField>
+        </Field>
+        <Field Name="TempAppliedVendLedgEntry__Entry_No___Control75">
+          <DataField>TempAppliedVendLedgEntry__Entry_No___Control75</DataField>
+        </Field>
+        <Field Name="AppliedEntries_Number">
+          <DataField>AppliedEntries_Number</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

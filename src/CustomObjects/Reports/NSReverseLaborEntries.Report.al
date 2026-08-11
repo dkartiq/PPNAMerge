@@ -10,7 +10,6 @@ report 14021385 "NS_Reverse Labor Entries"
     // + PPAL-64.MS.1.0 Created new report
     // +------------------------------------------------------------
     ///PPAL-64.NS.1.0 Add field on request page
-    //PE-68 Dk.1.0 10April2023 | Add Some Code
     Caption = 'Reverse Labor Entries';
     ProcessingOnly = true;
 
@@ -29,10 +28,7 @@ report 14021385 "NS_Reverse Labor Entries"
         dataitem("Job Ledger Entry"; "Job Ledger Entry")
         {
             DataItemTableView = SORTING("Job No.", "Posting date") where(quantity = filter(> 0));
-            //PE-68.NK.1.0 start 20April2023 start
-            // RequestFilterFields = "Posting Date", "Job No.", "Job Task No."; 
-            RequestFilterFields = "Posting Date", "Job No.", "Job Task No.", "NS_Job Cost Category";
-            //PE-68.NK.1.0 start 20April2023 end
+            RequestFilterFields = "Posting Date", "Job No.", "Job Task No.";
             trigger OnAfterGetRecord();
             begin
                 JobJnLine.Init();
@@ -64,15 +60,6 @@ report 14021385 "NS_Reverse Labor Entries"
                 JobJnLine.validate("Unit Cost", "Unit Cost");
                 JobJnLine.validate("Unit Price", "Unit Price");
                 JobJnLine."Gen. Prod. Posting Group" := "Gen. Prod. Posting Group";
-                //PE-68 Dk.1.0 10April2023 Start
-                JobJnLine."NS_Segment Code" := "NS_Segment Code";
-                JobJnLine."NS_Crew Code" := "NS_Crew Code";
-                JobJnLine."NS_Crew Time Sheet Ref. No." := "NS_Crew Time Sheet Ref. No.";
-                JobJnLine."Work Type Code" := "Work Type Code";
-                JobJnLine."NS_Union Code" := "NS_Union Code";
-                JobJnLine."NS_Skill Code New" := "NS_Skill code New";
-                JobJnLine."NS_Skill Class New" := "NS_Skill Class New";
-                //PE-68 Dk.1.0 10April2023 End
                 JobJnLine.Insert();
                 NextLineNo += 10000;
                 InsertCount += 1;
@@ -80,22 +67,11 @@ report 14021385 "NS_Reverse Labor Entries"
 
             trigger OnPreDataItem();
             begin
-                //PE-68.NK.1.0 20April2023 Start 
-                NS_jobCostCategory := '';
-                NS_jobCostCategory := "Job Ledger Entry".GetFilter("NS_Job Cost Category");
-                //PE-68.NK.1.0 20April2023 End
                 InsertCount := 0;
-                if JobSetup.get() then;
-                //jobsetup.TestField("NS_Job Cost Cat.for Rev.LaborEnt."); //PE-68.NK.1.0 20April2023 comment
+                if JobSetup.get then;
+                jobsetup.TestField("NS_Job Cost Cat.for Rev.LaborEnt.");
                 SETRANGE(Type, Type::Resource);
-                //PE-68.NK.1.0 start 20April2023
-                // SetFilter("NS_Job Cost Category", JobSetup."NS_Job Cost Cat.for Rev.LaborEnt.");
-                if NS_jobCostCategory <> '' then
-                    SetFilter("NS_Job Cost Category", NS_jobCostCategory)
-                else
-                    if JobSetup."NS_Job Cost Cat.for Rev.LaborEnt." <> '' then
-                        SetFilter("NS_Job Cost Category", JobSetup."NS_Job Cost Cat.for Rev.LaborEnt.");
-                //PE-68.NK.1.0  end 20April2023
+                SetFilter("NS_Job Cost Category", JobSetup."NS_Job Cost Cat.for Rev.LaborEnt.");
                 JobJnLine.RESET;
                 JobJnLine.SETRANGE("journal Template Name", journalTemplateName);
                 JobJnLine.SETRANGE("Journal Batch Name", JournalBatchName);
@@ -148,7 +124,6 @@ report 14021385 "NS_Reverse Labor Entries"
         Text001: Label '%1 lines have been inserted into the end of the journal.';
         JobSetup: Record "Jobs Setup";
         ReversalPostingDate: Date;//PPAL-64.NS.1.0
-        NS_jobCostCategory: Code[50];//PE-68.NK.1.0 20April2023
 
 }
 

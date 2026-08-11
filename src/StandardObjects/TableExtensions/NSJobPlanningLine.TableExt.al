@@ -1,5 +1,6 @@
 tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version NAVW111.00.00.24232,PPNA11.00
     //PRJ-33.SK.1.0 Modified code for updating "Unit Cost" and "Unit Price" while picking up "No." in Line.
     //PRJ-72.SK.1.0 Modified Code since it is causing error.
@@ -15,12 +16,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
     //PRJ-913.JS.1.0 15Sep2021 | add code to flow dimension from task line lines
     //PRJ-929.GK.1.0 22Sep2021 | Added Three fields
     //PRJ-973.GK.1.0 13Oct2021 | Add one field and validate this field from Job.
-    //PRJ-1015.JS.1.0 10Oct2021 | Add one field
-    //PRJ-1182.AS.2.0 | Added events for PRJ-1226
-    //PRJ-1335.NK.1.0 02May2022 Add Code
-    //PRJ-1608.RM.1.0 20Sep2022 | Added some code
-    //FOR-8.RM.1.0 13Apr2023 | Added some code
-    //PRJCTPR-191.HS.1.0 29sept2023| Added two fields
     fields
     {
 
@@ -30,11 +25,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
         {
             trigger OnAfterValidate();
             begin
-                //PRJCTPR-322.AT START
-                if (Type = Type::"NS_Resource (Group)") then
-                    Error('Resource (Group) will obselete in Projectpro upcoming release 25.0.XX.XXXX');
-                //PRJCTPR-322.AT END
-
                 //ProjectPro - start
                 if (Type <> xRec.Type) and ("NS_Segment Code" <> '') then
                     UpdateSegmentEntry;
@@ -49,30 +39,20 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
 
             trigger OnAfterValidate()
             var
-                NSJob: Record Job; //PRJ-1608.RM.1.0
-                                   //PRJ-563
+                //PRJ-563
                 AssemBOMRec: Record "NS_Assembley BOM Components";//PRJ-563
                 AssemBOMRec2: Record "NS_Assembley BOM Components";//PRJ-563
                 AssemBOMRec3: Record "NS_Assembley BOM Components";//PRJ-563
-                ASMBOM: Record "NS_Assembley BOM Components";//PRJ-1226.AS.1.0
                 BOMComponentRec: Record "BOM Component";//PRJ-563
                 itemrec: Record Item;//PRJ-563
                 Resourcerec: Record Resource;//PRJ-463.AS.4.0
                 NS_Job: Record Job; //PRJ-973.GK.1.0 13Oct2021
-                Jobs: Record Job;  //PRJ-1015.JS.1.0 10Oct2021 //PRJ-929.GK.4.0 16Dec2021
-                NS_GLAccount: Record "G/L Account";//PRJ-1089.GK.1.0 28Dec2021
-
-
             begin
                 //PRJ-913.JS.1.0 15Sep2021-Start
                 If Rec."Line No." <> 0 then begin
                     NS_JobTskLins.get(Rec."Job No.", "Job Task No.");
                     Rec.Validate("NS_Shortcut Dimension 1 Code", NS_JobTskLins."Global Dimension 1 Code");
                     Rec.Validate("NS_Shortcut Dimension 2 Code", NS_JobTskLins."Global Dimension 2 Code");
-                    //PRJ-1015.JS.1.0 10Oct2021 - Start
-                    If Jobs.Get(rec."Job No.") then
-                        Rec."NS_Sub-Level to Job No." := Jobs."NS_Sub-Level to Job No.";
-                    //PRJ-1015.JS.1.0 10Oct2021 - Start                      
                 end;
                 //PRJ-913.JS.1.0 15Sep2021-end                
                 CASE Type OF
@@ -85,7 +65,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                             IF Res."NS_Job Cost Category" <> '' THEN
                                 "NS_Cost Category" := Res."NS_Job Cost Category";
                             //ProjectPro - end
-                            "Unit of Measure Code" := res."Base Unit of Measure";  //PRJCTPR-397.JS.1.0
                         END;
                     Type::Item:
                         BEGIN
@@ -93,33 +72,16 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                             //ProjectPro - start
                             IF Item."NS_Job Cost Category" <> '' THEN
                                 "NS_Cost Category" := Item."NS_Job Cost Category";
-                            //PRJ-1335.NK.1.0 02May2022 Start
-                            if Item."NS_Revenue Category" <> '' then
-                                if "Line Type" <> "Line Type"::Budget then
-                                    "NS_Revenue Category" := Item."NS_Revenue Category";
-                            //PRJ-1335.NK.1.0 02May2022 End
                             Item.CalcFields("Assembly BOM");
                             "NS_Assembley BOM" := Item."Assembly BOM";
                             //ProjectPro - end
-                            "Unit of Measure Code" := NS_GetUOMfromItem("No."); //PE-301.NC.1.0 05Jun2024
                         END;
                     //ProjectPro - start
                     Type::"NS_Resource (Group)":
                         BEGIN
-                            //NS_ResourceGroup.GET("No."); //PRJCTPR-322 comment
-                            if NS_ResourceGroup.GET("No.") then ///PRJCTPR-322 Add
-                                Description := NS_ResourceGroup.Name;
+                            NS_ResourceGroup.GET("No.");
+                            Description := NS_ResourceGroup.Name;
                         END;
-                    //PRJ-1089.GK.1.0 28Dec2021 start
-                    Type::"G/L Account":
-                        begin
-                            if NS_GLAccount.Get("No.") then
-                                if NS_GLAccount."NS_Cost Category" <> '' then
-                                    "NS_Cost Category" := NS_GLAccount."NS_Cost Category"
-                                else
-                                    "NS_Cost Category" := '';
-                        end;
-                //PRJ-1089.GK.1.0 28Dec2021 end
                 //ProjectPro - end
                 END;
                 //ProjectPro - start
@@ -141,14 +103,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                 if Job.get("Job No.") then; //PRj-394
                                             //"Gen. Bus. Posting Group" := Job."NS_Gen. Bus. Posting Group";//PRj-394 //PRJ-831.AS.1.0 12OCT2021 Comment old
                 "Gen. Bus. Posting Group" := Job."NS_Gen. Bus. Posting Group New";//PRj-394 //PRJ-831.AS.1.0 12OCT2021 Comment New
-
-                //PRJ-1226.AS.4.0 - START PE-26.AS.1.0 START
-                ASMBOM.Reset();
-                ASMBOM.SetRange("NS_Job No.", rec."Job No.");
-                ASMBOM.SetRange("NS_Job Task No.", rec."Job Task No.");
-                ASMBOM.SetRange("NS_Ref. JPL Line No.", Rec."Line No.");
-                ASMBOM.DELETEALL();
-                //PRJ-1226.AS.4.0 - END PE-26.AS.1.0 END
 
                 //PRJ-563.AS.1.0 - START
                 if (Rec.Type = Rec.Type::Item) and (Rec."No." <> '') and ("NS_Assembley BOM" = true) then begin
@@ -218,9 +172,7 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                                 else
                                     AssemBOMRec2."NS_Item Type" := AssemBOMRec2."NS_Item Type"::Normal;
                                 //PRJ-563.AS.1.0 24MAY2020 - end
-                                OnBeforeInsertAssembleyBOMComponents(AssemBOMRec2);//PRJ-1182.AS.2.0 ADDED EVENT
                                 AssemBOMRec2.Insert();
-                                OnAfterInsertAssembleyBOMComponents(AssemBOMRec2);//PRJ-1182.AS.2.0 ADDED EVENT
                             end;
                         until BOMComponentRec.next = 0;
                 end;
@@ -229,13 +181,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                 IF NS_Job.GET("Job No.") AND ("Line Type" <> "Line Type"::Budget) AND (Type = Type::"G/L Account") then
                     Validate("NS_Use Job Plan. Line Entries", NS_Job."NS_Use Job Plan. Line Entries");
                 //PRJ-973.GK.1.0 13Oct2021 end
-                if Jobs.get("Job No.") then;
-                //"NS_Contract Forecast Date" := Jobs."NS_Contract Date"; //PRJ-1189.GK.1.0 06apr2022 //PRJ-1468.GK.1.0 12July2022 comment
-                //PRJ-1608.RM.1.0 Start
-                if NSJob.Get("Job No.") then;
-                if NSJob."NS_Gen. Prod. Posting Group New" <> '' then
-                    Rec."Gen. Prod. Posting Group" := NSJob."NS_Gen. Prod. Posting Group New";
-                //PRJ-1608.RM.1.0 End
             end;
         }
 
@@ -360,11 +305,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             begin
                 NS_TempNo := "No.";
             end;
-
-            trigger OnAfterValidate()
-            begin
-                Validate(Quantity);//PRJ-1531.GK.1.0 29Aug2022
-            end;
         }
 
         modify("Unit Cost (LCY)")
@@ -424,6 +364,11 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                         NS_TempJobPlanningLine2.Type := NS_TempJobPlanningLine2.Type::"NS_Resource (Group)";
                         ERROR(Text14021100, FIELDCAPTION(Type), NS_TempJobPlanningLine1.Type, NS_TempJobPlanningLine2.Type);
                     END;
+                // >> Upgrade
+                //FDD109
+                Validate(Quantity);
+                //FDD109
+                // << Upgrade
                 IF Rec.Type = Rec.Type::Resource THEN
                     exit;
                 //ProjectPro - end
@@ -459,8 +404,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
         modify("Line Type")
         {
             trigger OnBeforeValidate()
-            var
-                NSResRec: Record Resource; //PRJCTPR-397.JS.1.0 04July2024
             begin
                 //ProjectPro - start
                 case "Line Type" of
@@ -471,23 +414,9 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                     "Line Type"::"Both Budget and Billable":
                         "NS_Entry Type" := "NS_Entry Type"::Both;
                 end;
-                //FOR-8.RM.1.0 13Apr2023 Start
-                // if ("Line Type" <> "Line Type"::Budget) or ("Line Type" = "Line Type"::"Both Budget and Billable") then
-                //     "NS_Progress Billing Method" := "NS_Progress Billing Method"::"%";
-                if ("Line Type" = "Line Type"::Billable) or ("Line Type" = "Line Type"::"Both Budget and Billable") then
-                    "NS_Progress Billing Method" := "NS_Progress Billing Method"::"%"
-                else
-                    "NS_Progress Billing Method" := "NS_Progress Billing Method"::" ";
-                //FOR-8.RM.1.0 13Apr2023 end
-                if "No." <> '' then //PE-301.NC.1.0 13Jun2024
-                    "Unit of Measure Code" := NS_GetUOMfromItem("No."); //PE-301.NC.1.0 13Jun2024
-
+                if ("Line Type" <> "Line Type"::Budget) or ("Line Type" = "Line Type"::"Both Budget and Billable") then
+                    "NS_Progress Billing Method" := "NS_Progress Billing Method"::"%";
                 //ProjectPro - end
-                //PRJCTPR-397.JS.1.0 04July2024-Start
-                if (Type = Type::Resource) and ("No." <> '') then
-                    if NSResRec.get("No.") then
-                        "Unit of Measure Code" := NSResRec."Base Unit of Measure";
-                //PRJCTPR-397.JS.1.0 04July2024-end
             end;
         }
 
@@ -531,19 +460,12 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             DataClassification = CustomerContent;
 
             trigger OnValidate();
-            var
-                NSJobs: record Job;  //PE-249.JS.1.0 09FEB2024
             begin
                 //ProjectPro - start
-                //PE-249.JS.1.0 09FEB2024
-                if NS_JobsSetup.GET() then;
-                if NSJobs.get("Job No.") then;
-                //if ("NS_Revenue Category" <> '') and ("Line Type" = "Line Type"::Budget) then
-                if ("NS_Revenue Category" <> '') and ("Line Type" = "Line Type"::Budget) and (NSJobs."NS_Mandate Revenue Category" = false) then
+                if ("NS_Revenue Category" <> '') and ("Line Type" = "Line Type"::Budget) then
                     ERROR(Text14021105);
 
-                //NS_JobsSetup.GET()
-                //PE-249.JS.1.0 09FEB2024 - end
+                NS_JobsSetup.GET;
 
                 if ("Line Type" = "Line Type"::Billable) and ("Job No." <> '') then
                     if (NS_JobsSetup."NS_Revenue Cat. Required Bud") and ("NS_Revenue Category" = '') then
@@ -578,20 +500,9 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             DataClassification = CustomerContent;
 
             trigger OnValidate();
-            var
-                NSJobSetup: Record "Jobs Setup";  //PE-273.JS.1.0 15MAR2024                
             begin
-                //PE-273.JS.1.0 15MAR2024 start
-                if NSJobSetup.get() then
-                    if NSJobSetup."NS_Enable Change Dim. on JPL" = false then
-                        //ProjectPro - start
-                        NS_ValidateShortcutDimCode(1, "NS_Shortcut Dimension 1 Code")
-                    else begin
-                        if rec."NS_Shortcut Dimension 1 Code" <> xrec."NS_Shortcut Dimension 1 Code" then begin
-                            NS_ValidateShortcutDimCode(1, "NS_Shortcut Dimension 1 Code");
-                        end;
-                    end;
-                //PE-273.JS.1.0 15MAR2024 end
+                //ProjectPro - start
+                NS_ValidateShortcutDimCode(1, "NS_Shortcut Dimension 1 Code");
                 //ProjectPro - end
             end;
         }
@@ -604,20 +515,9 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             DataClassification = CustomerContent;
 
             trigger OnValidate();
-            var
-                NSJobSetup: Record "Jobs Setup";  //PE-273.JS.1.0 15MAR2024            
             begin
-                //PE-273.JS.1.0 15MAR2024 start
-                if NSJobSetup.get() then
-                    if NSJobSetup."NS_Enable Change Dim. on JPL" = false then
-                        //ProjectPro - start
-                        NS_ValidateShortcutDimCode(2, "NS_Shortcut Dimension 2 Code")
-                    else begin
-                        if rec."NS_Shortcut Dimension 2 Code" <> xrec."NS_Shortcut Dimension 2 Code" then begin
-                            NS_ValidateShortcutDimCode(2, "NS_Shortcut Dimension 2 Code")
-                        end;
-                    end;
-                //PE-273.JS.1.0 15MAR2024 end        
+                //ProjectPro - start
+                NS_ValidateShortcutDimCode(2, "NS_Shortcut Dimension 2 Code");
                 //ProjectPro - end
             end;
         }
@@ -676,13 +576,8 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             Description = 'ProjectPro';
             TableRelation = "NS_Skill Class";
             DataClassification = CustomerContent;
-            //PE-68 Dk.1.0 10April2023 Start
-            ObsoleteReason = 'Replace with New Field by increasing code length from 10 to 20';
-            ObsoleteState = Pending;
-            ObsoleteTag = 'This field will remove in ProjectPro upcoming build 22.0.XX.49984';
-            //PE-68 Dk.1.0 10April2023 End
+
             trigger OnValidate();
-            var
             begin
                 //ProjectPro - start
                 //UpdateAllAmounts; //PRJ-9.SK.1.0 Commented as not found
@@ -692,26 +587,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                 //ProjectPro - end
             end;
         }
-        //PE-68.Dk.1.0 10April2023 Start
-        field(14021119; "NS_Skill Class New"; Code[20])
-        {
-            Caption = 'Skill Class';
-            Description = 'ProjectPro';
-            TableRelation = "NS_Skill Class";
-            DataClassification = CustomerContent;
-
-            trigger OnValidate();
-            var
-            begin
-
-
-                NS_UpdateLineAmount;
-                // NS_TempSkillClass := "NS_Skill Class";
-                NS_TempSkillClass := "NS_Skill Class New";
-
-            end;
-        }
-        //PE-68.Dk.1.0 10April2023 End
         field(14021150; "NS_Entry Type"; Option)
         {
             Caption = 'Entry Type';
@@ -817,12 +692,8 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             trigger OnValidate();
             begin
                 //ProjectPro - start
-                //FOR-8.RM.1.0 13Apr2023 start
-                // if "Line Type" = "Line Type"::Budget then
-                //     ERROR(Text14021109);
-                if ("Line Type" = "Line Type"::Budget) AND (Rec."NS_Progress Billing Method" <> Rec."NS_Progress Billing Method"::" ") then
+                if "Line Type" = "Line Type"::Budget then
                     ERROR(Text14021109);
-                //FOR-8.RM.1.0 13Apr2023 End
                 //ProjectPro - end
             end;
         }
@@ -1144,16 +1015,16 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
         //PRJ-568.AS.1.0 - START
         field(14021426; "NS_Get Linked Resource"; Boolean)
         {
-            Caption = 'Linked Resource'; //PE-323 AT 12july2024
-            Description = 'Linked Resource'; //PE-323 AT 12july2024
+            Caption = 'Get Linked Resource';
+            Description = 'Get Linked Resource';
             DataClassification = CustomerContent;
         }
 
         field(14021427; "NS_Linked Resource"; Code[20])
         {
-            CaptionML = ENU = 'Default Linked Resource', //PE-323 AT.01 03July2024
-                        ENC = 'Default Linked Resource';//PE-323 AT.01 03July2024
-            Description = 'Default Linked Resource';//PE-323 AT.01 03July2024
+            CaptionML = ENU = 'Linked Resource',
+                        ENC = 'Linked Resource';
+            Description = 'Linked Resource';
             TableRelation = Resource."No.";
             DataClassification = CustomerContent;
         }
@@ -1170,7 +1041,6 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             Caption = 'Labor Hours per Qty.';
             Description = 'Labor Hours per Qty.';
             DataClassification = CustomerContent;
-            DecimalPlaces = 2 : 4; //PRJ-1075.GK.1.0 13Dec2021
         }
         field(14021433; "NS_Resource Line No."; Integer)
         {
@@ -1298,86 +1168,8 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
 
         }
         //PRJ-973.GK.1.0 13Oct2021 end
-        field(14021489; "NS_Sub-Level to Job No."; Code[20])   //PRJ-1015.JS.1.0 10Oct2021
-        {
-            Caption = 'Sub-Level to Job No.';
-            Description = 'ProjectPro';
-            DataClassification = CustomerContent;
-            TableRelation = Job;
-            Editable = false;
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks Start
-        field(14021493; "NS_Old Qty."; Decimal)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Old Qty';
-        }
-        //PRJ-1058.GK.1.0 26Nov2021 Twinoaks End
-        //PRJ-1189.GK.1.0 06apr2022 start
-        field(14021494; "NS_Contract Forecast Date"; Date)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Contract Forecast Date';
-        }
-        //PRJ-1189.GK.1.0 06apr2022 end
-        //PRJ-1417.NK.1.0 31May2022 Start
-        field(14021496; "NS_Quote Category"; Code[30])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Quote Category';
-        }
-        field(14021499; "NS_UpdateUnitPrice"; boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'UpdateUnitPrice';
-            Editable = false;
-        }
-        //PRJ-1417.NK.1.0 31May2022 End
-        //PE-118.NC.1.0 03Aug2023 Start 
-        field(14021477; "NS_ProgessBillingNo"; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Progress Billing No.';
-        }
-        //PE-118.NC.1.0 03Aug2023 End 
-        //PE-142.NC.1.0 03Aug2023 Start
-        field(14021478; "NS_Change Order"; Boolean)
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Change Order';
-        }
-        //PE-142.NC.1.0 03Aug2023 End
 
-        //PRJCTPR-147.PS.2.0 20Sep2023 Start
 
-        field(14021479; "NS_Ext Reference No."; Code[20])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'External Reference No.';
-            Editable = false;
-        }
-        //PRJCTPR-147.PS.2.0 20Sep2023 End 
-
-        //PRJCTPR-191.HS.1.0 29sept2023 Start
-        field(14021121; "NS_Requisition No."; Integer)
-        {
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        field(14021120; "NS_Version No."; Integer)
-        {
-            DataClassification = CustomerContent;
-            editable = false;
-        }
-        //PRJCTPR-191.HS.1.0 29sept2023 End
-        //PE-221.NC.1.0 07Mar2024 Start
-        field(14021131; "NS_Job Quote No."; Code[20])
-        {
-            DataClassification = CustomerContent;
-            editable = false;
-            Caption = 'Job Quote No.';
-        }
-        //PE-221.NC.1.0 07Mar2024 End
     }
     keys
     {
@@ -1387,6 +1179,7 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
         key(Key8; "NS_Subcontract No.")
         {
         }
+
     }
 
     trigger OnDelete();
@@ -1420,22 +1213,13 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
             NS_JobTskLins.get(Rec."Job No.", "Job Task No.");
             Rec.Validate("NS_Shortcut Dimension 1 Code", NS_JobTskLins."Global Dimension 1 Code");
             Rec.Validate("NS_Shortcut Dimension 2 Code", NS_JobTskLins."Global Dimension 2 Code");
-            //PRJ-1015.JS.1.0 10Oct2021 - Start
-            If Jobs.Get(rec."Job No.") then begin
-                Rec."NS_Sub-Level to Job No." := Jobs."NS_Sub-Level to Job No.";
-                Rec."NS_Ext Reference No." := Jobs."No."; //PRJCTPR-147.PS.2.0 20Sep2023
-                Rec."NS_Job Quote No." := Jobs."No."; //PE-221.NC.1.0 07Mar2024
-
-            end;
-            //PRJ-1015.JS.1.0 10Oct2021 - Start             
         end;
         //PRJ-913.JS.1.0 15Sep2021-end  
 
         //PRJ-929.GK.1.0 22Sep2021 start
         if "Job No." <> '' then begin
             if Jobs.Get("Job No.") then
-                "NS_Contract Forecast Date" := Jobs."NS_Contract Date";//PRJ-1468.GK.1.0 12July2022
-            Validate("NS_Use Tax Percentage", Jobs."NS_Use Tax Percentage");
+                Validate("NS_Use Tax Percentage", Jobs."NS_Use Tax Percentage");
         end;
         //PRJ-929.GK.1.0 22Sep2021 end   
     end;
@@ -1443,9 +1227,7 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
     trigger OnModify();
     var
         Jobs: Record Job;
-        NS_JobSetup: Record "Jobs Setup"; //PE-273.JS.1.0 15MAR2024       
     begin
-        if NS_JobSetup.get() then;   //PE-273.JS.1.0 15MAR2024
         //ProjectPro - start
         Job.NS_JobTaskNoToAPO("Job Task No.", "NS_Activity Code", "NS_Process Code", "NS_Operation Code", "NS_Section Code");//PRJ-688.AM.1.0
         NS_TempNo := "No.";
@@ -1463,21 +1245,8 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
         //PRJ-913.JS.1.0 15Sep2021-Start
         If Rec."Line No." <> 0 then begin
             NS_JobTskLins.get(Rec."Job No.", "Job Task No.");
-            //PRJ-1015.JS.1.0 10Oct2021 - Start
-            //PE-273.JS.1.0 15MAR2024 - start
-            if NS_JobSetup."NS_Enable Change Dim. on JPL" = false then begin
-                Rec.Validate("NS_Shortcut Dimension 1 Code", NS_JobTskLins."Global Dimension 1 Code");
-                Rec.Validate("NS_Shortcut Dimension 2 Code", NS_JobTskLins."Global Dimension 2 Code");
-            end;
-            //PE-273.JS.1.0 15MAR2024 - end
-            //PRJ-1015.JS.1.0 10Oct2021 - Start
-            If Jobs.Get(rec."Job No.") then begin
-                Rec."NS_Sub-Level to Job No." := Jobs."NS_Sub-Level to Job No.";
-                Rec."NS_Ext Reference No." := Jobs."No."; //PRJCTPR-147.PS.2.0 20Sep2023
-                Rec."NS_Job Quote No." := Jobs."No."; //PE-221.NC.1.0 07Mar2024
-
-            end;
-            //PRJ-1015.JS.1.0 10Oct2021 - Start             
+            Rec.Validate("NS_Shortcut Dimension 1 Code", NS_JobTskLins."Global Dimension 1 Code");
+            Rec.Validate("NS_Shortcut Dimension 2 Code", NS_JobTskLins."Global Dimension 2 Code");
         end;
         //PRJ-913.JS.1.0 15Sep2021-end  
 
@@ -2527,72 +2296,5 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
         END;
         //ProjectPro - end
     end;
-
-    [IntegrationEvent(false, false)]//PRJ-1182.AS.2.0 ADDED EVENT
-    local procedure OnBeforeInsertAssembleyBOMComponents(Var NS_AssembleyBOMComponents: Record "NS_Assembley BOM Components")
-    begin
-    end;
-
-    [IntegrationEvent(false, false)]//PRJ-1182.AS.2.0 ADDED EVENT
-    local procedure OnAfterInsertAssembleyBOMComponents(Var NS_AssembleyBOMComponents: Record "NS_Assembley BOM Components")
-    begin
-    end;
-
-    //PE-301.NC.1.0 05Jun2024 Start
-    procedure NS_GetUOMfromItem(ItemNo: Code[20]): Code[20];
-    var
-        Item: Record Item;
-    begin
-        if Item.Get(ItemNo) then;
-        if "Line Type" = "Line Type"::Budget then begin
-            if Item."Purch. Unit of Measure" <> '' then
-                exit(Item."Purch. Unit of Measure");
-            if Item."Ns_Parent Item UOM" <> '' then
-                exit(Item."Ns_Parent Item UOM");
-            if Item."Base Unit of Measure" <> '' then
-                exit(Item."Base Unit of Measure");
-        end;
-        if "Line Type" = "Line Type"::"Both Budget and Billable" then begin
-            if Item."Ns_Parent Item UOM" <> '' then
-                exit(Item."Ns_Parent Item UOM");
-            if Item."Base Unit of Measure" <> '' then
-                exit(Item."Base Unit of Measure");
-        end;
-        if "Line Type" = "Line Type"::Billable then begin
-            if Item."Sales Unit of Measure" <> '' then
-                exit(Item."Sales Unit of Measure");
-            if Item."Ns_Parent Item UOM" <> '' then
-                exit(Item."Ns_Parent Item UOM");
-            if Item."Base Unit of Measure" <> '' then
-                exit(Item."Base Unit of Measure");
-        end;
-    end;
-
-    procedure NS_GetUOMItemBB(ItemNo: Code[20]; JobNo: Code[20]; JobPlanLine: Record "Job Planning Line"): Code[20];
-    var
-        Item: Record Item;
-        Job: Record Job;
-    begin
-        if Job.Get(JobNo) then;
-        if Item.Get(ItemNo) then;
-        if job."NS_Pur/Sale UOM for B&B JPL" then
-            if Item."Purch. Unit of Measure" <> '' then
-                exit(Item."Purch. Unit of Measure");
-        exit(JobPlanLine."Unit of Measure Code");
-    end;
-
-    procedure NS_GetUOMSaleItemBB(ItemNo: Code[20]; JobNo: Code[20]; JobPlanLine: Record "Job Planning Line"): Code[20];
-    var
-        Item: Record Item;
-        Job: Record Job;
-    begin
-        if Job.Get(JobNo) then;
-        if Item.Get(ItemNo) then;
-        if job."NS_Pur/Sale UOM for B&B JPL" then
-            if Item."Sales Unit of Measure" <> '' then
-                exit(Item."Sales Unit of Measure");
-        exit(JobPlanLine."Unit of Measure Code");
-    end;
-    //PE-301.NC.1.0 05Jun2024 End
 
 }

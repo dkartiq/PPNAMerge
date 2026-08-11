@@ -1,8 +1,7 @@
 pageextension 14021290 NS_PurchaseOrderArchive extends "Purchase Order Archive"
 {
     // version NAVW111.00.00.19846,NAVNA11.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Purchase Order Archive'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Responsibility Center")

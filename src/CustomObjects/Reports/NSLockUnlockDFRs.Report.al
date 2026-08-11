@@ -87,41 +87,6 @@ report 14021424 NS_LockUnlockDFRs
                     {
                         ApplicationArea = all;
                         Caption = 'DFR No.Filter';
-                        //PRJCTPR-105 Dk.1.0 Start
-                        trigger OnLookup(var Text: Text): Boolean
-                        var
-                            NumbFilter: Record NSNumberFilter;
-                            NumbFilter2: Record NSNumberFilter;
-                            JobPlanLine: Record "Job Planning Line";
-                            DFRCode2: Code[20];
-                        begin
-                            NumbFilter.Reset();
-                            NumbFilter.SetRange(Type, NumbFilter.Type::NS_DFR);
-                            NumbFilter.SetFilter("Document No.", '%1', NS_JobNo);
-                            if NumbFilter.FindFirst() then
-                                NumbFilter.DeleteAll();
-                            JobPlanLine.Reset();
-                            JobPlanLine.SetCurrentKey("Job No.", "NS_DFR No.");
-                            JobPlanLine.SetFilter("Job No.", '%1', NS_JobNo);
-                            if JobPlanLine.FindFirst() then
-                                repeat
-                                    if DFRCode2 <> JobPlanLine."NS_DFR No." then begin
-                                        NumbFilter2.Init();
-                                        NumbFilter2.Type := NumbFilter2.Type::NS_DFR;
-                                        NumbFilter2."Document No." := NS_JobNo;
-                                        NumbFilter2."No." := JobPlanLine."NS_DFR No.";
-                                        DFRCode2 := JobPlanLine."NS_DFR No.";
-                                        NumbFilter2.Insert();
-                                    end;
-                                until JobPlanLine.Next() = 0;
-                            Commit();
-                            NumbFilter.Reset();
-                            NumbFilter.SetRange(Type, NumbFilter.Type::NS_DFR);
-                            NumbFilter.SetFilter("Document No.", NS_JobNo);
-                            if PAGE.RUNMODAL(PAGE::"NSNumberFilter List", NumbFilter) = ACTION::LookupOK then
-                                DFRNoFilter := NumbFilter."No.";
-                        end;
-                        //PRJCTPR-105 Dk.1.0 End
                     }
                     field(StartDate; StartDate)
                     {
@@ -181,7 +146,6 @@ report 14021424 NS_LockUnlockDFRs
         Enddate: Date;
         UserSetup: Record "User Setup";
         DFRBool: Boolean;
-        NS_JobNo: Code[20];//PRJCTPR-105 Dk.1.0
 
 
 }

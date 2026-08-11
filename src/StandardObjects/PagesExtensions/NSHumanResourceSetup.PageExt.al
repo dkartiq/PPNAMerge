@@ -3,75 +3,46 @@ pageextension 14021294 NS_HumanResourceSetup extends "Human Resources Setup"
     // version NAVW111.00.00.23572,NSNA11.00
     //PRJ-553.SK.1.0 17FEB2021 Commented some code that is not useful
     //PRJ-924.JS.1.0 17Sep2021 | Correct Captions
-    //PRJ-1281.RM.1.0 08April2022 | Added a new field 
-    //PRJ-1301.RM.1.0 13April2022 | Added a fast tab
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Human Resources Setup'; //PRJ-1330.NK.1.0 25Apr2022
-    //PRJ-1403.RM.1.0 17May2022 | Modified caption
-    //PRJ-1547.RM.1.0 28July2022 | Added caption
-    //PRJ-1649.RP.1.0 07Dec2022 | Added two fields
-    //PE-19.RM.1.0 31Jan2023 | Added some fields
-    //PE-68.Dk.1.0 13june2023 | Added ToolTip
+
     layout
     {
         addafter(Numbering)
         {
-            group(NS_CrewTimesheet)//PRJ-1301.RM.1.0
-            {
-                //Caption = 'Crew Timesheet';//PRJ-1301.RM.1.0   //PRJ-1403.RM.1.0 commented
-                Caption = 'ProjectPro - Crew Timesheet'; //PRJ-1403.RM.1.0
-                field("NS_Custom Timesheet No. Series"; Rec."NS_Custom Timesheet No. Series")//PRJ-772.AS.1.0
-                {
-                    ApplicationArea = All;
-                    Caption = 'Crew Timesheet No. Series';   //PRJ-924.JS.1.0 17Sep2021                
-                    ToolTip = 'Crew Timesheet No. Series';
-                }
-                field(NS_TimeSheetCrewWorkDays; Rec.NS_TimeSheetCrewWorkDays)//PRJ-772.AS.1.0 //PRJ-1135.NK.1.0
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies Time Sheet Work Days';
-                }
-                field(NS_CustomTimesheetCrewWorkingHrs; Rec.NS_CustomTimesheetCrewWorkingHrs)//PRJ-772.AS.1.0 //PRJ-1135.NK.1.0
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies Time Sheet Work Hours';
-                }
-                field("NS_Timesheet Unique Line Nos."; Rec."NS_Timesheet Unique Line Nos.")  //PRJ-772.JS.1.0 26July2021
-                {
-                    Caption = 'Crew Timesheet Line No. Series';   //PRJ-924.JS.1.0 17Sep2021                
-                    ToolTip = 'Specifies the value of the Timesheet Unique Line Nos. field';
-                    ApplicationArea = All;
-                }
-                //PRJ-1281.RM.1.0 08April2022 START
-                field("NS_Activate Skill Class"; Rec."NS_Activate Skill Class")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Makes the “Skill Class” Mandatory on “Crew Time Sheet” for “Manager Time Sheet” approval.';  //PE-68.Dk.1.0 13june2023 
-                }
-                //PRJ-1281.RM.1.0 08April2022 END
 
-                //PE-158.AS.1.0 04SEPT2023 START
-                field(NS_EnableResourceSkillClass; Rec.NS_EnableResourceSkillClass)
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies Enable Use Only Resource Default Skill Class';
-                }
-                //PE-158.AS.1.0 04SEPT2023 END
-            }//PRJ-1301.RM.1.0 
+            field("NS_Custom Timesheet No. Series"; Rec."NS_Custom Timesheet No. Series")//PRJ-772.AS.1.0
+            {
+                ApplicationArea = All;
+                Caption = 'Crew Timesheet No. Series';   //PRJ-924.JS.1.0 17Sep2021                
+                ToolTip = 'Crew Timesheet No. Series';
+            }
+            field(NS_TimeSheetCrewWorkDays; NS_TimeSheetCrewWorkDays)//PRJ-772.AS.1.0
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies Time Sheet Work Days';
+            }
+            field(NS_CustomTimesheetCrewWorkingHrs; NS_CustomTimesheetCrewWorkingHrs)//PRJ-772.AS.1.0
+            {
+                ApplicationArea = All;
+                ToolTip = 'Specifies Time Sheet Work Hours';
+            }
+            field("NS_Timesheet Unique Line Nos."; Rec."NS_Timesheet Unique Line Nos.")  //PRJ-772.JS.1.0 26July2021
+            {
+                Caption = 'Crew Timesheet Line No. Series';   //PRJ-924.JS.1.0 17Sep2021                
+                ToolTip = 'Specifies the value of the Timesheet Unique Line Nos. field';
+                ApplicationArea = All;
+            }
 
 
 
             group(NS_ProjectPro)
             {
-                //Caption = 'ProjectPro';//PRJ-1301.RM.1.0 commented
-                // Caption = 'ProjectPro - Crew Timesheet';//PRJ-1301.RM.1.0  //PRJ-1403.RM.1.0 commented
-                //Caption = 'Timesheet'; //PRJ-1403.RM.1.0 //PRJ-1547.RM.1.0 commented
-                Caption = 'ProjectPro - Job Payroll'; //PRJ-1547.RM.1.0
+                Caption = 'ProjectPro';
                 field("NS_Adv Job Labor is Active"; Rec."NS_Advanced Job Labor isActive")
                 {
                     ApplicationArea = All;
                     Caption = 'Advanced Job Labor is Active';
-                    ToolTip = 'Enabling this will calculate the Labor Wage Rate defined on the “Employee” card as per the “Skill Class Code” and it will auto activate the “ Activate Skill Class Code” Boolean as True.';  //PE-68.Dk.1.0 13june2023 
+
+                    ToolTip = 'Advanced Job Labor is Active';
                 }
                 field("NS_Default Payroll Batch No."; Rec."NS_Default Payroll Batch No.")
                 {
@@ -117,9 +88,7 @@ pageextension 14021294 NS_HumanResourceSetup extends "Human Resources Setup"
                 }
             }
             group("NS_ProjectPro - Certified Payroll")
-
             {
-                Visible = false;//PE-348.PS.1.0 27July2024 
                 Caption = 'ProjectPro - Certified Payroll';
                 field("NS_Payroll Reg. Import XMLPort No"; Rec."NS_Payroll RegImportXMLPortNo")
                 {
@@ -179,36 +148,6 @@ pageextension 14021294 NS_HumanResourceSetup extends "Human Resources Setup"
 
                     ToolTip = 'WH 347 Address 2';
                 }
-                field("NS_OBD No."; Rec."NS_OBD No.") //PRJ-1649.RP.1.0 07Dec2022 Start
-                {
-                    ApplicationArea = All;
-                    Caption = 'OBD No.';
-                    ToolTip = 'OBD No.';
-                }
-                field("NS_Expires Date"; Rec."NS_Expires Date")
-                {
-                    ApplicationArea = All;
-                    Caption = 'Expires';
-                    ToolTip = 'Expires';
-                }
-                //PRJ-1649.RP.1.0 07Dec2022 End
-                //PE-19.RM.1.0 31Jan2023 start
-                field("NS_Company ID"; Rec."NS_Company ID")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Company ID';
-                }
-                field(NS_Picture; Rec.NS_Picture)
-                {
-                    ApplicationArea = Basic, Suite;
-                    ToolTip = 'Specifies the picture that has been set up for the company, such as a company logo.';
-
-                    trigger OnValidate()
-                    begin
-                        CurrPage.SaveRecord();
-                    end;
-                }
-                //PE-19.RM.1.0 31Jan2023 End
             }
         }
     }
@@ -281,12 +220,10 @@ pageextension 14021294 NS_HumanResourceSetup extends "Human Resources Setup"
                     FileManagement.BLOBExport(TempBlobCodeunit, PathFilename, true);//PRJ-9.SK.1.0 Commented
                 end;
             }
-
         }
     }
 
     var
-        NS_UserSetup: Record "User Setup";
     //PathFileName: Label 'ProjectPro WH-347 Template.xlsx';
 
     /* Documentation

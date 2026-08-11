@@ -35,19 +35,11 @@ page 14021375 "NS_Employee Wage Rates"
                     ToolTip = 'Specifies the Line No.';
                     Visible = false;
                 }
-                field("Skill Class"; '')//PE-68 DK.1.0 10April2023
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the Skill Class';
-                    Visible = false;//PE-68 DK.1.0 10April2023
-                }
-                //PE-68 Dk.1.0 10April2023 Start
-                field("Skill Class New"; Rec."NS_Skill Class New")
+                field("Skill Class"; Rec."NS_Skill Class")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Skill Class';
                 }
-                //PE-68 Dk.1.0 10April2023 End
                 field("Work Type Code"; Rec."NS_Work Type Code")
                 {
                     ApplicationArea = All;

@@ -28,14 +28,6 @@ page 14021267 "NS_ Job Crew List"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the _Crew Code field';
                 }
-                //PRJCTPR-343.JS.1.0 21MAR2024 - Start
-                field("NS_Crew Description"; Rec."NS_Crew Description")
-                {
-                    caption = 'Description';
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Description field.';
-                }
-                //PRJCTPR-343.JS.1.0 21MAR2024 - end
                 field("NS_Lead Person"; Rec."NS_Lead Person")
                 {
                     ApplicationArea = All;
@@ -114,13 +106,6 @@ page 14021267 "NS_ Job Crew List"
                     end;
                     //PRJ-991.GK.2.0 22Oct2021 end
                 }
-                //PE-152.JS.1.0 21Aug2023 - Start
-                field("NS_Default Crew"; Rec."NS_Default Crew")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Specifies the value of the Default Crew field.';
-                }
-                //PE-152.JS.1.0 21Aug2023 - end
             }
         }
     }

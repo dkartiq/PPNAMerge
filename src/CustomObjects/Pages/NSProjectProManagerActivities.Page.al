@@ -1,5 +1,6 @@
 page 14021354 "NS_ProjectProManagerActivities"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -10,9 +11,6 @@ page 14021354 "NS_ProjectProManagerActivities"
     // +------------------------------------------------------------
     //PRJ-476.AS.1.0 15JAN 2021 Done code to show Subcontracts with statue order and their correct numbering
     //PRJ-477.AS.1.0 18JAN 2021 Done code to show Expired Vendor Insaurances and their correct numbering
-    //PRJ-1710.RM.1.0 23Nov2022 | Added a tooltip
-    //PRJ-1711.RP.1.0 24Nov2022 | Added a tooltip
-    //PE-168.HS.1.0 18Nov2023| Added New CueGroup
     Caption = 'Activities';
     PageType = CardPart;
     SourceTable = "NS_ProjectPro Job Cue";
@@ -34,22 +32,11 @@ page 14021354 "NS_ProjectProManagerActivities"
                 {
                     ApplicationArea = All;
                     Caption = 'Open Job Backlog';
+
                     ToolTip = 'Open Job Backlog';
                     DrillDown = true;
                     DrillDownPageID = "Job List";
-                    visible = false;//PRJ-1262.GK.1.0 03June2022
                 }
-                //PRJ-1262.GK.1.0 03June2022 start
-                field("NS_Open Job Backlog"; Rec."NS_Open Job Backlog")
-                {
-                    // ToolTip = 'Specifies the value of the Open Job Backlog field.'; //PRJ-1710.RM.1.0 commented
-                    //ToolTip = 'Open Job Backlog specifies the value which is the difference between the �Total Contract Price including Master & Sub Levels Jobs� minus �Total Invoiced Price including Master & the Sub Levels Jobs�. Open Job Backlog Batch can be run from the Job card & on the ProjectPro Manager Role Center. Note: Open Job Backlog calculation includes Jobs only with status �Open or Planning�, in addition to this �Manager Job Status� should be "Planning".'; //PRJ-1710.RM.1.0  //PRJ-1711.RP.1.0 01Dec2022 commented
-                    // ToolTip = 'Open Job backlog Specifies the Value which is the difference between the "Total Contract Price including Master & Sub Levels Jobs" minus "Total Invoiced Price including Master & the Sub Levels Jobs". Open Job Backlog Batch can be run from the Job card & on the ProjectPro Manager Role Center. Note: Open Job Backlog calculation includes Jobs only with status "Open or Planning", in addition to this "Manager Job Status" should be "Running."';//PRJ-1711.RP.1.0 01Dec2022 //PRJ-1710.RM.1.0 06dec//PRJCTPR-122.PS.1.0 20Jun2023  //PRJCTPR-163.PS.1.0 20Jul2023 Commented 
-                    ToolTip = ' Specifies the difference between the "Total Contract Price” and the "Total Invoiced Price” including Master & the Sub Levels Jobs. The value under this field will get updated only when the “Open Job Backlog Batch” is run.  Note: Open Job Backlog calculation includes Jobs only with the status "Open” or “Planning", and in addition to this the "Manager Job Status" should also be set to "Planning."'; //PRJCTPR-163.PS.1.0 20Jul2023
-                    ApplicationArea = All;
-                    DrillDown = true;
-                }
-                //PRJ-1262.GK.1.0 03June2022 end
                 field("PP_Retention Invoices Due"; Rec."NS_Retention Invoices Due")
                 {
                     ApplicationArea = All;
@@ -77,28 +64,6 @@ page 14021354 "NS_ProjectProManagerActivities"
                         PAGE.RUN(PAGE::"Customer Ledger Entries", CLE);
                     end;
                 }
-                //PRJCTPR-147.NK.1.0 Start 09Aug2023
-                //  addafter("PP_Retention Invoices Due")
-
-                field("OpenChangeRequest"; Rec."OpenChangeRequest")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Open Change Request';
-                    DrillDownPageID = "Job List";
-                    Visible = true;
-
-                    trigger OnDrillDown();
-                    var
-                        NS_Jobs: Record Job;
-                    begin
-                        NS_Jobs.RESET();
-                        NS_Jobs.SETRANGE(Status, NS_Jobs.Status::Open);
-                        NS_Jobs.SETRANGE("NS_Job Class", NS_Jobs."NS_Job Class"::"Change Request");
-                        PAGE.RUN(PAGE::"Job List", NS_Jobs);
-                    end;
-                }
-
-                //PRJCTPR-147.NK.1.0 End 09Aug2023
 
                 actions
                 {
@@ -133,11 +98,11 @@ page 14021354 "NS_ProjectProManagerActivities"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS();
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
-                                JobRec.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
-                                JobRec.CalculateInvoiceBilled(JobRec, InvoiceBilled, true);
+                                JobRec.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true, WorkDate());
+                                JobRec.CalculateInvoiceBilled(JobRec, InvoiceBilled, true, WorkDate());
                                 JobRec.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                 CLEAR("Sub-LevelsCost");
                                 CLEAR("Sub-LevelsPrice");
@@ -173,11 +138,11 @@ page 14021354 "NS_ProjectProManagerActivities"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS();
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
-                                JobCalc.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
-                                JobCalc.CalculateInvoiceBilled(JobRec, InvoiceBilled, true);
+                                JobCalc.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true, WorkDate());
+                                JobCalc.CalculateInvoiceBilled(JobRec, InvoiceBilled, true, WorkDate());
                                 if ActualCostToDate[3] > InvoiceBilled[3] then
                                     JobRec.MARK(true);
                             until JobRec.NEXT() = 0;
@@ -282,27 +247,6 @@ page 14021354 "NS_ProjectProManagerActivities"
                     }
                 }
             }
-            //PE-168.HS.1.0 18Nov2023 Start
-            cuegroup("NS_DailyJobLog")
-            {
-                Caption = 'Job Daily Log';
-                Visible = true;
-                field(NS_DailyJobLogs; NS_DailyJobLogs)
-                {
-                    ApplicationArea = all;
-                    Caption = 'Job Daily Log List';
-                    DrillDown = true;
-                    trigger OnDrillDown()
-                    var
-                        NS_DailyJobLg: Record "NS_Daily Job Log";
-                    begin
-                        NS_DailyJobLg.Reset();
-                        NS_DailyJobLg.SetRange(Status, NS_DailyJobLg.Status::Open);
-                        page.Run(page::"NS_Daily Job Log List", NS_DailyJobLg);
-                    end;
-                }
-            }
-            //PE-168.HS.1.0 18Nov2023 End
         }
     }
 
@@ -318,12 +262,12 @@ page 14021354 "NS_ProjectProManagerActivities"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings
-                JobCalc.NS_CalculateActualCostToDate(JobCalc, ActualCostToDate, true);
-                JobCalc.CalculateInvoiceBilled(JobCalc, InvoiceBilled, true);
+                JobCalc.NS_CalculateActualCostToDate(JobCalc, ActualCostToDate, true, WorkDate());
+                JobCalc.CalculateInvoiceBilled(JobCalc, InvoiceBilled, true, WorkDate());
                 if ActualCostToDate[3] > InvoiceBilled[3] then
                     "NS_Job CostExceedsContBillings" += 1;
 
@@ -392,46 +336,26 @@ page 14021354 "NS_ProjectProManagerActivities"
             repeat
                 //Find "Running" top-level jobs, calculate Backlog as Contract Total Value less Total Invoice Billed
                 if Job."NS_Sub-Level to Job No." = '' then
-                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                         Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                         Backlog += Job."NS_Budgeted Price (LCY)";
                         Backlog += Job."SLsUsage(Price)"(Job);
-                        Job.CalculateInvoiceBilled(Job, InvoiceBilled, true);
+                        Job.CalculateInvoiceBilled(Job, InvoiceBilled, true, WorkDate());
                         Backlog -= InvoiceBilled[3];
                     end;
             until Job.NEXT() = 0;
-        //PRJCTPR-147.NK.1.0 start 09Aug2023
-        NS_Jobs.RESET();
-        NS_Jobs.SETRANGE(Status, NS_Jobs.Status::Open);
-        NS_Jobs.SETRANGE("NS_Job Class", NS_Jobs."NS_Job Class"::"Change Request");
-        if NS_Jobs.FindSet() then begin
-            Rec.OpenChangeRequest := NS_Jobs.Count;
-        end;
-        //PRJCTPR-147.NK.1.0  end 09aug2023
-
-        //PE-168.HS.1.0 18Nov2023 Start
-        NS_DailyJobLogs := 0;
-        NS_DailyJobLog.Reset();
-        NS_DailyJobLog.SetRange(Status, NS_DailyJobLog.Status::Open);
-        if NS_DailyJobLog.FindSet() then
-            NS_DailyJobLogs := NS_DailyJobLog.Count;
-        //PE-168.HS.1.0 18Nov2023 End
     end;
 
     trigger OnOpenPage();
-    var
-        NSConfPersonalizationMgt: Codeunit "Conf./Personalization Mgt.";//PRJ-1686.GK.4.0 18Dec2022
     begin
-        NSConfPersonalizationMgt.RaiseOnOpenRoleCenterEvent();//PRJ-1686.GK.4.0 18Dec2022
         RESET();
         if not GET() then begin
             INIT();
             INSERT();
         end;
 
-        //Rec.SETFILTER("NS_Date Filter", '%1..%2', 19000101D, CALCDATE('CM')); //PRJ-1131.NK.1.0  //PRJCTPR-36.SD.1.0 line commented
-        Rec.SETFILTER("NS_Date Filter", '%1..%2', 19000101D, CALCDATE('<CM>')); //PRJ-1131.NK.1.0  //PRJCTPR-36.SD.1.0 line addeds
-        Rec.SETFILTER("NS_Date Filter2", '<%1', WORKDATE); //PRJ-1131.NK.1.0
+        SETFILTER("NS_Date Filter", '%1..%2', 19000101D, CALCDATE('CM'));
+        SETFILTER("NS_Date Filter2", '<%1', WORKDATE);
         JobsSetup.GET();
     end;
 
@@ -452,13 +376,10 @@ page 14021354 "NS_ProjectProManagerActivities"
         TotalBudgetedCost: Decimal;
         CalcPctComplete: Decimal;
         ProjectedCost: Decimal;
-        NS_Jobs: Record Job;//PRJCTPR-147.NK.1.0 09Aug2023
         OpenSubcontracts: Integer;
 
         ExpiringInsurance: Integer;
 
         Backlog: Decimal;
-        NS_DailyJobLogs: Integer;  //PE-168.HS.1.0 18Nov2023
-        NS_DailyJobLog: Record "NS_Daily Job Log";  //PE-168.HS.1.0 18Nov2023
 }
 

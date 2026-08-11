@@ -2,9 +2,7 @@ report 14021291 "NS_UpdateRecRevSummDetailJFW"
 {
     //CTSI-274.MS.1.0
     //PRJ-830.GK.1.0 06Sep2021|Changes in code.
-    //PRJ-1041.AS.1.0 Done Code to flow Dimensions of Job Table to Recognized Rev Summary Table
-    //PRJ-1435.JS.1.0 06JUN2022 | Correct Code
-    //PRJ-1463.NK.0.0 06Jul2022 | Added Code
+
     ProcessingOnly = true;
     Caption = 'Update Rec.Rev.Summ.Detail JFW';
     UseRequestPage = false;
@@ -121,7 +119,6 @@ report 14021291 "NS_UpdateRecRevSummDetailJFW"
                 GrosRevVar: Decimal;
                 GrossProfitVar: Decimal;
                 RevenueRecSummaryTab2: Record NS_RevenueRecSummaryTab;
-                jobtbl: Record Job;//PE-160.AS.1.0
             begin
                 GrosRevVar := 0;
                 GrossProfitVar := 0;
@@ -129,11 +126,11 @@ report 14021291 "NS_UpdateRecRevSummDetailJFW"
                 RevenueRecSummaryVoid.Reset();
                 RevenueRecSummaryVoid.SetCurrentKey("NS_Entry No.");
                 RevenueRecSummaryVoid.SetRange("NS_Job No.", MasterJobno);
-                // RevenueRecSummaryVoid.setfilter(NS_Posted, '%1', false); //PE-136.JS.1.0 29MAY2024
+                RevenueRecSummaryVoid.setfilter(NS_Posted, '%1', false);
                 //RevenueRecSummaryVoid.SetFilter("True-Up Posted", '%1', false);//CTSI-286 rollback
                 RevenueRecSummaryVoid.SetFilter(NS_Voided, '%1', false);
                 RevenueRecSummaryVoid.Setrange("NS_Posting Date", AsofDateForecast);
-                RevenueRecSummaryVoid.SetFilter("NS_Entry Type", '%1|%2|%3', RevenueRecSummaryVoid."NS_Entry Type"::JFW, RevenueRecSummaryVoid."NS_Entry Type"::Finance, RevenueRecSummaryVoid."NS_Entry Type"::Batch); //PE-271.PS.1.0 19March2024 Added on Extra filter 
+                RevenueRecSummaryVoid.SetFilter("NS_Entry Type", '%1', RevenueRecSummaryVoid."NS_Entry Type"::JFW);
                 if RevenueRecSummaryVoid.FindSet() then
                     repeat
                         RevenueRecSummaryVoid.NS_Voided := true;
@@ -151,7 +148,6 @@ report 14021291 "NS_UpdateRecRevSummDetailJFW"
                 if jobTable.get(RevenueRecSummaryTab_N."NS_Job No.") then begin
                     RevenueRecSummaryTab_N."NS_Global Dimension 1 Code" := jobTable."Global Dimension 1 Code";
                     RevenueRecSummaryTab_N."NS_Global Dimension 2 Code" := jobTable."Global Dimension 2 Code";
-                    RevenueRecSummaryTab_N."NS_Dimension Set ID" := RevenueRecSummaryTab_N.GetDimensionNoFromJob(jobTable."No.");//PRJ-1041.AS.1.0 
                 end;
                 //PRJ-950.AS.1.0 - end
 
@@ -223,12 +219,6 @@ report 14021291 "NS_UpdateRecRevSummDetailJFW"
                 RevenueRecSummaryTab_N."NS_Billings to Date" := BillingToDate;//PRJ-830
                 RevenueRecSummaryTab_N."NS_Over Billings" := Overbilling;//PRJ-830
                 RevenueRecSummaryTab_N."NS_Under Billings" := Underbilling;//PRJ-830
-                //PRJ-1463.NK.0.0 06Jul2022 Start
-                if jobTable."NS_POC Method" = jobTable."NS_POC Method"::"NS_Markup%" then
-                    RevenueRecSummaryTab_N."NS_EstMarkup%" := jobTable."NS_POC Method Value";
-                if jobTable."NS_POC Method" = jobTable."NS_POC Method"::"NS_Gross Margin%" then
-                    RevenueRecSummaryTab_N."NS_EstGrossProfit%" := jobTable."NS_POC Method Value";
-                //PRJ-1463.NK.0.0 06Jul2022 End
                 RevenueRecSummaryTab_N.Insert();
                 //PRJ-658.AS.1.0 04MAY2021 changed variables to RevenueRecSummaryTab_N = RevenueRecSummaryTab - END
             end;
@@ -309,11 +299,9 @@ report 14021291 "NS_UpdateRecRevSummDetailJFW"
             repeat
                 //PRJ-830.GK.1.0 06Sep2021 start
                 //SumOfTotalCostsUsed := round(SumOfTotalCostsUsed + JobLedEntry."Total Cost (LCY)", Jobsetup."NS_Forecast Amount Rounding"); // Line Comment
-                //SumOfTotalCostsUsed := round(SumOfTotalCostsUsed + ABS(JobLedEntry."Total Price (LCY)"), Jobsetup."NS_Forecast Amount Rounding"); //New line Added //PRJ-1435.JS.1.0 06JUN2021 Line Commented
-                SumOfTotalCostsUsed := round(SumOfTotalCostsUsed + JobLedEntry."Total Price (LCY)", Jobsetup."NS_Forecast Amount Rounding"); //New line Added  //PRJ-1435.JS.1.0 06JUN2021 Line added
+                SumOfTotalCostsUsed := round(SumOfTotalCostsUsed + ABS(JobLedEntry."Total Price (LCY)"), Jobsetup."NS_Forecast Amount Rounding"); //New line Added
             //PRJ-830.GK.1.0 06Sep2021 end
             until JobLedEntry.Next() = 0;
-        SumOfTotalCostsUsed := ABS(SumOfTotalCostsUsed);  //PRJ-1435.JS.1.0 06JUN2021 Line added
         exit(SumOfTotalCostsUsed);
 
     end;

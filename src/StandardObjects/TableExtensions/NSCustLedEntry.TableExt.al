@@ -1,8 +1,7 @@
 tableextension 14021104 NS_CustLedEntry extends "Cust. Ledger Entry"
 {
     // version NAVW111.00.00.20783,NAVNA11.00.00.20783,PPNA11.00
-    //PE-209.HS.1.0 7Dec2023 | Obselete Bal. to Ledger No.
-
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     fields
     {
         field(14021100; "NS_Job No."; Code[20])
@@ -13,13 +12,7 @@ tableextension 14021104 NS_CustLedEntry extends "Cust. Ledger Entry"
         }
         field(14021129; "NS_Bal. Ledger No."; Code[20])
         {
-            //PE-209.HS.1.0 7Dec2023  Start
-            // Caption = 'Bal. Ledger No.';// commented
-            Caption = 'Bal. Ledger No. (Obsolete)';
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in next build';
-            ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-            //PE-209.HS.1.0 7Dec2023  End
+            Caption = 'Bal. Ledger No.';
             Description = 'ProjectPro';
             TableRelation = Customer;
             DataClassification = CustomerContent;
@@ -81,87 +74,16 @@ tableextension 14021104 NS_CustLedEntry extends "Cust. Ledger Entry"
             Description = 'ProjectPro';
             DataClassification = CustomerContent;
         }
-        field(14021152; "NS_Retention Ledger Code"; code[20]) //MHNA-8.NC.1.0 29Jun2023 |Increase length 10 to 20
+        // >> Upgrade
+        //field(14021152; "NS_Retention Ledger Code"; code[10])
+        field(14021152; "NS_Retention Ledger Code"; code[20])
+        // << Upgrade
         {
             DataClassification = CustomerContent;
             Caption = 'Retention Ledger Code';
             Description = 'ProjectPro';
             TableRelation = "NS_Retention Ledger Code".NS_Code;
         }
-        //PRJCTPR-11.GK.1.0 20Apr2023 start
-        field(14021153; "NS_Lien Waiver Type"; Option)
-        {
-            Caption = 'Lien Waiver Type';
-            Editable = true;
-            DataClassification = CustomerContent;
-            OptionCaption = ' ,Conditional-Progress,Unconditional-Progress,Conditional-Final,Unconditional-Final';
-            OptionMembers = " ","Conditional-Progress","Unconditional-Progress","Conditional-Final","Unconditional-Final";
-        }
-        field(14021154; "NS_Lien Waiver Signed Date"; Date)
-        {
-            Editable = true;
-            DataClassification = CustomerContent;
-            Caption = 'Lien Waiver Signed Date';
-        }
-        field(14021155; "NS_Lien Waiver Print Status"; Option)
-        {
-            Caption = 'Lien Waiver Print Status';
-            Editable = true;
-            DataClassification = CustomerContent;
-            OptionCaption = ' ,Reprint,Printed';
-            OptionMembers = " ",Reprint,Printed;
-        }
-        field(14021156; "NS_Lien Waiver Amount"; Decimal)
-        {
-            Caption = 'Lien Waiver Amount';
-            DataClassification = CustomerContent;
-            Editable = true;
-        }
-        field(14021157; "NS_Lien Waiver Payment"; Decimal)
-        {
-            Caption = 'Lien Waiver Payment';
-            DataClassification = CustomerContent;
-            Editable = true;
-        }
-        field(14021158; "NS_Lien Waiver Work Type"; Text[50])
-        {
-            Caption = 'Lien Waiver Work Type';
-            DataClassification = CustomerContent;
-            Editable = true;
-        }
-        //PRJCTPR-11.GK.1.0 20Apr2023 end
-
-        //PE-200.AS.1.0 24SEPT2023 START
-        field(14021159; "NS_Draw No."; Code[25])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'Draw No.';
-        }
-        //PE-200.AS.1.0 24SEPT2023 END
-
-        //PE-200.AS.9.0 START
-        field(14021160; "NS_PaywhenPaid"; Boolean)
-        {
-            Caption = 'Pay when paid';
-            DataClassification = CustomerContent;
-        }
-        //PE-200.AS.9.0 END
-        //PE-302.JS.1.0 29MAY24-Start
-        field(14021311; "NS_AppliesToDocument Type"; Enum "Gen. Journal Document Type")
-        {
-            Caption = 'AppliesToDocument Type';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document Type" is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        field(14021312; "NS_AppliesToDocument No."; code[20])
-        {
-            Caption = 'AppliesToDocument No.';
-            DataClassification = CustomerContent;
-            Description = '"Applies To Document No." is required to resolve posting issue with other ISV running with ProjectPro on same environment';
-            Editable = false;
-        }
-        //PE-302.JS.1.0 29MAY24-end 
 
     }
 

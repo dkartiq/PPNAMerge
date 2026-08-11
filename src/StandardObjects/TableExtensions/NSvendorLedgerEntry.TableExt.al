@@ -2,7 +2,6 @@ tableextension 14021106 NS_VendorLedgerEntry extends "Vendor Ledger Entry"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
     //PRJ-290.AS.1.0 09SEPT20 Changed Captions
-    //PE-209.HS.1.0 7Dec2023 | Obselete Bal. to Ledger No.
     fields
     {
         field(14021100; "NS_Job No."; Code[20])
@@ -22,13 +21,7 @@ tableextension 14021106 NS_VendorLedgerEntry extends "Vendor Ledger Entry"
         }
         field(14021129; "NS_Bal. Ledger No."; Code[20])
         {
-            //PE-209.HS.1.0 7Dec2023 Start
-            // Caption = 'Bal. Ledger No.'; // commented
-            Caption = 'Bal. Ledger No. (Obsolete)';
-            ObsoleteState = Pending;
-            ObsoleteReason = 'Will be removed in next build';
-            ObsoleteTag = 'ProjectPro upcoming release 22.0.XXX.00';
-            //PE-209.HS.1.0 7Dec2023  End
+            Caption = 'Bal. Ledger No.';
             DataClassification = CustomerContent;
             Description = 'ProjectPro';
             TableRelation = Vendor;
@@ -112,13 +105,6 @@ tableextension 14021106 NS_VendorLedgerEntry extends "Vendor Ledger Entry"
             OptionMembers = " ",Progress,Final;
             DataClassification = CustomerContent;
         }
-        //PE-200.AS START
-        field(14021155; "NS_PaywhenPaid"; Boolean)
-        {
-            Caption = 'Pay when paid';
-            DataClassification = CustomerContent;
-        }
-        //PE-200.AS END
         field(14021300; "NS_Subcontract No."; Code[20])
         {
             Caption = 'Subcontract No.';

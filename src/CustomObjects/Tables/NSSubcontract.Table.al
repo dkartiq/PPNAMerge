@@ -1,5 +1,6 @@
 table 14021300 NS_Subcontract
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -19,7 +20,6 @@ table 14021300 NS_Subcontract
     //PRJ-533.AS.1.0 Added code & field
     //PRJ-676.RS.1.0 6June2021 | Custom Report Creation for V17
     //PRJ-715.RS.1.0 28May2021 | Dimensions not carrying over from Subcontract Card to PO
-    //PRJ-773.SK.1.0 | 24JUNE2021 | Added events
     //PRJ-676.RS.1.0 6June2021 | Custom Report Creation for V17
     //PRJ-751.RS.1.0 14June21 | Cloned of TMF: 10: Product Change: Change the names associated with the Manager Job Status on Job Card (88)//PRJ-751.AS.1.0 06July2021 Changes roll back , as it was wrong
     //PRJ-817.JS.1.0�04Aug2021 | Assign value from subcondetails to purchase line for work unit and work unit of measure
@@ -27,18 +27,13 @@ table 14021300 NS_Subcontract
     //PRJ-889.GK.1.0 13Sep2021 | Update Progress Payment Disable field
     //PRJ-913.JS.1.0 16Sep2021 | code added
     //PRJ-906.GK.1.0 05Oct2021 | Code added
-    //PRJ-1039.JS.1.0 12Nov2021 | code added
-    //PRJ-999.JS.1.0 02Nov2021 | Code added
-    //PRJ-1350.AS.1.0 Done code give error message while creating purchase document when status equals planning not order
-    //PRJ-1459.NK.1.0 16Jun2022 | Add Code
-    //PRJCTPR-110.JS.1.0 09MAY2023 | Add new event 
+
     Caption = 'Subcontract';
-    DataCaptionFields = "NS_No.", NS_Description, "NS_Subcon Class";    //PRJCTPR-294.JS.1.0 24JAN2024 
+    DataCaptionFields = "NS_No.", NS_Description;
     //DrillDownPageID = "NS_Subcontract List(Formatted)"; //PRJ-676.RS.1.0 6June2021
     //LookupPageID = "NS_Subcontract List(Formatted)";//PRJ-676.RS.1.0 6June2021
     DrillDownPageID = "NS_Subcontract List";
     LookupPageID = "NS_Subcontract List";
-
 
     fields
     {
@@ -93,23 +88,14 @@ table 14021300 NS_Subcontract
             var
                 Job_L: Record Job;
             begin
-                if Job_L.get("NS_Job No.") then Begin   //PRJ-999.JS.1.0 02Nov2021 line modofied
+                if Job_L.get("NS_Job No.") then
                     "NS_Person Responsible" := Job_L."Person Responsible";
-                    //PRJ-999.JS.1.0 02Nov2021-Start
-                    Rec."NS_Global Dimension 1 Code" := Job_L."Global Dimension 1 Code";
-                    Rec."NS_Global Dimension 2 Code" := Job_L."Global Dimension 2 Code";
-                    Rec."NS_Dimension Set ID" := GetDimensionNoFromJob("NS_Job No.");
-                    //"NS_Dimension Set ID" := 33;
-                    //PRJ-999.JS.1.0 02Nov2021-end
-
-                    Rec."NS_Field Manager" := Job_L."NS_Field Manager";//PE-211.AS
-                end;    //PRJ-999.JS.1.0 02Nov2021 line added                                      
             end;
             //PRJ-383.AS.1.0 12OCT2020  - end
         }
         field(12; "NS_Creation Date"; Date)
         {
-            Caption = 'Contract Date'; //PRJCTPR-263.PS.1.0 Changes Caption Only
+            Caption = 'Creation Date';
             DataClassification = CustomerContent;
         }
         field(13; "NS_Starting Date"; Date)
@@ -437,15 +423,6 @@ table 14021300 NS_Subcontract
             Caption = 'Buy-from Contact';
             DataClassification = CustomerContent;
         }
-        //PE-211.AS start
-        field(14021488; "NS_Field Manager"; Code[50])
-        {
-            Caption = 'Field Manager';
-            TableRelation = "User Setup";
-            DataClassification = CustomerContent;
-            Editable = false;
-        }
-        //PE-211.AS end
         field(1004; "NS_Planning Date Filter"; Date)
         {
             Caption = 'Planning Date Filter';
@@ -643,7 +620,7 @@ table 14021300 NS_Subcontract
             //OptionCaption = ',Estimating,Quoting,Submitted,Verbal App,Approved,Running,Hold,Completed,Billed,Paid,Closed';//PRJ-751.RS.1.0 14June21 Sequence Changed
             //OptionMembers = ,Estimating,Quoting,Submitted,"Verbal App",Approved,Running,Hold,Completed,Billed,Paid,Closed;//PRJ-751.RS.1.0 14June21 Sequence Changed
             //PRJ-751.AS.1.0 06July2021 Changes Roll back as it was wrong . All commented done by RS- end
-            OptionCaption = ',Estimating,Quoting,Verbal App,Approved,Planning,Running,Hold,Completed,Billed,Paid,Closed';//PRJ-751.AS.1.0 06July2021 Previous chages done again  //PE-177.DK.3.0 23Jan2024 Make changes Approvel to Approved
+            OptionCaption = ',Estimating,Quoting,Verbal App,Approval,Planning,Running,Hold,Completed,Billed,Paid,Closed';//PRJ-751.AS.1.0 06July2021 Previous chages done again
             OptionMembers = ,Estimating,Quoting,"Verbal App",Approval,Planning,Running,Hold,Completed,Billed,Paid,Closed;//PRJ-751.AS.1.0 06July2021 Previous chages done again
             DataClassification = CustomerContent;
             //PRJ-826.GK.1.0 17Aug2021 start
@@ -849,9 +826,8 @@ table 14021300 NS_Subcontract
         {
             Caption = 'Subcontract Class';
             Description = '//PRJ-533.AS.1.0';
-            OptionCaption = ' ,Master Subcontract,Change Order,Change Request';
-            // OptionMembers = " ","Master Job","Change Order"; //PE-177.DK.1.0 10Nov2023
-            OptionMembers = " ","Master Job","Change Order","Change Request"; //PE-177.DK.1.0 10Nov2023
+            OptionCaption = ' ,Master Subcontract,Change Order';
+            OptionMembers = " ","Master Job","Change Order";
             DataClassification = CustomerContent;
         }
         field(14021302; "NS_Budgeted Cost Quantity"; Decimal)
@@ -894,24 +870,6 @@ table 14021300 NS_Subcontract
             FieldClass = FlowFilter;
             TableRelation = "NS_Retention Ledger Code".NS_Code;
         }
-        //PE-23.NC.1.0 26May2023 Start
-        field(14021335; "NS_Change Order Commit Amt."; Decimal)
-        {
-            AutoFormatType = 1;
-            CalcFormula = Sum("Detailed Vendor Ledg. Entry"."Amount (LCY)" WHERE("NS_Subcontract No." = FIELD("NS_No."),
-                                                                      "Entry Type" = FILTER("Initial Entry"), "NS_Job No." = field("NS_Job No."), "Document Type" = filter(Invoice)));
-            Caption = 'Change Order Commitment';
-            Description = 'Flow Fields';
-            Editable = false;
-            FieldClass = FlowField;
-        }
-        //PE-23.NC.1.0 26May2023 End
-        //PE-177.DK.3.0 23Jan2024 Start
-        field(14021336; NS_MergedtoChangeOrderNo; Code[20])
-        {
-            DataClassification = CustomerContent;
-        }
-        //PE-177.DK.3.0 23Jan2024 End
     }
 
     keys
@@ -931,7 +889,6 @@ table 14021300 NS_Subcontract
         key(Key5; "NS_Last SubcontForSubcontList", "NS_No.")
         {
         }
-        key(Key6; "NS_Job No.") { }//PE-23.NC.1.0 16May2023
     }
 
     fieldgroups
@@ -993,7 +950,6 @@ table 14021300 NS_Subcontract
         Licdate: date;//PRJ-516
         NoOfDays: Text;//PRJ-516
         EnvInfoCU: Codeunit "Environment Information";//PRJ-516
-        jbrec2: Record job;//PE-211.AS
     begin
         //PRJ-516.ms.1.0 start
         if EnvInfoCU.IsSaaS() then begin
@@ -1004,21 +960,7 @@ table 14021300 NS_Subcontract
             //     Message('Your free trial is going to expire in %1 days.Please contact your administrator.', NoOfDays);
             // if WorkDate > Licdate then
             //     Error('Your free trial has expired.Please contact your administrator.');
-
-            //PRJ-1686.GK.1.0 26Oct2022
-            //PRJ-1641.JS.1.0 23SEP2022 - Start		
-            // Licdate := DMY2Date(30, 11, 2022);
-            // Licdate := DMY2Date(31, 12, 2022);
-            // Licdate := DMY2Date(31, 1, 2023);
-            // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-            // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-            //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-            // if WorkDate > Licdate then
-            //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-            OnCheckPPLicenseExpire();   //PRJ-1641.JS.1.0 23SEP2022 line commented
-            //PRJ-1641.JS.1.0 23SEP2022 - end 
-            //PRJ-1686.GK.1.0 26Oct2022           
-
+            OnCheckPPLicenseExpire();
         end;
         //PRJ-516.ms.1.0 end
         if "NS_No." = '' then begin
@@ -1028,24 +970,11 @@ table 14021300 NS_Subcontract
         "NS_Subcon Class" := "NS_Subcon Class"::"Master Job";//PRJ-533
         NS_SetDimensions("NS_No.", "NS_Job No.");
         SubcontractLinks.NS_CreateSubcontractLinks("NS_No.", "NS_Sub-LeveltoSubcontractNo.");
-
-        //PE-211.AS start
-        if Rec."NS_Job No." <> '' then
-            if jbrec2.get(Rec."NS_Job No.") then
-                Rec."NS_Field Manager" := jbrec2."NS_Field Manager";
-        //PE-211.AS end
     end;
 
     trigger OnModify();
-    var
-        jbrec: Record job;//PE-211.AS
     begin
         "NS_Last Date Modified" := TODAY;
-        //PE-211.AS start
-        if Rec."NS_Job No." <> '' then
-            if jbrec.get(Rec."NS_Job No.") then
-                Rec."NS_Field Manager" := jbrec."NS_Field Manager";
-        //PE-211.AS end
     end;
 
     trigger OnRename();
@@ -1700,6 +1629,11 @@ table 14021300 NS_Subcontract
         Licdate: date;//PRJ-516
         NoOfDays: Text;//PRJ-516
         EnvInfoCU: Codeunit "Environment Information";//PRJ-516
+                                                      // >> Upgrade
+        Go: Boolean;
+        DeliverGoods: Boolean;
+        IsHandled: Boolean;
+    // << Upgrade
 
     begin
         //PRJ-516.ms.1.0 start
@@ -1711,31 +1645,13 @@ table 14021300 NS_Subcontract
             //     Message('Your free trial is going to expire in %1 days.Please contact your administrator.', NoOfDays);
             // if WorkDate > Licdate then
             //     Error('Your free trial has expired.Please contact your administrator.');
-            //PRJ-1686.GK.1.0 26Oct2022 start
-            //PRJ-1641.JS.1.0 23SEP2022 - Start		
-            // Licdate := DMY2Date(30, 11, 2022);
-            // Licdate := DMY2Date(31, 12, 2022);
-            // Licdate := DMY2Date(31, 1, 2023);
-            // EVALUATE(NoOfDays, FORMAT(Licdate - WorkDate));
-            // if (WorkDate > (Licdate - 15)) and (WorkDate <= Licdate) then
-            //     Message('Your ProjectPro license is going to expire in %1 days.Please contact your administrator.', NoOfDays);
-            // if WorkDate > Licdate then
-            //     Error('Your ProjectPro license has expired.Please contact your administrator.');
-            OnCheckPPLicenseExpire();   //PRJ-1641.JS.1.0 23SEP2022 line commented
-            //PRJ-1641.JS.1.0 23SEP2022 - end
-            //PRJ-1686.GK.1.0 26Oct2022 end
-
+            OnCheckPPLicenseExpire();
         end;
         //PRJ-516.ms.1.0 end
         //PRJ-273 VT1.0 22-05-20
         if not NS_CheckIfLineAvailbleForPO(SubcontractHeader) then
             Error('Purchase Document %1 already created', SubcontractHeader."NS_Purchase Document No.");
         ////PRJ-273 VT1.0 22-05-20
-
-        //PRJ-1350.AS.1.0 START
-        if SubcontractHeader.NS_Status = SubcontractHeader.NS_Status::Planning then
-            Error('Status must be equal to Order in Subcontract: No.=%1. Current value is Planning', SubcontractHeader."NS_No.");
-        //PRJ-1350.AS.1.0 END
         JobsSetup.GET();
         Subcontract.GET(SubcontractHeader."NS_No.");
         SubcontractHeader.CALCFIELDS("NS_Budgeted Cost (LCY)");
@@ -1752,10 +1668,17 @@ table 14021300 NS_Subcontract
                     end;
                 SubcontractHeader."NS_Budgeted Cost (LCY)" > 0:
                     begin
-
+                        // >> Upgrade
+                        // >> 001
+                        if "NS_Job No." = '' then
+                            SubcontractPurchaseParameter.SetParemeter(true);
+                        // << 001
+                        // << Upgrade
                         if ACTION::OK = SubcontractPurchaseParameter.RUNMODAL then begin
-                            SubcontractPurchaseParameter.NS_GetResults(PurchaseDocumentType, PurchaseDocumentNo);
-
+                            // >> Upgrade
+                            //SubcontractPurchaseParameter.NS_GetResults(PurchaseDocumentType, PurchaseDocumentNo);
+                            SubcontractPurchaseParameter.NS_GetResults(PurchaseDocumentType, PurchaseDocumentNo, DeliverGoods);
+                            // << Upgrade
                             PurchaseDocumentType := PurchaseDocumentType + 1;
                         end else begin
                             CLEAR(SubcontractPurchaseParameter);
@@ -1780,6 +1703,24 @@ table 14021300 NS_Subcontract
                 PurchSetup.GET();
                 if PurchaseHeader."No." = '' then
                     case PurchaseHeader."Document Type" of
+                        // >> Upgrade
+                        PurchaseHeader."Document Type"::Quote:
+                            begin
+                                PurchSetup.TestField("Quote Nos.");
+                                NoSeriesRelationship.Reset;
+                                NoSeriesRelationship.SetRange(Code, PurchSetup."Quote Nos.");
+                                if NoSeriesRelationship.Count > 1 then begin
+                                    if NoSeriesMgt.SelectSeries(PurchSetup."Quote Nos.", xRec."NS_No. Series", PurchaseHeader."No. Series") then
+                                        PurchaseDocumentNo := NoSeriesMgt.GetNextNo(PurchaseHeader."No. Series", WorkDate(), true)
+                                    else
+                                        Error(Text0002);
+                                end else
+                                    NoSeriesMgt.InitSeries(PurchSetup."Quote Nos.", '', WorkDate(), PurchaseDocumentNo, PurchaseHeader."No. Series");
+
+                                PurchSetup.TestField("Posted Receipt Nos.");
+                                PurchaseHeader."Receiving No. Series" := PurchSetup."Posted Receipt Nos.";
+                            end;
+                        // << Upgrade
                         PurchaseHeader."Document Type"::Order:
                             begin
                                 PurchSetup.TESTFIELD("Order Nos.");
@@ -1847,16 +1788,20 @@ table 14021300 NS_Subcontract
                 PurchaseHeader."NS_Retention Percent" := SubcontractHeader."NS_Retention Percent";
                 PurchaseHeader."NS_Retention Date" := CALCDATE(JobsSetup."NS_Sales Retention Period", PurchaseHeader."Document Date");
                 PurchaseHeader."Currency Code" := "NS_Currency Code";
+                // >> Upgrade
+                IsHandled := false;
+                OnNS_MakePurchaseDocument1(SubcontractHeader, PurchaseHeader, IsHandled, FirstJobNo, SubconDtl, Job, DeliverGoods);
                 //PurchaseHeader."Dimension Set ID" := SubcontractHeader."NS_Dimension Set ID";//PRJ-715.RS.1.0 28May2021
-                PurchaseHeader.VALIDATE("NS_Job No.", SubcontractHeader."NS_Job No.");
-                //PurchaseHeader."Dimension Set ID" := SubcontractHeader."NS_Dimension Set ID";//PRJ-715.RS.1.0 28May2021  //PRJCTPR-199.JS.1.0 11DEC2023 line commented
+                if IsHandled then
+                    // << Upgrade
+                    PurchaseHeader.VALIDATE("NS_Job No.", SubcontractHeader."NS_Job No.");
+                // >> Upgrade
+                OnNS_MakePurchaseDocument2(SubcontractHeader, PurchaseHeader);
+
+                // << Upgrade
+                PurchaseHeader."Dimension Set ID" := SubcontractHeader."NS_Dimension Set ID";//PRJ-715.RS.1.0 28May2021
                 PurchaseHeader."NS_Progress Payment Enable" := JobsSetup."NS_Progress Payment Enable"; //PRJ-889.GK.1.0 13Sep2021
                 PurchaseHeader.Validate("NS_Retention Percent", SubcontractHeader."NS_Retention Percent"); //PRJ-906.GK.1.0 05Oct2021
-
-                //PRJ-999.JS.1.0 12Nov2021 Start
-                // PurchaseHeader."Shortcut Dimension 1 Code" := SubcontractHeader."NS_Global Dimension 1 Code"; //PRJCTPR-199.JS.1.0 11DEC2023 line commented
-                // PurchaseHeader."Shortcut Dimension 2 Code" := SubcontractHeader."NS_Global Dimension 2 Code"; //PRJCTPR-199.JS.1.0 11DEC2023 line commented
-                //PRJ-999.JS.1.0 12Nov2021 end                
                 PurchaseHeader.INSERT();
             end;//PRJ-274 VT1.0 22-05-20
         end;
@@ -1882,18 +1827,45 @@ table 14021300 NS_Subcontract
 
         //Update Purchase Header
         PurchaseHeader.VALIDATE("NS_Retention Amount");
-        PurchaseHeader."NS_Job No." := FirstJobNo;
+        // PurchaseHeader."NS_Job No." := FirstJobNo;// #152
         PurchaseHeader."NS_Subcontract No." := SubcontractHeader."NS_No.";
+        // >> Upgrade
+        OnNS_MakePurchaseDocument3(PurchaseHeader);
+
+        // << Upgrade
         PurchaseHeader.MODIFY();
 
         //Update Subcontract Header with new Purchase Document No.
         SubcontractHeader."NS_Purchase Document No." := PurchaseHeader."No.";
         SubcontractHeader."NS_Purchase Document Type" := PurchaseHeader."Document Type";//PRJ-274 VT1.0 22-05-20
+                                                                                        // >> Upgrade
+        case PurchaseHeader."Document Type" of
+            PurchaseHeader."Document Type"::Order:
+                SubcontractHeader.NS_Status := SubcontractHeader.NS_Status::Order;
+            PurchaseHeader."Document Type"::Quote:
+                SubcontractHeader.NS_Status := SubcontractHeader.NS_Status::Quote;
+        end;
+        // << Upgrade
         SubcontractHeader.MODIFY();
-
+        // >> Upgrade
+        OnNS_MakePurchaseDocument4(SubcontractHeader);
+        // << Upgrade
         //Show appropriate completion message
-        if CONFIRM(Text0004 + PurchaseHeader."No." + Text0006, true) then
-            PAGE.RUN(PAGE::"NS_Subcontract PO", PurchaseHeader);
+        // >> Upgrade
+        // if CONFIRM(Text0004 + PurchaseHeader."No." + Text0006, true) then
+        //     PAGE.RUN(PAGE::"NS_Subcontract PO", PurchaseHeader);
+        Go := false;
+        Go := Confirm(StrSubstNo(Text0004, PurchaseHeader."Document Type") + PurchaseHeader."No." + Text0006, true);
+        if Go then
+            case PurchaseHeader."Document Type" of
+                PurchaseHeader."Document Type"::Order:
+                    PAGE.RunModal(PAGE::"NS_Subcontract PO", PurchaseHeader);
+                PurchaseHeader."Document Type"::Quote:
+                    PAGE.RunModal(PAGE::"Purchase Quote", PurchaseHeader);
+                PurchaseHeader."Document Type"::Invoice:
+                    PAGE.RunModal(PAGE::"Purchase Invoice", PurchaseHeader);
+            end;
+        // << Upgrade
     end;
 
     procedure NS_MakePurchaseDocumentLines(PurchaseHeader: Record "Purchase Header"; SubcontractHeader: Record NS_Subcontract);
@@ -1906,7 +1878,6 @@ table 14021300 NS_Subcontract
         LineNumber: Integer;
         HeaderDimSet: Integer;
         T_27: Record Item;//PRJ-383.N.S.1.0 16Sep2020
-        NS_Jobs: Record Job;   //PRJ-1039.JS.1.0  12Nov2021
     begin
         JobsSetup.GET();
 
@@ -1933,6 +1904,11 @@ table 14021300 NS_Subcontract
                     PurchaseLine."Document No." := PurchaseHeader."No.";
                     LineNumber := LineNumber + 10000;
                     PurchaseLine."Line No." := LineNumber;
+                    // >> Upgrade
+                    // >> 002
+                    PurchaseLine.Insert(true);
+                    // << 002
+                    // << Upgrade
                     case NS_Type of
                         NS_Type::Resource:
                             PurchaseLine.Type := PurchaseLine.Type::Resource;
@@ -1941,6 +1917,9 @@ table 14021300 NS_Subcontract
                         NS_Type::"G/L Account":
                             PurchaseLine.Type := PurchaseLine.Type::"G/L Account";
                     end;
+                    // >> Upgrade
+                    OnNS_MakePurchaseDocumentLines1(SubcontractDetail, PurchaseLine);
+                    // << Upgrade
                     if PurchaseLine.Type.AsInteger() <> 0 then begin
                         PurchaseLine.VALIDATE(Type);
                         PurchaseLine."No." := "NS_No.";
@@ -1950,24 +1929,18 @@ table 14021300 NS_Subcontract
                         else
                             PurchaseLine."Unit of Measure" := "NS_Unit of Measure Code";
                         PurchaseLine.VALIDATE("No.");
-                        PurchaseLine."NS_Segment Code" := SubcontractDetail."NS_Segment Code"; // PRJCTPR-237 AT.0.1 12Dec2023
                         //PRJ-383.N.S.1.0 16Sep2020 Start
                         if (NS_Type = NS_Type::"G/L Account") OR (NS_Type = NS_Type::Resource) then
                             PurchaseLine."Unit of Measure Code" := "NS_Unit of Measure Code";
                         if NS_Type = NS_Type::Item then begin
                             If "NS_No." <> '' then
                                 T_27.Get("NS_No.");
-                            // PurchaseLine."Unit of Measure Code" :=T_27."Base Unit of Measure"; //PE-301.NC.1.0 14Jun2024 Block
-                            PurchaseLine."Unit of Measure Code" := SubcontractDetail."NS_Unit of Measure Code"; //PE-301.NC.1.0 14Jun2024
+                            PurchaseLine."Unit of Measure Code" := T_27."Base Unit of Measure";
                         end;
                         //PRJ-383.N.S.1.0 16Sep2020 End                  
                         PurchaseLine."Expected Receipt Date" := "NS_Starting Date";
                         PurchaseLine.Description := NS_Description;
-                        //PRJ-1459.NK.1.0 16Jun2022 Start
-                        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::"Credit Memo" then
-                            PurchaseLine.Quantity := -1 * SubcontractDetail.NS_Quantity
-                        else //PRJ-1459.NK.1.0 16Jun2022 End
-                            PurchaseLine.Quantity := NS_Quantity;
+                        PurchaseLine.Quantity := NS_Quantity;
                         //PRJ-206.MS.1.0 code comment start
                         //if ((NS_Type = NS_Type::"G/L Account") or (NS_Type = NS_Type::Resource)) and
                         //   ("NS_Unit of Measure Code" = JobsSetup."NS_Subcontract Default UOM") then begin
@@ -1987,8 +1960,6 @@ table 14021300 NS_Subcontract
                         //end else begin
                         //PRJ-206.MS.1.0 code comment end
                         //Process normal lines
-                        // PurchaseLine."Job Task No." := "NS_Job Task No.";  //PRJCTPR-199.JS.1.0 11DEC2023 line //PRJCTPR-263.PS.1.0 28Dec2023 Only filed moved 
-                        PurchaseLine.validate("Job Task No.", SubcontractDetail."NS_Job Task No."); //PRJCTPR-199.JS.1.0 11DEC2023 line added //PRJCTPR-263.PS.1.0 28Dec2023 Only filed moved
                         PurchaseLine."Unit of Measure" := "NS_Unit of Measure Code";  //do it again
                         // PurchaseLine."Direct Unit Cost" := "NS_Unit Cost"; //PPAL-74.SK.1.0 Commented
                         PurchaseLine.VALIDATE("Direct Unit Cost", "NS_Unit Cost"); //PPAL-74.SK.1.0 Added
@@ -2023,49 +1994,31 @@ table 14021300 NS_Subcontract
                         PurchaseLine."Job No." := "NS_Job No.";
                         PurchaseLine."NS_Subcontract No." := "NS_Subcontract No.";
                         PurchaseLine."NS_Job Cost Category" := "NS_Job Cost Category";
+                        PurchaseLine."Job Task No." := "NS_Job Task No.";
                         if PurchaseHeader."NS_Retention Percent" > 0 then
                             PurchaseLine."NS_Retention Applies" := true;
                         //PurchaseLine.VALIDATE("Unit of Measure Code", "NS_Unit of Measure Code");//PRJ.302.MS.1.0 comment
                     end;
-                    //PRJ-1039.JS.1.0 12Nov2021-Start
-                    If NS_Jobs.get(PurchaseLine."Job No.") then begin
-                        if NS_Jobs."NS_Sub-Level to Job No." = '' then
-                            PurchaseLine."NS_Sub-Level to Job No." := NS_Jobs."No."
-                        else
-                            PurchaseLine."NS_Sub-Level to Job No." := NS_Jobs."NS_Sub-Level to Job No.";
-                    end;
-                    //PRJ-1039.JS.1.0 12Nov2021-end
-                    //PRJCTPR-380.DK.3.0 need  to Uncomment Start
-                    //PRJ-1308.GK.1.0 05May2022 start-Comment 
-                    PurchaseLine."Shortcut Dimension 1 Code" := SubcontractDetail."NS_Shortcut Dimension 1 Code";   //PRJ-999.JS.1.0 12Nov2021   line added
-                    PurchaseLine."Shortcut Dimension 2 Code" := SubcontractDetail."NS_Shortcut Dimension 2 Code";   //PRJ-999.JS.1.0 12Nov2021   line added                   
-                    PurchaseLine."Dimension Set ID" := SubcontractDetail."NS_Dimension Set ID";
-                    //PRJ-1308.GK.1.0 05May2022 end 
-                    //PRJCTPR-380.DK.3.0 need  to Uncomment End
-
-                    // //PRJ-999.JS.1.0 12Nov2021-Code Blocked - Start
-                    // //PRJ-913.JS.1.0 13Sep2021-Start                        
-                    // if JobTask1.GET(PurchaseLine."Job No.", PurchaseLine."Job Task No.") then
-                    //     IF ((JobTask1."Global Dimension 1 Code" <> '') and (JobTask1."Global Dimension 2 Code" <> '')) then begin
-                    //         PurchaseLine."Shortcut Dimension 1 Code" := JobTask1."Global Dimension 1 Code";
-                    //         PurchaseLine."Shortcut Dimension 2 Code" := JobTask1."Global Dimension 2 Code";
-                    //         PurchaseLine."Dimension Set ID" := BillingHeader.NS_GetDimensionNoFromJobTask(PurchaseLine."Job No.", PurchaseLine."Job Task No.");
-                    //     end;
-                    // //PRJ-913.JS.1.0 13Sep2021-end
-                    // //PRJ-999.JS.1.0 12Nov2021-Code Blocked - end
-
+                    PurchaseLine."Dimension Set ID" := "NS_Dimension Set ID";
+                    //PRJ-913.JS.1.0 13Sep2021-Start                        
+                    if JobTask1.GET(PurchaseLine."Job No.", PurchaseLine."Job Task No.") then
+                        IF ((JobTask1."Global Dimension 1 Code" <> '') and (JobTask1."Global Dimension 2 Code" <> '')) then begin
+                            PurchaseLine."Shortcut Dimension 1 Code" := JobTask1."Global Dimension 1 Code";
+                            PurchaseLine."Shortcut Dimension 2 Code" := JobTask1."Global Dimension 2 Code";
+                            PurchaseLine."Dimension Set ID" := BillingHeader.NS_GetDimensionNoFromJobTask(PurchaseLine."Job No.", PurchaseLine."Job Task No.");
+                        end;
+                    //PRJ-913.JS.1.0 13Sep2021-end 
                     PurchaseLine."Job Planning Line No." := "NS_Job Planning Line No.";
                     //PurchaseLine."NS_JMP Document No." := SubcontractHeader."NS_No.";	//PRJ-383.N.S.1.0 16Sep2020 Code comment
                     PurchaseLine."NS_JMP Document No." := ''; //PRJ-383.N.S.1.0 16Sep2020
                     PurchaseLine."NS_Work Units" := "NS_Work Units"; //PRJ-817.JS.1.0�04Aug2021
                     PurchaseLine."NS_Work Unit of Measure" := "NS_Work Unit of Measure"; //PRJ-817.JS.1.0�04Aug2021
-                    PurchaseLine.validate("Location Code", SubcontractDetail."NS_Location Code");  //PRJ-1374.RM.1.0
-                    //PRJ-773.SK.1.0 Start
-                    OnBeforeInsertPurchLinesFromSubconLines(PurchaseLine, SubcontractDetail);
-                    //PRJ-773.SK.1.0 End
-
-                    PurchaseLine.INSERT();
-                    OnAfterInsertPurchLinesFromSubconLines(PurchaseLine, SubcontractDetail); //PRJCTPR-110.JS.1.0 05MAY2023
+                                                                                         // >> Upgrade
+                                                                                         // >> 002
+                                                                                         //PurchaseLine.INSERT(TRUE);
+                    PurchaseLine.Modify(true);
+                    // << 002
+                    // << Upgrade
                     "NS_PO No." := PurchaseLine."Document No.";//PRJ-274 VT1.0 22-05-20
                     "NS_PO Line No." := PurchaseLine."Line No.";//PRJ-274 VT1.0 22-05-20
                     Modify();
@@ -2493,13 +2446,8 @@ table 14021300 NS_Subcontract
             NS_Status := NS_Status::Planning;
             "NS_Subcon Class" := "NS_Subcon Class"::"Change Order";
             "NS_Person Responsible" := Rec."NS_Person Responsible";
-            //PE-23.NC.1.0 09May2023 start
-            //SubcontractNew_ChangeOrd.VALIDATE("NS_Global Dimension 1 Code", Rec."NS_Global Dimension 1 Code");
-            //SubcontractNew_ChangeOrd.VALIDATE("NS_Global Dimension 2 Code", Rec."NS_Global Dimension 2 Code");
-            SubcontractNew_ChangeOrd."NS_Global Dimension 1 Code" := Rec."NS_Global Dimension 1 Code";
-            SubcontractNew_ChangeOrd."NS_Global Dimension 2 Code" := Rec."NS_Global Dimension 2 Code";
-            SubcontractNew_ChangeOrd."NS_Dimension Set ID" := Rec."NS_Dimension Set ID";
-            //PE-23.NC.1.0 09May2023 End
+            VALIDATE("NS_Global Dimension 1 Code", Rec."NS_Global Dimension 1 Code");
+            VALIDATE("NS_Global Dimension 2 Code", Rec."NS_Global Dimension 2 Code");
             NS_Blocked := NS_Blocked::" ";
             "NS_Sub-LeveltoSubcontractNo." := Rec."NS_No.";
             "NS_Job No." := rec."NS_Job No.";
@@ -2553,237 +2501,31 @@ table 14021300 NS_Subcontract
     local procedure OnCheckPPLicenseExpire()
     begin
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocument1(var SubcontractHeader: Record NS_Subcontract; var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean; var FirstJobNo: Code[20]; var SubconDtl: Record "NS_Subcontract Lines"; var Job: Record Job; var DeliverGoods: Boolean)
+    begin
+    end;
 
     [IntegrationEvent(false, false)]
-    local procedure OnBeforeInsertPurchLinesFromSubconLines(Var PurchaseLines: Record "Purchase Line"; var SubcontractLines: Record "NS_Subcontract Lines")
+    local procedure OnNS_MakePurchaseDocument2(var SubcontractHeader: Record NS_Subcontract; var PurchaseHeader: Record "Purchase Header")
     begin
     end;
-
-    //PE-177.DK.1.0 10Nov2023 Start
-    procedure NS_SubConChangeRequest(NS_Subcon: Record NS_Subcontract);
-    var
-        SubcontractNew_ChangeReqL: Record NS_Subcontract;
-        NS_JobsSetupL: Record 315;
-        SubConCardL: Page "NS_Subcontract Card";
-        NS_SubConLine: Record "NS_Subcontract Lines";
-        NS_SubConLineNew: Record "NS_Subcontract Lines";
-        NS_DocumentNo: Code[20];
-    begin
-
-        NS_JobsSetupL.Get();
-        //WITH NewJob DO BEGIN
-        //  repeat
-        NS_DocumentNo := '';
-        SubcontractNew_ChangeReqL.Init();
-        //SubcontractNew_ChangeReq.SetCopyJob(TRUE);
-        SubcontractNew_ChangeReqL."NS_No." := NS_GetNextRequestOrderNo();
-        SubcontractNew_ChangeReqL."NS_No. Series" := '';
-        SubcontractNew_ChangeReqL.Insert(true);
-        NS_DocumentNo := SubcontractNew_ChangeReqL."NS_No.";
-        SubcontractNew_ChangeReqL."NS_Search Description" := NS_Subcon."NS_Search Description";
-        SubcontractNew_ChangeReqL.NS_Description := NS_Subcon.NS_Description;
-        SubcontractNew_ChangeReqL."NS_Description 2" := NS_Subcon."NS_Description 2";
-        SubcontractNew_ChangeReqL."NS_Buy-from Vendor No." := NS_Subcon."NS_Buy-from Vendor No.";
-        SubcontractNew_ChangeReqL.VALIDATE("NS_Buy-from Vendor No.");
-        SubcontractNew_ChangeReqL."NS_Creation Date" := TODAY;
-        SubcontractNew_ChangeReqL."NS_Starting Date" := 0D;
-        SubcontractNew_ChangeReqL."NS_Ending Date" := 0D;
-        SubcontractNew_ChangeReqL.NS_Status := SubcontractNew_ChangeReqL.NS_Status::Planning;
-        SubcontractNew_ChangeReqL."NS_Person Responsible" := NS_Subcon."NS_Person Responsible";
-        SubcontractNew_ChangeReqL."NS_Global Dimension 1 Code" := NS_Subcon."NS_Global Dimension 1 Code";
-        SubcontractNew_ChangeReqL."NS_Global Dimension 2 Code" := NS_Subcon."NS_Global Dimension 2 Code";
-        SubcontractNew_ChangeReqL."NS_Dimension Set ID" := NS_Subcon."NS_Dimension Set ID";
-        SubcontractNew_ChangeReqL.NS_Blocked := SubcontractNew_ChangeReqL.NS_Blocked::" ";
-        SubcontractNew_ChangeReqL."NS_Sub-LeveltoSubcontractNo." := NS_Subcon."NS_No.";
-        SubcontractNew_ChangeReqL."NS_Job No." := NS_Subcon."NS_Job No.";
-        SubcontractNew_ChangeReqL."NS_Subcon Class" := "NS_Subcon Class"::"Change Request";
-        SubcontractNew_ChangeReqL."NS_Language Code" := NS_Subcon."NS_Language Code";
-        SubcontractNew_ChangeReqL."NS_Buy-from Name" := NS_Subcon."NS_Buy-from Name";
-        SubcontractNew_ChangeReqL."NS_Buy-from Address" := NS_Subcon."NS_Buy-from Address";
-        SubcontractNew_ChangeReqL."NS_Buy-from Address 2" := NS_Subcon."NS_Buy-from Address 2";
-        SubcontractNew_ChangeReqL."NS_Buy-from City" := NS_Subcon."NS_Buy-from City";
-        SubcontractNew_ChangeReqL.NS_County := NS_Subcon.NS_County;
-        SubcontractNew_ChangeReqL."NS_Buy-from Post Code" := NS_Subcon."NS_Buy-from Post Code";
-        SubcontractNew_ChangeReqL."NS_No. Series" := NS_Subcon."NS_No. Series";
-        SubcontractNew_ChangeReqL."NS_Buy-fromCountry/RegionCode" := NS_Subcon."NS_Buy-fromCountry/RegionCode";
-        SubcontractNew_ChangeReqL."NS_Currency Code" := NS_Subcon."NS_Currency Code";
-        SubcontractNew_ChangeReqL."NS_Buy-from Contact No." := NS_Subcon."NS_Buy-from Contact No.";
-        SubcontractNew_ChangeReqL."NS_Buy-from Contact" := NS_Subcon."NS_Buy-from Contact";
-        SubcontractNew_ChangeReqL."NS_Invoice Currency Code" := NS_Subcon."NS_Invoice Currency Code";
-        SubcontractNew_ChangeReqL."NS_Exch. Calculation (Cost)" := NS_Subcon."NS_Exch. Calculation (Cost)";
-        SubcontractNew_ChangeReqL."NS_Exch. Calculation (Price)" := NS_Subcon."NS_Exch. Calculation (Price)";
-        SubcontractNew_ChangeReqL."NS_AllowSchedule/ContractLines" := NS_Subcon."NS_AllowSchedule/ContractLines";
-        SubcontractNew_ChangeReqL."NS_Subcontract Status Date" := 0D;
-        SubcontractNew_ChangeReqL."NS_Estimated Start Date" := 0D;
-        SubcontractNew_ChangeReqL."NS_Estimated Completion Date" := 0D;
-        SubcontractNew_ChangeReqL."NS_Completion Date" := 0D;
-        SubcontractNew_ChangeReqL.Modify();
-        if CONFIRM('Do you wish to copy Master Subcontract Lines ?') then begin
-            NS_SubConLine.Reset();
-            NS_SubConLine.SetRange("NS_Subcontract No.", NS_Subcon."NS_No.");
-            if NS_SubConLine.FindFirst() then
-                repeat
-                    NS_SubConLineNew.init();
-                    NS_SubConLineNew.TransferFields(NS_SubConLine);
-                    NS_SubConLineNew."NS_Subcontract No." := NS_DocumentNo;
-                    NS_SubConLineNew."NS_Line No." := NS_SubConLine."NS_Line No.";
-                    NS_SubConLineNew."NS_PO No." := ''; //PE-177.DK.4.0 02Feb2024
-                    NS_SubConLineNew."NS_PO Line No." := 0; //PE-177.DK.4.0 02Feb2024 
-                    NS_SubConLineNew.Insert();
-                until NS_SubConLine.next() = 0;
-        end;
-
-        if CONFIRM('Subcontract No. ' + SubcontractNew_ChangeReqL."NS_No." + ' has been created. Go to new Subcontract?') then begin
-            SubConCardL.SetRecord(SubcontractNew_ChangeReqL);
-            SubConCardL.Run();
-        end;
-    end;
-
-    local procedure NS_MyProcedure(OldJobNo: Code[20]; NewJobNo: Code[20])
-    var
-        NS_JPL: Record "Job Planning Line";
-        NS_NewJPL: Record "Job Planning Line";
-        NS_JPL2: Record "Job Planning Line";
-        NS_LiLineNo: Integer;
-    begin
-        NS_JPL.Reset();
-        NS_JPL.SetRange("Job No.", OldJobNo);
-        if NS_JPL.FindSet() then
-            repeat
-                NS_JPL2.Reset();
-                NS_JPL2.SetRange("Job No.", NewJobNo);
-                if NS_JPL2.FindLast() then
-                    NS_LiLineNo := NS_JPL2."Line No." + 10000
-                else
-                    NS_LiLineNo := 10000;
-                NS_NewJPL.Init();
-                NS_NewJPL.TransferFields(NS_JPL);
-                NS_NewJPL."Job No." := NewJobNo;
-                NS_NewJPL."Line No." := NS_LiLineNo;
-                NS_NewJPL.Insert();
-                Commit();
-            until NS_JPL.Next() = 0;
-    end;
-
-    LOCAL procedure NS_GetNextRequestOrderNo(): Code[20];
-    var
-        NS_lrJobSetupL: Record "Jobs Setup";
-        NS_lcuNoSeriesL: Codeunit NoSeriesManagement;
-        NS_lcNoSeriesL: Code[20];
-    begin
-        NS_lrJobSetupL.Get();
-        NS_lcNoSeriesL := NS_lcuNoSeriesL.GetNextNo(NS_lrJobSetupL."NS_SubConChange Req No. Series", Today, true);
-        exit(NS_lcNoSeriesL);
-    end;
-
-    procedure NS_CreateCOHeader(NS_MasterSubCon: Record NS_Subcontract): Code[20]
-    var
-        NS_SubCon: Record "NS_Subcontract";
-        NS_JobSetup: Record "Jobs Setup";
-        NS_SubCon1: Record "NS_Subcontract";
-        NS_NewSubCon: Record "NS_Subcontract";
-        NS_SubConNewRecord: Code[20];
-    //PE-177.DK.4.0 02Feb2024 Start remove this variable
-    // NS_SubconLineTbl: Record "NS_Subcontract Lines";
-    // NS_SubconLineNewTbl: Record "NS_Subcontract Lines";
-    // NS_DocumentNo: Code[20];
-    //PE-177.DK.4.0 02Feb2024 End
-    begin
-        NS_SubCon := NS_MasterSubCon;
-
-        //Message(jobcr."No.");
-        NS_JobSetup.Get();
-        NS_SubConNewRecord := NS_GetNextSubConChangeOrderNoNew(NS_SubCon, NS_JobSetup."NS_Change Order No. Separator");
-        NS_NewSubCon.Init();
-        // NS_DocumentNo := NS_SubConNewRecord; //PE-177.DK.4.0 02Feb2024 End
-        NS_NewSubCon."NS_No." := NS_SubConNewRecord;
-        NS_NewSubCon."NS_No. Series" := '';
-        NS_NewSubCon."NS_Search Description" := NS_SubCon."NS_Search Description";
-        NS_NewSubCon.NS_Description := NS_SubCon.NS_Description;
-        NS_NewSubCon."NS_Description 2" := NS_SubCon."NS_Description 2";
-        NS_NewSubCon."NS_Buy-from Vendor No." := NS_SubCon."NS_Buy-from Vendor No.";
-        NS_NewSubCon."NS_Creation Date" := TODAY();
-        NS_NewSubCon."NS_Starting Date" := 0D;
-        NS_NewSubCon."NS_Ending Date" := 0D;
-        NS_NewSubCon.NS_Status := NS_NewSubCon.NS_Status::Planning;
-        NS_NewSubCon."NS_Person Responsible" := NS_SubCon."NS_Person Responsible";
-        NS_NewSubCon."NS_Global Dimension 1 Code" := NS_SubCon."NS_Global Dimension 1 Code";
-        NS_NewSubCon."NS_Global Dimension 2 Code" := NS_SubCon."NS_Global Dimension 2 Code";
-        NS_NewSubCon."NS_Dimension Set ID" := NS_SubCon."NS_Dimension Set ID";
-        NS_NewSubCon.NS_Blocked := NS_NewSubCon.NS_Blocked::" ";
-        NS_NewSubCon."NS_Sub-LeveltoSubcontractNo." := NS_SubCon."NS_Sub-LeveltoSubcontractNo.";
-        NS_NewSubCon."NS_Job No." := NS_SubCon."NS_Job No.";
-        NS_NewSubCon."NS_Language Code" := NS_SubCon."NS_Language Code";
-        NS_NewSubCon."NS_Buy-from Name" := NS_SubCon."NS_Buy-from Name";
-        NS_NewSubCon."NS_Buy-from Address" := NS_SubCon."NS_Buy-from Address";
-        NS_NewSubCon."NS_Buy-from Address 2" := NS_SubCon."NS_Buy-from Address 2";
-        NS_NewSubCon."NS_Buy-from City" := NS_SubCon."NS_Buy-from City";
-        NS_NewSubCon.NS_County := NS_SubCon.NS_County;
-        NS_NewSubCon."NS_Buy-from Post Code" := NS_SubCon."NS_Buy-from Post Code";
-        NS_NewSubCon."NS_No. Series" := NS_SubCon."NS_No. Series";
-        NS_NewSubCon."NS_Buy-fromCountry/RegionCode" := NS_SubCon."NS_Buy-fromCountry/RegionCode";
-        NS_NewSubCon."NS_Currency Code" := NS_SubCon."NS_Currency Code";
-        NS_NewSubCon."NS_Buy-from Contact No." := NS_SubCon."NS_Buy-from Contact No.";
-        NS_NewSubCon."NS_Buy-from Contact" := NS_SubCon."NS_Buy-from Contact";
-        NS_NewSubCon."NS_Invoice Currency Code" := NS_SubCon."NS_Invoice Currency Code";
-        NS_NewSubCon."NS_Exch. Calculation (Cost)" := NS_SubCon."NS_Exch. Calculation (Cost)";
-        NS_NewSubCon."NS_Exch. Calculation (Price)" := NS_SubCon."NS_Exch. Calculation (Price)";
-        NS_NewSubCon."NS_AllowSchedule/ContractLines" := NS_SubCon."NS_AllowSchedule/ContractLines";
-        NS_NewSubCon."NS_Subcontract Status Date" := 0D;
-        NS_NewSubCon."NS_Estimated Start Date" := 0D;
-        NS_NewSubCon."NS_Estimated Completion Date" := 0D;
-        NS_NewSubCon."NS_Completion Date" := 0D;
-        NS_NewSubCon.Insert(true);
-        NS_SubCon1.Reset();
-        NS_SubCon1.SetRange("NS_No.", NS_SubConNewRecord);
-        if NS_SubCon1.FindFirst() then begin
-            NS_SubCon1."NS_Subcon Class" := NS_SubCon1."NS_Subcon Class"::"Change Order";
-            NS_SubCon1.Modify();
-        end;
-        //PE-177.DK.4.0 02Feb2024 Start Please Remove this code Under this tag
-        // if CONFIRM('Do you wish to copy Change Requrest Subcontract Lines ?') then begin  //PE-177.DK.3.0 23Jan2024 
-        //NS_SubconLineTbl.Reset();
-        //NS_SubconLineTbl.SetRange("NS_Subcontract No.", NS_SubCon."NS_No.");
-        //if NS_SubconLineTbl.FindFirst() then
-        // repeat
-        //  NS_SubconLineNewTbl.init();
-        //  NS_SubconLineNewTbl.TransferFields(NS_SubconLineTbl);
-        //  NS_SubconLineNewTbl."NS_Subcontract No." := NS_DocumentNo;
-        // NS_SubconLineNewTbl."NS_Line No." := NS_SubconLineTbl."NS_Line No.";
-        // NS_SubconLineNewTbl."NS_Change Request No." := NS_SubCon."NS_No.";
-        //  NS_SubconLineNewTbl.Insert();
-        // until NS_SubconLineTbl.next() = 0;
-        //PE-177.DK.4.0 02Feb2024 End
-        //  end; 
-        //PE-177.DK.3.0 23Jan2024 
-        exit(NS_NewSubCon."NS_NO.");
-    end;
-
-    procedure NS_GetNextSubConChangeOrderNoNew(PassSubConNo: Record NS_Subcontract; PassJobSeparator: Text[10]): Code[20];
-    var
-        NS_SubConRec: Record NS_Subcontract;
-        NS_SubConRec1: Record NS_Subcontract;
-        NS_NewChangeOdrNo: Code[20];
-    begin
-        NS_SubConRec.Reset();
-        NS_SubConRec.SetRange("NS_Sub-LeveltoSubcontractNo.", PassSubConNo."NS_Sub-LeveltoSubcontractNo.");
-        // NS_SubConRec.SetRange("NS_Manager Subcontract Status", "NS_Manager Subcontract Status"::Approval);
-        NS_SubConRec.SetRange("NS_Subcon Class", NS_SubConRec."NS_Subcon Class"::"Change Order");
-        if NS_SubConRec.FindLast() then
-            NS_NewChangeOdrNo := (INCSTR(NS_SubConRec."NS_No."))
-        else
-            NS_NewChangeOdrNo := (PassSubConNo."NS_Sub-LeveltoSubcontractNo." + PassJobSeparator + '001');
-
-        exit(NS_NewChangeOdrNo)
-    end;
-    //PE-177.DK.1.0 10Nov2023 End
-    //PRJCTPR-110.JS.1.0 09MAY2023 - Start
 
     [IntegrationEvent(false, false)]
-    local procedure OnAfterInsertPurchLinesFromSubconLines(Var PurchaseLines: Record "Purchase Line"; var SubcontractLines: Record "NS_Subcontract Lines")
+    local procedure OnNS_MakePurchaseDocument3(var PurchaseHeader: Record "Purchase Header")
     begin
     end;
-    //PRJCTPR-110.JS.1.0 09MAY2023 - end
 
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocumentLines1(var SubcontractDetail: Record "NS_Subcontract Lines"; var PurchaseLine: Record "Purchase Line")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocument4(var SubcontractHeader: Record NS_Subcontract)
+    begin
+    end;
+    // << Upgrade
 }
 

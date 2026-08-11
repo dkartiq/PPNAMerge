@@ -9,7 +9,6 @@ report 14021170 "NS_POC Gross Margin"
     // +  - www.gemko.com
     // +------------------------------------------------------------
     //PRJ-84.SK.1.0 Added report to search
-    //PE-141.AS.1.0 16AUG2023 Done change in layout to Add comp logo, user id, timedate, page
     DefaultLayout = RDLC;
     RDLCLayout = './Layouts/NSPOC Gross Margin.rdl';
 
@@ -36,17 +35,6 @@ report 14021170 "NS_POC Gross Margin"
             column(CompanyInformation_Name; CompanyInformation.Name)
             {
             }
-            //PE-141.AS.1.0 16AUG2023 start
-            column(CompanyInformationPic; CompanyInformation.Picture) { }
-            column(CompanyInformationAdd; CompanyInformation.Address) { }
-            column(CompanyInformationadd2; CompanyInformation."Address 2") { }
-            column(CompanyInformationcity; CompanyInformation.City) { }
-            column(CompanyInformationRegion; CompanyInformation."Country/Region Code") { }
-            column(CompanyInformationpost; CompanyInformation."Post Code") { }
-            column(CompanyInformationCountry; CompanyInformation.County) { }
-            column(CompanyInformationPhone; CompanyInformation."Phone No.") { }
-            column(NS_CompanyFullAddress; NS_CompanyFullAddress) { }//PE-141.AS.1.0 24AUG2023
-            //PE-141.AS.1.0 16AUG2023 end
             column(ShowJobSummaries; ShowJobSummaries)
             {
             }
@@ -467,34 +455,6 @@ report 14021170 "NS_POC Gross Margin"
         Pos: Integer;
     begin
         CompanyInformation.GET;
-        CompanyInformation.CalcFields(Picture);//PE-141.AS.1.0 16AUG2023
-
-        //PE-141.AS.1.0 start 24Aug2023
-        if CompanyInformation.Address = '' then
-            NS_CompanyInformationAdd := ''
-        else
-            NS_CompanyInformationAdd := CompanyInformation.Address;
-        if CompanyInformation."Address 2" = '' then
-            NS_CompanyInformationadd2 := ''
-        else
-            NS_CompanyInformationadd2 := CompanyInformation."Address 2";
-
-        if CompanyInformation.City = '' then
-            NS_CompanyInformationcity := ''
-        else
-            NS_CompanyInformationcity := CompanyInformation.City + ',' + ' ';
-        if CompanyInformation.County = '' then
-            NS_CompanyInformationCountry := ''
-        else
-            NS_CompanyInformationCountry := CompanyInformation.County + ' ';
-        if CompanyInformation."Post Code" = '' then
-            NS_CompanyInformationpost := ''
-        else
-            NS_CompanyInformationpost := CompanyInformation."Post Code";
-        NS_CompanyFullAddress := NS_CompanyInformationcity + NS_CompanyInformationCountry + NS_CompanyInformationpost;
-
-        //PE-141.AS.1.0 start 24Aug2023
-
         JobFilter := Job.GETFILTERS;
 
         DateFilter := Job.GETFILTER("NS_Date Filter");
@@ -523,15 +483,6 @@ report 14021170 "NS_POC Gross Margin"
 
     var
         CompanyInformation: Record "Company Information";
-        //PE-141.AS.1.0 start 24Aug2023 
-        NS_CompanyInformationAdd: Text[250];
-        NS_CompanyInformationadd2: Text[250];
-        NS_CompanyInformationcity: Text;
-        NS_CompanyInformationRegion: Code[20];
-        NS_CompanyInformationpost: Code[20];
-        NS_CompanyInformationCountry: Text[250];
-        NS_CompanyFullAddress: Text[250];
-        //PE-141.AS.1.0 24Aug2023 
         JobFilters: Record Job;
         JobLedgEntry: Record "Job Ledger Entry";
         CompletionStatus: Record "NS_Job Forecast";
@@ -827,10 +778,7 @@ report 14021170 "NS_POC Gross Margin"
             RESET();
             SETCURRENTKEY("NS_Sub-Level to Job No.");
             SETRANGE("NS_Sub-Level to Job No.", ParentJob."No.");
-            //PE-308.DK.1.0 13JUNE2024 Start
-            //JobSearch.SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            JobSearch.SETFILTER("NS_TypeEnumFilter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
-            //PE-308.DK.1.0 13JUNE2024 END
+            SETFILTER("NS_Type Filter", '<>%1', NS_JobLedgerEntry.Type::NS_Ledger);
             SETFILTER("NS_Date Filter", ParentJob.GETFILTER("NS_Date Filter"));
             SETFILTER("NS_Revenue Category Filter", ParentJob.GETFILTER("NS_Revenue Category Filter"));
             if FINDSET() then

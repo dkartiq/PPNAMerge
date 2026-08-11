@@ -1,5 +1,6 @@
 page 14021361 "NS_ProjectProManagerActivity2"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -84,11 +85,11 @@ page 14021361 "NS_ProjectProManagerActivity2"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS;
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
-                                JobRec.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
-                                JobRec.CalculateInvoiceBilled(JobRec, InvoiceBilled, true);
+                                JobRec.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true, WorkDate());
+                                JobRec.CalculateInvoiceBilled(JobRec, InvoiceBilled, true, WorkDate());
                                 JobRec.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                 CLEAR("Sub-LevelsCost");
                                 CLEAR("Sub-LevelsPrice");
@@ -125,11 +126,11 @@ page 14021361 "NS_ProjectProManagerActivity2"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS;
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
-                                JobCalc.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
-                                JobCalc.CalculateInvoiceBilled(JobRec, InvoiceBilled, true);
+                                JobCalc.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true, WorkDate());
+                                JobCalc.CalculateInvoiceBilled(JobRec, InvoiceBilled, true, WorkDate());
                                 if ActualCostToDate[3] > InvoiceBilled[3] then
                                     JobRec.MARK(true);
                             until JobRec.NEXT() = 0;
@@ -177,12 +178,12 @@ page 14021361 "NS_ProjectProManagerActivity2"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings
-                JobCalc.NS_CalculateActualCostToDate(JobCalc, ActualCostToDate, true);
-                JobCalc.CalculateInvoiceBilled(JobCalc, InvoiceBilled, true);
+                JobCalc.NS_CalculateActualCostToDate(JobCalc, ActualCostToDate, true, WorkDate());
+                JobCalc.CalculateInvoiceBilled(JobCalc, InvoiceBilled, true, WorkDate());
                 if ActualCostToDate[3] > InvoiceBilled[3] then
                     "NS_Job CostExceedsContBillings" += 1;
 
@@ -225,10 +226,7 @@ page 14021361 "NS_ProjectProManagerActivity2"
     end;
 
     trigger OnOpenPage();
-    var
-        NSConfPersonalizationMgt: Codeunit "Conf./Personalization Mgt."; //PRJ-1686.GK.4.0 18Dec2022
     begin
-        NSConfPersonalizationMgt.RaiseOnOpenRoleCenterEvent();//PRJ-1686.GK.4.0 18Dec2022
         RESET;
         if not GET then begin
             INIT();

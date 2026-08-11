@@ -56,14 +56,11 @@ table 14021320 "NS_TimeSheetLineCustom Archive"
                 ResourceRec: Record Resource;
             begin
                 if ResourceRec.Get("NS_Resource No.") then
-                    // "NS_Resource Name" := ResourceRec.Name;//PRJ-1074.AS.1.0 28DEC2021 Commented code for old field "NS_Resource Name"
-                     "NS_Resource Name New" := ResourceRec.Name;//PRJ-1074.AS.1.0 28DEC2021 Add New code for new field "NS_Resource Name New"
+                    "NS_Resource Name" := ResourceRec.Name;
             end;
         }
         field(7; "NS_Resource Name"; Code[20])
         {
-            ObsoleteState = Pending;//PRJ-1074.AS.1.0 28DEC2021 Obselete
-            ObsoleteReason = 'Will be removed in next build';//PRJ-1074.AS.1.0 28DEC2021 Obselete
             Caption = 'Resource Name';
             Description = 'Specifies Resource Name';
             TableRelation = Resource;
@@ -110,13 +107,6 @@ table 14021320 "NS_TimeSheetLineCustom Archive"
             Description = 'Specifies unique line ID';
             DataClassification = CustomerContent;
             Editable = false;
-        }
-        field(20; "NS_Resource Name New"; Text[100])//PRJ-1074.AS.1.0 28DEC2021
-        {
-            Caption = 'Resource Name';
-            Description = 'Specifies Resource Name';
-            TableRelation = Resource;
-            DataClassification = CustomerContent;
         }
     }
 

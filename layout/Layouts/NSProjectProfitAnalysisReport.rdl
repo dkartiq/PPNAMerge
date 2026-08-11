@@ -19,7 +19,7 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.63584in</Width>
+                  <Width>0.76255in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.04609in</Width>
@@ -46,13 +46,13 @@
                   <Width>0.0406in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.84075in</Width>
+                  <Width>0.96399in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.92779in</Width>
+                  <Width>0.78194in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.73352in</Width>
+                  <Width>0.66067in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.69725in</Width>
@@ -92,7 +92,7 @@
                                 <TextRun>
                                   <Value>=First(Fields!Job_No_Caption.Value)</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -133,7 +133,7 @@
                                 <TextRun>
                                   <Value>=First(Fields!Job_DescriptionCaption.Value)</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -173,7 +173,7 @@
                                 <TextRun>
                                   <Value>Project</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -187,7 +187,7 @@
                                 <TextRun>
                                   <Value>Manager</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -231,7 +231,7 @@
                                 <TextRun>
                                   <Value>Contract  Price</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -275,7 +275,7 @@
                                 <TextRun>
                                   <Value>=First(Fields!To_Date_BillingsCaption.Value)</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -319,7 +319,7 @@
                                 <TextRun>
                                   <Value>=First(Fields!To_Date_CostCaption.Value)</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -363,7 +363,7 @@
                                 <TextRun>
                                   <Value>=First(Fields!Total_Cost_EstimateCaption.Value)</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -407,7 +407,7 @@
                                 <TextRun>
                                   <Value>%</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -421,7 +421,7 @@
                                 <TextRun>
                                   <Value> Done</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -460,7 +460,6 @@
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontSize>8pt</FontSize>
                                     <Color>RoyalBlue</Color>
                                   </Style>
                                 </TextRun>
@@ -502,7 +501,7 @@
                                 <TextRun>
                                   <Value EvaluationMode="Constant">Recognized Revenue</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -542,7 +541,7 @@
                                 <TextRun>
                                   <Value>=First(Fields!Recognized_Profit_LossCaption.Value)</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -584,15 +583,15 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!ChginperCompl.Value</Value>
+                                  <Value EvaluationMode="Constant">Change % in Completion</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Center</TextAlign>
+                                <TextAlign>Right</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -630,7 +629,7 @@
                                 <TextRun>
                                   <Value>Change in Rec. Profit</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -673,7 +672,7 @@
                                 <TextRun>
                                   <Value EvaluationMode="Constant">Change in % of Profit</Value>
                                   <Style>
-                                    <FontSize>8pt</FontSize>
+                                    <FontSize>9pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
                                 </TextRun>
@@ -714,9 +713,7 @@
                               <TextRuns>
                                 <TextRun>
                                   <Value />
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                  </Style>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -2557,12 +2554,130 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>1.2065cm</Top>
+            <Top>1.90472cm</Top>
             <Left>0.07874in</Left>
             <Height>1.07572in</Height>
-            <Width>10.25559in</Width>
+            <Width>10.28684in</Width>
             <Style />
           </Tablix>
+          <Textbox Name="Job_TABLECAPTION_____Filters______JobFilter">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Job_TABLECAPTION_____Filters______JobFilter.Value)</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.2698cm</Top>
+            <Left>0.07874in</Left>
+            <Height>0.423cm</Height>
+            <Width>25.2cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="MarkedPriceEntriesExcluded">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!MarkedPriceEntriesExcluded.Value)</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.23598in</Top>
+            <Left>0.07874in</Left>
+            <Height>0.423cm</Height>
+            <Width>6.00544cm</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="MarkedCostEntriesExcluded">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!MarkedCostEntriesExcluded.Value)</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.23598in</Top>
+            <Left>3.58864in</Left>
+            <Height>0.423cm</Height>
+            <Width>6.00544cm</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="Sub_LevelsText_">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Sub_LevelsText_.Value)</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>0.07874in</Left>
+            <Height>0.52883cm</Height>
+            <Width>4.7619cm</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="CompletePercentText">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompletePercentText.Value)</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>5.27936cm</Left>
+            <Height>0.52883cm</Height>
+            <Width>3.47139cm</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <VerticalAlign>Middle</VerticalAlign>
+            </Style>
+          </Textbox>
           <Tablix Name="table2">
             <TablixBody>
               <TablixColumns>
@@ -3302,10 +3417,10 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>4.10818cm</Top>
+            <Top>4.64793cm</Top>
             <Height>0.24997in</Height>
             <Width>10.26148in</Width>
-            <ZIndex>1</ZIndex>
+            <ZIndex>6</ZIndex>
             <Style />
           </Tablix>
           <Chart Name="chart1">
@@ -3594,11 +3709,11 @@
               </Style>
             </ChartNoDataMessage>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>2.02917in</Top>
-            <Left>1.88738in</Left>
-            <Height>1.5625in</Height>
-            <Width>2.23303in</Width>
-            <ZIndex>2</ZIndex>
+            <Top>2.29167in</Top>
+            <Left>0.82874in</Left>
+            <Height>2.375in</Height>
+            <Width>3.5in</Width>
+            <ZIndex>7</ZIndex>
             <Visibility>
               <Hidden>=not(FIRST(Fields!ShowReportSummary.Value))</Hidden>
             </Visibility>
@@ -3899,11 +4014,11 @@
               </Style>
             </ChartNoDataMessage>
             <DataSetName>DataSet_Result</DataSetName>
-            <Top>2.02917in</Top>
-            <Left>6.38738in</Left>
-            <Height>1.5625in</Height>
-            <Width>2.23303in</Width>
-            <ZIndex>3</ZIndex>
+            <Top>2.29167in</Top>
+            <Left>5.32874in</Left>
+            <Height>2.375in</Height>
+            <Width>3.5in</Width>
+            <ZIndex>8</ZIndex>
             <Visibility>
               <Hidden>=not(FIRST(Fields!ShowReportSummary.Value))</Hidden>
             </Visibility>
@@ -3918,126 +4033,6 @@
               <BackgroundColor>White</BackgroundColor>
             </Style>
           </Chart>
-          <Textbox Name="Job_TABLECAPTION_____Filters______JobFilter">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Job_TABLECAPTION_____Filters______JobFilter.Value)</Value>
-                    <Style>
-                      <FontSize>7pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.6827cm</Top>
-            <Left>0.10654in</Left>
-            <Height>0.423cm</Height>
-            <Width>25.2cm</Width>
-            <ZIndex>4</ZIndex>
-            <Style>
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="MarkedPriceEntriesExcluded">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!MarkedPriceEntriesExcluded.Value)</Value>
-                    <Style>
-                      <FontSize>7pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.07151in</Top>
-            <Left>0.10654in</Left>
-            <Height>0.45875cm</Height>
-            <Width>6.00544cm</Width>
-            <ZIndex>5</ZIndex>
-            <Style>
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="MarkedCostEntriesExcluded">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!MarkedCostEntriesExcluded.Value)</Value>
-                    <Style>
-                      <FontSize>7pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.02984in</Top>
-            <Left>3.61644in</Left>
-            <Height>0.423cm</Height>
-            <Width>6.00544cm</Width>
-            <ZIndex>6</ZIndex>
-            <Style>
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="Sub_LevelsText_">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!Sub_LevelsText_.Value)</Value>
-                    <Style>
-                      <FontSize>7pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.12198cm</Top>
-            <Left>0.10654in</Left>
-            <Height>0.52883cm</Height>
-            <Width>6.00544cm</Width>
-            <ZIndex>7</ZIndex>
-            <Style>
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
-          <Textbox Name="CompletePercentText">
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>=First(Fields!CompletePercentText.Value)</Value>
-                    <Style>
-                      <FontSize>7pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style />
-              </Paragraph>
-            </Paragraphs>
-            <Top>0.07965cm</Top>
-            <Left>6.5882cm</Left>
-            <Height>0.52883cm</Height>
-            <Width>3.47139cm</Width>
-            <ZIndex>8</ZIndex>
-            <Style>
-              <VerticalAlign>Middle</VerticalAlign>
-            </Style>
-          </Textbox>
           <Textbox Name="textbox40">
             <KeepTogether>true</KeepTogether>
             <Paragraphs>
@@ -4053,8 +4048,7 @@
                 <Style />
               </Paragraph>
             </Paragraphs>
-            <Top>0.07965cm</Top>
-            <Left>10.42399cm</Left>
+            <Left>9.11515cm</Left>
             <Height>0.52883cm</Height>
             <Width>4.05358cm</Width>
             <ZIndex>9</ZIndex>
@@ -4063,13 +4057,13 @@
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>3.59167in</Height>
+        <Height>4.67709in</Height>
         <Style />
       </Body>
-      <Width>10.33433in</Width>
+      <Width>10.36558in</Width>
       <Page>
         <PageHeader>
-          <Height>1.34796cm</Height>
+          <Height>1.269cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -4089,49 +4083,48 @@
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.02821in</Top>
-              <Left>0.06624in</Left>
+              <Top>0.01389in</Top>
+              <Left>0.07874in</Left>
               <Height>0.423cm</Height>
               <Width>10.65cm</Width>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
-            <Textbox Name="CurrReport_PAGENOCaption1">
+            <Textbox Name="CompanyInformation_Name1">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Page</Value>
+                      <Value>=ReportItems!CompanyInformation_Name.Value</Value>
                       <Style>
                         <FontSize>7pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style>
-                    <TextAlign>Right</TextAlign>
-                  </Style>
+                  <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.4561cm</Top>
-              <Left>24.99216cm</Left>
+              <Top>0.45828cm</Top>
+              <Left>0.07874in</Left>
               <Height>0.423cm</Height>
-              <Width>0.75cm</Width>
+              <Width>10.65cm</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
-            <Textbox Name="PageNumberTextBox">
+            <Textbox Name="ExecutionTimeTextBox">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Globals!PageNumber</Value>
+                      <Value>=Globals!ExecutionTime</Value>
                       <Style>
                         <FontSize>7pt</FontSize>
+                        <Format>g</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -4140,10 +4133,9 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.4561cm</Top>
-              <Left>25.74216cm</Left>
+              <Left>23.3746cm</Left>
               <Height>0.423cm</Height>
-              <Width>0.45cm</Width>
+              <Width>2.5cm</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -4166,73 +4158,24 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.92496cm</Top>
-              <Left>20.67558cm</Left>
+              <Top>0.846cm</Top>
+              <Left>18.18877cm</Left>
               <Height>0.423cm</Height>
-              <Width>5.54733cm</Width>
+              <Width>7.68583cm</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
-            <Image Name="Image1">
-              <Source>Database</Source>
-              <Value>=First(Fields!CompanyInformationPic.Value, "DataSet_Result")</Value>
-              <MIMEType>image/jpeg</MIMEType>
-              <Sizing>FitProportional</Sizing>
-              <Left>0.13641cm</Left>
-              <Height>0.96661cm</Height>
-              <Width>3.32245cm</Width>
-              <ZIndex>4</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-            <Textbox Name="ReportCompanyName">
+            <Textbox Name="PageNumberTextBox">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value xml:space="preserve"> </Value>
+                      <Value>=Globals!PageNumber</Value>
                       <Style>
                         <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                    <TextRun>
-                      <Value>=First(Fields!CompanyInformation_Name.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <Top>0.56092cm</Top>
-              <Left>0.13186cm</Left>
-              <Height>0.423cm</Height>
-              <Width>10.65455cm</Width>
-              <ZIndex>5</ZIndex>
-              <Style>
-                <VerticalAlign>Middle</VerticalAlign>
-              </Style>
-            </Textbox>
-            <Textbox Name="ExecutionTimeTextBox">
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=Globals!ExecutionTime</Value>
-                      <Style>
-                        <FontSize>7pt</FontSize>
-                        <Format>MM/dd/yyyy</Format>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -4241,24 +4184,47 @@
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.02652in</Top>
-              <Left>22.77616cm</Left>
+              <Top>0.423cm</Top>
+              <Left>25.11027cm</Left>
               <Height>0.423cm</Height>
-              <Width>3.416cm</Width>
-              <ZIndex>6</ZIndex>
+              <Width>0.76433cm</Width>
+              <ZIndex>4</ZIndex>
               <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
+            <Textbox Name="CurrReport_PAGENOCaption1">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=ReportItems!CurrReport_PAGENOCaption.Value</Value>
+                      <Style>
+                        <FontSize>7pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.16656in</Top>
+              <Left>9.54218in</Left>
+              <Height>0.423cm</Height>
+              <Width>0.34375in</Width>
+              <ZIndex>5</ZIndex>
+              <Style>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-          </Style>
+          <Style />
         </PageHeader>
         <PageHeight>8.5in</PageHeight>
         <PageWidth>11in</PageWidth>
@@ -4322,33 +4288,6 @@ End Function
         </Field>
         <Field Name="CompanyInformation_Name">
           <DataField>CompanyInformation_Name</DataField>
-        </Field>
-        <Field Name="CompanyInformationPic">
-          <DataField>CompanyInformationPic</DataField>
-        </Field>
-        <Field Name="CompanyInformationAdd">
-          <DataField>CompanyInformationAdd</DataField>
-        </Field>
-        <Field Name="CompanyInformationadd2">
-          <DataField>CompanyInformationadd2</DataField>
-        </Field>
-        <Field Name="CompanyInformationcity">
-          <DataField>CompanyInformationcity</DataField>
-        </Field>
-        <Field Name="CompanyInformationRegion">
-          <DataField>CompanyInformationRegion</DataField>
-        </Field>
-        <Field Name="CompanyInformationpost">
-          <DataField>CompanyInformationpost</DataField>
-        </Field>
-        <Field Name="CompanyInformationCountry">
-          <DataField>CompanyInformationCountry</DataField>
-        </Field>
-        <Field Name="CompanyInformationPhone">
-          <DataField>CompanyInformationPhone</DataField>
-        </Field>
-        <Field Name="NS_CompanyFullAddress">
-          <DataField>NS_CompanyFullAddress</DataField>
         </Field>
         <Field Name="ShowJobSummaries">
           <DataField>ShowJobSummaries</DataField>
@@ -4415,9 +4354,6 @@ End Function
         </Field>
         <Field Name="Under_BillingsCaption">
           <DataField>Under_BillingsCaption</DataField>
-        </Field>
-        <Field Name="ChginperCompl">
-          <DataField>ChginperCompl</DataField>
         </Field>
         <Field Name="Job__No__">
           <DataField>Job__No__</DataField>

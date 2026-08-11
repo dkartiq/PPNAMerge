@@ -1,8 +1,7 @@
 pageextension 14021234 NS_SalesJournalExt extends "Sales Journal"
 {
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Sales Journals'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         addafter("Bal. Account No.")

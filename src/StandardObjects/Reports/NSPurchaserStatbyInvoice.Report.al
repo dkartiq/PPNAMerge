@@ -19,7 +19,7 @@ report 14021219 "NS_Purchaser Stat. by Invoice"
     RDLCLayout = './Layouts/Purchaser Stat. by Invoice.rdl';
 
     ApplicationArea = Suite;
-    Caption = 'Job Purchaser Stat. by Invoice';//PE-141.NK.1.0 03Aug2023 updated name
+    Caption = 'Purchaser Stat. by Invoice';
     UsageCategory = ReportsAndAnalysis;
 
     dataset

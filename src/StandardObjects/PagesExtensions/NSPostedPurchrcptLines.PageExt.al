@@ -1,8 +1,7 @@
 pageextension 14021268 NS_PostedPurchRcptLines extends "Posted Purchase Receipt Lines"
 {
     // version NAVW111.00.00.19846,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Posted Purchase Receipt Lines'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Job No.")

@@ -1,8 +1,7 @@
 pageextension 14021255 NS_IssuedReminderStatsExt extends "Issued Reminder Statistics"
 {
     // version NAVW111.00,PPNA11.00
-    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-    Caption = 'Issued Reminder Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+
     layout
     {
         modify("Cust.""Balance (LCY)""")
