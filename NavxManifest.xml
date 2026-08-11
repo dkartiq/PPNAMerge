@@ -1,0 +1,32 @@
+<Package xmlns="http://schemas.microsoft.com/navx/2015/manifest">
+  <App Id="a3b03edf-3f59-46a5-9644-a1f4a6b1d289" Name="ProjectPro - A construction vertical (Global)" Publisher="Netsmartz LLC" Brief="Explore our construction solution" Description="ProjectPro is specifically designed for Construction Firms and powered by Microsoft Dynamics NAV/Business Central to make sure you get the most out of your business software" Version="23.0.14.14966" CompatibilityId="0.0.0.0" PrivacyStatement="https://www.netsmartz.com/dynamic-app/" EULA="https://www.netsmartz.com/dynamic-app/" Help="https://www.netsmartz.com/dynamic-app/" HelpBaseUrl="" ContextSensitiveHelpUrl="https://www.projectpro365.com/" Url="https://www.netsmartz.com/dynamic-app/" Logo="/logo/projectpro.png" Platform="1.0.0.0" Application="19.0.0.0" Runtime="9.0" Target="Cloud" ShowMyCode="False" />
+  <IdRanges>
+    <IdRange MinObjectId="14021100" MaxObjectId="14021499" />
+  </IdRanges>
+  <Dependencies />
+  <InternalsVisibleTo>
+    <Module Id="130451d0-d281-4c95-add6-f5ac6bacf10b" Name="ProjectPro Dependent App" Publisher="Netsmartz LLC" />
+  </InternalsVisibleTo>
+  <ScreenShots />
+  <SupportedLocales />
+  <Features>
+    <Feature>TRANSLATIONFILE</Feature>
+    <Feature>GENERATECAPTIONS</Feature>
+  </Features>
+  <PreprocessorSymbols />
+  <SuppressWarnings>
+    <SuppressWarning Name="AL0604" />
+    <SuppressWarning Name="AA0008" />
+    <SuppressWarning Name="AA0074" />
+    <SuppressWarning Name="AA0072" />
+    <SuppressWarning Name="AA0005" />
+    <SuppressWarning Name="AL0254" />
+    <SuppressWarning Name="AL0603" />
+    <SuppressWarning Name="AL0606" />
+  </SuppressWarnings>
+  <ResourceExposurePolicy AllowDebugging="true" AllowDownloadingSource="false" IncludeSourceInSymbolFile="false" />
+  <KeyVaultUrls />
+  <Source />
+  <Build By="AL Language Extension,14.0.1070882" Timestamp="2024-08-02T13:52:22.6827073Z" CompilerVersion="14.0.16.22338" />
+  <AlternateIds />
+</Package>

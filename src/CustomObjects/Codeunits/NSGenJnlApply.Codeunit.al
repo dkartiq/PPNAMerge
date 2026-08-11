@@ -1,0 +1,538 @@
+codeunit 14021115 "NS_Gen. Jnl.-Apply"
+{
+    // version NAVW113.02,PPNA11.00,SPLN
+
+    // SPLN1.00 2019-01-22 Copy of C225
+    // 
+    // +------------------------------------------------------------
+    // +ProjectPro
+    // +  - Modification(s):
+    // +     - OnRun:
+    // +         - If Sales Retention or Purchase Retention is active, then set filter on Retention Ledger Code
+    // +------------------------------------------------------------
+    //PRJ-1353.JS.1.0 05MAY2022 | change code to get blank entries with normal entries in Custoner/Vendor Ledger entries
+
+    trigger OnRun()
+    begin
+    end;
+
+    var
+        Text000: Label 'You must specify %1 or %2.';
+        ConfirmChangeQst: Label 'CurrencyCode in the %1 will be changed from %2 to %3.\Do you wish to continue?', Comment = '%1 = Table Name, %2 and %3 = Currency Code';
+        UpdateInterruptedErr: Label 'The update has been interrupted to respect the warning.';
+        Text005: Label 'The %1 or %2 must be Customer or Vendor.';
+        Text006: Label 'All entries in one application must be in the same currency.';
+        Text007: Label 'All entries in one application must be in the same currency or one or more of the EMU currencies. ';
+        GenJnlLine: Record "Gen. Journal Line";
+        GLSetup: Record "General Ledger Setup";
+        Currency: Record Currency;
+        CurrExchRate: Record "Currency Exchange Rate";
+        PaymentToleranceMgt: Codeunit "Payment Tolerance Management";
+        AccNo: Code[20];
+        CurrencyCode2: Code[10];
+        OK: Boolean;
+        AccType: Option "G/L Account",Customer,Vendor,"Bank Account","Fixed Asset","IC Partner",Employee;
+
+    [EventSubscriber(ObjectType::Codeunit, 225, 'OnBeforeRun', '', false, false)]
+    local procedure NS_C225OnBeforeRun(var GenJnlLine: Record "Gen. Journal Line"; var IsHandled: Boolean)
+    begin
+        NS_C225OnRun(GenJnlLine);
+        IsHandled := true;
+    end;
+    //PRJCTPR-97.GK.1.0 06Apr2023 start
+    [EventSubscriber(ObjectType::Table, 81, 'OnBeforeSetAmountWithCustLedgEntry', '', false, false)]
+    local procedure NS_T81OnBeforeSetAmountWithCustLedgEntry(var CustLedgerEntry: Record "Cust. Ledger Entry"; var GenJournalLine: Record "Gen. Journal Line")
+    var
+    begin
+        if (GenJournalLine."Document Type" = GenJnlLine."Document Type"::Payment) AND (GenJournalLine."Source Code" = 'CASHRECJNL') then begin
+            GenJournalLine."Job No." := CustLedgerEntry."NS_Job No.";
+            GenJournalLine."NS_Draw No." := CustLedgerEntry."NS_Draw No.";//PE-200.AS.11.0
+        end;
+
+        //PE-200.AS.11.0 START
+        if (GenJournalLine."Document Type" = GenJnlLine."Document Type"::Payment) AND (GenJournalLine."Source Code" = 'PAYMENTJNL') then begin
+            GenJournalLine."Job No." := CustLedgerEntry."NS_Job No.";
+            GenJournalLine."NS_Draw No." := CustLedgerEntry."NS_Draw No.";
+        end;
+        //PE-200.AS.11.0 END
+    end;
+    //PRJCTPR-97.GK.1.0 06Apr2023 end
+
+    local procedure NS_C225OnRun(var inGenJnlLine: Record "Gen. Journal Line")
+    var
+        CustLedgEntry: Record "Cust. Ledger Entry";
+        VendLedgEntry: Record "Vendor Ledger Entry";
+        IsHandled: Boolean;
+        NS_SalesSetup: Record "Sales & Receivables Setup";
+        NS_PurchSetup: Record "Purchases & Payables Setup";
+    begin
+        GenJnlLine.Copy(inGenJnlLine);
+
+        IsHandled := false;
+        NS_OnBeforeRun(GenJnlLine, IsHandled);
+        if IsHandled then
+            exit;
+
+        with GenJnlLine do begin
+            NS_GetCurrency;
+            if "Bal. Account Type" in
+               ["Bal. Account Type"::Customer, "Bal. Account Type"::Vendor, "Bal. Account Type"::Employee]
+            then begin
+                AccType := "Bal. Account Type".AsInteger();
+                AccNo := "Bal. Account No.";
+            end else begin
+                AccType := "Account Type".AsInteger();
+                AccNo := "Account No.";
+            end;
+            case AccType of
+                AccType::Customer:
+                    begin
+                        OK := NS_SelectCustLedgEntry(GenJnlLine);
+                        if not OK then
+                            exit;
+
+                        CustLedgEntry.Reset;
+                        CustLedgEntry.SetCurrentKey("Customer No.", Open, Positive);
+                        CustLedgEntry.SetRange("Customer No.", AccNo);
+                        CustLedgEntry.SetRange(Open, true);
+                        CustLedgEntry.SetRange("Applies-to ID", "Applies-to ID");
+
+                        //ProjectPro - start
+                        if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
+                            if GenJnlLine."NS_Retention Ledger Code" > '' then
+                                //PRJ-1353.JS.1.0 07MAY2022 - Start
+                                If GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
+                                    CustLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
+                                else
+                                    VendLedgEntry.SetFilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
+                        //PRJ-1353.JS.1.0 07MAY2022 - end    
+                        //ProjectPro - end
+
+                        if CustLedgEntry.Find('-') then begin
+                            CurrencyCode2 := CustLedgEntry."Currency Code";
+                            if Amount = 0 then begin
+                                repeat
+                                    PaymentToleranceMgt.DelPmtTolApllnDocNo(GenJnlLine, CustLedgEntry."Document No.");
+                                    NS_CheckAgainstApplnCurrency(CurrencyCode2, CustLedgEntry."Currency Code", AccType::Customer, true);
+                                    NS_UpdateCustLedgEntry(CustLedgEntry);
+                                    IsHandled := false;
+                                    NS_OnBeforeFindCustApply(GenJnlLine, CustLedgEntry, Amount, IsHandled);
+                                    if not IsHandled then
+                                        if PaymentToleranceMgt.CheckCalcPmtDiscGenJnlCust(inGenJnlLine, CustLedgEntry, 0, false) and
+                                           (Abs(CustLedgEntry."Amount to Apply") >=
+                                            Abs(CustLedgEntry."Remaining Amount" - CustLedgEntry."Remaining Pmt. Disc. Possible"))
+                                        then
+                                            Amount := Amount - (CustLedgEntry."Amount to Apply" - CustLedgEntry."Remaining Pmt. Disc. Possible")
+                                        else
+                                            Amount := Amount - CustLedgEntry."Amount to Apply";
+                                until CustLedgEntry.Next = 0;
+                                if ("Bal. Account Type" = "Bal. Account Type"::Customer) or ("Bal. Account Type" = "Bal. Account Type"::Vendor) then
+                                    Amount := -Amount;
+                                Validate(Amount);
+                                GenJnlLine."NS_Draw No." := CustLedgEntry."NS_Draw No."; //PE-200.AS.7.0
+                                GenJnlLine."Job No." := CustLedgEntry."NS_Job No."; //PE-200.AS.7.0
+                            end else
+                                repeat
+                                    NS_CheckAgainstApplnCurrency(CurrencyCode2, CustLedgEntry."Currency Code", AccType::Customer, true);
+                                until CustLedgEntry.Next = 0;
+                            if "Currency Code" <> CurrencyCode2 then
+                                if Amount = 0 then begin
+                                    if not Confirm(ConfirmChangeQst, true, TableCaption, "Currency Code", CustLedgEntry."Currency Code") then
+                                        Error(UpdateInterruptedErr);
+                                    "Currency Code" := CustLedgEntry."Currency Code"
+                                end else
+                                    NS_CheckAgainstApplnCurrency("Currency Code", CustLedgEntry."Currency Code", AccType::Customer, true);
+                            "Applies-to Doc. Type" := 0;
+                            "Applies-to Doc. No." := '';
+                        end else
+                            "Applies-to ID" := '';
+                        Modify;
+                        if inGenJnlLine.Amount <> 0 then
+                            if not PaymentToleranceMgt.PmtTolGenJnl(GenJnlLine) then
+                                exit;
+                    end;
+                AccType::Vendor:
+                    begin
+                        OK := NS_SelectVendLedgEntry(GenJnlLine);
+                        if not OK then
+                            exit;
+
+                        VendLedgEntry.Reset;
+                        VendLedgEntry.SetCurrentKey("Vendor No.", Open, Positive);
+                        VendLedgEntry.SetRange("Vendor No.", AccNo);
+                        VendLedgEntry.SetRange(Open, true);
+
+                        //ProjectPro - start
+                        if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
+                            if "NS_Retention Ledger Code" > '' then
+                                //PRJ-1353.JS.1.0 07MAY2022 - Start
+                                If GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
+                                    VendLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
+                                else
+                                    VendLedgEntry.SetFilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
+                        //PRJ-1353.JS.1.0 07MAY2022 - End    
+                        //ProjectPro - end
+
+                        VendLedgEntry.SetRange("Applies-to ID", "Applies-to ID");
+                        if VendLedgEntry.Find('-') then begin
+                            CurrencyCode2 := VendLedgEntry."Currency Code";
+                            if Amount = 0 then begin
+                                repeat
+                                    PaymentToleranceMgt.DelPmtTolApllnDocNo(GenJnlLine, VendLedgEntry."Document No.");
+                                    NS_CheckAgainstApplnCurrency(CurrencyCode2, VendLedgEntry."Currency Code", AccType::Vendor, true);
+                                    NS_UpdateVendLedgEntry(VendLedgEntry);
+                                    IsHandled := false;
+                                    NS_OnBeforeFindVendApply(GenJnlLine, VendLedgEntry, Amount, IsHandled);
+                                    if not IsHandled then
+                                        if PaymentToleranceMgt.CheckCalcPmtDiscGenJnlVend(inGenJnlLine, VendLedgEntry, 0, false) and
+                                           (Abs(VendLedgEntry."Amount to Apply") >=
+                                            Abs(VendLedgEntry."Remaining Amount" - VendLedgEntry."Remaining Pmt. Disc. Possible"))
+                                        then
+                                            Amount := Amount - (VendLedgEntry."Amount to Apply" - VendLedgEntry."Remaining Pmt. Disc. Possible")
+                                        else
+                                            Amount := Amount - VendLedgEntry."Amount to Apply";
+                                until VendLedgEntry.Next = 0;
+                                if ("Bal. Account Type" = "Bal. Account Type"::Customer) or ("Bal. Account Type" = "Bal. Account Type"::Vendor) then
+                                    Amount := -Amount;
+                                Validate(Amount);
+                            end else
+                                repeat
+                                    NS_CheckAgainstApplnCurrency(CurrencyCode2, VendLedgEntry."Currency Code", AccType::Vendor, true);
+                                until VendLedgEntry.Next = 0;
+                            if "Currency Code" <> CurrencyCode2 then
+                                if Amount = 0 then begin
+                                    if not Confirm(ConfirmChangeQst, true, TableCaption, "Currency Code", VendLedgEntry."Currency Code") then
+                                        Error(UpdateInterruptedErr);
+                                    "Currency Code" := VendLedgEntry."Currency Code"
+                                end else
+                                    NS_CheckAgainstApplnCurrency("Currency Code", VendLedgEntry."Currency Code", AccType::Vendor, true);
+                            "Applies-to Doc. Type" := 0;
+                            "Applies-to Doc. No." := '';
+                        end else
+                            "Applies-to ID" := '';
+                        Modify;
+                        if inGenJnlLine.Amount <> 0 then
+                            if not PaymentToleranceMgt.PmtTolGenJnl(GenJnlLine) then
+                                exit;
+                    end;
+                AccType::Employee:
+                    NS_ApplyEmployeeLedgerEntry(GenJnlLine);
+                else
+                    Error(
+                      Text005,
+                      FieldCaption("Account Type"), FieldCaption("Bal. Account Type"));
+            end;
+        end;
+        NS_OnAfterRun(GenJnlLine);
+
+        inGenJnlLine := GenJnlLine;
+    end;
+
+    local procedure NS_SelectCustLedgEntry(var GenJnlLine: Record "Gen. Journal Line") Selected: Boolean
+    var
+        CustLedgEntry: Record "Cust. Ledger Entry";
+        ApplyCustEntries: Page "Apply Customer Entries";
+        IsHandled: Boolean;
+        NS_SalesSetup: Record "Sales & Receivables Setup";
+        NS_PurchSetup: Record "Purchases & Payables Setup";
+    begin
+        NS_OnBeforeSelectCustLedgEntry(GenJnlLine, AccNo, Selected, IsHandled);
+        if IsHandled then
+            exit(Selected);
+
+        with GenJnlLine do begin
+            CustLedgEntry.SetCurrentKey("Customer No.", Open, Positive);
+            CustLedgEntry.SetRange("Customer No.", AccNo);
+            CustLedgEntry.SetRange(Open, true);
+
+            //ProjectPro - start
+            //PRJ-1353.JS.1.0 05MAY2022 - Start
+            NS_SalesSetup.Get();
+            NS_PurchSetup.Get();
+            if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
+                if GenJnlLine."NS_Retention Ledger Code" > '' then
+                    if GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
+                        CustLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
+                    else
+                        CustLedgEntry.SetFilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
+            //ProjectPro - end
+            //PRJ-1353.JS.1.0 05MAY2022 - end
+
+            if "Applies-to ID" = '' then
+                "Applies-to ID" := "Document No.";
+            if "Applies-to ID" = '' then
+                Error(
+                  Text000,
+                  FieldCaption("Document No."), FieldCaption("Applies-to ID"));
+            ApplyCustEntries.SetGenJnlLine(GenJnlLine, FieldNo("Applies-to ID"));
+            ApplyCustEntries.SetRecord(CustLedgEntry);
+            ApplyCustEntries.SetTableView(CustLedgEntry);
+            ApplyCustEntries.LookupMode(true);
+            Selected := ApplyCustEntries.RunModal = ACTION::LookupOK;
+            Clear(ApplyCustEntries);
+        end;
+    end;
+
+    local procedure NS_SelectVendLedgEntry(var GenJnlLine: Record "Gen. Journal Line") Selected: Boolean
+    var
+        VendLedgEntry: Record "Vendor Ledger Entry";
+        ApplyVendEntries: Page "Apply Vendor Entries";
+        IsHandled: Boolean;
+        NS_SalesSetup: Record "Sales & Receivables Setup";
+        NS_PurchSetup: Record "Purchases & Payables Setup";
+    begin
+        NS_OnBeforeSelectVendLedgEntry(GenJnlLine, AccNo, Selected, IsHandled);
+        if IsHandled then
+            exit(Selected);
+
+        with GenJnlLine do begin
+            VendLedgEntry.SetCurrentKey("Vendor No.", Open, Positive);
+            VendLedgEntry.SetRange("Vendor No.", AccNo);
+            VendLedgEntry.SetRange(Open, true);
+
+            //ProjectPro - start
+            //PRJ-1353.JS.1.0 05MAY2022 - Start
+            NS_SalesSetup.Get();
+            NS_PurchSetup.Get();
+            if (not NS_SalesSetup."NS_Sales Retention Inactive") or (not NS_PurchSetup."NS_Purchase Retention Inactive") then
+                if GenJnlLine."NS_Retention Ledger Code" > '' then
+                    if GenJnlLine."Document Type" <> GenJnlLine."Document Type"::Payment then
+                        VendLedgEntry.SetRange("NS_Retention Ledger Code", GenJnlLine."NS_Retention Ledger Code")
+                    else
+                        VendLedgEntry.Setfilter("NS_Retention Ledger Code", '%1|%2', '', GenJnlLine."NS_Retention Ledger Code");
+            //ProjectPro - end
+            //PRJ-1353.JS.1.0 05MAY2022 - Start
+
+            if "Applies-to ID" = '' then
+                "Applies-to ID" := "Document No.";
+            if "Applies-to ID" = '' then
+                Error(
+                  Text000,
+                  FieldCaption("Document No."), FieldCaption("Applies-to ID"));
+            ApplyVendEntries.SetGenJnlLine(GenJnlLine, FieldNo("Applies-to ID"));
+            ApplyVendEntries.SetRecord(VendLedgEntry);
+            ApplyVendEntries.SetTableView(VendLedgEntry);
+            ApplyVendEntries.LookupMode(true);
+            Selected := ApplyVendEntries.RunModal = ACTION::LookupOK;
+            Clear(ApplyVendEntries);
+        end;
+    end;
+
+    local procedure NS_SelectEmplLedgEntry(var GenJnlLine: Record "Gen. Journal Line") OK: Boolean
+    var
+        EmplLedgEntry: Record "Employee Ledger Entry";
+        ApplyEmplEntries: Page "Apply Employee Entries";
+    begin
+        with GenJnlLine do begin
+            EmplLedgEntry.SetCurrentKey("Employee No.", Open, Positive);
+            EmplLedgEntry.SetRange("Employee No.", AccNo);
+            EmplLedgEntry.SetRange(Open, true);
+            if "Applies-to ID" = '' then
+                "Applies-to ID" := "Document No.";
+            if "Applies-to ID" = '' then
+                Error(
+                  Text000,
+                  FieldCaption("Document No."), FieldCaption("Applies-to ID"));
+            ApplyEmplEntries.SetGenJnlLine(GenJnlLine, FieldNo("Applies-to ID"));
+            ApplyEmplEntries.SetRecord(EmplLedgEntry);
+            ApplyEmplEntries.SetTableView(EmplLedgEntry);
+            ApplyEmplEntries.LookupMode(true);
+            OK := ApplyEmplEntries.RunModal = ACTION::LookupOK;
+            Clear(ApplyEmplEntries);
+        end;
+    end;
+
+    local procedure NS_UpdateCustLedgEntry(var CustLedgEntry: Record "Cust. Ledger Entry")
+    begin
+        with GenJnlLine do begin
+            CustLedgEntry.CalcFields("Remaining Amount");
+            CustLedgEntry."Remaining Amount" :=
+              CurrExchRate.ExchangeAmount(
+                CustLedgEntry."Remaining Amount", CustLedgEntry."Currency Code", "Currency Code", "Posting Date");
+            CustLedgEntry."Remaining Amount" :=
+              Round(CustLedgEntry."Remaining Amount", Currency."Amount Rounding Precision");
+            CustLedgEntry."Remaining Pmt. Disc. Possible" :=
+              CurrExchRate.ExchangeAmount(
+                CustLedgEntry."Remaining Pmt. Disc. Possible", CustLedgEntry."Currency Code", "Currency Code", "Posting Date");
+            CustLedgEntry."Remaining Pmt. Disc. Possible" :=
+              Round(CustLedgEntry."Remaining Pmt. Disc. Possible", Currency."Amount Rounding Precision");
+            CustLedgEntry."Amount to Apply" :=
+              CurrExchRate.ExchangeAmount(
+                CustLedgEntry."Amount to Apply", CustLedgEntry."Currency Code", "Currency Code", "Posting Date");
+            CustLedgEntry."Amount to Apply" :=
+              Round(CustLedgEntry."Amount to Apply", Currency."Amount Rounding Precision");
+        end;
+    end;
+
+    local procedure NS_UpdateVendLedgEntry(var VendLedgEntry: Record "Vendor Ledger Entry")
+    begin
+        with GenJnlLine do begin
+            VendLedgEntry.CalcFields("Remaining Amount");
+            VendLedgEntry."Remaining Amount" :=
+              CurrExchRate.ExchangeAmount(
+                VendLedgEntry."Remaining Amount", VendLedgEntry."Currency Code", "Currency Code", "Posting Date");
+            VendLedgEntry."Remaining Amount" :=
+              Round(VendLedgEntry."Remaining Amount", Currency."Amount Rounding Precision");
+            VendLedgEntry."Remaining Pmt. Disc. Possible" :=
+              CurrExchRate.ExchangeAmount(
+                VendLedgEntry."Remaining Pmt. Disc. Possible", VendLedgEntry."Currency Code", "Currency Code", "Posting Date");
+            VendLedgEntry."Remaining Pmt. Disc. Possible" :=
+              Round(VendLedgEntry."Remaining Pmt. Disc. Possible", Currency."Amount Rounding Precision");
+            VendLedgEntry."Amount to Apply" :=
+              CurrExchRate.ExchangeAmount(
+                VendLedgEntry."Amount to Apply", VendLedgEntry."Currency Code", "Currency Code", "Posting Date");
+            VendLedgEntry."Amount to Apply" :=
+              Round(VendLedgEntry."Amount to Apply", Currency."Amount Rounding Precision");
+        end;
+    end;
+
+    [Scope('Cloud')]
+    procedure NS_CheckAgainstApplnCurrency(ApplnCurrencyCode: Code[10]; CompareCurrencyCode: Code[10]; AccType: Option "G/L Account",Customer,Vendor,"Bank Account","Fixed Asset"; Message: Boolean): Boolean
+    var
+        Currency: Record Currency;
+        Currency2: Record Currency;
+        SalesSetup: Record "Sales & Receivables Setup";
+        PurchSetup: Record "Purchases & Payables Setup";
+        CurrencyAppln: Option No,EMU,All;
+    begin
+        if ApplnCurrencyCode = CompareCurrencyCode then
+            exit(true);
+
+        case AccType of
+            AccType::Customer:
+                begin
+                    SalesSetup.Get;
+                    CurrencyAppln := SalesSetup."Appln. between Currencies";
+                    case CurrencyAppln of
+                        CurrencyAppln::No:
+                            begin
+                                if ApplnCurrencyCode <> CompareCurrencyCode then
+                                    if Message then
+                                        Error(Text006)
+                                    else
+                                        exit(false);
+                            end;
+                        CurrencyAppln::EMU:
+                            begin
+                                GLSetup.Get;
+                                if not Currency.Get(ApplnCurrencyCode) then
+                                    Currency."EMU Currency" := GLSetup."EMU Currency";
+                                if not Currency2.Get(CompareCurrencyCode) then
+                                    Currency2."EMU Currency" := GLSetup."EMU Currency";
+                                if not Currency."EMU Currency" or not Currency2."EMU Currency" then
+                                    if Message then
+                                        Error(Text007)
+                                    else
+                                        exit(false);
+                            end;
+                    end;
+                end;
+            AccType::Vendor:
+                begin
+                    PurchSetup.Get;
+                    CurrencyAppln := PurchSetup."Appln. between Currencies";
+                    case CurrencyAppln of
+                        CurrencyAppln::No:
+                            begin
+                                if ApplnCurrencyCode <> CompareCurrencyCode then
+                                    if Message then
+                                        Error(Text006)
+                                    else
+                                        exit(false);
+                            end;
+                        CurrencyAppln::EMU:
+                            begin
+                                GLSetup.Get;
+                                if not Currency.Get(ApplnCurrencyCode) then
+                                    Currency."EMU Currency" := GLSetup."EMU Currency";
+                                if not Currency2.Get(CompareCurrencyCode) then
+                                    Currency2."EMU Currency" := GLSetup."EMU Currency";
+                                if not Currency."EMU Currency" or not Currency2."EMU Currency" then
+                                    if Message then
+                                        Error(Text007)
+                                    else
+                                        exit(false);
+                            end;
+                    end;
+                end;
+        end;
+
+        exit(true);
+    end;
+
+    local procedure NS_GetCurrency()
+    begin
+        with GenJnlLine do
+            if "Currency Code" = '' then
+                Currency.InitRoundingPrecision
+            else begin
+                Currency.Get("Currency Code");
+                Currency.TestField("Amount Rounding Precision");
+            end;
+    end;
+
+    local procedure NS_ApplyEmployeeLedgerEntry(var GenJnlLine: Record "Gen. Journal Line")
+    var
+        EmplLedgEntry: Record "Employee Ledger Entry";
+    begin
+        with GenJnlLine do begin
+            OK := NS_SelectEmplLedgEntry(GenJnlLine);
+            if not OK then
+                exit;
+
+            EmplLedgEntry.Reset;
+            EmplLedgEntry.SetCurrentKey("Employee No.", Open, Positive);
+            EmplLedgEntry.SetRange("Employee No.", AccNo);
+            EmplLedgEntry.SetRange(Open, true);
+            EmplLedgEntry.SetRange("Applies-to ID", "Applies-to ID");
+            if EmplLedgEntry.Find('-') then begin
+                if Amount = 0 then begin
+                    repeat
+                        Amount := Amount - EmplLedgEntry."Amount to Apply";
+                    until EmplLedgEntry.Next = 0;
+                    if ("Bal. Account Type" = "Bal. Account Type"::Customer) or
+                       ("Bal. Account Type" = "Bal. Account Type"::Vendor) or
+                       ("Bal. Account Type" = "Bal. Account Type"::Employee)
+                    then
+                        Amount := -Amount;
+                    Validate(Amount);
+                end;
+                "Applies-to Doc. Type" := 0;
+                "Applies-to Doc. No." := '';
+            end else
+                "Applies-to ID" := '';
+            if Modify then;
+        end;
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnAfterRun(var GenJnlLine: Record "Gen. Journal Line")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnBeforeRun(var GenJnlLine: Record "Gen. Journal Line"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnBeforeFindCustApply(GenJournalLine: Record "Gen. Journal Line"; CustLedgerEntry: Record "Cust. Ledger Entry"; var Amount: Decimal; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnBeforeFindVendApply(GenJournalLine: Record "Gen. Journal Line"; VendorLedgerEntry: Record "Vendor Ledger Entry"; var Amount: Decimal; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnBeforeSelectCustLedgEntry(var GenJournalLine: Record "Gen. Journal Line"; var AccNo: Code[20]; var Selected: Boolean; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnBeforeSelectVendLedgEntry(var GenJournalLine: Record "Gen. Journal Line"; var AccNo: Code[20]; var Selected: Boolean; var IsHandled: Boolean)
+    begin
+    end;
+}
+

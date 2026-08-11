@@ -1,0 +1,4632 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>c52bb55d-f31e-48aa-9147-495134f85e05</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Tablix Name="Tablix1">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>0.91346cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.77454cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69238cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69238cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69238cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69238cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69238cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.55806cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.69238cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.65001cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.45861cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DLine_No_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Item_Lbl.Value</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DDescription_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Description_Lbl.Value</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DScheduled_Value_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Scheduled_Value_Lbl.Value</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DPrevious_Period_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Previous_Period_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DThis_Period_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_This_Period_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DStored_Materials_Amount_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Materials_Presently_Stored_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DTotal_Completed_And_Stored_Amount_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Total_Completed_And_Stored_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DTotal_Completed_And_Stored_Pct_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Percent_This_Period_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DBalance_To_Finish_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Balance_To_Finish_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DRetention_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Detail_Retention_Lbl.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border />
+                            <VerticalAlign>Top</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.45861cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DLine_No">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DLine_No.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DLine_No</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DDescription">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DDescription.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DDescription</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DScheduled_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DScheduled_Value.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DScheduled_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DScheduled_Value</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DPrevious_Period">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DPrevious_Period.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DPrevious_PeriodFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DPrevious_Period</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DThis_Period">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DThis_Period.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DThis_PeriodFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DThis_Period</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DStored_Materials_Amount">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DStored_Materials_Amount.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DStored_Materials_AmountFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DStored_Materials_Amount</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DTotal_Completed_And_Stored_Amount">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DTotal_Completed_And_Stored.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DTotal_Completed_And_StoredFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DCompleted_And_Stored_Amount_Pct">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DTotal_Completed_And_Stored_Pct.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DTotal_Completed_And_Stored_PctFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DBalance_To_Finish">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DBalance_To_Finish.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DBalance_To_FinishFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DBalance_To_Finish</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DRetention">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!DRetention.Value</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <Format>=First(Fields!DRetentionFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>DRetention</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.45861cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox16">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox16</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox51">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox51</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox52">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox52</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox53">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox53</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox54">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox54</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox55">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox55</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox56">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox56</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox57">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox57</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox58">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox58</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.45861cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox59">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox59</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox60">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox60</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DScheduled_Value_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DScheduled_Value.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DScheduled_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DPrevious_Period_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DPrevious_Period.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DPrevious_PeriodFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DThis_Period_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DThis_Period.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DThis_PeriodFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DStored_Materials_Amount_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DStored_Materials_Amount.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DStored_Materials_AmountFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="otal_Completed_And_Stored_Amount_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DTotal_Completed_And_Stored.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DTotal_Completed_And_StoredFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox66">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox66</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DBalance_To_Finish_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DBalance_To_Finish.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DBalance_To_FinishFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="DRetention_Total">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!DRetention.Value)</Value>
+                                  <Style>
+                                    <FontFamily>Segoe UI</FontFamily>
+                                    <FontSize>7pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Format>=First(Fields!DRetentionFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Details" />
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <KeepWithGroup>Before</KeepWithGroup>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>DataSet_Result</DataSetName>
+            <PageBreak>
+              <BreakLocation>Start</BreakLocation>
+            </PageBreak>
+            <Top>17.95397cm</Top>
+            <Left>0.25689cm</Left>
+            <Height>1.83444cm</Height>
+            <Width>18.05035cm</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="Line1Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_01_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.18505cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00117pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line1Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_01_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.18509cm</Top>
+            <Left>1.76615cm</Left>
+            <Height>12.00003pt</Height>
+            <Width>7.30722cm</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line1Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Original_Contract_Sum.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Original_Contract_SumFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.08694cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>11.78119pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line2Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_02_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.67894cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line2Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_02_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.67898cm</Top>
+            <Left>1.76615cm</Left>
+            <Height>11.99924pt</Height>
+            <Width>7.30722cm</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line2Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Net_Change_Orders.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Net_ChangesFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.60838cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>12.00003pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>6</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line3Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_03_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.20811cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00094pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line3Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_03_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.20812cm</Top>
+            <Left>1.76615cm</Left>
+            <Height>12.00066pt</Height>
+            <Width>7.30722cm</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line3Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contract_Sum_To_Date.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Contract_Sum_To_DateFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.13755cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line4Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_04_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.73727cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line4Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_04_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.73731cm</Top>
+            <Left>1.76615cm</Left>
+            <Height>13.00009pt</Height>
+            <Width>7.30722cm</Width>
+            <ZIndex>11</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line4Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Total_Completed_And_Stored_To_Date.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Total_Completed_And_Stored_To_DateFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.73727cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>12</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.26644cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00038pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>13</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.26648cm</Top>
+            <Left>1.76615cm</Left>
+            <Height>11.99924pt</Height>
+            <Width>7.30722cm</Width>
+            <ZIndex>14</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5aHdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05a_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.79562cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>11.99953pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>15</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5aDesc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05a_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.79562cm</Top>
+            <Left>2.66841cm</Left>
+            <Height>13.00066pt</Height>
+            <Width>6.40496cm</Width>
+            <ZIndex>16</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5aValue">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Retention_Percent_Of_Completed_Work.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Retention_Percent_Of_Completed_WorkFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.79562cm</Top>
+            <Left>11.45407cm</Left>
+            <Height>12.00066pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>17</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5bHdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05b_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.32477cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00123pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5bDesc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05b_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.32481cm</Top>
+            <Left>2.66841cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>6.40496cm</Width>
+            <ZIndex>19</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5bValue">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Retention_Percent_Of_Completed_Material.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Retention_Percent_Of_Completed_MaterialFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.32481cm</Top>
+            <Left>11.45407cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>20</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5cDesc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_05c_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.78343cm</Top>
+            <Left>1.76615cm</Left>
+            <Height>12pt</Height>
+            <Width>7.00256cm</Width>
+            <ZIndex>21</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line5cValue">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Total_Retention.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Total_RetentionFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.85398cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>12pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>22</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line6Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_06_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.38315cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>11.91802pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>23</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line6Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_06_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.38315cm</Top>
+            <Left>1.74237cm</Left>
+            <Height>11.91802pt</Height>
+            <Width>7.331cm</Width>
+            <ZIndex>24</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line6Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Total_Earned_Less_Retention.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Total_Earned_Less_RetentionFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.38315cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>11.91802pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>25</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line7Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_07_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.90942cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>26</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line7Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_07_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.90942cm</Top>
+            <Left>1.74237cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>7.331cm</Width>
+            <ZIndex>27</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line7Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Less_Previous_Invoices.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Less_Previous_InvoicesFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.90942cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>28</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line8Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_08_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.43859cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>29</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line8Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_08_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.43859cm</Top>
+            <Left>1.74237cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>7.331cm</Width>
+            <ZIndex>30</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line8Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Current_Payment_Due.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Current_Payment_DueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.43859cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>12.00009pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>31</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line9Hdr">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_09_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.93248cm</Top>
+            <Left>0.5765cm</Left>
+            <Height>12.99981pt</Height>
+            <Width>0.84845cm</Width>
+            <ZIndex>32</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line9Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_09_Name_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.96776cm</Top>
+            <Left>1.74237cm</Left>
+            <Height>11.99981pt</Height>
+            <Width>7.331cm</Width>
+            <ZIndex>33</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line9Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Balance_To_Finish_Including_Retention.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Balance_To_Finish_Including_RetentionFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.96776cm</Top>
+            <Left>15.26088cm</Left>
+            <Height>11.99981pt</Height>
+            <Width>3.0659cm</Width>
+            <ZIndex>34</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line10Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_10_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.95054cm</Top>
+            <Left>0.55272cm</Left>
+            <Height>12.40022pt</Height>
+            <Width>6.8548cm</Width>
+            <ZIndex>35</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line10Value1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_10a_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.95054cm</Top>
+            <Left>8.03631cm</Left>
+            <Height>12.40022pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>36</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line10Value2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_10b_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.92938cm</Top>
+            <Left>11.13803cm</Left>
+            <Height>13.00003pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>37</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line11Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_11_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.42327cm</Top>
+            <Left>0.55272cm</Left>
+            <Height>12.4005pt</Height>
+            <Width>6.8548cm</Width>
+            <ZIndex>38</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line11Value1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Previous_Additions.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Previous_AdditionsFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.42327cm</Top>
+            <Left>8.03631cm</Left>
+            <Height>13.4005pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>39</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line11Value2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Previous_Deductions.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Previous_DeductionsFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.42327cm</Top>
+            <Left>11.146cm</Left>
+            <Height>13.4005pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>40</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line12Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_12_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.89601cm</Top>
+            <Left>0.55272cm</Left>
+            <Height>12.39937pt</Height>
+            <Width>6.8548cm</Width>
+            <ZIndex>41</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line12Value1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Current_Additions.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Current_AdditionsFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.89601cm</Top>
+            <Left>8.03631cm</Left>
+            <Height>12.39937pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>42</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line12Value2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Current_Deductions.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Current_DeductionsFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.89601cm</Top>
+            <Left>11.146cm</Left>
+            <Height>11.39937pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>43</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line13Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_13_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>16.36871cm</Top>
+            <Left>0.55272cm</Left>
+            <Height>14.20019pt</Height>
+            <Width>6.8548cm</Width>
+            <ZIndex>44</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line13Value1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Total_Changes_Additions.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Total_Changes_AdditionsFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>16.36871cm</Top>
+            <Left>8.03631cm</Left>
+            <Height>14.20019pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>45</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line13Value2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Total_Changes_Deductions.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Total_Changes_DeductionsFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>16.36871cm</Top>
+            <Left>11.146cm</Left>
+            <Height>14.20019pt</Height>
+            <Width>2.55976cm</Width>
+            <ZIndex>46</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line14Desc">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Header_Line_14_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>17.04605cm</Top>
+            <Left>0.55272cm</Left>
+            <Height>14.20019pt</Height>
+            <Width>6.8548cm</Width>
+            <ZIndex>47</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line14Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(Fields!Net_Change_Orders.Value)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Net_Change_OrdersFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Center</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>17.04605cm</Top>
+            <Left>8.02442cm</Left>
+            <Height>14.20019pt</Height>
+            <Width>5.67337cm</Width>
+            <ZIndex>48</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CopyTxt1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=Code.GetData(39,1)</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Left>6.79885in</Left>
+            <Height>11.3372pt</Height>
+            <Width>1.09749cm</Width>
+            <ZIndex>49</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CompanyAddress51">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_5.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.6694cm</Top>
+            <Left>0.10114in</Left>
+            <Height>12pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>50</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CompanyAddress41">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_4.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.28135cm</Top>
+            <Left>0.10114in</Left>
+            <Height>11.00006pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>51</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CompanyAddress31">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_3.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.88976cm</Top>
+            <Left>0.10142in</Left>
+            <Height>11.00013pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>52</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CompanyAddress21">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_2.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.49465cm</Top>
+            <Left>0.10114in</Left>
+            <Height>12pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>53</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CompanyAddress11">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_1.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.00782cm</Top>
+            <Left>0.10114in</Left>
+            <Height>11.99978pt</Height>
+            <Width>11.67571cm</Width>
+            <ZIndex>54</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="ToCaption2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Addr_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.94778cm</Top>
+            <Left>10.19822cm</Left>
+            <Height>12.44699pt</Height>
+            <Width>0.75756cm</Width>
+            <ZIndex>55</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="AECaption">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Job_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.52444cm</Top>
+            <Left>10.19821cm</Left>
+            <Height>11pt</Height>
+            <Width>7.91177cm</Width>
+            <ZIndex>56</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="ToCaption1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!To_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.97932cm</Top>
+            <Left>0.2569cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>0.98401cm</Width>
+            <ZIndex>57</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillCaption">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Payment_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.52444cm</Top>
+            <Left>0.2569cm</Left>
+            <Height>12.44728pt</Height>
+            <Width>8.37682cm</Width>
+            <ZIndex>58</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress8">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_8.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>5.96215cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>59</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="ShipToAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_4.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.14721cm</Top>
+            <Left>11.28034cm</Left>
+            <Height>11.00006pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>60</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="ShipToAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_3.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.72388cm</Top>
+            <Left>11.28034cm</Left>
+            <Height>12pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>61</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="ShipToAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_2.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.33583cm</Top>
+            <Left>11.28034cm</Left>
+            <Height>10.99972pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>62</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="ShipToAddress1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_1.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.9125cm</Top>
+            <Left>11.28034cm</Left>
+            <Height>12pt</Height>
+            <Width>6.82965cm</Width>
+            <ZIndex>63</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress7">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_7.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>5.5546cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>64</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress6">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_6.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>5.11176cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>65</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress5">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_5.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.69215cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>66</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_4.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.26882cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>67</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_3.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.84549cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>68</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_2.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>3.42216cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>69</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="BillToAddress1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!VendorAddress_1.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.97932cm</Top>
+            <Left>2.24343cm</Left>
+            <Height>11.55279pt</Height>
+            <Width>7.66029cm</Width>
+            <ZIndex>70</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="ContractDateCaption">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contract_Date_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.3965cm</Top>
+            <Left>10.19822cm</Left>
+            <Height>12.57141pt</Height>
+            <Width>2.76924cm</Width>
+            <ZIndex>71</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CustomerJobNoCaption">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Vendor_Job_No_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.93788cm</Top>
+            <Left>10.19822cm</Left>
+            <Height>11.00025pt</Height>
+            <Width>2.76924cm</Width>
+            <ZIndex>72</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CustomerIDCaption">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Vendor_ID_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.444cm</Top>
+            <Left>10.19822cm</Left>
+            <Height>12.99975pt</Height>
+            <Width>2.76924cm</Width>
+            <ZIndex>73</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="PeriodToCaption1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Period_To_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.90261cm</Top>
+            <Left>0.12892in</Left>
+            <Height>12pt</Height>
+            <Width>1.5134cm</Width>
+            <ZIndex>74</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="PeriodTo">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!NS_PeriodToDate.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>d</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.90261cm</Top>
+            <Left>2.15836cm</Left>
+            <Height>12pt</Height>
+            <Width>7.73884cm</Width>
+            <ZIndex>75</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="ContractDate">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!NS_ContractDate.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <Format>d</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.3965cm</Top>
+            <Left>12.96746cm</Left>
+            <Height>12.57141pt</Height>
+            <Width>5.35932cm</Width>
+            <ZIndex>76</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CustomerJobNo">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Vendor_Job_No.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.93788cm</Top>
+            <Left>12.96746cm</Left>
+            <Height>11.00025pt</Height>
+            <Width>5.35932cm</Width>
+            <ZIndex>77</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="CustomerID">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Vendor_ID_No.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.444cm</Top>
+            <Left>12.96746cm</Left>
+            <Height>12.99975pt</Height>
+            <Width>5.35932cm</Width>
+            <ZIndex>78</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="DescriptionCaption">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Description_Caption.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.444cm</Top>
+            <Left>0.12892in</Left>
+            <Height>12pt</Height>
+            <Width>1.5134cm</Width>
+            <ZIndex>79</ZIndex>
+            <Style />
+          </Textbox>
+          <Textbox Name="Description">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Subcontract_Description.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Normal</FontStyle>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.444cm</Top>
+            <Left>2.15836cm</Left>
+            <Height>12pt</Height>
+            <Width>7.73884cm</Width>
+            <ZIndex>80</ZIndex>
+            <Style />
+          </Textbox>
+        </ReportItems>
+        <Height>20.06357cm</Height>
+        <Style />
+      </Body>
+      <Width>18.52534cm</Width>
+      <Page>
+        <PageHeader>
+          <Height>1.03632in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Textbox Name="InvoiceNumberCaption">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Invoice_Number_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!Progress_Payment_Header_No.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.03494cm</Top>
+              <Left>0.25689cm</Left>
+              <Height>12.49043pt</Height>
+              <Width>4.77703cm</Width>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Textbox>
+            <Textbox Name="InvoiceDateCaption">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Invoice_Date_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!Requision_Date.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <Format>d</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.51438cm</Top>
+              <Left>0.25689cm</Left>
+              <Height>13.91859pt</Height>
+              <Width>4.77703cm</Width>
+              <ZIndex>1</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Textbox>
+            <Textbox Name="PeriodToHdr">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Period_To_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!NS_PeriodToDate.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <Format>d</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Height>13.48086pt</Height>
+              <Width>18.49358cm</Width>
+              <ZIndex>2</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Textbox>
+            <Textbox Name="DocumentText1">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Invoice_Header_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>12pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.09525cm</Top>
+              <Height>19.00957pt</Height>
+              <Width>18.49358cm</Width>
+              <ZIndex>3</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="InvoiceHeaderNo1">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Invoice_Number_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!Progress_Payment_Header_No.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.76906cm</Top>
+              <Height>13.62471pt</Height>
+              <Width>7.28094in</Width>
+              <ZIndex>4</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="PageCaption2">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Page  </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Globals!PageNumber</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value> of </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Globals!TotalPages</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.49774cm</Top>
+              <Height>14.69055pt</Height>
+              <Width>18.49358cm</Width>
+              <ZIndex>5</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,True,False)</Hidden>
+              </Visibility>
+              <Style>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="InvoiceDateBox">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!Invoice_Date_Caption.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value xml:space="preserve"> </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=First(Fields!Requision_Date.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <Format>d</Format>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>1.2744cm</Top>
+              <Height>11.79998pt</Height>
+              <Width>18.49358cm</Width>
+              <ZIndex>6</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox4">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value> User: </Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=User!UserID</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox4</rd:DefaultName>
+              <Top>1.69773cm</Top>
+              <Left>0.03175cm</Left>
+              <Height>0.45861cm</Height>
+              <Width>18.49359cm</Width>
+              <ZIndex>7</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
+              </Visibility>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="PageCaption">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Page  </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Globals!PageNumber</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value> of </Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                    <TextRun>
+                      <Value>=Globals!TotalPages</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Right</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>2.15634cm</Top>
+              <Height>11.69055pt</Height>
+              <Width>18.46183cm</Width>
+              <ZIndex>8</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
+              </Visibility>
+              <Style>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Image Name="CompanyInformationPicture1">
+              <Source>Database</Source>
+              <Value>=Convert.ToBase64String(Fields!CompanyInfo1Picture.Value)</Value>
+              <MIMEType>image/bmp</MIMEType>
+              <Sizing>Fit</Sizing>
+              <Top>0.03876in</Top>
+              <Left>0.07614in</Left>
+              <Height>0.8352in</Height>
+              <Width>0.87915in</Width>
+              <ZIndex>9</ZIndex>
+              <Visibility>
+                <Hidden>=IIF(Globals!PageNumber=1,False,True)</Hidden>
+              </Visibility>
+              <DataElementOutput>NoOutput</DataElementOutput>
+              <Style>
+                <Border />
+              </Style>
+            </Image>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageHeader>
+        <PageHeight>23cm</PageHeight>
+        <PageWidth>21.59cm</PageWidth>
+        <LeftMargin>1cm</LeftMargin>
+        <TopMargin>1cm</TopMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+
+
+Shared offset as Integer
+public Shared newPage as Object
+Shared currentgroup1 as Object
+Shared currentgroup2 as Integer
+public print as Boolean
+public Shared CompanyAddressInfo as Object
+public Shared Group1 as Object
+
+Public Function GetGroupPageNumber(NewPage as Boolean, pagenumber as Integer) as Object
+ If NewPage then
+      offset = pagenumber - 1
+  End If
+  Return pagenumber - offset
+End Function
+
+Public Function IsNewPage(group1 as Object,ByVal group2 as Integer) As Boolean
+   NewPage = FALSE
+   If Not (group1 = currentgroup1)
+       newPage = TRUE
+       currentgroup1 = group1
+       currentgroup2 = group2
+   ELSE
+       If  ( group2 &lt;&gt; currentgroup2)  then 
+           newPage = TRUE 
+           currentgroup2 = group2
+       End If
+   End if
+   Return NewPage
+End Function
+
+
+Public Function IsPrintFooter(printvalue as Boolean)
+   print = printvalue
+End Function
+
+Public Function GetData(Num as integer,Group as Integer) as Object
+    if Group = 1 then
+       if Choose(Num,Split(Cstr(Group1), Chr(177)))="" then
+         Return " "
+       end if
+       Return Choose(Num,Split(Cstr(Group1), Chr(177)))
+    End if
+    Return "5"
+End Function</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>13cf33b5-6ed1-4571-a30a-9948ca63b354</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Invoice_Header_Caption">
+          <DataField>Invoice_Header_Caption</DataField>
+        </Field>
+        <Field Name="CompanyInfo1Picture">
+          <DataField>CompanyInfo1Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfo2Picture">
+          <DataField>CompanyInfo2Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfo3Picture">
+          <DataField>CompanyInfo3Picture</DataField>
+        </Field>
+        <Field Name="CompanyAddress_1">
+          <DataField>CompanyAddress_1</DataField>
+        </Field>
+        <Field Name="CompanyAddress_2">
+          <DataField>CompanyAddress_2</DataField>
+        </Field>
+        <Field Name="CompanyAddress_3">
+          <DataField>CompanyAddress_3</DataField>
+        </Field>
+        <Field Name="CompanyAddress_4">
+          <DataField>CompanyAddress_4</DataField>
+        </Field>
+        <Field Name="CompanyAddress_5">
+          <DataField>CompanyAddress_5</DataField>
+        </Field>
+        <Field Name="CompanyAddress_6">
+          <DataField>CompanyAddress_6</DataField>
+        </Field>
+        <Field Name="CompanyAddress_7">
+          <DataField>CompanyAddress_7</DataField>
+        </Field>
+        <Field Name="CompanyAddress_8">
+          <DataField>CompanyAddress_8</DataField>
+        </Field>
+        <Field Name="Invoice_Number_Caption">
+          <DataField>Invoice_Number_Caption</DataField>
+        </Field>
+        <Field Name="Progress_Payment_Header_No">
+          <DataField>Progress_Payment_Header_No</DataField>
+        </Field>
+        <Field Name="Invoice_Date_Caption">
+          <DataField>Invoice_Date_Caption</DataField>
+        </Field>
+        <Field Name="Page_Caption">
+          <DataField>Page_Caption</DataField>
+        </Field>
+        <Field Name="Payment_Caption">
+          <DataField>Payment_Caption</DataField>
+        </Field>
+        <Field Name="To_Caption">
+          <DataField>To_Caption</DataField>
+        </Field>
+        <Field Name="VendorAddress_1">
+          <DataField>VendorAddress_1</DataField>
+        </Field>
+        <Field Name="VendorAddress_2">
+          <DataField>VendorAddress_2</DataField>
+        </Field>
+        <Field Name="VendorAddress_3">
+          <DataField>VendorAddress_3</DataField>
+        </Field>
+        <Field Name="VendorAddress_4">
+          <DataField>VendorAddress_4</DataField>
+        </Field>
+        <Field Name="VendorAddress_5">
+          <DataField>VendorAddress_5</DataField>
+        </Field>
+        <Field Name="VendorAddress_6">
+          <DataField>VendorAddress_6</DataField>
+        </Field>
+        <Field Name="VendorAddress_7">
+          <DataField>VendorAddress_7</DataField>
+        </Field>
+        <Field Name="VendorAddress_8">
+          <DataField>VendorAddress_8</DataField>
+        </Field>
+        <Field Name="Job_Caption">
+          <DataField>Job_Caption</DataField>
+        </Field>
+        <Field Name="Addr_Caption">
+          <DataField>Addr_Caption</DataField>
+        </Field>
+        <Field Name="JobAddress_1">
+          <DataField>JobAddress_1</DataField>
+        </Field>
+        <Field Name="JobAddress_2">
+          <DataField>JobAddress_2</DataField>
+        </Field>
+        <Field Name="JobAddress_3">
+          <DataField>JobAddress_3</DataField>
+        </Field>
+        <Field Name="JobAddress_4">
+          <DataField>JobAddress_4</DataField>
+        </Field>
+        <Field Name="A_E_Caption">
+          <DataField>A_E_Caption</DataField>
+        </Field>
+        <Field Name="AEAddress_1">
+          <DataField>AEAddress_1</DataField>
+        </Field>
+        <Field Name="AEAddress_2">
+          <DataField>AEAddress_2</DataField>
+        </Field>
+        <Field Name="AEAddress_3">
+          <DataField>AEAddress_3</DataField>
+        </Field>
+        <Field Name="AEAddress_4">
+          <DataField>AEAddress_4</DataField>
+        </Field>
+        <Field Name="Description_Caption">
+          <DataField>Description_Caption</DataField>
+        </Field>
+        <Field Name="Subcontract_Description">
+          <DataField>Subcontract_Description</DataField>
+        </Field>
+        <Field Name="Period_To_Caption">
+          <DataField>Period_To_Caption</DataField>
+        </Field>
+        <Field Name="Period_To">
+          <DataField>Period_To</DataField>
+        </Field>
+        <Field Name="Vendor_ID_Caption">
+          <DataField>Vendor_ID_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_ID_No">
+          <DataField>Vendor_ID_No</DataField>
+        </Field>
+        <Field Name="Vendor_Job_No_Caption">
+          <DataField>Vendor_Job_No_Caption</DataField>
+        </Field>
+        <Field Name="Vendor_Job_No">
+          <DataField>Vendor_Job_No</DataField>
+        </Field>
+        <Field Name="Contract_Date_Caption">
+          <DataField>Contract_Date_Caption</DataField>
+        </Field>
+        <Field Name="Contract_Date">
+          <DataField>Contract_Date</DataField>
+        </Field>
+        <Field Name="Header_Line_01_No_Lbl">
+          <DataField>Header_Line_01_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_01_Name_Lbl">
+          <DataField>Header_Line_01_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Original_Contract_Sum">
+          <DataField>Original_Contract_Sum</DataField>
+        </Field>
+        <Field Name="Original_Contract_SumFormat">
+          <DataField>Original_Contract_SumFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_02_No_Lbl">
+          <DataField>Header_Line_02_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_02_Name_Lbl">
+          <DataField>Header_Line_02_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Net_Changes">
+          <DataField>Net_Changes</DataField>
+        </Field>
+        <Field Name="Net_ChangesFormat">
+          <DataField>Net_ChangesFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_03_No_Lbl">
+          <DataField>Header_Line_03_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_03_Name_Lbl">
+          <DataField>Header_Line_03_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Contract_Sum_To_Date">
+          <DataField>Contract_Sum_To_Date</DataField>
+        </Field>
+        <Field Name="Contract_Sum_To_DateFormat">
+          <DataField>Contract_Sum_To_DateFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_04_No_Lbl">
+          <DataField>Header_Line_04_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_04_Name_Lbl">
+          <DataField>Header_Line_04_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Completed_And_Stored_To_Date">
+          <DataField>Total_Completed_And_Stored_To_Date</DataField>
+        </Field>
+        <Field Name="Total_Completed_And_Stored_To_DateFormat">
+          <DataField>Total_Completed_And_Stored_To_DateFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_05_No_Lbl">
+          <DataField>Header_Line_05_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05_Name_Lbl">
+          <DataField>Header_Line_05_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05a_No_Lbl">
+          <DataField>Header_Line_05a_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05a_Name_Lbl">
+          <DataField>Header_Line_05a_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_Work">
+          <DataField>Retention_Percent_Of_Completed_Work</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_WorkFormat">
+          <DataField>Retention_Percent_Of_Completed_WorkFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_05b_No_Lbl">
+          <DataField>Header_Line_05b_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_05b_Name_Lbl">
+          <DataField>Header_Line_05b_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_Material">
+          <DataField>Retention_Percent_Of_Completed_Material</DataField>
+        </Field>
+        <Field Name="Retention_Percent_Of_Completed_MaterialFormat">
+          <DataField>Retention_Percent_Of_Completed_MaterialFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_05c_Name_Lbl">
+          <DataField>Header_Line_05c_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Retention">
+          <DataField>Total_Retention</DataField>
+        </Field>
+        <Field Name="Total_RetentionFormat">
+          <DataField>Total_RetentionFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_06_No_Lbl">
+          <DataField>Header_Line_06_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_06_Name_Lbl">
+          <DataField>Header_Line_06_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Earned_Less_Retention">
+          <DataField>Total_Earned_Less_Retention</DataField>
+        </Field>
+        <Field Name="Total_Earned_Less_RetentionFormat">
+          <DataField>Total_Earned_Less_RetentionFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_07_No_Lbl">
+          <DataField>Header_Line_07_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_07_Name_Lbl">
+          <DataField>Header_Line_07_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Less_Previous_Invoices">
+          <DataField>Less_Previous_Invoices</DataField>
+        </Field>
+        <Field Name="Less_Previous_InvoicesFormat">
+          <DataField>Less_Previous_InvoicesFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_08_No_Lbl">
+          <DataField>Header_Line_08_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_08_Name_Lbl">
+          <DataField>Header_Line_08_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Current_Payment_Due">
+          <DataField>Current_Payment_Due</DataField>
+        </Field>
+        <Field Name="Current_Payment_DueFormat">
+          <DataField>Current_Payment_DueFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_09_No_Lbl">
+          <DataField>Header_Line_09_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_09_Name_Lbl">
+          <DataField>Header_Line_09_Name_Lbl</DataField>
+        </Field>
+        <Field Name="Balance_To_Finish_Including_Retention">
+          <DataField>Balance_To_Finish_Including_Retention</DataField>
+        </Field>
+        <Field Name="Balance_To_Finish_Including_RetentionFormat">
+          <DataField>Balance_To_Finish_Including_RetentionFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_10_No_Lbl">
+          <DataField>Header_Line_10_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_10a_No_Lbl">
+          <DataField>Header_Line_10a_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_10b_No_Lbl">
+          <DataField>Header_Line_10b_No_Lbl</DataField>
+        </Field>
+        <Field Name="Header_Line_11_No_Lbl">
+          <DataField>Header_Line_11_No_Lbl</DataField>
+        </Field>
+        <Field Name="Previous_Additions">
+          <DataField>Previous_Additions</DataField>
+        </Field>
+        <Field Name="Previous_AdditionsFormat">
+          <DataField>Previous_AdditionsFormat</DataField>
+        </Field>
+        <Field Name="Previous_Deductions">
+          <DataField>Previous_Deductions</DataField>
+        </Field>
+        <Field Name="Previous_DeductionsFormat">
+          <DataField>Previous_DeductionsFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_12_No_Lbl">
+          <DataField>Header_Line_12_No_Lbl</DataField>
+        </Field>
+        <Field Name="Current_Additions">
+          <DataField>Current_Additions</DataField>
+        </Field>
+        <Field Name="Current_AdditionsFormat">
+          <DataField>Current_AdditionsFormat</DataField>
+        </Field>
+        <Field Name="Current_Deductions">
+          <DataField>Current_Deductions</DataField>
+        </Field>
+        <Field Name="Current_DeductionsFormat">
+          <DataField>Current_DeductionsFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_13_No_Lbl">
+          <DataField>Header_Line_13_No_Lbl</DataField>
+        </Field>
+        <Field Name="Total_Changes_Additions">
+          <DataField>Total_Changes_Additions</DataField>
+        </Field>
+        <Field Name="Total_Changes_AdditionsFormat">
+          <DataField>Total_Changes_AdditionsFormat</DataField>
+        </Field>
+        <Field Name="Total_Changes_Deductions">
+          <DataField>Total_Changes_Deductions</DataField>
+        </Field>
+        <Field Name="Total_Changes_DeductionsFormat">
+          <DataField>Total_Changes_DeductionsFormat</DataField>
+        </Field>
+        <Field Name="Header_Line_14_No_Lbl">
+          <DataField>Header_Line_14_No_Lbl</DataField>
+        </Field>
+        <Field Name="Net_Change_Orders">
+          <DataField>Net_Change_Orders</DataField>
+        </Field>
+        <Field Name="Net_Change_OrdersFormat">
+          <DataField>Net_Change_OrdersFormat</DataField>
+        </Field>
+        <Field Name="NS_UserID">
+          <DataField>NS_UserID</DataField>
+        </Field>
+        <Field Name="NS_UserIDCaption">
+          <DataField>NS_UserIDCaption</DataField>
+        </Field>
+        <Field Name="Requision_Date">
+          <DataField>Requision_Date</DataField>
+        </Field>
+        <Field Name="NS_Requision_Date">
+          <DataField>NS_Requision_Date</DataField>
+        </Field>
+        <Field Name="NS_PeriodToDate">
+          <DataField>NS_PeriodToDate</DataField>
+        </Field>
+        <Field Name="NS_ContractDate">
+          <DataField>NS_ContractDate</DataField>
+        </Field>
+        <Field Name="Detail_Item_Lbl">
+          <DataField>Detail_Item_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Description_Lbl">
+          <DataField>Detail_Description_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Scheduled_Value_Lbl">
+          <DataField>Detail_Scheduled_Value_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Previous_Period_Lbl">
+          <DataField>Detail_Previous_Period_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_This_Period_Lbl">
+          <DataField>Detail_This_Period_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Materials_Presently_Stored_Lbl">
+          <DataField>Detail_Materials_Presently_Stored_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Total_Completed_And_Stored_Lbl">
+          <DataField>Detail_Total_Completed_And_Stored_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Percent_This_Period_Lbl">
+          <DataField>Detail_Percent_This_Period_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Balance_To_Finish_Lbl">
+          <DataField>Detail_Balance_To_Finish_Lbl</DataField>
+        </Field>
+        <Field Name="Detail_Retention_Lbl">
+          <DataField>Detail_Retention_Lbl</DataField>
+        </Field>
+        <Field Name="DLine_No">
+          <DataField>DLine_No</DataField>
+        </Field>
+        <Field Name="DDescription">
+          <DataField>DDescription</DataField>
+        </Field>
+        <Field Name="DScheduled_Value">
+          <DataField>DScheduled_Value</DataField>
+        </Field>
+        <Field Name="DScheduled_ValueFormat">
+          <DataField>DScheduled_ValueFormat</DataField>
+        </Field>
+        <Field Name="DPrevious_Period">
+          <DataField>DPrevious_Period</DataField>
+        </Field>
+        <Field Name="DPrevious_PeriodFormat">
+          <DataField>DPrevious_PeriodFormat</DataField>
+        </Field>
+        <Field Name="DThis_Period">
+          <DataField>DThis_Period</DataField>
+        </Field>
+        <Field Name="DThis_PeriodFormat">
+          <DataField>DThis_PeriodFormat</DataField>
+        </Field>
+        <Field Name="DStored_Materials_Amount">
+          <DataField>DStored_Materials_Amount</DataField>
+        </Field>
+        <Field Name="DStored_Materials_AmountFormat">
+          <DataField>DStored_Materials_AmountFormat</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_Stored">
+          <DataField>DTotal_Completed_And_Stored</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_StoredFormat">
+          <DataField>DTotal_Completed_And_StoredFormat</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_Stored_Pct">
+          <DataField>DTotal_Completed_And_Stored_Pct</DataField>
+        </Field>
+        <Field Name="DTotal_Completed_And_Stored_PctFormat">
+          <DataField>DTotal_Completed_And_Stored_PctFormat</DataField>
+        </Field>
+        <Field Name="DBalance_To_Finish">
+          <DataField>DBalance_To_Finish</DataField>
+        </Field>
+        <Field Name="DBalance_To_FinishFormat">
+          <DataField>DBalance_To_FinishFormat</DataField>
+        </Field>
+        <Field Name="DRetention">
+          <DataField>DRetention</DataField>
+        </Field>
+        <Field Name="DRetentionFormat">
+          <DataField>DRetentionFormat</DataField>
+        </Field>
+        <Field Name="NS_ScheduledSum">
+          <DataField>NS_ScheduledSum</DataField>
+        </Field>
+        <Field Name="NS_ScheduledSumFormat">
+          <DataField>NS_ScheduledSumFormat</DataField>
+        </Field>
+        <Field Name="NS_PreviousPeriodSum">
+          <DataField>NS_PreviousPeriodSum</DataField>
+        </Field>
+        <Field Name="NS_PreviousPeriodSumFormat">
+          <DataField>NS_PreviousPeriodSumFormat</DataField>
+        </Field>
+        <Field Name="NS_StoredMaterialAmtSum">
+          <DataField>NS_StoredMaterialAmtSum</DataField>
+        </Field>
+        <Field Name="NS_StoredMaterialAmtSumFormat">
+          <DataField>NS_StoredMaterialAmtSumFormat</DataField>
+        </Field>
+        <Field Name="NS_TotalCompledtedAmtSum">
+          <DataField>NS_TotalCompledtedAmtSum</DataField>
+        </Field>
+        <Field Name="NS_TotalCompledtedAmtSumFormat">
+          <DataField>NS_TotalCompledtedAmtSumFormat</DataField>
+        </Field>
+        <Field Name="NS_BalanceToFinishSum">
+          <DataField>NS_BalanceToFinishSum</DataField>
+        </Field>
+        <Field Name="NS_BalanceToFinishSumFormat">
+          <DataField>NS_BalanceToFinishSumFormat</DataField>
+        </Field>
+        <Field Name="NS_RetentionSum">
+          <DataField>NS_RetentionSum</DataField>
+        </Field>
+        <Field Name="NS_RetentionSumFormat">
+          <DataField>NS_RetentionSumFormat</DataField>
+        </Field>
+        <Field Name="NS_ThisPeriod">
+          <DataField>NS_ThisPeriod</DataField>
+        </Field>
+        <Field Name="NS_ThisPeriodFormat">
+          <DataField>NS_ThisPeriodFormat</DataField>
+        </Field>
+        <Field Name="NSScheduledValueTotal">
+          <DataField>NSScheduledValueTotal</DataField>
+        </Field>
+        <Field Name="NSScheduledValueTotalFormat">
+          <DataField>NSScheduledValueTotalFormat</DataField>
+        </Field>
+        <Field Name="NSThisPeriodTotal">
+          <DataField>NSThisPeriodTotal</DataField>
+        </Field>
+        <Field Name="NSThisPeriodTotalFormat">
+          <DataField>NSThisPeriodTotalFormat</DataField>
+        </Field>
+        <Field Name="NSStoredMaterialsTotAmt">
+          <DataField>NSStoredMaterialsTotAmt</DataField>
+        </Field>
+        <Field Name="NSStoredMaterialsTotAmtFormat">
+          <DataField>NSStoredMaterialsTotAmtFormat</DataField>
+        </Field>
+        <Field Name="NSTotalCompletedAndStored">
+          <DataField>NSTotalCompletedAndStored</DataField>
+        </Field>
+        <Field Name="NSTotalCompletedAndStoredFormat">
+          <DataField>NSTotalCompletedAndStoredFormat</DataField>
+        </Field>
+        <Field Name="NSBalanceToFinishTot">
+          <DataField>NSBalanceToFinishTot</DataField>
+        </Field>
+        <Field Name="NSBalanceToFinishTotFormat">
+          <DataField>NSBalanceToFinishTotFormat</DataField>
+        </Field>
+        <Field Name="NsTotalRetention">
+          <DataField>NsTotalRetention</DataField>
+        </Field>
+        <Field Name="NsTotalRetentionFormat">
+          <DataField>NsTotalRetentionFormat</DataField>
+        </Field>
+        <Field Name="NSPreviousPeriodTotal">
+          <DataField>NSPreviousPeriodTotal</DataField>
+        </Field>
+        <Field Name="NSPreviousPeriodTotalFormat">
+          <DataField>NSPreviousPeriodTotalFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

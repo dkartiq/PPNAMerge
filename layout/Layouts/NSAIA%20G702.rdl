@@ -1,0 +1,4392 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString />
+      </ConnectionProperties>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>7282ecbd-50f9-4ba1-b8bb-b6b1d9c20fb2</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Line Name="Line1">
+            <Top>0.88963cm</Top>
+            <Left>0.07051cm</Left>
+            <Height>0cm</Height>
+            <Width>26.39428cm</Width>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Title_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Title_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>15pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.11324cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.75875cm</Height>
+            <Width>13.18917cm</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Document_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Document_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>13pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.27199cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.6cm</Height>
+            <Width>5.68911cm</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="To_Owner_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!To_Owner_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>0.97782cm</Top>
+            <Left>0.14107cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.62445cm</Width>
+            <ZIndex>3</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CustomerAddress1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CustomerAddress_1_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CustomerAddress1</rd:DefaultName>
+            <Top>0.97782cm</Top>
+            <Left>1.94191cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91705cm</Width>
+            <ZIndex>4</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CustomerAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CustomerAddress_2_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CustomerAddress2</rd:DefaultName>
+            <Top>1.37782cm</Top>
+            <Left>1.94191cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91705cm</Width>
+            <ZIndex>5</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CustomerAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CustomerAddress_3_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CustomerAddress3</rd:DefaultName>
+            <Top>1.77782cm</Top>
+            <Left>1.94191cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91705cm</Width>
+            <ZIndex>6</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CustomerAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CustomerAddress_4_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CustomerAddress4</rd:DefaultName>
+            <Top>2.17782cm</Top>
+            <Left>1.94191cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91705cm</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CompanyAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_2_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CompanyAddress2</rd:DefaultName>
+            <Top>3.18581cm</Top>
+            <Left>3.99606cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.8629cm</Width>
+            <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CompanyAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_3_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CompanyAddress3</rd:DefaultName>
+            <Top>3.58581cm</Top>
+            <Left>3.99606cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.8629cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="CompanyAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_4_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CompanyAddress4</rd:DefaultName>
+            <Top>3.98581cm</Top>
+            <Left>3.99606cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.8629cm</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Project_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Project_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.00252cm</Top>
+            <Left>9.26813cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.64498cm</Width>
+            <ZIndex>11</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="JobAddress1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_1_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>JobAddress1</rd:DefaultName>
+            <Top>1.00252cm</Top>
+            <Left>11.05422cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.54152cm</Width>
+            <ZIndex>12</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="JobAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_2_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>JobAddress2</rd:DefaultName>
+            <Top>1.40252cm</Top>
+            <Left>11.05422cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.54152cm</Width>
+            <ZIndex>13</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="JobAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_4_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.22721cm</Top>
+            <Left>11.05422cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.54152cm</Width>
+            <ZIndex>14</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="From_Contractor_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!From_Contractor_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.78581cm</Top>
+            <Left>0.14107cm</Left>
+            <Height>0.4cm</Height>
+            <Width>3.29666cm</Width>
+            <ZIndex>15</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="JobAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!JobAddress_3_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>JobAddress3</rd:DefaultName>
+            <Top>1.80252cm</Top>
+            <Left>11.05422cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.54152cm</Width>
+            <ZIndex>16</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Via_Architect_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Via_Architect_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.78581cm</Top>
+            <Left>9.29459cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.66803cm</Width>
+            <ZIndex>17</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AEAddress1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_1_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AEAddress1</rd:DefaultName>
+            <Top>2.76939cm</Top>
+            <Left>12.76033cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.83541cm</Width>
+            <ZIndex>18</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AEAddress2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_2_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AEAddress2</rd:DefaultName>
+            <Top>3.16939cm</Top>
+            <Left>12.76033cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.83541cm</Width>
+            <ZIndex>19</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AEAddress3">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_3_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AEAddress3</rd:DefaultName>
+            <Top>3.56939cm</Top>
+            <Left>12.76033cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.83541cm</Width>
+            <ZIndex>20</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AEAddress4">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AEAddress_4_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AEAddress4</rd:DefaultName>
+            <Top>3.96939cm</Top>
+            <Left>12.76033cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.83541cm</Width>
+            <ZIndex>21</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Application_No_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Application_No_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.02721cm</Top>
+            <Left>17.8879cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.67485cm</Width>
+            <ZIndex>22</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Period_To_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Period_To_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.42721cm</Top>
+            <Left>17.8879cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.67485cm</Width>
+            <ZIndex>23</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Project_Nos_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Project_Nos_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.82721cm</Top>
+            <Left>17.8879cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.67485cm</Width>
+            <ZIndex>24</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Contract_Date_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contract_Date_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.76939cm</Top>
+            <Left>17.8879cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.67485cm</Width>
+            <ZIndex>25</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="app_no">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Application_No.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>app_no</rd:DefaultName>
+            <Top>1.02721cm</Top>
+            <Left>20.73914cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.47349cm</Width>
+            <ZIndex>26</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Project_No_1">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Project_No_1.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.82721cm</Top>
+            <Left>20.73914cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.47349cm</Width>
+            <ZIndex>27</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Project_No_2">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Project_No_2.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.22721cm</Top>
+            <Left>20.73914cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.47349cm</Width>
+            <ZIndex>28</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Contract_Date">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contract_Date.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>d</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.78581cm</Top>
+            <Left>20.73914cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.47349cm</Width>
+            <ZIndex>29</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Line Name="Line2">
+            <Top>5.74676cm</Top>
+            <Left>0.07051cm</Left>
+            <Height>0cm</Height>
+            <Width>26.39122cm</Width>
+            <ZIndex>30</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Period_To">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Period_To.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>d</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.42721cm</Top>
+            <Left>20.73914cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.47349cm</Width>
+            <ZIndex>31</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AIA_Form_Code">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AIA_Form_Code.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>6pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AIA_Form_Code</rd:DefaultName>
+            <Top>0.47199cm</Top>
+            <Left>23.81472cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.30938cm</Width>
+            <ZIndex>32</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="AIA_Form_Expiration_Date">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!AIA_Form_Expiration_Date.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>6pt</FontSize>
+                      <Format>d</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>AIA_Form_Expiration_Date</rd:DefaultName>
+            <Top>0.47199cm</Top>
+            <Left>25.1241cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.21062cm</Width>
+            <ZIndex>33</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Contractor_Application_Heading_1_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contractor_Application_Heading_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>16pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>5.8914cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.75875cm</Height>
+            <Width>12.5cm</Width>
+            <ZIndex>34</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Contractor_Application_Heading_2_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contractor_Application_Heading_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>6.66779cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>12.49999cm</Width>
+            <ZIndex>35</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Contractor_Application_Heading_3_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contractor_Application_Heading_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.06779cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>12.49999cm</Width>
+            <ZIndex>36</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_1_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.82546cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>37</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_2_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.54296cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>38</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_3_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.26046cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.31322cm</Width>
+            <ZIndex>39</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_4_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_4_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.97796cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>40</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_5_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_5_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.91408cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>41</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_5a_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_5a_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.63158cm</Top>
+            <Left>0.73237cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91871cm</Width>
+            <ZIndex>42</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_5b_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_5b_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.34908cm</Top>
+            <Left>0.73237cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91871cm</Width>
+            <ZIndex>43</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_5c_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_5c_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>7pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.03119cm</Top>
+            <Left>0.7359cm</Left>
+            <Height>0.4cm</Height>
+            <Width>6.91871cm</Width>
+            <ZIndex>44</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_6_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_6_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.78408cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>45</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_7_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_7_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.50158cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>46</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_8_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_8_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.21908cm</Top>
+            <Left>0.14107cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>47</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_Heading_9_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_Heading_9_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.93658cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.54529cm</Width>
+            <ZIndex>48</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Tablix Name="Tablix1">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>5.78942cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.37292cm</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>3.37289cm</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.42301cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_10_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!Line_Heading_10_Lbl.Value, "DataSet_Result")</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_10a_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!Line_Heading_10a_Lbl.Value, "DataSet_Result")</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_10b_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=First(Fields!Line_Heading_10b_Lbl.Value, "DataSet_Result")</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.81608cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_11_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Line_Heading_11_Lbl.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>0.2cm</PaddingLeft>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_11a_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_11a_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_11a_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_11b_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_11b_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_08_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.42301cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_12_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Line_Heading_12_Lbl.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>0.2cm</PaddingLeft>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_12a_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_12a_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_12a_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_12b_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_12b_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_11b_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.42301cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_13_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Line_Heading_13_Lbl.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingRight>0.2cm</PaddingRight>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_13a_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_13a_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_13a_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_13b_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_13b_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_13b_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.42301cm</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_Heading_14_Lbl">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Line_Heading_14_Lbl.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>0.2cm</PaddingLeft>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Line_14a_Value">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=code.BlankZero(First(Fields!Line_14a_Value.Value, "DataSet_Result"))</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=First(Fields!Line_14a_ValueFormat.Value, "DataSet_Result")</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>2</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+                <TablixMember />
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Details" />
+                  <TablixMembers>
+                    <TablixMember />
+                    <TablixMember />
+                    <TablixMember />
+                    <TablixMember />
+                  </TablixMembers>
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>DataSet_Result</DataSetName>
+            <Top>16.7262cm</Top>
+            <Left>0.07056cm</Left>
+            <Height>2.50812cm</Height>
+            <Width>12.53523cm</Width>
+            <ZIndex>49</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Tablix>
+          <Textbox Name="Contractor_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contractor_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.32559cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.81745cm</Width>
+            <ZIndex>50</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="By_Lbl1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!By_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.90198cm</Top>
+            <Left>14.3921cm</Left>
+            <Height>0.4cm</Height>
+            <Width>0.60029cm</Width>
+            <ZIndex>51</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date_Lbl1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Date_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.90198cm</Top>
+            <Left>23.28946cm</Left>
+            <Height>0.4cm</Height>
+            <Width>0.76553cm</Width>
+            <ZIndex>52</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="State_Of_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!State_Of_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.70076cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.30458cm</Width>
+            <ZIndex>53</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="County_Of_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!County_Of_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.10076cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.30458cm</Width>
+            <ZIndex>54</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Subscribed_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Subscribed_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.50076cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.30458cm</Width>
+            <ZIndex>55</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Me_This_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Me_This_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.90076cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.23001cm</Width>
+            <ZIndex>56</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Day_Of_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Day_Of_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.90076cm</Top>
+            <Left>20.23207cm</Left>
+            <Height>0.4cm</Height>
+            <Width>0.85959cm</Width>
+            <ZIndex>57</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Notary_Public_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Notary_Public_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.63158cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.30458cm</Width>
+            <ZIndex>58</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Commission_Expires_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Commission_Expires_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.03159cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.30458cm</Width>
+            <ZIndex>59</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Line Name="Line3">
+            <Top>12.57758cm</Top>
+            <Left>14.3921cm</Left>
+            <Height>0cm</Height>
+            <Width>12.10843cm</Width>
+            <ZIndex>60</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Architect_Certificate_Heading_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Architect_Certificate_Heading_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.61286cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.65292cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>61</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Accordance_1_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Accordance_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.39278cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>62</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Accordance_2_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Accordance_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.79278cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>63</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Accordance_3_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Accordance_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.19278cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>64</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Accordance_4_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Accordance_4_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.59278cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>65</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Accordance_5_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Accordance_5_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.99279cm</Top>
+            <Left>14.4309cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>66</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Amount_Certified_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Amount_Certified_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>9pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.66294cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.52708cm</Width>
+            <ZIndex>67</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Line Name="Line4">
+            <Top>19.83409cm</Top>
+            <Left>0.14459cm</Left>
+            <Height>0cm</Height>
+            <Width>26.22898cm</Width>
+            <ZIndex>68</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="Contract_For_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contract_For_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.85287cm</Top>
+            <Left>0.10579cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.40938cm</Width>
+            <ZIndex>69</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Attach_1_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Attach_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Italic</FontStyle>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>16.12644cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>70</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Attach_2_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Attach_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Italic</FontStyle>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>16.52644cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>71</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Attach_3_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Attach_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontStyle>Italic</FontStyle>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>16.92644cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.90382cm</Width>
+            <ZIndex>72</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Architect_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Architect_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>17.63034cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.6798cm</Width>
+            <ZIndex>73</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="By_Lbl2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!By_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>18.09384cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>0.56854cm</Width>
+            <ZIndex>74</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date_Lbl2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_08_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_08_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.66294cm</Top>
+            <Left>23.13979cm</Left>
+            <Height>0.4cm</Height>
+            <Width>3.18788cm</Width>
+            <ZIndex>75</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Certificate_1_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Certificate_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>18.53406cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.89677cm</Width>
+            <ZIndex>76</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Certificate_2_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Certificate_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>18.93406cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.89677cm</Width>
+            <ZIndex>77</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Certificate_3_Lbl">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Certificate_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>19.33406cm</Top>
+            <Left>14.42385cm</Left>
+            <Height>0.4cm</Height>
+            <Width>11.89677cm</Width>
+            <ZIndex>78</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_01_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_01_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_01_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>7.82546cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>79</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_02_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_02_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_02_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.54296cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>80</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_03_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.26046cm</Top>
+            <Left>8.22177cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.38402cm</Width>
+            <ZIndex>81</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_04_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_04_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_04_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.97796cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>82</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_05a2_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(First(Fields!Line_05a2_Value.Value, "DataSet_Result"))</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_05a2_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.63158cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.75821cm</Width>
+            <ZIndex>83</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_05b2_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(First(Fields!Line_05b2_Value.Value, "DataSet_Result"))</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_05b2_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.34908cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.75821cm</Width>
+            <ZIndex>84</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_05c_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=code.BlankZero(First(Fields!Line_05c_Value.Value, "DataSet_Result"))</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_05b2_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.03119cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>85</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_06_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_06_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_06_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.78408cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>86</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_07_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_07_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_07_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.50158cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>87</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_08_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_08_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_08_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.21908cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>88</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_09_Value">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Line_09_Value.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_09_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.93658cm</Top>
+            <Left>7.82747cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.77832cm</Width>
+            <ZIndex>89</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Contract_For">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contract_For.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>4.88815cm</Top>
+            <Left>2.69156cm</Left>
+            <Height>0.4cm</Height>
+            <Width>14.90418cm</Width>
+            <ZIndex>90</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="contractor">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Contractor_Name.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>contractor</rd:DefaultName>
+            <Top>8.32559cm</Top>
+            <Left>17.37889cm</Left>
+            <Height>0.4cm</Height>
+            <Width>8.95583cm</Width>
+            <ZIndex>91</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date_Lbl3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Date_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>18.09384cm</Top>
+            <Left>23.06919cm</Left>
+            <Height>0.4cm</Height>
+            <Width>0.89783cm</Width>
+            <ZIndex>92</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Distribution_To_Lbl">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Distribution_To_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.06602cm</Top>
+            <Left>23.52545cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.40538cm</Width>
+            <ZIndex>93</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Distribution_To_Owner_Lbl">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Distribution_To_Owner_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>1.60713cm</Top>
+            <Left>23.97524cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.95559cm</Width>
+            <ZIndex>94</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Distribution_To_Architect_Lbl">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Distribution_To_Architect_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.11296cm</Top>
+            <Left>23.97524cm</Left>
+            <Height>0.4cm</Height>
+            <Width>1.95559cm</Width>
+            <ZIndex>95</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Distribution_To_Contractor_Lbl">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Distribution_To_Contractor_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>2.65055cm</Top>
+            <Left>23.97524cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.34538cm</Width>
+            <ZIndex>96</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Rectangle Name="Rectangle1">
+            <KeepTogether>true</KeepTogether>
+            <Top>1.67063cm</Top>
+            <Left>23.51946cm</Left>
+            <Height>0.30677cm</Height>
+            <Width>0.2794cm</Width>
+            <ZIndex>97</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="Rectangle2">
+            <KeepTogether>true</KeepTogether>
+            <Top>2.17646cm</Top>
+            <Left>23.51946cm</Left>
+            <Height>0.30677cm</Height>
+            <Width>0.2794cm</Width>
+            <ZIndex>98</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="Rectangle3">
+            <KeepTogether>true</KeepTogether>
+            <Top>2.71405cm</Top>
+            <Left>23.51946cm</Left>
+            <Height>0.30677cm</Height>
+            <Width>0.2794cm</Width>
+            <ZIndex>99</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="Rectangle4">
+            <KeepTogether>true</KeepTogether>
+            <Top>3.26004cm</Top>
+            <Left>23.51946cm</Left>
+            <Height>0.30677cm</Height>
+            <Width>0.2794cm</Width>
+            <ZIndex>100</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Rectangle Name="Rectangle5">
+            <KeepTogether>true</KeepTogether>
+            <Top>3.79517cm</Top>
+            <Left>23.51946cm</Left>
+            <Height>0.30677cm</Height>
+            <Width>0.2794cm</Width>
+            <ZIndex>101</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Rectangle>
+          <Line Name="Line5">
+            <Top>15.07278cm</Top>
+            <Left>7.74382cm</Left>
+            <Height>0cm</Height>
+            <Width>5.02708cm</Width>
+            <ZIndex>102</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line6">
+            <Top>15.76019cm</Top>
+            <Left>7.74382cm</Left>
+            <Height>0cm</Height>
+            <Width>5.02708cm</Width>
+            <ZIndex>103</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line7">
+            <Top>15.07278cm</Top>
+            <Left>12.76033cm</Left>
+            <Height>0.68741cm</Height>
+            <Width>0cm</Width>
+            <ZIndex>104</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Line Name="Line8">
+            <Top>15.07278cm</Top>
+            <Left>7.72869cm</Left>
+            <Height>0.68741cm</Height>
+            <Width>0cm</Width>
+            <ZIndex>105</ZIndex>
+            <Style>
+              <Border>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Line>
+          <Textbox Name="CustomerAddress7">
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!CompanyAddress_1_.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>CustomerAddress1</rd:DefaultName>
+            <Top>2.78581cm</Top>
+            <Left>3.99606cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.8629cm</Width>
+            <ZIndex>106</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Architect_Lbl2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>17.63034cm</Top>
+            <Left>16.1742cm</Left>
+            <Height>0.4cm</Height>
+            <Width>10.14643cm</Width>
+            <ZIndex>107</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="By_Lbl3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>18.1009cm</Top>
+            <Left>15.05412cm</Left>
+            <Height>0.4cm</Height>
+            <Width>7.97272cm</Width>
+            <ZIndex>108</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date_Lbl4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>18.1009cm</Top>
+            <Left>24.01641cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.30421cm</Width>
+            <ZIndex>109</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="Day_Of_Lbl2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.90076cm</Top>
+            <Left>21.14986cm</Left>
+            <Height>0.4cm</Height>
+            <Width>5.22371cm</Width>
+            <ZIndex>110</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="Me_This_Lbl2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.93251cm</Top>
+            <Left>15.62387cm</Left>
+            <Height>0.4cm</Height>
+            <Width>4.57292cm</Width>
+            <ZIndex>111</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="By_Lbl4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.90198cm</Top>
+            <Left>15.05942cm</Left>
+            <Height>0.4cm</Height>
+            <Width>8.23004cm</Width>
+            <ZIndex>112</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="Date_Lbl5">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant" />
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <Top>8.90198cm</Top>
+            <Left>24.05499cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.27268cm</Width>
+            <ZIndex>113</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Line 1 </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>+</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                      <TextDecoration>Underline</TextDecoration>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>  Line2</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>) </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>9.26046cm</Top>
+            <Left>4.31356cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.1854cm</Width>
+            <ZIndex>114</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Column G on G703</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>10.37796cm</Top>
+            <Left>1.56983cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.78512cm</Width>
+            <ZIndex>115</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Column D + E on G703</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>11.9963cm</Top>
+            <Left>1.56983cm</Left>
+            <Height>0.28222cm</Height>
+            <Width>3.40248cm</Width>
+            <ZIndex>116</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value5">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Column F on G703</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>12.68723cm</Top>
+            <Left>1.56983cm</Left>
+            <Height>0.28222cm</Height>
+            <Width>3.08498cm</Width>
+            <ZIndex>117</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value6">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Line 5A + 5B or                </Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Total in Column I of G703</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>13.04cm</Top>
+            <Left>2.54967cm</Left>
+            <Height>0.54981cm</Height>
+            <Width>3.31429cm</Width>
+            <ZIndex>118</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value7">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Line 4 less Line 5 Total</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.1488cm</Top>
+            <Left>1.56983cm</Left>
+            <Height>0.28222cm</Height>
+            <Width>3.40248cm</Width>
+            <ZIndex>119</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value8">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Line 6 from prior Certificate</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>14.71056cm</Top>
+            <Left>1.56983cm</Left>
+            <Height>0.28222cm</Height>
+            <Width>3.84918cm</Width>
+            <ZIndex>120</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Line_03_Value9">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>(Line 3 less Line 6</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Normal</FontWeight>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                  <TextRun>
+                    <Value>)</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                      <Format>=First(Fields!Line_03_ValueFormat.Value, "DataSet_Result")</Format>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <Top>15.9013cm</Top>
+            <Left>6.49498cm</Left>
+            <Height>0.4cm</Height>
+            <Width>2.78512cm</Width>
+            <ZIndex>121</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox1">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_1_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>5.8914cm</Top>
+            <Left>14.38134cm</Left>
+            <Height>0.27897cm</Height>
+            <Width>12.01178cm</Width>
+            <ZIndex>122</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox2">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_2_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>6.18801cm</Top>
+            <Left>14.38134cm</Left>
+            <Height>0.21876cm</Height>
+            <Width>12.01178cm</Width>
+            <ZIndex>123</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox3">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_3_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>6.45616cm</Top>
+            <Left>14.38134cm</Left>
+            <Height>0.20461cm</Height>
+            <Width>12.01178cm</Width>
+            <ZIndex>124</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox4">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_4_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>6.71016cm</Top>
+            <Left>14.38505cm</Left>
+            <Height>0.23636cm</Height>
+            <Width>12.00807cm</Width>
+            <ZIndex>125</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox5">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>=First(Fields!Undersigned_5_Lbl.Value, "DataSet_Result")</Value>
+                    <Style>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style />
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox1</rd:DefaultName>
+            <Top>6.99591cm</Top>
+            <Left>14.38134cm</Left>
+            <Height>0.30014cm</Height>
+            <Width>12.01178cm</Width>
+            <ZIndex>126</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>2pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+        </ReportItems>
+        <Height>7.8087in</Height>
+        <Style />
+      </Body>
+      <Width>10.43328in</Width>
+      <Page>
+        <PageHeight>8.5in</PageHeight>
+        <PageWidth>11in</PageWidth>
+        <LeftMargin>0.25in</LeftMargin>
+        <TopMargin>0.25in</TopMargin>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <Code>Public Function BlankZero(ByVal Value As Decimal)
+    if Value = 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankPos(ByVal Value As Decimal)
+    if Value &gt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankZeroAndPos(ByVal Value As Decimal)
+    if Value &gt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNeg(ByVal Value As Decimal)
+    if Value &lt; 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+
+Public Function BlankNegAndZero(ByVal Value As Decimal)
+    if Value &lt;= 0 then
+        Return ""
+    end if
+    Return Value
+End Function
+</Code>
+  <Language>=User!Language</Language>
+  <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>a90a6ba3-b092-4f80-8f0a-0925d956440c</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Title_Lbl">
+          <DataField>Title_Lbl</DataField>
+        </Field>
+        <Field Name="Document_Lbl">
+          <DataField>Document_Lbl</DataField>
+        </Field>
+        <Field Name="To_Owner_Lbl">
+          <DataField>To_Owner_Lbl</DataField>
+        </Field>
+        <Field Name="Project_Lbl">
+          <DataField>Project_Lbl</DataField>
+        </Field>
+        <Field Name="Application_No_Lbl">
+          <DataField>Application_No_Lbl</DataField>
+        </Field>
+        <Field Name="Period_To_Lbl">
+          <DataField>Period_To_Lbl</DataField>
+        </Field>
+        <Field Name="Project_Nos_Lbl">
+          <DataField>Project_Nos_Lbl</DataField>
+        </Field>
+        <Field Name="Contract_Date_Lbl">
+          <DataField>Contract_Date_Lbl</DataField>
+        </Field>
+        <Field Name="Distribution_To_Lbl">
+          <DataField>Distribution_To_Lbl</DataField>
+        </Field>
+        <Field Name="Distribution_To_Owner_Lbl">
+          <DataField>Distribution_To_Owner_Lbl</DataField>
+        </Field>
+        <Field Name="Distribution_To_Architect_Lbl">
+          <DataField>Distribution_To_Architect_Lbl</DataField>
+        </Field>
+        <Field Name="Distribution_To_Contractor_Lbl">
+          <DataField>Distribution_To_Contractor_Lbl</DataField>
+        </Field>
+        <Field Name="From_Contractor_Lbl">
+          <DataField>From_Contractor_Lbl</DataField>
+        </Field>
+        <Field Name="Via_Architect_Lbl">
+          <DataField>Via_Architect_Lbl</DataField>
+        </Field>
+        <Field Name="Contract_For_Lbl">
+          <DataField>Contract_For_Lbl</DataField>
+        </Field>
+        <Field Name="Contractor_Application_Heading_1_Lbl">
+          <DataField>Contractor_Application_Heading_1_Lbl</DataField>
+        </Field>
+        <Field Name="Contractor_Application_Heading_2_Lbl">
+          <DataField>Contractor_Application_Heading_2_Lbl</DataField>
+        </Field>
+        <Field Name="Contractor_Application_Heading_3_Lbl">
+          <DataField>Contractor_Application_Heading_3_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_1_Lbl">
+          <DataField>Line_Heading_1_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_2_Lbl">
+          <DataField>Line_Heading_2_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_3_Lbl">
+          <DataField>Line_Heading_3_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_4_Lbl">
+          <DataField>Line_Heading_4_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_5_Lbl">
+          <DataField>Line_Heading_5_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_5a_Lbl">
+          <DataField>Line_Heading_5a_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_5b_Lbl">
+          <DataField>Line_Heading_5b_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_5c_Lbl">
+          <DataField>Line_Heading_5c_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_6_Lbl">
+          <DataField>Line_Heading_6_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_7_Lbl">
+          <DataField>Line_Heading_7_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_8_Lbl">
+          <DataField>Line_Heading_8_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_9_Lbl">
+          <DataField>Line_Heading_9_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_10_Lbl">
+          <DataField>Line_Heading_10_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_10a_Lbl">
+          <DataField>Line_Heading_10a_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_10b_Lbl">
+          <DataField>Line_Heading_10b_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_11_Lbl">
+          <DataField>Line_Heading_11_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_12_Lbl">
+          <DataField>Line_Heading_12_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_13_Lbl">
+          <DataField>Line_Heading_13_Lbl</DataField>
+        </Field>
+        <Field Name="Line_Heading_14_Lbl">
+          <DataField>Line_Heading_14_Lbl</DataField>
+        </Field>
+        <Field Name="Undersigned_1_Lbl">
+          <DataField>Undersigned_1_Lbl</DataField>
+        </Field>
+        <Field Name="Undersigned_2_Lbl">
+          <DataField>Undersigned_2_Lbl</DataField>
+        </Field>
+        <Field Name="Undersigned_3_Lbl">
+          <DataField>Undersigned_3_Lbl</DataField>
+        </Field>
+        <Field Name="Undersigned_4_Lbl">
+          <DataField>Undersigned_4_Lbl</DataField>
+        </Field>
+        <Field Name="Undersigned_5_Lbl">
+          <DataField>Undersigned_5_Lbl</DataField>
+        </Field>
+        <Field Name="Contractor_Lbl">
+          <DataField>Contractor_Lbl</DataField>
+        </Field>
+        <Field Name="By_Lbl">
+          <DataField>By_Lbl</DataField>
+        </Field>
+        <Field Name="Date_Lbl">
+          <DataField>Date_Lbl</DataField>
+        </Field>
+        <Field Name="State_Of_Lbl">
+          <DataField>State_Of_Lbl</DataField>
+        </Field>
+        <Field Name="County_Of_Lbl">
+          <DataField>County_Of_Lbl</DataField>
+        </Field>
+        <Field Name="Subscribed_Lbl">
+          <DataField>Subscribed_Lbl</DataField>
+        </Field>
+        <Field Name="Me_This_Lbl">
+          <DataField>Me_This_Lbl</DataField>
+        </Field>
+        <Field Name="Day_Of_Lbl">
+          <DataField>Day_Of_Lbl</DataField>
+        </Field>
+        <Field Name="Notary_Public_Lbl">
+          <DataField>Notary_Public_Lbl</DataField>
+        </Field>
+        <Field Name="Commission_Expires_Lbl">
+          <DataField>Commission_Expires_Lbl</DataField>
+        </Field>
+        <Field Name="Architect_Certificate_Heading_Lbl">
+          <DataField>Architect_Certificate_Heading_Lbl</DataField>
+        </Field>
+        <Field Name="Accordance_1_Lbl">
+          <DataField>Accordance_1_Lbl</DataField>
+        </Field>
+        <Field Name="Accordance_2_Lbl">
+          <DataField>Accordance_2_Lbl</DataField>
+        </Field>
+        <Field Name="Accordance_3_Lbl">
+          <DataField>Accordance_3_Lbl</DataField>
+        </Field>
+        <Field Name="Accordance_4_Lbl">
+          <DataField>Accordance_4_Lbl</DataField>
+        </Field>
+        <Field Name="Accordance_5_Lbl">
+          <DataField>Accordance_5_Lbl</DataField>
+        </Field>
+        <Field Name="Amount_Certified_Lbl">
+          <DataField>Amount_Certified_Lbl</DataField>
+        </Field>
+        <Field Name="Attach_1_Lbl">
+          <DataField>Attach_1_Lbl</DataField>
+        </Field>
+        <Field Name="Attach_2_Lbl">
+          <DataField>Attach_2_Lbl</DataField>
+        </Field>
+        <Field Name="Attach_3_Lbl">
+          <DataField>Attach_3_Lbl</DataField>
+        </Field>
+        <Field Name="Architect_Lbl">
+          <DataField>Architect_Lbl</DataField>
+        </Field>
+        <Field Name="Certificate_1_Lbl">
+          <DataField>Certificate_1_Lbl</DataField>
+        </Field>
+        <Field Name="Certificate_2_Lbl">
+          <DataField>Certificate_2_Lbl</DataField>
+        </Field>
+        <Field Name="Certificate_3_Lbl">
+          <DataField>Certificate_3_Lbl</DataField>
+        </Field>
+        <Field Name="AIA_Form_Code">
+          <DataField>AIA_Form_Code</DataField>
+        </Field>
+        <Field Name="AIA_Form_Expiration_Date">
+          <DataField>AIA_Form_Expiration_Date</DataField>
+        </Field>
+        <Field Name="CustomerAddress_1_">
+          <DataField>CustomerAddress_1_</DataField>
+        </Field>
+        <Field Name="CustomerAddress_2_">
+          <DataField>CustomerAddress_2_</DataField>
+        </Field>
+        <Field Name="CustomerAddress_3_">
+          <DataField>CustomerAddress_3_</DataField>
+        </Field>
+        <Field Name="CustomerAddress_4_">
+          <DataField>CustomerAddress_4_</DataField>
+        </Field>
+        <Field Name="JobAddress_1_">
+          <DataField>JobAddress_1_</DataField>
+        </Field>
+        <Field Name="JobAddress_2_">
+          <DataField>JobAddress_2_</DataField>
+        </Field>
+        <Field Name="JobAddress_3_">
+          <DataField>JobAddress_3_</DataField>
+        </Field>
+        <Field Name="JobAddress_4_">
+          <DataField>JobAddress_4_</DataField>
+        </Field>
+        <Field Name="AEAddress_1_">
+          <DataField>AEAddress_1_</DataField>
+        </Field>
+        <Field Name="AEAddress_2_">
+          <DataField>AEAddress_2_</DataField>
+        </Field>
+        <Field Name="AEAddress_3_">
+          <DataField>AEAddress_3_</DataField>
+        </Field>
+        <Field Name="AEAddress_4_">
+          <DataField>AEAddress_4_</DataField>
+        </Field>
+        <Field Name="CompanyAddress_1_">
+          <DataField>CompanyAddress_1_</DataField>
+        </Field>
+        <Field Name="CompanyAddress_2_">
+          <DataField>CompanyAddress_2_</DataField>
+        </Field>
+        <Field Name="CompanyAddress_3_">
+          <DataField>CompanyAddress_3_</DataField>
+        </Field>
+        <Field Name="CompanyAddress_4_">
+          <DataField>CompanyAddress_4_</DataField>
+        </Field>
+        <Field Name="Contract_For">
+          <DataField>Contract_For</DataField>
+        </Field>
+        <Field Name="Application_No">
+          <DataField>Application_No</DataField>
+        </Field>
+        <Field Name="Period_To">
+          <DataField>Period_To</DataField>
+        </Field>
+        <Field Name="Project_No_1">
+          <DataField>Project_No_1</DataField>
+        </Field>
+        <Field Name="Project_No_2">
+          <DataField>Project_No_2</DataField>
+        </Field>
+        <Field Name="Contract_Date">
+          <DataField>Contract_Date</DataField>
+        </Field>
+        <Field Name="Line_01_Value">
+          <DataField>Line_01_Value</DataField>
+        </Field>
+        <Field Name="Line_01_ValueFormat">
+          <DataField>Line_01_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_02_Value">
+          <DataField>Line_02_Value</DataField>
+        </Field>
+        <Field Name="Line_02_ValueFormat">
+          <DataField>Line_02_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_03_Value">
+          <DataField>Line_03_Value</DataField>
+        </Field>
+        <Field Name="Line_03_ValueFormat">
+          <DataField>Line_03_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_04_Value">
+          <DataField>Line_04_Value</DataField>
+        </Field>
+        <Field Name="Line_04_ValueFormat">
+          <DataField>Line_04_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_05a2_Value">
+          <DataField>Line_05a2_Value</DataField>
+        </Field>
+        <Field Name="Line_05a2_ValueFormat">
+          <DataField>Line_05a2_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_05b2_Value">
+          <DataField>Line_05b2_Value</DataField>
+        </Field>
+        <Field Name="Line_05b2_ValueFormat">
+          <DataField>Line_05b2_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_05c_Value">
+          <DataField>Line_05c_Value</DataField>
+        </Field>
+        <Field Name="Line_05c_ValueFormat">
+          <DataField>Line_05c_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_06_Value">
+          <DataField>Line_06_Value</DataField>
+        </Field>
+        <Field Name="Line_06_ValueFormat">
+          <DataField>Line_06_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_07_Value">
+          <DataField>Line_07_Value</DataField>
+        </Field>
+        <Field Name="Line_07_ValueFormat">
+          <DataField>Line_07_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_08_Value">
+          <DataField>Line_08_Value</DataField>
+        </Field>
+        <Field Name="Line_08_ValueFormat">
+          <DataField>Line_08_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_09_Value">
+          <DataField>Line_09_Value</DataField>
+        </Field>
+        <Field Name="Line_09_ValueFormat">
+          <DataField>Line_09_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_11a_Value">
+          <DataField>Line_11a_Value</DataField>
+        </Field>
+        <Field Name="Line_11a_ValueFormat">
+          <DataField>Line_11a_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_11b_Value">
+          <DataField>Line_11b_Value</DataField>
+        </Field>
+        <Field Name="Line_11b_ValueFormat">
+          <DataField>Line_11b_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_12a_Value">
+          <DataField>Line_12a_Value</DataField>
+        </Field>
+        <Field Name="Line_12a_ValueFormat">
+          <DataField>Line_12a_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_12b_Value">
+          <DataField>Line_12b_Value</DataField>
+        </Field>
+        <Field Name="Line_12b_ValueFormat">
+          <DataField>Line_12b_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_13a_Value">
+          <DataField>Line_13a_Value</DataField>
+        </Field>
+        <Field Name="Line_13a_ValueFormat">
+          <DataField>Line_13a_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_13b_Value">
+          <DataField>Line_13b_Value</DataField>
+        </Field>
+        <Field Name="Line_13b_ValueFormat">
+          <DataField>Line_13b_ValueFormat</DataField>
+        </Field>
+        <Field Name="Line_14a_Value">
+          <DataField>Line_14a_Value</DataField>
+        </Field>
+        <Field Name="Line_14a_ValueFormat">
+          <DataField>Line_14a_ValueFormat</DataField>
+        </Field>
+        <Field Name="Contractor_Name">
+          <DataField>Contractor_Name</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
+</Report>

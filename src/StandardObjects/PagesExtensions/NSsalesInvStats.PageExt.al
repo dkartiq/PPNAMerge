@@ -1,0 +1,198 @@
+pageextension 14021248 NS_SalesInvStats extends "Sales Invoice Statistics"
+{
+    // version NAVW111.00,PPNA11.00
+    //PRJ-56.SK.1.0 Added code for clearing all variables
+    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
+    //PRJCTPR-224.VC.1.0 16Nov2023 | Sale Invoice with Foreign Currency
+    Caption = 'Sales Invoice Statistics'; //PRJ-1330.NK.1.0 25Apr2022
+    layout
+    {
+        modify("Cust.""Balance (LCY)""")
+        {
+            Visible = false;
+            Enabled = false;
+        }
+
+        addafter("Cust.""Balance (LCY)""")
+        {
+            field(NS_CustBalanceLCY; NS_Cust."Balance (LCY)")
+            {
+                Caption = 'Balance ($)';
+                ToolTip = 'Specifies the balance in $ on the customer''s account.';
+                ApplicationArea = "#Basic, #Suite";
+                AutoFormatType = 1;
+            }
+        }
+
+        modify("Cust.""Credit Limit (LCY)""")
+        {
+            Visible = false;
+            Enabled = false;
+        }
+
+        addafter("Cust.""Credit Limit (LCY)""")
+        {
+            field(NS_CustCreditLimitLCY; NS_Cust."Credit Limit (LCY)")
+            {
+                Caption = 'Credit Limit ($)';
+                ToolTip = 'Specifies information about the credit limit in $, for the customer who you created and posted this sales invoice for. ';
+                ApplicationArea = "#Basic,#Suite";
+                AutoFormatType = 1;
+            }
+        }
+
+        modify(CreditLimitLCYExpendedPct)
+        {
+            Visible = false;
+            Enabled = false;
+        }
+
+        addafter(CreditLimitLCYExpendedPct)
+        {
+            field(NS_CreditLimitLCYExpendedPct; NS_CreditLimitLCYExpendedPct)
+            {
+                ExtendedDatatype = Ratio;
+                Caption = 'Expended % of Credit Limit ($)';
+                ToolTip = 'Specifies the expended percentage of the credit limit in ($).';
+                ApplicationArea = "#Basic,#Suite";
+            }
+        }
+
+        addafter(AmountInclVAT)
+        {
+            field("NS Retention Amount (LCY)"; Rec."NS_Retention Amount (LCY)")
+            {
+                ApplicationArea = All;
+                AutoFormatExpression = "Currency Code";
+                AutoFormatType = 1;
+                Caption = 'Retention Amount ($)';
+            }
+            //PRJCTPR-224.VC.1.0 Start         
+            field("NS_Retention Amount"; Rec."NS_Retention Amount")
+            {
+                ApplicationArea = All;
+                AutoFormatType = 1;
+                Caption = 'Retention Amount';
+
+                ToolTip = 'Retention Amount';
+                Editable = false;
+            }
+            //PRJCTPR-224.VC.1.0 End
+            field("NS Final Total"; NS_FinalTotal)
+            {
+                ApplicationArea = All;
+                AutoFormatExpression = "Currency Code";
+                AutoFormatType = 1;
+                Caption = 'Final Total';
+            }
+        }
+        addafter("Cust.""Balance (LCY)""")
+        {
+            field("NS Retention Balance LCY"; NS_RetentionBalanceLCY)
+            {
+                ApplicationArea = All;
+                AutoFormatType = 1;
+                Caption = 'Retention Balance ($)';
+            }
+        }
+    }
+
+    var
+        NS_SalesSetup: Record "Sales & Receivables Setup";
+        NS_JobsSetup: Record "Jobs Setup";
+        NS_RetentionBalanceLCY: Decimal;
+        NS_FinalTotal: Decimal;
+        NS_Cust: Record Customer;
+        NS_CreditLimitLCYExpendedPct: Decimal;
+        NS_SalesInvoiceLine: Record "Sales Invoice Line";
+        NS_AmountInclVAT: Decimal;
+
+
+    trigger OnOpenPage()
+
+    begin
+        //ProjectPro - start
+        NS_SalesSetup.GET;
+        NS_JobsSetup.GET;
+        //ProjectPro - end
+    end;
+
+    trigger OnAfterGetRecord()
+    begin
+        Clear(NS_AmountInclVAT); //PRJ-56.SK.1.0 Added
+        NS_SalesInvoiceLine.SETRANGE("Document No.", "No.");
+        IF NS_SalesInvoiceLine.FIND('-') THEN
+            REPEAT
+                NS_AmountInclVAT := NS_AmountInclVAT + NS_SalesInvoiceLine."Amount Including VAT";
+            UNTIL NS_SalesInvoiceLine.NEXT = 0;
+
+
+        //ProjectPro - start
+        //IF Cust.GET("Bill-to Customer No.") THEN
+        //  Cust.CALCFIELDS("Balance (LCY)")
+        //END
+        IF NS_Cust.GET("Bill-to Customer No.") THEN BEGIN
+            NS_RetentionBalanceLCY := 0;
+            IF NOT NS_SalesSetup."NS_Sales Retention Inactive" THEN BEGIN
+                NS_Cust.SETRANGE("NS_Retention Ledger CodeFilter", NS_JobsSetup."NS_Retention Receivable Ledger");
+                NS_Cust.CALCFIELDS("Balance (LCY)");
+                NS_RetentionBalanceLCY := NS_Cust."Balance (LCY)";
+                NS_Cust.SETRANGE("NS_Retention Ledger CodeFilter", NS_SalesSetup."NS_Normal Customer Ledger No.");
+            END;
+            NS_Cust.CALCFIELDS("Balance (LCY)")
+        END ELSE
+            //ProjectPro - end
+            CLEAR(NS_Cust);
+
+        CASE TRUE OF
+            NS_Cust."Credit Limit (LCY)" = 0:
+                NS_CreditLimitLCYExpendedPct := 0;
+            NS_Cust."Balance (LCY)" / NS_Cust."Credit Limit (LCY)" < 0:
+                NS_CreditLimitLCYExpendedPct := 0;
+            NS_Cust."Balance (LCY)" / NS_Cust."Credit Limit (LCY)" > 1:
+                NS_CreditLimitLCYExpendedPct := 10000;
+            ELSE
+                NS_CreditLimitLCYExpendedPct := ROUND(NS_Cust."Balance (LCY)" / NS_Cust."Credit Limit (LCY)" * 10000, 1);
+        END;
+
+        //ProjectPro - start
+        //PRJCTPR-224.VC.1.0 Start        
+        If Rec."Currency Code" <> '' then
+            NS_FinalTotal := NS_AmountInclVAT - Rec."NS_Retention Amount"
+        else
+            //PRJCTPR-224.VC.1.0 End 
+        NS_FinalTotal := NS_AmountInclVAT - "NS_Retention Amount (LCY)";
+        //ProjectPro - end
+    end;
+}
+
+// +---------------------------------------------------------------------------------------------
+// +ProjectPro
+// +  - Added field(s):
+// +     - General - Group
+// +         Retention (LCY)
+// +         Final Total
+// +     - Customer - Group
+// +         Retention Balance (LCY)
+// +
+// +  - Added function(s):
+// +
+// +  - Added global variable(s):
+// +     PP_SalesSetup
+// +     PP_JobsSetup
+// +     PP_RetentionBalanceLCY
+// +     PP_FinalTotal
+// +
+// +  - Added global text constant(s):
+// +
+// +  - Modification(s):
+// +     - OnOpenPage - Read setup records
+// +                       PP_SalesSetup
+// +                       PP_JobsSetup
+// +
+// +     - OnAfterGetRecord - When Sales Retention is active set values for
+// +                             Retention Ledger Code Filter
+// +                             PP_RetentionBalanceLCY
+// +                             PP_FinalTotal
+// +-----------------------------------------------------------------------------------------------
+

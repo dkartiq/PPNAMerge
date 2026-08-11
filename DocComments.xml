@@ -1,0 +1,1122 @@
+<?xml version="1.0"?>
+<doc>
+    <application>
+        <id>a3b03edf-3f59-46a5-9644-a1f4a6b1d289</id>
+        <name>ProjectPro - A construction vertical (Global)</name>
+        <publisher>Netsmartz LLC</publisher>
+        <version>23.0.14.14966</version>
+    </application>
+    <members>
+        <member name="O:ControlAddIn::NS_SignaturePad">
+             <summary>
+            PE-217.DK.1.0 27Dec2023 |Create New Controladdin for Signature Pad
+             </summary>
+        </member>
+        <member name="O:ControlAddIn::NS_UserTaskGraphics">
+            <summary>
+            ControlAddIn NS_UserTaskGraphis.
+            </summary>
+        </member>
+        <member name="O:ControlAddIn::NS_WeatherContrilAddIn">
+             <summary>
+            PE-217.DK.1.0 27Dec2023 |Create New Controladdin for Weather
+             </summary>
+        </member>
+        <member name="O:Profile::NS_PROJECTPROACCOUNTLITE">
+            <summary>
+            Unknown NS_PROJECTPROACCOUNTLITE.
+            </summary>
+        </member>
+        <member name="O:Profile::NS_PROJECTPROMANAGERLITE">
+            <summary>
+            Unknown NS_PROJECTPROMANAGERLITE.
+            </summary>
+        </member>
+        <member name="O:Profile::NS_PROJECTPROPURCHASINGLITE">
+            <summary>
+            Unknown NS_PROJECTPROPURCHASINGLITE.
+            </summary>
+        </member>
+        <member name="M:Codeunit::NS_PPAppSecureManagement.NS_GetAccessToken:Text">
+            <summary>
+            NS_GetAccessToken.
+            </summary>
+            <returns>Return value of type Text.</returns>
+        </member>
+        <member name="M:Codeunit::NS_PPAppSecureManagement.NS_AddHttpOAuthHeader(HttpClient@)">
+            <summary>
+            NS_AddHttpOAuthHeader.
+            </summary>
+            <param name="HttpClient">VAR HttpClient.</param>
+        </member>
+        <member name="M:Page::NS_PPClientLicenseInformation.NS_GetAccessToken:Text">
+            <summary>
+            NS_GetAccessToken.
+            </summary>
+            <returns>Return value of type Text.</returns>
+        </member>
+        <member name="M:Codeunit::NS_Event Subscr# Tables.POpenForecastpageByTaskTotals(Code[20],Date,Date,NS_Job Forecast@)">
+            <summary>
+            POpenForecastpageByTaskTotals.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="DefaultStatusDate">Date.</param>
+            <param name="NextBillDate">Date.</param>
+            <param name="JobForecast">VAR Record "NS_Job Forecast".</param>
+        </member>
+        <member name="O:Codeunit::NS_Job Chart Management">
+            <summary>
+            Codeunit NS_Job Chart Management (ID 14021221).
+            </summary>
+            PE-115.JS.1.0 03July2023 New codeunit
+        </member>
+        <member name="M:Codeunit::NS_Job Chart Management.GeneratJobChartData(Business Chart Buffer@)">
+            <summary>
+            GeneratJobChartData.
+            </summary>
+            <param name="BusinessChartBuffer">VAR Record "Business Chart Buffer".</param>
+        </member>
+        <member name="M:Codeunit::NS_Job Chart Management.NS_FillJobCostCategory(Code[20]@)">
+            <summary>
+            NS_FillJobCostCategory.
+            </summary>
+            <param name="NS_JobNo">VAR Code[20].</param>
+        </member>
+        <member name="M:Codeunit::NS_Job Chart Management.NS_FillJobSegment(Code[20]@)">
+            <summary>
+            NS_FillJobSegment.
+            </summary>
+            <param name="NS_JobNo">VAR Code[20].</param>
+        </member>
+        <member name="M:Codeunit::NS_Parameters for Events.NS_P10038GetTaxAmt(Decimal@,Decimal@)">
+            <summary>
+            NS_P10038GetTaxAmt.
+            </summary>
+            <param name="NS_AmountInclTax">VAR Decimal.</param>
+            <param name="NS_TaxAmount">VAR Decimal.</param>
+        </member>
+        <member name="M:Codeunit::NS_Parameters for Events.NS_P10038SetTaxAmount(Decimal)">
+            <summary>
+            NS_P10038SetTaxAmount.
+            </summary>
+            <param name="inTaxAmount">Decimal.</param>
+        </member>
+        <member name="M:Codeunit::NS_Parameters for Events.NS_P10038SetAmountInclTax(Decimal)">
+            <summary>
+            NS_P10038SetAmountInclTax.
+            </summary>
+            <param name="inAmountInclTax">Decimal.</param>
+        </member>
+        <member name="M:Codeunit::NS_Progress BillingMakeSaleDoc.NS_RetentionDocumentValueAIAG702Values(NS_Progress Billing Header):Decimal">
+            <summary>
+            NS_RetentionDocumentValueAIAG702Values.
+            </summary>
+            <param name="BillingHeader">Record "NS_Progress Billing Header".</param>
+            <returns>Return value of type Decimal.</returns>
+        </member>
+        <member name="O:Codeunit::NS_Sales Header Apply">
+            <summary>
+            Codeunit NS_Sales Header Apply (ID 14021316).
+            </summary>
+        </member>
+        <member name="O:Codeunit::NS_AllSubscriber">
+            <summary>
+            Codeunit NS_AllSubscriber (ID 14021191).
+            </summary>
+            PRJ-1538.DK.1.0 27JULY2022
+            PE-167.VC.1.0 18Sep2023 | Job -> status -> WIP Message -> Setup -> to disable message.
+        </member>
+        <member name="M:Codeunit::NS_AllSubscriber.NS_CopyPlanningLines(NS_Job Material Planning,Boolean)">
+            <summary>
+            NS_CopyPlanningLines.
+            </summary>
+            <param name="Rec">Record "NS_Job Material Planning".</param>
+            <param name="Update">Boolean.</param>
+            PRJ-1538
+        </member>
+        <member name="M:Codeunit::NS_AllSubscriber.NS_LastLineNo(Code[20]):Integer">
+            <summary>
+            NS_LastLineNo.
+            </summary>
+            <param name="JobNo..">Code[20].</param>
+            <returns>Return value of type Integer.</returns>
+        </member>
+        <member name="O:Codeunit::NS Copy Job">
+            <summary>
+            Codeunit NS Copy Job (ID 14021190).
+            </summary>
+        </member>
+        <member name="M:Codeunit::NS_Percentage of Completion.NS_PostedRevenueRecognitionConActualCosttodate(Job@):Decimal">
+            Posted data ...Code ++
+        </member>
+        <member name="O:Enum::NS_Accrual Status">
+            <summary>
+            Enum NS_Accrual Status (ID 14021347).
+            </summary>
+        </member>
+        <member name="O:Enum::NS Chart Job Values">
+            <summary>
+            Enum NS Chart Job Values (ID 14021392).
+            </summary>
+            PE-115.JS.1.0 03July2023 New Enum
+        </member>
+        <member name="O:Enum::NSDailyJobLogDoctype">
+            <summary>
+            Enum DailyJobLogDoctype (ID 14021100).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New enums create
+        </member>
+        <member name="O:Enum::NS_JobTaskLineStatus">
+            <summary>
+            Enum NS_JobTaskLineStatus (ID 14021348).
+            </summary>
+        </member>
+        <member name="O:Page::NS_Apply Customer Entries">
+            PRJ-1198.NK.1.0 14Feb2022| With Statement Changes for Warning AL0604 and AL0606
+        </member>
+        <member name="O:Page::NS_TimesheetCustomizeDocument">
+            <summary>
+            Page NS_TimesheetCustomizeDocument (ID 14021236).
+            </summary>
+        </member>
+        <member name="O:Page::NS_Daily Job Visitors Subfrom">
+            <summary>
+            Page NS_Daily Job task Subfrom (ID 14021462).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New page create
+        </member>
+        <member name="O:Page::NS_GetSubConChangeOrder">
+            <summary>
+            Page NS_GetSubConChangeOrder (ID 14021492).
+            </summary>
+        </member>
+        <member name="O:Page::NS Job Balance Chart">
+            <summary>
+            Page NS Job Balance Chart (ID 14021120).
+            </summary>
+            PE-115.JS.1.0 03July2023 New Pages
+        </member>
+        <member name="O:Page::NS_Job_Chart Setup">
+            <summary>
+            Page NS_Job_Chart Setup (ID 14021119).
+            </summary>
+            PE-115.JS.1.0 03July2023 New Pages
+        </member>
+        <member name="O:Page::NS_ Job Crew List">
+            <summary>
+            Page NS_ Job Crew List (ID 14021267).
+            </summary>
+            //PRJ-949.GK.1.0 01Oct2021 | Add new Page
+        </member>
+        <member name="O:Page::NS_Job Forecast SummIncSubLevl">
+            <summary>
+            Page NS_Job Forecast SummIncSubLevl (ID 14021174).
+            </summary>
+        </member>
+        <member name="M:Page::NS_Job Forecast SummIncSubLevl.NS_Set(Code[20],Date)">
+            <summary>
+            NS_Set.
+            </summary>
+            <param name="JobNoIn">Code[20].</param>
+            <param name="NewStatusDateIn">Date.</param>
+        </member>
+        <member name="O:Page::NS_JobForecastWrks Task Total">
+            <summary>
+            Page NS_JobForecastWrks Task Total (ID 14021151).
+            </summary>
+            //PRJ-1299.JS.1.0 18APR2022 New Worksheet Page for Forecast by Task Totals
+            PRJ-1299.JS.2.0 23MAY2022 correct caption
+        </member>
+        <member name="M:Page::NS_JobForecastWrks Task Total.NS_ListUpdateByTaskTotals">
+            <summary>
+            NS_ListUpdateByTaskTotals.
+            </summary>
+        </member>
+        <member name="M:Page::NS_JobForecastWrks Task Total.NS_SetTaskTotals(Code[20],Code[20],Date,Boolean)">
+            <summary>
+            NS_SetTaskTotals.
+            </summary>
+            <param name="JobNoIn">Code[20].</param>
+            <param name="TaskManagerIn">Code[20].</param>
+            <param name="AsOfDateIn">Date.</param>
+            <param name="ByTaskTotals">Boolean.</param>
+            //PRJ-1299.JS.1.0 19APR2022 - Start
+        </member>
+        <member name="">
+            Visible = PP_AdvancedJobLaborActive;//PE-68 Dk.1.0 10April2023
+        </member>
+        <member name="M:Page::NS_Job Quote Scope of Work.NS_InitValue(Code[20],Code[20])">
+            <summary>
+            NS_InitValue.
+            </summary>
+            <param name="JobQuoteNo">Code[20].</param>
+            <param name="SegmentCodeNo">Code[20].</param>
+        </member>
+        <member name="O:Page::NS_RevCategoryStatistics">
+            <summary>
+            Page NS_RevCategoryStatistics (ID 14021109).
+            </summary>
+        </member>
+        <member name="M:Page::NS_RevCategoryStatistics.NS_OnAfterGetCurrRecord">
+            <summary>
+            NS_OnAfterGetCurrRecord.
+            </summary>
+        </member>
+        <member name="M:Page::NS_RevCategoryStatistics.NS_CalcStatistics">
+            <summary>
+            NS_CalcStatistics.
+            </summary>
+        </member>
+        <member name="O:Page::NS_Job Task All Levels List">
+            <summary>
+            Page NS_Job Task All Levels List (ID 14021333).
+            </summary>
+        </member>
+        <member name="M:Page::NS_Job Task All Levels List.CalculateAllCustomFields(Job Task)">
+            <summary>
+            CalculateAllCustomFields.
+            </summary>
+            <param name="Rec">Record "Job Task".</param>
+        </member>
+        <member name="O:Page::NS_Job Task All Levels List1">
+            <summary>
+            Page NS_Job Task All Levels List (ID 14021333).
+            </summary>
+        </member>
+        <member name="M:Page::NS_Job Task All Levels List1.CalculateAllCustomFields(Job Task)">
+            <summary>
+            CalculateAllCustomFields.
+            </summary>
+            <param name="Rec">Record "Job Task".</param>
+        </member>
+        <member name="O:Page::NS_OPS Manager">
+            <summary>
+            Page NS_OPS Manager (ID 14021287).
+            </summary>
+        </member>
+        <member name="O:Page::NS_PM Statistics IncSub Levels">
+            <summary>
+            Page NS_PM Statistics IncSub Levels (ID 14021176).
+            </summary>
+            //PRJ-1039.JS.1.0 30JAN2022 | Create New Page
+            //PRJ-1514.RM.1.0 21July2022 | Added some code
+        </member>
+        <member name="M:Page::NS_PM Statistics IncSub Levels.GetPrevSummaryDetailIncludeSubLevels(Date,Date@,Code[20]@,Boolean@,Boolean@):Decimal">
+            <summary>
+            GetPrevSummaryDetailIncludeSubLevels.
+            </summary>
+            <param name="PreStartDate">Date.</param>
+            <param name="PreEnddate">VAR Date.</param>
+            <param name="ParaJob">VAR Code[20].</param>
+            <param name="Flag">VAR Boolean.</param>
+            <param name="FlagTotCostTodate">VAR boolean.</param>
+            <returns>Return variable Answer of type Decimal.</returns>
+        </member>
+        <member name="M:Page::NS_Progress Billing Header.NS_CheckPBLinesForContractForecastDate">
+            <summary>
+            NS_CheckPBLinesForContractForecastDate.
+            </summary>
+        </member>
+        <member name="M:Page::NS_Progress Billing Header.NS_CheckPBLineWorkAmount:Decimal">
+            <summary>
+            NS_CheckPBLineWorkAmount.
+            </summary>
+            <returns>Return value of type Decimal.</returns>
+        </member>
+        <member name="M:Page::NS_Progress Billing Header.NS_GetPreviousRetetionkunit:Decimal">
+            <summary>
+            NS_GetPreviousRetetionkunit.
+            </summary>
+            <returns>Return value of type Decimal.</returns>
+            PRJCTPR-174.PS.1.0 10aug2023 Start
+        </member>
+        <member name="O:Page::NSProjectProAccountLite">
+            <summary>
+            Page NSProjectProAccountLite (ID 14021138).
+            </summary>
+        </member>
+        <member name="O:Page::NSProjectProPuchaserRole">
+            <summary>
+            Page NSProjectProPuchaserRole (ID 14021299).
+            </summary>
+        </member>
+        <member name="O:Page::NS_Punch list">
+            <summary>
+            Page NSPP1 Punch list (ID 14021338).
+            </summary>
+        </member>
+        <member name="O:Page::NS_Punch List Codes">
+            <summary>
+            Page NSPP1_Punch List Codes (ID 14021111).
+            </summary>
+        </member>
+        <member name="O:Page::NS Punch List Card">
+            <summary>
+            Page NS Punch List Card (ID 14021103).
+            </summary>
+        </member>
+        <member name="O:Page::NS_PunchListPicturePage">
+            <summary>
+            Page NSPPPunchListPicture (ID 14021337).
+            </summary>
+        </member>
+        <member name="O:Page::NS_PunchList Task Subform">
+            <summary>
+            Page NS_PunchList Task Subform (ID 14021336).
+            </summary>
+        </member>
+        <member name="M:Page::NS_PunchList Task Subform.NSPPImportFromDevice">
+            <summary>
+            NSPPImportFromDevice.
+            </summary>
+        </member>
+        <member name="M:Page::NS_PunchList Task Subform.NSDeleteItemPicture">
+            <summary>
+            NSPPDeleteItemPicture.
+            </summary>
+        </member>
+        <member name="O:Page::NSPunchListTempMedia">
+            <summary>
+            Page NSPPTempMedia (ID 14021104).
+            </summary>
+        </member>
+        <member name="M:Page::NS_RevenueRecognitionSummary.GetRecords(NS_RevenueRecSummaryTab@)">
+            <summary>
+            GetRecords.
+            </summary>
+            <param name="VAR RevRecSumRevRecSum">Record NS_RevenueRecSummaryTab.</param>
+        </member>
+        <member name="M:Page::NS_Subcontract Lines.NS_GetFromSubcontractChangeRequestLine(Code[20],Code[20],Code[20],Boolean)">
+            <summary>
+            NS_GetFromSubcontractChangeRequestLine.
+            </summary>
+            <param name="NS_No">Code[20].</param>
+            <param name="NSLeveltoSubcontractNo">code[20].</param>
+            <param name="ChangeReqNo">Code[20].</param>
+            <param name="NSChangeOrdger">Boolean.</param>
+        </member>
+        <member name="O:Page::NS_Accidents SafetyIssue">
+            <summary>
+            Page NS_Accidents And SafetyIssue  (ID 14021461).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New page create
+        </member>
+        <member name="O:Page::NS_ChangeRequestList">
+            <summary>
+            Page NS_ChangeRequestList (ID 14021297).
+            </summary>
+        </member>
+        <member name="M:Page::NS_ChangeRequestList.NS_CreateChangeOrderFromCR(Boolean)">
+            <summary>
+            NS_CreateChangeOrderFromCR.
+            </summary>
+            <param name="IsSelected">Boolean.</param>
+        </member>
+        <member name="M:Page::NS_ChangeRequestList.NS_GetFromJobPlaningChangeRequestLine(Code[20],Code[20],Code[20],Boolean)">
+            <summary>
+            NS_GetFromSubcontractChangeRequestLine.
+            </summary>
+            <param name="NS_No">Code[20].</param>
+            <param name="NSSubLeveltoJobNo">code[20].</param>
+            <param name="ChangeReqNo">Code[20].</param>
+            <param name="NSChangeOrdger">Boolean.</param>
+        </member>
+        <member name="M:Page::NS_ChangeRequestList.Setdefintion(Code[20],Code[20],Boolean)">
+            <summary>
+            RetunValue.
+            </summary>
+            <summary>
+            Setdefintion.
+            </summary>
+            <param name="OrderNo">Code[20].</param>
+            <param name="NSChangeRequestNo">Code[20].</param>
+            <param name="ClosePage">Boolean.</param>
+        </member>
+        <member name="M:Page::NS_ChangeRequestList.CreateJobtaskChangeRequesttoMasterJob(Job Task)">
+            <summary>
+            CreateJobtaskChangeRequesttoMasterJob.
+            </summary>
+            <param name="tempJobtask">Record "Job Task".</param>
+        </member>
+        <member name="O:Page::NS Copy Job Tasks">
+            <summary>
+            Page NS Copy Job Tasks (ID 14021493).
+            </summary>
+        </member>
+        <member name="O:Page::NS_Daily Job Log List">
+            <summary>
+            Page Daily Job Log List (ID 14021399).
+            </summary>
+            Create New Page for Daily Job Log //PE-168.PS.1.0 18Sep2023
+        </member>
+        <member name="O:Page::NS_Daily Job Log Card">
+            <summary>
+            Page MyPage (ID 14021454).
+            </summary>
+            Create New Page for Daily Job Log //PE-168.PS.1.0 18Sep2023
+            //PE-168.HS.1.0 7Dec2023 | Add Code 
+        </member>
+        <member name="O:Page::NS_DailyJobLogSubform">
+            <summary>
+            Page NS_DailyJobLogSubform  (ID 14021455).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New page create
+        </member>
+        <member name="O:Page::NS_Daily Job task Subfrom">
+            <summary>
+            Page NS_Daily Job task Subfrom (ID 14021462).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New page create
+            //PE-168.HS.1.0 10Nov2023| Removed Doc job no. and Entry Date field 
+        </member>
+        <member name="O:Page::NS_Daily PO Subform">
+            <summary>
+            Page Daily PO Subform (ID 14021463).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New page create
+            //PE-168.HS.1.0 10Nov2023| Removed Doc job no. and Entry Date field 
+        </member>
+        <member name="O:Page::NS_ Job Crew Resource List">
+            <summary>
+            Page NS_ Job Crew Resource List (ID 14021268).
+            </summary>
+        </member>
+        <member name="O:ControlAddIn::NSJobPlaningBeginEnd">
+            <summary>
+            ControlAddIn NSJobPlaningBeginEnd.
+            </summary>
+        </member>
+        <member name="EV:">
+            <summary>
+            IAddInReady.
+            </summary>
+        </member>
+        <member name="O:Page::NS_PPFieldManagerActivities">
+            <summary>
+            Page NS_FieldManagerActivities (ID 14021254).
+            </summary>
+        </member>
+        <member name="O:Page::NS_PPProjectManagerActivities">
+            <summary>
+            Page NS_PPProjectManagerActivities (ID 14021317).
+            </summary>
+        </member>
+        <member name="O:Page::NS_ProjProManagerLite">
+            <summary>
+            Page NS_ProjProManagerLite (ID 14021139).
+            </summary>
+        </member>
+        <member name="O:Page::NS_ProjectProPurchasingLite">
+            <summary>
+            Page NS_ProjectProPurchasingLite (ID 14021137).
+            </summary>
+        </member>
+        <member name="O:Page::NS_ProjProFieldMgr Role Center">
+            <summary>
+            Page NS_ProjProFieldMgr Role Center (ID 14021252).
+            </summary>
+        </member>
+        <member name="O:Page::NS_ResourceSkillClass">
+            <summary>
+            Page MyPage (ID 140).
+            </summary>
+        </member>
+        <member name="O:Page::NS_SubConChangeRequestList">
+            <summary>
+            Page NS_SubConChangeRequestList (ID 14021298).
+            </summary>
+        </member>
+        <member name="M:Page::NS_SubConChangeRequestList.NS_CreateChangeOrderFromCR(Boolean)">
+            <summary>
+            NS_CreateChangeOrderFromCR.
+            </summary>
+            <param name="IsSelected">Boolean.</param>
+        </member>
+        <member name="M:Page::NS_SubConChangeRequestList.NS_GetFromSubcontractChangeRequestLine(Code[20],Code[20],Code[20],Boolean)">
+            <summary>
+            NS_GetFromSubcontractChangeRequestLine.
+            </summary>
+            <param name="NS_No">Code[20].</param>
+            <param name="NSLeveltoSubcontractNo">code[20].</param>
+            <param name="ChangeReqNo">Code[20].</param>
+            <param name="NSChangeOrdger">Boolean.</param>
+        </member>
+        <member name="M:Page::NS_SubConChangeRequestList.Setdefintion(Code[20],Code[20])">
+            <summary>
+            Setdefintion.
+            </summary>
+            <param name="OrderNo">Code[20].</param>
+            <param name="NSChangeRequestNo">Code[20].</param>
+        </member>
+        <member name="O:Page::NS_UserTaskGraphicsPage">
+            <summary>
+            Page NS_UserTaskGraphicsPage (ID 14021108).
+            </summary>
+        </member>
+        <member name="O:Report::NS_CalculateRevenueRecognition">
+            <summary>
+            Report NS_Calculate Revenue Recognition (ID 14021486).
+            </summary>
+            
+        </member>
+        <member name="O:Report::NS_Combined_AIAG702andAIAG703">
+            <summary>
+            Report NS_Combined_AIAG702andAIAG703 (ID 14021355).
+            </summary>
+        </member>
+        <member name="M:Report::NS_Combined_AIAG702andAIAG703.NS_ClearFormData">
+            <summary>
+            NS_ClearFormData.
+            </summary>
+        </member>
+        <member name="C:RequestPage::RequestOptionsPage.content.CrewNo">
+            PRJ-949.GK.1.0 01Oct2021 start
+        </member>
+        <member name="V:Report::NS_CopyCrew to CustomTimesheet.CrewLine">
+            PRJ-949.GK.1.0 01Oct2021
+        </member>
+        <member name="O:Report::NS_Delivery Ticket JMP">
+            <summary>
+            Report NS_Delivery Ticket JMP (ID 14021402).
+            </summary>
+        </member>
+        <member name="M:Report::NS_Get Contact forProgressBill.SetParameters(Code[20],Integer,Integer)">
+            <summary>
+            SetParameters.
+            </summary>
+            <param name="ProgBillNo">Code[20].</param>
+            <param name="ReqNo">Integer.</param>
+            <param name="VerNo">Integer.</param>
+        </member>
+        <member name="M:Report::NS_JFW POC By TaskToatls.Set(Code[20],Date)">
+            <summary>
+            Set.
+            </summary>
+            <param name="JobNoIn">Code[20].</param>
+            <param name="AsOfDateIn">Date.</param>
+        </member>
+        <member name="O:Report::NS_JobForecast WhksIncSubLevel">
+            <summary>
+            Report NS_Job Forecast WhksIncCubLevel (ID 14021292).
+            </summary>
+        </member>
+        <member name="O:Report::NS_Job Task Tot Quote Proposal">
+            <summary>
+            Report NS_Job Task Tot Quote Proposal (ID 14021497).
+            </summary>
+        </member>
+        <member name="">
+            <summary>
+            This Field Use to RDLC Report
+            </summary>
+        </member>
+        <member name="">
+            <summary>
+            This Field Use to RDLC Report
+            </summary>
+        </member>
+        <member name="">
+            <summary>
+            This Field Use to WordLayout
+            </summary>
+        </member>
+        <member name="">
+            <summary>
+            This Field Use to WordLayout
+            </summary>
+        </member>
+        <member name="O:Report::NS_PunchListReport">
+            <summary>
+            Report NSPP_PunchListReport (ID 14021111).
+            </summary>
+        </member>
+        <member name="M:Report::NS_Suggest Billing Task Lines.SetParameters(Code[20],Integer,Integer,Code[20],Date)">
+            <summary>
+            SetParameters.
+            </summary>
+            <param name="NoIn">Code[20].</param>
+            <param name="RequisitionNoIn">Integer.</param>
+            <param name="VersionNoIn">Integer.</param>
+            <param name="JobNoIn">Code[20].</param>
+            <param name="PeriodToDate">Date.</param>
+        </member>
+        <member name="O:Report::NS_Open Job Backlog Batch New">
+            <summary>
+            Report NS_Open Job Backlog Batch New (ID 14021295).
+            </summary>
+        </member>
+        <member name="O:Report::NS_UpdateOpenJobBacklogBatch">
+            <summary>
+            Report NS_UpdateOpenJobBacklogBatch (ID 14021487).
+            </summary>
+        </member>
+        <member name="O:Report::NSUPDRevRec_IncSubLevel_FBTT">
+            <summary>
+            Report NSUPDRevRec_IncSubLevel_FBTT (ID 14021236).
+            </summary>
+        </member>
+        <member name="O:Report::NS_UPD RRSumDtls By TaskTotals">
+            <summary>
+            Report NS_UPD RRSumDtls By TaskTotals (ID 14021238).
+            </summary>
+        </member>
+        <member name="O:Report::NS_ChangeRequesttoChangeOrder">
+            <summary>
+            Report ChangeRequesttoChangeOrder (ID 14021289).
+            </summary>
+            PE-193.PS.2.0 Create Process Only report 
+        </member>
+        <member name="M:Report::NS_ChangeRequesttoChangeOrder.InitReport">
+            <summary>
+            InitReport.
+            </summary>
+        </member>
+        <member name="M:Report::NS_ChangeRequesttoChangeOrder.NS_RetunValue:Code[20]">
+            <summary>
+            RetunValue.
+            </summary>
+            <returns>Return value of type Boolean.</returns>
+            <returns>Return value of type Code[20].</returns>
+        </member>
+        <member name="M:Report::NS_ChangeRequesttoChangeOrder.NS_ClosePageRetrun:Boolean">
+            <summary>
+            ClosePageRetrun.
+            </summary>
+            <returns>Return value of type Code[20].</returns>
+        </member>
+        <member name="M:Report::NS_ChangeRequesttoChangeOrder.NS_CreateChangeOrderFromCR(Code[20],Code[20],Boolean)">
+            <summary>
+            NS_CreateChangeOrderFromCR.
+            </summary>
+            <param name="NS_No">Code[20].</param>
+            <param name="LeveltoSubLeveljobNo">Code[20].</param>
+            <param name="BoolValue">Boolean.</param>
+        </member>
+        <member name="O:Report::NS_Comb_N2AIAG702andAIAG703">
+            <summary>
+            Report NS_Comb_N2AIAG702andAIAG703 (ID 14021144).
+            </summary>
+        </member>
+        <member name="M:Report::NS_Comb_N2AIAG702andAIAG703.NS_ClearFormData">
+            <summary>
+            NS_ClearFormData.
+            </summary>
+        </member>
+        <member name="O:Report::NS_Conditional Final Waiver">
+            <summary>
+            Report NS_Conditional Final Waiver (ID 14021471).
+            </summary>
+        </member>
+        <member name="O:Report::NS_conditionalLienFinal">
+            <summary>
+            Report NS_UnconditionalLienFinal (ID 14021476).
+            </summary>
+        </member>
+        <member name="M:Report::NS_conditionalLienFinal.SetDocument(Code[20],Code[20],Code[20],Date)">
+            <summary>
+            SetDocument.
+            </summary>
+            <param name="NSJobNo">code[20].</param>
+            <param name="DocNo">code[20].</param>
+            <param name="CustNo">Code[20].</param>
+            <param name="PostingDate">Date.</param>
+        </member>
+        <member name="O:Report::NS_Conditional Lien Waiver">
+            <summary>
+            Report NS_Conditional Lien Waiver1 (ID 14021472).
+            </summary>
+        </member>
+        <member name="O:Report::NSConditionalWaiver">
+            <summary>
+            Report NSConditionalWaiver (ID 14021494).
+            </summary>
+        </member>
+        <member name="M:Report::NSConditionalWaiver.SetDocument(Code[20],Code[20],Date,Code[20])">
+            <summary>
+            SetDocument.
+            </summary>
+            <param name="NSJobNo">code[20].</param>
+            <param name="DocNo">code[20].</param>
+            <param name="PostingDate">Date.</param>
+            <param name="CustNo">Code[20].</param>
+        </member>
+        <member name="O:Report::NS_Daily Job Log Report">
+            <summary>
+            Report NS_Daily Job Log Report (ID 14021453).
+            </summary>
+            Create New Report for Daily Job Log and New Layout
+            PE-168.DK.1.0 01NOV2023 Start
+            //PE-168.HS.1.0 3 Nov 2023 | Add Code
+        </member>
+        <member name="O:Report::NS_JobEstimation">
+            <summary>
+            Report NS_JobEstimation (ID 14021332).
+            </summary>
+        </member>
+        <member name="O:Report::NS_Subcontract Agreement1">
+            <summary>
+            Report NS_Subcontract Agreement1 (ID 14021478).
+            </summary>
+        </member>
+        <member name="O:Report::NS_SubconCahReqTrfToChaOrder">
+            <summary>
+            Report NS_SubconCahReqTrfToChaOrder (ID 14021241).
+            </summary>
+            PE-177.DK.2.0 22Nov2023 |Create new Process only Report
+        </member>
+        <member name="M:Report::NS_SubconCahReqTrfToChaOrder.InitReport">
+            <summary>
+            InitReport.
+            </summary>
+        </member>
+        <member name="M:Report::NS_SubconCahReqTrfToChaOrder.RetunValue:Code[20]">
+            <summary>
+            RetunValue.
+            </summary>
+            <returns>Return value of type Boolean.</returns>
+            <returns>Return value of type Code[20].</returns>
+        </member>
+        <member name="M:Report::NS_SubconCahReqTrfToChaOrder.NS_ClosePageRetrun:Boolean">
+            <summary>
+            ClosePageRetrun.
+            </summary>
+            <returns>Return value of type Code[20].</returns>
+        </member>
+        <member name="M:Report::NS_SubconCahReqTrfToChaOrder.NS_CreateChangeOrderFromCR(Code[20],Code[20],Boolean)">
+            <summary>
+            NS_CreateChangeOrderFromCR.
+            </summary>
+            <param name="NS_No">Code[20].</param>
+            <param name="LeveltoSubcontractNo">Code[20].</param>
+            <param name="BoolValue">Boolean.</param>
+        </member>
+        <member name="O:Report::NS_Unconditional Final Waiver">
+            <summary>
+            Report NS_Unconditional Final Waiver (ID 14021473).
+            </summary>
+        </member>
+        <member name="O:Report::NS_UnconditionalLienFinal">
+            <summary>
+            Report NS_UnconditionalLienFinal (ID 14021476).
+            </summary>
+        </member>
+        <member name="O:Report::NS_Unconditional Lien Waiver">
+            <summary>
+            Report NS_Unconditional Lien Waiver (ID 14021474).
+            </summary>
+        </member>
+        <member name="M:Report::NS_UnconditionalProgress.SetDocument(Code[20],Code[20],Code[20],Date)">
+            <summary>
+            SetDocument.
+            </summary>
+            <param name="NSJobNo">code[20].</param>
+            <param name="DocNo">code[20].</param>
+            <param name="CustNo">Code[20].</param>
+            <param name="PostingDate">Date.</param>
+        </member>
+        <member name="O:Report::NS_Update Cust Ledger">
+            <summary>
+            Report NS_Update Cust Ledger Report (ID 14021492).
+            </summary>
+        </member>
+        <member name="O:Report::NS_Update JMP Line No#">
+            <summary>
+            Report MyReport (ID 14021436).
+            </summary>
+        </member>
+        <member name="O:Table::NS_Job_Chart Setup">
+            <summary>
+            Table NS_Job_Chart Setup (ID 14021291).
+            </summary>
+            PE-115.JS.1.0 03July2023 New Table
+        </member>
+        <member name="O:Table::NS_CommitmentReportTemp">
+            <summary>
+            Table NS_CommitmentReportTemp (ID 14021141).
+            </summary>
+        </member>
+        <member name="O:Table::NS_Daily Job Log Sub#">
+            <summary>
+            Table NS_Daily JOb Log Sub. (ID 14021400).
+            </summary>
+            //PE-168.PS.1.0 18Sep2023 New table create
+            //PE-168.HS.1.0 17Nov2023 | Add Caption
+        </member>
+        <member name="M:Table::NS_Daily Job Log Sub#.NS_CreateEntriesForJobJournals(NS_Daily Job Log)">
+            <summary>
+            NS_CreateEntriesForJobJournals.
+            </summary>
+            <param name="NSDailyJobLog">Record "NS_Daily Job Log".</param>
+        </member>
+        <member name="O:Table::NS_Job Chart Index">
+            <summary>
+            Table NS_Job Chart Index (ID 14021149).
+            </summary>
+            PE-115.JS.1.0 03July2023 New Table
+        </member>
+        <member name="O:Table::NS_Job Crew Resource">
+            <summary>
+            Table NS_Job Crews (ID 14021225).
+            </summary>
+        </member>
+        <member name="O:Table::NS_Job Crews">
+            <summary>
+            Table NS_Job Crews (ID 14021224).
+            </summary>
+        </member>
+        <member name="M:Table::NS_Job Forecast.NS_GetNewTasksByTaskTotalsFBTT(Code[20],Code[20])">
+            //PRJ-1299.JS.1.0 19APR2022 - Start
+        </member>
+        <member name="M:Table::NS_Job Forecast.NS_PostLinesFBTT(Code[20],Date,Date)">
+            <summary>
+            NS_PostLinesFBTT.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="DefaultStatusDate">Date.</param>
+            <param name="NextBillDate">Date.</param>
+        </member>
+        <member name="M:Table::NS_Job Forecast.NS_ForecastedCompletedAmtNoDateFBTT(Code[20],Date)">
+            <summary>
+            NS_ForecastedCompletedAmtNoDateFBTT.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="DefaultStatusDate">Date.</param>
+        </member>
+        <member name="M:Table::NS_Job Forecast.NS_PostLinesIncludeSubLevelsFBTT(Code[20],Date,Date)">
+            <summary>
+            NS_PostLinesIncludeSubLevelsFBTT.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="DefaultStatusDate">Date.</param>
+            <param name="NextBillDate">Date.</param>
+        </member>
+        <member name="M:Table::NS_Job Forecast.NS_Get100PctCostIncludeSubLevelNew(Code[20],Code[20],Date):Decimal">
+            <summary>
+            NS_Get100PctCostIncludeSubLevelNew.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="JobTaskNo">Code[20].</param>
+            <param name="DefaultStatusDate">Date.</param>
+            <returns>Return variable TotalCostUsed of type Decimal;.</returns>
+        </member>
+        <member name="O:Table::NS_Job Include Sub Levels">
+            <summary>
+            Table NS_Job Include Sub Levels (ID 14021463).
+            </summary>
+            //PRJ-1399.JS.1.0 16MAY2022
+        </member>
+        <member name="M:Table::NS_Progress Billing Header.NS_GetChangeOrderValuesNew(Code[20],Date,Date,Decimal@,Decimal@,Decimal@,Decimal@)">
+            <summary>
+            NS_GetChangeOrderValuesNew.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="PeriodFrom">Date.</param>
+            <param name="PeriodTo">Date.</param>
+            <param name="PreviousAdditions">VAR Decimal.</param>
+            <param name="PreviousDeductions">VAR Decimal.</param>
+            <param name="CurrentAdditions">VAR Decimal.</param>
+            <param name="CurrentDeductions">VAR Decimal.</param>
+        </member>
+        <member name="M:Table::NS_Progress Billing Header.NS_GetChangeOrderValuesBasedonPBLines(Code[20],Date,Date,Decimal@,Decimal@,Decimal@,Decimal@)">
+            <summary>
+            NS_GetChangeOrderValuesBasedonPBLines.
+            </summary>
+            <param name="JobNo">Code[20].</param>
+            <param name="PeriodFrom">Date.</param>
+            <param name="PeriodTo">Date.</param>
+            <param name="PreviousAdditions">VAR Decimal.</param>
+            <param name="PreviousDeductions">VAR Decimal.</param>
+            <param name="CurrentAdditions">VAR Decimal.</param>
+            <param name="CurrentDeductions">VAR Decimal.</param>
+        </member>
+        <member name="M:Table::NS_Progress Billing Line.NS_GetPreviousRetetionkunit(NS_Progress Billing Line@):Decimal">
+            <summary>
+            NS_GetPreviousRetetionkunit.
+            </summary>
+            <param name="Rec">VAR Record "NS_Progress Billing Line".</param>
+            <returns>Return value of type Decimal.</returns>
+            
+            PRJCTPR-174.PS.1.0 10aug2023 Start
+        </member>
+        <member name="M:Table::NS_Progress Billing Line.NS_LastBilledWorkRetAmt(NS_Progress Billing Line@):Decimal">
+            PRJCTPR-174.PS.1.0 10aug2023 End 
+        </member>
+        <member name="O:Table::NS_Punch List Code">
+            <summary>
+            Table NSPP1_Punch List Code (ID 14021131).
+            </summary>
+        </member>
+        <member name="O:Table::NS_Punch List Header">
+            <summary>
+            Table NSPP1_Punch List Header (ID 14021132).
+            </summary>
+        </member>
+        <member name="O:Table::NSPunchListLineImage">
+            <summary>
+            Table NSPP1PunchListLineImage (ID 91126).
+            </summary>
+        </member>
+        <member name="O:Table::NS_PunchListDailyTasks">
+            <summary>
+            Table NSPP1_PunchListTask (ID 91103).
+            </summary>
+        </member>
+        <member name="O:Table::NS_ResourceSkillClass">
+            <summary>
+            Table NS_ResourceSkillClass (ID 14021489).
+            </summary>
+        </member>
+        <member name="M:Table::NS_TimesheetHdrCustom.NS_CTSUpdateWorkStartandEndDate(Code[20],Date)">
+            <summary>
+            NS_UpdateWorkStartandEndDate.
+            </summary>
+            <param name="TimeSheetCode">Code[20].</param>
+            <param name="NSWorkingDate">date.</param>
+        </member>
+        <member name="O:Table::NS_Where Used Job Calendar">
+            <summary>
+            Table NS_Where Used Job Calendar (ID 14021172).
+            </summary>
+        </member>
+        <member name="O:Table::NS_Daily Job Log">
+            <summary>
+            Table Daily Job Log (ID 14021999).
+            </summary>
+            Create New table for Daily Job Log //PE-168.PS.1.0 15Sep2023
+            //PE-168.HS.1.0 10Nov2023
+        </member>
+        <member name="O:XmlPort::NS_PayrollRegiLedgerExport XML">
+            <summary>
+            XmlPort NS_PayrollRegiLedgerExport XML (ID 14021105).
+            </summary>
+        </member>
+        <member name="O:XmlPort::NS_PayrollRegLedgeImport XML">
+            <summary>
+            XmlPort NS_PayrollRegLedgeImport XML (ID 14021106).
+            </summary>
+        </member>
+        <member name="O:XmlPort::NS_PayrollRegLedTemplate XML">
+            <summary>
+            XmlPort NS_PayrollRegLedTemplate XML (ID 14021107).
+            </summary>
+        </member>
+        <member name="M:PageExtension::NS_CustomerLedgerEntries.NS_AdvanceCustLienWaiverEnable:Boolean">
+            <summary>
+            NS_AdvanceCustLienWaiverEnable.
+            </summary>
+            <returns>Return value of type Boolean.</returns>
+        </member>
+        <member name="O:PageExtension::NS_GLAccountCardExt">
+            <summary>
+            PageExtension NS_GLAccountCardExt (ID 14021399) extends Record G/L Account Card.
+            </summary>
+        </member>
+        <member name="O:PageExtension::NS_InventorySetup">
+            <summary>
+            PageExtension NS_InventorySetup (ID 14021359) extends Record Inventory Setup.
+            </summary>
+        </member>
+        <member name="M:PageExtension::NS_JobCard.NS_GetBudgetedCostLCYForProjection(Code[20]):Decimal">
+            <summary>
+            NS_GetBudgetedCostLCYForProjection.
+            </summary>
+            <param name="JobNo">code[20].</param>
+            <returns>Return variable BudgetCostLCYForProj of type Decimal.</returns>
+        </member>
+        <member name="O:PageExtension::NS_JobCostFactbox">
+             <summary>
+             PageExtension NS_JobCostFactbox (ID 14021492) extends Record Job Cost Factbox.
+             </summary>
+            PE-41.NK.1.0 03Jan2022
+            New page is created to add A/p retention balance and A/R retentionbalance in factobx areas
+        </member>
+        <member name="O:Page::NS Copy JobList">
+            <summary>
+            Page NS Copy Job Tasks (ID 14021493).
+            </summary>
+        </member>
+        <member name="M:PageExtension::NS_JobPlanningLines.NS_GetQuoteSegmentLineVars(Code[20]@,Code[30]@)">
+            <summary>
+            NS_GetQuoteSegmentLinesVars.
+            </summary>
+            <param name="NSPassJobNo">VAR code[20].</param>
+            <param name="Var NSPassSegmentCodeNSPassSegmentCode">code[30].</param>    
+        </member>
+        <member name="M:PageExtension::NS_JobPlanningLines.NS_CreateQuoteSegmentTakeoffTotal(Job Planning Line@,Code[20]@,Code[30]@)">
+            <summary>
+            NS_CreateQuoteSegmentTakeoffTotal.
+            </summary>
+            <param name="NSPaddJobPlanningLine">VAR record "Job Planning Line".</param>
+            <param name="NSPassJobNum">VAR code[20].</param>
+            <param name="Var NSPassSegmentCodeNSPassSegmentCode">code[30].</param>
+        </member>
+        <member name="O:PageExtension::NS_Time Sheet Mgr SubForm">
+             <summary>
+             PageExtension NS_Time Sheet SubForm (ID 14021177) extends Record Time Sheet Lines Subform.
+             </summary>
+            PRJ-1144.JS.1.0 | New Pages
+             //PRJCTPR-2.RM.1.0 13Dec2022 | Added a new field
+        </member>
+        <member name="O:Report::NS_Suggest Crew Job Jnl# Lines">
+            <summary>
+            Report NS_Suggest Crew Job Jnl. Lines (ID 14021379).
+            </summary>
+            //PRJ-841.JS.1.0 16Aug2021 | add code line
+            //PRJ-842.JS.1.0 16Aug2021 |  add code line
+             //PRJCTPR-2.RM.1.0 13Dec2022 | Added some code
+        </member>
+        <member name="O:TableExtension::NS_GLAccountExt">
+            <summary>
+            TableExtension NS_GLAccountExt (ID 14021399) extends Record G/L Account.
+            </summary>
+        </member>
+        <member name="O:TableExtension::NS_InvPostingBuffer">
+            <summary>
+            TableExtension NS_InvPostingBuffer (ID 14021374) extends Record Invoice Posting Buffer.
+            </summary>
+        </member>
+        <member name="O:TableExtension::NS_InvPostBuffer">
+            <summary>
+            TableExtension NS_InvPostBuffer (ID 14021112) extends Record Invoice Post. Buffer.
+            </summary>
+        </member>
+        <member name="O:TableExtension::NS_Job">
+            <summary>
+            TableExtension NS_Job (ID 14021131) extends Record Job.
+            </summary>
+        </member>
+        <member name="F:TableExtension::NS_Job.NS_No# Of Active Crews">
+            PRJ-949.GK.1.0 01Oct2021 start
+        </member>
+        <member name="F:TableExtension::NS_Job.NS_No# Of Inactive Crews">
+            PRJ-949.GK.1.0 01Oct2021 end
+        </member>
+        <member name="M:TableExtension::NS_Job.NS_ChangeRequestBillingprice(Job@):Decimal">
+            <summary>
+            NS_ChangeRequestBillingprice.
+            </summary>
+            <param name="Var NS_JobChangeReqNS_JobChangeReq">Record Job.</param>
+            <returns>Return variable ChangeRequesvaluePrice of type Decimal.</returns>
+        </member>
+        <member name="M:TableExtension::NS_SalesHeader.NS_SetShipToAddress(Text[100],Text[50],Text[100],Text[50],Text[30],Code[20],Text[30],Code[10],Text[100],Code[10])">
+            <summary>
+            NS_SetShipToAddress.
+            </summary>
+            <param name="NS_ShipToName">Text[100].</param>
+            <param name="NS_ShipToName2">Text[50].</param>
+            <param name="NS_ShipToAddress">Text[100].</param>
+            <param name="NS_ShipToAddress2">Text[50].</param>
+            <param name="NS_ShipToCity">Text[30].</param>
+            <param name="NS_ShipToPostCode">Code[20].</param>
+            <param name="NS_ShipToCounty">Text[30].</param>
+            <param name="NS_ShipToCountryRegionCode">Code[10].</param>
+            <param name="NS_ShipToContact">Text[100].</param>
+            <param name="NS_ShipToCode">Code[10].</param>
+        </member>
+        <member name="O:TableExtension::NS_InventorySetup">
+            <summary>
+            TableExtension NS_InventorySetup (ID 14021242) extends Record Inventory Setup.
+            </summary>
+        </member>
+    </members>
+</doc>
