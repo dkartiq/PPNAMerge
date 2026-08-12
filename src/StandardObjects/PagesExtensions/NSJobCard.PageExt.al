@@ -2,7 +2,7 @@ pageextension 14021131 NS_JobCard extends "Job Card"
 //PRJCTPR-197 Dk.1.0 31March2023 | Job No. Rewrite Issue.
 //PE-311.PP.1.0 11JUN2024 | Added the new Work order report and uncomment the "Work Requested" fasttab. Rename the old work order report as "Work order completed" report
 {
-    ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
+    //ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
     //PRJ-88.SK.1.0 Do open original field and blocked the new field that has been added.
     //PRJ-120.SK.1.0 Added field

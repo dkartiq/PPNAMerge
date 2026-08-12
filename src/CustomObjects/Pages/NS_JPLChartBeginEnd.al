@@ -5,11 +5,11 @@
 controladdin NSJobPlaningBeginEnd
 {
     Scripts = 'NSProjectProcanvasjs.min.js', 'NSProjectProJobScript.js';
-    StartupScript = 'NSProjectProStartup.js';
+    StartupScript = 'addin/src/NSProjectProStartup.js';
     //StyleSheets = 'Progress1.css';
     RequestedHeight = 1200;
     RequestedWidth = 1200;
-    RefreshScript = 'NSProjectProChart.js';
+    RefreshScript = 'addin/src/NSProjectProChart.js';
     /// <summary>
     /// IAddInReady.
     /// </summary>

@@ -1945,7 +1945,7 @@ table 14021300 NS_Subcontract
         //Show appropriate completion message
         // >> Upgrade
         //if CONFIRM(Text0004 + PurchaseHeader."No." + Text0006, true) then
-            //PAGE.RUN(PAGE::"NS_Subcontract PO", PurchaseHeader);
+        //PAGE.RUN(PAGE::"NS_Subcontract PO", PurchaseHeader);
         Go := false;
         Go := Confirm(StrSubstNo(Text0004, PurchaseHeader."Document Type") + PurchaseHeader."No." + Text0006, true);
         if Go then
@@ -2136,12 +2136,12 @@ table 14021300 NS_Subcontract
                     OnBeforeInsertPurchLinesFromSubconLines(PurchaseLine, SubcontractDetail);
                     //PRJ-773.SK.1.0 End
                     // >> Upgrade
-		    // >> 002
+                    // >> 002
                     //PurchaseLine.INSERT();
                     PurchaseLine.Modify(true);
                     // << 002
                     // << Upgrade
-		    
+
                     OnAfterInsertPurchLinesFromSubconLines(PurchaseLine, SubcontractDetail); //PRJCTPR-110.JS.1.0 05MAY2023
                     "NS_PO No." := PurchaseLine."Document No.";//PRJ-274 VT1.0 22-05-20
                     "NS_PO Line No." := PurchaseLine."Line No.";//PRJ-274 VT1.0 22-05-20
@@ -2635,8 +2635,8 @@ table 14021300 NS_Subcontract
     local procedure OnBeforeInsertPurchLinesFromSubconLines(Var PurchaseLines: Record "Purchase Line"; var SubcontractLines: Record "NS_Subcontract Lines")
     begin
     end;
-     // >> Upgrade
-    
+    // >> Upgrade
+
     [IntegrationEvent(false, false)]
     local procedure OnNS_MakePurchaseDocument1(var SubcontractHeader: Record NS_Subcontract; var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean; var FirstJobNo: Code[20]; var SubconDtl: Record "NS_Subcontract Lines"; var Job: Record Job; var DeliverGoods: Boolean)
     begin
@@ -2646,19 +2646,32 @@ table 14021300 NS_Subcontract
     local procedure OnNS_MakePurchaseDocument2(var SubcontractHeader: Record NS_Subcontract; var PurchaseHeader: Record "Purchase Header")
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnNS_MakePurchaseDocument3(var PurchaseHeader: Record "Purchase Header")
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnNS_MakePurchaseDocumentLines1(var SubcontractDetail: Record "NS_Subcontract Lines"; var PurchaseLine: Record "Purchase Line")
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnNS_MakePurchaseDocument4(var SubcontractHeader: Record NS_Subcontract)
     begin
     end;
     // << Upgrade
+
+    procedure NS_SubConChangeRequest(NS_Subcon: Record NS_Subcontract);
+    var
+        SubcontractNew_ChangeReqL: Record NS_Subcontract;
+        NS_JobsSetupL: Record 315;
+        SubConCardL: Page "NS_Subcontract Card";
+        NS_SubConLine: Record "NS_Subcontract Lines";
+        NS_SubConLineNew: Record "NS_Subcontract Lines";
+        NS_DocumentNo: Code[20];
+    begin
 
         NS_JobsSetupL.Get();
         //WITH NewJob DO BEGIN

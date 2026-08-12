@@ -73,8 +73,8 @@ table 14021301 "NS_Subcontract Lines"
         field(10; NS_Type; Option)
         {
             Caption = 'Type';
-            OptionCaption = ' ,Resource,Item,G/L Account';
-            OptionMembers = " ",Resource,Item,"G/L Account";
+            //OptionCaption = ' ,Resource,Item,G/L Account';
+            //OptionMembers = " ",Resource,Item,"G/L Account";
             // >> Upgrade
             Description = '001 "Fixed Asset" added to Option String';
             OptionCaption = ' ,Resource,Item,G/L Account,Fixed Asset';
@@ -102,6 +102,7 @@ table 14021301 "NS_Subcontract Lines"
                 Resource: Record Resource;
                 Item: Record Item;
                 GLAccount: Record "G/L Account";
+                JobSetup: Record "Jobs Setup"; //PE-301.NC.1.0 28May2024
                 // >> Upgrade
                 FixedAsset: Record "Fixed Asset";
             // << Upgrade

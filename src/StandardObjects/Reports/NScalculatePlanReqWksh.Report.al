@@ -80,9 +80,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
 
                 if NS_JMPBatchName <> '' then //PRJCTPR-93.NC.1.0 01May2023
                     CurrWorksheetName := NS_JMPBatchName; //PRJCTPR-93.NC.1.0 01May2023
-                // >> Upgrade
-		//InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, '');
-		InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, JobNoFilter);
+                                                          // >> Upgrade
+                                                          //InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, '');
+                InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, JobNoFilter);
                 // << Upgrade
                 InvtProfileOffsetting.NS_SetUsePlanCostBoolean(UsePlanCostToPurCost); //PRJ-1380.NK.1.0 13May2022 
                 InvtProfileOffsetting.NS_GetPurchaserCodes(JobPurchaser, ProjectManager);//PRJ-1380.NK.1.0 13May2022 
@@ -149,7 +149,7 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                 // >> Upgrade
                 PurchReqLine.SetFilter("NS_Job No.", JobNoFilter); // FDD
                                                                    // << Upgrade
-                //ProjectPro  - start
+                                                                   //ProjectPro  - start
                 IF UseJobDemandOnly THEN
                     FilterToJobItems(Item);
                 //ProjectPro  - end
@@ -364,6 +364,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
         JobNoFilter: Code[20];
         UseJobDemandOnly: Boolean;
         CurrentDocumentNo: Code[20];
+        UsePlanCostToPurCost: Boolean; //PRJ-1380.NK.1.0 13May2022
+        JobPurchaser: Code[20];  //PRJ-1380.NK.1.0 13May2022 
+        ProjectManager: Code[20];  //PRJ-1380.NK.1.0 13May2022 
         // >> Upgrade
         Text50000: label 'There are Items in Requisition Worksheets for this Job Filter. Items cannot be duplicated and existing lines will be deleted. Ensure you apply the correct Item Filters to avoid deleting Items incorrectly.;ENA=There are Items in Requisition Worksheets for this Job Filter. Items cannot be duplicated and existing lines will be deleted. Ensure you apply the correct Item Filters to avoid deleting Items incorrectly.';
     // << Upgrade

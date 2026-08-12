@@ -13,10 +13,10 @@ controladdin NS_UserTaskGraphics
     // RequestedHeight = 400;
     // RequestedWidth = 1280;
     //Scripts = 'NSProjectProcanvasjs.min.js', 'NSProjectProJobScript.js';
-    Scripts = 'JsScript\material-dashboard.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js', 'JsScript\NS_chartjs-plugin.js', 'JsScript\NS_UserTask.js';
+    Scripts = 'addin/src/JsScript\material-dashboard.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js', 'addin/src/JsScript\NS_chartjs-plugin.js', 'addin/src/JsScript\NS_UserTask.js';
     //Scripts = 'https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous', 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js', 'JsScript\NS_chartjs-plugin.js', 'https://cdn.jsdelivr.net/npm/chart.js', 'JsScript\NS_UserTask.js';
-    StyleSheets = 'StyleSheet\material-dashboard.min.css', 'StyleSheet\material-dashboard.css';
-    StartupScript = 'NSProjectProStartup.js';
+    StyleSheets = 'addin/src/StyleSheet\material-dashboard.min.css', 'addin/src/StyleSheet\material-dashboard.css';
+    StartupScript = 'addin/src/NSProjectProStartup.js';
     event IAddInReady();
     procedure NS_InitializeUserTaskGraphis(HyperlinkText: JsonArray; NS_OverdueDate: Code[20]; NS_Next7DayDate: Code[20]; NS_GreatherThanDate: Code[20]; NS_OverdueDate2: Code[20]; NS_Next7DayDate2: Code[20]; NS_GreatherThanDate2: Code[20]; NS_OverdueDate3: Code[20]; NS_Next7DayDate3: Code[20]; NS_GreatherThanDate3: Code[20]; NS_OverdueDate4: Code[20]; NS_Next7DayDate4: Code[20]; NS_GreatherThanDate4: Code[20]; NS_OverdueDate5: Code[20]; NS_Next7DayDate5: Code[20]; NS_GreatherThanDate5: Code[20]; NS_OverdueDate6: Code[20]; NS_Next7DayDate6: Code[20]; NS_GreatherThanDate6: Code[20]; NS_OverdueDate7: Code[20]; NS_Next7DayDate7: Code[20]; NS_GreatherThanDate7: Code[20]; NS_Label: JsonArray)
     //Procedure Demo(NS_Label: Code[20]; NS_Value: Integer);

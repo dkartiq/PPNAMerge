@@ -10,7 +10,7 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
     //PRJ-1750.NK.1.0 26Dec2022 | Code added    
     //PRJCTPR-10.SD.1.0 10Jan2023 | Code Added.
     //PE-22.JS.1.0 02FEB2022
-        // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     trigger OnRun()
     begin
     end;
@@ -251,7 +251,7 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         SalesHeader: Record "Sales Header";
     begin
         // >> Upgrade
-        OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(SalesHeader, SalesLine, InvoicePostBuffer);
+        OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(SalesHeader, SalesLine, InvoicePostingBuffer);
         // << Upgrade
     end;
     //PE-129.AS.1.0 end Add
@@ -888,11 +888,17 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         //PRJ-1648.PS.1.0  05OCT2022 - End
     end;
     //PRJ-884.JS.1.0 24Aug2021-end
-    // >> Upgrade
+    
     [IntegrationEvent(false, false)]
-    local procedure OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(var SaleHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
+    local procedure OnbeforeNS_C80PostLedgerType(SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; GenJnlLineDocType: Integer; SrcCode: Code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var Ishandled: Boolean)
     begin
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(var SaleHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; var InvoicePostBuffer: Record "Invoice Posting Buffer")
+    begin
+    end;
+
     [IntegrationEvent(false, false)]
     local procedure OnAfterNS_C80OnBeforePostCustomerEntry(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header")
     begin

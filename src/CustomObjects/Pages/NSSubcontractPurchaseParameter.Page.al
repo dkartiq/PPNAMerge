@@ -64,10 +64,8 @@ page 14021307 "NS_SubcontractPurchParameter"
 
     var
         PurchaseDocument: Code[20];
-        DocumentType: Option "Purch. Order","Purch. Invoice";
         OldDocumentType: Option "Purchase Order","Purchase Invoice";
     // >> Upgrade
-    protected var
         DocumentType: Option "Purch. Quote","Purch. Order","Purch. Invoice";
         DeliverGoods: Boolean;
         [InDataSet]

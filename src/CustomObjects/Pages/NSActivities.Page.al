@@ -11,7 +11,7 @@ page 14021156 NS_Activities
     //PRJ-192:AS:09APRIL2020 : Changed page type to list page as scrolling feature was not enabled on webclient due to wrong page type card.
     //PRJ-1085.RM.1.0 16Dec2021 | Added Page url
     //PRJ-917.NK.1.0 09Mar2022 | Add One Field
-    ContextSensitiveHelpPage = 'user-guide/role-center/activities/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/role-center/activities/'; //PRJ-1085.RM.1.0 16Dec2021
 
     Caption = 'Job Activities'; //PRJ-917.NK.1.0
     PageType = List;//PRJ-192:AS:09APRIL2020

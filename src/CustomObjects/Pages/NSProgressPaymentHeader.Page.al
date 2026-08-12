@@ -773,7 +773,6 @@ page 14021340 "NS_Progress Payment Header"
         LineRetention: Boolean;
         GetContractForProgressPay: Report "NS_Get Contact forProgressBill";
         GetPaymentForecast: Report "NS_Get Billing Forecast";
-        SubcontractName: Text[50];
         JobName: Text[50];
         VendorName: Text[50];
         [InDataSet]
@@ -816,15 +815,13 @@ page 14021340 "NS_Progress Payment Header"
         Text011Lbl: Label 'This function can only be run on Open versions.';
         // Text013Lbl: Label 'The Period To date is not filled in.'; //PRJCTPR-286.PS.1.0 10Jan2024 Commented
         Text013Lbl: Label 'The Period To date and  The Requisition Date is not filled in.';//PRJCTPR-286.PS.1.0 10Jan2024 
-        Text014Lbl: Label 'Are you certain you want to update the Purchase Order for this requisition?';
         Text019Lbl: Label 'This is a VOID requisition.';
         Text050Lbl: Label 'Subcontract No.';
         Text051Lbl: Label 'Job No.';
         Text052Lbl: Label 'Buy-from Vendor No.';
         Text053Lbl: Label 'Purchase Order';
         Text054Lbl: Label '<> Void';
-    // >> Upgrade
-    protected var
+
         SubcontractName: Text[50];
         Text014Lbl: Label 'Are you certain you want to update the Purchase Order for this requisition?';
         Text50000: Label 'You can only create a new Requisition when the current requisition is Invoiced';

@@ -460,7 +460,7 @@ page 14021203 "NS_Pick APO Code"
         // << Upgrade
     end;
 
-    procedure NS_GetResult(var JobTskNo: Code[35]; var JobTskDesc: Text[100]): Code[35];//PRJ-449.Am.1.0
+    procedure NS_GetResult(var JobTskNo: Code[35]; var JobTskDesc: Text[100];var JobTskAct: Code[20]): Code[35];//PRJ-449.Am.1.0
     begin
         JobTskNo := JobTaskNo;
         // >> Upgrade

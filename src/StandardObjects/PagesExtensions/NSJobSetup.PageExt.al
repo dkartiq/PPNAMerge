@@ -1,60 +1,61 @@
 pageextension 14021260 NS_JobSetupExt extends "Jobs Setup"
 {
-    ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
-                                                // version NAVW111.00,NSNA11.00
-                                                //PRJ-39.SK.1.0 - Added LookupPageID property on fields
-                                                //PRJ-191.AS.1.0 - 2APRIL2020 - Corrected caption of 'Progress Billiing' to 'Progress Billing'
-                                                //PRJ-291.MS.1.0 Added new field
-                                                //NSAL-64.MS.1.0 added new field
-                                                //CTSI-95.MS.1.0 added new field
-                                                //CTSI-115.AS.1.0 Added new field
-                                                //TM-10.AM.1.0 Added New Field.
-                                                //PRJ-459.MS.1.0 added new field
-                                                //CTSI-268.MS.1.0 added new field
-                                                //PRJ-530.AS.1.0 8FEB2021 Commented code
-                                                //PRJ-562/MGLBC-4 to remove filed from Progress Payment TAB
-                                                //PRJ-639.RS.1.0 19May2021 | Creat the tool tip Specific to PP Fields
-                                                //PRJ-756.RS.1.0 18June21 | Shifting of "Auto Lock Planning Line" field from Job Quoting Fast Tab to General Fast Tab on Job Setup
-                                                //PRJ-659.JS.1.0�27July2021 | Remove NS form two fast tabs
-                                                //CTSI-254.MS.1.0 added 2 new field
-                                                //PRJ-866.JS.1.0  19Aug2021 | Add one field
-                                                //PRJ-881.JS.1.0 25Aug2021 | update fields
-                                                //PRJ-889.GK.1.0 13Sep2021 | Add one field
-                                                //PRJ-929.GK.1.0 22Sep2021 | Add one field
-                                                //PRJ-935.RM.1.0 04-Oct-2021 | Modify Tooltip of a field
-                                                //PRJ-945.RM.1.0 04-Oct-2021 | Modify Tooltip of  fields
-                                                //PRJ-973.GK.1.0 13Oct2021 | Add one field.
-                                                //PRJ-985.RM.1.0 14Oct2021 | Modified Tooltip of field
-                                                //PRJ-986.RM.1.0 14Oct2021  | Made field invisible
-                                                //PRJ-987.RM.1.0 14Oct2021 | Modified Tooltip of field
-                                                //PRJ-1087.JS.1.0 18Dec2021 | Add one field
-                                                //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
-                                                //PRJ-1098.NK.1.0 15Feb2022 | Add One Field
-                                                //PRJ-1262.RM.1.0 28March2022 | Added a field
-                                                //PRJ-1299.JS.1.0 18APR2022 | Add one field
-                                                //PRJ-1349.JS.1.0 15MAY2022 | Add one Field 
-                                                //PRJ-1389.RM.1.0 23May2022 | Made fields invisible
-                                                //PRJ-1438.RM.1.0 06June2022 | Made a field invisible
-                                                //PRJ-1510.NK.1.0 21Jul2022 | Added Field
-                                                //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
-                                                //PRJ-1579.RM.2.0 31Aug2022 | Added a tooltip
-                                                //PRJ-1617.RM.1.0 07Sep2022 | Added some code
-                                                //PRJ-1669.RM.1.0 14Oct2022 | Added a tooltip
-                                                //PRJ-1711.RM.1.0 24Nov2022 | Added a tooltip 
-                                                //PRJ-1711.RP.1.0 24Nov2022 | Added a tooltip
-                                                //PRJ-1454.NK.1.0 13Jan2023 | Added Code
-                                                //PE-45.RM.1.0 13Feb2023 | Added tooltip
-                                                //PRJCTPR-78.NC.1.0 24Mar2023 | Obsolete Property
-                                                //PRJCTPR-151.RM.1.0 10July2023 | Added a tooltip
-                                                //PE-132.RM.1.0 19July2023 | Added some code
-                                                //PRJCTPR-162.RM.1.0 21July2023 | Added some code and tested the same on the web client.
-                                                //PE-167.VC.1.0 18Sep2023 | Job -> status -> WIP Message -> Setup -> to disable message.
-                                                //PE-170.HS.1.0 27Sept2023 |Changed Tooltip and Caption
-                                                //PRJCTPR-209.HS.1.0 27Oct2023 | Add tooltip and caption
-                                                //PE-210.HS.1.0 23Nov2023| Add Code
-                                                // PE-229.HS.1.0 14Dec2023 | Add field
-                                                //PRJCTPR-279.HS.1.0 17Jan2024 | Obselete Field
-                                                //PE-247.HS.1.0 6Feb2024 | Added code
+
+    //ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
+    // version NAVW111.00,NSNA11.00
+    //PRJ-39.SK.1.0 - Added LookupPageID property on fields
+    //PRJ-191.AS.1.0 - 2APRIL2020 - Corrected caption of 'Progress Billiing' to 'Progress Billing'
+    //PRJ-291.MS.1.0 Added new field
+    //NSAL-64.MS.1.0 added new field
+    //CTSI-95.MS.1.0 added new field
+    //CTSI-115.AS.1.0 Added new field
+    //TM-10.AM.1.0 Added New Field.
+    //PRJ-459.MS.1.0 added new field
+    //CTSI-268.MS.1.0 added new field
+    //PRJ-530.AS.1.0 8FEB2021 Commented code
+    //PRJ-562/MGLBC-4 to remove filed from Progress Payment TAB
+    //PRJ-639.RS.1.0 19May2021 | Creat the tool tip Specific to PP Fields
+    //PRJ-756.RS.1.0 18June21 | Shifting of "Auto Lock Planning Line" field from Job Quoting Fast Tab to General Fast Tab on Job Setup
+    //PRJ-659.JS.1.0�27July2021 | Remove NS form two fast tabs
+    //CTSI-254.MS.1.0 added 2 new field
+    //PRJ-866.JS.1.0  19Aug2021 | Add one field
+    //PRJ-881.JS.1.0 25Aug2021 | update fields
+    //PRJ-889.GK.1.0 13Sep2021 | Add one field
+    //PRJ-929.GK.1.0 22Sep2021 | Add one field
+    //PRJ-935.RM.1.0 04-Oct-2021 | Modify Tooltip of a field
+    //PRJ-945.RM.1.0 04-Oct-2021 | Modify Tooltip of  fields
+    //PRJ-973.GK.1.0 13Oct2021 | Add one field.
+    //PRJ-985.RM.1.0 14Oct2021 | Modified Tooltip of field
+    //PRJ-986.RM.1.0 14Oct2021  | Made field invisible
+    //PRJ-987.RM.1.0 14Oct2021 | Modified Tooltip of field
+    //PRJ-1087.JS.1.0 18Dec2021 | Add one field
+    //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
+    //PRJ-1098.NK.1.0 15Feb2022 | Add One Field
+    //PRJ-1262.RM.1.0 28March2022 | Added a field
+    //PRJ-1299.JS.1.0 18APR2022 | Add one field
+    //PRJ-1349.JS.1.0 15MAY2022 | Add one Field 
+    //PRJ-1389.RM.1.0 23May2022 | Made fields invisible
+    //PRJ-1438.RM.1.0 06June2022 | Made a field invisible
+    //PRJ-1510.NK.1.0 21Jul2022 | Added Field
+    //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
+    //PRJ-1579.RM.2.0 31Aug2022 | Added a tooltip
+    //PRJ-1617.RM.1.0 07Sep2022 | Added some code
+    //PRJ-1669.RM.1.0 14Oct2022 | Added a tooltip
+    //PRJ-1711.RM.1.0 24Nov2022 | Added a tooltip 
+    //PRJ-1711.RP.1.0 24Nov2022 | Added a tooltip
+    //PRJ-1454.NK.1.0 13Jan2023 | Added Code
+    //PE-45.RM.1.0 13Feb2023 | Added tooltip
+    //PRJCTPR-78.NC.1.0 24Mar2023 | Obsolete Property
+    //PRJCTPR-151.RM.1.0 10July2023 | Added a tooltip
+    //PE-132.RM.1.0 19July2023 | Added some code
+    //PRJCTPR-162.RM.1.0 21July2023 | Added some code and tested the same on the web client.
+    //PE-167.VC.1.0 18Sep2023 | Job -> status -> WIP Message -> Setup -> to disable message.
+    //PE-170.HS.1.0 27Sept2023 |Changed Tooltip and Caption
+    //PRJCTPR-209.HS.1.0 27Oct2023 | Add tooltip and caption
+    //PE-210.HS.1.0 23Nov2023| Add Code
+    // PE-229.HS.1.0 14Dec2023 | Add field
+    //PRJCTPR-279.HS.1.0 17Jan2024 | Obselete Field
+    //PE-247.HS.1.0 6Feb2024 | Added code
     Caption = 'Jobs Setup'; //PRJ-1330.NK.1.0 25Apr2022
     layout
     {

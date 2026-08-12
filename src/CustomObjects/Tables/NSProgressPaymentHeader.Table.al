@@ -946,6 +946,7 @@ table 14021340 "NS_Progress Payment Header"
         StoredMaterialToPay: Decimal;
         LineNumber: Integer;
         ModCount: Integer;
+        PurHdrRec: Record "Purchase Header"; //PE-183.AS.1.0
         // >> Upgrade
         TotalPOValue: Decimal;
         SubconPaymentValue: Decimal;
@@ -996,23 +997,23 @@ table 14021340 "NS_Progress Payment Header"
                     //Calculate and modify the "Qty. to Receive" on the Purchase Line
                     //if PurchaseLine.GET(PurchaseLine."Document Type"::Order, "NS_Purchase Order No.", "NS_Line No.") then begin //PRJ-1106.GK.1.0 29Dec2021 |Comment
                     if PurchaseLine.GET(PurchaseLine."Document Type"::Order, "NS_Purchase Order No.", "NS_PO Line No.") then begin //PRJ-1106.GK.1.0 29Dec2021 |add new line
-                        //PurchaseLine."Qty. to Receive" := NS_Total - PurchaseLine."Quantity Received";//PRJ-499.MS.1.0 comment
-                        //PurchaseLine.VALIDATE(PurchaseLine."Qty. to Receive");PRJ-499.MS.1.0 comment
-                        //PRJ-499.MS.1.0 start
-                        // >> Upgrade
-                        //if (PurchaseLine."NS_Subcontract Payment Percent" = 0) and (PurchaseLine."Quantity Received" < PurchaseLine.Quantity) then
-                           // if PurchaseLine.Quantity <> 0 then
-                             //   PurchaseLine."NS_Subcontract Payment Percent" := PurchaseLine."Quantity Received" / PurchaseLine.Quantity * 100
-                            //else
-                               // ERROR(Text14021102);
-                        //PurchaseLine.validate("NS_Subcontract Payment Percent", NS_Quantity);
-                        //PurchaseLine."NS_Subcontract Payment Value" := PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100) * PurchaseLine."Direct Unit Cost";
-                        //PurchaseLine."Qty. to Receive" := (PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100)) - PurchaseLine."Quantity Received";
-                        //if PurchaseLine."Qty. to Receive" < 0 then
-                          //  ERROR(Text14021104, FORMAT(PurchaseLine."Quantity Received"), FORMAT(PurchaseLine."Quantity Received" + PurchaseLine."Qty. to Receive"));
-                        //PurchaseLine.VALIDATE("Amount Including VAT");
-                        //PurchaseLine.VALIDATE("Qty. to Receive");
-                        //This code added
+                                                                                                                                   //PurchaseLine."Qty. to Receive" := NS_Total - PurchaseLine."Quantity Received";//PRJ-499.MS.1.0 comment
+                                                                                                                                   //PurchaseLine.VALIDATE(PurchaseLine."Qty. to Receive");PRJ-499.MS.1.0 comment
+                                                                                                                                   //PRJ-499.MS.1.0 start
+                                                                                                                                   // >> Upgrade
+                                                                                                                                   //if (PurchaseLine."NS_Subcontract Payment Percent" = 0) and (PurchaseLine."Quantity Received" < PurchaseLine.Quantity) then
+                                                                                                                                   // if PurchaseLine.Quantity <> 0 then
+                                                                                                                                   //   PurchaseLine."NS_Subcontract Payment Percent" := PurchaseLine."Quantity Received" / PurchaseLine.Quantity * 100
+                                                                                                                                   //else
+                                                                                                                                   // ERROR(Text14021102);
+                                                                                                                                   //PurchaseLine.validate("NS_Subcontract Payment Percent", NS_Quantity);
+                                                                                                                                   //PurchaseLine."NS_Subcontract Payment Value" := PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100) * PurchaseLine."Direct Unit Cost";
+                                                                                                                                   //PurchaseLine."Qty. to Receive" := (PurchaseLine."Quantity (Base)" * (PurchaseLine."NS_Subcontract Payment Percent" / 100)) - PurchaseLine."Quantity Received";
+                                                                                                                                   //if PurchaseLine."Qty. to Receive" < 0 then
+                                                                                                                                   //  ERROR(Text14021104, FORMAT(PurchaseLine."Quantity Received"), FORMAT(PurchaseLine."Quantity Received" + PurchaseLine."Qty. to Receive"));
+                                                                                                                                   //PurchaseLine.VALIDATE("Amount Including VAT");
+                                                                                                                                   //PurchaseLine.VALIDATE("Qty. to Receive");
+                                                                                                                                   //This code added
                         if ProgressPaymentLine."NS_No." <> '' then begin
                             if PurchaseLine.Quantity <> 0 then
                                 PurchaseLine."NS_Subcontract Payment Percent" := ProgressPaymentLine.NS_Quantity
@@ -1233,28 +1234,33 @@ table 14021340 "NS_Progress Payment Header"
             exit(PurchaseHeader."Posting Date");
         exit(WORKDATE);
     end;
-    
+
     // >> Upgrade
     [IntegrationEvent(false, false)]
     local procedure OnBeforeInsertNewRequisition(var PaymentHeader: Record "NS_Progress Payment Header"; var Subcontract: Record NS_Subcontract)
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnBeforeInsertNewRequisition2(var ProgressPaymentLine2: Record "NS_Progress Payment Line"; var ProgressPaymentLine: Record "NS_Progress Payment Line")
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnNewVersion1(var ProgressPaymentHeader: Record "NS_Progress Payment Header"; var ProgressPaymentHeader2: Record "NS_Progress Payment Header"; var Subcontract: Record NS_Subcontract)
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnBeforeUpdatePurchaseOrderLines(var PaymentHeader: Record "NS_Progress Payment Header"; var PurchaseHeader: Record "Purchase Header")
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnBeforeUpdatePurchaseOrderLines2(var PurchaseLine: Record "Purchase Line"; var ProgressPaymentLine: Record "NS_Progress Payment Line")
     begin
     end;
+
     [IntegrationEvent(false, false)]
     local procedure OnAfterUpdatePurchaseOrderLines(var PurchaseHeader: Record "Purchase Header")
     begin

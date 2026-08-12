@@ -2,11 +2,11 @@
 controladdin NSmyGeneric
 {
     Scripts = 'NSProjectProChart.js', 'NSProjectProJobScript.js';
-    StartupScript = 'NSProjectProStartup.js';
+    StartupScript = 'addin/src/NSProjectProStartup.js';
     //StyleSheets = 'Progress1.css';
     RequestedHeight = 300;
     RequestedWidth = 400;
-    RefreshScript = 'NSProjectProChart.js';
+    RefreshScript = 'addin/src/NSProjectProChart.js';
     event IAddInReady();
     procedure NSbar(NSjobNo: code[20]; NS_Discription: Text[100]; NSBudgetedCost: Decimal; NSBudgetedCostText: Text; NSBudgetedPrice: Decimal; NSBudgetedPriceText: Text; NSInvoicePrice: Decimal; NSInvoicePriceText: Text; NSUsagecost: Decimal; NSUsagecostText: Text);
     procedure NSPie(NSjobNo: code[20]; NS_Discription: Text[100]; NSBudgetedCost: Decimal; NSBudgetedCostText: Text; NSBudgetedPrice: Decimal; NSBudgetedPriceText: Text; NSInvoicePrice: Decimal; NSInvoicePriceText: Text; NSUsagecost: Decimal; NSUsagecostText: Text);
@@ -15,11 +15,11 @@ controladdin NSmyGeneric
 controladdin NSJobCostCatogary
 {
     Scripts = 'NSProjectProChart.js', 'NSProjectProJobScript.js';
-    StartupScript = 'NSProjectProStartup.js';
+    StartupScript = 'addin/src/NSProjectProStartup.js';
     //StyleSheets = 'Progress1.css';
     RequestedHeight = 300;
     RequestedWidth = 400;
-    RefreshScript = 'NSProjectProChart.js';
+    RefreshScript = 'addin/src/NSProjectProChart.js';
     event IAddInReady();
     procedure NSCOSTCATEGORYBar(NSjobNo: code[20]; NS_Discription: Text[100]; NSBudgetedCost: Decimal; NSBudgetedCostText: Text; NSBudgetedPrice: Decimal; NSBudgetedPriceText: Text; NSUsagecost: Decimal; NSUsagecostText: Text; NSUsageprice: Decimal; NSUsagepriceText: Text);
     procedure NSCOSTCATEGORYPIE(NSjobNo: code[20]; NS_Discription: Text[100]; NSBudgetedCost: Decimal; NSBudgetedCostText: Text; NSBudgetedPrice: Decimal; NSBudgetedPriceText: Text; NSUsagecost: Decimal; NSUsagecostText: Text; NSUsageprice: Decimal; NSUsagepriceText: Text);
@@ -28,11 +28,11 @@ controladdin NSJobCostCatogary
 controladdin NSGenericTpye4
 {
     Scripts = 'NSProjectProChart.js', 'NSProjectProJobScript.js';
-    StartupScript = 'NSProjectProStartup.js';
+    StartupScript = 'addin/src/NSProjectProStartup.js';
     //StyleSheets = 'Progress1.css';
     RequestedHeight = 300;
     RequestedWidth = 400;
-    RefreshScript = 'NSProjectProChart.js';
+    RefreshScript = 'addin/src/NSProjectProChart.js';
     event IAddInReady();
     procedure NSBudgetedHourbar(NSjobNo: code[20]; NS_Discription: Text[100]; NSBudgetedCost: Decimal; NSBudgetedCostText: Text; NSUsagecost: Decimal; NSUsagecostText: Text);
     procedure NSBudgetedHourPie(NSjobNo: code[20]; NS_Discription: Text[100]; NSBudgetedCost: Decimal; NSBudgetedCostText: Text; NSUsagecost: Decimal; NSUsagecostText: Text);
@@ -41,11 +41,11 @@ controladdin NSGenericTpye4
 controladdin NSCalculateRevenueRecognition
 {
     Scripts = 'NSProjectProChart.js', 'NSProjectProJobScript.js';
-    StartupScript = 'NSProjectProStartup.js';
+    StartupScript = 'addin/src/NSProjectProStartup.js';
     //StyleSheets = 'Style2.css';
     RequestedHeight = 300;
     RequestedWidth = 400;
-    RefreshScript = 'NSProjectProChart.js';
+    RefreshScript = 'addin/src/NSProjectProChart.js';
     event IAddInReady();
     procedure NSRevrecBar(NSjobNo: code[20]; NS_Discription: Text[100]; NSCurrentEst: Decimal; NSCurrentEstText: Text; NSActualCosttoDate: Decimal; NSActualCosttoDateText: Text; NSCurrentContract: Decimal; NSCurrentContractText: Text; NSBillingtoDate: Decimal; NSBillingtoDateText: Text);
     procedure NSRevrecBar2(NSjobNo: code[20]; NS_Discription: Text[100]; NSCurrentEst: Decimal; NSCurrentEstText: Text; NSActualCosttoDate: Decimal; NSActualCosttoDateText: Text; NSCurrentContract: Decimal; NSCurrentContractText: Text; NSBillingtoDate: Decimal; NSBillingtoDateText: Text; NSGrossProfit: Decimal; NSGrossProfitText: Text);

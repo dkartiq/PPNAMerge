@@ -13,7 +13,7 @@ page 14021407 "NS_Job Quote List"
     //PRJ-1085.RM.1.0 16Dec2021 | Added Page url
     //PRJ-1579.RM.1.0 18Aug2022 | Added tooltip
      //PRJCTPR-130.RM.1.0 18July2023 | Added an action button
-    ContextSensitiveHelpPage = 'user-guide/job-quotes/defining-a-job-quote/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/job-quotes/defining-a-job-quote/'; //PRJ-1085.RM.1.0 16Dec2021
 
     Caption = 'Quote List';
     CardPageID = "NS_Job Quote";

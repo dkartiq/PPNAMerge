@@ -20,7 +20,7 @@ page 14021305 "NS_Job Subcontract List"
     SourceTable = NS_Subcontract;
     UsageCategory = Lists;
     ApplicationArea = Jobs;
-    ContextSensitiveHelpPage = 'user-guide/subcontracts/subcontract-management/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/subcontracts/subcontract-management/'; //PRJ-1085.RM.1.0 16Dec2021
     layout
     {
         area(content)

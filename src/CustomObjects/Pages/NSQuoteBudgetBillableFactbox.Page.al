@@ -282,40 +282,42 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
         OnBeforeNS_CalcStatistics(Rec, JobCalc, OriginalBudget, OriginalContract, AdjustmentBudget, AdjustmentContract, IsHandled);
         if not IsHandled then begin
             // << Upgrade
-        //Calculate original amounts
-        JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');
-        JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)");
-        OriginalBudget := JobCalc."NS_Budgeted Cost (LCY)";
+            //Calculate original amounts
+            JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');
+            JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)");
+            OriginalBudget := JobCalc."NS_Budgeted Cost (LCY)";
 
-        JobCalc.CALCFIELDS("NS_Budgeted Price (LCY)");
-        OriginalContract := JobCalc."NS_Budgeted Price (LCY)";
+            JobCalc.CALCFIELDS("NS_Budgeted Price (LCY)");
+            OriginalContract := JobCalc."NS_Budgeted Price (LCY)";
 
-        //Calculate adjusted amounts
-        JobCalc.SETFILTER("NS_Adjustment Filter", '>%1', '');
-        JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
-        AdjustmentBudget := JobCalc."NS_Budgeted Cost (LCY)";
-        AdjustmentBudget := AdjustmentBudget + NS_SLsBudgetedCost(JobCalc);
-        AdjustmentContract := JobCalc."NS_Budgeted Price (LCY)";
-        AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);
+            //Calculate adjusted amounts
+            JobCalc.SETFILTER("NS_Adjustment Filter", '>%1', '');
+            JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
+            AdjustmentBudget := JobCalc."NS_Budgeted Cost (LCY)";
+            AdjustmentBudget := AdjustmentBudget + NS_SLsBudgetedCost(JobCalc);
+            AdjustmentContract := JobCalc."NS_Budgeted Price (LCY)";
+            AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);
 
-        //Calculate total Job Level values
-        JobLevelBudget := OriginalBudget + AdjustmentBudget;
-        JobLevelContract := OriginalContract + AdjustmentContract;
+            //Calculate total Job Level values
+            JobLevelBudget := OriginalBudget + AdjustmentBudget;
+            JobLevelContract := OriginalContract + AdjustmentContract;
 
-        JobCalc.RESET;
+            JobCalc.RESET;
 
-        //Find Revisions Cost and Price
-        CLEAR("Sub-LevelsCost");
-        CLEAR("Sub-LevelsPrice");
-        "Sub-LevelsCost" := NS_SLsBudgetedCost(JobCalc);
-        "Sub-LevelsPrice" := NS_SLsBudgetedPrice(JobCalc);
+            //Find Revisions Cost and Price
+            CLEAR("Sub-LevelsCost");
+            CLEAR("Sub-LevelsPrice");
+            "Sub-LevelsCost" := NS_SLsBudgetedCost(JobCalc);
+            "Sub-LevelsPrice" := NS_SLsBudgetedPrice(JobCalc);
 
-        CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
+            CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
+            // >> Upgrade
+            OnAfterNS_CalcStatistics(Rec, "QuotedGP$", "QuotedGP%");
+            // << Upgrade
+        end;
         // >> Upgrade
-        OnAfterNS_CalcStatistics(Rec, "QuotedGP$", "QuotedGP%");
-        // << Upgrade
     end;
-    // >> Upgrade
+
     [IntegrationEvent(false, false)]
     local procedure DrilldownResetAndSetApproved(var JobPlanningList: Page "Job Planning Lines")
     begin

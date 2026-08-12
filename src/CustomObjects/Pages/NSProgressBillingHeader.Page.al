@@ -35,7 +35,7 @@ page 14021325 "NS_Progress Billing Header"
     SourceTable = "NS_Progress Billing Header";
     UsageCategory = Documents;
     ApplicationArea = Jobs;
-    ContextSensitiveHelpPage = 'user-guide/progress-billing/progress-billings/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/progress-billing/progress-billings/'; //PRJ-1085.RM.1.0 16Dec2021
 
     layout
     {

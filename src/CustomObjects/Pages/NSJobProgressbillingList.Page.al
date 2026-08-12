@@ -20,7 +20,7 @@ page 14021328 "NS_Job Progress Billing List"
     PageType = List;
     RefreshOnActivate = true;
     SourceTable = "NS_Progress Billing Header";
-    ContextSensitiveHelpPage = 'user-guide/progress-billing/progress-billings/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/progress-billing/progress-billings/'; //PRJ-1085.RM.1.0 16Dec2021
 
     layout
     {

@@ -13,7 +13,7 @@ controladdin NS_WeatherContrilAddIn
     HorizontalStretch = true;
     HorizontalShrink = true;
     VerticalShrink = true;
-    Scripts = 'JsScript\NS_ProjectProWeather.js', 'JsScript\ProjectProWeatherjquery.min.js';
+    Scripts = 'addin/src/JsScript\NS_ProjectProWeather.js', 'addin/src/JsScript\ProjectProWeatherjquery.min.js';
     // StyleSheets = 'StyleSheet\NS_StyleSheet.css';
     //StartupScript = 'JsScript\NS_Start.js';
     //Images = 'Image\WeatherImage.jpg';

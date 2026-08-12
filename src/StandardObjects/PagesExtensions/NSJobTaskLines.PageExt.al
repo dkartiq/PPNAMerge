@@ -133,7 +133,7 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                     IF NS_PickAPOCode.RUNMODAL = ACTION::LookupOK THEN BEGIN
                         if (Rec."Job Task No.") <> '' then//PRJ-604.AS.1.0
                             Validate("Job Task No.", Rec."Job Task No.");//PRJ-604.AS.1.0
-                        NS_PickAPOCode.NS_GetResult("Job Task No.", NS_Description2);
+                        NS_PickAPOCode.NS_GetResult("Job Task No.", NS_Description2,JobAct);
                         Description := NS_JobTask.NS_GetJobTaskDescription("Job No.", "Job Task No.");
                         IF Description = '' THEN
                             Description := NS_Description2;

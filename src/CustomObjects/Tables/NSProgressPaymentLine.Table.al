@@ -878,6 +878,11 @@ table 14021341 "NS_Progress Payment Line"
         exit(PrevPayment);
     end;
 
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_LineCalculations(var ProgressPaymentHeader: Record "NS_Progress Payment Header"; var ProgressPaymentLine: Record "NS_Progress Payment Line")
+    begin
+    end;
+
     //SMPL Replaced TextConst with labels
 }
 

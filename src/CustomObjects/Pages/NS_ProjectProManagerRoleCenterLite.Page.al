@@ -7,7 +7,7 @@ page 14021139 "NS_ProjProManagerLite"
     //PE-109.PS.1.0 06Jun2023 | Only moved Controll
     Caption = 'ProjectPro Manager Lite';
     PageType = RoleCenter;
-    ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/';
+    //ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/';
 
     layout
     {

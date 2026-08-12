@@ -5,7 +5,7 @@
 ///New page is created to add A/p retention balance and A/R retentionbalance in factobx areas
 pageextension 14021492 NS_JobCostFactbox extends "Job Cost Factbox"
 {
-    ContextSensitiveHelpPage = 'user-guide/';
+    //ContextSensitiveHelpPage = 'user-guide/';
 
     layout
     {

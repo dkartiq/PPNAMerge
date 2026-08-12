@@ -32,9 +32,7 @@ page 14021405 "NS_Job Quote"
     //PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs'; //PE-221.NC.1.0 22Jan2024 Block
     PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs,Analytics'; //PE-221.NC.1.0 22Jan2024
     SourceTable = "NS_Job Quote Header";
-    // >> Upgrade
-    RefreshOnActivate = true;
-    // << Upgrade
+
     layout
     {
         area(content)

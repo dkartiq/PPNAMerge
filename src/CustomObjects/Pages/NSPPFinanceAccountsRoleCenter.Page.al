@@ -3,7 +3,7 @@ page 14021313 "NSPPFinanceAccountRolecenter"
     //PRJ-1743.NK.1.0 11Dec2022 | Create New Page
     Caption = 'PP Finance Account';
     PageType = RoleCenter;
-    ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/';
+    //ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/';
     layout
     {
         area(rolecenter)

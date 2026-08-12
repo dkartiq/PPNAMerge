@@ -37,7 +37,7 @@ page 14021300 "NS_Subcontract Card"
     UsageCategory = Documents;
     ApplicationArea = Jobs;
     Permissions = tabledata 39 = rmd; //PRJ-1106.GK.1.0 29Dec2021
-    ContextSensitiveHelpPage = 'user-guide/subcontracts/subcontract-management/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/subcontracts/subcontract-management/'; //PRJ-1085.RM.1.0 16Dec2021
 
     layout
     {
@@ -1804,7 +1804,6 @@ page 14021300 "NS_Subcontract Card"
         Text1002Lbl: Label 'The Job No. has not been modified.';
         RetentionHeld: array[3] of Decimal;
         VendorLedgerEntries: Page "Vendor Ledger Entries";
-        Text1003_Txt: Label 'A Purchase Order for this Subcontract does not exist.';//PRJ-780.RS.1.0 28June2021
 
         //PE-177.DK.1.0 10Nov2023 Start
         NS_SubconCRManagerStatus: Boolean;
@@ -1853,7 +1852,7 @@ page 14021300 "NS_Subcontract Card"
         PurchaseLine.RESET;
         PurchaseLine.SETCURRENTKEY("NS_Subcontract No.");
             // >> Upgrade
-            SetRange("Document Type", "Document Type"::Order); // #RG008
+                PurchaseLine.SetRange("Document Type", PurchaseLine."Document Type"::Order); // #RG008
             // << Upgrade
         PurchaseLine.SETRANGE("NS_Subcontract No.", SubcontractCalc."NS_No.");
         PurchaseLine.CALCSUMS("NS_Committed Amount");

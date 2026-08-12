@@ -2447,6 +2447,11 @@ codeunit 14021400 "NS_Job Quote Mgt."
         //_No[4] := _No4;
         //_TableID[5] := _Type5;  // Customer Template
         //_No[5] := _No5;
+        // >> Upgrade
+        //FDD101
+        //"NS_Shortcut Dimension 1 Code" := '';
+        //"NS_Shortcut Dimension 2 Code" := '';
+        // << Upgrade
         _QuoteHeader."NS_Shortcut Dimension 1 Code" := '';
         _QuoteHeader."NS_Shortcut Dimension 2 Code" := '';
         //PRJCTPR-155.JS.1.0 08Sep2023 - Start
@@ -2599,7 +2604,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_Quote Revision" := qQuoteHeader.NS_Revision;
             QuoteJob.MODIFY;
         end;
+        // >> Upgrade
+        OnAfterNS_CreateRevisionJQ(qQuoteHeader);
 
+        // << Upgrade
         MESSAGE('Job Quote Revision Created: ' + qQuoteHeader."NS_Quote No." + '.' + FORMAT(qQuoteHeader.NS_Revision - 1));
     end;
 
@@ -2922,6 +2930,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _Job: Record Job;
         _QuoteHeader: Record "NS_Job Quote Header";
         _Resource: Record Resource;
+        // >> Upgrade
+        Salesperson: Record "Salesperson/Purchaser";
+    // << Upgrade
     begin
         case _TableID of
             DATABASE::"NS_Job Quote Header":
@@ -4204,6 +4215,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         if lJob.GET(_QuoteHeader."NS_Job No.") then
             lJob.DELETE(true);
+        // >> Upgrade
+        OnAfterNS_OnDeleteQuote(_QuoteHeader);
+        // << Upgrade
     end;
 
     procedure NS_OnDeleteQuoteLine(_QuoteLine: Record "NS_Job Quote Line");
@@ -4287,6 +4301,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _NoSeries: Record "No. Series";
         _UserSetup: Record "User Setup";
         QuoteSetup: Record "Jobs Setup";
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         if not _UserSetup.GET(USERID) then
             _UserSetup.INIT;
@@ -4315,6 +4332,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
             "NS_Created by" := USERID;
             "NS_Created at Date" := TODAY;
             "NS_Created at Time" := TIME;
+            // >> Upgrade
+            NS_OnInsertQuote2(_QuoteHeader, _UserSetup);
+            // << Upgrade
             "NS_Modified by" := '';
             "NS_Modified at Date" := 0D;
             "NS_Modified at Time" := 000000T;
@@ -4349,6 +4369,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
             NS_CopyScopeOfWorkFromSetup(_QuoteHeader);
         NS_CreateQuoteJob(_QuoteHeader, TrueFalse);
         Commit();    //PRJCTPR-164.JS.1.0
+        // >> Upgrade
+        IsHandled := false;
+        NS_OnInsertQuote3(_QuoteHeader, IsHandled);
+        if IsHandled then
+            NS_CreateDim(_QuoteHeader, DATABASE::Job, _QuoteHeader."NS_Quote No.", 0, '', 0, '', 0, '', 0, '');
+        // << Upgrade
     end;
 
     local procedure NS_OnInsertQuoteCopy(var _QuoteHeader: Record "NS_Job Quote Header");
@@ -4529,6 +4555,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _Address: Record "Ship-to Address";
         _Customer: Record Customer;
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         if _QuoteHeader."NS_Bill-to Customer No." = '' then
             _QuoteHeader."NS_Bill-to Customer No." := _QuoteHeader."NS_Sell-to Customer No.";
@@ -4540,22 +4569,24 @@ codeunit 14021400 "NS_Job Quote Mgt."
               0, '',   // Campaign
               0, '',   // Responsibility Center
               0, '');  // Customer Template
+        NS_OnValidateBillToCustomerOnBefore(_QuoteHeader, IsHandled);//>>Upgrade<<
+        if not IsHandled then begin
+            if _Customer.GET(_QuoteHeader."NS_Bill-to Customer No.") then begin
+                _QuoteHeader."NS_Bill-to Customer Name" := _Customer.Name;
+                _QuoteHeader."NS_Payment Terms Code" := _Customer."Payment Terms Code";
+            end;
 
-        if _Customer.GET(_QuoteHeader."NS_Bill-to Customer No.") then begin
-            _QuoteHeader."NS_Bill-to Customer Name" := _Customer.Name;
-            _QuoteHeader."NS_Payment Terms Code" := _Customer."Payment Terms Code";
+            _Address.SETRANGE("NS_Table ID", DATABASE::"NS_Job Quote Header");
+            _Address.SETRANGE("NS_No.", _QuoteHeader."NS_Quote No.");
+            _Address.DELETEALL;
+
+            // copy addresses
+
+            NS_CopyCustomerAddress(_QuoteHeader, _QuoteHeader."NS_Bill-to Customer No.");
+
+            if _QuoteHeader."NS_Sales Quote No." <> '' then
+                NS_SyncSalesQuoteHeader(_QuoteHeader);
         end;
-
-        _Address.SETRANGE("NS_Table ID", DATABASE::"NS_Job Quote Header");
-        _Address.SETRANGE("NS_No.", _QuoteHeader."NS_Quote No.");
-        _Address.DELETEALL;
-
-        // copy addresses
-
-        NS_CopyCustomerAddress(_QuoteHeader, _QuoteHeader."NS_Bill-to Customer No.");
-
-        if _QuoteHeader."NS_Sales Quote No." <> '' then
-            NS_SyncSalesQuoteHeader(_QuoteHeader);
     end;
 
     procedure NS_OnValidateContactNo(var _QuoteHeader: Record "NS_Job Quote Header");
@@ -4632,8 +4663,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
         CLEAR(_QuoteHeader."NS_Estimator Name");
         with _QuoteHeader do
             if "NS_Estimator No." <> '' then
-                if _Resource.GET("NS_Estimator No.") then
-                    "NS_Estimator Name" := _Resource.Name;
+                // >> Upgrade
+                // if _Resource.GET("NS_Estimator No.") then
+                //     "NS_Estimator Name" := _Resource.Name;
+                if Salesperson.Get("NS_Estimator No.") then //FDD109
+                    "NS_Estimator Name" := Salesperson.Name; //FDD109
+                                                             // << Upgrade
     end;
 
     procedure NS_OnValidateJobNo(var _QuoteHeader: Record "NS_Job Quote Header");
@@ -5107,6 +5142,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_OnValidateTemplate(var _QuoteHeader: Record "NS_Job Quote Header");
     var
+	UserSetup: Record "User Setup";
         _Text000: Label 'This quote has been assigned to the LIBRARY, so Template may not be changed.';
         _Text001: Label 'This quote has been assigned to the LIBRARY.  If Template is turned OFF, the document will be removed from the LIBRARY.  Continue?';
     begin
@@ -5118,6 +5154,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
                     ERROR(_Text000);
             _QuoteHeader."NS_Salesperson/User ID" := USERID;
             _QuoteHeader."NS_Created by" := USERID;  // super quote users, if modify Template, change USERID
+            // >> Upgrade
+            //FDD109 Start
+            if UserSetup.Get(UserId) then
+                _QuoteHeader."NS_Salesperson Code New" := UserSetup."Salespers./Purch. Code";
+            //FDD109 End
+            // << Upgrade
         end;                                    //   so the quote no longer appears in the LIBRARY
         _QuoteHeader.MODIFY;
     end;
@@ -6087,6 +6129,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _User: Record User;
         _NewDocNo: Code[20];
         _Text000: Label 'Quote %1 was created and assigned to %2.';
+        // >> Upgrade
+        UserSetup: Record "User Setup";
+    // << Upgrade
     begin
         // if PAGE.RUNMODAL(PAGE::Users,_User) <> ACTION::LookupOK then
         //   exit;
@@ -6095,6 +6140,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
         _QuoteHeader2.GET(_NewDocNo);
         _QuoteHeader2."NS_Created by" := _User."User Name";
         _QuoteHeader2."NS_Salesperson/User ID" := _User."User Name";
+        // >> Upgrade
+        //FDD109 Start
+        if UserSetup.Get(_User."User Name") then
+            _QuoteHeader2."NS_Salesperson Code New" := UserSetup."Salespers./Purch. Code";
+        //FDD109 End
+        // << Upgrade
         _QuoteHeader2.NS_Template := true;
         _QuoteHeader2.MODIFY;
         MESSAGE(_Text000, _NewDocNo, _User."User Name");
@@ -6135,9 +6186,16 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _DimMgt: Codeunit DimensionManagement;
         _OldDimSetID: Integer;
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         with _QuoteHeader do begin
             _OldDimSetID := "NS_Dimension Set ID";
+            // >> Upgrade
+            OnBeforeNS_ShowDocDim(_QuoteHeader, IsHandled);
+            if not IsHandled then
+                // << Upgrade
             "NS_Dimension Set ID" :=
               _DimMgt.EditDimensionSet(
                 "NS_Dimension Set ID", STRSUBSTNO('%1 %2', TABLECAPTION, "NS_Quote No."),
@@ -6749,6 +6807,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
     var
         _DimMgt: Codeunit DimensionManagement;
         _OldDimSetID: Integer;
+        // >> Upgrade
+        Job: Record Job;
+    // << Upgrade
     begin
         with _QuoteHeader do begin
             _OldDimSetID := "NS_Dimension Set ID";
@@ -6760,6 +6821,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 MODIFY;
                 if NS_QuoteLinesExist(_QuoteHeader) then
                     NS_UpdateAllLineDim(_QuoteHeader, "NS_Dimension Set ID", _OldDimSetID);
+                // >> Upgrade
+                NS_ValidateShortcutDimCode1(_QuoteHeader, _ShortcutDimCode, _FieldNumber);
+
+                // << Upgrade
             end;
         end;
 
@@ -7164,6 +7229,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_Job Class" := QuoteJob."NS_Job Class"::Proposed;
         QuoteJob.InitVar(TrueFalse, true);
         QuoteJob.SetDisableLoadTasks(DisableJobTaskLoad);
+        // >> Upgrade
+        NS_CreateQuoteJob1(QuoteJob, lJobQuote);
+        // << Upgrade
         if not QuoteJob.INSERT(true) then
             QuoteJob.MODIFY(true);
     end;
@@ -7180,7 +7248,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 QuoteJob.Validate("NS_Sell-to Customer No.", JobQuote."NS_Sell-to Customer No.");
             if QuoteJob."Bill-to Customer No." <> JobQuote."NS_Bill-to Customer No." then
                 QuoteJob.VALIDATE("Bill-to Customer No.", JobQuote."NS_Bill-to Customer No.");
-            QuoteJob."Creation Date" := JobQuote."NS_Proposal Date";
+            // >> Upgrade
+            //>>FDD101.01
+            //QuoteJob."Creation Date" := JobQuote."NS_Proposal Date";
+            QuoteJob."Creation Date" := JobQuote."NS_Created at Date";
+            //<<FDD101.01
+            // << Upgrade
             QuoteJob."Starting Date" := JobQuote."NS_Estimated Start Date";
             QuoteJob."Ending Date" := JobQuote."NS_Estimated Completion Date";
             QuoteJob.NS_EnblGLNResGMCalc := JobQuote.NS_EnblGLNResGMCalc;//PRJ-1443
@@ -7212,8 +7285,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_CCIP/OCIP/RCOIP Insurance" := JobQuote."NS_CCIP/OCIP/RCOIP Insurance";
             QuoteJob."NS_Lien Waiver Required" := JobQuote."NS_Lien Waiver Required";
             QuoteJob."NS_Billing Cutoff Day of Month" := JobQuote."NS_Billing Cutoff Day of Month";
-            QuoteJob."NS_Estimated Start Date" := JobQuote."NS_Estimated Start Date";
-            QuoteJob."NS_Estimated Completion Date" := JobQuote."NS_Estimated Completion Date";
+            // >> Upgrade
+            // >> 001
+            //QuoteJob."NS_Estimated Start Date" := JobQuote."NS_Estimated Start Date";
+            //QuoteJob."NS_Estimated Completion Date" := JobQuote."NS_Estimated Completion Date";
+            // << 001
+            // << Upgrade
             QuoteJob."NS_Tax Area Code" := JobQuote."NS_Tax Area Code";
             QuoteJob."NS_Tax Liable" := JobQuote."NS_Tax Liable";
             // QuoteJob."NS_Tax Group Code" := JobQuote."NS_Tax Group Code"; //PRJCTPR-298.JS.1.0 16JAN2024
@@ -7235,6 +7312,14 @@ codeunit 14021400 "NS_Job Quote Mgt."
             QuoteJob."NS_Job Post Code" := JobQuote."NS_Job Post Code";
             QuoteJob."NS_Job Country/Region Code" := JobQuote."NS_Job Country/Region Code";
             QuoteJob."NS_Job Ship-to Code" := JobQuote."NS_Job Ship-to Code";
+            // >> Upgrade
+            //>>TG060818
+            QuoteJob."NS_Customer Job No." := JobQuote."Customer Job No.";
+            //<<TG060818
+            // << Upgrade
+            // >> Upgrade
+            NS_ModifyQuoteJob1(QuoteJob, JobQuote);
+            // << Upgrade
             QuoteJob.MODIFY;
         end;
     end;

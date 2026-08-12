@@ -10,7 +10,7 @@ enum 14021107 NSManagerJobStatus
     value(3; "Verbal App") { }
 // >> Upgrade
     //value(4; Approval)
-     value(4; "Budget Review") { }
+     value(4; "Budget Review") 
     {
         Caption = 'Approved'; //PE-193.PS.1.0 29Nov2023
     }

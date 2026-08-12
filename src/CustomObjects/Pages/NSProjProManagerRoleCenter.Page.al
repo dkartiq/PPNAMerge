@@ -24,7 +24,7 @@ page 14021350 "NS_ProjPro Manager Role Center"
     //PRJCTPR-130.RM.1.0 18July2023 | Added an action button
     Caption = 'ProjectPro Manager Role Center';
     PageType = RoleCenter;
-    ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/'; //PRJ-1085.RM.1.0 16Dec2021
 
     layout
     {

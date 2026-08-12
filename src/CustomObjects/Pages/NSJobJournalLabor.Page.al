@@ -835,9 +835,7 @@ page 14021388 "NS_Job Journal Labor"
         JobJnlManagement.OpenJnl(CurrentJnlBatchName, Rec);
     end;
     // >> Upgrade
-    protected var
-        CurrentJnlBatchName: Code[10];
-    // << Upgrade
+
 
     var
         PP_HumanResourcesSetup: Record "Human Resources Setup";
@@ -846,10 +844,10 @@ page 14021388 "NS_Job Journal Labor"
         ReportPrint: Codeunit "Test Report-Print";
         JobDescription: Text[50];
         AccName: Text[50];
-        CurrentJnlBatchName: Code[10];
         ShortcutDimCode: array[8] of Code[20];
         OpenedFromBatch: Boolean;
         PP_AdvancedJobLaborActive: Boolean;
+        CurrentJnlBatchName: Code[10];
 
 
     local procedure NS_CurrentJnlBatchNameOnAfterVali();

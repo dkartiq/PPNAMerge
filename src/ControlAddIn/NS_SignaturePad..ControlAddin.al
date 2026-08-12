@@ -14,8 +14,8 @@ controladdin "NS_SignaturePad"
     HorizontalShrink = true;
     RequestedHeight = 400;
     RequestedWidth = 1280;
-    Scripts = 'JsScript/sign.js', 'JsScript\signature_pad.min.js';
-    StyleSheets = 'StyleSheet/style.css';
+    Scripts = 'addin/src/JsScript/sign.js', 'addin/src/JsScript\signature_pad.min.js';
+    StyleSheets = 'addin/src/StyleSheet/style.css';
     event Ready()
     procedure InitializeSignaturePad()
      procedure SignetureImg(Image: Text)

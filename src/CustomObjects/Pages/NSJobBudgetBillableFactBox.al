@@ -450,20 +450,7 @@ page 14021356 "NS_Job Budget/Billable FactBox"
     begin
         NS_CalcStatistics;
     end;
-    // >> Upgrade
-    protected var
-        [InDataSet]
-        OriginalBudget: Decimal;
-        JobPlanningList: Page "Job Planning Lines";
-        Text14021101: Label 'NO';
-        AdjustmentBudget: Decimal;
-        Text14021100: Label 'YES';
-        AdjustmentContract: Decimal;
 
-        AdjustmentBudgetNC: Decimal;
-        AdjustmentContractNC: Decimal;
-        OriginalContract: Decimal;
-    // << Upgrade
     var
         ChangeRequest_Job: Record Job; //PE-193.PS.3.0 27Dec2023
         ChangeRequest: Decimal;//PE-193.PS.3.0 27Dec2023
@@ -508,6 +495,10 @@ page 14021356 "NS_Job Budget/Billable FactBox"
         JobNoFilter: Code[30]; //PE-133.NC.1.0 21July2023
         ChangeRequst: Decimal; //PE-193.PS.3.0 04Jan2024 
 
+        AdjustmentBudgetNC: Decimal;
+        AdjustmentContractNC: Decimal;
+        IsHandled: Boolean;
+
     procedure NS_CalcStatistics();
     begin
         //PRJ-340.SK.1.0 Start
@@ -521,25 +512,25 @@ page 14021356 "NS_Job Budget/Billable FactBox"
         // >> Upgrade
         Calculateoriginalamounts(Rec, JobCalc, OriginalBudget, OriginalContract, AdjustmentBudget, AdjustmentBudgetNC, AdjustmentContract, AdjustmentContractNC, IsHandled);
         if not IsHandled then begin
-        JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');
+            JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');
 
-        JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)");
-        OriginalBudget := JobCalc."NS_Budgeted Cost (LCY)";
+            JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)");
+            OriginalBudget := JobCalc."NS_Budgeted Cost (LCY)";
 
-        JobCalc.CALCFIELDS("NS_Budgeted Price (LCY)", "NS_Locked Bill Rev Cost (LCY)", "NS_ Locked Budgeted Rev ");//MHNA-6.NK.1.0 start 06Jan2023
-        OriginalContract := JobCalc."NS_Budgeted Price (LCY)";
-        LockedCostBill := JobCalc."NS_Locked Bill Rev Cost (LCY)"; //MHNA-6.NK.1.0 start 06Jan2023
+            JobCalc.CALCFIELDS("NS_Budgeted Price (LCY)", "NS_Locked Bill Rev Cost (LCY)", "NS_ Locked Budgeted Rev ");//MHNA-6.NK.1.0 start 06Jan2023
+            OriginalContract := JobCalc."NS_Budgeted Price (LCY)";
+            LockedCostBill := JobCalc."NS_Locked Bill Rev Cost (LCY)"; //MHNA-6.NK.1.0 start 06Jan2023
 
 
 
-        //Calculate adjusted amounts
-        JobCalc.SETFILTER("NS_Adjustment Filter", '>%1', '');
-        JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)", "NS_ Locked Budgeted Rev ");//MHNA-6.NK.1.0 start 06Jan2023
-        AdjustmentBudget := JobCalc."NS_Budgeted Cost (LCY)";
-        //AdjustmentBudget := AdjustmentBudget + NS_SLsBudgetedCost(JobCalc);//PRJ-421.MS.1.0
-        AdjustmentContract := JobCalc."NS_Budgeted Price (LCY)";
-        AdjustmentRevenueCont := JobCalc."NS_ Locked Budgeted Rev ";//MHNA-6.NK.1.0 start 06march2023
-        //AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);//PRJ-421.MS.1.0
+            //Calculate adjusted amounts
+            JobCalc.SETFILTER("NS_Adjustment Filter", '>%1', '');
+            JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)", "NS_ Locked Budgeted Rev ");//MHNA-6.NK.1.0 start 06Jan2023
+            AdjustmentBudget := JobCalc."NS_Budgeted Cost (LCY)";
+            //AdjustmentBudget := AdjustmentBudget + NS_SLsBudgetedCost(JobCalc);//PRJ-421.MS.1.0
+            AdjustmentContract := JobCalc."NS_Budgeted Price (LCY)";
+            AdjustmentRevenueCont := JobCalc."NS_ Locked Budgeted Rev ";//MHNA-6.NK.1.0 start 06march2023
+                                                                        //AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);//PRJ-421.MS.1.0
         end;
         AdjustmentBudget := AdjustmentBudget + NS_SLsBudgetedCost(JobCalc);
         AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);

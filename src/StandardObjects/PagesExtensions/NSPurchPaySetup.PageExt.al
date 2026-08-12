@@ -1,6 +1,6 @@
 pageextension 14021259 NS_PurchPaySetup extends "Purchases & Payables Setup"
 {
-    ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
+    //ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,NAVMX11.00.00.23572,PPNA11.00
     //PRJ-1330.NK.1.0 25Apr2022 | Change Caption
     //PRJ-1416.JS.1.0 24MAY2022 | Add one field

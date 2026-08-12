@@ -42,7 +42,7 @@ page 14021427 "NS_Job Material Planning Wksht"
     ApplicationArea = Jobs;
     SourceTableView = sorting("NS_Worksheet Job No.", "NS_Order Code", "NS_Job Plannine Line No.", NS_Level)
     ORDER(Ascending);//PRJ-563.AS.1.0 24MAY2020
-    ContextSensitiveHelpPage = 'user-guide/jmp-process/job-material-planning/'; //PRJ-1085.RM.1.0 16Dec2021
+    //ContextSensitiveHelpPage = 'user-guide/jmp-process/job-material-planning/'; //PRJ-1085.RM.1.0 16Dec2021
 
     layout
     {

@@ -6,7 +6,7 @@ page 14021138 "NSProjectProAccountLite"
     //PE-65.GK.1.0 27Mar2023|Create New Page
     Caption = 'ProjectPro Account Lite';
     PageType = RoleCenter;
-    ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/';
+    //ContextSensitiveHelpPage = 'user-guide/role-center/projectpro-role-center/';
     layout
     {
         area(rolecenter)

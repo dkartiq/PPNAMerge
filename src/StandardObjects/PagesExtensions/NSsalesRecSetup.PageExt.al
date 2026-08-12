@@ -1,6 +1,6 @@
 pageextension 14021158 NS_SalesRecSetup extends "Sales & Receivables Setup"
 {
-    ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
+    //ContextSensitiveHelpPage = 'user-guide/';   //PRJ-1556.JS.1.0 24AUG2022
     // version NAVW111.00.00.23572,PPNA11.00
     //PRJ-931.JS.1.0�23Sep2021 | Add one field
     //PRJ-1330.NK.1.0 25Apr2022 | Change Caption

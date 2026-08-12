@@ -417,269 +417,270 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                         SalesHeader."NS_Retention Date" := CALCDATE(JobsSetup."NS_Sales Retention Period", SalesHeader."Document Date")
                     else
                         SalesHeader."NS_Retention Date" := SalesHeader."Document Date";
+                    // >> Upgrade
+                    //SalesHeader.VALIDATE("NS_Retention Amount"); // #132
+                    // << Upgrade
+                    //PRJ-1624.NK.1.0 26Sep2022 Start
+                    if BillingHeader."NS_Multiple Retention on Lines" then begin
+                        BillingHeader.CalcFields("NS_Lines Total Retention Amt");
+                        SalesHeader."NS_Retention Amount" := Round((BillingHeader."NS_Lines Total Retention Amt" - PreviousRetention + NS_TotalStoreMarRetentionAmt(BillingHeader)), 0.01);
+                        //PE-22.JS.1.0 21FEB2023-Start
+                        if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then begin
+                            if NS_Currency.get(SalesHeader."Currency Code") then;
+                            SalesHeader."NS_Retention Amount" := Round((SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor"),
+                            NS_Currency."Unit-Amount Rounding Precision");
+                        end;
+                        // >> Upgrade
+                        SalesHeader."NS_Progress Billing Document" := true;
+                        // << Upgrade
+                    end;
+                    //PRJ-1624.NK.1.0 26Sep2022 End
+                    //PRJ-1648.PS.1.0 19Dec2022 Start
+
+                    if (BillingHeader."NS_Multiple Retention on Lines") And (BillingHeader."NS_R_Reduction & Invoicing" = false) then begin  //PRJ-1648.PS.1.0 19Dec2022
+                        BillingHeader.CalcFields("NS_Lines Total Retention New");
+                        BillingHeader.CalcFields("NS_Stored Material Ret. Amt"); //PE-15.PS.1.0 02Feb2023
+                        SalesHeader."NS_Retention Amount" := Round((BillingHeader."NS_Lines Total Retention Amt" - PreviousRetention + NS_TotalStoreMarRetentionAmt(BillingHeader)), 0.01); //PE-15.PS.1.0 02Feb2023
+                                                                                                                                                                                            //PE-22.JS.1.0 21FEB2023-Start
+                        if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then begin
+                            if NS_Currency.get(SalesHeader."Currency Code") then;
+                            SalesHeader."NS_Retention Amount" := Round((SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor"),
+                            NS_Currency."Unit-Amount Rounding Precision");
+                        end;
+                        //PE-22.JS.1.0 21FEB2023-end   
+                    end;
+
+                    //PRJ-1648.PS.1.0 19Dec2022 End
+                    //   SalesHeader.VALIDATE("NS_Retention Amount"); //PE-22.JS.1.0 line commented
+                end;
+
+                SalesHeader."NS_From Progress Billing No." := "NS_No.";
+                SalesHeader."NS_From ProgressBillingReq.No." := "NS_Requisition No.";
+                SalesHeader."NS_From ProgressBillingVer.No." := "NS_Version No.";
                 // >> Upgrade
-                //SalesHeader.VALIDATE("NS_Retention Amount"); // #132
+                //SalesHeader.VALIDATE("NS_Job No.", "NS_Job No.");
                 // << Upgrade
-                //PRJ-1624.NK.1.0 26Sep2022 Start
-                if BillingHeader."NS_Multiple Retention on Lines" then begin
-                    BillingHeader.CalcFields("NS_Lines Total Retention Amt");
-                    SalesHeader."NS_Retention Amount" := Round((BillingHeader."NS_Lines Total Retention Amt" - PreviousRetention + NS_TotalStoreMarRetentionAmt(BillingHeader)), 0.01);
-                    //PE-22.JS.1.0 21FEB2023-Start
-                    if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then begin
-                        if NS_Currency.get(SalesHeader."Currency Code") then;
-                        SalesHeader."NS_Retention Amount" := Round((SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor"),
-                        NS_Currency."Unit-Amount Rounding Precision");
-                    end;
-            // >> Upgrade
-            SalesHeader."NS_Progress Billing Document" := true;
-            // << Upgrade
+                if BillingHeader."NS_Multiple Retention on Lines" then
+                    SalesHeader."NS_Multiple Retention on Lines" := BillingHeader."NS_Multiple Retention on Lines";
+                //PRJ-1624.NK.1.0 23Sep2022             
+                SalesHeader.VALIDATE("NS_Job No.", "NS_Job No.");
+                SalesHeader."NS_Use % Billing format" := Job."NS_Use % Billing format";//CTSI-150.AS.1.0
+                SalesHeader."NS_Draw No." := BillingHeader."NS_Draw No.";//PRJ-1304.RM.1
+                                                                         //PE-22.JS.1.0 02FEB2023-Start
+                if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then
+                    if NS_Currency.get(SalesHeader."Currency Code") then
+                        SalesHeader.VALIDATE("NS_Retention Amount", Round(SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor",
+                        NS_Currency."Unit-Amount Rounding Precision"));
+                //PE-22.JS.1.0 02FEB2023-end
+                NS_OnBeforeInsertSalesHeaderinPB(SalesHeader, BillingHeader, Job);//PRJ-1414.AS.1.0 Added event
+                SalesHeader.INSERT;
+                // >> Upgrade
+                //FDD108 Start
+
+                // SalesHeader.VALIDATE("Shortcut Dimension 1 Code", Job."Global Dimension 1 Code");
+                // SalesHeader.VALIDATE("Shortcut Dimension 2 Code", Job."Global Dimension 2 Code");
+                //JobDimensionNo := ProgressBillingHeader.GetDimensionNoFromJob(ProgressBillingHeader."Job No."); //PRJ-180.SK.1.0 Commented
+                JobDimensionNo := ProgressBillingHeader.NS_GetDimensionNoFromJob("NS_Job No.");//PRJ-180.SK.1.0 Added
+                                                                                               // SalesHeader."Dimension Set ID" := JobDimensionNo;
+                SalesHeader.Validate("NS_Job No.", "NS_Job No.");
+                SalesHeader.Modify;
+                //FDD108 End
+                // << Upgrade
+
+                //SalesHeader.VALIDATE("Tax Liable", Job."NS_Tax Liable");     //PRJ-862.JS.1.0 Line Added //PRJCTPR-133.NC.1.0 22June2023 Block
+                //SalesHeader.VALIDATE("Tax Area Code", Job."NS_Tax Area Code");   //PRJ-862.JS.1.0 Line Added //PRJCTPR-133.NC.1.0 22June2023 Block
+                //PRJCTPR-199.JS.1.0 12DEC2023 Start belwo code commented
+                // SalesHeader.VALIDATE("Shortcut Dimension 1 Code", Job."Global Dimension 1 Code");
+                // SalesHeader.VALIDATE("Shortcut Dimension 2 Code", Job."Global Dimension 2 Code");
+                //JobDimensionNo := ProgressBillingHeader.GetDimensionNoFromJob(ProgressBillingHeader."Job No."); //PRJ-180.SK.1.0 Commented
+                // JobDimensionNo := ProgressBillingHeader.NS_GetDimensionNoFromJob("NS_Job No.");//PRJ-180.SK.1.0 Added
+                // SalesHeader."Dimension Set ID" := JobDimensionNo;
+                //PRJ-999.JS.1.0 12Nov2021 Start
+                // SalesHeader."Shortcut Dimension 1 Code" := "NS_Global Dimension 1 Code";
+                // SalesHeader."Shortcut Dimension 2 Code" := "NS_Global Dimension 2 Code";
+                // SalesHeader."Dimension Set ID" := "NS_Dimension Set ID";
+                //PRJCTPR-199.JS.1.0 12DEC2023 end belwo code commented
+                //PRJ-999.JS.1.0 12Nov2021 end
+
+                //PRJ-876.JS.1.0 23Aug2021-Start-below code commented
+                //Set up Sales Lines
+                // LineRetention := false;
+                // if SalesHeader."NS_Retention Document" then
+                //     NS_RetentionDocumentLines(BillingHeader, SalesHeader, Job)
+                // else
+                //     NS_NormalDocumentLines(BillingHeader, SalesHeader, Job);
+                //PRJ-876.JS.1.0 23Aug2021-end    
+                // >> Upgrade
+                // #132 Start
+                SalesHeader.Get(SalesHeader."Document Type", SalesHeader."No.");
+                SalesHeader.Validate("NS_Retention Amount");
+                SalesHeader.Modify;
+                // #132 End
+                // << Upgrade
+                //Validation Checks
+                if ("NS_Work Retention Percent" <> 0) or ("NS_Material Retention Percent" <> 0) then begin
+                    //Find current Retention Balance for this Job
+                    CustLedgerEntry.CLEARMARKS;
+                    CustLedgerEntry.RESET;
+                    CustLedgerEntry.SETCURRENTKEY("Customer No.", "Posting Date");
+                    CustLedgerEntry.SETRANGE("Customer No.", Job."Bill-to Customer No.");
+                    CustLedgerEntry.SETRANGE(Open, true);
+                    if not SalesSetup."NS_Sales Retention Inactive" then
+                        CustLedgerEntry.SETRANGE("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
+                    if CustLedgerEntry.FINDSET then
+                        repeat
+                            if CustLedgerEntry."Document Type" = CustLedgerEntry."Document Type"::Invoice then begin
+                                Used := false;
+                                SalesInvoiceLine.RESET;
+                                SalesInvoiceLine.SETRANGE("Document No.", CustLedgerEntry."Document No.");
+                                if SalesInvoiceLine.FINDSET then
+                                    repeat
+                                        if SalesInvoiceLine."Job No." = "NS_Job No." then begin
+                                            //PE-22.JS.1.0 17FEB2023 - Start
+                                            //CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)");
+                                            CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)", "Remaining Amount");
+                                            if CustLedgerEntry."Currency Code" = '' then
+                                                RetBalance := RetBalance + CustLedgerEntry."Remaining Amt. (LCY)"
+                                            else
+                                                RetBalance := RetBalance + CustLedgerEntry."Remaining Amount";
+                                            //PE-22.JS.1.0 17FEB2023 - end  
+                                            Used := true
+                                        end;
+                                    until (SalesInvoiceLine.NEXT = 0) or Used;
+                            end;
+                            if CustLedgerEntry."Document Type" = CustLedgerEntry."Document Type"::"Credit Memo" then begin
+                                Used := false;
+                                SalesCrMemoLine.RESET;
+                                SalesCrMemoLine.SETRANGE("Document No.", CustLedgerEntry."Document No.");
+                                if SalesCrMemoLine.FINDSET then
+                                    repeat
+                                        if SalesCrMemoLine."Job No." = "NS_Job No." then begin
+                                            //PE-22.JS.1.0 17FEB2023 - Start
+                                            //CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)");
+                                            CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)", "Remaining Amount");
+                                            if CustLedgerEntry."Currency Code" = '' then
+                                                RetBalance := RetBalance + CustLedgerEntry."Remaining Amt. (LCY)"
+                                            else
+                                                RetBalance := RetBalance + CustLedgerEntry."Remaining Amount";
+                                            //PE-22.JS.1.0 17FEB2023 - end 
+                                            Used := true
+                                        end;
+                                    until (SalesCrMemoLine.NEXT = 0) or Used;
+                            end;
+                        until CustLedgerEntry.NEXT = 0;
+                    if SalesHeader."NS_Retention Amount" + RetBalance < 0 then
+                        ERROR(Text004Lbl);
                 end;
-                //PRJ-1624.NK.1.0 26Sep2022 End
-                //PRJ-1648.PS.1.0 19Dec2022 Start
 
-                if (BillingHeader."NS_Multiple Retention on Lines") And (BillingHeader."NS_R_Reduction & Invoicing" = false) then begin  //PRJ-1648.PS.1.0 19Dec2022
-                    BillingHeader.CalcFields("NS_Lines Total Retention New");
-                    BillingHeader.CalcFields("NS_Stored Material Ret. Amt"); //PE-15.PS.1.0 02Feb2023
-                    SalesHeader."NS_Retention Amount" := Round((BillingHeader."NS_Lines Total Retention Amt" - PreviousRetention + NS_TotalStoreMarRetentionAmt(BillingHeader)), 0.01); //PE-15.PS.1.0 02Feb2023
-                    //PE-22.JS.1.0 21FEB2023-Start
-                    if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then begin
-                        if NS_Currency.get(SalesHeader."Currency Code") then;
-                        SalesHeader."NS_Retention Amount" := Round((SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor"),
-                        NS_Currency."Unit-Amount Rounding Precision");
-                    end;
-                    //PE-22.JS.1.0 21FEB2023-end   
-                end;
+                SalesHeader."NS_Retention Percent" := 0;
+                if "NS_Requisition Total" <> 0 then
+                    SalesHeader."NS_Retention Percent" := "NS_Work Retention Percent";//PRJ-293.MS.1.0
+                                                                                      //SalesHeader."NS_Retention Percent" := ROUND(SalesHeader."NS_Retention Amount" / "NS_Requisition Total" * 100, GLSetup."Amount Rounding Precision");
+                                                                                      //PRJ-1519.NK.1.0 08Sep2022 Start                                                                                   //SalesHeader."NS_Retention Percent" := ROUND(SalesHeader."NS_Retention Amount" / "NS_Requisition Total" * 100, GLSetup."Amount Rounding Precision");
+                if BillingHeader."NS_Work Retention Percent" = 0 then
+                    if BillingHeader."NS_Material Retention Percent" <> 0 then
+                        SalesHeader."NS_Retention Percent" := BillingHeader."NS_Material Retention Percent";
+                //PRJ-1519.NK.1.0 08Sep2022 End
+                //Update Sales Header
+                SalesHeader.Validate("Bill-to Customer No.", Job."Bill-to Customer No."); //PRJCTPR-386 AT.01 25june2024
+                SalesHeader."External Document No." := Job."NS_Customer PO Number";//CTSI-179.MS.1.0
+                SalesHeader."Salesperson Code" := Job."NS_Salesperson Code";//PRJ-415
+                                                                            //ZEL-4.RM.1.0 10April2023 Start
 
-                //PRJ-1648.PS.1.0 19Dec2022 End
-                //   SalesHeader.VALIDATE("NS_Retention Amount"); //PE-22.JS.1.0 line commented
-            end;
+                //SalesHeader.Validate("Bill-to Customer No.", Job."Bill-to Customer No."); //PRJCTPR-386 AT.01 25june2024 Block
+                //PRJCTPR-133.NC.1.0 22June2023 Start
+                if Job."NS_Tax Liable" = true then
+                    SalesHeader.VALIDATE("Tax Liable", Job."NS_Tax Liable");
+                if Job."NS_Tax Area Code" <> '' then
+                    SalesHeader.VALIDATE("Tax Area Code", Job."NS_Tax Area Code");
+                //PRJCTPR-133.NC.1.0 22June2023 End
+                if Job."Invoice Currency Code" <> '' then
+                    SalesHeader.Validate("Currency Code", Job."Invoice Currency Code");
+                //ZEL-4.RM.1.0 10April2023 End
+                SalesHeader."Your Reference" := Job."Your Reference";  //ZEL-5.GK.1.0 21Apr2023
 
-            SalesHeader."NS_From Progress Billing No." := "NS_No.";
-            SalesHeader."NS_From ProgressBillingReq.No." := "NS_Requisition No.";
-            SalesHeader."NS_From ProgressBillingVer.No." := "NS_Version No.";
-            // >> Upgrade
-            //SalesHeader.VALIDATE("NS_Job No.", "NS_Job No.");
-            // << Upgrade
-            if BillingHeader."NS_Multiple Retention on Lines" then
-                SalesHeader."NS_Multiple Retention on Lines" := BillingHeader."NS_Multiple Retention on Lines";
-            //PRJ-1624.NK.1.0 23Sep2022             
-            SalesHeader.VALIDATE("NS_Job No.", "NS_Job No.");
-            SalesHeader."NS_Use % Billing format" := Job."NS_Use % Billing format";//CTSI-150.AS.1.0
-            SalesHeader."NS_Draw No." := BillingHeader."NS_Draw No.";//PRJ-1304.RM.1
-            //PE-22.JS.1.0 02FEB2023-Start
-            if (SalesHeader."Currency Code" <> '') and (SalesHeader."Currency Factor" <> 0) then
-                if NS_Currency.get(SalesHeader."Currency Code") then
-                    SalesHeader.VALIDATE("NS_Retention Amount", Round(SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor",
-                    NS_Currency."Unit-Amount Rounding Precision"));
-            //PE-22.JS.1.0 02FEB2023-end
-            NS_OnBeforeInsertSalesHeaderinPB(SalesHeader, BillingHeader, Job);//PRJ-1414.AS.1.0 Added event
-            SalesHeader.INSERT;
-            // >> Upgrade
-            //FDD108 Start
+                //PRJCTPR-177.AS.1.0 Start
+                //PRJCTPR-199.JS.1.0 12DEC2023 Start belwo code commented  
+                // SalesHeader."Shortcut Dimension 1 Code" := BillingHeader."NS_Global Dimension 1 Code";
+                // SalesHeader."Shortcut Dimension 2 Code" := BillingHeader."NS_Global Dimension 2 Code";
+                // SalesHeader."Dimension Set ID" := BillingHeader."NS_Dimension Set ID";
+                //PRJCTPR-199.JS.1.0 12DEC2023 end belwo code commented
+                //PRJCTPR-177.AS.1.0 end
+                //SSCM-8.PS2048.22052024  //PRJCTPR-371.JS.1.0 22MAY2024
+                NS_OnBeforeModifySalesHeaderAfterDimension(SalesHeader, BillingHeader, Job);
+                //SSCM-8.PS2048.22052024  //PRJCTPR-371.JS.1.0 22MAY2024
+                SalesHeader.MODIFY;
+                //PRJ-876.JS.1.0 23Aug2021-Start bellow code added
+                //Set up Sales Lines
+                //PRJ-1648.PS.1.0 12OCT2022 - Start
 
-            // SalesHeader.VALIDATE("Shortcut Dimension 1 Code", Job."Global Dimension 1 Code");
-            // SalesHeader.VALIDATE("Shortcut Dimension 2 Code", Job."Global Dimension 2 Code");
-            //JobDimensionNo := ProgressBillingHeader.GetDimensionNoFromJob(ProgressBillingHeader."Job No."); //PRJ-180.SK.1.0 Commented
-            JobDimensionNo := ProgressBillingHeader.NS_GetDimensionNoFromJob("NS_Job No.");//PRJ-180.SK.1.0 Added
-                                                                                           // SalesHeader."Dimension Set ID" := JobDimensionNo;
-            SalesHeader.Validate("NS_Job No.", "NS_Job No.");
-            SalesHeader.Modify;
-            //FDD108 End
-            // << Upgrade
-
-            //SalesHeader.VALIDATE("Tax Liable", Job."NS_Tax Liable");     //PRJ-862.JS.1.0 Line Added //PRJCTPR-133.NC.1.0 22June2023 Block
-            //SalesHeader.VALIDATE("Tax Area Code", Job."NS_Tax Area Code");   //PRJ-862.JS.1.0 Line Added //PRJCTPR-133.NC.1.0 22June2023 Block
-            //PRJCTPR-199.JS.1.0 12DEC2023 Start belwo code commented
-            // SalesHeader.VALIDATE("Shortcut Dimension 1 Code", Job."Global Dimension 1 Code");
-            // SalesHeader.VALIDATE("Shortcut Dimension 2 Code", Job."Global Dimension 2 Code");
-            //JobDimensionNo := ProgressBillingHeader.GetDimensionNoFromJob(ProgressBillingHeader."Job No."); //PRJ-180.SK.1.0 Commented
-            // JobDimensionNo := ProgressBillingHeader.NS_GetDimensionNoFromJob("NS_Job No.");//PRJ-180.SK.1.0 Added
-            // SalesHeader."Dimension Set ID" := JobDimensionNo;
-            //PRJ-999.JS.1.0 12Nov2021 Start
-            // SalesHeader."Shortcut Dimension 1 Code" := "NS_Global Dimension 1 Code";
-            // SalesHeader."Shortcut Dimension 2 Code" := "NS_Global Dimension 2 Code";
-            // SalesHeader."Dimension Set ID" := "NS_Dimension Set ID";
-            //PRJCTPR-199.JS.1.0 12DEC2023 end belwo code commented
-            //PRJ-999.JS.1.0 12Nov2021 end
-
-            //PRJ-876.JS.1.0 23Aug2021-Start-below code commented
-            //Set up Sales Lines
-            // LineRetention := false;
-            // if SalesHeader."NS_Retention Document" then
-            //     NS_RetentionDocumentLines(BillingHeader, SalesHeader, Job)
-            // else
-            //     NS_NormalDocumentLines(BillingHeader, SalesHeader, Job);
-            //PRJ-876.JS.1.0 23Aug2021-end    
-            // >> Upgrade
-            // #132 Start
-            SalesHeader.Get(SalesHeader."Document Type", SalesHeader."No.");
-            SalesHeader.Validate("NS_Retention Amount");
-            SalesHeader.Modify;
-            // #132 End
-            // << Upgrade
-            //Validation Checks
-            if ("NS_Work Retention Percent" <> 0) or ("NS_Material Retention Percent" <> 0) then begin
-                //Find current Retention Balance for this Job
-                CustLedgerEntry.CLEARMARKS;
-                CustLedgerEntry.RESET;
-                CustLedgerEntry.SETCURRENTKEY("Customer No.", "Posting Date");
-                CustLedgerEntry.SETRANGE("Customer No.", Job."Bill-to Customer No.");
-                CustLedgerEntry.SETRANGE(Open, true);
-                if not SalesSetup."NS_Sales Retention Inactive" then
-                    CustLedgerEntry.SETRANGE("NS_Retention Ledger Code", JobsSetup."NS_Retention Receivable Ledger");
-                if CustLedgerEntry.FINDSET then
-                    repeat
-                        if CustLedgerEntry."Document Type" = CustLedgerEntry."Document Type"::Invoice then begin
-                            Used := false;
-                            SalesInvoiceLine.RESET;
-                            SalesInvoiceLine.SETRANGE("Document No.", CustLedgerEntry."Document No.");
-                            if SalesInvoiceLine.FINDSET then
-                                repeat
-                                    if SalesInvoiceLine."Job No." = "NS_Job No." then begin
-                                        //PE-22.JS.1.0 17FEB2023 - Start
-                                        //CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)");
-                                        CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)", "Remaining Amount");
-                                        if CustLedgerEntry."Currency Code" = '' then
-                                            RetBalance := RetBalance + CustLedgerEntry."Remaining Amt. (LCY)"
-                                        else
-                                            RetBalance := RetBalance + CustLedgerEntry."Remaining Amount";
-                                        //PE-22.JS.1.0 17FEB2023 - end  
-                                        Used := true
-                                    end;
-                                until (SalesInvoiceLine.NEXT = 0) or Used;
-                        end;
-                        if CustLedgerEntry."Document Type" = CustLedgerEntry."Document Type"::"Credit Memo" then begin
-                            Used := false;
-                            SalesCrMemoLine.RESET;
-                            SalesCrMemoLine.SETRANGE("Document No.", CustLedgerEntry."Document No.");
-                            if SalesCrMemoLine.FINDSET then
-                                repeat
-                                    if SalesCrMemoLine."Job No." = "NS_Job No." then begin
-                                        //PE-22.JS.1.0 17FEB2023 - Start
-                                        //CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)");
-                                        CustLedgerEntry.CALCFIELDS("Remaining Amt. (LCY)", "Remaining Amount");
-                                        if CustLedgerEntry."Currency Code" = '' then
-                                            RetBalance := RetBalance + CustLedgerEntry."Remaining Amt. (LCY)"
-                                        else
-                                            RetBalance := RetBalance + CustLedgerEntry."Remaining Amount";
-                                        //PE-22.JS.1.0 17FEB2023 - end 
-                                        Used := true
-                                    end;
-                                until (SalesCrMemoLine.NEXT = 0) or Used;
-                        end;
-                    until CustLedgerEntry.NEXT = 0;
-                if SalesHeader."NS_Retention Amount" + RetBalance < 0 then
-                    ERROR(Text004Lbl);
-            end;
-
-            SalesHeader."NS_Retention Percent" := 0;
-            if "NS_Requisition Total" <> 0 then
-                SalesHeader."NS_Retention Percent" := "NS_Work Retention Percent";//PRJ-293.MS.1.0
-                                                                                  //SalesHeader."NS_Retention Percent" := ROUND(SalesHeader."NS_Retention Amount" / "NS_Requisition Total" * 100, GLSetup."Amount Rounding Precision");
-                                                                                  //PRJ-1519.NK.1.0 08Sep2022 Start                                                                                   //SalesHeader."NS_Retention Percent" := ROUND(SalesHeader."NS_Retention Amount" / "NS_Requisition Total" * 100, GLSetup."Amount Rounding Precision");
-            if BillingHeader."NS_Work Retention Percent" = 0 then
-                if BillingHeader."NS_Material Retention Percent" <> 0 then
-                    SalesHeader."NS_Retention Percent" := BillingHeader."NS_Material Retention Percent";
-            //PRJ-1519.NK.1.0 08Sep2022 End
-            //Update Sales Header
-            SalesHeader.Validate("Bill-to Customer No.", Job."Bill-to Customer No."); //PRJCTPR-386 AT.01 25june2024
-            SalesHeader."External Document No." := Job."NS_Customer PO Number";//CTSI-179.MS.1.0
-            SalesHeader."Salesperson Code" := Job."NS_Salesperson Code";//PRJ-415
-                                                                        //ZEL-4.RM.1.0 10April2023 Start
-
-            //SalesHeader.Validate("Bill-to Customer No.", Job."Bill-to Customer No."); //PRJCTPR-386 AT.01 25june2024 Block
-            //PRJCTPR-133.NC.1.0 22June2023 Start
-            if Job."NS_Tax Liable" = true then
-                SalesHeader.VALIDATE("Tax Liable", Job."NS_Tax Liable");
-            if Job."NS_Tax Area Code" <> '' then
-                SalesHeader.VALIDATE("Tax Area Code", Job."NS_Tax Area Code");
-            //PRJCTPR-133.NC.1.0 22June2023 End
-            if Job."Invoice Currency Code" <> '' then
-                SalesHeader.Validate("Currency Code", Job."Invoice Currency Code");
-            //ZEL-4.RM.1.0 10April2023 End
-            SalesHeader."Your Reference" := Job."Your Reference";  //ZEL-5.GK.1.0 21Apr2023
-
-            //PRJCTPR-177.AS.1.0 Start
-            //PRJCTPR-199.JS.1.0 12DEC2023 Start belwo code commented  
-            // SalesHeader."Shortcut Dimension 1 Code" := BillingHeader."NS_Global Dimension 1 Code";
-            // SalesHeader."Shortcut Dimension 2 Code" := BillingHeader."NS_Global Dimension 2 Code";
-            // SalesHeader."Dimension Set ID" := BillingHeader."NS_Dimension Set ID";
-            //PRJCTPR-199.JS.1.0 12DEC2023 end belwo code commented
-            //PRJCTPR-177.AS.1.0 end
-            //SSCM-8.PS2048.22052024  //PRJCTPR-371.JS.1.0 22MAY2024
-            NS_OnBeforeModifySalesHeaderAfterDimension(SalesHeader, BillingHeader, Job);
-            //SSCM-8.PS2048.22052024  //PRJCTPR-371.JS.1.0 22MAY2024
-            SalesHeader.MODIFY;
-            //PRJ-876.JS.1.0 23Aug2021-Start bellow code added
-            //Set up Sales Lines
-            //PRJ-1648.PS.1.0 12OCT2022 - Start
-
-            if BoolforNormalLine = true then begin
-                NS_RetentionStoreDocLine(BillingHeader, SalesHeader, Job);
-            end else begin
-                LineRetention := false;
-                if SalesHeader."NS_Retention Document" then begin
-                    //PRJ-1519.NK.1.0 17Aug2022 Start
-                    if NS_CalcLastStrAmt(BillingHeader) then
-                        NS_StoreMatrZeroLines(BillingHeader, SalesHeader, Job)
-                    else
-                        NS_RetentionDocumentLines(BillingHeader, SalesHeader, Job);
-                    //NS_RetentionDocumentLines(BillingHeader, SalesHeader, Job);
-                    // else
-                    //     NS_NormalDocumentLines(BillingHeader, SalesHeader, Job);
+                if BoolforNormalLine = true then begin
+                    NS_RetentionStoreDocLine(BillingHeader, SalesHeader, Job);
                 end else begin
-                    if NS_StoreMarRetentionAmt(BillingHeader) <> 0 then
-                        NS_NormalDocumentLines(BillingHeader, SalesHeader, Job)
-                    else
-                        NS_RetentionStoreDocLine(BillingHeader, SalesHeader, Job);
+                    LineRetention := false;
+                    if SalesHeader."NS_Retention Document" then begin
+                        //PRJ-1519.NK.1.0 17Aug2022 Start
+                        if NS_CalcLastStrAmt(BillingHeader) then
+                            NS_StoreMatrZeroLines(BillingHeader, SalesHeader, Job)
+                        else
+                            NS_RetentionDocumentLines(BillingHeader, SalesHeader, Job);
+                        //NS_RetentionDocumentLines(BillingHeader, SalesHeader, Job);
+                        // else
+                        //     NS_NormalDocumentLines(BillingHeader, SalesHeader, Job);
+                    end else begin
+                        if NS_StoreMarRetentionAmt(BillingHeader) <> 0 then
+                            NS_NormalDocumentLines(BillingHeader, SalesHeader, Job)
+                        else
+                            NS_RetentionStoreDocLine(BillingHeader, SalesHeader, Job);
+                    end;
                 end;
-            end;
 
-            //PRJ-1648.PS.1.0 12OCT2022 - End
-            //PRJ-1519.NK.1.0 17Aug2022 end
-            //PRJ-876.JS.1.0 23Aug2021-end            
+                //PRJ-1648.PS.1.0 12OCT2022 - End
+                //PRJ-1519.NK.1.0 17Aug2022 end
+                //PRJ-876.JS.1.0 23Aug2021-end            
 
-            //Update Progress Billing Header with Receivable Document Information
-            NS_OnDrawNoskip(BillingHeader, SalesHeader);//PRJ-989.AS.1.0 18OCT2021 Added Event
-            case SalesHeader."Document Type" of
-                SalesHeader."Document Type"::Order:
-                    "NS_Sales Document Type" := "NS_Sales Document Type"::Order;
-                SalesHeader."Document Type"::Invoice:
-                    "NS_Sales Document Type" := "NS_Sales Document Type"::Invoice;
-                SalesHeader."Document Type"::"Credit Memo":
-                    "NS_Sales Document Type" := "NS_Sales Document Type"::"Credit";
-            end;
-            "NS_Sales Document No." := SalesHeader."No.";
-            NS_Status := NS_Status::Invoiced;
-            MODIFY;
-
-            //Update Draw record to show sales document created
-            if "NS_Draw No." > '' then begin
-                //Draw record was read in earlier
+                //Update Progress Billing Header with Receivable Document Information
+                NS_OnDrawNoskip(BillingHeader, SalesHeader);//PRJ-989.AS.1.0 18OCT2021 Added Event
                 case SalesHeader."Document Type" of
                     SalesHeader."Document Type"::Order:
-                        Draw."NS_Sales Document Type" := Draw."NS_Sales Document Type"::Invoice;
+                        "NS_Sales Document Type" := "NS_Sales Document Type"::Order;
                     SalesHeader."Document Type"::Invoice:
-                        Draw."NS_Sales Document Type" := Draw."NS_Sales Document Type"::Invoice;
+                        "NS_Sales Document Type" := "NS_Sales Document Type"::Invoice;
                     SalesHeader."Document Type"::"Credit Memo":
-                        Draw."NS_Sales Document Type" := Draw."NS_Sales Document Type"::"Credit Memo";
+                        "NS_Sales Document Type" := "NS_Sales Document Type"::"Credit";
                 end;
-                Draw."NS_Sales Document No." := SalesHeader."No.";
-                Draw."NS_Sales Document Date" := SalesHeader."Document Date";
-                Draw."NS_Progress Bill No." := "NS_No.";
-                Draw."NS_ProgressBillRequisitionNo." := "NS_Requisition No.";
-                Draw."NS_ProgressBillVersionNo." := "NS_Version No.";
-                Draw.MODIFY;
-            end;
+                "NS_Sales Document No." := SalesHeader."No.";
+                NS_Status := NS_Status::Invoiced;
+                MODIFY;
 
-            //Show appropriate completion message
-            case "NS_Sales Document Type" of
-                "NS_Sales Document Type"::Order:
-                    MESSAGE(Text005Lbl + SalesHeader."No." + Text008Lbl);
-                "NS_Sales Document Type"::Invoice:
-                    MESSAGE(Text006Lbl + SalesHeader."No." + Text008Lbl);
-                "NS_Sales Document Type"::"Credit":
-                    MESSAGE(Text007Lbl + SalesHeader."No." + Text008Lbl);
+                //Update Draw record to show sales document created
+                if "NS_Draw No." > '' then begin
+                    //Draw record was read in earlier
+                    case SalesHeader."Document Type" of
+                        SalesHeader."Document Type"::Order:
+                            Draw."NS_Sales Document Type" := Draw."NS_Sales Document Type"::Invoice;
+                        SalesHeader."Document Type"::Invoice:
+                            Draw."NS_Sales Document Type" := Draw."NS_Sales Document Type"::Invoice;
+                        SalesHeader."Document Type"::"Credit Memo":
+                            Draw."NS_Sales Document Type" := Draw."NS_Sales Document Type"::"Credit Memo";
+                    end;
+                    Draw."NS_Sales Document No." := SalesHeader."No.";
+                    Draw."NS_Sales Document Date" := SalesHeader."Document Date";
+                    Draw."NS_Progress Bill No." := "NS_No.";
+                    Draw."NS_ProgressBillRequisitionNo." := "NS_Requisition No.";
+                    Draw."NS_ProgressBillVersionNo." := "NS_Version No.";
+                    Draw.MODIFY;
+                end;
+
+                //Show appropriate completion message
+                case "NS_Sales Document Type" of
+                    "NS_Sales Document Type"::Order:
+                        MESSAGE(Text005Lbl + SalesHeader."No." + Text008Lbl);
+                    "NS_Sales Document Type"::Invoice:
+                        MESSAGE(Text006Lbl + SalesHeader."No." + Text008Lbl);
+                    "NS_Sales Document Type"::"Credit":
+                        MESSAGE(Text007Lbl + SalesHeader."No." + Text008Lbl);
+                end;
             end;
         end;
     end;
