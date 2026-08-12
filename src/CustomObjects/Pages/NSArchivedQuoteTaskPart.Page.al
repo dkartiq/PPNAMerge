@@ -1,5 +1,6 @@
 page 14021449 "NS_Archived Quote Task Part"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     //SPLN1.00 2019-02-12 DMT Created to mach BC365 requarements. Copy of page 14021441, changed type to ListPart
     // version PPNA11.00
 
@@ -51,12 +52,21 @@ page 14021449 "NS_Archived Quote Task Part"
                     var
                         PP_PickAPOCode: Page "NS_Pick APO Code";
                         PP_Description2: Text[50];
+                        // >> Upgrade
+                        JobAct: Code[20];
+                    // << Upgrade
                     begin
                         CLEAR(PP_PickAPOCode);
                         PP_PickAPOCode.LOOKUPMODE(true);
-                        PP_PickAPOCode.NS_SetInput(Rec."NS_Job No.", Rec."NS_Job Task No.", 0);
+                        // >> Upgrade
+                        // PP_PickAPOCode.NS_SetInput("NS_Job No.", "NS_Job Task No.", 0);
+                        PP_PickAPOCode.NS_SetInput("NS_Job No.", "NS_Job Task No.", JobAct, 0);
+                        // << Upgrade
                         if PP_PickAPOCode.RUNMODAL() = ACTION::LookupOK then begin
-                            PP_PickAPOCode.NS_GetResult(Rec."NS_Job Task No.", PP_Description2);
+                            // >> Upgrade
+                            // PP_PickAPOCode.NS_GetResult("NS_Job Task No.", PP_Description2);
+                            PP_PickAPOCode.NS_GetResult("NS_Job Task No.", PP_Description2, JobAct);
+                            // << Upgrade
                             Rec.NS_Description := PP_JobTask.NS_GetJobTaskDescription(Rec."NS_Job No.", Rec."NS_Job Task No.");
                             if Rec.NS_Description = '' then
                                 Rec.NS_Description := PP_Description2;

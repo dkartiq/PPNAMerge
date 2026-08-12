@@ -1,5 +1,6 @@
 page 14021419 "NS_Job Quote Pipeline Upd "
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -145,8 +146,12 @@ page 14021419 "NS_Job Quote Pipeline Upd "
         ProbabilityToClose: Option Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
 
         NSProbabilityToClose: Enum "NS_QuotePro to Close";  //PE-300.JS.1.0 02JUN2024
-        Description: Text[50];
-        SiteCustomerName: Text[50];
+        // >> Upgrade
+        // Description: Text[50];
+        // SiteCustomerName: Text[50];
+        Description: Text[100];
+        SiteCustomerName: Text[100];
+        // << Upgrade
         Text000: Label 'Quote %1 has been updated.';
         Text001: Label 'Update quote?';
         Text002: Label 'In some cases, marking a quote inactive is not easily reversible.  Continue?';

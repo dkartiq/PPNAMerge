@@ -1,5 +1,6 @@
 tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version NAVW111.00.00.24232,PPNA11.00
     //PRJ-33.SK.1.0 Modified code for updating "Unit Cost" and "Unit Price" while picking up "No." in Line.
     //PRJ-72.SK.1.0 Modified Code since it is causing error.
@@ -424,6 +425,11 @@ tableextension 14021214 NS_JobPlanningLine extends "Job Planning Line"
                         NS_TempJobPlanningLine2.Type := NS_TempJobPlanningLine2.Type::"NS_Resource (Group)";
                         ERROR(Text14021100, FIELDCAPTION(Type), NS_TempJobPlanningLine1.Type, NS_TempJobPlanningLine2.Type);
                     END;
+                // >> Upgrade
+                //FDD109
+                Validate(Quantity);
+                //FDD109
+                // << Upgrade
                 IF Rec.Type = Rec.Type::Resource THEN
                     exit;
                 //ProjectPro - end

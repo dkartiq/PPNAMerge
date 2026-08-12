@@ -1,5 +1,6 @@
 page 14021388 "NS_Job Journal Labor"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -833,6 +834,10 @@ page 14021388 "NS_Job Journal Labor"
             ERROR('');
         JobJnlManagement.OpenJnl(CurrentJnlBatchName, Rec);
     end;
+    // >> Upgrade
+    protected var
+        CurrentJnlBatchName: Code[10];
+    // << Upgrade
 
     var
         PP_HumanResourcesSetup: Record "Human Resources Setup";

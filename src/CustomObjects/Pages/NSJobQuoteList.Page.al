@@ -1,5 +1,6 @@
 page 14021407 "NS_Job Quote List"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -22,7 +23,11 @@ page 14021407 "NS_Job Quote List"
     ApplicationArea = Jobs;
     PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Filters';
     SourceTable = "NS_Job Quote Header";
-
+    // >> Upgrade
+    RefreshOnActivate = true;
+    SourceTableView = SORTING("NS_Quote No.")
+                      ORDER(Descending);
+    // << Upgrade
     layout
     {
         area(content)

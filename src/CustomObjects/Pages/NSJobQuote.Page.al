@@ -1,5 +1,6 @@
 page 14021405 "NS_Job Quote"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -31,8 +32,9 @@ page 14021405 "NS_Job Quote"
     //PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs'; //PE-221.NC.1.0 22Jan2024 Block
     PromotedActionCategories = 'New,Process,Reports,Supplemental,Tasks,Team,Workflow,Jobs,Analytics'; //PE-221.NC.1.0 22Jan2024
     SourceTable = "NS_Job Quote Header";
-     ContextSensitiveHelpPage = 'user-guide/job-quotes/defining-a-job-quote/'; //PRJ-1085.RM.1.0 16Dec2021
-
+    // >> Upgrade
+    RefreshOnActivate = true;
+    // << Upgrade
     layout
     {
         area(content)
@@ -127,6 +129,13 @@ page 14021405 "NS_Job Quote"
                     Importance = Promoted;
                     ToolTip = 'Sepcifies the name of the Customer'; //PRJ-1579.RM.2.0 
                 }
+                // >> Upgrade
+                field("Customer Job No."; Rec."Customer Job No.")
+                {
+                    ToolTip = 'Specifies the value of the Customer Job No. field.';
+                    ApplicationArea = All;
+                }
+                // << Upgrade
                 field("Contract Line Method"; Rec."NS_Contract Line Method")
                 {
                     ApplicationArea = All;
@@ -1270,7 +1279,10 @@ page 14021405 "NS_Job Quote"
 
                 trigger OnAction();
                 begin
-                    QuoteMgt.NS_CreateRevisionJQ(Rec);
+                    // >> Upgrade
+                    //QuoteMgt.NS_CreateRevisionJQ(Rec);
+                    QuoteMgt.NS_CreateRevisionJQ(Rec, true);
+                    // << Upgrade
                 end;
             }
             action(CopyDocument)
@@ -1396,7 +1408,10 @@ page 14021405 "NS_Job Quote"
 
                 trigger OnAction();
                 begin
-                    QuoteMgt.NS_SetStatusReleased(Rec);
+                    // >> Upgrade
+                    //FDD109
+                    //QuoteMgt.NS_SetStatusReleased(Rec);
+                    // << Upgrade
                 end;
             }
             action(ShareQuote)
@@ -1974,6 +1989,15 @@ page 14021405 "NS_Job Quote"
             }
         }
     }
+    // >> Upgrade
+    trigger OnNextRecord(Steps: Integer): Integer
+    var
+        CurrentSteps: Integer;
+    begin
+        OnBeforeNextRecord(Rec, Steps, CurrentSteps);
+        exit(CurrentSteps);
+    end;
+    // << Upgrade
 
     trigger OnOpenPage()
     var
@@ -2056,5 +2080,13 @@ page 14021405 "NS_Job Quote"
         Text14021400: Label 'Currently there are not any segments for Quote %1, Do you wish to use the Defaults?';
         Text14021401: Label 'A Site Customer must be chosen';
         Text14021402: Label '"Total Schedule Percentage must be 100% : "';
+    // >> Upgrade
+
+    [IntegrationEvent(false, false)]
+    procedure OnBeforeNextRecord(var CurrRec: Record "NS_Job Quote Header"; var Steps: Integer; var CurrentSteps: Integer)
+    begin
+
+    end;
+    // << Upgrade
 }
 

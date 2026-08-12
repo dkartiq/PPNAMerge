@@ -10,6 +10,7 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
     //PRJ-1750.NK.1.0 26Dec2022 | Code added    
     //PRJCTPR-10.SD.1.0 10Jan2023 | Code Added.
     //PE-22.JS.1.0 02FEB2022
+        // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     trigger OnRun()
     begin
     end;
@@ -200,6 +201,9 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         end else begin
             SalesHeader.CalcFields("NS_Retention Base Amount");
             GenJnlLine."NS_Retention Base Amount" := SalesHeader."NS_Retention Base Amount";
+            // >> Upgrade
+            OnAfterNS_C80OnBeforePostCustomerEntry(GenJnlLine, SalesHeader);
+            // << Upgrade
         end;
         GenJnlLine."Job No." := SalesHeader."NS_Job No.";
         //MHNA-7.JS.1.0 22JUN2023 - end
@@ -246,14 +250,9 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         NS_CustPostingGr: Record "Customer Posting Group";
         SalesHeader: Record "Sales Header";
     begin
-        IF SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.") then begin
-            if (SalesLine.Type <> SalesLine.Type::"G/L Account") and (SalesLine.Type <> SalesLine.Type::"Fixed Asset") then
-                if SalesHeader."NS_Retention Document" and (SalesLine.Type = SalesLine.Type::NS_Ledger) then begin
-                    NS_CustPostingGr.Get(SalesHeader."Customer Posting Group");
-                    NS_CustPostingGr.TestField(NS_RetentionReceivablesAccount);
-                    InvoicePostingBuffer."G/L Account" := NS_CustPostingGr.NS_RetentionReceivablesAccount;
-                end;
-        end;
+        // >> Upgrade
+        OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(SalesHeader, SalesLine, InvoicePostBuffer);
+        // << Upgrade
     end;
     //PE-129.AS.1.0 end Add
 
@@ -889,13 +888,16 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         //PRJ-1648.PS.1.0  05OCT2022 - End
     end;
     //PRJ-884.JS.1.0 24Aug2021-end
-
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 START
+    // >> Upgrade
     [IntegrationEvent(false, false)]
-    local procedure OnbeforeNS_C80PostLedgerType(SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; GenJnlLineDocNo: Code[20]; GenJnlLineExtDocNo: Code[35]; GenJnlLineDocType: Integer; SrcCode: Code[10]; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; var Ishandled: Boolean)
+    local procedure OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(var SaleHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; var InvoicePostBuffer: Record "Invoice Post. Buffer")
     begin
     end;
-    //FGH-163.SM.29022024 //PE-269.JS.1.0 END
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterNS_C80OnBeforePostCustomerEntry(var GenJnlLine: Record "Gen. Journal Line"; var SalesHeader: Record "Sales Header")
+    begin
+    end;
+    // << Upgrade
 
     //PRJ-1583.AS.1.0 START Added integration event
     [IntegrationEvent(false, false)]

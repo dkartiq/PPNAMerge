@@ -1,5 +1,6 @@
 codeunit 14021327 "NS_Progress BillingNewDocument"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -100,6 +101,9 @@ codeunit 14021327 "NS_Progress BillingNewDocument"
                     "NS_Requisition No." := ProgressBillingHeader."NS_Requisition No." + 1;
                     "NS_Version No." := 0;
                     "NS_Job No." := ProgressBillingHeader."NS_Job No.";
+                    // >> Upgrade
+                    NS_NewRequisition1(BillingHeader, ProgressBillingHeader);
+                    // << Upgrade
                     "NS_Owner Contact Type" := ProgressBillingHeader."NS_Owner Contact Type";
                     "NS_Owner Contact Code" := ProgressBillingHeader."NS_Owner Contact Code";
                     "NS_Requisition Date" := TODAY;
@@ -902,5 +906,11 @@ codeunit 14021327 "NS_Progress BillingNewDocument"
     local procedure OnCheckPPLicenseExpire()
     begin
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure NS_NewRequisition1(var BillingHeader: Record "NS_Progress Billing Header"; var ProgressBillingHeader: Record "NS_Progress Billing Header")
+    begin
+    end;
+    // << Upgrade
 }
 

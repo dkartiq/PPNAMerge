@@ -1,5 +1,6 @@
 page 14021325 "NS_Progress Billing Header"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -1691,8 +1692,11 @@ page 14021325 "NS_Progress Billing Header"
             "Period ToEditable" := true;
             StatusEditable := true;
             "Round AmountsEditable" := true;
-            "Work Retention %Editable" := true;
-            MaterialRetentionPercentEditab := true;
+            // >> Upgrade
+
+            // "Work Retention %Editable" := true;
+            // MaterialRetentionPercentEditab := true;
+            // << Upgrade
             ManualRetentionAmountEditable := true;
         end;
 
@@ -1795,7 +1799,11 @@ page 14021325 "NS_Progress Billing Header"
     begin
         FinalEditable := true;
         ManualRetentionAmountEditable := true;
-        MaterialRetentionPercentEditab := true;
+        // >> Upgrade
+        //MaterialRetentionPercentEditab := true;
+        // MaterialRetentionPercentEditab := "Retention Type" = "Retention Type"::Cash; // #RG008
+        // "Work Retention %Editable" := "Retention Type" = "Retention Type"::Cash; // #RG008
+        // << Upgrade
         "Work Retention %Editable" := true;
         "Round AmountsEditable" := true;
         StatusEditable := true;
@@ -1905,7 +1913,13 @@ page 14021325 "NS_Progress Billing Header"
             RetEditable := true;
         //PRJ-1624.NK.1.0 22Sep2022 End
     end;
-
+    // >> Upgrade
+    protected var
+        [InDataSet]
+        "Work Retention %Editable": Boolean;
+        [InDataSet]
+        MaterialRetentionPercentEditab: Boolean;
+    // << Upgrade
     var
         NSWorkAmtLine: Decimal;//PRJCTPR-174.PS.1.0 10Aug2023
         NSRetPercentage: Decimal; //PRJCTPR-174.PS.1.0 10Aug2023
@@ -1956,10 +1970,13 @@ page 14021325 "NS_Progress Billing Header"
         StatusEditable: Boolean;
         [InDataSet]
         "Round AmountsEditable": Boolean;
-        [InDataSet]
-        "Work Retention %Editable": Boolean;
-        [InDataSet]
-        MaterialRetentionPercentEditab: Boolean;
+        // >> Upgrade
+        // [InDataSet]
+        // "Work Retention %Editable": Boolean;
+
+        // [InDataSet]
+        // MaterialRetentionPercentEditab: Boolean;
+        // << Upgrade
         [InDataSet]
         ManualRetentionAmountEditable: Boolean;
         [InDataSet]

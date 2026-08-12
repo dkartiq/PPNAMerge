@@ -1,5 +1,6 @@
 page 14021300 "NS_Subcontract Card"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -49,7 +50,9 @@ page 14021300 "NS_Subcontract Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the No.';
-
+                    // >> Upgrade
+                    Editable = false;
+                    // << Upgrade
                     trigger OnAssistEdit();
                     begin
                         if Rec.AssistEdit(xRec) then //PRJ-1131.NK.1.0
@@ -71,12 +74,17 @@ page 14021300 "NS_Subcontract Card"
                     ApplicationArea = All;
                     Importance = Promoted;
                     ToolTip = 'Specifies the Description';
+                    // >> Upgrade
+                    //Editable = NOT Variation;
+                    // << Upgrade
                 }
                 field("Buy-from Vendor No."; Rec."NS_Buy-from Vendor No.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Buy-from Vendor No.';
-
+                    // >> Upgrade
+                    Editable = NOT Variation;
+                    // << Upgrade
                     trigger OnValidate();
                     begin
                         NS_BuyfromVendorNoOnAfterValidate();
@@ -93,18 +101,27 @@ page 14021300 "NS_Subcontract Card"
                     ApplicationArea = All;
                     Editable = false;
                     ToolTip = 'Specifies the Buy-from Address';
+                    // >> Upgrade
+                    Importance = Additional;
+                    // << Upgrade
                 }
                 field("Buy-from Address 2"; Rec."NS_Buy-from Address 2")
                 {
                     ApplicationArea = All;
                     Editable = false;
                     ToolTip = 'Specifies the "Buy-from Address 2';
+                    // >> Upgrade
+                    Importance = Additional;
+                    // << Upgrade
                 }
                 field("Buy-from City"; Rec."NS_Buy-from City")
                 {
                     ApplicationArea = All;
                     Editable = false;
                     ToolTip = 'Specifies the Buy-from City';
+                    // >> Upgrade
+                    Importance = Additional;
+                    // << Upgrade
                 }
                 field(County; Rec.NS_County)
                 {
@@ -112,6 +129,9 @@ page 14021300 "NS_Subcontract Card"
                     Caption = 'Buy-from State'; //PRJ-961.RM.1.0 09Oct2021 
                     Editable = false;
                     ToolTip = 'Specifies the Buy-from State'; //PRJ-961.RM.1.0 09Oct2021
+                                                              // >> Upgrade
+                    Importance = Additional;
+                    // << Upgrade
                 }
                 field("Buy-from Contact"; Rec."NS_Buy-from Contact")
                 {
@@ -124,11 +144,17 @@ page 14021300 "NS_Subcontract Card"
                     ApplicationArea = All;
                     Editable = false;
                     ToolTip = 'Specifies the Buy-from Post Code';
+                    // >> Upgrade
+                    Importance = Additional;
+                    // << Upgrade
                 }
                 field("Sub-Level to Subcontract No."; Rec."NS_Sub-LeveltoSubcontractNo.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Sub-Level to Subcontract No.';
+                    // >> Upgrade
+                    Editable = NOT Variation;
+                    // << Upgrade
                 }
                 //PE-177.DK.3.0 23Jan2024 Start
                 field(NS_MergedtoChangeOrderNo; Rec.NS_MergedtoChangeOrderNo)
@@ -143,6 +169,9 @@ page 14021300 "NS_Subcontract Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the "Search Description';
+                    // >> Upgrade
+                    Editable = NOT Variation;
+                    // << Upgrade
                 }
                 field("Person Responsible"; Rec."NS_Person Responsible")
                 {
@@ -222,6 +251,11 @@ page 14021300 "NS_Subcontract Card"
                             Rec.NS_ClearExistingDimensions(Rec."NS_No."); //PRJ-1131.NK.1.0
                             Rec.NS_SetDimensions(Rec."NS_No.", Rec."NS_Job No."); //PRJ-1131.NK.1.0
                         end;
+                        // >> Upgrade
+                        // >> 002
+                        SetHideForecast();
+                        // << 002
+                        // << Upgrade
                     end;
                 }
                 field("Purchase Document No."; Rec."NS_Purchase Document No.")
@@ -258,6 +292,9 @@ page 14021300 "NS_Subcontract Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the Creation Date';
+                    // >> Upgrade
+                    Editable = false;
+                    // << Upgrade
                 }
                 field("Starting Date"; Rec."NS_Starting Date")    //PE-267.JS.1.0 11MAR2024
                 {
@@ -495,6 +532,9 @@ page 14021300 "NS_Subcontract Card"
                     ApplicationArea = All;
                     Caption = 'Status Date';
                     ToolTip = 'Specifies the Status Date';
+                    // >> Upgrade
+                    Editable = false;
+                    // << Upgrade
                 }
                 field("Estimated Start Date"; Rec."NS_Estimated Start Date")
                 {
@@ -1656,6 +1696,12 @@ page 14021300 "NS_Subcontract Card"
 
     trigger OnAfterGetRecord();
     begin
+        // >> Upgrade
+        OnPreOnAfterGetRecord(Rec, Variation);
+        // >> 002
+        SetHideForecast();
+        // << 002
+        // << Upgrade
         NS_CalcStatistics;
         NS_GetPersonResponsibleName;
         NSReturnManagerStatus := NSManagerStatusEdite(); //PE-177.DK.1.0 10Nov2023 
@@ -1765,7 +1811,22 @@ page 14021300 "NS_Subcontract Card"
         NSReturnManagerStatus: Boolean;
         NS_SetstatusEditable: Boolean; //PRJCTPR-332.Dk.1.0 07March2023
         NS_SubconStatus: Boolean; //PRJCTPR-332.Dk.1.0 07March2023
-    //PE-177.DK.1.0 10Nov2023 End
+        // >> Upgrade
+        Variation: Boolean;
+
+    protected var
+        PracticalCompletionDate: Date;
+        [InDataSet]
+        HideForecast: Boolean;
+        Text1004: Label 'Do you want to copy PO Lines to subcontract?';
+        Text1003_Txt: Label 'A Purchase Order for this Subcontract does not exist.';//PRJ-780.RS.1.0 28June2021
+        ShowMasterSubConMaxRetention: Boolean;
+        [InDataSet]
+        RetentionBankGuarantee: Boolean;
+        [InDataSet]
+        RetentionCash: Boolean;
+        ShowSiteLocGoogleMapsLbl: Label 'Show Site Location on Google Maps';
+    // << Upgrade
 
     procedure NS_CalcStatistics();
     begin
@@ -1791,6 +1852,9 @@ page 14021300 "NS_Subcontract Card"
         //with PurchaseLine do begin
         PurchaseLine.RESET;
         PurchaseLine.SETCURRENTKEY("NS_Subcontract No.");
+            // >> Upgrade
+            SetRange("Document Type", "Document Type"::Order); // #RG008
+            // << Upgrade
         PurchaseLine.SETRANGE("NS_Subcontract No.", SubcontractCalc."NS_No.");
         PurchaseLine.CALCSUMS("NS_Committed Amount");
         CommittedCost := PurchaseLine."NS_Committed Amount";
@@ -2252,10 +2316,18 @@ page 14021300 "NS_Subcontract Card"
     end;
 
     procedure NS_GetPersonResponsibleName();
+    // >> Upgrade
+    var
+        Salesperson: Record "Salesperson/Purchaser";
+    // << Upgrade
     begin
         if Rec."NS_Person Responsible" > '' then //PRJ-1131.NK.1.0
-            if Resource.GET(Rec."NS_Person Responsible") then //PRJ-1131.NK.1.0
-                PersonResponsibleName := Resource.Name
+            // >> Upgrade
+            //if Resource.GET(Rec."NS_Person Responsible") then //PRJ-1131.NK.1.0
+                //PersonResponsibleName := Resource.Name
+            if Salesperson.Get("NS_Person Responsible") then
+                PersonResponsibleName := Salesperson.Name
+            // << Upgrade
             else
                 PersonResponsibleName := Text1000
         else
@@ -2298,7 +2370,22 @@ page 14021300 "NS_Subcontract Card"
         //PRJ-1131.NK.1.0 11Jan2022 End
     end;
     //PRJ-1036.GK.1.0 22Nov2021 end
-    //PE-177.DK.1.0 10Nov2023 Start
+    // >> Upgrade
+    local procedure SetHideForecast()
+    begin
+        // >> 002 New Function
+        if "NS_Job No." = '' then
+            HideForecast := true
+        else
+            HideForecast := false
+        // << 002
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnPreOnAfterGetRecord(var SubContract: Record NS_Subcontract; var Variation: Boolean)
+    begin
+    end;
+    // << Upgrade
     local procedure NSManagerStatusEdite(): Boolean
     var
         myInt: Integer;

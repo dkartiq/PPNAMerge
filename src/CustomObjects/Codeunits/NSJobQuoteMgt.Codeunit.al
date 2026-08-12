@@ -1,5 +1,6 @@
 codeunit 14021400 "NS_Job Quote Mgt."
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -1105,9 +1106,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         with _QuoteHeader do
             //PE-300-DK.1.0 29May2024 Start
-        // if _QuoteHeader.NS_Status <> _QuoteHeader.NS_Status::Accepted 
-        if _QuoteHeader."NS_Quote Status" <> _QuoteHeader."NS_Quote Status"::Accepted then
-            //PE-300-DK.1.0 29May2024 End
+            // if _QuoteHeader.NS_Status <> _QuoteHeader.NS_Status::Accepted 
+            if _QuoteHeader."NS_Quote Status" <> _QuoteHeader."NS_Quote Status"::Accepted then
+                //PE-300-DK.1.0 29May2024 End
                 if not CONFIRM(_Text000, false) then
                     exit;
 
@@ -2574,7 +2575,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
         PAGE.RUN(PAGE::"NS_Job Quote", _QuoteHeader2);
     end;
 
-    procedure NS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header");
+    // >> Upgrade
+    //procedure NS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header");
+    procedure NS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header"; IsRevision: Boolean)
+    // << Upgrade
     var
         qQuoteLine: Record "NS_Job Quote Line";
         QuoteJob: Record Job;
@@ -2933,10 +2937,14 @@ codeunit 14021400 "NS_Job Quote Mgt."
                         else
                             _Value := '';
                     _QuoteHeader.FIELDNO("NS_Project Manager No."):
-                        if _Resource.GET(_Code) then
-                            _Value := _Resource.Name
+                        // >> Upgrade
+                        // if _Resource.GET(_Code) then
+                        //     _Value := _Resource.Name
+                        if Salesperson.Get(_Code) then //FDD109
+                            _Value := Salesperson.Name //FDD109
                         else
                             _Value := '';
+                // << Upgrade
                 end;
             DATABASE::Job:
                 case _FieldNo of
@@ -3422,7 +3430,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_Inactive(var _QuoteHeader: Record "NS_Job Quote Header");
     begin
-     
+
         //with _QuoteHeader do
         //PE-300-DK.1.0 29May2024 Start
         // case _QuoteHeader.NS_Status of
@@ -3455,7 +3463,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 _QuoteHeader.FIELDERROR("NS_Quote Status");
         end;
         //PE-300-DK.1.0 29May2024 End
-      
+
     end;
 
     procedure NS_JobOnValidateJobSiteCustNo(var _Job: Record Job);
@@ -4295,7 +4303,12 @@ codeunit 14021400 "NS_Job Quote Mgt."
                     QuoteSetup.GET;
                     QuoteSetup.TESTFIELD("Job Nos.");
                     _NoSeries.GET(QuoteSetup."NS_Job Quote No. Series");
-                    _NoSeries.TESTFIELD("Manual Nos.");
+                    // >> Upgrade
+                    NS_OnInsertQuote1(_QuoteHeader, IsHandled);
+                    if IsHandled then
+                        _NoSeries.TESTFIELD("Manual Nos.");
+
+                    // << Upgrade
                 end;
 
             "NS_Job Class" := "NS_Job Class"::"Master Job";
@@ -4331,7 +4344,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         //_QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Open;
         _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Open;
         //PE-300-DK.1.0 29May2024 End
-        
+
         if _QuoteHeader."NS_Duplicated-from Quote No." = '' then
             NS_CopyScopeOfWorkFromSetup(_QuoteHeader);
         NS_CreateQuoteJob(_QuoteHeader, TrueFalse);
@@ -4611,7 +4624,10 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
     procedure NS_OnValidateEstimatorNo(var _QuoteHeader: Record "NS_Job Quote Header");
     var
-        _Resource: Record Resource;
+        // >> Upgrade
+        // _Resource: Record Resource;
+        Salesperson: Record "Salesperson/Purchaser";
+    // << Upgrade
     begin
         CLEAR(_QuoteHeader."NS_Estimator Name");
         with _QuoteHeader do
@@ -5830,7 +5846,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
         // _QuoteHeader.NS_Status := _QuoteHeader.NS_Status::Open;
         _QuoteHeader."NS_Quote Status" := _QuoteHeader."NS_Quote Status"::Open;
         //PE-300-DK.1.0 29May2024 End
-      
+
         if _QuoteHeader."NS_Sales Quote No." <> '' then
             if _SalesHeader.GET(_SalesHeader."Document Type", _QuoteHeader."NS_Sales Quote No.") then begin
                 CLEAR(_ReleaseSalesDoc);
@@ -6008,36 +6024,38 @@ codeunit 14021400 "NS_Job Quote Mgt."
 
         // create Sales Quote if not exist
 
-        NS_CreateSalesQuoteHeader(_QuoteHeader);
+        // >> Upgrade
+        // NS_CreateSalesQuoteHeader(_QuoteHeader);
 
-        // synchronize Sales Quote and Quote (Enhanced)
+        // // synchronize Sales Quote and Quote (Enhanced)
 
-        NS_SyncSalesQuoteHeader(_QuoteHeader);
-        NS_SyncSalesQuoteLines(_QuoteHeader);
+        // NS_SyncSalesQuoteHeader(_QuoteHeader);
+        // NS_SyncSalesQuoteLines(_QuoteHeader);
 
-        // release quote
+        // // release quote
 
-        if _SalesHeader.GET(_SalesHeader."Document Type"::Quote, _QuoteHeader."NS_Sales Quote No.") then begin
-            CLEAR(_ReleaseSalesDoc);
-            //_ReleaseSalesDoc.SetHideValidationDialog(TRUE);
-            _ReleaseSalesDoc.RUN(_SalesHeader);
-        end;
+        // if _SalesHeader.GET(_SalesHeader."Document Type"::Quote, _QuoteHeader."NS_Sales Quote No.") then begin
+        //     CLEAR(_ReleaseSalesDoc);
+        //     //_ReleaseSalesDoc.SetHideValidationDialog(TRUE);
+        //     _ReleaseSalesDoc.RUN(_SalesHeader);
+        // end;
 
-        // copy taxability information from quote
+        // // copy taxability information from quote
 
-        _QuoteLine.SETRANGE("NS_Quote No.", _QuoteHeader."NS_Quote No.");
-        if _QuoteLine.FINDSET(true) then
-            repeat
-                if _QuoteLine."NS_Sales Quote Line No." <> 0 then
-                    if _SalesLine.GET(_SalesLine."Document Type"::Quote, _QuoteLine."NS_Sales Quote No.", _QuoteLine."NS_Sales Quote Line No.") then begin
-                        if _QuoteHeader."NS_Use Tax Liable" = _QuoteHeader."NS_Use Tax Liable"::No then begin
-                            _QuoteLine."NS_Amount Including VAT" := _SalesLine."Amount Including VAT";
-                            _QuoteLine."NS_Sales Tax Amount" := _SalesLine."Amount Including VAT" - _SalesLine.Amount;
-                        end else
-                            _QuoteLine."NS_Amount Including VAT" := _QuoteLine.NS_Amount + _QuoteLine."NS_Sales Tax Amount";
-                        _QuoteLine.MODIFY;
-                    end;
-            until _QuoteLine.NEXT = 0;
+        // _QuoteLine.SETRANGE("NS_Quote No.", _QuoteHeader."NS_Quote No.");
+        // if _QuoteLine.FINDSET(true) then
+        //     repeat
+        //         if _QuoteLine."NS_Sales Quote Line No." <> 0 then
+        //             if _SalesLine.GET(_SalesLine."Document Type"::Quote, _QuoteLine."NS_Sales Quote No.", _QuoteLine."NS_Sales Quote Line No.") then begin
+        //                 if _QuoteHeader."NS_Use Tax Liable" = _QuoteHeader."NS_Use Tax Liable"::No then begin
+        //                     _QuoteLine."NS_Amount Including VAT" := _SalesLine."Amount Including VAT";
+        //                     _QuoteLine."NS_Sales Tax Amount" := _SalesLine."Amount Including VAT" - _SalesLine.Amount;
+        //                 end else
+        //                     _QuoteLine."NS_Amount Including VAT" := _QuoteLine.NS_Amount + _QuoteLine."NS_Sales Tax Amount";
+        //                 _QuoteLine.MODIFY;
+        //             end;
+        //     until _QuoteLine.NEXT = 0;
+        // << Upgrade
 
         // set document status
         //PE-300-DK.1.0 29May2024 Start
@@ -7500,6 +7518,9 @@ codeunit 14021400 "NS_Job Quote Mgt."
         QuoteSetup: Record "Jobs Setup";
         NSQuoteStatus: enum "NS_Quote Status";  //PE-300.JS.1.0 29JULY2024
         NSQuoteStatusInt: Integer; //PE-300.JS.1.0 29JULY2024
+                                   // >> Upgrade
+        Ins: InStream;
+    // << Upgrade
     begin
         CLEAR(_QuoteDoc);
         //PE-300.JS.1.0 29JULY2024
@@ -9482,7 +9503,63 @@ codeunit 14021400 "NS_Job Quote Mgt."
             until PlanLine_L.NEXT = 0;
     end;
     //PRJ-774.AS.1.0 - end
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterNS_CreateRevisionJQ(var qQuoteHeader: Record "NS_Job Quote Header")
+    begin
+    end;
 
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterNS_OnDeleteQuote(var _QuoteHeader: Record "NS_Job Quote Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnInsertQuote1(var _QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnInsertQuote2(var _QuoteHeader: Record "NS_Job Quote Header"; var _UserSetup: Record "User Setup")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnInsertQuote3(var _QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeNS_ShowDocDim(var _QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_ValidateShortcutDimCode1(var _QuoteHeader: Record "NS_Job Quote Header"; var _ShortcutDimCode: Code[20]; var _FieldNumber: Integer)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_CreateQuoteJob1(var QuoteJob: Record Job; var lJobQuote: Record "NS_Job Quote Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_ModifyQuoteJob1(var QuoteJob: Record Job; var JobQuote: Record "NS_Job Quote Header")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_LoadFromJobTmplOnBeforeInsert(var QuoteTaskLine: Record "Job Task"; var SeqNo: integer)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure NS_OnValidateBillToCustomerOnBefore(_QuoteHeader: Record "NS_Job Quote Header"; var IsHandled: boolean)
+    begin
+
+    end;
+    // << Upgrade
 
     //PRJ-914.AS.1.0 20OCT2021 START Created New Function
     LOCAL PROCEDURE NS_GetNextChangeOrderNo(PassJobNo: Code[20]; PassJobSeparator: Text[10]): Code[20];

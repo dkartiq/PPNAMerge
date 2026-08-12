@@ -1,5 +1,6 @@
 codeunit 14021123 NS_PPSetStatusNotification
 {
+   // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     //PE-333.JS.1.0 22July2024 Changes related only for W1 App, if someone download the W1 app
     //System do ask for dependency App
     Permissions = tabledata "NS_PPClientLicenseInformation" = ri;//PE-259.AT

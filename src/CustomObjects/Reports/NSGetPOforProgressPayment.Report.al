@@ -1,5 +1,6 @@
 report 14021345 "NS_Get PO for Progress Payment"
 {
+   //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -51,6 +52,10 @@ report 14021345 "NS_Get PO for Progress Payment"
                             ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::Item;
                         Type::Resource:
                             ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::Resource;
+                    // >> 001 Upgrade
+                    Type::"Fixed Asset":
+                        ProgressPaymentLine.NS_Type := ProgressPaymentLine.NS_Type::"Fixed Asset";
+                // << 001 Upgrade
                     end;
                     ProgressPaymentLine."NS_No." := "No.";
                     //ProgressPaymentLine."NS_No. Description" := Description;//PRJ-1623.GK.1.0 08Sept2022
@@ -64,8 +69,10 @@ report 14021345 "NS_Get PO for Progress Payment"
                     //PRJ-1652.GK.1.0 29Sept2022 end
 
                     ProgressPaymentLine."NS_Cost Category" := "NS_Job Cost Category";
-                    //ProgressPaymentLine."NS_Base Amount" := "Unit Cost"; //PRJ-1257.NK.1.0 30Mar2022 Block
-                    ProgressPaymentLine."NS_Base Amount" := "Direct Unit Cost" * "Quantity (Base)"; //PRJ-1257.NK.1.0 30Mar2022 Add
+                // >> 001 Upgrade
+                //ProgressPaymentLine."NS_Base Amount" := "Unit Cost";
+                ProgressPaymentLine.Validate("NS_Base Amount", "Unit Cost");
+                // << 001 Upgrade
                     ProgressPaymentLine."NS_Base Quantity" := "Quantity (Base)";
                     //PRJ-906.GK.1.0  04Oct2021 Start
                     If NS_SubContractHead.Get(SubcontractNoIn) then begin
@@ -85,6 +92,11 @@ report 14021345 "NS_Get PO for Progress Payment"
             end;
 
             trigger OnPreDataItem();
+            // >> Upgrade
+            var
+                Subcontract: Record NS_Subcontract;
+                ProgressPaymentHeader: Record "NS_Progress Payment Header";
+            // << Upgrade
             begin
                 with PurchaseHeader do begin
                     RESET();
@@ -93,9 +105,20 @@ report 14021345 "NS_Get PO for Progress Payment"
                     SETRANGE("Document Type", "Document Type"::Order);
                     if COUNT = 0 then
                         CurrReport.QUIT;
-                    FINDFIRST();
+                    // >> 002 Upgrade
+                    FINDFIRST;
+                    IF Subcontract.GET(SubcontractNoIn) THEN
+                        IF Subcontract."NS_Purchase Document No." <> '' THEN
+                            PurchaseHeader.GET(PurchaseHeader."Document Type"::Order, Subcontract."NS_Purchase Document No.");
+                    // << 002 Upgrade
                 end;
-
+                // #RG008 Start Upgrade
+                ProgressPaymentHeader.GET(ProgressPayNoIn, RequisitionNoIn, VersionNoIn);
+                IF ProgressPaymentHeader."NS_Purchase Order No." <> PurchaseHeader."No." THEN BEGIN
+                    ProgressPaymentHeader."NS_Purchase Order No." := PurchaseHeader."No.";
+                    ProgressPaymentHeader.MODIFY;
+                END;
+                // #RG008 End Upgrade
                 //Determine the last Line No. and Item No. so far
                 LastLineNo := 0;
                 LastItemNo := 0;

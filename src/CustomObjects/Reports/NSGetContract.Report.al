@@ -1,5 +1,6 @@
 report 14021168 "NS_Get Contract"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -47,8 +48,12 @@ report 14021168 "NS_Get Contract"
                         SalesLine."Job No." := "Job No.";
                         SalesLine."Job Task No." := Job.APOToJobTaskNo("NS_Activity Code", "NS_Process Code", "NS_Operation Code", "NS_Section Code");//PRJ-688.AM.1.0
                         SalesLine."NS_Job Revenue Category" := "NS_Revenue Category";
-                        SalesLine."Gen. Bus. Posting Group" := "Gen. Bus. Posting Group";
-                        SalesLine."Gen. Prod. Posting Group" := "Gen. Prod. Posting Group";
+                        // >> Upgrade
+                        // SalesLine."Gen. Bus. Posting Group" := "Gen. Bus. Posting Group";
+                        // SalesLine."Gen. Prod. Posting Group" := "Gen. Prod. Posting Group";
+                        SalesLine.Validate("Gen. Bus. Posting Group", "Gen. Bus. Posting Group");//FDD108
+                        SalesLine.Validate("Gen. Prod. Posting Group", "Gen. Prod. Posting Group");//FDD108
+                        // << Upgrade
                         SalesLine."Unit of Measure" := "Unit of Measure Code";
                         SalesLine.Quantity := Quantity;
                         SalesLine.VALIDATE(Quantity);
@@ -57,12 +62,16 @@ report 14021168 "NS_Get Contract"
                         SalesLine."Unit Cost" := "Unit Cost";
                         SalesLine."Unit Price" := "Unit Price";
                         SalesLine.VALIDATE("Unit Price");
-                        SalesLine."VAT Calculation Type" := SalesLine."VAT Calculation Type"::"Sales Tax";
+                        // >> Upgrade
+                        //SalesLine."VAT Calculation Type" := SalesLine."VAT Calculation Type"::"Sales Tax";//FDD108
+                        // << Upgrade 
                         SalesLine."Tax Area Code" := "Sales Header"."Tax Area Code";
                         SalesLine."Tax Liable" := "Sales Header"."Tax Liable";
                         SalesLine."Shortcut Dimension 1 Code" := "NS_Shortcut Dimension 1 Code";
                         SalesLine."Shortcut Dimension 2 Code" := "NS_Shortcut Dimension 2 Code";
-                        SalesLine."Dimension Set ID" := "NS_Dimension Set ID";
+                        // >> Upgrade
+                        //SalesLine."Dimension Set ID" := "NS_Dimension Set ID";
+                        // << Upgrade
                         SalesLine."Location Code" := "Location Code";
                     end;
                     SalesLine.INSERT;

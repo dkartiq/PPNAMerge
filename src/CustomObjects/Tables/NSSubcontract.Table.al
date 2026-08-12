@@ -1,5 +1,6 @@
 table 14021300 NS_Subcontract
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -1700,6 +1701,11 @@ table 14021300 NS_Subcontract
         Licdate: date;//PRJ-516
         NoOfDays: Text;//PRJ-516
         EnvInfoCU: Codeunit "Environment Information";//PRJ-516
+                                                      // >> Upgrade
+        Go: Boolean;
+        DeliverGoods: Boolean;
+        IsHandled: Boolean;
+    // << Upgrade
 
     begin
         //PRJ-516.ms.1.0 start
@@ -1752,10 +1758,17 @@ table 14021300 NS_Subcontract
                     end;
                 SubcontractHeader."NS_Budgeted Cost (LCY)" > 0:
                     begin
-
+                        // >> Upgrade
+                        // >> 001
+                        if "NS_Job No." = '' then
+                            SubcontractPurchaseParameter.SetParemeter(true);
+                        // << 001
+                        // << Upgrade
                         if ACTION::OK = SubcontractPurchaseParameter.RUNMODAL then begin
-                            SubcontractPurchaseParameter.NS_GetResults(PurchaseDocumentType, PurchaseDocumentNo);
-
+                            // >> Upgrade
+                            //SubcontractPurchaseParameter.NS_GetResults(PurchaseDocumentType, PurchaseDocumentNo);
+                            SubcontractPurchaseParameter.NS_GetResults(PurchaseDocumentType, PurchaseDocumentNo, DeliverGoods);
+                            // << Upgrade
                             PurchaseDocumentType := PurchaseDocumentType + 1;
                         end else begin
                             CLEAR(SubcontractPurchaseParameter);
@@ -1780,6 +1793,23 @@ table 14021300 NS_Subcontract
                 PurchSetup.GET();
                 if PurchaseHeader."No." = '' then
                     case PurchaseHeader."Document Type" of
+                        // >> Upgrade
+                        PurchaseHeader."Document Type"::Quote:
+                            begin
+                                PurchSetup.TestField("Quote Nos.");
+                                NoSeriesRelationship.Reset;
+                                NoSeriesRelationship.SetRange(Code, PurchSetup."Quote Nos.");
+                                if NoSeriesRelationship.Count > 1 then begin
+                                    if NoSeriesMgt.SelectSeries(PurchSetup."Quote Nos.", xRec."NS_No. Series", PurchaseHeader."No. Series") then
+                                        PurchaseDocumentNo := NoSeriesMgt.GetNextNo(PurchaseHeader."No. Series", WorkDate(), true)
+                                    else
+                                        Error(Text0002);
+                                end else
+                                    NoSeriesMgt.InitSeries(PurchSetup."Quote Nos.", '', WorkDate(), PurchaseDocumentNo, PurchaseHeader."No. Series");
+                                PurchSetup.TestField("Posted Receipt Nos.");
+                                PurchaseHeader."Receiving No. Series" := PurchSetup."Posted Receipt Nos.";
+                            end;
+                        // << Upgrade
                         PurchaseHeader."Document Type"::Order:
                             begin
                                 PurchSetup.TESTFIELD("Order Nos.");
@@ -1847,8 +1877,16 @@ table 14021300 NS_Subcontract
                 PurchaseHeader."NS_Retention Percent" := SubcontractHeader."NS_Retention Percent";
                 PurchaseHeader."NS_Retention Date" := CALCDATE(JobsSetup."NS_Sales Retention Period", PurchaseHeader."Document Date");
                 PurchaseHeader."Currency Code" := "NS_Currency Code";
+                // >> Upgrade
+                IsHandled := false;
+                OnNS_MakePurchaseDocument1(SubcontractHeader, PurchaseHeader, IsHandled, FirstJobNo, SubconDtl, Job, DeliverGoods);
                 //PurchaseHeader."Dimension Set ID" := SubcontractHeader."NS_Dimension Set ID";//PRJ-715.RS.1.0 28May2021
+                if IsHandled then
+                    // << Upgrade
                 PurchaseHeader.VALIDATE("NS_Job No.", SubcontractHeader."NS_Job No.");
+                // >> Upgrade
+                OnNS_MakePurchaseDocument2(SubcontractHeader, PurchaseHeader);
+                // << Upgrade
                 //PurchaseHeader."Dimension Set ID" := SubcontractHeader."NS_Dimension Set ID";//PRJ-715.RS.1.0 28May2021  //PRJCTPR-199.JS.1.0 11DEC2023 line commented
                 PurchaseHeader."NS_Progress Payment Enable" := JobsSetup."NS_Progress Payment Enable"; //PRJ-889.GK.1.0 13Sep2021
                 PurchaseHeader.Validate("NS_Retention Percent", SubcontractHeader."NS_Retention Percent"); //PRJ-906.GK.1.0 05Oct2021
@@ -1884,16 +1922,42 @@ table 14021300 NS_Subcontract
         PurchaseHeader.VALIDATE("NS_Retention Amount");
         PurchaseHeader."NS_Job No." := FirstJobNo;
         PurchaseHeader."NS_Subcontract No." := SubcontractHeader."NS_No.";
+        // >> Upgrade
+        OnNS_MakePurchaseDocument3(PurchaseHeader);
+        // << Upgrade
         PurchaseHeader.MODIFY();
 
         //Update Subcontract Header with new Purchase Document No.
         SubcontractHeader."NS_Purchase Document No." := PurchaseHeader."No.";
         SubcontractHeader."NS_Purchase Document Type" := PurchaseHeader."Document Type";//PRJ-274 VT1.0 22-05-20
+                                                                                        // >> Upgrade
+        case PurchaseHeader."Document Type" of
+            PurchaseHeader."Document Type"::Order:
+                SubcontractHeader.NS_Status := SubcontractHeader.NS_Status::Order;
+            PurchaseHeader."Document Type"::Quote:
+                SubcontractHeader.NS_Status := SubcontractHeader.NS_Status::Quote;
+        end;
+        // << Upgrade
         SubcontractHeader.MODIFY();
-
+        // >> Upgrade
+        OnNS_MakePurchaseDocument4(SubcontractHeader);
+        // << Upgrade
         //Show appropriate completion message
-        if CONFIRM(Text0004 + PurchaseHeader."No." + Text0006, true) then
-            PAGE.RUN(PAGE::"NS_Subcontract PO", PurchaseHeader);
+        // >> Upgrade
+        //if CONFIRM(Text0004 + PurchaseHeader."No." + Text0006, true) then
+            //PAGE.RUN(PAGE::"NS_Subcontract PO", PurchaseHeader);
+        Go := false;
+        Go := Confirm(StrSubstNo(Text0004, PurchaseHeader."Document Type") + PurchaseHeader."No." + Text0006, true);
+        if Go then
+            case PurchaseHeader."Document Type" of
+                PurchaseHeader."Document Type"::Order:
+                    PAGE.RunModal(PAGE::"NS_Subcontract PO", PurchaseHeader);
+                PurchaseHeader."Document Type"::Quote:
+                    PAGE.RunModal(PAGE::"Purchase Quote", PurchaseHeader);
+                PurchaseHeader."Document Type"::Invoice:
+                    PAGE.RunModal(PAGE::"Purchase Invoice", PurchaseHeader);
+            end;
+        // << Upgrade
     end;
 
     procedure NS_MakePurchaseDocumentLines(PurchaseHeader: Record "Purchase Header"; SubcontractHeader: Record NS_Subcontract);
@@ -1933,6 +1997,11 @@ table 14021300 NS_Subcontract
                     PurchaseLine."Document No." := PurchaseHeader."No.";
                     LineNumber := LineNumber + 10000;
                     PurchaseLine."Line No." := LineNumber;
+                    // >> Upgrade
+                    // >> 002
+                    PurchaseLine.Insert(true);
+                    // << 002
+                    // << Upgrade
                     case NS_Type of
                         NS_Type::Resource:
                             PurchaseLine.Type := PurchaseLine.Type::Resource;
@@ -1941,6 +2010,9 @@ table 14021300 NS_Subcontract
                         NS_Type::"G/L Account":
                             PurchaseLine.Type := PurchaseLine.Type::"G/L Account";
                     end;
+                    // >> Upgrade
+                    OnNS_MakePurchaseDocumentLines1(SubcontractDetail, PurchaseLine);
+                    // << Upgrade
                     if PurchaseLine.Type.AsInteger() <> 0 then begin
                         PurchaseLine.VALIDATE(Type);
                         PurchaseLine."No." := "NS_No.";
@@ -2063,8 +2135,13 @@ table 14021300 NS_Subcontract
                     //PRJ-773.SK.1.0 Start
                     OnBeforeInsertPurchLinesFromSubconLines(PurchaseLine, SubcontractDetail);
                     //PRJ-773.SK.1.0 End
-
-                    PurchaseLine.INSERT();
+                    // >> Upgrade
+		    // >> 002
+                    //PurchaseLine.INSERT();
+                    PurchaseLine.Modify(true);
+                    // << 002
+                    // << Upgrade
+		    
                     OnAfterInsertPurchLinesFromSubconLines(PurchaseLine, SubcontractDetail); //PRJCTPR-110.JS.1.0 05MAY2023
                     "NS_PO No." := PurchaseLine."Document No.";//PRJ-274 VT1.0 22-05-20
                     "NS_PO Line No." := PurchaseLine."Line No.";//PRJ-274 VT1.0 22-05-20
@@ -2558,17 +2635,30 @@ table 14021300 NS_Subcontract
     local procedure OnBeforeInsertPurchLinesFromSubconLines(Var PurchaseLines: Record "Purchase Line"; var SubcontractLines: Record "NS_Subcontract Lines")
     begin
     end;
-
-    //PE-177.DK.1.0 10Nov2023 Start
-    procedure NS_SubConChangeRequest(NS_Subcon: Record NS_Subcontract);
-    var
-        SubcontractNew_ChangeReqL: Record NS_Subcontract;
-        NS_JobsSetupL: Record 315;
-        SubConCardL: Page "NS_Subcontract Card";
-        NS_SubConLine: Record "NS_Subcontract Lines";
-        NS_SubConLineNew: Record "NS_Subcontract Lines";
-        NS_DocumentNo: Code[20];
+     // >> Upgrade
+    
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocument1(var SubcontractHeader: Record NS_Subcontract; var PurchaseHeader: Record "Purchase Header"; var IsHandled: Boolean; var FirstJobNo: Code[20]; var SubconDtl: Record "NS_Subcontract Lines"; var Job: Record Job; var DeliverGoods: Boolean)
     begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocument2(var SubcontractHeader: Record NS_Subcontract; var PurchaseHeader: Record "Purchase Header")
+    begin
+    end;
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocument3(var PurchaseHeader: Record "Purchase Header")
+    begin
+    end;
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocumentLines1(var SubcontractDetail: Record "NS_Subcontract Lines"; var PurchaseLine: Record "Purchase Line")
+    begin
+    end;
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_MakePurchaseDocument4(var SubcontractHeader: Record NS_Subcontract)
+    begin
+    end;
+    // << Upgrade
 
         NS_JobsSetupL.Get();
         //WITH NewJob DO BEGIN

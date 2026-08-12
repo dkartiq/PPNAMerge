@@ -3,6 +3,7 @@
 /// </summary>
 tableextension 14021131 NS_Job extends Job
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version NAVW111.00.00.24232,NAVNA11.00.00.24232,PPNA11.00
     //PRJ-78.SK.1.0 Modified the OptionCaption for "Contract Type" field
     //PRJ-83.SK.1.0 Modified the field lenght
@@ -5673,7 +5674,10 @@ tableextension 14021131 NS_Job extends Job
         FromQuote := lFromQuote;
     END;
 
-    LOCAL PROCEDURE LoadTasks();
+    // >> Upgrade
+    //LOCAL PROCEDURE LoadTasks();
+    PROCEDURE LoadTasks()
+    // << Upgrade
     BEGIN
         IF NOT DisableLoadTasks THEN BEGIN
             LoadTasksOperation;
@@ -5685,6 +5689,9 @@ tableextension 14021131 NS_Job extends Job
     LOCAL PROCEDURE LoadTasksActivity();
     var//PRJ-199:16APRIL2020
         JobsSetup: Record "Jobs Setup";//PRJ-199:16APRIL2020
+                                       // >> Upgrade1
+        SeqNo: Integer;
+    // << Upgrade1
         NS_JobTask: Record "Job Task";    //PRJ-1042.JS.1.0
         //PRJCTPR-338.DK.1.0 19March Start
         NS_Job: Record Job;
@@ -5694,6 +5701,9 @@ tableextension 14021131 NS_Job extends Job
     //PRJCTPR-338.DK.1.0 19March End
     BEGIN
         JobsSetup.Get;//PRJ-199:16APRIL2020
+                      // >> Upgrade1
+        SeqNo := 100; // >> 019 <<
+                      // << Upgrade1
         IF (JobsSetup."NS_Use Default Tasks" = JobsSetup."NS_Use Default Tasks"::Default) AND (NOT SkipTasks) THEN BEGIN
             NS_JobActivity.RESET;
             NS_JobActivity.SETCURRENTKEY("NS_Default onto each Job");
@@ -5719,6 +5729,7 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask."NS_Gross Profit" := NS_JobActivity."NS_Total Price" - NS_JobActivity."NS_Total Cost";
                         IF FromQuote THEN
                             NS_JobTask."NS_Quote No." := "No.";
+		        OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade << 
                         //PRJ-1406.GK.1.0 18May2022 start
                         OnLoadTaskActivityOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobActivity);
                         //PRJ-1406.GK.1.0 18May2022 end
@@ -5726,6 +5737,7 @@ tableextension 14021131 NS_Job extends Job
                         if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
                             SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
                             NS_InsertDimension(SubleveJobNo, NS_JobTask);
+			    
                             if NS_Job.Get(SubleveJobNo) then;
                             NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
                             NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
@@ -5766,6 +5778,7 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask."NS_Gross Profit" := NS_JobActivity."NS_Total Price" - NS_JobActivity."NS_Total Cost";
                             IF FromQuote THEN
                                 NS_JobTask."NS_Quote No." := "No.";
+			    OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade <<
                             //PRJ-1406.GK.1.0 18May2022 start
                             OnLoadTaskActivityOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobActivity);
                             //PRJ-1406.GK.1.0 18May2022 end
@@ -6984,7 +6997,12 @@ tableextension 14021131 NS_Job extends Job
 
 
     ////////////////////////////////////////////////////PPPPPPPPPPP///////////////////
-
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeInsertJobTask(var JobTask: Record "Job Task"; var SeqNo: Integer)
+    begin
+    end;
+    // << Upgrade
     PROCEDURE CreateSubJob(PassJob: Record 167);
     VAR
         JobsSetup: Record 315;

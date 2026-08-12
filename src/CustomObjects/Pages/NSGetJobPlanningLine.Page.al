@@ -1,5 +1,6 @@
 page 14021204 "NS_Get Job Planning Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -15,6 +16,9 @@ page 14021204 "NS_Get Job Planning Line"
     //FOR-5.NK.1.0 02Mar2023 | Added Code
     Caption = 'Get Job Planning Line';
     DataCaptionFields = "Job No.";
+    // >> Upgrade
+    DataCaptionExpression = PageCaption;
+    // << Upgrade
     Editable = true;
     PageType = Card;
     SourceTable = "Job Planning Line";
@@ -218,7 +222,19 @@ page 14021204 "NS_Get Job Planning Line"
             NS_CreateLines(Rec);
         end;
     end;
-
+    // >> Upgrade
+    trigger OnAfterGetRecord()
+    var
+        Job: Record Job;
+    begin
+        // #152 Start
+        if Job.Get("Job No.") then
+            PageCaption := Job."No." + ' · ' + Job.Description
+        else
+            PageCaption := '';
+        // #152 End
+    end;
+    // << Upgrade
     var
         Job: Record Job;
         JobPlanningLine: Record "Job Planning Line";
@@ -232,6 +248,9 @@ page 14021204 "NS_Get Job Planning Line"
         DocType: Enum "Sales Document Type";
         SalesPurch: Option " ",Sales,Purchase;
         DocNo: Code[20];
+        // >> Upgrade
+        PageCaption: Text;
+    // << Upgrade
 
     procedure NS_Set(CustNoIn: Code[20]; JobIn: Code[20]; CostCat: Code[10]; RevCat: Code[10]; JobTaskNo: Code[35]; EntType: Option);
     begin

@@ -1,5 +1,6 @@
 page 14021447 "NS_Assembly BOM Lines"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -55,12 +56,21 @@ page 14021447 "NS_Assembly BOM Lines"
                     var
                         PP_PickAPOCode: Page "NS_Pick APO Code";
                         Description: Text[50];
+                        // >> Upgrade
+                        JobAct: Code[20];
+                    // << Upgrade
                     begin
                         CLEAR(PP_PickAPOCode);
                         PP_PickAPOCode.LOOKUPMODE(true);
-                        PP_PickAPOCode.NS_SetInput('', "NS_Job Task No.", 0);
+                        // >> Upgrade
+                        //PP_PickAPOCode.NS_SetInput('', "NS_Job Task No.", 0);
+                        PP_PickAPOCode.NS_SetInput('', "NS_Job Task No.", JobAct, 0);
+                        // << Upgrade
                         if PP_PickAPOCode.RUNMODAL() = ACTION::LookupOK then
-                            PP_PickAPOCode.NS_GetResult("NS_Job Task No.", Description);
+                            // >> Upgrade
+                            //PP_PickAPOCode.NS_GetResult("NS_Job Task No.", Description);
+                            PP_PickAPOCode.NS_GetResult("NS_Job Task No.", Description, JobAct);
+                        // << Upgrade
                     end;
                 }
             }

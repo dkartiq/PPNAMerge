@@ -1,5 +1,6 @@
 tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version NAVW111.00.00.25466,NAVNA11.00.00.25466,PPNA11.00
     //PRJ-162.SK.1.0 Added code for populating "Line Type" from "Job No."
     //PRJ-190.MS.1.0 added new Type Chage type for validate job no.
@@ -1817,7 +1818,10 @@ tableextension 14021111 NS_PurchaseLine extends "Purchase Line"
 
     //PRJ-1314.JS.1.0 18APR2022 - Start
     [Obsolete('Now this procedure is available in Business Central Standard in Purchase Line and will be removed in ProjectPro upcomming release')] //PRJCTPR-168.JS.1.0 27July2023
-    PROCEDURE SuspendStatusCheck(Suspend: Boolean);
+    // Upgrade
+    //PROCEDURE SuspendStatusCheck(Suspend: Boolean);
+    PROCEDURE NS_SuspendStatusCheck(Suspend: Boolean);
+    // << Upgrade
     BEGIN
         StatusCheckSuspended := Suspend;
     END;

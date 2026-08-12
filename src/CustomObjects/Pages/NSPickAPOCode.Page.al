@@ -1,5 +1,6 @@
 page 14021203 "NS_Pick APO Code"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -30,13 +31,24 @@ page 14021203 "NS_Pick APO Code"
                 trigger OnLookup(VAR Text: Text): Boolean;
                 var
                     JobAct: Record "NS_Job Activity";
+                    // >> Upgrade
+                    IsHandled: Boolean;
+                // << Upgrade
                 begin
                     JobAct.RESET();
+                    // >> Upgrade
+                    OnBeforeLookupActcd(JobAct);
+
+                    // << Upgrade
                     if JobTaskType = JobTaskType::Cost then
                         JobAct.SETRANGE(NS_Type, JobAct.NS_Type::Cost)
                     else
                         if JobTaskType = JobTaskType::Price then
                             JobAct.SETRANGE(NS_Type, JobAct.NS_Type::Revenue);
+                    // >> Upgrade
+                    OnBeforeLookupActcd2(JobAct, JobNo);
+
+                    // << Upgrade
                     if PAGE.RUNMODAL(PAGE::"NS_Activities List", JobAct) = ACTION::LookupOK then begin
                         ActivityCode := JobAct.NS_Code;
                         if JobAct.NS_Type = JobAct.NS_Type::Cost then
@@ -328,6 +340,9 @@ page 14021203 "NS_Pick APO Code"
                     JobActivity.GET(JobActivity.NS_Type::Revenue, ActivityCode);
             if not JobActivity.GET(JobActivity.NS_Type::Cost, ActivityCode) then
                 JobActivity.GET(JobActivity.NS_Type::Revenue, ActivityCode);
+            // >> Upgrade
+            OnNS_GetActivityDescription(JobActivity);
+            // << Upgrade
             ActivityDescription := JobActivity.NS_Description;
         end else
             ActivityDescription := '';
@@ -423,8 +438,10 @@ page 14021203 "NS_Pick APO Code"
             JobTaskNo := JobTaskNo + Separator3 + SectionCode;
         //PRJ-688.AM.1.0 End
     end;
-
-    procedure NS_SetInput(JobNoIn: Code[20]; JobTaskNoIn: Code[35]; TaskTypeIn: Option Cost,Price);
+    // >> Upgrade
+    // procedure NS_SetInput(JobNoIn: Code[20]; JobTaskNoIn: Code[35]; TaskTypeIn: Option Cost,Price);
+    procedure NS_SetInput(JobNoIn: Code[20]; JobTaskNoIn: Code[35]; JobAct: Code[20]; TaskTypeIn: Option Cost,Price);
+    // << Upgrade
     begin
         JobNo := JobNoIn;
         JobTaskNo := JobTaskNoIn;
@@ -437,12 +454,18 @@ page 14021203 "NS_Pick APO Code"
             ProcessCode := '';
             OperationCode := '';
         end;
+        // >> Upgrade
+        if JobAct <> '' then
+            ActivityCode := JobAct;
+        // << Upgrade
     end;
 
     procedure NS_GetResult(var JobTskNo: Code[35]; var JobTskDesc: Text[100]): Code[35];//PRJ-449.Am.1.0
     begin
         JobTskNo := JobTaskNo;
-
+        // >> Upgrade
+        JobTskAct := ActivityCode;
+        // << Upgrade
         if ActivityDescription > '' then
             JobTskDesc := ActivityDescription;
 
@@ -477,5 +500,25 @@ page 14021203 "NS_Pick APO Code"
         OperationCode := '';
         NS_SetProcessOperation();
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeLookupActcd(var JobAct: Record "NS_Job Activity")
+    begin
+
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeLookupActcd2(var JobAct: Record "NS_Job Activity"; var JobNo: Code[20])
+    begin
+
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnNS_GetActivityDescription(var JobActivity: Record "NS_Job Activity")
+    begin
+
+    end;
+
+    // << Upgrade
 }
 

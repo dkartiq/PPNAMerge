@@ -1,5 +1,6 @@
 report 14021205 "NS_Calculate Plan - Req. Wksh."
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // +------------------------------------------------------------
     // +ProjectPro
     // +  - Added field(s):
@@ -79,7 +80,10 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
 
                 if NS_JMPBatchName <> '' then //PRJCTPR-93.NC.1.0 01May2023
                     CurrWorksheetName := NS_JMPBatchName; //PRJCTPR-93.NC.1.0 01May2023
-                InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, '');
+                // >> Upgrade
+		//InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, '');
+		InvtProfileOffsetting.NS_SetParm(UseForecast, ExcludeForecastBefore, CurrWorksheetType, JobNoFilter);
+                // << Upgrade
                 InvtProfileOffsetting.NS_SetUsePlanCostBoolean(UsePlanCostToPurCost); //PRJ-1380.NK.1.0 13May2022 
                 InvtProfileOffsetting.NS_GetPurchaserCodes(JobPurchaser, ProjectManager);//PRJ-1380.NK.1.0 13May2022 
                 InvtProfileOffsetting.NS_CalculatePlanFromWorksheet(
@@ -131,6 +135,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                 ReqLineExtern.SETCURRENTKEY(Type, "No.", "Variant Code", "Location Code");
                 COPYFILTER("Variant Filter", ReqLineExtern."Variant Code");
                 COPYFILTER("Location Filter", ReqLineExtern."Location Code");
+                // >> Upgrade
+                ReqLineExtern.SetFilter("NS_Job No.", JobNoFilter); //FDD
+                // << Upgrade
 
                 PurchReqLine.SETCURRENTKEY(
                   Type, "No.", "Variant Code", "Location Code", "Sales Order No.", "Planning Line Origin", "Due Date");
@@ -139,7 +146,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                 COPYFILTER("Location Filter", PurchReqLine."Location Code");
                 PurchReqLine.SETFILTER("Worksheet Template Name", ReqWkshTemplateFilter);
                 PurchReqLine.SETFILTER("Journal Batch Name", ReqWkshFilter);
-
+                // >> Upgrade
+                PurchReqLine.SetFilter("NS_Job No.", JobNoFilter); // FDD
+                                                                   // << Upgrade
                 //ProjectPro  - start
                 IF UseJobDemandOnly THEN
                     FilterToJobItems(Item);
@@ -197,11 +206,20 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
                         ToolTip = 'Job No. Filter';
                         TableRelation = Job;
                         ApplicationArea = all;
+                        // >> Upgrade
                         trigger OnValidate()
+                        var
+                            RequisitionLine: Record "Requisition Line";
                         begin
                             if ((JobPurchaser <> '') or (ProjectManager <> '')) and (JobNoFilter <> '') then //PRJ-1380.NK.1.0 13May2022      
                                 Error('Remove the Job Purchaser or Job Manager filter first');  //PRJ-1380.NK.1.0 13May2022 
+                            //FDD109 Start
+                            RequisitionLine.SetFilter("NS_Job No.", JobNoFilter);
+                            if not RequisitionLine.IsEmpty then
+                                Message(Text50000);
+                            //FDD109 End
                         end;
+                        // << Upgrade
                     }
                     field(NS_UseJobDemandOnly; UseJobDemandOnly)
                     {
@@ -346,10 +364,9 @@ report 14021205 "NS_Calculate Plan - Req. Wksh."
         JobNoFilter: Code[20];
         UseJobDemandOnly: Boolean;
         CurrentDocumentNo: Code[20];
-
-        UsePlanCostToPurCost: Boolean; //PRJ-1380.NK.1.0 13May2022
-        JobPurchaser: Code[20];  //PRJ-1380.NK.1.0 13May2022 
-        ProjectManager: Code[20];  //PRJ-1380.NK.1.0 13May2022 
+        // >> Upgrade
+        Text50000: label 'There are Items in Requisition Worksheets for this Job Filter. Items cannot be duplicated and existing lines will be deleted. Ensure you apply the correct Item Filters to avoid deleting Items incorrectly.;ENA=There are Items in Requisition Worksheets for this Job Filter. Items cannot be duplicated and existing lines will be deleted. Ensure you apply the correct Item Filters to avoid deleting Items incorrectly.';
+    // << Upgrade
 
     [Scope('Cloud')]
     procedure SetTemplAndWorksheet(TemplateName: Code[10]; WorksheetName: Code[10]; DocumentNo: Code[20])

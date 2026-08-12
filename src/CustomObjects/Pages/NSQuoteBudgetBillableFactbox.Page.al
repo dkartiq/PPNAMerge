@@ -1,5 +1,6 @@
 page 14021437 "NS_QuoteBudget/BillableFactBox"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -70,6 +71,11 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 0);
+                            // >> Upgrade
+                            //>>FDD108.01
+                            DrilldownReset(JobPlanningList);
+                            //<<FDD108.01
+                            // << Upgrade
                             JobPlanningList.SetShowAdjustmentLines(Text14021401Lbl);
                             JobPlanningList.RUNMODAL;
                             CLEAR(JobPlanningList);
@@ -85,6 +91,12 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 0);
+                            // >> Upgrade
+                            // #146 Start
+                            DrilldownResetAndSetApproved(JobPlanningList);
+                            DrilldownReset(JobPlanningList);
+                            // #146 End
+                            // << Upgrade
                             JobPlanningList.SetShowAdjustmentLines(Text14021400Lbl);
                             JobPlanningList.RUNMODAL;
                             CLEAR(JobPlanningList);
@@ -100,6 +112,11 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 0);
+                            // >> Upgrade
+                            //>>FDD108.01
+                            DrilldownReset(JobPlanningList);
+                            //<<FDD108.01
+                            // << Upgrade
                             JobPlanningList.RUNMODAL;
                             CLEAR(JobPlanningList);
                         end;
@@ -142,6 +159,11 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 1);
+                            // >> Upgrade
+                            //>>FDD108.01
+                            DrilldownReset(JobPlanningList);
+                            //<<FDD108.01
+                            // << Upgrade
                             JobPlanningList.SetShowAdjustmentLines(Text14021401Lbl);
                             JobPlanningList.RUNMODAL;
                             CLEAR(JobPlanningList);
@@ -157,6 +179,12 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 1);
+                            // >> Upgrade
+                            // #146 Start
+                            DrilldownResetAndSetApproved(JobPlanningList);
+                            DrilldownReset(JobPlanningList);
+                            // #146 End
+                            // << Upgrade
                             JobPlanningList.SetShowAdjustmentLines(Text14021400Lbl);
                             JobPlanningList.RUNMODAL;
                             CLEAR(JobPlanningList);
@@ -173,6 +201,11 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
                         trigger OnDrillDown();
                         begin
                             JobPlanningList.SetFilters("No.", 1);
+                            // >> Upgrade
+                            //>>FDD108.01
+                            DrilldownReset(JobPlanningList);
+                            //<<FDD108.01
+                            // << Upgrade
                             JobPlanningList.RUNMODAL;
                             CLEAR(JobPlanningList);
                         end;
@@ -232,12 +265,23 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
         Text19065341Lbl: Label 'PROJECTPRO';
         Text19073417Lbl: Label '"        Budget (Cost)"';
         Text19055672Lbl: Label '"        Contract (Price)"';
+        // >> Upgrade
+        "QuotedGP$": Decimal;
+        "QuotedGP%": Decimal;
+    // << Upgrade
 
     procedure NS_CalcStatistics();
+    // >> Upgrade
+    var
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         JobCalc := Rec;
         JobCalc.RESET();
-
+        // >> Upgrade
+        OnBeforeNS_CalcStatistics(Rec, JobCalc, OriginalBudget, OriginalContract, AdjustmentBudget, AdjustmentContract, IsHandled);
+        if not IsHandled then begin
+            // << Upgrade
         //Calculate original amounts
         JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');
         JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)");
@@ -267,6 +311,33 @@ page 14021437 "NS_QuoteBudget/BillableFactBox"
         "Sub-LevelsPrice" := NS_SLsBudgetedPrice(JobCalc);
 
         CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
+        // >> Upgrade
+        OnAfterNS_CalcStatistics(Rec, "QuotedGP$", "QuotedGP%");
+        // << Upgrade
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure DrilldownResetAndSetApproved(var JobPlanningList: Page "Job Planning Lines")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure DrilldownReset(var JobPlanningList: Page "Job Planning Lines")
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeNS_CalcStatistics(var Job: Record Job; var JobCalc: Record Job; var OriginalBudget: Decimal; var OriginalContract: Decimal; var AdjustmentBudget: Decimal;
+    var AdjustmentContract: Decimal; var IsHandled: Boolean)
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+
+    local procedure OnAfterNS_CalcStatistics(var Job: Record Job; var "QuotedGP$": Decimal; var "QuotedGP%": Decimal);
+    begin
+
+    end;
+    // << Upgrade
 }
 

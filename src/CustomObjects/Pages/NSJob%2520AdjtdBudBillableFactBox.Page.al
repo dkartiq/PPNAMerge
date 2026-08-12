@@ -1,5 +1,6 @@
 page 14021365 "NS_Job AdjtdBudBillableFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -325,6 +326,12 @@ page 14021365 "NS_Job AdjtdBudBillableFactBox"
         //PRJ-340.SK.1.0 End
         JobCalc := Rec;
         JobCalc.RESET();
+        // >> Upgrade
+        //FDD108 Start
+        if "NS_Sub-Level to Job No." = "No." then
+            exit;
+        //FDD108 End
+        // << Upgrade
 
         //Calculate original amounts
         JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');

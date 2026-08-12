@@ -1,5 +1,6 @@
 report 14021401 "NS_Load Job Jnl from JMP"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -40,6 +41,10 @@ report 14021401 "NS_Load Job Jnl from JMP"
                 JobMatPlan.SETFILTER("NS_Inv. Avail", '>%1', 0);
                 if JobMatPlan.FINDSET(true, false) then
                     repeat
+                        // >> Upgrade
+                        JobMatPlan.TESTFIELD("NS_Job Plannine Line No."); //FDD109
+                        JobJnlLine.INIT; //FDD109
+                        // << Upgrade
                         if Item.GET(JobMatPlan."NS_Part No.") then;
                         if not AddLine then begin
                             LineNo += 10000;

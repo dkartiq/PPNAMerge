@@ -1,5 +1,6 @@
 page 14021360 "NS_Job A/R A/P BalancesFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -215,7 +216,16 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
         DtldCustLedgEntry: Record "Detailed Cust. Ledg. Entry";
         CustLedgerEntri: Record "Cust. Ledger Entry"; //PRJCTPR-193.DK.1.0 20SEP2023
         Blank: Code[20];
+        // >> Upgrade
+        DtldVendLedgEntry: Record "Detailed Vendor Ledg. Entry";
+    // << Upgrade
     begin
+        // >> Upgrade
+        //FDD108 Start
+        if "NS_Sub-Level to Job No." = "No." then
+            exit;
+        //FDD108 End
+        // << Upgrade
         NS_CalculateJobFinancials(Rec, ActualCostToDate, InvoiceBilled, PaymentReceived, CommittedCost, false);
         //Calculate Common Values
         CLEAR("Sub-LevelsCost");
@@ -231,6 +241,12 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
         ARBalance := 0;
         //PRJCTPR-193.DK.1.0 15Sep2023 START
         // DtldCustLedgEntry.RESET();
+        // >> Upgrade
+        // >> 001
+        //DtldCustLedgEntry.SETCURRENTKEY("Job No.");
+        DtldCustLedgEntry.SetCurrentKey("NS_Job No.", "Customer No.", "Initial Entry Global Dim. 2");
+        // << 001
+        // << Upgrade
         // DtldCustLedgEntry.SETCURRENTKEY("NS_Job No.");
         // DtldCustLedgEntry.SETRANGE("NS_Job No.", Rec."No.");//PRJ-1131.RM.1.0 10Jan2022 need to be checked
         // DtldCustLedgEntry.SETRANGE("Customer No.", Rec."Bill-to Customer No.");//PRJ-1131.RM.1.0 10Jan2022 need to be checked
@@ -257,15 +273,37 @@ page 14021360 "NS_Job A/R A/P BalancesFactBox"
         //PRJCTPR-193.DK.1.0 15Sep2023 END
         //Calculate A/P Balance
         APBalance := 0;
+        // >> Upgrade
+        // VendLedgEntry.RESET();
+        // VendLedgEntry.SETRANGE("NS_Job No.", "No.");
+        // VendLedgEntry.SETRANGE(Open, true);
+        // if VendLedgEntry.FINDSET() then
+        //     repeat
+        //         VendLedgEntry.CALCFIELDS(Amount);
+        //         APBalance += ABS(VendLedgEntry.Amount);
+        //     until VendLedgEntry.NEXT() = 0;
+        DtldVendLedgEntry.Reset;
 
-        VendLedgEntry.RESET();
-        VendLedgEntry.SETRANGE("NS_Job No.", "No.");
-        VendLedgEntry.SETRANGE(Open, true);
-        if VendLedgEntry.FINDSET() then
-            repeat
-                VendLedgEntry.CALCFIELDS(Amount);
-                APBalance += ABS(VendLedgEntry.Amount);
-            until VendLedgEntry.NEXT() = 0;
+        // >> 001
+        DtldVendLedgEntry.SetCurrentKey("NS_Job No.", "NS_Retention Ledger Code");
+        //DtldVendLedgEntry.SETCURRENTKEY("Job No.");
+        // << 001
+
+        DtldVendLedgEntry.SetRange("NS_Job No.", "No.");
+        if not PurchSetup."NS_Purchase Retention Inactive" then
+            DtldVendLedgEntry.SetFilter("NS_Retention Ledger Code", '<>%1', JobsSetup."NS_Retention Payable Ledger");
+
+        // >> 001
+        /*
+        IF DtldVendLedgEntry.FINDSET THEN
+          REPEAT
+            APBalance := APBalance + DtldVendLedgEntry.Amount;
+          UNTIL DtldVendLedgEntry.NEXT = 0;
+        */
+        DtldVendLedgEntry.CalcSums(Amount);
+        APBalance := DtldVendLedgEntry.Amount;
+        // << 001
+        // << Upgrade
 
         //Subcontract Balance
         SubcontractBalance := 0;

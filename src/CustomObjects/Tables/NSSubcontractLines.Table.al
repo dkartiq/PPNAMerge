@@ -1,5 +1,6 @@
 table 14021301 "NS_Subcontract Lines"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -49,7 +50,14 @@ table 14021301 "NS_Subcontract Lines"
         field(5; "NS_Job Task Description"; Code[100]) //PRJ-301.MS.1.0
         {
             Caption = 'Job Task Description';
-            DataClassification = CustomerContent;
+            // >> Upgrade
+            // DataClassification = CustomerContent;
+            //CalcFormula = Lookup("Job Task".Description WHERE("Job No." = FIELD("NS_Job No."),
+            // "Job Task No." = FIELD("NS_Job Task No.")));
+            Description = '#RG008';
+            Editable = false;
+            //FieldClass = FlowField;
+            // << Upgrade
         }
         field(7; "NS_Job Cost Category"; Code[10])
         {
@@ -67,6 +75,11 @@ table 14021301 "NS_Subcontract Lines"
             Caption = 'Type';
             OptionCaption = ' ,Resource,Item,G/L Account';
             OptionMembers = " ",Resource,Item,"G/L Account";
+            // >> Upgrade
+            Description = '001 "Fixed Asset" added to Option String';
+            OptionCaption = ' ,Resource,Item,G/L Account,Fixed Asset';
+            OptionMembers = " ",Resource,Item,"G/L Account","Fixed Asset";
+            // << Upgrade
             DataClassification = CustomerContent;
             //PE-137.DK.1.0 Start 26July2023
             trigger OnValidate();
@@ -89,7 +102,9 @@ table 14021301 "NS_Subcontract Lines"
                 Resource: Record Resource;
                 Item: Record Item;
                 GLAccount: Record "G/L Account";
-                JobSetup: Record "Jobs Setup"; //PE-301.NC.1.0 28May2024
+                // >> Upgrade
+                FixedAsset: Record "Fixed Asset";
+            // << Upgrade
             begin
                 if JobSetup.Get() then; //PE-301.NC.1.0 28May2024
                 case NS_Type of
@@ -128,12 +143,29 @@ table 14021301 "NS_Subcontract Lines"
                                 NS_Description := GLAccount.Name;
                             end;
                         end;
+                    // >> Upgrade
+                    // >> 001
+                    NS_Type::"Fixed Asset":
+                        begin
+                            FixedAsset.Reset;
+                            if PAGE.RunModal(0, FixedAsset) = ACTION::LookupOK then begin
+                                FixedAsset.TestField(Inactive, false);
+                                FixedAsset.TestField(Blocked, false);
+                                "NS_No." := FixedAsset."No.";
+                                NS_Description := FixedAsset.Description;
+                            end;
+                        end;
+                // << 001
+                // << Upgrade
                 end;
             end;
 
             trigger OnValidate();
+            // >> Upgrade
             var
                 JobSetup: Record "Jobs Setup"; //PE-301.NC.1.0 28May2024
+	    	FixedAsset: Record "Fixed Asset";
+            	// << Upgrade
             begin
                 if JobSetup.Get() then; //PE-301.NC.1.0 28May2024
                 if "NS_No." = '' then
@@ -169,6 +201,17 @@ table 14021301 "NS_Subcontract Lines"
                             NS_Description := GLAcc.Name;
                             "NS_Job Cost Category" := GLAcc."NS_Cost Category"; //PE-315.DK.1.0 21JUNE2024
                         end;
+                    // >> Upgrade
+                    // >> 001
+                    NS_Type::"Fixed Asset":
+                        begin
+                            FixedAsset.Get("NS_No.");
+                            FixedAsset.TestField(Inactive, false);
+                            FixedAsset.TestField(Blocked, false);
+                            NS_Description := FixedAsset.Description;
+                        end;
+                // << 001
+                // << Upgrade
                 end;
             end;
         }

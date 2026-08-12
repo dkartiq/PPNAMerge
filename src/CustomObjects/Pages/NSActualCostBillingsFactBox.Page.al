@@ -1,5 +1,6 @@
 page 14021357 "NS_Actual CostBillingsFactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -314,6 +315,12 @@ page 14021357 "NS_Actual CostBillingsFactBox"
 
     procedure NS_CalcStatistics();
     begin
+        // >> Upgrade
+        //FDD108 Start
+        IF "NS_Sub-Level to Job No." = "No." THEN
+            EXIT;
+        //FDD108 End
+        // << Upgrade
         //PRJ-340.SK.1.0 Start
         IF "No." = '' then
             Exit;

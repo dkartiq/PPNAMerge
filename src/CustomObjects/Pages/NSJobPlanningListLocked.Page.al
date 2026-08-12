@@ -1,5 +1,8 @@
 page 14021172 "NS_Job Planning List (Locked)"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+    // 002 24-11-2021  PREM  Job Filter
+    //   001 12-11-2021  PREM  RG007-P0485-62-1 JPL Lock actions
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -398,7 +401,15 @@ page 14021172 "NS_Job Planning List (Locked)"
         Text14021402: Label 'NO';
         NS_ShowLineType: Option;
         Text14021401: Label 'YES';
-    //MHNA-6.NK.1.0 end 06march2023
+        // >> Upgrade
+        JobNoFilterG: Text;
+
+    PROCEDURE SetJobFilter(JobNoFilter: Text);
+    BEGIN
+        // >> 001 New Function <<
+        JobNoFilterG := JobNoFilter;
+    END;
+    // << Upgrade
     procedure NS_SetFilters(JobNo: Code[20]; LineType: Option);
     begin
         PP_ShowJobNo := JobNo;

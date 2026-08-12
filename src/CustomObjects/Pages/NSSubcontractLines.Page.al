@@ -1,5 +1,6 @@
 page 14021301 "NS_Subcontract Lines"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -22,7 +23,9 @@ page 14021301 "NS_Subcontract Lines"
     SourceTable = "NS_Subcontract Lines";
     UsageCategory = Lists;
     ApplicationArea = Jobs;
-
+    // >> Upgrade
+    SourceTableView = SORTING("NS_Subcontract No.", "NS_Line No.");
+    // << Upgrade
     layout
     {
         area(content)

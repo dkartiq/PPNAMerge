@@ -1,5 +1,6 @@
 page 14021356 "NS_Job Budget/Billable FactBox"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -449,7 +450,20 @@ page 14021356 "NS_Job Budget/Billable FactBox"
     begin
         NS_CalcStatistics;
     end;
+    // >> Upgrade
+    protected var
+        [InDataSet]
+        OriginalBudget: Decimal;
+        JobPlanningList: Page "Job Planning Lines";
+        Text14021101: Label 'NO';
+        AdjustmentBudget: Decimal;
+        Text14021100: Label 'YES';
+        AdjustmentContract: Decimal;
 
+        AdjustmentBudgetNC: Decimal;
+        AdjustmentContractNC: Decimal;
+        OriginalContract: Decimal;
+    // << Upgrade
     var
         ChangeRequest_Job: Record Job; //PE-193.PS.3.0 27Dec2023
         ChangeRequest: Decimal;//PE-193.PS.3.0 27Dec2023
@@ -504,6 +518,9 @@ page 14021356 "NS_Job Budget/Billable FactBox"
         JobCalc.RESET;
 
         //Calculate original amounts
+        // >> Upgrade
+        Calculateoriginalamounts(Rec, JobCalc, OriginalBudget, OriginalContract, AdjustmentBudget, AdjustmentBudgetNC, AdjustmentContract, AdjustmentContractNC, IsHandled);
+        if not IsHandled then begin
         JobCalc.SETFILTER("NS_Adjustment Filter", '=%1', '');
 
         JobCalc.CALCFIELDS("NS_Budgeted Cost (LCY)");
@@ -523,7 +540,10 @@ page 14021356 "NS_Job Budget/Billable FactBox"
         AdjustmentContract := JobCalc."NS_Budgeted Price (LCY)";
         AdjustmentRevenueCont := JobCalc."NS_ Locked Budgeted Rev ";//MHNA-6.NK.1.0 start 06march2023
         //AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);//PRJ-421.MS.1.0
-
+        end;
+        AdjustmentBudget := AdjustmentBudget + NS_SLsBudgetedCost(JobCalc);
+        AdjustmentContract := AdjustmentContract + NS_SLsBudgetedPrice(JobCalc);
+        // << Upgrade
         //Calculate total Job Level values
         JobLevelBudget := OriginalBudget + AdjustmentBudget;
         JobLevelContract := OriginalContract + AdjustmentContract;
@@ -569,5 +589,12 @@ page 14021356 "NS_Job Budget/Billable FactBox"
         LockedSubLevelCost := NS_LockedSLsBudgetedCost(JobCalc);
         LockedSubLevelPrice := NS_LockedSLsBudgetedPrice(JobCalc);
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure Calculateoriginalamounts(var Job: Record Job; var JobCalc: Record Job; var OriginalBudget: Decimal; var OriginalContract: Decimal; var AdjustmentBudget: Decimal; var AdjustmentBudgetNC: Decimal;
+    var AdjustmentContract: Decimal; var AdjustmentContractNC: Decimal; var IsHandled: Boolean)
+    begin
+    end;
+    // << Upgrade
 }
 

@@ -1,5 +1,6 @@
 table 14021421 "NS_Job Material Planning"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -1208,8 +1209,13 @@ table 14021421 "NS_Job Material Planning"
         NSGLedgSetup: Record "General Ledger Setup";
         NSJobTaskDimension: Record "Job Task Dimension";
     //PRJCTPR-309.HS.1.0 26Feb2024 END
-
+                                     // >> Upgrade
+        Job: Record Job;
+    // << Upgrade
     begin
+        // >> Upgrade
+        OnBeforeNS_CopyPlanningLines(Job, pJobNo);
+        // << Upgrade
         //PRJ-516.ms.1.0 start
         if EnvInfoCU.IsSaaS() then begin
             //Licdate := DMY2Date(31, 3, 2021);//PRJ-516.AS.1.0 16MARCH2021 Comment
@@ -1912,7 +1918,11 @@ table 14021421 "NS_Job Material Planning"
                                                 JobMatPlan."NS_Purchase Res. G/L" := false;
                                     end; //PRJ-1725.PD.1.0
                                 end;
-
+                                // >> Upgrade
+                                // >> pv00.00
+                                OnAfterCreateJobMaterialLineBeforeValidateQuantity(JobMatPlan, JobPlanLines);
+                                // << pv00.00
+                                // << Upgrade
                                 JobMatPlan.VALIDATE(NS_Quantity);
                                 JobMatPlan."NS_Job Plannine Line No." := JobPlanLines."Line No.";
                                 //PE-180.VC.1.0 04Oct2023 Start
@@ -1957,7 +1967,10 @@ table 14021421 "NS_Job Material Planning"
                                 //PRJ-773.SK.1.0 Start
                                 OnBeforeInsertJobMatPlanFromJobPlanningLineResource(JobMatPlan, JobPlanLines);
                                 //PRJ-773.SK.1.0 End
+                                // >> Upgrade
+                                OnBeforeInsertNS_CopyPlanningLines(JobMatPlan, JobPlanLines);
 
+                                // << Upgrade
                                 JobMatPlan.INSERT;
 
                             end;
@@ -3081,5 +3094,24 @@ table 14021421 "NS_Job Material Planning"
         exit(JobPlanLine."Unit of Measure Code");
     end;
     //PE-301.NC.1.0 24May2024 End
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeNS_CopyPlanningLines(var Job: Record Job; var pJobNo: Code[20])
+    begin
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnAfterCreateJobMaterialLineBeforeValidateQuantity(var JobMaterialPlanning: Record "NS_Job Material Planning"; JobPlanningLine: Record "Job Planning Line")
+    begin
+        // >> pv00.00
+        // << pv00.00
+    end;
+
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeInsertNS_CopyPlanningLines(var JobMatPlan: Record "NS_Job Material Planning"; var JobPlanningLine: Record "Job Planning Line")
+    begin
+    end;
+
+    // << Upgrade
 }
 

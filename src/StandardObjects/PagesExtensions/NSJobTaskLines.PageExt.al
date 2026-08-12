@@ -1,5 +1,6 @@
 pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version NAVW111.00.00.22292,NAVNA11.00.00.22292,PPNA11.00
     //PRJ-431.AM.1.0 11NOV2020 | Added style property to JobtaskNo. .
     //PRJ-492.RS.1.0 10May2021 | Hide/Unhide Fields
@@ -118,11 +119,17 @@ pageextension 14021276 NS_JobTaskLines extends "Job Task Lines"
                     JobOperation: Record "NS_Job Operation";//PRJ-1264.AS.1.0
                     JobSection: Record NS_Sections;//PRJ-1264.AS.1.0
                     JobQuoteHead: Record "NS_Job Quote Header"; //PRJ-1437.NK.1.0 10Jun2022
+                                               // >> Upgrade
+                    JobAct: Code[20];
+                // << Upgrade
                 begin
                     //ProjectPro - start
                     CLEAR(NS_PickAPOCode);
                     NS_PickAPOCode.LOOKUPMODE(TRUE);
-                    NS_PickAPOCode.NS_SetInput("Job No.", "Job Task No.", 0);
+                    // >> Upgrade
+                    // NS_PickAPOCode.NS_SetInput("Job No.", "Job Task No.", 0);
+                    NS_PickAPOCode.NS_SetInput("Job No.", "Job Task No.", JobAct, 0);
+                    // << Upgrade
                     IF NS_PickAPOCode.RUNMODAL = ACTION::LookupOK THEN BEGIN
                         if (Rec."Job Task No.") <> '' then//PRJ-604.AS.1.0
                             Validate("Job Task No.", Rec."Job Task No.");//PRJ-604.AS.1.0

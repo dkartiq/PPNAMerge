@@ -1,5 +1,6 @@
 table 14021165 "NS_Locked Job Planning Line"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -58,11 +59,14 @@ table 14021165 "NS_Locked Job Planning Line"
             IF (NS_Type = CONST("Resource (Group)")) "Resource Group";
             DataClassification = CustomerContent;
         }
-        field(8; NS_Description; Text[50])
+        // >> Upgrade
+        //field(8; NS_Description; Text[50])
+        field(8; NS_Description; Text[100])
         {
             Caption = 'Description';
             DataClassification = CustomerContent;
         }
+        // << Upgrade
         field(9; NS_Quantity; Decimal)
         {
             Caption = 'Quantity';

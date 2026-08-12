@@ -1,5 +1,6 @@
 page 14021311 "NS_Subcontract PO"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -677,7 +678,10 @@ page 14021311 "NS_Subcontract PO"
                 field("PP Retention Percent"; Rec."NS_Retention Percent")
                 {
                     ApplicationArea = All;
-                    Editable = PP_RetentionPercentEditable;
+                    // >> Upgrade
+                    //Editable = PP_RetentionPercentEditable;
+                    Editable = false;
+                    // << Upgrade
                     Importance = Promoted;
                     ToolTip = 'Specifies the Retention Percent';
 
@@ -716,7 +720,10 @@ page 14021311 "NS_Subcontract PO"
                 field("PP Retention Date"; Rec."NS_Retention Date")
                 {
                     ApplicationArea = All;
-                    Editable = PP_RetentionDateEditable;
+                    // >> Upgrade
+                    //Editable = PP_RetentionDateEditable;
+                    Editable = false;
+                    // << Upgrade
                     ToolTip = 'Specifies the Retention Date';
 
                     trigger OnValidate();
@@ -1219,7 +1226,12 @@ page 14021311 "NS_Subcontract PO"
                     begin
                         ProgressPaymentHeader.RESET;
                         ProgressPaymentHeader.SETRANGE("NS_No.", "NS_Subcontract No.");
-                        PAGE.RUNMODAL(PAGE::"NS_Progress Payment List", ProgressPaymentHeader);
+                        // >> Upgrade
+                        //FDD101
+                        //PAGE.RUNMODAL(PAGE::"NS_Progress Payment List", ProgressPaymentHeader);
+                        PAGE.RUN(PAGE::"NS_Progress Payment List", ProgressPaymentHeader);
+                        //FDD101
+                        // << Upgrade
                     end;
                 }
                 separator(Separator1100773001)

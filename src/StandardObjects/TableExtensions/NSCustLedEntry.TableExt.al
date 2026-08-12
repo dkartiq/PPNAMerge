@@ -1,5 +1,6 @@
 tableextension 14021104 NS_CustLedEntry extends "Cust. Ledger Entry"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version NAVW111.00.00.20783,NAVNA11.00.00.20783,PPNA11.00
     //PE-209.HS.1.0 7Dec2023 | Obselete Bal. to Ledger No.
 

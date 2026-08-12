@@ -1,5 +1,6 @@
 codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -416,7 +417,9 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                         SalesHeader."NS_Retention Date" := CALCDATE(JobsSetup."NS_Sales Retention Period", SalesHeader."Document Date")
                     else
                         SalesHeader."NS_Retention Date" := SalesHeader."Document Date";
-                end;
+                // >> Upgrade
+                //SalesHeader.VALIDATE("NS_Retention Amount"); // #132
+                // << Upgrade
                 //PRJ-1624.NK.1.0 26Sep2022 Start
                 if BillingHeader."NS_Multiple Retention on Lines" then begin
                     BillingHeader.CalcFields("NS_Lines Total Retention Amt");
@@ -427,7 +430,9 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                         SalesHeader."NS_Retention Amount" := Round((SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor"),
                         NS_Currency."Unit-Amount Rounding Precision");
                     end;
-                    //PE-22.JS.1.0 21FEB2023-end
+            // >> Upgrade
+            SalesHeader."NS_Progress Billing Document" := true;
+            // << Upgrade
                 end;
                 //PRJ-1624.NK.1.0 26Sep2022 End
                 //PRJ-1648.PS.1.0 19Dec2022 Start
@@ -452,7 +457,9 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
             SalesHeader."NS_From Progress Billing No." := "NS_No.";
             SalesHeader."NS_From ProgressBillingReq.No." := "NS_Requisition No.";
             SalesHeader."NS_From ProgressBillingVer.No." := "NS_Version No.";
-            //PRJ-1624.NK.1.0 23Sep2022 Start
+            // >> Upgrade
+            //SalesHeader.VALIDATE("NS_Job No.", "NS_Job No.");
+            // << Upgrade
             if BillingHeader."NS_Multiple Retention on Lines" then
                 SalesHeader."NS_Multiple Retention on Lines" := BillingHeader."NS_Multiple Retention on Lines";
             //PRJ-1624.NK.1.0 23Sep2022             
@@ -467,6 +474,18 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
             //PE-22.JS.1.0 02FEB2023-end
             NS_OnBeforeInsertSalesHeaderinPB(SalesHeader, BillingHeader, Job);//PRJ-1414.AS.1.0 Added event
             SalesHeader.INSERT;
+            // >> Upgrade
+            //FDD108 Start
+
+            // SalesHeader.VALIDATE("Shortcut Dimension 1 Code", Job."Global Dimension 1 Code");
+            // SalesHeader.VALIDATE("Shortcut Dimension 2 Code", Job."Global Dimension 2 Code");
+            //JobDimensionNo := ProgressBillingHeader.GetDimensionNoFromJob(ProgressBillingHeader."Job No."); //PRJ-180.SK.1.0 Commented
+            JobDimensionNo := ProgressBillingHeader.NS_GetDimensionNoFromJob("NS_Job No.");//PRJ-180.SK.1.0 Added
+                                                                                           // SalesHeader."Dimension Set ID" := JobDimensionNo;
+            SalesHeader.Validate("NS_Job No.", "NS_Job No.");
+            SalesHeader.Modify;
+            //FDD108 End
+            // << Upgrade
 
             //SalesHeader.VALIDATE("Tax Liable", Job."NS_Tax Liable");     //PRJ-862.JS.1.0 Line Added //PRJCTPR-133.NC.1.0 22June2023 Block
             //SalesHeader.VALIDATE("Tax Area Code", Job."NS_Tax Area Code");   //PRJ-862.JS.1.0 Line Added //PRJCTPR-133.NC.1.0 22June2023 Block
@@ -491,7 +510,13 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
             // else
             //     NS_NormalDocumentLines(BillingHeader, SalesHeader, Job);
             //PRJ-876.JS.1.0 23Aug2021-end    
-
+            // >> Upgrade
+            // #132 Start
+            SalesHeader.Get(SalesHeader."Document Type", SalesHeader."No.");
+            SalesHeader.Validate("NS_Retention Amount");
+            SalesHeader.Modify;
+            // #132 End
+            // << Upgrade
             //Validation Checks
             if ("NS_Work Retention Percent" <> 0) or ("NS_Material Retention Percent" <> 0) then begin
                 //Find current Retention Balance for this Job
@@ -1179,7 +1204,9 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                         //SalesLine."Dimension Set ID" := BillingHeader.NS_GetDimensionNoFromJob(BillingHeader."NS_Job No."); //PRJ-180.SK.1.1 Added //PRJ-913.JS.1.0 Commented                    
 
                         SalesLine."NS_From Prog. Billing Base Amount" := "NS_Base Amount";//CTSI-150.AS.1.0 28Sept2020
-
+                                                                                          // >> Upgrade
+                        OnBeforeInsertNS_NormalDocumentLines(SalesLine, ProgressBillingLine);
+                        // << Upgrade
                         //PRJ-773.SK.1.0 Start
                         OnBeforeInsertSalesLineFromProgressBillLine(SalesLine, ProgressBillingLine);
                         //PRJ-773.SK.1.0 End
@@ -1496,6 +1523,9 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                                 end;
                             end;
                             //PRJCTPR-320.NC.1.0 16Feb2024 End
+                            // >> Upgrade
+                            OnBeforeInsertNS_NormalDocumentLines(SalesLine, ProgressBillingLine);
+                            // << Upgrade
                             if SalesLine.Amount <> 0 then begin
                                 //SalesLine.INSERT;  //PRJ-876.JS.1.0 24Aug2021 commented
                                 //PRJ-1465.GK.1.0 20June2022 start
@@ -1637,6 +1667,12 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
     begin
     end;
     //PRJ-1030.AS.1.0 END
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    local procedure OnBeforeInsertNS_NormalDocumentLines(var SalesLine: Record "Sales Line"; var ProgressBillingLine: Record "NS_Progress Billing Line")
+    begin
+    end;
+    // << Upgrade
     //PRJ-1465.GK.1.0 20June2022 start
     [IntegrationEvent(false, false)]
     local procedure NS_OnBeforeInsertNormalDocumentLineMakeReceivablesDocument(var SalesLine: Record "Sales Line"; ProgressBillingLine: Record "NS_Progress Billing Line")

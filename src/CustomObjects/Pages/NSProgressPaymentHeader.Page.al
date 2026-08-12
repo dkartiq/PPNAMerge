@@ -1,5 +1,6 @@
 page 14021340 "NS_Progress Payment Header"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -18,7 +19,10 @@ page 14021340 "NS_Progress Payment Header"
     UsageCategory = Documents;
     ApplicationArea = Jobs;
     SourceTable = "NS_Progress Payment Header";
-
+    // >> Upgrade
+    InsertAllowed = false;
+    PromotedActionCategories = 'New,Process,Report,Purchasing';
+    // << Upgrade
     layout
     {
         area(content)
@@ -239,6 +243,9 @@ page 14021340 "NS_Progress Payment Header"
             {
 
                 Caption = 'Retention';
+                // >> Upgrade
+                Editable = false;
+                // << Upgrade
                 field("Work Retention %"; Rec."NS_Work Retention Percent")
                 {
                     ApplicationArea = All;
@@ -420,6 +427,12 @@ page 14021340 "NS_Progress Payment Header"
                     var
                         Result: Integer;
                     begin
+                        // >> Upgrade
+                        // #RG008 Start
+                        if NS_Status = NS_Status::Open then
+                            Error(Text50000);
+                        // #RG008 End
+                        // << Upgrade
                         Result := NewRequisition(Rec);
                         if Result <> -1 then begin
                             SETRANGE("NS_Requisition No.", Result);
@@ -442,6 +455,12 @@ page 14021340 "NS_Progress Payment Header"
                     var
                         Result: Integer;
                     begin
+                        // >> Upgrade
+                        // #RG008 Start
+                        if NS_Status <> NS_Status::Open then
+                            Error(Text50001);
+                        // #RG008 End
+                        // << Upgrade
                         Result := NewVersion(Rec);
                         if Result <> -1 then begin
                             SETRANGE("NS_Version No.", Result);
@@ -804,6 +823,13 @@ page 14021340 "NS_Progress Payment Header"
         Text052Lbl: Label 'Buy-from Vendor No.';
         Text053Lbl: Label 'Purchase Order';
         Text054Lbl: Label '<> Void';
+    // >> Upgrade
+    protected var
+        SubcontractName: Text[50];
+        Text014Lbl: Label 'Are you certain you want to update the Purchase Order for this requisition?';
+        Text50000: Label 'You can only create a new Requisition when the current requisition is Invoiced';
+        Text50001: Label 'You can only create a new Version when the current requisition has NOT been Invoiced.';
+    // << Upgrade
 
     procedure GetVendorName();
     begin

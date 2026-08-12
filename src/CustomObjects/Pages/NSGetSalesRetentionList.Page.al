@@ -1,5 +1,6 @@
 page 14021212 "NS_Get Sales Retention List"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -18,7 +19,9 @@ page 14021212 "NS_Get Sales Retention List"
     SourceTable = "Cust. Ledger Entry";
     SourceTableView = SORTING("Customer No.", "Posting Date", "Currency Code")
                       ORDER(Ascending);
-
+    // >> Upgrade
+    PromotedActionCategories = 'New,Process,Report,Include';
+    // << Upgrade
     layout
     {
         area(content)
@@ -227,7 +230,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Image = SelectField;
                     ShortCutKey = 'F7';
                     ToolTip = 'Include';
-
+                    // >> Upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     begin
                         if "NS_Retention Applies-to Amount" = 0 then
@@ -247,7 +254,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Image = Percentage;
                     ShortCutKey = 'Shift+F11';
                     ToolTip = 'Include retention percentage';
-
+                    // >> upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     var
                         Window: Dialog;
@@ -271,7 +282,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Image = ExciseApplyToLine;
                     ShortCutKey = 'Ctrl+F11';
                     ToolTip = 'Include all rentention percentage.';
-
+                    // >> Upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     var
                         EnteredPct: Decimal;
@@ -300,7 +315,11 @@ page 14021212 "NS_Get Sales Retention List"
                     Caption = '&Clear All';
                     Image = ClearLog;
                     ToolTip = 'Clear all retention.';
-
+                    // >> Upgrade
+                    Promoted = true;
+                    PromotedCategory = Category4;
+                    PromotedOnly = true;
+                    // << Upgrade
                     trigger OnAction();
                     begin
                         CustLedgEntry2.RESET();
@@ -327,6 +346,10 @@ page 14021212 "NS_Get Sales Retention List"
                 Promoted = true;
                 PromotedCategory = Process;
                 ToolTip = 'Navigate';
+                // >> Upgrade
+                PromotedOnly = true;
+
+                // << Upgrade
 
                 trigger OnAction();
                 begin

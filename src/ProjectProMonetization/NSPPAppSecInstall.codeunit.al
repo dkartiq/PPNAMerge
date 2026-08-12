@@ -1,5 +1,6 @@
 codeunit 14021121 NS_PPAppSecInstall
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     Subtype = Install;
     Permissions = tabledata "NS_PPClientLicenseInformation" = rimd;
 
@@ -13,6 +14,9 @@ codeunit 14021121 NS_PPAppSecInstall
         IsExist: Boolean;
         EnvInfoCU: Codeunit "Environment Information";//PRJ-1686.GK.1.0 03Nov2022
     begin
+        // >> Upgrade
+        exit;
+        // << Upgrade
         //PRJ-1686.GK.1.0 22Nov2022 start
         //PRJ-1686.GK.1.0 26Oct2022 start
         //PRJ-1641.JS.1.0 23SEP2022 - Start

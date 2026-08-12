@@ -1,5 +1,6 @@
 report 14021330 "NS_Get Contact forProgressBill"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -41,7 +42,17 @@ report 14021330 "NS_Get Contact forProgressBill"
                 end;
 
                 ProcessJobBudget(Job);
-
+                // >> Upgrade
+                // if "NS_Progress Billing No." = '' then
+                //     if CONFIRM(Text001, true, "No.", ParamProgressBillNo) then begin
+                //         "NS_Progress Billing No." := ParamProgressBillNo;
+                //         if CONFIRM(Text002, false, "No.", ParamProgressBillNo) then begin
+                //             "NS_Progress Billing Sub-Level" := true;
+                //         end;
+                //         MODIFY();
+                //     end;
+                JobOnAfterGetRecord(Job, MasterJobNo, ParamProgressBillNo);
+                // << Upgrade
                 if "NS_Progress Billing No." = '' then
                     if CONFIRM(Text001, true, "No.", ParamProgressBillNo) then begin
                         "NS_Progress Billing No." := ParamProgressBillNo;
@@ -135,7 +146,9 @@ report 14021330 "NS_Get Contact forProgressBill"
         Text004: Label 'Should the sub-level %1 job card be updated to show that it is part of progress bill %2?';
         Text005: Label 'Is job %1 a sub-level for progress bill%2?';
         NSIsProgressBillChangeOrder: Boolean;   //PRJ-1708.JS.1.0 12DEC2022
-
+        // >> Upgrade
+        MasterJobNo: Code[20];
+    // << Upgrade
     //PRJ-1414.AS.1.0 START Created event
     [IntegrationEvent(false, false)]
     local procedure NS_OnAfterProcessJobBudget(ParamProgressBillNoL: Code[20]; ParamRequisitionNoL: integer; ParamVersionNoL: integer)
@@ -180,6 +193,9 @@ report 14021330 "NS_Get Contact forProgressBill"
         NSProgressBillingHeader: Record "NS_Progress Billing Header";   //PRJ-1373.JS.1.0 06MAY2022
         NSJobs: Record Job;  //PE-22.JS.1.0 21FEB2023
         NSJob: Record Job; //PRJCTPR-238.NC.1.0 05Jan2024
+        // >> Upgrade
+        IsHandled: Boolean;
+    // << Upgrade
     begin
         If NSProgressBillingHeader.Get(ParamProgressBillNo, ParamRequisitionNo, ParamVersionNo) then; //PRJ-1373.JS.1.0 06MAY2022
         //PE-22.JS.1.0 21FEB2023 - Start
@@ -245,7 +261,12 @@ report 14021330 "NS_Get Contact forProgressBill"
                             ProgressBillingLine."NS_Revenue Cat Description" := RevCatTble.NS_Description;
                         //PRJ-702.AS.1.0 - end
                         ProgressBillingLine."NS_Job Task No." := "Job Task No.";
-                        ProgressBillingLine."NS_Activity Code" := "NS_Activity Code";
+                        // >> Upgrade
+                        //FDD108 Start
+                        //ProgressBillingLine."NS_Activity Code" := "NS_Activity Code";
+                        ProgressBillingLine."NS_Activity Code" := "Job Task No.";
+                        //FDD108 Stop
+                        // << Upgrade
                         ProgressBillingLine."NS_Process Code" := "NS_Process Code";
                         ProgressBillingLine."NS_Operation Code" := "NS_Operation Code";
                         if BudgetDesc > '' then
@@ -291,7 +312,11 @@ report 14021330 "NS_Get Contact forProgressBill"
                                 ProgressBillingLine."NS_Dimension Set ID" := BillingHeader.NS_GetDimensionNoFromJobTask(ProgressBillingLine."NS_Job No.", ProgressBillingLine."NS_Job Task No.");
                             end;
                         //PRJ-999.JS.1.0 09Nov2021-end   
-
+                        // >> Upgrade
+                        OnBeforeInsertProcessJobBudget(Job, ProgressBillingLine, JobPlanningLine, ParamProgressBillNo);
+                        //ProgressBillingLine.INSERT();
+                        //ProgressBillingLine.VALIDATE("NS_Work Retention Percent", Job."NS_Default Job Retention");
+                        // << Upgrade
                         //PRJ-773.SK.1.0 Start
                         OnBeforeInsertProgressBillingLine(ProgressBillingLine, JobPlanningLine);
                         //PRJ-773.SK.1.0 End
@@ -336,7 +361,20 @@ report 14021330 "NS_Get Contact forProgressBill"
                 until NEXT() = 0;
         end;
     end;
+    // >> Upgrade
+    [IntegrationEvent(false, false)]
+    procedure OnBeforeInsertProcessJobBudget(var Job: Record Job; var ProgressBillingLine: record "NS_Progress Billing Line"; var JobPlanningLine: record "Job Planning Line"; var ParamProgressBillNo: code[20])
+    begin
 
+    end;
+
+    [IntegrationEvent(false, false)]
+    procedure JobOnAfterGetRecord(var Job: Record Job; var MasterJobNo: Code[20]; var ParamProgressBillNo: Code[20])
+    begin
+
+    end;
+
+    // << Upgrade
 
     [IntegrationEvent(false, false)]
     local procedure OnBeforeInsertProgressBillingLine(Var ProgressBillingLine: Record "NS_Progress Billing Line"; Var JobPlanningLine: Record "Job Planning Line")

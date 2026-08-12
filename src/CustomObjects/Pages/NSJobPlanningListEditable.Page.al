@@ -1,5 +1,7 @@
 page 14021217 "NS_Job PlanningList(Editable)"
 {
+    // "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+    // 001 23.10.2021  PREM  bugfix
     // version PPNA11.00
 
     // +------------------------------------------------------------

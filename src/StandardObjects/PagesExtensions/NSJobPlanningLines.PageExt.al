@@ -1,5 +1,7 @@
 pageextension 14021278 NS_JobPlanningLines extends "Job Planning Lines"
 {
+    //  "a3b03edf-3f59-46a5-9644-a1f4a6b1d289"
+    // 001 23.10.2021  PREM  bugfix
     // version NAVW111.00.00.23572,NAVNA11.00.00.23572,PPNA11.00
     // +------------------------------------------------------------
     // +ProjectPro

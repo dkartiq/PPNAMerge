@@ -1,5 +1,6 @@
 table 14021325 "NS_Progress Billing Header"
 {
+    // a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -627,7 +628,10 @@ table 14021325 "NS_Progress Billing Header"
         //PE-255 AT.1.0 13Feb2024 End
         if "NS_Job No." = '' then
             if GETFILTER("NS_Job No.") <> '' then
-                "NS_Job No." := GETFILTER("NS_Job No.");
+                // >> Upgrade
+                // "NS_Job No." := GETFILTER("NS_Job No.");
+                Validate("NS_Job No.", GETFILTER("NS_Job No."));
+        // << Upgrade
 
         if "NS_No." = '' then begin
             JobsSetup.GET();

@@ -1,5 +1,6 @@
 report 14021288 "NS_Work Order (Job LedgerSumm)"
 {
+    //a3b03edf-3f59-46a5-9644-a1f4a6b1d289
     // version PPNA11.00
 
     // +------------------------------------------------------------
@@ -301,7 +302,12 @@ report 14021288 "NS_Work Order (Job LedgerSumm)"
                 if NS_UserSettings.Get() then begin
                     if NS_UserSettings."Language ID" = 1033 then
                         NS_Today := FORMAT(TODAY, 0, '<Month,2>-<Day,2>-<Year4>');
-
+                // >> Upgrade
+                // #152 Start
+                IF Job.GETFILTER("No.") = '' THEN
+                    ERROR(Text002);
+                // #152 End
+                // << Upgrade
                 end;
 
 
@@ -360,7 +366,9 @@ report 14021288 "NS_Work Order (Job LedgerSumm)"
         NS_ManagerName: Text;
         NS_UserSettings: Record "User Settings";
         NS_Recource: Record Resource;
-
+        // >> Upgrade
+        Text002: Label 'Job No. filter is empty.';
+    // << Upgrade
 
     procedure SetFilter(PassJobNoFilter: Text[60]);
     begin
