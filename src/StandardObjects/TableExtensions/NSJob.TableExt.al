@@ -305,7 +305,7 @@ tableextension 14021131 NS_Job extends Job
                     if (rec.Status = rec.Status::Completed) AND (rec."NS_New Run B_OpenJob B Log" = false) then  //PRJCTPR-122.PS.1.0 14Jun2023
                         Error('Please run the open batch job backlog batch');
                     if (rec.Status = rec.Status::Completed) AND (rec."NS_New Run B_OpenJob B Log") AND (rec."NS_Open Job Backlog" <> 0) then begin  //PRJCTPR-122.PS.1.0 14Jun2023
-                        if (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Closed) OR (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Running) OR (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Completed) then begin
+                        if (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Closed) OR (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Handover) OR (rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Completed) then begin
                             if not Confirm('Do you want to set this job to completed and clear the backlog values?', false) then begin
                                 rec."NS_New Run B_OpenJob B Log" := false; //PRJCTPR-122.PS.1.0 14Jun2023
                                 Rec.Validate(Status, xRec.Status);
@@ -324,7 +324,7 @@ tableextension 14021131 NS_Job extends Job
                                         BilledAmount += JobTask."Contract (Total Price)";
                                         InvoiceAmount += JobTask."Contract (Invoiced Price)";
                                     until JobTask.Next() = 0;
-                                if (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Running) AND (InvoiceAmount - BilledAmount = 0) then begin
+                                if (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Handover) AND (InvoiceAmount - BilledAmount = 0) then begin
                                     Rec."NS_Open Job Backlog" := 0;
                                     Rec."NS_New Run B_OpenJob B Log" := true;  //PRJCTPR-122.PS.1.0 14Jun2023
                                     Rec."NS_New Billable/Inv Dif" := InvoiceAmount - BilledAmount;  //PRJCTPR-122.PS.1.0 14Jun2023
@@ -5691,7 +5691,7 @@ tableextension 14021131 NS_Job extends Job
         JobsSetup: Record "Jobs Setup";//PRJ-199:16APRIL2020
                                        // >> Upgrade1
         SeqNo: Integer;
-    // << Upgrade1
+        // << Upgrade1
         NS_JobTask: Record "Job Task";    //PRJ-1042.JS.1.0
         //PRJCTPR-338.DK.1.0 19March Start
         NS_Job: Record Job;
@@ -5729,7 +5729,7 @@ tableextension 14021131 NS_Job extends Job
                         NS_JobTask."NS_Gross Profit" := NS_JobActivity."NS_Total Price" - NS_JobActivity."NS_Total Cost";
                         IF FromQuote THEN
                             NS_JobTask."NS_Quote No." := "No.";
-		        OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade << 
+                        OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade << 
                         //PRJ-1406.GK.1.0 18May2022 start
                         OnLoadTaskActivityOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobActivity);
                         //PRJ-1406.GK.1.0 18May2022 end
@@ -5737,7 +5737,7 @@ tableextension 14021131 NS_Job extends Job
                         if (Rec."NS_Sub-Level to Job No." <> '') OR (Rec."NS_Change Request to Job No." <> '') then begin
                             SubleveJobNo := Rec."NS_Sub-Level to Job No." + Rec."NS_Change Request to Job No.";
                             NS_InsertDimension(SubleveJobNo, NS_JobTask);
-			    
+
                             if NS_Job.Get(SubleveJobNo) then;
                             NS_JobTask."Global Dimension 1 Code" := NS_Job."Global Dimension 1 Code";
                             NS_JobTask."Global Dimension 2 Code" := NS_Job."Global Dimension 2 Code";
@@ -5778,7 +5778,7 @@ tableextension 14021131 NS_Job extends Job
                             NS_JobTask."NS_Gross Profit" := NS_JobActivity."NS_Total Price" - NS_JobActivity."NS_Total Cost";
                             IF FromQuote THEN
                                 NS_JobTask."NS_Quote No." := "No.";
-			    OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade <<
+                            OnBeforeInsertJobTask(NS_JobTask, SeqNo); // >> Upgrade <<
                             //PRJ-1406.GK.1.0 18May2022 start
                             OnLoadTaskActivityOnBeforeInsertJobTaskLines(NS_JobTask, NS_JobActivity);
                             //PRJ-1406.GK.1.0 18May2022 end
@@ -6395,7 +6395,7 @@ tableextension 14021131 NS_Job extends Job
             NS_Estimator := PassJob.NS_Estimator;
             NS_Manager := PassJob.NS_Manager;
             //"Manager Job Status" := PassJob."Manager Job Status";
-            "NS_Manager Job Status" := "NS_Manager Job Status"::Running;
+            "NS_Manager Job Status" := "NS_Manager Job Status"::Handover;
             //PRJ-464.AM.1.0 start
             "NS_Salesperson Code" := PassJob."NS_Salesperson Code";
             //"NS_Gen. Bus. Posting Group" := PassJob."NS_Gen. Bus. Posting Group";//PRJ-831.AS.1.0 12OCT2021 Comment old
@@ -7604,7 +7604,7 @@ tableextension 14021131 NS_Job extends Job
         Clear(NS_JobNoNewRecord);
         NS_jobcr.reset;
         NS_jobcr.setrange("NS_Sub-Level to Job No.", PassJob."NS_Sub-Level to Job No.");
-        NS_jobcr.SetRange("NS_Manager Job Status", NS_jobcr."NS_Manager Job Status"::Approval);
+        NS_jobcr.SetRange("NS_Manager Job Status", NS_jobcr."NS_Manager Job Status"::"Budget Review");
         NS_jobcr.SetRange("NS_Job Class", NS_jobcr."NS_Job Class"::"Change Request");
         NS_liNoOfRequest := NS_jobcr.Count;
         if NS_jobcr.findset then

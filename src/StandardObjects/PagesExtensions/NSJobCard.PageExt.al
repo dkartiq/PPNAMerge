@@ -1285,7 +1285,7 @@ pageextension 14021131 NS_JobCard extends "Job Card"
                 ObsoleteTag = '19.0.40.30666'; //PRJ-1486.NK.1.0 08Jul2022
             }
             //TM-10.AM.1.0 start
-             //PE-311.PP.1.0 11JUN2024 Start Uncomment 
+            //PE-311.PP.1.0 11JUN2024 Start Uncomment 
             part("NS_Work Completed"; "NS_Work Type")
             {
                 Caption = 'Work Requested'; // PE-311.PP.1.0 11JUN2024
@@ -3846,7 +3846,7 @@ pageextension 14021131 NS_JobCard extends "Job Card"
                     //  NS_Jobs.SetRange("NS_Sub-Level to Job No.", Rec."No."); //PE-193.PS.1.0 06Nov2023 Commented 
                     NS_Jobs.SetRange("NS_Change Request to Job No.", Rec."No."); //PE-193.PS.1.0 06Nov2023
                     NS_Jobs.SetRange("NS_Job Class", NS_Jobs."NS_Job Class"::"Change Request");
-                    NS_Jobs.SetRange("NS_Manager Job Status", NS_Jobs."NS_Manager Job Status"::Approval);
+                    NS_Jobs.SetRange("NS_Manager Job Status", NS_Jobs."NS_Manager Job Status"::"Budget Review");
                     PAGE.RUN(PAGE::"NS_ChangeRequestList", NS_Jobs);
                 end;
             }
@@ -4648,7 +4648,7 @@ pageextension 14021131 NS_JobCard extends "Job Card"
                     begin
                         Rec."NS_Last Run Open Job Backlog" := WorkDate();//PE-173.PS.1.0 10Oct2023 
                         Rec."NS_New Run B_OpenJob B Log" := false;//PE-173.PS.1.0 10Oct2023
-                        If (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Closed) OR (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Running) OR ((Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Completed)) then begin
+                        If (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Closed) OR (Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Handover) OR ((Rec."NS_Manager Job Status" = Rec."NS_Manager Job Status"::Completed)) then begin
                             Clear(InvoiceAmount);
                             Clear(BilledAmount);
                             JobTask.Reset();
@@ -4667,7 +4667,7 @@ pageextension 14021131 NS_JobCard extends "Job Card"
                                 Rec."NS_New Run B_OpenJob B Log" := true; //PRJCTPR-122.PS.1.0 14Jun2023
                                 Rec.Modify();
                             end;
-                            if (InvoiceAmount - BilledAmount = 0) AND (Rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Running) then begin
+                            if (InvoiceAmount - BilledAmount = 0) AND (Rec."NS_Manager Job Status" = rec."NS_Manager Job Status"::Handover) then begin
                                 Rec."NS_New Billable/Inv Dif" := InvoiceAmount - BilledAmount; //PRJCTPR-122.PS.1.0 14Jun2023
                                 Rec."NS_Open Job Backlog" := ABS(InvoiceAmount - BilledAmount);
                                 Rec."NS_New Run B_OpenJob B Log" := true; //PRJCTPR-122.PS.1.0 14Jun2023

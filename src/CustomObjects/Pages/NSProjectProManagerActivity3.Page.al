@@ -92,7 +92,7 @@ page 14021363 "NS_ProjectPro ManagerActivity3"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings

@@ -175,7 +175,7 @@ page 14021297 NS_ChangeRequestList
             if not IsSelected then begin
                 NS_lrJob.reset;
                 NS_lrJob.setrange("NS_Sub-Level to Job No.", Rec."NS_Sub-Level to Job No.");
-                NS_lrJob.SetRange("NS_Manager Job Status", NS_lrJob."NS_Manager Job Status"::Approval);
+                NS_lrJob.SetRange("NS_Manager Job Status", NS_lrJob."NS_Manager Job Status"::"Budget Review");
                 NS_lrJob.SetRange("NS_Job Class", NS_lrJob."NS_Job Class"::"Change Request");
                 if NS_lrJob.FindSet() then;
             end else
@@ -241,7 +241,7 @@ page 14021297 NS_ChangeRequestList
 
         //NS_Jobs.reset;
         NS_Jobs.setrange("NS_Change Request to Job No.", Rec."NS_Change Request to Job No.");
-        NS_Jobs.SetRange("NS_Manager Job Status", NS_Jobs."NS_Manager Job Status"::Approval);
+        NS_Jobs.SetRange("NS_Manager Job Status", NS_Jobs."NS_Manager Job Status"::"Budget Review");
         NS_Jobs.SetRange("NS_Job Class", NS_Jobs."NS_Job Class"::"Change Request");
         if NS_Jobs.FindSet() then begin
             repeat

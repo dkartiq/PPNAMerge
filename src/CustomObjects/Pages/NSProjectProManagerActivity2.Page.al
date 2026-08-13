@@ -85,7 +85,7 @@ page 14021361 "NS_ProjectProManagerActivity2"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS;
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
                                 JobRec.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
@@ -126,7 +126,7 @@ page 14021361 "NS_ProjectProManagerActivity2"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS;
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
                                 JobCalc.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
@@ -178,7 +178,7 @@ page 14021361 "NS_ProjectProManagerActivity2"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings

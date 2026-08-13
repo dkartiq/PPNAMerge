@@ -27,7 +27,7 @@ page 14021254 "NS_PPFieldManagerActivities"
                     begin
                         JobsRec1.Reset();
                         JobsRec1.SetRange("NS_Field Manager", USERID());
-                        JobsRec1.SetRange("NS_Manager Job Status", JobsRec1."NS_Manager Job Status"::Running);
+                        JobsRec1.SetRange("NS_Manager Job Status", JobsRec1."NS_Manager Job Status"::Handover);
                         JobsRec1.SetRange("NS_Estimated Completion Date", Rec."NS_Date Filter");
                         PAGE.RUN(PAGE::"job list", JobsRec1);
                     end;
@@ -109,7 +109,7 @@ page 14021254 "NS_PPFieldManagerActivities"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings
@@ -172,7 +172,7 @@ page 14021254 "NS_PPFieldManagerActivities"
             repeat
                 //Find "Running" top-level jobs, calculate Backlog as Contract Total Value less Total Invoice Billed
                 if Job."NS_Sub-Level to Job No." = '' then
-                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                         Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                         Backlog += Job."NS_Budgeted Price (LCY)";
                         Backlog += Job."SLsUsage(Price)"(Job);
@@ -206,7 +206,7 @@ page 14021254 "NS_PPFieldManagerActivities"
 
         JobCal5.RESET();
         JobCal5.SetRange("NS_Field Manager", UserId());
-        JobCal5.SetRange("NS_Manager Job Status", JobCal5."NS_Manager Job Status"::Running);
+        JobCal5.SetRange("NS_Manager Job Status", JobCal5."NS_Manager Job Status"::Handover);
         JobCal5.Setfilter("NS_Estimated Completion Date", '%1', Rec."NS_Date Filter");
         if JobCal5.FindSet() then
             Job2CompleteThisMonCalc := JobCal5.Count();

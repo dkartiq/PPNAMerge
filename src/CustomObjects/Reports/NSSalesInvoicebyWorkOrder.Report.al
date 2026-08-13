@@ -102,7 +102,7 @@ report 14021290 "NS_Sales Invoice by Work Order"
             {
                 DataItemLink = "NS_Sub-Level to Job No." = FIELD("No.");
                 //DataItemTableView = SORTING("NS_Sub-Level to Job No.", "NS_Contract Date") ORDER(Ascending) WHERE("NS_Job Class" = CONST("Work Order"), "NS_Manager Job Status" = CONST(Approved));//PRJ-751.RS.1.0 14June21 change from Approval to Approved //PRJ-751.AS.1.0 06July2021. All commented done by RS. Roll back because it was wrong 
-                DataItemTableView = SORTING("NS_Sub-Level to Job No.", "NS_Contract Date") ORDER(Ascending) WHERE("NS_Job Class" = CONST("Work Order"), "NS_Manager Job Status" = CONST(Approval));//PRJ-751.AS.1.0 06July2021 //PRJ-751.AS.1.0 06July2021 After roll back previous changes done again
+                DataItemTableView = SORTING("NS_Sub-Level to Job No.", "NS_Contract Date") ORDER(Ascending) WHERE("NS_Job Class" = CONST("Work Order"), "NS_Manager Job Status" = CONST("Budget Review"));//PRJ-751.AS.1.0 06July2021 //PRJ-751.AS.1.0 06July2021 After roll back previous changes done again
                 column(WorkOrder_No; WorkOrder."No.")
                 {
                 }
@@ -155,10 +155,10 @@ report 14021290 "NS_Sales Invoice by Work Order"
                 SubJob.SETRANGE("NS_Job Class", SubJob."NS_Job Class"::"Work Order");
                 SubJob.SETRANGE("NS_Sub-Level to Job No.", "No.");
                 //PRJ-751.AS.1.0 06July2021 Roll back because it was wrong - start
-                //SubJob.SETRANGE("NS_Manager Job Status", "NS_Manager Job Status"::Approval);//PRJ-751 Comment//PRJ-751.AS.1.0 06July2021
+                //SubJob.SETRANGE("NS_Manager Job Status", "NS_Manager Job Status"::"Budget Review");//PRJ-751 Comment//PRJ-751.AS.1.0 06July2021
                 //SubJob.SETRANGE("NS_Manager Job Status", "NS_Manager Job Status"::Approved);//PRJ-751 Add//PRJ-751.AS.1.0 06July2021
                 //PRJ-751.AS.1.0 06July2021 Roll back because it was wrong - end
-                SubJob.SETRANGE("NS_Manager Job Status", "NS_Manager Job Status"::Approval);//PRJ-751.AS.1.0 06July2021 Previous changes done again
+                SubJob.SETRANGE("NS_Manager Job Status", "NS_Manager Job Status"::"Budget Review");//PRJ-751.AS.1.0 06July2021 Previous changes done again
                 if not SubJob.FINDFIRST() then
                     CurrReport.SKIP;
 

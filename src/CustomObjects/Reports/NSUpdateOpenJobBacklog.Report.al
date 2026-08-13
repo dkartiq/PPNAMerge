@@ -21,7 +21,7 @@ report 14021487 "NS_UpdateOpenJobBacklogBatch"
                 InvoiceBilled: array[3] of Decimal;
             begin
                 if Job."NS_Sub-Level to Job No." = '' then
-                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                         Job."NS_Open Job Backlog" := 0;//PRJ-1262.GK.2.0 13June2022
                         Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                         Job."NS_Open Job Backlog" += Job."NS_Budgeted Price (LCY)";

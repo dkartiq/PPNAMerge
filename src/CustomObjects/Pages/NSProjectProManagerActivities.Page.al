@@ -134,7 +134,7 @@ page 14021354 "NS_ProjectProManagerActivities"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS();
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
                                 JobRec.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
@@ -174,7 +174,7 @@ page 14021354 "NS_ProjectProManagerActivities"
                     begin
                         JobRec.RESET();
                         JobRec.CLEARMARKS();
-                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Running);
+                        JobRec.SETRANGE("NS_Manager Job Status", JobRec."NS_Manager Job Status"::Handover);
                         if JobRec.FINDSET() then
                             repeat
                                 JobCalc.NS_CalculateActualCostToDate(JobRec, ActualCostToDate, true);
@@ -319,7 +319,7 @@ page 14021354 "NS_ProjectProManagerActivities"
 
         JobCalc.RESET();
         JobCalc.SETCURRENTKEY("NS_Manager Job Status");
-        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Running);
+        JobCalc.SETRANGE("NS_Manager Job Status", JobCalc."NS_Manager Job Status"::Handover);
         if JobCalc.FINDSET() then
             repeat
                 //Calulate Job Cost Exceeds Contract Billings
@@ -393,7 +393,7 @@ page 14021354 "NS_ProjectProManagerActivities"
             repeat
                 //Find "Running" top-level jobs, calculate Backlog as Contract Total Value less Total Invoice Billed
                 if Job."NS_Sub-Level to Job No." = '' then
-                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                    if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                         Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                         Backlog += Job."NS_Budgeted Price (LCY)";
                         Backlog += Job."SLsUsage(Price)"(Job);

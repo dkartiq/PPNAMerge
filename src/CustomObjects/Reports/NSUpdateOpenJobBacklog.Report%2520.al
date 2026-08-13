@@ -29,7 +29,7 @@ Report 14021295 "NS_Open Job Backlog Batch New"
             begin
                 Job."NS_Last Run Open Job Backlog" := WorkDate(); //PE-173.PS.1.0 09Oct2023 
                 if (Job.Status = Job.Status::Completed) then begin
-                    If (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Closed) OR (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running) then begin
+                    If (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Closed) OR (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover) then begin
                         Clear(InvoiceAmount);
                         Clear(BilledAmount);
                         JobTask.Reset();
@@ -42,7 +42,7 @@ Report 14021295 "NS_Open Job Backlog Batch New"
                                 BilledAmount += JobTask."Contract (Total Price)";
                                 InvoiceAmount += JobTask."Contract (Invoiced Price)";
                             until JobTask.Next() = 0;
-                        if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running) AND (InvoiceAmount - BilledAmount = 0) then
+                        if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover) AND (InvoiceAmount - BilledAmount = 0) then
                             Job."NS_Open Job Backlog" := 0
                         else
                             if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Closed) AND (InvoiceAmount - BilledAmount >= 0) then
@@ -56,7 +56,7 @@ Report 14021295 "NS_Open Job Backlog Batch New"
                     SunlevaeBool := true;
                     //PE-173.PS.1.0 04Oct2023  Start
                     if (Job.Status = Job.Status::Open) or (Job.Status = Job.Status::Planning) then begin
-                        if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                        if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                             NSBilledAndDiffence := 0;
                             Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                             NSBilledAndDiffence += Job."NS_Budgeted Price (LCY)";
@@ -71,7 +71,7 @@ Report 14021295 "NS_Open Job Backlog Batch New"
                     JobSetup.Get();
                     if JobSetup."NS_Inclued SubJob & Change Ord" = false then begin
                         if (Job.Status = Job.Status::Open) or (Job.Status = Job.Status::Planning) then begin
-                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                                 Job."NS_Open Job Backlog" := 0;
                                 Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                                 Job."NS_Open Job Backlog" += Job."NS_Budgeted Price (LCY)";
@@ -84,7 +84,7 @@ Report 14021295 "NS_Open Job Backlog Batch New"
                         end;
                     end else begin
                         if (Job.Status = Job.Status::Open) or (Job.Status = Job.Status::Planning) then begin
-                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                                 Job."NS_Open Job Backlog" := 0;
                                 Job.CALCFIELDS("NS_Budgeted Price (LCY)");
                                 Job."NS_Open Job Backlog" += Job."NS_Budgeted Price (LCY)";

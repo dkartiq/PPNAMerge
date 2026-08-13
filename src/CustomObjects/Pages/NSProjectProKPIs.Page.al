@@ -38,7 +38,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 //If job is 100% complete, compare "Actual Percent Complete Date" to "Estimated Completion Date" to determine if it was on-time
                                 if (Job2."NS_Estimated Completion Date" >= StartingDate) and
                                    (Job2."NS_Estimated Completion Date" <= EndingDate) then
-                                    if (Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running) or
+                                    if (Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover) or
                                        (Job2."NS_Manager Job Status" >= Job2."NS_Manager Job Status"::Completed) then
                                         Job2.MARK(true);
                                 //Add in jobs which are estimated to be completed after the time horizon and were completed within the time horizon.
@@ -69,7 +69,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 if Job2."Starting Date" <> 0D then
                                     if Job2."Starting Date" <= EndingDate then
                                         if Job2."NS_Sub-Level to Job No." = '' then
-                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running then
+                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover then
                                                 Job2.MARK(true);
                             until Job2.NEXT() = 0;
                         Job2.MARKEDONLY(true);
@@ -100,7 +100,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 if Job2."Starting Date" <> 0D then
                                     if Job2."Starting Date" <= EndingDate then
                                         if Job2."NS_Sub-Level to Job No." = '' then
-                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running then begin
+                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover then begin
                                                 Job2.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                                 TotalBudgetedCost := Job2."NS_Budgeted Cost (LCY)" + Job2.NS_SLsBudgetedLaborHours(Job);
                                                 TotalContract := Job2."NS_Budgeted Price (LCY)" + Job2."SLsUsage(Price)"(Job);
@@ -150,7 +150,7 @@ page 14021355 "NS_ProjectPro KPIs"
                                 if Job2."Starting Date" <> 0D then
                                     if Job2."Starting Date" <= EndingDate then
                                         if Job2."NS_Sub-Level to Job No." = '' then
-                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Running then begin
+                                            if Job2."NS_Manager Job Status" = Job2."NS_Manager Job Status"::Handover then begin
                                                 Job2.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                                 TotalBudgetedCost := Job2."NS_Budgeted Cost (LCY)" + Job2.NS_SLsBudgetedLaborHours(Job);
                                                 TotalContract := Job2."NS_Budgeted Price (LCY)" + Job2."SLsUsage(Price)"(Job);
@@ -227,7 +227,7 @@ page 14021355 "NS_ProjectPro KPIs"
                 //If job is 100% complete, compare "Actual Percent Complete Date" to "Estimated Completion Date" to determine if it was on-time
                 if (Job."NS_Estimated Completion Date" >= StartingDate) and
                    (Job."NS_Estimated Completion Date" <= EndingDate) then
-                    if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running) or
+                    if (Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover) or
                        (Job."NS_Manager Job Status" >= Job."NS_Manager Job Status"::Completed) then begin
                         W1 += 1;
                         if Job."NS_Actual Percent Complete" >= 100 then
@@ -260,7 +260,7 @@ page 14021355 "NS_ProjectPro KPIs"
                 if Job."Starting Date" <> 0D then
                     if Job."Starting Date" <= EndingDate then
                         if Job."NS_Sub-Level to Job No." = '' then
-                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                                 W1 += 1;
                                 Job.NS_CalculateActualCostToDate(Job, ActualCostToDate, true);
                                 Job.CalculateInvoiceBilled(Job, InvoiceBilled, true);
@@ -281,7 +281,7 @@ page 14021355 "NS_ProjectPro KPIs"
                 //Find "Running" top-level jobs, calculate Backlog as Contract Total Value less Total Invoice Billed
                 if Job."NS_Sub-Level to Job No." = '' then
                     //  if JobsSetup."NS_Project Pro KPI" = true then begin ;//PRJ-1262.RM.2.0 commented
-                    //   |  if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin //PRJ-1262.RM.1.0 
+                    //   |  if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin //PRJ-1262.RM.1.0 
 
                     if (Job.Status = Job.Status::Open) or (Job.Status = Job.Status::Planning) then begin//PRJ-1262.RM.2.0 start.
                         Job.CALCFIELDS("NS_Budgeted Price (LCY)");
@@ -292,7 +292,7 @@ page 14021355 "NS_ProjectPro KPIs"
                     end;
             //PRJ-1262.RM.2.0 start commented
             //         end else begin
-            // if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin //PRJ-1262.RM.1.0 
+            // if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin //PRJ-1262.RM.1.0 
             //     Job.CALCFIELDS("NS_Budgeted Price (LCY)");
             //     KPI[3] += Job."NS_Budgeted Price (LCY)";
             //     KPI[3] += Job."SLsUsage(Price)"(Job);
@@ -318,7 +318,7 @@ page 14021355 "NS_ProjectPro KPIs"
                 if Job."Starting Date" <> 0D then
                     if Job."Starting Date" <= EndingDate then
                         if Job."NS_Sub-Level to Job No." = '' then
-                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Running then begin
+                            if Job."NS_Manager Job Status" = Job."NS_Manager Job Status"::Handover then begin
                                 Job.CALCFIELDS("NS_Budgeted Cost (LCY)", "NS_Budgeted Price (LCY)");
                                 TotalBudgetedCost := Job."NS_Budgeted Cost (LCY)" + Job.NS_SLsBudgetedLaborHours(Job);
                                 TotalContract := Job."NS_Budgeted Price (LCY)" + Job."SLsUsage(Price)"(Job);

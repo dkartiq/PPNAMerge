@@ -23,7 +23,7 @@ table 14021353 "NS_ProjectPro Job Cue"
         }
         field(2; "NS_Jobs To Complete This Month"; Integer)
         {
-            CalcFormula = Count(Job WHERE("NS_Manager Job Status" = CONST(Running),
+            CalcFormula = Count(Job WHERE("NS_Manager Job Status" = CONST(Handover),
                                            "NS_Estimated Completion Date" = FIELD("NS_Date Filter")));
             Caption = 'Jobs To Complete This Month';
             FieldClass = FlowField;
