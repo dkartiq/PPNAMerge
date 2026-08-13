@@ -250,6 +250,15 @@ codeunit 14021113 "NS_Event Subscr. Codeunit 80"
         NS_CustPostingGr: Record "Customer Posting Group";
         SalesHeader: Record "Sales Header";
     begin
+        IF SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.") then begin
+            if (SalesLine.Type <> SalesLine.Type::"G/L Account") and (SalesLine.Type <> SalesLine.Type::"Fixed Asset") then
+                if SalesHeader."NS_Retention Document" and (SalesLine.Type = SalesLine.Type::NS_Ledger) then begin
+                    NS_CustPostingGr.Get(SalesHeader."Customer Posting Group");
+                    NS_CustPostingGr.TestField(NS_RetentionReceivablesAccount);
+                    InvoicePostingBuffer."G/L Account" := NS_CustPostingGr.NS_RetentionReceivablesAccount;
+                end;
+        end;
+    
         // >> Upgrade
         OnAfterNS_C80OnFillInvoicePostingBufferBeforeSetAccount(SalesHeader, SalesLine, InvoicePostingBuffer);
         // << Upgrade

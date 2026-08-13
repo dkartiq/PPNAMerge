@@ -401,6 +401,7 @@ page 14021172 "NS_Job Planning List (Locked)"
         Text14021402: Label 'NO';
         NS_ShowLineType: Option;
         Text14021401: Label 'YES';
+        //MHNA-6.NK.1.0 end 06march2023
         // >> Upgrade
         JobNoFilterG: Text;
 

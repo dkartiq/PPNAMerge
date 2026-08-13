@@ -70,9 +70,10 @@ report 14021345 "NS_Get PO for Progress Payment"
 
                     ProgressPaymentLine."NS_Cost Category" := "NS_Job Cost Category";
                 // >> 001 Upgrade
-                //ProgressPaymentLine."NS_Base Amount" := "Unit Cost";
+                //ProgressPaymentLine."NS_Base Amount" := "Unit Cost"; //PRJ-1257.NK.1.0 30Mar2022 Block
                 ProgressPaymentLine.Validate("NS_Base Amount", "Unit Cost");
                 // << 001 Upgrade
+                 ProgressPaymentLine."NS_Base Amount" := "Direct Unit Cost" * "Quantity (Base)"; //PRJ-1257.NK.1.0 30Mar2022 Add
                     ProgressPaymentLine."NS_Base Quantity" := "Quantity (Base)";
                     //PRJ-906.GK.1.0  04Oct2021 Start
                     If NS_SubContractHead.Get(SubcontractNoIn) then begin
@@ -106,7 +107,7 @@ report 14021345 "NS_Get PO for Progress Payment"
                     if COUNT = 0 then
                         CurrReport.QUIT;
                     // >> 002 Upgrade
-                    FINDFIRST;
+                    FINDFIRST();
                     IF Subcontract.GET(SubcontractNoIn) THEN
                         IF Subcontract."NS_Purchase Document No." <> '' THEN
                             PurchaseHeader.GET(PurchaseHeader."Document Type"::Order, Subcontract."NS_Purchase Document No.");

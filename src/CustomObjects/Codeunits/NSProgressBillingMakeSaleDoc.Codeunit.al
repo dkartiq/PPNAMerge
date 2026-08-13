@@ -417,9 +417,11 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                         SalesHeader."NS_Retention Date" := CALCDATE(JobsSetup."NS_Sales Retention Period", SalesHeader."Document Date")
                     else
                         SalesHeader."NS_Retention Date" := SalesHeader."Document Date";
+                end;
                     // >> Upgrade
                     //SalesHeader.VALIDATE("NS_Retention Amount"); // #132
                     // << Upgrade
+                
                     //PRJ-1624.NK.1.0 26Sep2022 Start
                     if BillingHeader."NS_Multiple Retention on Lines" then begin
                         BillingHeader.CalcFields("NS_Lines Total Retention Amt");
@@ -430,6 +432,7 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                             SalesHeader."NS_Retention Amount" := Round((SalesHeader."NS_Retention Amount" * SalesHeader."Currency Factor"),
                             NS_Currency."Unit-Amount Rounding Precision");
                         end;
+                        //PRJ-1624.NK.1.0 23Sep2022 Start
                         // >> Upgrade
                         SalesHeader."NS_Progress Billing Document" := true;
                         // << Upgrade
@@ -683,7 +686,6 @@ codeunit 14021326 "NS_Progress BillingMakeSaleDoc"
                 end;
             end;
         end;
-    end;
 
     procedure NS_NormalDocumentLines(BillingHeader: Record "NS_Progress Billing Header"; SalesHeader: Record "Sales Header"; Job: Record Job);
     var

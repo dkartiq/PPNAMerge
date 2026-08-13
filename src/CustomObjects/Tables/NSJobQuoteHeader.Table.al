@@ -114,19 +114,18 @@ table 14021402 "NS_Job Quote Header"
             ObsoleteState = Pending;
             ObsoleteReason = 'Will remove in next build because the field is converted from type option to Enum type';
             ObsoleteTag = 'Will remove in ProjectPro upcoming release 24.0.XXX.00';
-            OptionCaption = 'Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed';
-            OptionMembers = Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed;
+	    	                // >> Upgrade
+            //OptionCaption = 'Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed';
+            //OptionMembers = Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed;
             DataClassification = CustomerContent;
+            OptionMembers = Created,,,,"On Hold","Off Hold Pending WF",,Go,"Estimate Pending WF","Estimate Approved","Response Pending WF","Response Approved",Submitted,,,"Award Pending WF",Awarded,,,"Won Pending WF",Closed,,,Won,Lost;
+            OptionCaption = 'Created,,,,On Hold,Off Hold Pending WF,,Go,Estimate Pending WF,Estimate Approved,Response Pending WF,Response Approved,Submitted,,,Award Pending WF,Awarded,,,Won Pending WF,Closed,,,Won,Lost';
+            // << Upgrade
         }
         field(62; "NS_Quote Status"; Enum "NS_Quote Status")
         {
             Caption = 'Status';
-            // >> Upgrade
-            // OptionCaption = 'Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed';
-            // OptionMembers = Open,,,,Inactive,,,,Review,,,,Released,,,,Accepted,,,,Closed;
-            OptionMembers = Created,,,,"On Hold","Off Hold Pending WF",,Go,"Estimate Pending WF","Estimate Approved","Response Pending WF","Response Approved",Submitted,,,"Award Pending WF",Awarded,,,"Won Pending WF",Closed,,,Won,Lost;
-            OptionCaption = 'Created,,,,On Hold,Off Hold Pending WF,,Go,Estimate Pending WF,Estimate Approved,Response Pending WF,Response Approved,Submitted,,,Award Pending WF,Awarded,,,Won Pending WF,Closed,,,Won,Lost';
-            // << Upgrade
+ 
             DataClassification = CustomerContent;
         }
         field(66; "NS_Probability to Close"; Option)
@@ -136,18 +135,18 @@ table 14021402 "NS_Job Quote Header"
             ObsoleteState = Pending;
             ObsoleteReason = 'Will remove in next build because the field is converted from type option to Enum type';
             ObsoleteTag = 'Will remove in ProjectPro upcoming release 24.0.XXX.00';
-            OptionCaption = 'Draft,Budget Only,25,,,50,,75,,90,100,,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
-            OptionMembers = Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
+	    // >> Upgrade
+            //OptionCaption = 'Draft,Budget Only,25,,,50,,75,,90,100,,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
+	    OptionCaption = '10 - Feasibility Pricing Submitted,25 - Budget Quote Submitted,50 - FBS Shortlisted for Project,,,50,,75 - FBS Nominated as Preferred Supplier,,90 - Letter of Award Issued/Verbal Award,100 - Project Won - FBS has Award Documentation,,,,,,,,,,0 - Project Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
+            // OptionMembers = Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
+                      OptionMembers = "10 - Feasibility Pricing Submitted","25 - Budget Quote Submitted","50 - FBS Shortlisted for Project",,,"50",,"75 - FBS Nominated as Preferred Supplier",,"90 - Letter of Award Issued/Verbal Award","100 - Project Won - FBS has Award Documentation",,,,,,,,,,"0 - Project Lost",,,,,,,,,,Canceled,,,,,,,Opportunity;
+            // << Upgrade
         }
         field(67; "NS_QuotePro to Close"; Enum "NS_QuotePro to Close")
         {
             Caption = 'Probability to Close';
             DataClassification = CustomerContent;
-            // >> Upgrade
-            //OptionCaption = 'Draft,Budget Only,25,,,50,,75,,90,100,,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
-            OptionCaption = '10 - Feasibility Pricing Submitted,25 - Budget Quote Submitted,50 - FBS Shortlisted for Project,,,50,,75 - FBS Nominated as Preferred Supplier,,90 - Letter of Award Issued/Verbal Award,100 - Project Won - FBS has Award Documentation,,,,,,,,,,0 - Project Lost,,,,,,,,,,Canceled,,,,,,,Opportunity';
-            // OptionMembers = Draft,"Budget Only","25",,,"50",,"75",,"90","100",,,,,,,,,,Lost,,,,,,,,,,Canceled,,,,,,,Opportunity;
-            // << Upgrade
+
         }
         //PE-300.Dk.1.0  29May2024 End
         field(71; NS_Template; Boolean)
@@ -2200,6 +2199,8 @@ table 14021402 "NS_Job Quote Header"
             until NS_JobCostCategory.Next() = 0;
     End;
     //PE-221.NC.1.0 22May2024 End
+    var  
+    a:Enum "NS_Quote Status";
 }
 
 

@@ -2385,6 +2385,7 @@ page 14021300 "NS_Subcontract Card"
     begin
     end;
     // << Upgrade
+    //PE-177.DK.1.0 10Nov2023 Start
     local procedure NSManagerStatusEdite(): Boolean
     var
         myInt: Integer;

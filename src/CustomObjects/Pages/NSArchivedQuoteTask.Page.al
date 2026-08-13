@@ -65,7 +65,7 @@ page 14021441 "NS_Archived Quote Task"
                             //PP_PickAPOCode.NS_GetResult("NS_Job Task No.", PP_Description2);
                             PP_PickAPOCode.NS_GetResult("NS_Job Task No.", PP_Description2, JobAct);
                             // << Upgrade
-                            NS_Description := PP_JobTask.NS_GetJobTaskDescription("NS_Job No.", "NS_Job Task No.");
+                           Rec.NS_Description := PP_JobTask.NS_GetJobTaskDescription(Rec."NS_Job No.", Rec."NS_Job Task No.");
                             if Rec.NS_Description = '' then
                                 Rec.NS_Description := PP_Description2;
                         end;

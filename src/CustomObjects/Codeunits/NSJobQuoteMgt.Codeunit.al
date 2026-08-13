@@ -4352,7 +4352,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Use Tax Liable" := "NS_Use Tax Liable"::No;
             end;
 
-            NS_Status := NS_Status::Open;
+            NS_Status := NS_Status::Created;
             NS_Template := false;
             "NS_Link-to Quote No." := '';
             "NS_Sales Quote No." := '';
@@ -4421,7 +4421,7 @@ codeunit 14021400 "NS_Job Quote Mgt."
                 "NS_Use Tax Liable" := "NS_Use Tax Liable"::No;
             end;
 
-            NS_Status := NS_Status::Open;
+            NS_Status := NS_Status::Created;
             NS_Template := false;
             //IF Revision = 0 THEN
             //Revision := 1;
